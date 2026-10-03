@@ -74,34 +74,58 @@ question, call `predict` with `pql="template:<id>"`, for example
 ## PQL
 
 ```
-PREDICT <target> FOR EACH <entity_table>.<primary_key> [WHERE <filter>]
+PREDICT <target> FOR EACH <entity_table>.<primary_key> [WHERE <entity filter>]
 ```
 
 - `<entity_table>.<primary_key>`: the entities to score, from the catalog
   (`primary_key` of the table the question is about: customers, machines,
   patients, accounts).
 - `<target>`: an aggregation of a related table over a window after the anchor,
-  `<AGG>(<table>.<column>, <start>, <end>, <unit>)`, where `<AGG>` is `SUM`,
+  `<AGG>(<table>.<column> [WHERE <event filter>], <start>, <end>, <unit>)`, where `<AGG>` is `SUM`,
   `AVG`, `MIN`, `MAX` or `COUNT`. `COUNT(<table>.*, 0, 30, days)` counts rows.
   `0, 30, days` is the 30 days after the anchor. The table must have a
   `time_column` and link to the entity table through the catalog's foreign keys.
 - Add a comparison to ask a yes/no question: `<AGG>(...) <op> <value>`, with
   `<op>` one of `=`, `!=`, `>`, `>=`, `<`, `<=`.
-- `WHERE` narrows the entities, on a column of the entity table
-  (`customers.tier = 'gold'`) or on past activity with a window that ends at the
-  anchor (`COUNT(orders.*, -90, 0, days) > 0`: active in the 90 days before).
 - Name tables as the catalog does, without the source's DuckDB alias:
   `orders.net_amount`, not `retail_sales.orders.net_amount`.
 
-Examples (the names are illustrative; take yours from the catalog):
+Two kinds of `WHERE` do different things:
+
+- **Inside the aggregate, it filters the events counted**:
+  `<AGG>(<table>.* WHERE <table>.<column> = '<value>', <start>, <end>, <unit>)`.
+  Use it when the outcome is one kind of event: only unplanned maintenance
+  events, only returned orders, only declined transactions. The condition is on
+  a column of the aggregated table.
+- **After `FOR EACH`, it filters the entities scored**:
+  `FOR EACH <entity_table>.<primary_key> WHERE <condition>`. Use it when the
+  question is about some entities only: a column of the entity table
+  (`accounts.account_type = 'checking'`), or past activity with a window that
+  ends at the anchor (`COUNT(orders.*, -90, 0, days) > 0`: active in the 90
+  days before).
+
+An event condition written after `FOR EACH` changes which entities are scored,
+not what counts as the outcome. "Which machines are likely to fail unplanned"
+filters events:
+
+```
+PREDICT COUNT(maintenance_events.* WHERE maintenance_events.event_type = 'unplanned', 0, 30, days) > 0 FOR EACH machines.machine_id
+```
+
+"Which checking accounts are likely to close" filters entities:
+
+```
+PREDICT COUNT(monthly_balances.*, 0, 90, days) = 0 FOR EACH accounts.account_id WHERE accounts.account_type = 'checking'
+```
+
+More examples (the names are illustrative; take yours from the catalog):
 
 ```
 PREDICT COUNT(orders.*, 0, 90, days) = 0 FOR EACH customers.customer_id
 PREDICT COUNT(orders.*, 0, 30, days) = 0 FOR EACH customers.customer_id WHERE COUNT(orders.*, -90, 0, days) > 0
 PREDICT SUM(orders.net_amount, 0, 30, days) FOR EACH stores.store_id
-PREDICT COUNT(failures.*, 0, 30, days) > 0 FOR EACH machines.machine_id
 PREDICT COUNT(admissions.*, 0, 30, days) > 0 FOR EACH patients.patient_id
-PREDICT COUNT(missed_payments.*, 0, 90, days) > 0 FOR EACH loans.loan_id WHERE loans.status = 'active'
+PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id
 ```
 
 ## Reading the result

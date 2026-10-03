@@ -29,7 +29,10 @@ Receipt content, per kind:
 - `structured_query`: the question (for `query_tables`, its `question` argument, or its SQL when there is none),
   the database (`query_tables`' own `database_name`, else the scope's), the SQL, up to 25 rows of 40 columns, and
   Auto Ontology's answer and resolution lineage.
-- `structured_prediction`: the `predict` result without `elapsed_ms` and `warnings`. A result with
+- `structured_prediction`: the `predict` result without `elapsed_ms` and `warnings`. An entity id the schema
+  refuses (`SKU 12`, an email address) is recorded with each refused character as `_` and its leading
+  non-alphanumerics dropped, at most 128 characters, and the key as the tool gave it goes in an empty `label`.
+  A result with
   `available: false` (no Kumo endpoint, say) is a failed receipt with `errorType` `evidence_unavailable` and the
   `reason` as `errorSummary`.
 

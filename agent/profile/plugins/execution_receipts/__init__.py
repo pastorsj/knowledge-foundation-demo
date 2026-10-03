@@ -86,6 +86,12 @@ PREDICTION_KEYS = (
     "model",
 )
 ENTITY_KEYS = ("probability", "value", "label")
+# The receipt schema's entityId (OpenIdentifier). A key outside it, such as "SKU 12" or an email address, is recorded
+# with each other character replaced by "_", and the key as the tool gave it goes in the row's empty label.
+ENTITY_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:/-]*")
+ENTITY_ID_REFUSED = re.compile(r"[^A-Za-z0-9._:/-]")
+ENTITY_ID_LEADING = re.compile(r"^[^A-Za-z0-9]+")
+MAX_ENTITY_ID = 128
 # ask_question takes only the question here: a model-supplied thread, database, prediction, evidence or source
 # scope is dropped (Auto Ontology has no source_ids argument, but the other data tools do, so the model may send it).
 ASK_QUESTION_DROPPED = ("conversation_id", "target_db", "prediction", "evidence", "source_ids")
@@ -222,7 +228,7 @@ class ExecutionReceipts:
             receipt = build_receipt(
                 tool,
                 job_id=session_id,
-                database_name=self.scope(session_id)["database_name"],
+                database_name=self.scope(session_id).get("database_name"),
                 tool_call_id=tool_call_id,
                 turn_id=turn_id,
                 args=args or {},
@@ -426,12 +432,26 @@ def _prediction_content(result: dict, args: dict, database_name: str | None) -> 
     """The ``predict`` result's StructuredPrediction; an unavailable prediction (no Kumo endpoint, say) fails."""
     content = {key: result.get(key) for key in PREDICTION_KEYS}
     content["anchor_time"] = _aware_timestamp(content["anchor_time"])
-    content["rows"] = [
-        # Entity ids are keys of any column type; the receipt holds them as text.
-        {"entity_id": str(row["entity_id"]), **{key: row.get(key) for key in ENTITY_KEYS}}
-        for row in result.get("rows") or []
-    ]
+    content["rows"] = [_entity_prediction(row) for row in result.get("rows") or []]
     return content, (None if result["available"] else ("evidence_unavailable", result["reason"]))
+
+
+def _entity_prediction(row: dict) -> dict:
+    """One entity's prediction with an ``entity_id`` the receipt schema accepts, so the receipt is stored and cited.
+
+    Entity ids are keys of any column type and any text. A valid one is kept as it is. Otherwise each refused
+    character becomes ``_``, leading non-alphanumerics go, and the id is cut to 128 characters (or, with nothing
+    left, named by a hash of the key); an empty ``label`` then holds the key as the tool gave it.
+    """
+    key = str(row["entity_id"])
+    entity_id = key
+    if len(key) > MAX_ENTITY_ID or not ENTITY_ID.fullmatch(key):
+        entity_id = ENTITY_ID_LEADING.sub("", ENTITY_ID_REFUSED.sub("_", key))[:MAX_ENTITY_ID]
+        entity_id = entity_id or "entity-" + hashlib.sha256(key.encode("utf-8", errors="replace")).hexdigest()[:16]
+    prediction = {"entity_id": entity_id, **{name: row.get(name) for name in ENTITY_KEYS}}
+    if entity_id != key and not prediction["label"]:
+        prediction["label"] = key[: STRING_LIMITS["label"]]
+    return prediction
 
 
 def _query_content(result: dict, args: dict, database_name: str | None) -> tuple[dict, None]:

@@ -8,8 +8,10 @@ from pathlib import Path
 import pytest
 import skills_ref
 from common import MCP_TOOL
+from common import ROOT
 from common import SKILL_DIRS
 from common import exposed_tools
+from common import load_yaml
 
 HERMES_INDEX_LIMIT = 60  # SKILL_PROMPT_DESC_LIMIT: Hermes truncates longer descriptions in the skill index
 
@@ -81,9 +83,12 @@ def test_example_sql_qualifies_every_table_with_its_source_alias():
     assert references and all(re.fullmatch(r"[a-z_]+\.[a-z_]+", name) for name in references), references
 
 
+# The grammar predicting-with-kumo teaches: an aggregate of one table, optionally filtered to some of its events,
+# over a window; an optional comparison; the entities; an optional entity filter.
+COMPARE = r"(?:=|!=|>=|<=|>|<) (?:'[^']*'|-?\d+(?:\.\d+)?)"
 PQL = re.compile(
-    r"PREDICT (?:SUM|AVG|MIN|MAX|COUNT)\(\w+\.(?:\w+|\*), -?\d+, \d+, days\)(?: (?:=|!=|>=|<=|>|<) \S+)?"
-    r" FOR EACH \w+\.\w+(?: WHERE .+)?"
+    rf"PREDICT (?:SUM|AVG|MIN|MAX|COUNT)\((\w+)\.(?:\w+|\*)(?: WHERE \1\.\w+ {COMPARE})?, -?\d+, \d+, days\)"
+    rf"(?: {COMPARE})? FOR EACH \w+\.\w+(?: WHERE .+)?"
 )
 
 
@@ -95,6 +100,26 @@ def test_example_pql_follows_the_taught_grammar():
     assert len(queries) >= 6
     assert [query for query in queries if not PQL.fullmatch(query)] == []
     assert all(" FOR EACH " in query and "retail_sales." not in query for query in queries)  # no DuckDB alias
+    parts = [query.split(" FOR EACH ") for query in queries]
+    assert any(" WHERE " in target for target, _ in parts)  # an example that filters events
+    assert any(" WHERE " in entities for _, entities in parts)  # and one that filters entities
+
+
+def pack_templates() -> list[tuple[str, str]]:
+    """(pack and template id, PQL with its YAML line folds joined) of every industry pack's prediction templates."""
+    return [
+        (f"{pack.parent.name}:{template['id']}", " ".join(template["pql"].split()))
+        for pack in sorted((ROOT / "data" / "packs").glob("*/pack.yaml"))
+        for source in load_yaml(pack)["sources"]
+        for template in (source.get("prediction") or {}).get("templates", [])
+    ]
+
+
+def test_every_pack_prediction_template_follows_the_taught_grammar():
+    templates = pack_templates()
+
+    assert templates
+    assert {name: pql for name, pql in templates if not PQL.fullmatch(pql)} == {}
 
 
 def test_the_kumo_skill_teaches_templates_and_an_unavailable_endpoint():
