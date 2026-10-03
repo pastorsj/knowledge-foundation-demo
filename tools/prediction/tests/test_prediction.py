@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from collections.abc import Callable
 from pathlib import Path
@@ -15,12 +16,17 @@ from conftest import ACCOUNTS
 from conftest import SALES
 from conftest import add_copy_of_sales
 from conftest import fixture_source
+from conftest import write_source
+from kumo_relational_client import NimRequestError
+from kumo_relational_client import RelationalError
 from mcp.client import Client
 from mcp.server.mcpserver import MCPServer
 from mcp.types import CallToolResult
 
 from demo_prediction import catalog
+from demo_prediction import entities
 from demo_prediction import prediction
+from demo_prediction.prediction import EVIDENCE_ID
 from demo_prediction.prediction import Predictor
 from demo_prediction.prediction import build_graph
 from demo_prediction.server import create_server
@@ -235,7 +241,7 @@ async def test_an_unreachable_endpoint_makes_the_prediction_unavailable(knowledg
     content = result.structured_content
     assert (content["available"], content["reason"], content["rows"]) == (
         False,
-        "ConnectionError: connection refused",
+        prediction.UNREACHABLE,
         [],
     )
     assert content["horizon"] == {"value": 90, "unit": "days"}
@@ -248,7 +254,7 @@ async def test_the_real_client_takes_this_call_and_reports_a_closed_port(knowled
 
     content = result.structured_content
     assert content["available"] is False
-    assert content["reason"].startswith("RelationalError: [TRANSPORT_ERROR] Could not connect"), content["reason"]
+    assert content["reason"] == prediction.UNREACHABLE, content["reason"]
     assert content["anchor_time"] == "2026-09-30T00:00:00Z"
 
 
@@ -301,30 +307,145 @@ async def test_a_temporal_entity_filter_is_left_to_a_warning(knowledge_dir: Path
     assert "could not be applied" in warning
 
 
-async def test_an_entity_filter_reads_no_file(knowledge_dir: Path, stub: type[StubClient]):
-    hostile = (
-        f"{CHURN} WHERE customers.tier = 'gold' AND CAST((SELECT content FROM read_text('/etc/hostname')) AS INT) > 0"
-    )
+@pytest.mark.parametrize(
+    "hostile",
+    [
+        "customers.tier = 'gold' AND CAST((SELECT content FROM read_text('/etc/hostname')) AS INT) > 0",
+        "customers.tier = 'gold'; DROP TABLE customers",
+        "customers.tier = 'gold' UNION SELECT customer_id FROM orders",
+        "customers.tier = 'gold' OR customers.customer_id IN (SELECT customer_id FROM orders)",
+        "list_contains(range(20000000), 1)",
+        "read_text('/etc/hostname') IS NOT NULL",
+        "orders.net_amount > 10",
+        "customers.secret = 1",
+        "customers.tier",
+    ],
+    ids=[
+        "subquery-file",
+        "two-statements",
+        "union",
+        "in-subquery",
+        "range",
+        "file",
+        "other-table",
+        "no-column",
+        "bare",
+    ],
+)
+async def test_an_entity_filter_that_is_not_one_plain_condition_never_runs(
+    knowledge_dir: Path, stub: type[StubClient], monkeypatch: pytest.MonkeyPatch, hostile: str
+):
+    conditions = []
+    select = entities.select
 
-    result = await predict(knowledge_dir, hostile)
+    def spy(path, table, key, condition, limit, **options):
+        conditions.append(condition)
+        return select(path, table, key, condition, limit, **options)
 
+    monkeypatch.setattr(entities, "select", spy)
+    result = await predict(knowledge_dir, f"{CHURN} WHERE {hostile}")
+
+    assert conditions == [None]  # only the unfiltered selection ran
+    assert stub.calls[0]["indices"] == ["C1", "C2", "C3"]
     (warning,) = result.structured_content["warnings"]
     assert "could not be applied" in warning
-    assert "disabled by configuration" in warning
     assert Path("/etc/hostname").read_text().strip() not in str(result.structured_content)
 
 
-async def test_at_most_100_entities_in_primary_key_order_and_the_25_best(knowledge_dir: Path, stub: type[StubClient]):
-    result = await predict(
-        knowledge_dir, "PREDICT accounts.segment = 'enterprise' FOR EACH accounts.account_id", [ACCOUNTS]
+def test_a_plain_condition_is_regenerated_from_its_parse():
+    columns = ["customer_id", "tier", "joined_at"]
+
+    sql = entities.condition_sql(
+        "Customers.tier IN ('gold', 'silver') AND NOT joined_at < DATE '2025-01-01'", "customers", columns
     )
 
+    assert sql == "Customers.tier IN ('gold', 'silver') AND NOT joined_at < CAST('2025-01-01' AS DATE)"
+
+
+async def test_at_most_1000_entities_in_primary_key_order_and_the_25_best(knowledge_dir: Path, stub: type[StubClient]):
+    """Kumo's per-request limit: the first 1,000 of 1,200 are scored, and the warning names the population."""
+    result = await predict(knowledge_dir, "PREDICT accounts.segment = 'smb' FOR EACH accounts.account_id", [ACCOUNTS])
+
     (call,) = stub.calls
-    assert call["indices"] == list(range(1, 101))
+    assert call["indices"] == list(range(1, 1001))
     content = result.structured_content
-    assert [r["entity_id"] for r in content["rows"]] == [str(i) for i in range(100, 75, -1)]
-    assert len(content["warnings"]) == 2
-    assert "first 100 entities" in content["warnings"][0] and "25 highest of 100" in content["warnings"][1]
+    assert [r["entity_id"] for r in content["rows"]] == [str(i) for i in range(1000, 975, -1)]
+    population, rows = content["warnings"]
+    assert "1,200 entities" in population and "at most 1,000" in population
+    assert "FOR EACH accounts.account_id WHERE" in population
+    assert "25 highest of 1000" in rows
+
+
+async def test_a_filter_under_the_limit_scores_the_whole_population(knowledge_dir: Path, stub: type[StubClient]):
+    pql = "PREDICT accounts.segment = 'smb' FOR EACH accounts.account_id WHERE accounts.segment = 'enterprise'"
+    result = await predict(knowledge_dir, pql, [ACCOUNTS])
+
+    (call,) = stub.calls
+    assert len(call["indices"]) == 400 and call["indices"][:3] == [3, 6, 9]  # every third account is enterprise
+    assert result.structured_content["warnings"] == ["Showing the 25 highest of 400 predictions."]
+
+
+@pytest.mark.parametrize(
+    ("error", "reason"),
+    [
+        (
+            NimRequestError(
+                422, code="INVALID_REQUEST", message="Unknown column 'foo' (see http://kumo:8000/v1 /opt/x.py)"
+            ),
+            "Kumo rejected the query: Unknown column 'foo' (see <url> <path>)",
+        ),
+        (NimRequestError(401, code=None, message="no key"), prediction.REFUSED_KEY),
+        (NimRequestError(503, code=None, message="warming up at http://kumo:8000"), "HTTP 503"),
+        (RelationalError("Read timed out at http://kumo:8000", code="TRANSPORT_ERROR"), prediction.TIMED_OUT),
+        (RelationalError("refused", code="TRANSPORT_ERROR"), prediction.UNREACHABLE),
+        (TimeoutError("slow"), prediction.TIMED_OUT),
+        (RuntimeError("boom in /knowledge/sources/retail.sales/tables.duckdb"), prediction.UNEXPECTED),
+    ],
+    ids=["invalid-query", "credentials", "server-error", "timeout", "unreachable", "builtin-timeout", "unexpected"],
+)
+async def test_kumo_failures_get_written_reasons(
+    knowledge_dir: Path, stub: type[StubClient], error: Exception, reason: str
+):
+    stub.error = error
+
+    result = await predict(knowledge_dir, CHURN)
+
+    content = result.structured_content
+    assert content["available"] is False
+    assert reason in content["reason"]
+    assert "http://" not in content["reason"] and "/knowledge/" not in content["reason"]
+
+
+async def test_the_result_fits_30000_characters_however_its_ids_escape(knowledge_dir: Path, stub: type[StubClient]):
+    stub.answer = lambda ids: pd.DataFrame(
+        {"ENTITY": [f'{i}"\\' * 100 for i in range(25)], "CLASS": ['"\\' * 100] * 25, "SCORE": [0.5] * 25}
+    )
+
+    result = await predict(knowledge_dir, CHURN)
+
+    assert len(json.dumps({"evidence_id": EVIDENCE_ID, "result": result.content[0].text})) <= 30_000
+    content = result.structured_content
+    assert 0 < len(content["rows"]) < 25
+    assert any("fit in 30,000 characters" in warning for warning in content["warnings"])
+
+
+async def test_a_template_longer_than_a_query_may_be_is_refused(knowledge_dir: Path, stub: type[StubClient]):
+    manifest = fixture_source(SALES)
+    manifest["prediction"]["templates"][0]["pql"] = CHURN + " " * 2000
+    write_source(knowledge_dir, manifest)
+
+    result = await predict(knowledge_dir, "template:churn_90d")
+
+    assert result.is_error and "longer than 2000 characters" in result.content[0].text
+
+
+async def test_a_manifest_must_carry_its_own_id(knowledge_dir: Path, stub: type[StubClient]):
+    sources = knowledge_dir / "catalog" / "sources"
+    (sources / f"{ACCOUNTS}.json").replace(sources / f"{SALES}.json")
+
+    result = await predict(knowledge_dir, CHURN)
+
+    assert result.is_error and "names another source" in result.content[0].text
 
 
 @pytest.mark.parametrize(

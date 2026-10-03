@@ -19,7 +19,7 @@ from pydantic import Field
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from .prediction import MAX_ENTITIES
+from .prediction import KUMO_MAX_ENTITIES
 from .prediction import MAX_ROWS
 from .prediction import PredictionError
 from .prediction import PredictionResult
@@ -70,7 +70,8 @@ def create_server(settings: Settings) -> MCPServer:
         yes/no outcome, such as COUNT(orders.*, 0, 90, days) = 0; an aggregate alone for a number, such as
         SUM(orders.net_amount, 0, 30, days); or a column of the entity table for a class. Or pass
         pql="template:<id>" to run one of the source's prediction templates, with its anchor time. Kumo scores up to
-        100 entities in primary-key order and the result lists the 25 highest. When Kumo is unavailable the result
+        1,000 entities (its per-request limit) in primary-key order, so narrow a larger population with FOR EACH ...
+        WHERE; the result lists the 25 highest. When Kumo is unavailable the result
         says so (available: false, with the reason): report that instead of estimating the outcome yourself.
         """
         try:
@@ -92,7 +93,7 @@ def serve(settings: Settings) -> None:
         settings.knowledge_dir,
         settings.port,
         settings.kumo_url or "not configured",
-        MAX_ENTITIES,
+        KUMO_MAX_ENTITIES,
         MAX_ROWS,
     )
     server.run("streamable-http", host="0.0.0.0", port=settings.port, stateless_http=True, json_response=True)

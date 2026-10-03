@@ -17,7 +17,7 @@ import pytest
 
 FIXTURES = Path(__file__).parent / "fixtures" / "catalog"
 SALES = "retail.sales"
-ACCOUNTS = "workspace.tables"  # a second structured source with 150 accounts and no foreign keys
+ACCOUNTS = "workspace.tables"  # 1,200 accounts, past Kumo's 1,000 per request; no foreign keys
 
 
 def fixture_source(source_id: str) -> dict[str, Any]:
@@ -56,7 +56,7 @@ ACCOUNT_TABLES = [
     {
         "name": "accounts",
         "description": "One row per account.",
-        "row_count": 150,
+        "row_count": 1200,
         "primary_key": "account_id",
         "time_column": None,
         "columns": [
@@ -80,7 +80,7 @@ def knowledge_dir(tmp_path: Path) -> Path:
 
     csv_dir = tmp_path / "uploads"
     csv_dir.mkdir()
-    rows = "".join(f"{150 - i},{'enterprise' if i % 3 == 0 else 'smb'}\n" for i in range(150))
+    rows = "".join(f"{1200 - i},{'enterprise' if i % 3 == 0 else 'smb'}\n" for i in range(1200))
     (csv_dir / "accounts.csv").write_text("account_id,segment\n" + rows)
     build_database(root / "sources" / ACCOUNTS / "tables.duckdb", ACCOUNT_TABLES, csv_dir)
     accounts = {

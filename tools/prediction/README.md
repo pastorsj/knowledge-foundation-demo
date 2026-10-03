@@ -36,12 +36,15 @@ Each call:
    table; none or several is a `ToolError`, as is an entity column that is not its table's primary key.
 4. Without `KUMO_RELATIONAL_URL`, returns `available: false`,
    `reason: "No Kumo endpoint is configured (KUMO_RELATIONAL_URL)."`.
-5. Picks the entities: up to 100 primary keys of the entity table, in key order. A plain entity filter (a condition
-   on the entity table, such as `customers.tier = 'gold'`) is applied in a locked-down DuckDB (the source attached
-   read-only, external access off, the configuration locked, a 10 s interrupt), because Kumo predicts for every id
-   it is given whatever the filter says. A filter over time (`COUNT(orders.*, -90, 0, days) > 0`) only Kumo can
-   evaluate; the result then warns that the entities may include ones it excludes. `FOR <key> = ...` and
-   `FOR <key> IN (...)` leave the ids to the query.
+5. Picks the entities: up to 1,000 primary keys of the entity table (Kumo's documented per-request limit), in key
+   order. Past 1,000, the first 1,000 are scored and a warning names the population's size and says to narrow it
+   with `FOR EACH ... WHERE`. Kumo predicts for every id it is given whatever the filter says, so a plain entity
+   filter (such as `customers.tier = 'gold'`) is applied here (`entities.py`). sqlglot parses it as one condition
+   over the entity table's own columns, with no subquery, table, generator, aggregate or file function. The SQL
+   regenerated from that parse runs in a worker process: a fresh DuckDB with the source attached read-only, external
+   access off, the configuration locked, a 2 GiB address space and a 10 s kill. A filter it cannot apply, including
+   one over time (`COUNT(orders.*, -90, 0, days) > 0`), never runs; the result warns that the entities may include
+   ones it excludes. `FOR <key> = ...` and `FOR <key> IN (...)` leave the ids to the query.
 6. Builds the graph: `relational.Graph.from_duckdb(connection={"uri": <file>, "kwargs": {"read_only": True}},
    tables=[{name, primary_key, time_column}], edges=[])`, then sets every table's keys and time column to the
    catalog's (metadata inference would otherwise add its own guesses, such as `customers.joined_at` as a time
@@ -49,8 +52,17 @@ Each call:
    table's primary key, then `graph.validate()`.
 7. Predicts: `RelationalClient(url=..., api_key=..., timeout=60, max_retries=0).relational(graph).predict(pql, ids,
    anchor_time=..., run_mode="fast", num_retries=0, verbose=False)`. One attempt within 60 s, so a slow or warming
-   NIM yields `available: false` before the agent's MCP timeout. Any failure of the graph or the endpoint is
-   `available: false` with `"<error type>: <message>"` as the reason.
+   NIM yields `available: false` before the agent's MCP timeout. A failure is `available: false` with a written
+   reason, and no URL or file path in it:
+   - the endpoint could not be reached, or did not answer within 60 s;
+   - it refused the credentials;
+   - it rejected the query (with its first line);
+   - it answered with a server error;
+   - the tables do not make a graph;
+   - otherwise, a generic reason, with the details in the log.
+
+   The result is kept under 30,000 characters as the agent reads it, by dropping its lowest rows. Warnings are
+   capped, and a template's PQL may be at most 2,000 characters.
 
 Spans: `kumo` (TOOL), under the MCP SDK's `tools/call predict`.
 
