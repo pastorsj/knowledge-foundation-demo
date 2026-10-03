@@ -1,0 +1,19 @@
+branch_id,branch_name,city,region,branch_type,opened_year,staff_count
+BR01,Harborview Main Street,Harborview,Harbor Coast,full_service,1962,31
+BR02,Marina District,Harborview,Harbor Coast,full_service,1988,19
+BR03,Lighthouse Point,Port Alder,Harbor Coast,full_service,1995,14
+BR04,Seaport Plaza,Port Alder,Harbor Coast,limited_service,2011,6
+BR05,Union Square,Cedar Falls,Metro,full_service,1974,24
+BR06,Riverside,Cedar Falls,Metro,full_service,1999,17
+BR07,Eastgate,Cedar Falls,Metro,full_service,2004,15
+BR08,Westfield Mall,Cedar Falls,Metro,limited_service,2013,6
+BR09,Northgate,Cedar Falls,Metro,full_service,2008,13
+BR10,Millbrook,Millbrook,Valley,full_service,1968,16
+BR11,Oakridge,Oakridge,Valley,full_service,1991,13
+BR12,Fairview,Fairview,Valley,full_service,2001,12
+BR13,Stony Creek,Stony Creek,Valley,limited_service,2016,5
+BR14,Lakeside,Lakeside,Valley,full_service,2006,11
+BR15,Pinecrest,Pinecrest,Highlands,full_service,1979,12
+BR16,Summit Ridge,Summit Ridge,Highlands,full_service,2009,10
+BR17,Hollow Springs,Hollow Springs,Highlands,limited_service,2018,5
+BR18,Granite Falls,Granite Falls,Highlands,full_service,1985,11

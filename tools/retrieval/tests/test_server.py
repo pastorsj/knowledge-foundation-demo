@@ -3,8 +3,14 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import httpx
 import pytest
+from conftest import MANUALS
+from conftest import POLICIES
+from conftest import derived_source
+from conftest import write_source
 from mcp.client import Client
 from mcp.server.mcpserver import MCPServer
 
@@ -15,8 +21,8 @@ pytestmark = pytest.mark.anyio
 
 
 @pytest.fixture
-def server(retriever: Retriever) -> MCPServer:
-    return create_server(retriever, frozenset({"market_news", "market_regulations"}))
+def server(retriever: Retriever, knowledge_dir: Path) -> MCPServer:
+    return create_server(retriever, knowledge_dir)
 
 
 async def test_tool_schema(server: MCPServer):
@@ -32,49 +38,79 @@ async def test_tool_schema(server: MCPServer):
     assert tool.annotations.read_only_hint
 
 
-async def test_the_description_keeps_form_names_out_of_queries(server: MCPServer):
-    """A query with "8-K" returns cover pages: every filing's first passage repeats the form name and dates."""
+async def test_the_description_is_about_enterprise_documents(server: MCPServer):
     async with Client(server) as client:
         (tool,) = (await client.list_tools()).tools
 
     description = " ".join(tool.description.split())
-    assert "When you search filings, write the query as one sentence the passage itself would contain" in description
-    assert "not as a list of keywords" in description
-    assert "Leave form names (8-K, 6-K)" in description and "cover page" in description
-    assert "metadata gives its form and filing date" in description
-    assert "for filings, no form names" in tool.input_schema["properties"]["query"]["description"]
+    assert "document sources" in description
+    assert "one sentence the passage itself would contain" in description
+    for market_word in ("filing", "8-K", "Form"):
+        assert market_word not in description
 
 
 async def test_retrieve_evidence_returns_structured_hits(server: MCPServer):
     async with Client(server) as client:
         result = await client.call_tool(
             "retrieve_evidence",
-            {"query": "auditor change", "source_ids": ["market_regulations", "market_news"], "top_k": 3},
+            {"query": "cash handling at closing", "source_ids": [POLICIES, MANUALS, POLICIES], "top_k": 3},
         )
 
-    assert not result.is_error
+    assert not result.is_error, result.content[0].text
     content = result.structured_content
-    assert content["source_ids"] == ["market_news", "market_regulations"]
+    assert content["source_ids"] == [MANUALS, POLICIES]
+    assert content["collection"] == "knowledge" and content["collection_version"] == "knowledge__v1"
     assert len(content["hits"]) == 3
     assert {"document_id", "source_id", "title", "url", "snippet", "score", "rank"} <= content["hits"][0].keys()
 
 
-@pytest.mark.parametrize(
-    "source_ids",
-    [[], ["market_structured"], ["market_news", "web"]],
-    ids=["empty", "not-a-document-source", "unknown"],
-)
-async def test_sources_outside_the_pack_are_rejected(server: MCPServer, source_ids: list[str]):
+async def test_an_ingesting_source_is_searched(server: MCPServer):
+    """What an ingesting source already holds stays usable; this one holds nothing yet."""
     async with Client(server) as client:
-        result = await client.call_tool("retrieve_evidence", {"query": "auditor change", "source_ids": source_ids})
+        result = await client.call_tool(
+            "retrieve_evidence", {"query": "gift card refund rules", "source_ids": ["workspace.documents"]}
+        )
+
+    assert not result.is_error, result.content[0].text
+    assert result.structured_content["hits"] == []
+    assert result.structured_content["candidate_counts"] == {"workspace.documents": 0}
+
+
+@pytest.mark.parametrize(
+    ("source_ids", "message"),
+    [
+        ([], "select at least one document source"),
+        (["retail.unknown"], "retail.unknown is not in the knowledge catalog"),
+        (["retail.sales"], "retail.sales is a structured source, not a documents source"),
+        ([POLICIES, "retail.drafts"], "retail.drafts has status 'empty'"),
+        (["retail.archive"], "retail.archive has status 'failed'"),
+        (["../../etc/passwd"], "'../../etc/passwd' is not a source id"),
+        (["retail.policies/../retail.sales"], "is not a source id"),
+    ],
+    ids=["empty", "unknown", "structured", "empty-status", "failed-status", "path", "nested-path"],
+)
+async def test_sources_that_cannot_be_searched_are_refused(server: MCPServer, source_ids: list[str], message: str):
+    async with Client(server) as client:
+        result = await client.call_tool("retrieve_evidence", {"query": "restocking fee", "source_ids": source_ids})
 
     assert result.is_error
-    assert "must be a non-empty subset of ['market_news', 'market_regulations']" in result.content[0].text
+    assert message in result.content[0].text
+
+
+async def test_the_catalog_is_read_on_every_call(server: MCPServer, knowledge_dir: Path):
+    async with Client(server) as client:
+        before = await client.call_tool("retrieve_evidence", {"query": "fee", "source_ids": ["retail.handbook"]})
+        write_source(knowledge_dir, derived_source("retail.handbook"))
+        after = await client.call_tool("retrieve_evidence", {"query": "fee", "source_ids": ["retail.handbook"]})
+        write_source(knowledge_dir, derived_source("retail.handbook", status="failed"))
+        failed = await client.call_tool("retrieve_evidence", {"query": "fee", "source_ids": ["retail.handbook"]})
+
+    assert before.is_error and not after.is_error and failed.is_error
 
 
 async def test_invalid_arguments_are_rejected(server: MCPServer):
     async with Client(server) as client:
-        result = await client.call_tool("retrieve_evidence", {"query": "x", "source_ids": ["market_news"], "top_k": 99})
+        result = await client.call_tool("retrieve_evidence", {"query": "x", "source_ids": [POLICIES], "top_k": 99})
 
     assert result.is_error
 
@@ -85,4 +121,4 @@ async def test_health(server: MCPServer):
         response = await client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "collection": "test_pack"}
+    assert response.json() == {"status": "ok", "collection": "knowledge"}

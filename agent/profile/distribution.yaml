@@ -3,9 +3,9 @@
 
 # Hermes profile distribution manifest. agent/Dockerfile bakes this profile into
 # HERMES_HOME (/opt/data) and its skills into /opt/agent/skills.
-name: market-analysis-agent
+name: knowledge-foundation-agent
 version: 0.1.0
-description: Market research agent that answers with cited evidence from MCP data tools
+description: Enterprise knowledge assistant that answers with cited evidence from documents, tables and predictions
 hermes_requires: ">=0.21.5"
 author: NVIDIA
 license: Apache-2.0

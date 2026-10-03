@@ -1,0 +1,26 @@
+store_id,store_name,store_type,region,state,city,opened_on,square_feet
+S01,Lumen Boston Seaport,flagship,Northeast,MA,Boston,2014-03-14,41000
+S02,Lumen Providence Place,mall,Northeast,RI,Providence,2016-09-22,22000
+S03,Lumen Hartford Crossing,standalone,Northeast,CT,Hartford,2012-05-05,28000
+S04,Lumen Albany Commons,outlet,Northeast,NY,Albany,2018-10-19,19000
+S05,Lumen Philadelphia Center City,mall,Northeast,PA,Philadelphia,2011-04-02,26000
+S06,Lumen Newark Gateway,standalone,Northeast,NJ,Newark,2019-08-30,27000
+S07,Lumen Atlanta Midtown,flagship,Southeast,GA,Atlanta,2015-11-06,39000
+S08,Lumen Charlotte South End,mall,Southeast,NC,Charlotte,2017-03-11,23000
+S09,Lumen Raleigh Triangle,standalone,Southeast,NC,Raleigh,2013-06-08,27000
+S10,Lumen Nashville Music Row,mall,Southeast,TN,Nashville,2020-02-21,21000
+S11,Lumen Tampa Bayshore,outlet,Southeast,FL,Tampa,2018-01-26,20000
+S12,Lumen Orlando Premium,outlet,Southeast,FL,Orlando,2016-12-03,21000
+S13,Lumen Chicago Loop,flagship,Midwest,IL,Chicago,2013-10-12,44000
+S14,Lumen Minneapolis North Loop,mall,Midwest,MN,Minneapolis,2017-08-25,22000
+S15,Lumen Columbus Easton,standalone,Midwest,OH,Columbus,2014-09-13,26000
+S16,Lumen Indianapolis Fashion Mall,mall,Midwest,IN,Indianapolis,2015-04-18,22000
+S17,Lumen Kansas City Plaza,standalone,Midwest,MO,Kansas City,2019-05-04,25000
+S18,Lumen Milwaukee Third Ward,outlet,Midwest,WI,Milwaukee,2021-03-27,18000
+S19,Lumen Seattle South Lake Union,mall,West,WA,Seattle,2016-06-11,23000
+S20,Lumen Portland Pearl,standalone,West,OR,Portland,2014-11-01,24000
+S21,Lumen San Francisco Union Square,flagship,West,CA,San Francisco,2012-09-07,38000
+S22,Lumen Los Angeles Westside,mall,West,CA,Los Angeles,2015-02-14,30000
+S23,Lumen Phoenix Biltmore,standalone,West,AZ,Phoenix,2018-07-14,26000
+S24,Lumen Denver Cherry Creek,mall,West,CO,Denver,2025-08-15,21000
+WEB,Lumen.com,ecommerce,E-commerce,,,2010-01-01,

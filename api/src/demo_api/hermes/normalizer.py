@@ -21,7 +21,7 @@ from typing import Any
 from uuid import NAMESPACE_URL
 from uuid import uuid5
 
-from demo_api.events import COMPONENT_BY_FAMILY
+from demo_api.events import COMPONENT_BY_SERVER
 from demo_api.events import DisplaySafeProjection
 from demo_api.events import EventProvenance
 from demo_api.events import ExecutionEventV2
@@ -215,7 +215,7 @@ class EventNormalizer:
 
         label = tool.label if tool is not None else (_safe_text(name, 120) or "Unknown tool")
         fields: dict[str, Any] = {
-            "component_id": COMPONENT_BY_FAMILY[tool.family] if tool is not None else "hermes.tool",
+            "component_id": COMPONENT_BY_SERVER[tool.server] if tool is not None else "hermes.tool",
             "invocation_id": invocation_id,
             "parent_invocation_id": root,
             "tool_server": tool.server if tool is not None else None,

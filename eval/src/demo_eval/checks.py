@@ -3,8 +3,8 @@
 """Deterministic checks of one report: its text against the oracle rows and against the run's own evidence.
 
 A run is the job's export (`GET /v1/jobs/async/job/{id}/export`): the report, the `execution.v2` events and the
-receipts. None of this needs a grader. The checks look for what a correct answer must contain (the oracle's
-strongest asset, its return as a percentage, a required caveat) and never judge style.
+receipts. None of this needs a grader. The checks look for what a correct answer must contain (the value an oracle
+computed, a share as a percentage, a required caveat) and never judge style.
 """
 
 from __future__ import annotations
@@ -12,7 +12,6 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from .deadline import deadline_ok
 from .spec import Check
 from .spec import RowRef
 
@@ -25,7 +24,7 @@ FALL = re.compile(
 )
 DASHES = re.compile("[‐-–−]")
 SOURCES = re.compile(r"\n#+\s*Sources")
-# Markdown emphasis: a pattern matches the words, so "**not** forecasts" reads as "not forecasts"
+# Markdown emphasis: a text check matches the words, so "**not** covered" reads as "not covered"
 EMPHASIS = re.compile(r"\*+")
 
 Oracles = dict[str, list[dict[str, Any]]]
@@ -39,15 +38,6 @@ def report_text(turn: dict[str, Any]) -> str:
 def body(text: str) -> str:
     """The report before its Sources list."""
     return SOURCES.split(text)[0]
-
-
-def named(asset_id: Any, text: str, names: dict[str, str]) -> bool:
-    """The asset appears by its id (the ticker) or its company name."""
-    if not asset_id:
-        return False
-    asset = str(asset_id)
-    name = names.get(asset)
-    return bool(re.search(rf"\b{re.escape(asset)}\b", text) or (name and name.lower() in text.lower()))
 
 
 def has_percent(text: str, fraction: Any, tolerance: float = 0.0005) -> bool:
@@ -102,13 +92,14 @@ def grounding(text: str, turn: dict[str, Any]) -> float | None:
     return hits / len(reported)
 
 
-def prediction_top(turn: dict[str, Any], n: int) -> list[str]:
-    """The ``n`` most probable assets of the run's first completed Kumo prediction."""
-    for receipt in (turn or {}).get("receipts", []):
-        if receipt.get("artifactKind") == "structured_prediction" and receipt.get("status") == "completed":
-            rows = sorted((receipt.get("content") or {}).get("rows", []), key=lambda row: -row["probability"])
-            return [row["assetId"] for row in rows[:n]]
-    return []
+def prediction_available(turn: dict[str, Any]) -> bool:
+    """Kumo scored the entities: a prediction receipt completed with its content available."""
+    return any(
+        receipt.get("artifactKind") == "structured_prediction"
+        and receipt.get("status") == "completed"
+        and (receipt.get("content") or {}).get("available") is True
+        for receipt in (turn or {}).get("receipts", [])
+    )
 
 
 def retrieved_sources(turn: dict[str, Any]) -> set[str]:
@@ -120,53 +111,37 @@ def retrieved_sources(turn: dict[str, Any]) -> set[str]:
     }
 
 
-def retrieved_filings(turn: dict[str, Any]) -> set[str]:
-    """The filings (<cik>:<accession>) that the run's retrieval hits come from: edgar:<cik>:<accession>:<file>."""
-    return {
-        ":".join(parts[1:3])
-        for receipt in (turn or {}).get("receipts", [])
-        if receipt.get("artifactKind") == "retrieval_evidence"
-        for hit in (receipt.get("content") or {}).get("hits", [])
-        if (parts := str(hit.get("documentId") or "").split(":"))[0] == "edgar" and len(parts) >= 4
-    }
+def mentioned(value: Any, text: str) -> bool:
+    """The value (a name or an id) appears in the text as a whole word or phrase, ignoring case."""
+    if value is None or isinstance(value, bool) or not str(value).strip():
+        return False
+    return bool(re.search(rf"(?<!\w){re.escape(str(value).strip())}(?!\w)", text, re.IGNORECASE))
 
 
-def first_named(text: str, candidates: list[str]) -> str | None:
-    """Which of ``candidates`` the report's body names first, by ticker."""
-    positions = [(m.start(), c) for c in candidates for m in re.finditer(rf"\b{re.escape(c)}\b", body(text))]
-    return min(positions)[1] if positions else None
-
-
-def evaluate(check: Check, text: str, turn: dict[str, Any], oracles: Oracles, names: dict[str, str]) -> bool:
+def evaluate(check: Check, text: str, turn: dict[str, Any], oracles: Oracles) -> bool:
     """One check of one report: True when the report passes it."""
-    if check.kind == "named":
-        assets = RowRef.parse(check.value).values(oracles)
-        hits = sum(named(asset, text, names) for asset in assets)
-        if not assets:
+    plain = EMPHASIS.sub("", text)  # the text checks read the words, not the markdown emphasis
+    if check.kind == "mentions":
+        values = RowRef.parse(check.value).values(oracles)
+        hits = sum(mentioned(value, plain) for value in values)
+        if not values:
             return False
         if check.any:
             return hits >= 1
-        return hits >= (check.at_least if check.at_least is not None else len(assets))
+        return hits >= (check.at_least if check.at_least is not None else len(values))
+    if check.kind == "contains":
+        return all(word.lower() in plain.lower() for word in check.value)
     if check.kind == "percent":
         values = RowRef.parse(check.value).values(oracles)
         return bool(values) and all(has_percent(text, value) for value in values)
     if check.kind == "pattern":
         patterns = check.value if isinstance(check.value, list) else [check.value]
-        plain = EMPHASIS.sub("", text)
         return any(re.search(pattern, plain) for pattern in patterns)
-    if check.kind == "item_105_deadline":
-        return deadline_ok(text)
     if check.kind == "retrieved_source":
         return str(check.value) in retrieved_sources(turn)
-    if check.kind == "retrieved_filing":
-        return not retrieved_filings(turn).isdisjoint(check.value)
     if check.kind == "percent_grounding":
         share = grounding(text, turn)
         return share is not None and share >= float(check.value)
-    if check.kind == "prediction_named":
-        top = prediction_top(turn, int(check.value))
-        return bool(top) and all(named(asset, text, names) for asset in top)
-    if check.kind == "prediction_first":
-        top = prediction_top(turn, 3)
-        return bool(top) and first_named(text, top) == top[0]
+    if check.kind == "prediction_available":
+        return prediction_available(turn)
     raise ValueError(f"unknown check kind {check.kind}")

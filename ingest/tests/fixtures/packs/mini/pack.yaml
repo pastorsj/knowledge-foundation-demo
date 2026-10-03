@@ -1,0 +1,62 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# A minimal industry pack for the ingest tests: one documents source, one structured source.
+schema_version: "3"
+id: mini
+version: 1.0.0
+title: Mini Retail
+description: A two-source test pack for a fictional retailer.
+icon: Store
+as_of: "2026-09-30"
+disclaimer: Synthetic data for a software test; every company, person and figure is fictional.
+licenses:
+  - name: Apache-2.0
+    path: LICENSE
+    redistribution: allowed
+provenance:
+  - id: authored
+    title: Hand-written test fixtures
+    kind: committed
+    synthetic: true
+    license: Apache-2.0
+sources:
+  - id: policies
+    name: Policies
+    description: The return policy.
+    agent_description: Mini Retail's return policy, with restocking fees by category.
+    kind: documents
+    files: ["files/policies/*"]
+    capabilities: [unstructured_retrieval]
+    synthetic: true
+    example_questions:
+      - What restocking fee applies to electronics?
+  - id: sales
+    name: Sales
+    description: Customers and their orders.
+    agent_description: Mini Retail's customers and orders in DuckDB.
+    kind: structured
+    files: ["files/sales/*.csv"]
+    capabilities: [structured_retrieval, structured_prediction]
+    synthetic: true
+    default_enabled: true
+    tables:
+      orders:
+        description: One row per order.
+        foreign_keys:
+          - column: customer_id
+            references: customers.customer_id
+        columns:
+          net_amount: Order value after discounts, in USD.
+      customers:
+        description: One row per loyalty customer.
+        columns:
+          tier: "Loyalty tier: bronze, silver or gold."
+    prediction:
+      templates:
+        - id: churn_90d
+          name: No order in 90 days
+          description: Likelihood that a customer places no order in the next 90 days.
+          pql: PREDICT COUNT(orders.*, 0, 90, days) = 0 FOR EACH customers.customer_id
+          anchor_time: "2026-09-30T00:00:00Z"
+questions: questions.yaml

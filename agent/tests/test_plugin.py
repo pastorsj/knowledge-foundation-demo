@@ -2,12 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 """The execution-receipts plugin, driven the way Hermes calls its hooks.
 
-Tool results come from the contract fixtures (recorded runs, in the current tools' result shape) and
-from the market-analytics tools run on their test pack. Every receipt is checked against
+Tool results come from the contract fixtures (recorded runs), rebuilt in the shape each tool returns them:
+``query_tables`` and ``predict`` results carry fields their receipts leave out. Every receipt is checked against
 contracts/schemas/receipt.schema.json.
 """
 
-import copy
 import importlib.util
 import json
 import re
@@ -39,97 +38,75 @@ assert "date-time" in Draft202012Validator.FORMAT_CHECKER.checkers
 FIXTURE_RECEIPTS = json.loads((CONTRACTS / "fixtures" / "receipts.json").read_text(encoding="utf-8"))
 
 JOB = "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78"
-STRUCTURED = "market_analysis_structured"
-DOCUMENTS = ["market_news", "market_regulations"]
+DOCUMENTS = ["retail.policies", "workspace.documents"]
+STRUCTURED = "retail.sales"  # tables and predictions
+UPLOADED_TABLES = "workspace.tables"  # tables only
 EFFICIENT = "nvidia/nemotron-3-ultra-550b-a55b"
 CAPABLE = "gpt-6-sol"
 SCOPE = {
     "job_id": JOB,
     "sources": [
-        {"id": "market_news", "capabilities": ["unstructured_retrieval"]},
-        {"id": "market_regulations", "capabilities": ["unstructured_retrieval"]},
-        {"id": STRUCTURED, "capabilities": ["structured_retrieval", "structured_prediction", "market_analytics"]},
+        {"id": "retail.policies", "capabilities": ["unstructured_retrieval"]},
+        {"id": "workspace.documents", "capabilities": ["unstructured_retrieval"]},
+        {"id": STRUCTURED, "capabilities": ["structured_retrieval", "structured_prediction"]},
+        {"id": UPLOADED_TABLES, "capabilities": ["structured_retrieval"]},
     ],
-    "database_name": "market_analysis",
-    "collection": "aiq_market_intelligence_current",
+    "database_name": "retail_sales",
+    "collection": "knowledge",
     "models": {"efficient": EFFICIENT, "capable": CAPABLE},
 }
 
-# price_context and a rejected call: market-analytics tool output on tools/market-analytics/tests/fixture_pack.py.
-PRICE_CONTEXT = {
-    "operation_id": "price_context",
-    "status": "succeeded",
-    "source_id": "market_fixture_structured",
-    "database_name": "market_fixture",
-    "payload": {
-        "frequency": "weekly",
-        "summaries": [
-            {
-                "asset_id": "asset-alpha",
-                "start_timestamp": "2026-06-05T21:00:00Z",
-                "end_timestamp": "2026-06-30T21:00:00Z",
-                "start_price": 100.79438572429191,
-                "end_price": 99.21732905667542,
-                "total_return": -0.015646274901960244,
-                "minimum_price": 97.2655493120802,
-                "maximum_price": 100.79438572429191,
-                "average_volume": 4420869.8,
-                "observation_count": 5,
-            }
-        ],
-        "series": [
-            {
-                "asset_id": "asset-alpha",
-                "timestamp": "2026-06-05T21:00:00Z",
-                "adjusted_close": 100.79438572429191,
-                "volume": 4981805.0,
-            },
-            {
-                "asset_id": "asset-alpha",
-                "timestamp": "2026-06-12T21:00:00Z",
-                "adjusted_close": 97.27787115115679,
-                "volume": 4777179.0,
-            },
-            {
-                "asset_id": "asset-alpha",
-                "timestamp": "2026-06-19T21:00:00Z",
-                "adjusted_close": 97.2655493120802,
-                "volume": 5171950.0,
-            },
-        ],
-        "series_truncated": True,
-    },
-    "error": None,
-    "engine": {"device": "cpu", "library": "pandas", "version": "2.3.3", "engine_id": "pandas-cpu.v1"},
-    "timing": {
-        "compute_ms": 8.152874994266313,
-        "setup_ms": 0.6416250066831708,
-        "engine_ms": 8.794500000949484,
-        "total_ms": 9.425041987560689,
-    },
-    "rows_scanned": 22,
-    "asset_count": 1,
-    "warnings": ["The series is cut to the first 3 points."],
-    "limitations": ["Prices are adjusted historical observations and are not investment advice."],
-}
-REJECTED_PRICE_CONTEXT = {
-    "operation_id": "price_context",
-    "status": "failed",
-    "source_id": "market_fixture_structured",
-    "database_name": "market_fixture",
-    "payload": None,
-    "error": {"code": "invalid_request", "message": "unknown asset 'NOPE'"},
-    "engine": None,
-    "timing": {
-        "compute_ms": 0.01049999991664663,
-        "setup_ms": 0.0899169989861548,
-        "engine_ms": 0.10041699890280142,
-        "total_ms": 0.6247919914312661,
-    },
-    "rows_scanned": 0,
-    "asset_count": None,
+# A query_tables result over two structured sources, as tools/tables returns it.
+QUERY = {
+    "question": "Orders and net revenue by store region",
+    "sql": "SELECT s.region, count(*) AS orders, round(sum(o.net_amount), 2) AS net_revenue\n"
+    "FROM retail_sales.orders AS o JOIN workspace_tables.stores AS s USING (store_id)\n"
+    "GROUP BY s.region ORDER BY net_revenue DESC",
+    "database_name": "knowledge",
+    "databases": [
+        {"source_id": STRUCTURED, "alias": "retail_sales"},
+        {"source_id": UPLOADED_TABLES, "alias": "workspace_tables"},
+    ],
+    "columns": ["region", "orders", "net_revenue"],
+    "rows": [
+        {"region": "West", "orders": 3, "net_revenue": 395.0},
+        {"region": "East", "orders": 2, "net_revenue": 182.5},
+    ],
+    "row_count": 2,
+    "truncated": False,
+    "elapsed_ms": 41.7,
     "warnings": [],
-    "limitations": [],
+}
+QUERY_ARGS = {"question": QUERY["question"], "sql": QUERY["sql"]}
+
+# A predict result, as tools/prediction returns it.
+PREDICTION = {
+    "available": True,
+    "reason": None,
+    "source_id": STRUCTURED,
+    "template_id": None,
+    "pql": "PREDICT SUM(orders.net_amount, 0, 30, days) FOR EACH customers.customer_id",
+    "task_type": "regression",
+    "anchor_time": "2026-09-30T00:00:00Z",
+    "horizon": {"value": 30, "unit": "days"},
+    "entity_table": "customers",
+    "rows": [
+        {"entity_id": "C1", "probability": None, "value": 212.4, "label": None},
+        {"entity_id": "C3", "probability": None, "value": 75.0, "label": None},
+    ],
+    "model": "kumo-relational",
+    "elapsed_ms": 38120.4,
+    "warnings": ["Scored the first 100 of 240 customers."],
+}
+UNAVAILABLE = {
+    **PREDICTION,
+    "available": False,
+    "reason": "No Kumo endpoint is configured (KUMO_RELATIONAL_URL).",
+    "task_type": None,
+    "anchor_time": None,
+    "rows": [],
+    "elapsed_ms": 0.4,
+    "warnings": [],
 }
 
 
@@ -200,15 +177,31 @@ def snake_keys(value: Any, open_fields: set[str]) -> Any:
 
 
 def fixture_call(receipt: dict) -> tuple[str, dict, dict]:
-    """The tool id, arguments and result that produce a fixture receipt."""
+    """The tool id, arguments and result, in the tool's own shape, that produce a fixture receipt."""
     tool_id = receipt["toolName"].rsplit("__", 1)[1]
     content = snake_keys(receipt["content"], plugin.OPEN_FIELDS[receipt["artifactKind"]])
-    if receipt["artifactKind"] == "analytics_result":
-        return tool_id, content.pop("public_parameters"), content
-    if receipt["artifactKind"] == "structured_query":
+    if tool_id == "query_tables":
+        rows = content["rows"]
+        result = {
+            "question": content["query"],
+            "sql": content["sql"],
+            "database_name": content["database_name"],
+            "databases": [{"source_id": STRUCTURED, "alias": content["database_name"]}],
+            "columns": list(rows[0]) if rows else [],
+            "rows": rows,
+            "row_count": content["source_row_count"],
+            "truncated": content["truncated"],
+            "elapsed_ms": 12.5,
+            "warnings": [],
+        }
+        return tool_id, {"question": content["query"], "sql": content["sql"]}, result
+    if tool_id == "ask_question":
         result = {key: content[key] for key in ("answer", "sql", "rows", "truncated", "resolution_lineage")}
         return tool_id, {"question": content["query"]}, {**result, "row_count": content["source_row_count"]}
-    return tool_id, {}, content
+    if tool_id == "predict":
+        pql = f"template:{content['template_id']}" if content["template_id"] else content["pql"]
+        return tool_id, {"question": "Who is likely?", "pql": pql}, {**content, "elapsed_ms": 40.1, "warnings": []}
+    return tool_id, {"query": content["query"]}, content
 
 
 @pytest.mark.parametrize("fixture", FIXTURE_RECEIPTS, ids=lambda r: f"{r['artifactKind']}-{r['status']}")
@@ -219,14 +212,26 @@ def test_fixture_tool_results_give_the_fixture_receipts(hooks, api, fixture):
     output = run_tool(hooks, tool_id, args, result, job=fixture["jobId"], call=call, duration_ms=fixture["durationMs"])
 
     receipt = posted_receipt(api)
-    unobserved = {"occurredAt", "traceId", "spanId"}  # the plugin's clock; Hermes gives hooks no trace context
+    # occurredAt is the plugin's clock and Hermes gives hooks no trace context. The receipt id is checked against its
+    # derivation here, and against the fixture's in test_fixture_receipt_ids_are_the_plugin_evidence_ids.
+    unobserved = {"occurredAt", "traceId", "spanId", "receiptId"}
     assert {k: v for k, v in receipt.items() if k not in unobserved} == {
         k: v for k, v in fixture.items() if k not in unobserved
     }
+    assert receipt["receiptId"] == plugin.receipt_id(fixture["jobId"], call)
     if fixture["status"] == "completed":
-        assert json.loads(output)["evidence_id"] == fixture["receiptId"]
+        assert json.loads(output)["evidence_id"] == receipt["receiptId"]
     else:
         assert output is None
+
+
+def test_fixture_receipt_ids_are_the_plugin_evidence_ids():
+    """A fixture receipt's id is the evidence id the plugin derives for its job and tool call."""
+    derived = [
+        plugin.receipt_id(fixture["jobId"], fixture["invocationId"].removeprefix("hermes-tool:"))
+        for fixture in FIXTURE_RECEIPTS
+    ]
+    assert derived == [fixture["receiptId"] for fixture in FIXTURE_RECEIPTS]
 
 
 @pytest.mark.parametrize(
@@ -235,9 +240,9 @@ def test_fixture_tool_results_give_the_fixture_receipts(hooks, api, fixture):
 def test_either_hook_order_posts_one_receipt_and_cites_it(hooks, api, order):
     """Hermes' agent loop fires transform_tool_result before post_tool_call; a direct dispatch, the reverse."""
     call = {
-        "tool_name": TOOLS["price_context"]["hermes_name"],
-        "args": {},
-        "result": json.dumps({"result": json.dumps(PRICE_CONTEXT)}),
+        "tool_name": TOOLS["query_tables"]["hermes_name"],
+        "args": QUERY_ARGS,
+        "result": json.dumps({"result": json.dumps(QUERY)}),
         "session_id": JOB,
         "tool_call_id": "call_1",
     }
@@ -249,47 +254,133 @@ def test_either_hook_order_posts_one_receipt_and_cites_it(hooks, api, order):
     assert cited["evidence_id"] == receipt["receiptId"]
 
 
-def test_market_results_record_the_public_parameters(hooks, api):
-    args = {"asset_ids": ["ALPH"], "frequency": "weekly", "point_limit": 3, "source_ids": ["model-supplied"]}
-    output = run_tool(hooks, "price_context", args, PRICE_CONTEXT)
+def test_a_table_query_records_its_question_and_the_database_it_ran_on(hooks, api):
+    output = run_tool(hooks, "query_tables", {**QUERY_ARGS, "source_ids": ["model-supplied"]}, QUERY)
 
     receipt = posted_receipt(api)
     assert receipt["status"] == "completed"
-    assert receipt["content"]["publicParameters"] == {"asset_ids": ["ALPH"], "frequency": "weekly", "point_limit": 3}
-    assert receipt["content"]["payload"] == PRICE_CONTEXT["payload"]  # payload keys are kept as sent
+    assert receipt["content"] == {
+        "query": QUERY["question"],
+        "databaseName": "knowledge",  # two sources attached; the scope's database_name is retail_sales
+        "answer": None,
+        "sql": QUERY["sql"],
+        "rows": QUERY["rows"],  # row keys are column names, kept as sent
+        "sourceRowCount": 2,
+        "truncated": False,
+        "resolutionLineage": [],
+    }
     assert json.loads(output)["evidence_id"] == receipt["receiptId"]
 
 
-def test_market_results_keep_what_the_receipt_card_shows(hooks, api):
-    """The engine id, the asset count and the timing, to the microsecond, reach the receipt as the tool sent them."""
-    run_tool(hooks, "price_context", {"asset_ids": ["ALPH"]}, PRICE_CONTEXT)
+def test_a_table_query_without_a_question_is_recorded_by_its_sql(hooks, api):
+    run_tool(hooks, "query_tables", {"sql": QUERY["sql"]}, {**QUERY, "database_name": None})
 
     content = posted_receipt(api)["content"]
-    assert content["engine"]["engineId"] == "pandas-cpu.v1"
-    assert content["assetCount"] == 1
-    assert content["timing"] == {
-        "computeMs": 8.152874994266313,
-        "setupMs": 0.6416250066831708,
-        "engineMs": 8.794500000949484,
-        "totalMs": 9.425041987560689,
+    assert (content["query"], content["databaseName"]) == (QUERY["sql"], "retail_sales")
+
+
+def test_a_prediction_receipt_keeps_the_result_but_its_timing_and_warnings(hooks, api):
+    output = run_tool(hooks, "predict", {"question": "Spend next month?", "pql": PREDICTION["pql"]}, PREDICTION)
+
+    receipt = posted_receipt(api)
+    assert (receipt["status"], receipt["errorType"]) == ("completed", None)
+    assert receipt["content"] == {
+        "available": True,
+        "reason": None,
+        "sourceId": STRUCTURED,
+        "templateId": None,
+        "pql": PREDICTION["pql"],
+        "taskType": "regression",
+        "anchorTime": "2026-09-30T00:00:00Z",
+        "horizon": {"value": 30, "unit": "days"},
+        "entityTable": "customers",
+        "rows": [
+            {"entityId": "C1", "probability": None, "value": 212.4, "label": None},
+            {"entityId": "C3", "probability": None, "value": 75.0, "label": None},
+        ],
+        "model": "kumo-relational",
     }
+    # The agent still reads the whole result, warnings included.
+    assert json.loads(json.loads(output)["result"])["warnings"] == PREDICTION["warnings"]
 
 
-def test_a_failed_market_result_gives_a_failed_receipt_without_evidence_id(hooks, api):
-    output = run_tool(hooks, "price_context", {"asset_ids": ["NOPE"]}, REJECTED_PRICE_CONTEXT)
+def test_prediction_entity_ids_of_any_key_type_are_recorded_as_text(hooks, api):
+    rows = [{"entity_id": 1042, "probability": 0.62, "value": None, "label": None}]
+    run_tool(hooks, "predict", {"pql": "template:churn_90d"}, {**PREDICTION, "rows": rows})
+
+    assert posted_receipt(api)["content"]["rows"][0]["entityId"] == "1042"
+
+
+@pytest.mark.parametrize(
+    ("key", "entity_id"),
+    [
+        ("SKU 12", "SKU_12"),
+        ("jane.doe@example.com", "jane.doe_example.com"),
+        ("_C12", "C12"),
+        ("Zoë Müller", "Zo__M_ller"),
+    ],
+    ids=["space", "email", "leading-underscore", "non-ascii"],
+)
+def test_an_entity_id_the_schema_refuses_is_recorded_with_its_key_as_label(hooks, api, key, entity_id):
+    """Without this the API refuses the receipt, and the prediction loses its evidence id."""
+    rows = [{"entity_id": key, "probability": 0.62, "value": None, "label": None}]
+    output = run_tool(hooks, "predict", {"pql": "template:churn_90d"}, {**PREDICTION, "rows": rows})
+
+    receipt = posted_receipt(api)  # valid against the receipt schema
+    assert receipt["content"]["rows"] == [{"entityId": entity_id, "probability": 0.62, "value": None, "label": key}]
+    assert json.loads(output)["evidence_id"] == receipt["receiptId"]
+
+
+def test_entity_ids_the_schema_accepts_and_existing_labels_are_kept(hooks, api):
+    rows = [
+        {"entity_id": "M-07/line:2.a_b", "probability": 0.9, "value": None, "label": None},
+        {"entity_id": "Café 3", "probability": 0.7, "value": None, "label": "gold"},  # a multiclass label stays
+        {"entity_id": "A" * 130, "probability": 0.5, "value": None, "label": None},
+        {"entity_id": "日本", "probability": 0.4, "value": None, "label": None},  # nothing is left: a hash names it
+    ]
+    run_tool(hooks, "predict", {"pql": "template:churn_90d"}, {**PREDICTION, "rows": rows})
+
+    kept, labelled, long, unnamed = posted_receipt(api)["content"]["rows"]
+    assert (kept["entityId"], kept["label"]) == ("M-07/line:2.a_b", None)
+    assert (labelled["entityId"], labelled["label"]) == ("Caf__3", "gold")
+    assert (long["entityId"], long["label"]) == ("A" * 128, "A" * 130)
+    assert re.fullmatch(r"entity-[0-9a-f]{16}", unnamed["entityId"]) and unnamed["label"] == "日本"
+
+
+def test_a_scope_without_a_database_name_still_records_table_queries():
+    api = FakeApi({key: value for key, value in SCOPE.items() if key != "database_name"})
+    output = run_tool(plugin.ExecutionReceipts(REGISTRY, api), "query_tables", QUERY_ARGS, QUERY)
+
+    receipt = posted_receipt(api)
+    assert receipt["content"]["databaseName"] == "knowledge"  # the tool names it
+    assert json.loads(output)["evidence_id"] == receipt["receiptId"]
+
+
+def test_an_unavailable_prediction_gives_a_failed_receipt_without_evidence_id(hooks, api):
+    output = run_tool(hooks, "predict", {"question": "Spend next month?", "pql": PREDICTION["pql"]}, UNAVAILABLE)
 
     receipt = posted_receipt(api)
     assert (receipt["status"], receipt["errorType"], receipt["errorSummary"]) == (
         "failed",
-        "invalid_request",
-        "unknown asset 'NOPE'",
+        "evidence_unavailable",
+        "No Kumo endpoint is configured (KUMO_RELATIONAL_URL).",
     )
-    assert receipt["content"]["error"] == REJECTED_PRICE_CONTEXT["error"]
+    assert (receipt["content"]["available"], receipt["content"]["rows"]) == (False, [])
     assert output is None
 
 
+def test_a_retrieval_without_a_reranker_names_no_rerank_model(hooks, api):
+    retrieval = next(r for r in FIXTURE_RECEIPTS if r["artifactKind"] == "retrieval_evidence")
+    _, args, result = fixture_call(retrieval)
+    result["models"] = {"embed": result["models"]["embed"], "rerank": ""}
+
+    run_tool(hooks, "retrieve_evidence", args, result)
+
+    assert posted_receipt(api)["content"]["models"] == {"embed": result["models"]["embed"], "rerank": None}
+
+
 def test_an_mcp_error_gives_a_failed_receipt_without_content(hooks, api):
-    error = json.dumps({"error": "source_ids must be a non-empty subset of ['market_news']"})
+    error = json.dumps({"error": "source_ids must be a non-empty subset of ['retail.policies']"})
     output = run_tool(
         hooks,
         "retrieve_evidence",
@@ -297,7 +388,7 @@ def test_an_mcp_error_gives_a_failed_receipt_without_content(hooks, api):
         error,
         status="error",
         error_type="tool_error",
-        error_message="source_ids must be a non-empty subset of ['market_news']",
+        error_message="source_ids must be a non-empty subset of ['retail.policies']",
     )
 
     receipt = posted_receipt(api)
@@ -309,45 +400,49 @@ def test_results_are_fitted_to_the_display_limits(hooks, api):
     retrieval = next(r for r in FIXTURE_RECEIPTS if r["artifactKind"] == "retrieval_evidence")
     _, _, result = fixture_call(retrieval)
     hit = result["hits"][0]
-    hit.update(snippet="x" * 2400, title="Exhibit\x0399.1\tRisk", published_at="2026-05-11T00:00:00")
+    hit.update(snippet="x" * 2400, title="Return\x03Policy\tRetail", published_at="2026-05-11T00:00:00")
     hit["metadata"].update(api_key="k", token_count=3)
-    series = PRICE_CONTEXT["payload"]["series"] * 50
-    prices = copy.deepcopy(PRICE_CONTEXT)
-    prices["payload"].update(series=series, series_truncated=False)
+    rows = [{"entity_id": f"C{i}", "probability": 0.5, "value": None, "label": "x" * 300} for i in range(120)]
+    prediction = {**PREDICTION, "pql": "PREDICT " + "x" * 9000, "rows": rows}
+    unavailable = {**UNAVAILABLE, "reason": "Kumo said: " + "y" * 900}
 
-    run_tool(hooks, "retrieve_evidence", {"query": "outages"}, result, call="call_1")
+    run_tool(hooks, "retrieve_evidence", {"query": "returns"}, result, call="call_1")
     fitted_hit = posted_receipt(api)["content"]["hits"][0]
-    run_tool(hooks, "price_context", {"asset_ids": ["ALPH"]}, prices, call="call_2")
-    payload = posted_receipt(api)["content"]["payload"]
+    run_tool(hooks, "predict", {"pql": "PREDICT"}, prediction, call="call_2")
+    fitted_prediction = posted_receipt(api)["content"]
+    run_tool(hooks, "predict", {"pql": "PREDICT"}, unavailable, call="call_3")
+    failed = posted_receipt(api)
 
     assert len(fitted_hit["snippet"]) == 1500
-    assert fitted_hit["title"] == "Exhibit 99.1\tRisk"  # a control character from PDF extraction, but not the tab
+    assert fitted_hit["title"] == "Return Policy\tRetail"  # a control character from PDF extraction, but not the tab
     assert fitted_hit["publishedAt"] is None  # no timezone
     assert "api_key" not in fitted_hit["metadata"] and "token_count" not in fitted_hit["metadata"]
     assert fitted_hit["metadata"]["citation"] == hit["metadata"]["citation"]
-    assert (len(payload["series"]), payload["series_truncated"]) == (100, True)
+    assert len(fitted_prediction["pql"]) == 8000
+    assert len(fitted_prediction["rows"]) == 100 and len(fitted_prediction["rows"][0]["label"]) == 256
+    assert (len(failed["content"]["reason"]), len(failed["errorSummary"])) == (500, 600)
 
 
 def test_sql_rows_are_cut_to_25_rows_of_40_columns(hooks, api):
     rows = [{"token_count": 1, **{f"column_{c}": c for c in range(45)}} for _ in range(30)]
     result = {"answer": "30 rows", "sql": "SELECT 1", "rows": rows, "row_count": 30, "resolution_lineage": []}
 
-    run_tool(hooks, "ask_question", {"question": "Which assets?"}, result)
+    run_tool(hooks, "ask_question", {"question": "Which customers?"}, result)
 
     content = posted_receipt(api)["content"]
     assert (len(content["rows"]), content["sourceRowCount"], content["truncated"]) == (25, 30, True)
     assert len(content["rows"][0]) == 39  # 40 columns, less the banned token_count
-    assert content["databaseName"] == "market_analysis"
+    assert content["databaseName"] == "retail_sales"  # Auto Ontology's database, from the job's scope
 
 
 def test_a_result_too_long_to_read_whole_is_shortened(hooks, api):
     """Hermes hides an MCP result over 50,000 characters behind a preview; Auto Ontology can return 100 wide rows."""
     rows = [{f"column_{c}": f"value {r}-{c} " * 3 for c in range(12)} for r in range(100)]
-    reasoning = "Resolved the question to daily_prices. " * 400
+    reasoning = "Resolved the question to orders. " * 400
     result = {"answer": "100 rows", "sql": "SELECT 1", "rows": rows, "row_count": 340, "truncated": True}
     result |= {"reasoning": reasoning, "resolution_lineage": []}
 
-    output = run_tool(hooks, "ask_question", {"question": "Which assets?"}, result)
+    output = run_tool(hooks, "ask_question", {"question": "Which customers?"}, result)
 
     assert len(output) <= plugin.MAX_RESULT_CHARS < 50_000
     read = json.loads(output)
@@ -390,31 +485,31 @@ def test_a_second_copy_of_a_long_result_is_left_out(hooks, api):
 
 
 def test_a_result_that_fits_is_unchanged_but_for_its_evidence_id(hooks, api):
-    output = json.loads(run_tool(hooks, "price_context", {}, PRICE_CONTEXT))
+    output = json.loads(run_tool(hooks, "query_tables", QUERY_ARGS, QUERY))
 
     assert output.keys() == {"evidence_id", "result"}
-    assert json.loads(output["result"]) == PRICE_CONTEXT
+    assert json.loads(output["result"]) == QUERY
 
 
 def test_the_lineage_keeps_only_complete_bindings(hooks, api):
-    binding = {"phrase": "closing price", "ontology_object": "Close", "table": "main.daily_prices", "column": "close"}
+    binding = {"phrase": "net revenue", "ontology_object": "Net Amount", "table": "main.orders", "column": "net_amount"}
     # Auto Ontology leaves out a table or column it could not resolve; an empty one must not fail the receipt either.
-    lineage = [binding, {**binding, "column": ""}, {"phrase": "sector", "ontology_object": "Sector"}]
-    result = {"answer": "ALPH", "sql": "SELECT 1", "rows": [], "row_count": 0, "resolution_lineage": lineage}
+    lineage = [binding, {**binding, "column": ""}, {"phrase": "region", "ontology_object": "Region"}]
+    result = {"answer": "S-12", "sql": "SELECT 1", "rows": [], "row_count": 0, "resolution_lineage": lineage}
 
-    run_tool(hooks, "ask_question", {"question": "Which asset closed highest?"}, result)
+    run_tool(hooks, "ask_question", {"question": "Which store sold the most?"}, result)
 
     assert posted_receipt(api)["content"]["resolutionLineage"] == [
-        {"phrase": "closing price", "ontologyObject": "Close", "table": "main.daily_prices", "column": "close"}
+        {"phrase": "net revenue", "ontologyObject": "Net Amount", "table": "main.orders", "column": "net_amount"}
     ]
 
 
 def test_a_whole_question_as_the_lineage_phrase_is_cut(hooks, api):
     # Auto Ontology can bind a long question as one phrase; the receipt allows 500 characters.
-    binding = {"phrase": "q" * 600, "ontology_object": "News", "table": "main.company_news", "column": "headline"}
-    result = {"answer": "ALPH", "sql": "SELECT 1", "rows": [], "row_count": 0, "resolution_lineage": [binding]}
+    binding = {"phrase": "q" * 600, "ontology_object": "Return", "table": "main.returns", "column": "reason"}
+    result = {"answer": "S-12", "sql": "SELECT 1", "rows": [], "row_count": 0, "resolution_lineage": [binding]}
 
-    run_tool(hooks, "ask_question", {"question": "Which issuers had negative news?"}, result)
+    run_tool(hooks, "ask_question", {"question": "Which customers returned damaged items?"}, result)
 
     assert len(posted_receipt(api)["content"]["resolutionLineage"][0]["phrase"]) == 500
 
@@ -424,16 +519,18 @@ def test_each_tool_gets_the_sources_its_family_allows(hooks, api):
         directive = hooks.pre_tool_call(tool_name=tool["hermes_name"], args={"source_ids": ["x"]}, session_id=JOB)
         if tool["id"] == "retrieve_evidence":
             assert directive == {"action": "modify", "args": {"source_ids": DOCUMENTS}}
-        elif tool["server"] == "market_analytics":
+        elif tool["id"] == "query_tables":
+            assert directive == {"action": "modify", "args": {"source_ids": [STRUCTURED, UPLOADED_TABLES]}}
+        elif tool["id"] == "predict":
             assert directive == {"action": "modify", "args": {"source_ids": [STRUCTURED]}}
         else:
-            assert directive is None  # ask_question serves only the pack's database and takes no scope argument
+            assert directive is None  # ask_question serves only its own database and takes no scope argument
     assert api.scope_reads == 1
 
 
 def test_ask_question_keeps_only_the_question(hooks):
     args = {
-        "question": "Which asset closed highest?",
+        "question": "Which store sold the most?",
         "conversation_id": ",",
         "target_db": "other",
         "prediction": "p",
@@ -444,13 +541,13 @@ def test_ask_question_keeps_only_the_question(hooks):
 
     # Hermes dispatches this same dict; a modify directive could only add keys, never remove one.
     assert directive is None
-    assert args == {"question": "Which asset closed highest?"}
+    assert args == {"question": "Which store sold the most?"}
 
 
 def test_other_tools_keep_their_arguments(hooks):
-    args = {"asset_ids": ["asset-alpha"], "evidence": "kept"}
-    hooks.pre_tool_call(tool_name=TOOLS["price_context"]["hermes_name"], args=args, session_id=JOB)
-    assert args == {"asset_ids": ["asset-alpha"], "evidence": "kept"}
+    args = {**QUERY_ARGS, "evidence": "kept"}
+    hooks.pre_tool_call(tool_name=TOOLS["query_tables"]["hermes_name"], args=args, session_id=JOB)
+    assert args == {**QUERY_ARGS, "evidence": "kept"}
 
 
 @pytest.mark.parametrize(
@@ -458,16 +555,27 @@ def test_other_tools_keep_their_arguments(hooks):
     [
         ("skill_manage", SCOPE, False),
         ("mcp__retrieval__delete_collection", SCOPE, False),
-        ("mcp__market_analytics__market_scan", {**SCOPE, "sources": SCOPE["sources"][:2]}, False),
+        ("mcp__market_analytics__market_scan", SCOPE, False),
+        ("mcp__tables__query_tables", {**SCOPE, "sources": SCOPE["sources"][:2]}, False),
+        ("mcp__prediction__predict", {**SCOPE, "sources": [SCOPE["sources"][0], SCOPE["sources"][3]]}, False),
         (
             "mcp__auto_ontology__ask_question",
-            {**SCOPE, "sources": [{"id": STRUCTURED, "capabilities": ["market_analytics"]}]},
+            {**SCOPE, "sources": [{"id": STRUCTURED, "capabilities": ["structured_prediction"]}]},
             False,
         ),
         ("mcp__retrieval__retrieve_evidence", SCOPE, True),
         ("mcp__retrieval__retrieve_evidence", {"unexpected": "shape"}, False),
     ],
-    ids=["skill_manage", "unregistered", "no-allowed-source", "no-structured-retrieval", "api-down", "bad-scope"],
+    ids=[
+        "skill_manage",
+        "unregistered",
+        "retired-market-tool",
+        "no-table-source",
+        "no-prediction-source",
+        "no-structured-retrieval",
+        "api-down",
+        "bad-scope",
+    ],
 )
 def test_calls_are_blocked(tool_name, scope, api_down):
     api = FakeApi(scope)
@@ -481,9 +589,9 @@ def test_other_hermes_tools_pass_through(hooks):
 
 
 def test_no_evidence_id_when_the_receipt_was_not_stored(hooks, api):
-    hooks.pre_tool_call(tool_name=TOOLS["price_context"]["hermes_name"], args={}, session_id=JOB)
+    hooks.pre_tool_call(tool_name=TOOLS["query_tables"]["hermes_name"], args=QUERY_ARGS, session_id=JOB)
     api.down = True
-    assert run_tool(hooks, "price_context", {}, PRICE_CONTEXT) is None
+    assert run_tool(hooks, "query_tables", QUERY_ARGS, QUERY) is None
 
 
 def test_model_calls_report_the_served_model_and_tier(hooks, api):
@@ -493,7 +601,7 @@ def test_model_calls_report_the_served_model_and_tier(hooks, api):
             session_id=JOB,
             api_request_id=request_id,
             turn_id="turn-1",
-            model="market-research",
+            model="knowledge",
             response_model=model,
             usage=usage,
             started_at=1790571611.5,

@@ -7,8 +7,10 @@
 to its stdin.
 This file imports nothing from the API, so it runs in isolated mode. The query must be a single
 SELECT over the database's own tables and views; each table is replaced by a projection of its
-known columns before DuckDB sees the query. DuckDB opens the file read-only, with external
-access, extensions and spilling off.
+known columns before DuckDB sees the query. DuckDB attaches the file read-only under the source's
+alias (``database_name``), as the agent's tables tool does, so ``orders``, ``main.orders`` and
+``retail_sales.orders`` all name the same table; then external access, extensions and spilling are off and
+the configuration is locked.
 """
 
 from __future__ import annotations
@@ -56,7 +58,14 @@ def validate_sql(sql: str, tables: dict[str, list[str]], database_name: str) -> 
                 source.catalog and source.catalog.casefold() != database_name.casefold()
             ):
                 raise QueryRejected("Only the database's own tables and views are supported.")
-            columns = tables.get(f"{source.db or 'main'}.{source.name}".casefold())
+            schema = source.db or "main"
+            if (
+                not source.catalog
+                and schema.casefold() == database_name.casefold()
+                and f"{schema}.{source.name}".casefold() not in tables
+            ):
+                schema = "main"  # <alias>.<table>, as the agent writes it: the database's own main schema
+            columns = tables.get(f"{schema}.{source.name}".casefold())
             if not columns:
                 raise QueryRejected("A table is not part of this database.")
             for column in scope.columns:
@@ -105,10 +114,8 @@ def execute(payload: dict[str, Any]) -> dict[str, Any]:
     with (
         tempfile.TemporaryDirectory(prefix="demo-api-query-") as temp_directory,
         duckdb.connect(
-            payload["path"],
-            read_only=True,
+            ":memory:",
             config={
-                "enable_external_access": "false",
                 "autoload_known_extensions": "false",
                 "autoinstall_known_extensions": "false",
                 "threads": "1",
@@ -118,6 +125,13 @@ def execute(payload: dict[str, Any]) -> dict[str, Any]:
             },
         ) as connection,
     ):
+        # ATTACH takes no parameters: quote the path as a literal and the alias as an identifier
+        path = "'" + payload["path"].replace("'", "''") + "'"
+        alias = '"' + payload["database_name"].replace('"', '""') + '"'
+        connection.execute(f"ATTACH {path} AS {alias} (READ_ONLY)")
+        connection.execute(f"USE {alias}")
+        connection.execute("SET enable_external_access = false")
+        connection.execute("SET lock_configuration = true")
         statements = connection.extract_statements(sql)
         if len(statements) != 1 or statements[0].type != duckdb.StatementType.SELECT:
             raise QueryRejected("Only one SELECT query is supported.")

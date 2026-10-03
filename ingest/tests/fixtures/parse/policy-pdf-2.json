@@ -1,0 +1,39 @@
+{
+  "id": "chatcmpl-98d515e9e6b77677",
+  "object": "chat.completion",
+  "created": 1790997222,
+  "model": "nvidia/NVIDIA-Nemotron-Parse-2.0",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<x_0.2266><y_0.1922>## Exceptions<x_0.3398><y_0.2102><class_Section-header>\n\n<x_0.2256><y_0.218>Clearance items are final sale. Gift cards cannot be returned. Store managers may waive the\nrestocking fee for loyalty members of the gold tier.<x_0.7178><y_0.2398><class_Text>",
+        "refusal": null,
+        "annotations": null,
+        "audio": null,
+        "function_call": null,
+        "reasoning": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "stop_reason": null,
+      "token_ids": null,
+      "routed_experts": null
+    }
+  ],
+  "service_tier": null,
+  "system_fingerprint": "vllm-0.27.1-563bd04a",
+  "usage": {
+    "prompt_tokens": 6,
+    "total_tokens": 55,
+    "completion_tokens": 49,
+    "prompt_tokens_details": null
+  },
+  "prompt_logprobs": null,
+  "prompt_token_ids": null,
+  "prompt_text": null,
+  "kv_transfer_params": null,
+  "ec_transfer_params": null,
+  "metrics": null
+}

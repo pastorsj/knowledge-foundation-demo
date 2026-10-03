@@ -5,15 +5,15 @@ license: Apache-2.0
 compatibility: Requires the auto_ontology MCP server (ask_question tool)
 metadata:
   author: NVIDIA
-  version: "1.0"
+  version: "2.0"
   hermes:
     tags:
       - auto-ontology
       - text-to-sql
       - structured-data
     related_skills:
+      - querying-tables
       - predicting-with-kumo
-      - analyzing-market-data
 ---
 
 # Querying Auto Ontology
@@ -26,11 +26,11 @@ the result you need; Auto Ontology writes the query.
 
 - The selected sources include the `structured_retrieval` capability, and
 - the question needs exact rows, counts, totals, filters, groupings, or a custom
-  calculation over historical data, such as a sector rollup, a drawdown, or the
-  correlation between two chosen assets.
+  calculation over historical data, phrased in business terms ("active members",
+  "on-time deliveries") that do not map plainly to the catalog's columns.
 
-Use `predicting-with-kumo` for future outcomes. Use `analyzing-market-data` for
-the rankings and scans that its tools compute directly.
+When the catalog's columns make the SQL clear, `querying-tables` is faster and
+exact: prefer it. Use `predicting-with-kumo` for future outcomes.
 
 ## Tool
 
@@ -40,7 +40,7 @@ the rankings and scans that its tools compute directly.
 | --- | --- |
 | `question` | One complete, self-contained question |
 
-Auto Ontology answers over the data pack's database only. Pass only
+Auto Ontology answers over the one database it was set up for. Pass only
 `question`: never `source_ids`, `target_db`, `prediction`, `conversation_id`,
 or `evidence`.
 
@@ -52,7 +52,8 @@ or `evidence`.
 2. Call `ask_question` with only `question`.
 3. Read `rows`, `row_count`, `truncated`, and `sql`. Base claims on `rows`; treat
    `answer` as a summary. `resolution_lineage` shows which tables and columns
-   each phrase of the question resolved to.
+   each phrase of the question resolved to: check that they are the ones the
+   question means, in the selected source.
 4. If `truncated` is true, say the result is partial, or ask a narrower
    question.
 5. If the result is empty, has the wrong grain, or answers a different
@@ -63,32 +64,24 @@ or `evidence`.
 - Do not write SQL yourself or paste SQL into the question. Describe the result.
 - Auto Ontology's descriptions mention `search_terms` and `check_answerable`.
   Those tools are not enabled here, so go straight to `ask_question`.
+- Define every measure in the question: what is counted or summed, over which
+  rows, and how a ratio's numerator and denominator are formed. "Average order
+  value" can mean per order or per customer; say which.
 - Keep measures at their natural grain. Ask for totals before a one-to-many join
   can multiply them.
-- A return over a window is one number per asset, measured as the market tools
-  measure it: from the asset's close on its latest trading day before the window
-  (its first close in the window if it was listed inside it) to its close on its
-  latest trading day in the window. Say so in the question, in those words: "last
-  close" can come back as the highest close. Ask for the median or average of
-  those per-asset returns, never of daily returns, and for every asset of a group
-  to be counted; an asset without a close in the window has no return and stays
-  out of the median or average.
+- State date windows as explicit dates, with whether the end date is included.
 - Ask separate questions for different time grains, such as daily and monthly.
 - A correlation in the rows is not a cause.
 
 ## Example
 
-Question: "Which sectors had the best equal-weight return last month, and how
-many assets does each sector have?"
+Question: "How many orders did gold-tier customers place, and what was their
+average order value?"
 
 ```
 ask_question(
-    question="For each sector, count every asset and give the average of its assets' "
-             "returns from 2026-08-01 to 2026-08-31. Measure each asset's return from its "
-             "close on its latest trading day before 2026-08-01 (or its first close in "
-             "the window, if it was listed later) to its close on its latest trading day "
-             "in the window; an asset without a close in the window has no return. Sort "
-             "sectors by that average, highest first.",
+    question="Count the orders placed by customers in the gold loyalty tier, and give the "
+             "average net amount per order for those orders.",
 )
 ```
 

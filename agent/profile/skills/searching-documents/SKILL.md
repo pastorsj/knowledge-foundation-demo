@@ -5,7 +5,7 @@ license: Apache-2.0
 compatibility: Requires the retrieval MCP server (retrieve_evidence tool)
 metadata:
   author: NVIDIA
-  version: "1.2"
+  version: "2.0"
   hermes:
     tags:
       - retrieval
@@ -13,24 +13,27 @@ metadata:
       - citations
       - nemotron
     related_skills:
-      - analyzing-market-data
-      - querying-auto-ontology
+      - querying-tables
+      - predicting-with-kumo
 ---
 
 # Searching documents
 
-`retrieve_evidence` searches every document source selected for this turn. It
-ranks passages with NVIDIA Nemotron retrieval models and returns up to 8
-passages with their titles, citations, and dates.
+`retrieve_evidence` searches every document source selected for this turn:
+policies, procedures, contracts, reports, manuals, slide decks and scanned
+pages, parsed (with NVIDIA Nemotron Parse where a page needs it) and split into
+passages. It ranks passages with NVIDIA Nemotron retrieval models and returns
+up to 8, each with its document title, citation and metadata.
 
 ## When to Use
 
 - The selected sources include the `unstructured_retrieval` capability, and
-- the answer depends on what a document says: a filing, disclosure, regulation,
-  policy, or quotation.
+- the answer depends on what a document says: a rule, a requirement, a
+  procedure step, a term of a contract, a figure stated in a report, or a
+  quotation.
 
-Numbers calculated from data belong to `analyzing-market-data` or
-`querying-auto-ontology`.
+Figures computed from table rows (counts, totals, rankings) belong to
+`querying-tables`. Forecasts belong to `predicting-with-kumo`.
 
 ## Tool
 
@@ -43,68 +46,73 @@ Numbers calculated from data belong to `analyzing-market-data` or
 
 The application limits the search to the selected sources. Pass only `query`.
 
+Each hit has a `rank`, a `score`, the `source_id`, the document `title`, a
+`snippet` (the passage text) and `metadata`: `citation` (file and page or
+section), `file_name`, `page_start` and `page_end` when the document has pages,
+`headings` (where the passage sits in the document) and `doc_items` (`table`
+when the passage holds a table). `models.rerank` is null when the search ran
+without a reranker; the hits are then in vector-similarity order.
+
 ## Procedure
 
-1. Write one focused query per distinct topic, in the words the passage itself
-   would use. Name the concept you need, not the answer you expect. To find one
-   company's documents, put its name in the query.
-2. When you search filings, leave form names (8-K, 6-K) and words such as
-   "SEC filing", "current report" or "material event" out of the query. Every
-   filing's cover page repeats them, so a query with them returns cover pages
-   instead of what the filings report. Each passage's metadata gives its form
-   and filing date: check the form and period there. Item numbers and titles,
-   such as "Item 1.05 material cybersecurity incidents", are content: keep
-   them. A search of a rule may name the form the rule governs.
-3. For a kind of event, such as disruptions, incidents or restructurings,
-   write the query as the sentence a filing would use to report one, such as
-   "a fire damaged the plant" or "the company will close a facility and cut
-   jobs". A list of keywords, or the category's name alone, matches the risk
-   lists of forward-looking statements, which say what could happen, not what
-   did.
-4. Make one call even when several document sources are selected. Their
+1. Write one focused query per distinct topic, in the words the document
+   itself would use: "restocking fee for opened electronics", not "how much
+   does it cost to return a laptop". Name the concept you need, not the answer
+   you expect. To find one document, put its subject or title in the query.
+2. For an event, a condition or a requirement, write the query as the sentence
+   the document would use to state it, such as "a technician must lock out the
+   machine before clearing a jam". A bare keyword list matches tables of
+   contents, glossaries and lists of headings instead of the passage that says
+   it.
+3. Make one call even when several document sources are selected. Their
    passages are ranked together.
-5. Keep only passages that directly support a claim, and note each passage's
-   title, citation, and date.
-6. If nothing relevant comes back, rephrase once with different key terms. Then
-   say the passages found do not cover the question. A call returns only its
-   best passages, so never claim that a source contains no such document.
-7. That makes at most two searches per topic. A question about a rule and the
-   filings that apply it has two topics: search the rule, then the filings.
-   When the passages cover only part of a rule, cite what they show and name
-   what is missing rather than searching again.
+4. Keep only passages that directly support a claim, and note each passage's
+   title, citation and section heading. A passage cut off mid-sentence ends in
+   an ellipsis: claim only what the text shown says.
+5. A passage can hold a table as Markdown rows (its `doc_items` include
+   `table`). Read the header row and the row label before you cite a value from
+   it, and keep the table's units.
+6. If nothing relevant comes back, rephrase once with different key terms,
+   such as a synonym the document might use. Then say the passages found do
+   not cover the question. A call returns only its best passages, so never
+   claim that a source contains no such document.
+7. That makes at most two searches per topic. A question about a policy and
+   the procedure that applies it has two topics: search the policy, then the
+   procedure. When the passages cover only part of a rule, cite what they show
+   and name what is missing rather than searching again.
 
 ## Pitfalls
 
 - Keep what a document's author claims separate from what a rule or policy
-  requires.
+  requires, and a draft or proposal separate from a policy in force.
+- When two documents disagree (an old and a new version, a policy and a
+  procedure), report both with their citations and dates.
 - Quote exact wording only when the wording matters. Otherwise paraphrase and
   cite.
 - Never answer a document question from general knowledge or web search.
-- Link a document to a stock in the market data only through the passage's
-  `ticker` metadata. A matching company name alone does not prove it is the
-  same entity.
+- Link a document to rows in a table only through an identifier both share,
+  such as a product code or account number. A matching name alone does not
+  prove it is the same entity.
 
 ## Example
 
-Question: "What must a company disclose after a material cybersecurity
-incident, and how quickly?"
+Question: "What restocking fee applies to opened electronics, and do gold
+members pay it?"
 
 ```
-retrieve_evidence(query="disclosure requirements and deadline after a material cybersecurity incident")
+retrieve_evidence(query="restocking fee for opened electronics and loyalty tier exceptions")
 ```
 
-Question: "Which second-quarter current reports describe a product recall?"
+Question: "What must a technician do before clearing a jammed conveyor?"
 
 ```
-retrieve_evidence(query="the company recalled products after a defect was found")
+retrieve_evidence(query="the technician must lock out and tag out the conveyor before clearing a jam")
 ```
 
-The query is one sentence that reports the event, and it names no form. A list
-such as "product recall 8-K defect safety notice" returns cover pages and risk
-lists instead: the form name matches every cover page, and the keywords match
-the risks that forward-looking statements list. The passages' metadata gives
-each filing's form and date.
+The second query is the sentence a safety procedure would contain. A keyword
+list such as "conveyor jam safety" tends to return the manual's contents page
+and section titles instead.
 
 Answer from the returned passages and cite the result's `evidence_id` after each
 claim as `[evidence:<evidence_id>]`. One token covers every passage of the
-result: do not add a passage's rank or title inside the brackets.
+result: do not add a passage's rank, title or page inside the brackets.

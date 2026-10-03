@@ -14,12 +14,14 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from conftest import write_pack
+from conftest import MANUALS
+from conftest import POLICIES
+from conftest import index
 from mcp.client import Client
 
 from demo_retrieval import budget
-from demo_retrieval import ingest
 from demo_retrieval import search
+from demo_retrieval import store
 from demo_retrieval.search import Hit
 from demo_retrieval.search import Retriever
 from demo_retrieval.server import create_server
@@ -28,38 +30,39 @@ from demo_retrieval.settings import Settings
 pytestmark = pytest.mark.anyio
 
 HERMES_MCP_LIMIT = 50_000  # Hermes v2026.9.24, tool_budget.mcp_result_size_chars
-# Text that JSON escapes twice over (quotes, backslashes, line breaks), in chunks as long as ingest makes them.
-NASTY = 'Item 1.05 "material" \\ cybersecurity incident\n\t' * 60
+# Text that JSON escapes twice over (quotes, backslashes, line breaks), longer than a passage may be.
+NASTY = 'Section 4.2 "restocking" \\ fee for returned furniture\n\t' * 60
 
 
-def worst_documents() -> list[dict[str, Any]]:
-    """Forty long documents per source, with titles, URLs and metadata as long as the corpora have them."""
+def worst_chunks() -> list[dict[str, Any]]:
+    """Forty long chunks per source, with titles, URLs and metadata as long as real documents have them."""
     return [
         {
-            "document_id": f"{source}:{'d' * 60}:{i}",
+            "chunk_id": f"{source}:{'d' * 60}:{i}:0001",
             "source_id": source,
-            "title": f"{'Regulation S-K, Subpart 229.1000, Mergers and Acquisitions (Regulation M-A) ' * 3}{i}",
-            "text": NASTY * 2,
-            "url": f"https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml?{'part=229&' * 20}{i}",
+            "document_id": f"{source}:{'d' * 60}:{i}",
+            "title": f"{'Northwind Retail Store Operations Manual, Part 4, Returns and Exchanges ' * 3}{i}",
+            "text": NASTY,
+            "url": f"https://intranet.example.com/policies/returns.pdf?{'section=4&' * 20}{i}",
             "published_at": "2026-06-30T00:00:00Z",
-            "metadata": {
-                "citation": "17 CFR § 229.1011 " * 8,
-                "part_heading": "PART 229—STANDARD INSTRUCTIONS FOR FILING FORMS " * 5,
-                "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION " * 2,
-                "items": "1.01,1.05,2.02,5.02,7.01,8.01,9.01",
-            },
+            "citation": "Northwind Retail Policy § 4.2 " * 8,
+            "section_heading": "SECTION 4—RETURNS, EXCHANGES AND RESTOCKING FEES " * 5,
+            "chapter_heading": "CHAPTER II—STORE OPERATIONS " * 2,
+            "pages": "1,2,3,4,5,6,7",
         }
-        for source in ("market_news", "market_regulations")
+        for source in (MANUALS, POLICIES)
         for i in range(40)
     ]
 
 
+def metadata(chunk: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in chunk.items() if key not in store.SCALAR_FIELDS}
+
+
 @pytest.fixture
-async def worst(settings: Settings, tmp_path: Path) -> AsyncIterator[Retriever]:
-    data_dir = tmp_path / "worst"
-    write_pack(data_dir, worst_documents())
-    manifest = ingest.run(settings, data_dir)
-    retriever = Retriever(settings, manifest.collection)
+async def worst(settings: Settings) -> AsyncIterator[Retriever]:
+    index(settings.milvus_uri, "knowledge__worst", worst_chunks())
+    retriever = Retriever(settings)
     yield retriever
     await retriever.close()
 
@@ -69,19 +72,15 @@ def as_hermes_reads_it(text: str) -> str:
     return json.dumps({"evidence_id": budget.EVIDENCE_ID, "result": text}, ensure_ascii=False)
 
 
-async def test_the_worst_case_fits_the_budget_and_keeps_its_citations(worst: Retriever) -> None:
-    server = create_server(worst, frozenset({"market_news", "market_regulations"}))
+async def test_the_worst_case_fits_the_budget_and_keeps_its_citations(worst: Retriever, knowledge_dir: Path) -> None:
+    server = create_server(worst, knowledge_dir)
     async with Client(server) as client:
         result = await client.call_tool(
             "retrieve_evidence",
-            {
-                "query": "Item 1.05 material cybersecurity incident",
-                "source_ids": ["market_news", "market_regulations"],
-                "top_k": 25,
-            },
+            {"query": "restocking fee for returned furniture", "source_ids": [MANUALS, POLICIES], "top_k": 25},
         )
 
-    assert not result.is_error
+    assert not result.is_error, result.content[0].text
     read = as_hermes_reads_it(result.content[0].text)
     assert len(read) <= budget.MAX_RESULT_CHARS < HERMES_MCP_LIMIT
     hits = result.structured_content["hits"]
@@ -90,29 +89,24 @@ async def test_the_worst_case_fits_the_budget_and_keeps_its_citations(worst: Ret
     for hit in hits:
         assert len(hit["snippet"]) <= search.MAX_SNIPPET_CHARS
         # A citation needs the document, its title, link and date; none of them is cut.
-        source = next(doc for doc in worst_documents() if doc["document_id"] == hit["document_id"])
+        source = next(chunk for chunk in worst_chunks() if chunk["chunk_id"] == hit["chunk_id"])
         assert (hit["title"], hit["url"], hit["published_at"]) == (
             source["title"],
             source["url"],
             source["published_at"],
         )
-        assert hit["chunk_id"].startswith(hit["document_id"])
-        assert hit["metadata"] == source["metadata"]
+        assert hit["document_id"] == source["document_id"]
+        assert hit["metadata"] == metadata(source)
 
 
-async def test_top_k_above_the_cap_returns_the_cap(retriever: Retriever) -> None:
-    server = create_server(retriever, frozenset({"market_news", "market_regulations"}))
+async def test_top_k_above_the_cap_returns_the_cap(retriever: Retriever, knowledge_dir: Path) -> None:
+    server = create_server(retriever, knowledge_dir)
     async with Client(server) as client:
         result = await client.call_tool(
-            "retrieve_evidence",
-            {"query": "report", "source_ids": ["market_news", "market_regulations"], "top_k": 25},
+            "retrieve_evidence", {"query": "store", "source_ids": [MANUALS, POLICIES], "top_k": 25}
         )
 
     assert len(result.structured_content["hits"]) == budget.MAX_HITS
-
-
-def test_a_passage_is_never_shorter_than_a_chunk() -> None:
-    assert search.MAX_SNIPPET_CHARS == ingest.CHUNK_SIZE
 
 
 def test_a_long_passage_is_cut_at_a_word_and_marked() -> None:
@@ -129,23 +123,23 @@ def test_a_lone_passage_too_long_is_cut_to_fit() -> None:
         rank=1,
         score=1.0,
         vector_score=0.5,
-        source_id="market_news",
-        document_id="edgar:0",
-        chunk_id="edgar:0:0001",
+        source_id=POLICIES,
+        document_id=f"{POLICIES}:policy-0.pdf",
+        chunk_id=f"{POLICIES}:policy-0.pdf:0001",
         title="T" * 20_000,
-        url="https://www.sec.gov/Archives/edgar/0.htm",
+        url="https://intranet.example.com/policies/0.pdf",
         published_at=None,
         snippet="S" * 20_000,
         metadata={"citation": "C" * 20_000},
     )
     result = search.RetrievalResult(
         query="q",
-        source_ids=["market_news"],
-        collection="test_pack",
-        collection_version="test_pack__x",
+        source_ids=[POLICIES],
+        collection="knowledge",
+        collection_version="knowledge__v1",
         hits=[hit],
-        candidate_counts={"market_news": 1},
-        models=search.Models(embed="e", rerank="r"),
+        candidate_counts={POLICIES: 1},
+        models=search.Models(embed="e", rerank=None),
         index=search.IndexInfo(type="HNSW", metric="COSINE", params={}, search_params={}),
         timings=search.Timings(embed_ms=0, search_ms=0, rerank_ms=0, total_ms=0),
     )

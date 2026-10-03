@@ -1,0 +1,136 @@
+{
+  "schema_version": "1",
+  "id": "retail.sales",
+  "pack_id": "retail",
+  "name": "Sales & Customers",
+  "description": "Stores, customers, orders and returns.",
+  "agent_description": "Northwind Retail's operational tables in DuckDB: stores, customers, orders and order returns.",
+  "kind": "structured",
+  "capabilities": [
+    "structured_retrieval",
+    "structured_prediction"
+  ],
+  "synthetic": true,
+  "default_enabled": true,
+  "example_questions": [
+    "Which stores grew revenue fastest this year?"
+  ],
+  "status": "ready",
+  "updated_at": "2026-10-02T12:00:00Z",
+  "files": [
+    {
+      "file_id": "f-9a8b7c6d5e4f3a2b",
+      "file_name": "customers.csv",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "size_bytes": 20480,
+      "status": "ready",
+      "parser": "duckdb-csv",
+      "tables": [
+        "customers"
+      ],
+      "warnings": [],
+      "error_message": null
+    },
+    {
+      "file_id": "f-1a2b3c4d5e6f7a8b",
+      "file_name": "orders.csv",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "size_bytes": 81920,
+      "status": "ready",
+      "parser": "duckdb-csv",
+      "tables": [
+        "orders"
+      ],
+      "warnings": [],
+      "error_message": null
+    }
+  ],
+  "database": {
+    "path": "sources/retail.sales/tables.duckdb",
+    "alias": "retail_sales",
+    "tables": [
+      {
+        "name": "customers",
+        "description": "One row per loyalty customer.",
+        "row_count": 3,
+        "primary_key": "customer_id",
+        "time_column": null,
+        "origin_file": "customers.csv",
+        "columns": [
+          {
+            "name": "customer_id",
+            "type": "VARCHAR",
+            "description": "",
+            "nullable": false
+          },
+          {
+            "name": "tier",
+            "type": "VARCHAR",
+            "description": "Loyalty tier: bronze, silver or gold.",
+            "nullable": false
+          },
+          {
+            "name": "joined_at",
+            "type": "DATE",
+            "description": "",
+            "nullable": false
+          }
+        ],
+        "foreign_keys": []
+      },
+      {
+        "name": "orders",
+        "description": "One row per order.",
+        "row_count": 5,
+        "primary_key": "order_id",
+        "time_column": "ordered_at",
+        "origin_file": "orders.csv",
+        "columns": [
+          {
+            "name": "order_id",
+            "type": "VARCHAR",
+            "description": "",
+            "nullable": false
+          },
+          {
+            "name": "customer_id",
+            "type": "VARCHAR",
+            "description": "",
+            "nullable": false
+          },
+          {
+            "name": "ordered_at",
+            "type": "TIMESTAMP",
+            "description": "",
+            "nullable": false
+          },
+          {
+            "name": "net_amount",
+            "type": "DOUBLE",
+            "description": "Order value after discounts, in USD.",
+            "nullable": false
+          }
+        ],
+        "foreign_keys": [
+          {
+            "column": "customer_id",
+            "references_table": "customers",
+            "references_column": "customer_id",
+            "inferred": false
+          }
+        ]
+      }
+    ]
+  },
+  "prediction": {
+    "templates": [
+      {
+        "id": "churn_90d",
+        "name": "No order in 90 days",
+        "description": "Likelihood that a customer places no order in the next 90 days.",
+        "pql": "PREDICT COUNT(orders.*, 0, 90, days) = 0 FOR EACH customers.customer_id",
+        "anchor_time": "2026-09-30T00:00:00Z"
+      }
+    ]
+  }
+}

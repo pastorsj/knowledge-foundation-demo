@@ -1,0 +1,100 @@
+provider_id,specialty,credential,primary_facility_id,years_in_practice
+PR0001,Hospital Medicine,MD,F01,7
+PR0002,Hospital Medicine,MD,F01,13
+PR0003,Hospital Medicine,DO,F01,22
+PR0004,Hospital Medicine,MD,F01,24
+PR0005,Hospital Medicine,MD,F01,24
+PR0006,Hospital Medicine,DO,F01,3
+PR0007,Hospital Medicine,MD,F01,13
+PR0008,Cardiology,MD,F01,16
+PR0009,Cardiology,MD,F01,14
+PR0010,Cardiology,MD,F01,20
+PR0011,Pulmonology,MD,F01,24
+PR0012,Pulmonology,MD,F01,9
+PR0013,Emergency Medicine,MD,F01,2
+PR0014,Emergency Medicine,DO,F01,31
+PR0015,Emergency Medicine,MD,F01,22
+PR0016,Emergency Medicine,DO,F01,11
+PR0017,Emergency Medicine,MD,F01,13
+PR0018,Emergency Medicine,DO,F01,11
+PR0019,Hospital Medicine,MD,F02,20
+PR0020,Hospital Medicine,MD,F02,29
+PR0021,Hospital Medicine,DO,F02,5
+PR0022,Hospital Medicine,MD,F02,12
+PR0023,Hospital Medicine,MD,F02,20
+PR0024,Hospital Medicine,DO,F02,23
+PR0025,Hospital Medicine,MD,F02,22
+PR0026,Cardiology,MD,F02,25
+PR0027,Cardiology,MD,F02,16
+PR0028,Cardiology,MD,F02,2
+PR0029,Pulmonology,MD,F02,8
+PR0030,Pulmonology,MD,F02,15
+PR0031,Emergency Medicine,MD,F02,24
+PR0032,Emergency Medicine,DO,F02,18
+PR0033,Emergency Medicine,MD,F02,15
+PR0034,Emergency Medicine,DO,F02,8
+PR0035,Emergency Medicine,MD,F02,2
+PR0036,Emergency Medicine,DO,F02,11
+PR0037,Hospital Medicine,MD,F03,13
+PR0038,Hospital Medicine,MD,F03,2
+PR0039,Hospital Medicine,DO,F03,21
+PR0040,Hospital Medicine,MD,F03,2
+PR0041,Hospital Medicine,MD,F03,26
+PR0042,Hospital Medicine,DO,F03,9
+PR0043,Hospital Medicine,MD,F03,20
+PR0044,Cardiology,MD,F03,23
+PR0045,Cardiology,MD,F03,14
+PR0046,Cardiology,MD,F03,20
+PR0047,Pulmonology,MD,F03,17
+PR0048,Pulmonology,MD,F03,12
+PR0049,Emergency Medicine,MD,F03,21
+PR0050,Emergency Medicine,DO,F03,25
+PR0051,Emergency Medicine,MD,F03,10
+PR0052,Emergency Medicine,DO,F03,17
+PR0053,Emergency Medicine,MD,F03,21
+PR0054,Emergency Medicine,DO,F03,10
+PR0055,Family Medicine,MD,F04,4
+PR0056,Family Medicine,DO,F04,19
+PR0057,Internal Medicine,MD,F04,12
+PR0058,Family Medicine,NP,F04,19
+PR0059,Family Medicine,MD,F05,18
+PR0060,Family Medicine,DO,F05,21
+PR0061,Internal Medicine,MD,F05,15
+PR0062,Family Medicine,NP,F05,18
+PR0063,Family Medicine,MD,F06,19
+PR0064,Family Medicine,DO,F06,18
+PR0065,Internal Medicine,MD,F06,17
+PR0066,Family Medicine,NP,F06,29
+PR0067,Family Medicine,MD,F07,11
+PR0068,Family Medicine,DO,F07,27
+PR0069,Internal Medicine,MD,F07,6
+PR0070,Family Medicine,NP,F07,26
+PR0071,Family Medicine,MD,F08,8
+PR0072,Family Medicine,DO,F08,26
+PR0073,Internal Medicine,MD,F08,8
+PR0074,Family Medicine,NP,F08,30
+PR0075,Family Medicine,MD,F09,28
+PR0076,Family Medicine,DO,F09,22
+PR0077,Internal Medicine,MD,F09,22
+PR0078,Family Medicine,NP,F09,10
+PR0079,Cardiology,MD,F10,2
+PR0080,Cardiology,MD,F10,26
+PR0081,Cardiology,MD,F10,7
+PR0082,Cardiology,NP,F10,13
+PR0083,Cardiology,MD,F11,10
+PR0084,Cardiology,MD,F11,2
+PR0085,Cardiology,MD,F11,23
+PR0086,Cardiology,NP,F11,15
+PR0087,Pulmonology,MD,F12,3
+PR0088,Pulmonology,MD,F12,14
+PR0089,Pulmonology,NP,F12,15
+PR0090,Endocrinology,MD,F13,17
+PR0091,Endocrinology,MD,F13,20
+PR0092,Endocrinology,NP,F13,30
+PR0093,Family Medicine,MD,F14,11
+PR0094,Family Medicine,DO,F14,16
+PR0095,Internal Medicine,MD,F14,24
+PR0096,Family Medicine,NP,F14,10
+PR0097,Urgent Care,MD,F15,20
+PR0098,Urgent Care,PA,F15,13
+PR0099,Urgent Care,NP,F15,22

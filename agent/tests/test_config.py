@@ -10,15 +10,15 @@ import sys
 import pytest
 import yaml
 from common import AGENT
+from common import ROOT
 from common import SKILL_DIRS
 from common import exposed_tools
 from common import load_yaml
 from render_config import FEATURES
-from render_config import KUMO_TOOL
 from render_config import parse_features
 from render_config import render
 
-KUMO = f"mcp__market_analytics__{KUMO_TOOL}"
+DEFAULT_FEATURES = {"retrieval", "tables"}  # the core profile: documents and tables
 
 
 def test_config_is_at_the_image_schema_version(config):
@@ -43,14 +43,14 @@ def test_side_tasks_stay_off_the_escalation_route(config):
     auxiliary = config["auxiliary"]
     assert auxiliary["title_generation"]["enabled"] is False
     assert auxiliary["background_review"]["enabled"] is False
-    assert auxiliary["compression"]["model"] == "market-research-aux"
+    assert auxiliary["compression"]["model"] == "knowledge-aux"
     assert config["memory"]["memory_enabled"] is False
 
 
 def test_an_overloaded_model_falls_back_to_a_switchyard_route(config):
     # The chain entry must name the configured provider and one of its models, or Hermes skips it.
     [fallback] = config["fallback_providers"]
-    assert fallback == {"provider": config["model"]["provider"], "model": "market-research-fallback"}
+    assert fallback == {"provider": config["model"]["provider"], "model": "knowledge-fallback"}
     assert fallback["model"] in config["providers"]["switchyard"]["models"]
 
 
@@ -73,26 +73,33 @@ def test_every_feature_has_its_skill():
 
 def test_image_default_features_are_valid():
     default = re.search(r"^ARG AGENT_FEATURES=(\S+)$", (AGENT / "Dockerfile").read_text(), re.M).group(1)
-    assert parse_features(default) == {"retrieval", "analytics"}
+    assert parse_features(default) == DEFAULT_FEATURES
+
+
+def test_compose_and_demo_sh_build_the_same_default_features():
+    compose = load_yaml(ROOT / "compose.yaml")["services"]["agent"]["build"]["args"]["AGENT_FEATURES"]
+    assert parse_features(re.fullmatch(r"\$\{AGENT_FEATURES-([^}]+)\}", compose).group(1)) == DEFAULT_FEATURES
+    env_sh = (ROOT / "scripts" / "lib" / "env.sh").read_text(encoding="utf-8")
+    assert parse_features(re.search(r"^\s*local features=(\S+)$", env_sh, re.M).group(1)) == DEFAULT_FEATURES
 
 
 @pytest.mark.parametrize(
     ("features", "toolsets", "disabled"),
     [
         (
-            "retrieval,analytics",
-            ["skills", "retrieval", "market_analytics"],
+            "retrieval,tables",
+            ["skills", "retrieval", "tables"],
             ["predicting-with-kumo", "querying-auto-ontology"],
         ),
         (
-            "retrieval,analytics,kumo,ontology",
-            ["skills", "retrieval", "market_analytics", "auto_ontology"],
+            "retrieval,tables,kumo,ontology",
+            ["skills", "retrieval", "tables", "prediction", "auto_ontology"],
             [],
         ),
         (
-            "analytics",
-            ["skills", "market_analytics"],
-            ["predicting-with-kumo", "querying-auto-ontology", "searching-documents"],
+            "tables,kumo",
+            ["skills", "tables", "prediction"],
+            ["querying-auto-ontology", "searching-documents"],
         ),
     ],
 )
@@ -103,10 +110,20 @@ def test_render_keeps_only_the_selected_features(config, features, toolsets, dis
     assert rendered["skills"]["disabled"] == disabled
 
 
-def test_kumo_tool_comes_only_with_the_kumo_feature(config):
-    without = exposed_tools(render(config, parse_features("analytics")))
-    with_kumo = exposed_tools(render(config, parse_features("analytics,kumo")))
-    assert with_kumo - without == {KUMO}
+@pytest.mark.parametrize(
+    ("feature", "tool"),
+    [
+        ("retrieval", "mcp__retrieval__retrieve_evidence"),
+        ("tables", "mcp__tables__query_tables"),
+        ("kumo", "mcp__prediction__predict"),
+        ("ontology", "mcp__auto_ontology__ask_question"),
+    ],
+)
+def test_each_feature_adds_exactly_its_tool(config, feature, tool):
+    others = ",".join(name for name in FEATURES if name != feature)
+    without = exposed_tools(render(config, parse_features(others)))
+    with_feature = exposed_tools(render(config, parse_features(f"{others},{feature}")))
+    assert with_feature - without == {tool}
 
 
 def test_render_leaves_its_input_untouched(config):
@@ -115,7 +132,8 @@ def test_render_leaves_its_input_untouched(config):
     assert config == before
 
 
-@pytest.mark.parametrize(("features", "error"), [("retrieval,web", "unknown"), ("kumo", "needs the analytics")])
+# analytics was the market tools' feature; it is gone with them.
+@pytest.mark.parametrize(("features", "error"), [("retrieval,web", "unknown"), ("retrieval,analytics", "unknown")])
 def test_bad_feature_sets_are_rejected(features, error):
     with pytest.raises(ValueError, match=error):
         parse_features(features)
@@ -123,7 +141,7 @@ def test_bad_feature_sets_are_rejected(features, error):
 
 def test_cli_writes_a_config_hermes_can_read():
     result = subprocess.run(
-        [sys.executable, "render_config.py", "--features", "retrieval,analytics", "profile/config.yaml"],
+        [sys.executable, "render_config.py", "--features", "retrieval,tables", "profile/config.yaml"],
         cwd=AGENT,
         capture_output=True,
         text=True,

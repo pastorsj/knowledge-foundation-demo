@@ -5,7 +5,7 @@
 line-length = 120
 target-version = "py312"
 # First-party packages, so isort groups them after third-party imports.
-src = ["api/src", "data/src", "data/generate/src", "eval/src", "tools/*/src"]
+src = ["api/src", "eval/src", "ingest/src", "tools/*/src"]
 
 [lint]
 select = ["E", "F", "W", "I", "UP", "PL"]

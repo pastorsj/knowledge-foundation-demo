@@ -107,7 +107,7 @@ for path in "$root"/routes/*.toml.tmpl; do
 done
 
 expect "the judge prompt is inlined without its comment block" exits 0 escalation.nemotron-gpt
-expect "  ...its text is present" grep -q 'escalation judge for a financial research agent' "$work/routes.toml"
+expect "  ...its text is present" grep -q 'escalation judge for an enterprise knowledge assistant' "$work/routes.toml"
 expect "  ...its comment is not" not grep -q -e '<!--' -e 'inlines everything' "$work/routes.toml"
 expect "SWITCHYARD_CONFIRMATIONS=2 is rendered" exits 0 escalation.nemotron SWITCHYARD_CONFIRMATIONS=2
 expect "  ...into the escalation block" grep -q 'confirmations = 2,' "$work/routes.toml"

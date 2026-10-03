@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 """The reference facts the optional grader reads: a question's `facts` template with its oracle rows filled in.
 
-`{market_leaders[:5]: asset_id, total_return}` becomes "asset_id=ABC, total_return=+12.34%; asset_id=...". A
-fraction in a `format.signed_percent` field shows as a signed percentage, one in `format.percent` as a percentage,
-and any other float with three decimals.
+`{top_tiers[:3]: tier, net_revenue}` becomes "tier=gold, net_revenue=395.000; tier=...". A fraction in a
+`format.signed_percent` field shows as a signed percentage, one in `format.percent` as a percentage, and any other
+float with three decimals.
 """
 
 from __future__ import annotations

@@ -1,31 +1,31 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
-"""The deterministic checks: row references, names, percentages, grounding and each check kind."""
+"""The deterministic checks: row references, mentions, percentages, grounding and each check kind."""
 
 import pytest
-from support import market_turn
+from support import answer_turn
+from support import prediction_receipt
 from support import receipt
 
 from demo_eval.checks import body
 from demo_eval.checks import evaluate
 from demo_eval.checks import grounding
 from demo_eval.checks import has_percent
-from demo_eval.checks import named
+from demo_eval.checks import mentioned
 from demo_eval.checks import report_text
 from demo_eval.spec import Check
 from demo_eval.spec import RowRef
 from demo_eval.spec import SpecError
 from demo_eval.spec import select_rows
 
-ROWS = [{"asset_id": "AAA", "n": 1}, {"asset_id": "BBB", "n": 3}, {"asset_id": "CCC", "n": 3}, {"asset_id": "DDD"}]
+ROWS = [{"id": "AAA", "n": 1}, {"id": "BBB", "n": 3}, {"id": "CCC", "n": 3}, {"id": "DDD"}]
 ORACLES = {
     "leaders": [
-        {"asset_id": "PEAX", "total_return": 0.2474},
-        {"asset_id": "STIO", "total_return": 0.2092},
-        {"asset_id": "VIAS", "total_return": -0.1878},
+        {"store": "Northwind Austin", "growth": 0.2474},
+        {"store": "Northwind Reno", "growth": 0.2092},
+        {"store": "Northwind Tulsa", "growth": -0.1878},
     ]
 }
-NAMES = {"PEAX": "Peaxis Urban", "VIAS": "Viasent HomeDirect"}
 
 
 @pytest.mark.parametrize(
@@ -42,33 +42,37 @@ NAMES = {"PEAX": "Peaxis Urban", "VIAS": "Viasent HomeDirect"}
     ],
 )
 def test_row_selectors(selector, expected):
-    assert [row["asset_id"] for row in select_rows(ROWS, selector)] == expected
+    assert [row["id"] for row in select_rows(ROWS, selector)] == expected
 
 
-@pytest.mark.parametrize("text", ["leaders.asset_id", "leaders[0]", "leaders[x].asset_id", "leaders[max(].asset_id"])
+@pytest.mark.parametrize("text", ["leaders.store", "leaders[0]", "leaders[x].store", "leaders[max(].store"])
 def test_a_malformed_row_reference_is_refused(text):
     with pytest.raises(SpecError):
         RowRef.parse(text)
 
 
 def test_a_row_reference_reads_values_and_tolerates_a_short_oracle():
-    assert RowRef.parse("leaders[-1].total_return").values(ORACLES) == [-0.1878]
-    assert RowRef.parse("leaders[5].asset_id").values(ORACLES) == []
-    assert RowRef.parse("missing[0].asset_id").values(ORACLES) == []
+    assert RowRef.parse("leaders[-1].growth").values(ORACLES) == [-0.1878]
+    assert RowRef.parse("leaders[5].store").values(ORACLES) == []
+    assert RowRef.parse("missing[0].store").values(ORACLES) == []
 
 
-def test_an_asset_is_named_by_its_ticker_or_its_company_name():
-    assert named("PEAX", "PEAX led the group.", NAMES)
-    assert named("VIAS", "viasent homedirect lagged.", NAMES)
-    assert not named("PEAX", "PEAXIS rose", {})  # a ticker is matched as a word
-    assert not named(None, "anything", NAMES)
+def test_a_value_is_mentioned_as_a_whole_word_or_phrase_ignoring_case():
+    assert mentioned("Northwind Austin", "Austin led: northwind austin sold the most.")
+    assert mentioned("A1", "Store A1 led.")
+    assert not mentioned("A1", "Store A10 led.")  # a word, not a prefix
+    assert not mentioned("Austin", "Austinville led.")
+    assert mentioned(42, "Order 42 was late.")
+    assert not mentioned(None, "anything")
+    assert not mentioned("  ", "anything")
+    assert not mentioned(True, "True story")  # a flag is not a name
 
 
 @pytest.mark.parametrize(
     ("text", "fraction", "expected"),
     [
-        ("up +24.74% over 20 sessions", 0.2474, True),
-        ("up 24.7 % over 20 sessions", 0.2474, True),  # display rounding
+        ("up +24.74% over 20 days", 0.2474, True),
+        ("up 24.7 % over 20 days", 0.2474, True),  # display rounding
         ("down -18.78%", -0.1878, True),
         # A fall written without its sign
         ("fell 1.23% over the window", -0.0123, True),
@@ -89,83 +93,73 @@ def test_a_fraction_is_found_as_a_percentage(text, fraction, expected):
 
 
 def test_the_report_text_normalizes_dashes_and_the_body_stops_at_sources():
-    turn = market_turn("Return −18.78% and – more.\n\n## Sources\n\n- [1] 99%")
+    turn = answer_turn("Return −18.78% and – more.\n\n## Sources\n\n- [1] 99%")
     text = report_text(turn)
     assert "-18.78%" in text and "−" not in text
     assert "99%" not in body(text)
 
 
 def test_grounding_is_the_share_of_percentages_found_in_the_evidence():
-    turn = market_turn("PEAX +24.74% and VIAS -18.78%, overall 50%.", payload={"rows": [0.2474, -0.1878]})
+    turn = answer_turn("Austin +24.74% and Tulsa -18.78%, overall 50%.", rows=[0.2474, -0.1878])
     assert grounding(report_text(turn), turn) == pytest.approx(2 / 3)
     assert grounding("no numbers here", turn) is None
 
 
 def test_each_check_kind():
-    text = "PEAX rose +24.74%; Viasent HomeDirect fell. These are not forecasts. Item 1.05 applies."
-    turn = market_turn(text)
+    text = "Northwind Austin rose +24.74%; Reno fell. Returns are 30 days. These are **not** forecasts."
+    turn = answer_turn(text)
     turn["receipts"] += [
         receipt(
             "r2",
             "retrieval_evidence",
             "mcp__retrieval__retrieve_evidence",
-            {"hits": [{"sourceId": "sec", "documentId": "edgar:0000879764:0001104659-26-050851:ex99-1.htm"}]},
+            {"hits": [{"sourceId": "retail.policies", "documentId": "retail.policies:return-policy.pdf"}]},
         ),
-        receipt(
-            "r3",
-            "structured_prediction",
-            "mcp__kumo__predict_asset_outcomes",
-            {"rows": [{"assetId": "VIAS", "probability": 0.4}, {"assetId": "PEAX", "probability": 0.9}]},
-        ),
+        prediction_receipt(),
     ]
 
     def check(kind, value, **options):
-        return evaluate(Check("c", kind, value, **options), text, turn, ORACLES, NAMES)
+        return evaluate(Check("c", kind, value, **options), text, turn, ORACLES)
 
-    assert check("named", "leaders[0].asset_id")
-    assert not check("named", "leaders[:].asset_id")  # STIO is not named
-    assert check("named", "leaders[:].asset_id", at_least=2)
-    assert check("named", "leaders[1:].asset_id", any=True)
-    assert not check("named", "leaders[9].asset_id", any=True)  # no rows never passes
-    assert check("percent", "leaders[0].total_return")
-    assert not check("percent", "leaders[-1].total_return")
+    assert check("mentions", "leaders[0].store")
+    assert not check("mentions", "leaders[:].store")  # Tulsa is not mentioned
+    assert check("mentions", "leaders[:].store", at_least=1)
+    assert check("mentions", "leaders[:].store", any=True)
+    assert not check("mentions", "leaders[1:].store", any=True)  # "Reno" alone is not "Northwind Reno"
+    assert not check("mentions", "leaders[9].store", any=True)  # no rows never passes
+    assert check("contains", ("30 DAYS", "reno"))  # every substring, ignoring case
+    assert check("contains", ("not forecasts",))  # read through markdown emphasis
+    assert not check("contains", ("30 days", "60 days"))
+    assert check("percent", "leaders[0].growth")
+    assert not check("percent", "leaders[-1].growth")
     assert check("pattern", "(?i)NOT FORECAST")
-    assert check("pattern", ["Conduent", "1\\.05"])
-    assert not check("pattern", ["Conduent"])
-    assert not check("item_105_deadline", True)  # no deadline and no flag
-    assert check("retrieved_source", "sec")
-    assert not check("retrieved_source", "market_regulations")
-    assert check("retrieved_filing", ("0001429937:0001429937-26-000007", "0000879764:0001104659-26-050851"))
-    assert not check("retrieved_filing", ("0001429937:0001429937-26-000007",))
-    assert check("prediction_named", 2)
-    assert check("prediction_first", True)  # PEAX, the most probable, is named before VIAS
+    assert check("pattern", ["Tulsa", "30 days"])
+    assert not check("pattern", ["Tulsa"])
+    assert check("retrieved_source", "retail.policies")
+    assert not check("retrieved_source", "retail.sales")
     assert not check("percent_grounding", 0.9)  # 24.74% is not in this run's receipts
+    assert check("prediction_available", True)
+
+
+def test_a_prediction_is_available_only_when_kumo_scored_the_entities():
+    def available(*receipts):
+        turn = {"receipts": list(receipts)}
+        return evaluate(Check("c", "prediction_available", True), "", turn, {})
+
+    assert available(prediction_receipt())
+    assert not available()  # the run never predicted
+    assert not available(prediction_receipt(available=False))  # no Kumo endpoint: the receipt failed
+    assert not available(prediction_receipt(available=True, status="failed"))
+    assert available(prediction_receipt(available=False), prediction_receipt())  # any one scored run counts
 
 
 def test_a_pattern_reads_through_markdown_emphasis():
     pattern = "(?i)not (a |an )?(forecast|prediction)|neither\\b.{0,40}forecast|no(t)? .{0,20}forecast"
-    turn = market_turn("")
+    turn = answer_turn("")
 
     def check(text):
-        return evaluate(Check("c", "pattern", pattern), text, turn, ORACLES, NAMES)
+        return evaluate(Check("c", "pattern", pattern), text, turn, ORACLES)
 
     assert check("Anomaly scores are **not** forecasts or causal explanations.")
     assert check("They are *not* a ***forecast***.")
     assert not check("Anomaly scores rank sessions by how unusual they were.")
-
-
-def test_a_filing_is_retrieved_only_by_a_hit_from_one_of_its_documents():
-    def turn(*document_ids):
-        hits = [{"sourceId": "sec_filings", "documentId": document_id} for document_id in document_ids]
-        return {"receipts": [receipt("r", "retrieval_evidence", "mcp__retrieval__retrieve_evidence", {"hits": hits})]}
-
-    listed = ("0000879764:0001104659-26-050851",)
-    check = Check("c", "retrieved_filing", listed)
-
-    # Cover pages of other 8-Ks: the source was searched, but no listed filing came back
-    covers = turn("edgar:0000720500:0001193125-26-211838:asys-20260507.htm", "ecfr-title17:229.106:24c220ed7a14")
-    assert evaluate(Check("s", "retrieved_source", "sec_filings"), "", covers, ORACLES, NAMES)
-    assert not evaluate(check, "", covers, ORACLES, NAMES)
-    assert evaluate(check, "", turn("edgar:0000879764:0001104659-26-050851:tm2612842d1_ex99-1.htm"), ORACLES, NAMES)
-    assert not evaluate(check, "", turn("edgar:0000879764:0001104659-26-050852:x.htm"), ORACLES, NAMES)
-    assert not evaluate(check, "", {"receipts": []}, ORACLES, NAMES)

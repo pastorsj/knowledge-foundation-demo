@@ -1,0 +1,1061 @@
+customer_id,home_branch_id,segment,region,customer_since,tenure_years,credit_score,credit_score_band,annual_income,online_banking_enrolled
+C00001,BR08,Retiree,Metro,1991-10-01,35.0,659,Fair,65500,0
+C00002,BR02,Retiree,Harbor Coast,1991-10-01,35.0,690,Good,34500,0
+C00003,BR03,Retiree,Harbor Coast,1991-10-01,35.0,712,Good,29500,1
+C00004,BR02,Retiree,Harbor Coast,1991-10-01,35.0,769,Very Good,67500,1
+C00005,BR03,Retiree,Harbor Coast,1991-10-01,35.0,772,Very Good,32500,1
+C00006,BR16,Retiree,Highlands,1991-10-01,35.0,810,Exceptional,60500,1
+C00007,BR06,Retiree,Metro,1992-10-27,33.9,710,Good,39500,1
+C00008,BR05,Retiree,Metro,1993-08-17,33.1,740,Very Good,34000,1
+C00009,BR16,Retiree,Highlands,1994-08-08,32.1,788,Exceptional,80000,0
+C00010,BR03,Retiree,Harbor Coast,1995-07-01,31.2,740,Very Good,37500,1
+C00011,BR08,Retiree,Metro,1995-07-02,31.2,745,Very Good,28000,1
+C00012,BR10,Retiree,Valley,1996-06-12,30.3,800,Exceptional,62500,0
+C00013,BR15,Mass Market,Highlands,1996-09-30,30.0,653,Fair,39000,1
+C00014,BR04,Mass Market,Harbor Coast,1996-09-30,30.0,673,Good,59000,1
+C00015,BR17,Mass Market,Highlands,1996-09-30,30.0,678,Good,89500,0
+C00016,BR07,Mass Market,Metro,1996-09-30,30.0,705,Good,53000,1
+C00017,BR03,Mass Market,Harbor Coast,1996-09-30,30.0,719,Good,51000,0
+C00018,BR05,Mass Affluent,Metro,1996-09-30,30.0,631,Fair,170000,1
+C00019,BR06,Mass Affluent,Metro,1996-09-30,30.0,701,Good,169000,1
+C00020,BR18,Mass Affluent,Highlands,1996-09-30,30.0,704,Good,98500,1
+C00021,BR09,Mass Affluent,Metro,1996-09-30,30.0,730,Very Good,81000,0
+C00022,BR12,Mass Affluent,Valley,1996-09-30,30.0,737,Very Good,112500,1
+C00023,BR18,Mass Affluent,Highlands,1996-09-30,30.0,754,Very Good,126500,1
+C00024,BR01,Mass Affluent,Harbor Coast,1996-09-30,30.0,767,Very Good,152500,1
+C00025,BR01,Mass Affluent,Harbor Coast,1996-09-30,30.0,796,Exceptional,77500,1
+C00026,BR12,Private Client,Valley,1996-09-30,30.0,754,Very Good,240000,1
+C00027,BR03,Private Client,Harbor Coast,1996-09-30,30.0,779,Very Good,308500,1
+C00028,BR01,Private Client,Harbor Coast,1996-09-30,30.0,799,Exceptional,452500,1
+C00029,BR04,Private Client,Harbor Coast,1996-09-30,30.0,840,Exceptional,230000,1
+C00030,BR06,Mass Affluent,Metro,1996-12-03,29.8,745,Very Good,87000,1
+C00031,BR02,Mass Market,Harbor Coast,1996-12-10,29.8,607,Poor,79000,0
+C00032,BR05,Mass Market,Metro,1998-01-29,28.7,635,Fair,112000,0
+C00033,BR02,Retiree,Harbor Coast,1998-06-26,28.3,804,Exceptional,36000,0
+C00034,BR05,Retiree,Metro,1998-06-27,28.3,693,Good,35000,0
+C00035,BR12,Mass Affluent,Valley,1999-05-06,27.4,731,Very Good,137500,1
+C00036,BR10,Mass Affluent,Valley,1999-07-07,27.2,674,Good,109500,1
+C00037,BR12,Mass Affluent,Valley,1999-08-13,27.1,761,Very Good,77000,1
+C00038,BR16,Mass Affluent,Highlands,1999-08-20,27.1,834,Exceptional,141500,1
+C00039,BR05,Mass Market,Metro,1999-09-04,27.1,659,Fair,71500,1
+C00040,BR10,Mass Affluent,Valley,1999-10-12,27.0,716,Good,137500,0
+C00041,BR02,Mass Market,Harbor Coast,1999-10-31,26.9,625,Fair,61000,0
+C00042,BR04,Retiree,Harbor Coast,2000-01-24,26.7,684,Good,35500,1
+C00043,BR09,Mass Market,Metro,2000-01-28,26.7,698,Good,73000,0
+C00044,BR01,Retiree,Harbor Coast,2000-05-26,26.3,801,Exceptional,55500,0
+C00045,BR07,Retiree,Metro,2000-06-19,26.3,634,Fair,31000,0
+C00046,BR01,Private Client,Harbor Coast,2000-08-14,26.1,788,Exceptional,468500,1
+C00047,BR09,Mass Affluent,Metro,2000-10-14,26.0,787,Exceptional,113000,1
+C00048,BR11,Retiree,Valley,2000-11-20,25.9,714,Good,31500,0
+C00049,BR04,Retiree,Harbor Coast,2001-01-14,25.7,759,Very Good,47000,1
+C00050,BR05,Mass Market,Metro,2001-02-06,25.6,699,Good,43000,1
+C00051,BR03,Mass Market,Harbor Coast,2001-05-29,25.3,675,Good,52000,1
+C00052,BR01,Mass Market,Harbor Coast,2001-07-12,25.2,681,Good,74000,0
+C00053,BR04,Mass Market,Harbor Coast,2001-07-25,25.2,628,Fair,47000,1
+C00054,BR07,Mass Affluent,Metro,2001-08-04,25.2,694,Good,83500,1
+C00055,BR09,Mass Affluent,Metro,2001-09-23,25.0,800,Exceptional,104000,1
+C00056,BR07,Private Client,Metro,2002-01-16,24.7,827,Exceptional,717000,1
+C00057,BR16,Retiree,Highlands,2002-03-02,24.6,761,Very Good,69000,0
+C00058,BR05,Retiree,Metro,2002-04-06,24.5,702,Good,70500,0
+C00059,BR05,Mass Market,Metro,2002-04-20,24.4,645,Fair,60000,1
+C00060,BR02,Mass Affluent,Harbor Coast,2002-04-21,24.4,709,Good,97500,1
+C00061,BR02,Mass Affluent,Harbor Coast,2002-05-01,24.4,715,Good,87500,1
+C00062,BR14,Mass Market,Valley,2002-06-01,24.3,701,Good,40000,1
+C00063,BR01,Mass Affluent,Harbor Coast,2002-06-23,24.3,753,Very Good,102500,1
+C00064,BR02,Mass Market,Harbor Coast,2002-07-13,24.2,613,Poor,45500,1
+C00065,BR01,Private Client,Harbor Coast,2002-07-22,24.2,800,Exceptional,153500,0
+C00066,BR05,Mass Affluent,Metro,2002-08-22,24.1,693,Good,117000,1
+C00067,BR15,Mass Market,Highlands,2002-09-09,24.1,705,Good,78000,1
+C00068,BR15,Mass Market,Highlands,2002-10-01,24.0,655,Fair,62000,1
+C00069,BR05,Mass Affluent,Metro,2002-10-31,23.9,796,Exceptional,79500,1
+C00070,BR01,Retiree,Harbor Coast,2002-11-05,23.9,720,Very Good,63500,1
+C00071,BR17,Mass Affluent,Highlands,2002-11-22,23.9,730,Very Good,86500,1
+C00072,BR03,Mass Market,Harbor Coast,2003-01-12,23.7,733,Very Good,44000,1
+C00073,BR11,Mass Market,Valley,2003-01-15,23.7,668,Fair,37500,1
+C00074,BR01,Mass Affluent,Harbor Coast,2003-03-23,23.5,757,Very Good,214000,0
+C00075,BR06,Mass Market,Metro,2003-05-06,23.4,688,Good,62000,1
+C00076,BR14,Mass Market,Valley,2003-06-05,23.3,669,Fair,78000,0
+C00077,BR15,Retiree,Highlands,2003-06-28,23.3,679,Good,46000,0
+C00078,BR15,Retiree,Highlands,2003-07-01,23.2,698,Good,47500,0
+C00079,BR06,Mass Market,Metro,2003-08-02,23.2,614,Poor,41000,0
+C00080,BR12,Mass Affluent,Valley,2003-08-11,23.1,678,Good,79000,1
+C00081,BR07,Mass Affluent,Metro,2003-12-12,22.8,716,Good,89000,1
+C00082,BR11,Mass Affluent,Valley,2004-01-10,22.7,702,Good,114500,1
+C00083,BR17,Mass Market,Highlands,2004-03-06,22.6,649,Fair,43500,1
+C00084,BR05,Mass Market,Metro,2004-03-14,22.5,665,Fair,65500,1
+C00085,BR06,Private Client,Metro,2004-03-16,22.5,763,Very Good,449500,1
+C00086,BR18,Mass Affluent,Highlands,2004-03-29,22.5,771,Very Good,107500,1
+C00087,BR02,Mass Affluent,Harbor Coast,2004-03-31,22.5,798,Exceptional,50000,1
+C00088,BR01,Mass Affluent,Harbor Coast,2004-04-14,22.5,676,Good,117000,1
+C00089,BR14,Mass Market,Valley,2004-06-06,22.3,607,Poor,76500,0
+C00090,BR13,Retiree,Valley,2004-08-06,22.1,702,Good,51500,1
+C00091,BR11,Mass Market,Valley,2004-08-19,22.1,611,Poor,42000,1
+C00092,BR15,Mass Market,Highlands,2004-11-09,21.9,603,Poor,49500,1
+C00093,BR02,Retiree,Harbor Coast,2004-12-12,21.8,698,Good,55000,0
+C00094,BR15,Mass Affluent,Highlands,2005-01-25,21.7,754,Very Good,67000,1
+C00095,BR07,Mass Affluent,Metro,2005-02-12,21.6,709,Good,114000,1
+C00096,BR10,Mass Market,Valley,2005-02-26,21.6,742,Very Good,46000,1
+C00097,BR03,Retiree,Harbor Coast,2005-04-21,21.4,788,Exceptional,34000,0
+C00098,BR11,Mass Market,Valley,2005-05-11,21.4,606,Poor,58500,1
+C00099,BR10,Retiree,Valley,2005-05-29,21.3,825,Exceptional,32000,0
+C00100,BR15,Mass Affluent,Highlands,2005-08-31,21.1,725,Very Good,188500,1
+C00101,BR13,Mass Market,Valley,2005-09-12,21.0,768,Very Good,68000,1
+C00102,BR13,Retiree,Valley,2005-09-27,21.0,742,Very Good,54000,1
+C00103,BR01,Mass Market,Harbor Coast,2005-10-21,20.9,580,Poor,42500,1
+C00104,BR01,Retiree,Harbor Coast,2005-12-20,20.8,685,Good,43000,0
+C00105,BR10,Mass Affluent,Valley,2005-12-24,20.8,657,Fair,88000,1
+C00106,BR16,Mass Market,Highlands,2006-01-03,20.7,637,Fair,72000,1
+C00107,BR01,Mass Market,Harbor Coast,2006-01-06,20.7,702,Good,33000,1
+C00108,BR15,Private Client,Highlands,2006-01-15,20.7,740,Very Good,365500,0
+C00109,BR09,Private Client,Metro,2006-01-22,20.7,732,Very Good,301000,1
+C00110,BR05,Private Client,Metro,2006-01-22,20.7,782,Exceptional,477000,1
+C00111,BR07,Mass Market,Metro,2006-01-23,20.7,756,Very Good,47500,1
+C00112,BR04,Retiree,Harbor Coast,2006-02-05,20.6,768,Very Good,42500,1
+C00113,BR14,Mass Market,Valley,2006-02-08,20.6,713,Good,48500,1
+C00114,BR10,Private Client,Valley,2006-04-12,20.5,780,Exceptional,203500,0
+C00115,BR15,Retiree,Highlands,2006-04-13,20.5,729,Very Good,92500,1
+C00116,BR13,Private Client,Valley,2006-04-19,20.4,830,Exceptional,136500,1
+C00117,BR04,Mass Market,Harbor Coast,2006-06-08,20.3,678,Good,69000,0
+C00118,BR07,Retiree,Metro,2006-06-23,20.3,707,Good,45000,1
+C00119,BR05,Mass Market,Metro,2006-07-14,20.2,654,Fair,54000,0
+C00120,BR12,Mass Market,Valley,2006-07-25,20.2,521,Poor,106500,1
+C00121,BR02,Mass Market,Harbor Coast,2006-08-02,20.2,667,Fair,57500,1
+C00122,BR02,Mass Affluent,Harbor Coast,2006-08-07,20.1,695,Good,131500,1
+C00123,BR05,Retiree,Metro,2006-09-19,20.0,773,Very Good,35500,1
+C00124,BR05,Mass Market,Metro,2006-10-23,19.9,621,Fair,44000,0
+C00125,BR13,Retiree,Valley,2006-11-20,19.9,739,Very Good,51000,1
+C00126,BR02,Mass Affluent,Harbor Coast,2007-01-21,19.7,733,Very Good,53000,1
+C00127,BR14,Mass Market,Valley,2007-01-29,19.7,756,Very Good,55000,1
+C00128,BR02,Mass Market,Harbor Coast,2007-02-03,19.7,641,Fair,68500,1
+C00129,BR07,Retiree,Metro,2007-02-20,19.6,654,Fair,38000,0
+C00130,BR04,Mass Market,Harbor Coast,2007-03-30,19.5,655,Fair,47000,0
+C00131,BR02,Mass Market,Harbor Coast,2007-04-02,19.5,653,Fair,63500,1
+C00132,BR05,Mass Market,Metro,2007-04-18,19.5,640,Fair,79500,1
+C00133,BR03,Mass Affluent,Harbor Coast,2007-04-21,19.4,717,Good,205500,1
+C00134,BR14,Mass Market,Valley,2007-06-07,19.3,608,Poor,44500,0
+C00135,BR03,Mass Market,Harbor Coast,2007-06-13,19.3,637,Fair,37000,0
+C00136,BR03,Retiree,Harbor Coast,2007-07-19,19.2,732,Very Good,35000,0
+C00137,BR18,Mass Market,Highlands,2007-07-21,19.2,661,Fair,83000,1
+C00138,BR01,Private Client,Harbor Coast,2007-07-30,19.2,754,Very Good,272500,1
+C00139,BR10,Retiree,Valley,2007-10-12,19.0,760,Very Good,61500,0
+C00140,BR02,Mass Market,Harbor Coast,2007-11-08,18.9,597,Poor,47500,1
+C00141,BR11,Mass Market,Valley,2007-11-13,18.9,620,Fair,47500,1
+C00142,BR14,Mass Affluent,Valley,2007-11-13,18.9,681,Good,134000,1
+C00143,BR09,Retiree,Metro,2007-11-20,18.9,764,Very Good,48500,1
+C00144,BR15,Mass Affluent,Highlands,2008-01-15,18.7,745,Very Good,118000,0
+C00145,BR05,Mass Affluent,Metro,2008-01-19,18.7,761,Very Good,94500,1
+C00146,BR07,Retiree,Metro,2008-01-31,18.7,677,Good,49000,1
+C00147,BR01,Mass Affluent,Harbor Coast,2008-02-08,18.6,789,Exceptional,91000,1
+C00148,BR04,Mass Market,Harbor Coast,2008-02-15,18.6,661,Fair,49000,0
+C00149,BR13,Mass Market,Valley,2008-02-23,18.6,614,Poor,46500,1
+C00150,BR15,Mass Market,Highlands,2008-03-28,18.5,541,Poor,42000,1
+C00151,BR02,Mass Affluent,Harbor Coast,2008-05-09,18.4,701,Good,86500,1
+C00152,BR06,Retiree,Metro,2008-06-01,18.3,722,Very Good,90500,0
+C00153,BR06,Mass Affluent,Metro,2008-06-14,18.3,705,Good,70000,0
+C00154,BR17,Retiree,Highlands,2008-06-24,18.3,695,Good,34000,0
+C00155,BR15,Private Client,Highlands,2008-07-27,18.2,739,Very Good,194500,0
+C00156,BR10,Mass Market,Valley,2008-10-03,18.0,636,Fair,100500,1
+C00157,BR01,Retiree,Harbor Coast,2008-10-03,18.0,679,Good,55500,1
+C00158,BR13,Retiree,Valley,2008-10-28,17.9,791,Exceptional,56000,0
+C00159,BR02,Mass Market,Harbor Coast,2008-10-29,17.9,665,Fair,51000,1
+C00160,BR05,Retiree,Metro,2008-10-30,17.9,702,Good,48500,1
+C00161,BR01,Private Client,Harbor Coast,2008-12-07,17.8,758,Very Good,176500,1
+C00162,BR12,Mass Market,Valley,2009-01-17,17.7,719,Good,49500,0
+C00163,BR08,Mass Affluent,Metro,2009-02-21,17.6,745,Very Good,114000,1
+C00164,BR02,Mass Market,Harbor Coast,2009-03-18,17.5,711,Good,63000,0
+C00165,BR01,Mass Market,Harbor Coast,2009-04-04,17.5,638,Fair,66500,1
+C00166,BR06,Mass Market,Metro,2009-05-12,17.4,642,Fair,36500,0
+C00167,BR10,Retiree,Valley,2009-07-22,17.2,726,Very Good,40500,1
+C00168,BR04,Mass Market,Harbor Coast,2009-07-27,17.2,647,Fair,40500,0
+C00169,BR02,Mass Affluent,Harbor Coast,2009-09-26,17.0,742,Very Good,122000,1
+C00170,BR14,Mass Market,Valley,2009-10-30,16.9,644,Fair,85500,1
+C00171,BR01,Mass Affluent,Harbor Coast,2009-11-01,16.9,721,Very Good,84500,1
+C00172,BR02,Mass Market,Harbor Coast,2009-11-06,16.9,647,Fair,50500,1
+C00173,BR15,Mass Market,Highlands,2009-11-18,16.9,682,Good,46000,1
+C00174,BR01,Private Client,Harbor Coast,2009-11-29,16.8,808,Exceptional,153000,1
+C00175,BR05,Retiree,Metro,2009-12-01,16.8,691,Good,65500,0
+C00176,BR08,Mass Affluent,Metro,2009-12-07,16.8,724,Very Good,119500,1
+C00177,BR14,Retiree,Valley,2010-01-15,16.7,740,Very Good,41000,1
+C00178,BR12,Mass Affluent,Valley,2010-01-24,16.7,736,Very Good,64000,0
+C00179,BR06,Mass Market,Metro,2010-02-03,16.7,732,Very Good,41500,0
+C00180,BR16,Retiree,Highlands,2010-02-06,16.6,757,Very Good,45000,1
+C00181,BR05,Private Client,Metro,2010-03-07,16.6,825,Exceptional,258500,0
+C00182,BR02,Mass Affluent,Harbor Coast,2010-03-10,16.6,696,Good,88000,1
+C00183,BR07,Mass Market,Metro,2010-03-12,16.6,629,Fair,47000,0
+C00184,BR10,Mass Affluent,Valley,2010-03-17,16.5,713,Good,75000,0
+C00185,BR05,Mass Affluent,Metro,2010-03-17,16.5,754,Very Good,79500,1
+C00186,BR01,Mass Market,Harbor Coast,2010-03-24,16.5,612,Poor,29500,1
+C00187,BR01,Mass Market,Harbor Coast,2010-03-24,16.5,751,Very Good,71500,1
+C00188,BR03,Mass Market,Harbor Coast,2010-04-17,16.5,586,Poor,54500,0
+C00189,BR02,Mass Market,Harbor Coast,2010-05-07,16.4,749,Very Good,66500,0
+C00190,BR02,Mass Market,Harbor Coast,2010-05-11,16.4,668,Fair,74000,1
+C00191,BR05,Retiree,Metro,2010-06-04,16.3,683,Good,27000,1
+C00192,BR06,Mass Market,Metro,2010-06-09,16.3,732,Very Good,90000,1
+C00193,BR07,Mass Affluent,Metro,2010-06-25,16.3,791,Exceptional,152500,1
+C00194,BR02,Mass Affluent,Harbor Coast,2010-06-29,16.3,747,Very Good,73500,1
+C00195,BR01,Mass Affluent,Harbor Coast,2010-07-03,16.2,669,Fair,67000,1
+C00196,BR11,Mass Market,Valley,2010-07-20,16.2,779,Very Good,47000,0
+C00197,BR11,Mass Market,Valley,2010-07-27,16.2,602,Poor,52500,0
+C00198,BR03,Mass Market,Harbor Coast,2010-08-01,16.2,652,Fair,81000,1
+C00199,BR01,Mass Market,Harbor Coast,2010-08-01,16.2,671,Good,25500,0
+C00200,BR05,Mass Market,Metro,2010-10-15,16.0,681,Good,56500,1
+C00201,BR09,Mass Market,Metro,2010-10-24,15.9,692,Good,52000,1
+C00202,BR02,Mass Market,Harbor Coast,2010-11-01,15.9,667,Fair,58500,0
+C00203,BR01,Mass Market,Harbor Coast,2010-11-19,15.9,650,Fair,45000,1
+C00204,BR12,Mass Market,Valley,2010-11-23,15.9,686,Good,73000,1
+C00205,BR05,Mass Market,Metro,2010-12-06,15.8,642,Fair,40500,1
+C00206,BR01,Mass Affluent,Harbor Coast,2010-12-08,15.8,750,Very Good,75000,0
+C00207,BR09,Mass Market,Metro,2010-12-12,15.8,652,Fair,66000,1
+C00208,BR08,Mass Affluent,Metro,2010-12-18,15.8,716,Good,118500,0
+C00209,BR05,Mass Market,Metro,2010-12-28,15.8,580,Poor,66500,1
+C00210,BR01,Mass Market,Harbor Coast,2010-12-31,15.7,665,Fair,70500,0
+C00211,BR13,Retiree,Valley,2011-02-03,15.7,766,Very Good,31000,0
+C00212,BR09,Mass Affluent,Metro,2011-02-09,15.6,681,Good,74000,1
+C00213,BR05,Mass Market,Metro,2011-04-06,15.5,764,Very Good,31500,1
+C00214,BR06,Mass Affluent,Metro,2011-04-29,15.4,692,Good,127500,1
+C00215,BR05,Mass Affluent,Metro,2011-05-06,15.4,738,Very Good,130000,1
+C00216,BR06,Retiree,Metro,2011-05-12,15.4,808,Exceptional,62000,0
+C00217,BR11,Mass Market,Valley,2011-05-16,15.4,735,Very Good,54000,1
+C00218,BR12,Mass Market,Valley,2011-07-05,15.2,580,Poor,63000,0
+C00219,BR06,Mass Market,Metro,2011-07-06,15.2,660,Fair,53500,1
+C00220,BR10,Mass Market,Valley,2011-07-06,15.2,668,Fair,44500,1
+C00221,BR03,Mass Market,Harbor Coast,2011-07-15,15.2,605,Poor,39500,0
+C00222,BR10,Retiree,Valley,2011-07-15,15.2,821,Exceptional,79500,0
+C00223,BR07,Mass Affluent,Metro,2011-07-20,15.2,773,Very Good,59000,1
+C00224,BR03,Private Client,Harbor Coast,2011-07-25,15.2,817,Exceptional,380500,1
+C00225,BR01,Mass Market,Harbor Coast,2011-08-18,15.1,602,Poor,25500,1
+C00226,BR12,Retiree,Valley,2011-08-19,15.1,772,Very Good,70000,1
+C00227,BR03,Mass Market,Harbor Coast,2011-08-31,15.1,709,Good,57000,1
+C00228,BR12,Private Client,Valley,2011-09-19,15.0,834,Exceptional,202000,1
+C00229,BR02,Retiree,Harbor Coast,2011-10-12,15.0,771,Very Good,32500,1
+C00230,BR06,Mass Market,Metro,2011-11-05,14.9,604,Poor,86000,1
+C00231,BR16,Mass Market,Highlands,2011-12-22,14.8,742,Very Good,37000,1
+C00232,BR15,Mass Market,Highlands,2012-01-05,14.7,617,Poor,55000,1
+C00233,BR02,Mass Market,Harbor Coast,2012-01-10,14.7,660,Fair,44500,1
+C00234,BR11,Mass Market,Valley,2012-01-20,14.7,678,Good,58000,1
+C00235,BR07,Private Client,Metro,2012-02-04,14.7,822,Exceptional,251500,1
+C00236,BR01,Retiree,Harbor Coast,2012-02-18,14.6,733,Very Good,54000,1
+C00237,BR05,Mass Market,Metro,2012-02-26,14.6,719,Good,57000,1
+C00238,BR06,Mass Affluent,Metro,2012-03-07,14.6,762,Very Good,112000,1
+C00239,BR01,Mass Affluent,Harbor Coast,2012-03-25,14.5,797,Exceptional,138500,0
+C00240,BR16,Retiree,Highlands,2012-04-21,14.4,740,Very Good,52500,1
+C00241,BR15,Mass Market,Highlands,2012-05-02,14.4,568,Poor,56000,0
+C00242,BR01,Mass Affluent,Harbor Coast,2012-05-27,14.3,752,Very Good,141500,1
+C00243,BR11,Mass Affluent,Valley,2012-06-05,14.3,710,Good,104500,1
+C00244,BR14,Retiree,Valley,2012-06-16,14.3,701,Good,92500,1
+C00245,BR05,Mass Affluent,Metro,2012-07-05,14.2,650,Fair,95000,1
+C00246,BR08,Mass Market,Metro,2012-08-02,14.2,659,Fair,55500,1
+C00247,BR01,Mass Affluent,Harbor Coast,2012-08-06,14.1,694,Good,129500,1
+C00248,BR02,Mass Market,Harbor Coast,2012-08-14,14.1,623,Fair,51000,1
+C00249,BR02,Retiree,Harbor Coast,2012-08-20,14.1,799,Exceptional,63500,1
+C00250,BR18,Mass Market,Highlands,2012-08-21,14.1,627,Fair,56500,1
+C00251,BR11,Mass Market,Valley,2012-10-15,14.0,625,Fair,51000,1
+C00252,BR06,Retiree,Metro,2012-10-30,13.9,700,Good,80500,1
+C00253,BR14,Mass Market,Valley,2012-11-17,13.9,757,Very Good,62000,1
+C00254,BR11,Private Client,Valley,2013-01-18,13.7,833,Exceptional,169000,1
+C00255,BR06,Retiree,Metro,2013-01-20,13.7,730,Very Good,68000,0
+C00256,BR01,Mass Market,Harbor Coast,2013-01-29,13.7,632,Fair,74500,1
+C00257,BR10,Mass Market,Valley,2013-02-11,13.6,699,Good,46500,1
+C00258,BR16,Retiree,Highlands,2013-02-13,13.6,840,Exceptional,110500,1
+C00259,BR06,Mass Affluent,Metro,2013-03-05,13.6,727,Very Good,148000,1
+C00260,BR12,Mass Market,Valley,2013-03-09,13.6,701,Good,39000,1
+C00261,BR15,Retiree,Highlands,2013-03-29,13.5,801,Exceptional,37500,0
+C00262,BR05,Mass Market,Metro,2013-05-01,13.4,655,Fair,46000,0
+C00263,BR02,Private Client,Harbor Coast,2013-05-07,13.4,778,Very Good,228000,1
+C00264,BR07,Mass Market,Metro,2013-05-17,13.4,778,Very Good,105000,1
+C00265,BR10,Mass Affluent,Valley,2013-05-26,13.3,760,Very Good,116500,1
+C00266,BR04,Mass Market,Harbor Coast,2013-06-24,13.3,751,Very Good,59000,1
+C00267,BR01,Mass Affluent,Harbor Coast,2013-06-25,13.3,762,Very Good,103000,1
+C00268,BR05,Mass Affluent,Metro,2013-07-12,13.2,733,Very Good,119000,1
+C00269,BR09,Mass Market,Metro,2013-07-23,13.2,632,Fair,72000,1
+C00270,BR18,Mass Affluent,Highlands,2013-08-07,13.1,712,Good,81500,1
+C00271,BR08,Mass Market,Metro,2013-08-10,13.1,681,Good,90000,1
+C00272,BR12,Mass Affluent,Valley,2013-08-10,13.1,709,Good,114500,0
+C00273,BR05,Mass Market,Metro,2013-08-21,13.1,591,Poor,45500,1
+C00274,BR07,Mass Market,Metro,2013-08-23,13.1,636,Fair,49000,0
+C00275,BR11,Mass Affluent,Valley,2013-09-07,13.1,766,Very Good,60000,1
+C00276,BR04,Mass Market,Harbor Coast,2013-09-19,13.0,522,Poor,66000,0
+C00277,BR18,Retiree,Highlands,2013-09-28,13.0,716,Good,78000,1
+C00278,BR09,Retiree,Metro,2013-09-29,13.0,666,Fair,56000,1
+C00279,BR17,Mass Market,Highlands,2013-10-02,13.0,696,Good,46500,1
+C00280,BR15,Mass Affluent,Highlands,2013-10-05,13.0,711,Good,143500,1
+C00281,BR12,Mass Affluent,Valley,2013-10-09,13.0,713,Good,111000,1
+C00282,BR01,Mass Market,Harbor Coast,2013-10-10,13.0,679,Good,61500,1
+C00283,BR18,Mass Market,Highlands,2013-10-21,12.9,569,Poor,47000,1
+C00284,BR04,Mass Affluent,Harbor Coast,2013-11-09,12.9,696,Good,91500,1
+C00285,BR16,Retiree,Highlands,2013-11-15,12.9,840,Exceptional,31000,0
+C00286,BR06,Mass Affluent,Metro,2013-12-11,12.8,754,Very Good,77000,1
+C00287,BR03,Retiree,Harbor Coast,2013-12-12,12.8,725,Very Good,62500,0
+C00288,BR01,Mass Market,Harbor Coast,2013-12-16,12.8,666,Fair,55500,0
+C00289,BR01,Mass Market,Harbor Coast,2013-12-25,12.8,668,Fair,30500,1
+C00290,BR02,Mass Affluent,Harbor Coast,2014-01-06,12.7,687,Good,57000,1
+C00291,BR06,Mass Market,Metro,2014-01-19,12.7,695,Good,72500,1
+C00292,BR07,Mass Market,Metro,2014-02-17,12.6,724,Very Good,54500,1
+C00293,BR04,Mass Market,Harbor Coast,2014-03-15,12.5,600,Poor,49000,1
+C00294,BR06,Mass Market,Metro,2014-03-21,12.5,609,Poor,76000,1
+C00295,BR10,Mass Market,Valley,2014-04-13,12.5,663,Fair,36500,0
+C00296,BR05,Mass Affluent,Metro,2014-04-21,12.4,742,Very Good,101000,1
+C00297,BR18,Mass Affluent,Highlands,2014-04-23,12.4,793,Exceptional,92500,1
+C00298,BR01,Mass Market,Harbor Coast,2014-05-04,12.4,527,Poor,43500,1
+C00299,BR10,Mass Affluent,Valley,2014-05-20,12.4,700,Good,89000,1
+C00300,BR12,Private Client,Valley,2014-06-04,12.3,741,Very Good,181000,1
+C00301,BR12,Mass Market,Valley,2014-06-09,12.3,666,Fair,46500,0
+C00302,BR08,Mass Market,Metro,2014-06-19,12.3,682,Good,22000,1
+C00303,BR04,Mass Affluent,Harbor Coast,2014-06-19,12.3,726,Very Good,198500,0
+C00304,BR05,Mass Market,Metro,2014-07-01,12.2,693,Good,43000,0
+C00305,BR02,Private Client,Harbor Coast,2014-07-12,12.2,769,Very Good,128000,1
+C00306,BR05,Mass Market,Metro,2014-08-10,12.1,585,Poor,59500,1
+C00307,BR02,Private Client,Harbor Coast,2014-08-12,12.1,812,Exceptional,306500,0
+C00308,BR18,Private Client,Highlands,2014-08-24,12.1,781,Exceptional,188000,1
+C00309,BR05,Retiree,Metro,2014-09-09,12.1,753,Very Good,66500,1
+C00310,BR12,Mass Market,Valley,2014-09-12,12.0,774,Very Good,54000,0
+C00311,BR07,Mass Market,Metro,2014-09-17,12.0,699,Good,49000,1
+C00312,BR09,Mass Market,Metro,2014-09-18,12.0,664,Fair,65000,1
+C00313,BR01,Private Client,Harbor Coast,2014-09-20,12.0,789,Exceptional,209000,1
+C00314,BR02,Mass Affluent,Harbor Coast,2014-09-26,12.0,740,Very Good,85000,0
+C00315,BR05,Mass Affluent,Metro,2014-09-29,12.0,682,Good,101000,1
+C00316,BR07,Mass Affluent,Metro,2014-10-02,12.0,702,Good,68000,1
+C00317,BR06,Mass Market,Metro,2014-10-03,12.0,705,Good,46000,1
+C00318,BR08,Retiree,Metro,2014-10-12,12.0,775,Very Good,42000,0
+C00319,BR10,Mass Market,Valley,2014-10-17,12.0,740,Very Good,59500,0
+C00320,BR12,Mass Affluent,Valley,2014-10-18,12.0,672,Good,63000,1
+C00321,BR02,Mass Affluent,Harbor Coast,2014-10-18,12.0,738,Very Good,86000,1
+C00322,BR12,Retiree,Valley,2014-10-19,11.9,741,Very Good,81000,1
+C00323,BR03,Mass Affluent,Harbor Coast,2014-10-27,11.9,681,Good,89000,1
+C00324,BR05,Mass Market,Metro,2014-10-28,11.9,632,Fair,68000,1
+C00325,BR16,Retiree,Highlands,2014-11-11,11.9,744,Very Good,25000,0
+C00326,BR11,Mass Market,Valley,2014-12-02,11.8,670,Good,50500,0
+C00327,BR03,Mass Market,Harbor Coast,2014-12-19,11.8,668,Fair,78500,1
+C00328,BR02,Mass Affluent,Harbor Coast,2015-01-04,11.7,677,Good,83000,1
+C00329,BR04,Mass Affluent,Harbor Coast,2015-01-17,11.7,755,Very Good,69500,1
+C00330,BR05,Mass Affluent,Metro,2015-01-31,11.7,739,Very Good,89500,1
+C00331,BR11,Mass Market,Valley,2015-02-09,11.6,644,Fair,38500,1
+C00332,BR05,Mass Affluent,Metro,2015-02-24,11.6,697,Good,88000,0
+C00333,BR16,Mass Market,Highlands,2015-03-12,11.6,642,Fair,97000,1
+C00334,BR07,Mass Market,Metro,2015-03-12,11.6,686,Good,39500,1
+C00335,BR06,Private Client,Metro,2015-03-12,11.6,789,Exceptional,238000,1
+C00336,BR05,Mass Market,Metro,2015-03-30,11.5,708,Good,49500,1
+C00337,BR11,Mass Market,Valley,2015-04-20,11.4,561,Poor,40000,1
+C00338,BR13,Mass Market,Valley,2015-04-22,11.4,676,Good,72000,1
+C00339,BR07,Private Client,Metro,2015-05-10,11.4,802,Exceptional,248500,1
+C00340,BR16,Mass Market,Highlands,2015-05-29,11.3,669,Fair,69500,0
+C00341,BR10,Retiree,Valley,2015-06-04,11.3,838,Exceptional,63000,0
+C00342,BR16,Mass Market,Highlands,2015-06-11,11.3,684,Good,50500,0
+C00343,BR14,Mass Market,Valley,2015-06-15,11.3,579,Poor,34000,1
+C00344,BR01,Mass Affluent,Harbor Coast,2015-06-30,11.3,642,Fair,53000,1
+C00345,BR05,Mass Market,Metro,2015-07-15,11.2,673,Good,70500,1
+C00346,BR05,Mass Affluent,Metro,2015-07-15,11.2,683,Good,205000,1
+C00347,BR01,Mass Market,Harbor Coast,2015-07-20,11.2,628,Fair,50500,1
+C00348,BR02,Mass Market,Harbor Coast,2015-07-30,11.2,780,Exceptional,79000,1
+C00349,BR05,Private Client,Metro,2015-08-05,11.2,785,Exceptional,472500,1
+C00350,BR01,Mass Affluent,Harbor Coast,2015-08-11,11.1,781,Exceptional,67500,1
+C00351,BR03,Mass Market,Harbor Coast,2015-08-21,11.1,750,Very Good,24500,1
+C00352,BR01,Mass Market,Harbor Coast,2015-08-23,11.1,643,Fair,56500,1
+C00353,BR15,Mass Market,Highlands,2015-08-26,11.1,700,Good,32000,1
+C00354,BR04,Mass Market,Harbor Coast,2015-09-02,11.1,633,Fair,58000,1
+C00355,BR07,Mass Market,Metro,2015-09-05,11.1,660,Fair,69500,0
+C00356,BR08,Retiree,Metro,2015-09-05,11.1,681,Good,34500,0
+C00357,BR16,Mass Market,Highlands,2015-09-15,11.0,660,Fair,63500,1
+C00358,BR01,Mass Affluent,Harbor Coast,2015-09-21,11.0,724,Very Good,63500,1
+C00359,BR07,Mass Market,Metro,2015-09-26,11.0,618,Poor,61000,1
+C00360,BR10,Mass Affluent,Valley,2015-09-28,11.0,713,Good,142500,1
+C00361,BR08,Mass Affluent,Metro,2015-10-06,11.0,769,Very Good,156000,1
+C00362,BR17,Private Client,Highlands,2015-10-17,11.0,775,Very Good,294500,0
+C00363,BR12,Mass Affluent,Valley,2015-11-01,10.9,714,Good,108500,1
+C00364,BR07,Mass Affluent,Metro,2015-11-04,10.9,734,Very Good,81500,1
+C00365,BR18,Mass Market,Highlands,2015-11-06,10.9,677,Good,85000,1
+C00366,BR05,Mass Market,Metro,2015-11-08,10.9,735,Very Good,33500,1
+C00367,BR05,Private Client,Metro,2015-11-09,10.9,793,Exceptional,219000,1
+C00368,BR01,Mass Market,Harbor Coast,2015-11-11,10.9,748,Very Good,69000,1
+C00369,BR07,Mass Affluent,Metro,2015-11-17,10.9,682,Good,99000,1
+C00370,BR01,Retiree,Harbor Coast,2015-11-19,10.9,787,Exceptional,59500,0
+C00371,BR11,Retiree,Valley,2015-11-20,10.9,711,Good,33000,0
+C00372,BR01,Mass Affluent,Harbor Coast,2015-12-07,10.8,752,Very Good,102500,1
+C00373,BR09,Mass Market,Metro,2015-12-21,10.8,610,Poor,50500,0
+C00374,BR03,Retiree,Harbor Coast,2016-01-04,10.7,716,Good,56500,0
+C00375,BR02,Mass Market,Harbor Coast,2016-01-07,10.7,596,Poor,78500,0
+C00376,BR16,Mass Market,Highlands,2016-01-21,10.7,671,Good,43000,1
+C00377,BR05,Mass Affluent,Metro,2016-02-06,10.6,759,Very Good,55500,1
+C00378,BR12,Mass Affluent,Valley,2016-02-21,10.6,738,Very Good,124500,1
+C00379,BR03,Mass Market,Harbor Coast,2016-03-05,10.6,682,Good,68000,0
+C00380,BR16,Mass Market,Highlands,2016-03-07,10.6,677,Good,39500,1
+C00381,BR08,Mass Market,Metro,2016-03-10,10.6,600,Poor,33500,1
+C00382,BR06,Mass Market,Metro,2016-03-26,10.5,586,Poor,68000,0
+C00383,BR06,Mass Market,Metro,2016-03-29,10.5,673,Good,70500,0
+C00384,BR16,Mass Affluent,Highlands,2016-03-31,10.5,808,Exceptional,67000,1
+C00385,BR01,Retiree,Harbor Coast,2016-04-02,10.5,813,Exceptional,54500,1
+C00386,BR13,Mass Market,Valley,2016-04-07,10.5,728,Very Good,78500,1
+C00387,BR01,Mass Affluent,Harbor Coast,2016-04-18,10.5,840,Exceptional,166000,1
+C00388,BR18,Mass Market,Highlands,2016-04-27,10.4,600,Poor,74000,1
+C00389,BR03,Mass Affluent,Harbor Coast,2016-04-27,10.4,707,Good,93000,1
+C00390,BR08,Mass Market,Metro,2016-05-01,10.4,703,Good,65500,1
+C00391,BR01,Mass Affluent,Harbor Coast,2016-05-01,10.4,650,Fair,55000,1
+C00392,BR03,Mass Affluent,Harbor Coast,2016-05-03,10.4,797,Exceptional,65500,1
+C00393,BR06,Mass Market,Metro,2016-05-05,10.4,614,Poor,41500,0
+C00394,BR07,Retiree,Metro,2016-05-13,10.4,783,Exceptional,34500,1
+C00395,BR11,Mass Market,Valley,2016-05-20,10.4,707,Good,39000,1
+C00396,BR09,Mass Affluent,Metro,2016-06-14,10.3,732,Very Good,117500,1
+C00397,BR02,Retiree,Harbor Coast,2016-06-25,10.3,699,Good,76500,1
+C00398,BR05,Mass Market,Metro,2016-06-27,10.3,738,Very Good,73000,1
+C00399,BR05,Private Client,Metro,2016-06-29,10.3,787,Exceptional,156000,1
+C00400,BR05,Mass Market,Metro,2016-07-02,10.2,632,Fair,38500,1
+C00401,BR05,Retiree,Metro,2016-07-05,10.2,758,Very Good,48000,1
+C00402,BR14,Retiree,Valley,2016-07-12,10.2,714,Good,71000,0
+C00403,BR17,Mass Affluent,Highlands,2016-07-16,10.2,747,Very Good,126500,0
+C00404,BR14,Mass Affluent,Valley,2016-07-23,10.2,803,Exceptional,109000,1
+C00405,BR01,Mass Affluent,Harbor Coast,2016-08-07,10.1,765,Very Good,153000,1
+C00406,BR14,Mass Market,Valley,2016-08-08,10.1,670,Good,50000,0
+C00407,BR06,Mass Market,Metro,2016-08-18,10.1,640,Fair,53000,1
+C00408,BR02,Mass Market,Harbor Coast,2016-08-28,10.1,574,Poor,47500,1
+C00409,BR06,Mass Market,Metro,2016-08-31,10.1,789,Exceptional,73000,1
+C00410,BR02,Mass Market,Harbor Coast,2016-09-11,10.1,705,Good,47500,1
+C00411,BR06,Mass Affluent,Metro,2016-09-14,10.0,751,Very Good,89500,1
+C00412,BR07,Mass Market,Metro,2016-09-16,10.0,528,Poor,58500,1
+C00413,BR11,Retiree,Valley,2016-09-16,10.0,748,Very Good,60000,0
+C00414,BR06,Mass Affluent,Metro,2016-09-19,10.0,668,Fair,98500,1
+C00415,BR09,Mass Affluent,Metro,2016-09-22,10.0,711,Good,118000,1
+C00416,BR02,Mass Market,Harbor Coast,2016-09-23,10.0,688,Good,42500,0
+C00417,BR09,Retiree,Metro,2016-09-29,10.0,752,Very Good,53000,1
+C00418,BR02,Retiree,Harbor Coast,2016-10-02,10.0,786,Exceptional,33000,1
+C00419,BR10,Mass Affluent,Valley,2016-10-07,10.0,717,Good,112000,1
+C00420,BR05,Mass Market,Metro,2016-10-26,9.9,668,Fair,53000,1
+C00421,BR06,Retiree,Metro,2016-11-14,9.9,714,Good,72500,0
+C00422,BR11,Mass Market,Valley,2016-11-16,9.9,829,Exceptional,44500,0
+C00423,BR14,Private Client,Valley,2016-11-23,9.9,780,Exceptional,309500,0
+C00424,BR12,Mass Market,Valley,2016-11-25,9.8,621,Fair,58000,1
+C00425,BR02,Mass Market,Harbor Coast,2016-11-27,9.8,607,Poor,56000,1
+C00426,BR11,Mass Market,Valley,2016-11-28,9.8,681,Good,45500,0
+C00427,BR07,Mass Market,Metro,2016-11-29,9.8,705,Good,85500,1
+C00428,BR12,Mass Market,Valley,2016-11-30,9.8,763,Very Good,88000,1
+C00429,BR06,Private Client,Metro,2016-12-12,9.8,712,Good,187500,1
+C00430,BR06,Mass Market,Metro,2016-12-13,9.8,765,Very Good,31500,1
+C00431,BR01,Private Client,Harbor Coast,2016-12-28,9.8,786,Exceptional,213500,1
+C00432,BR18,Mass Market,Highlands,2017-01-02,9.7,704,Good,88500,1
+C00433,BR06,Mass Affluent,Metro,2017-01-17,9.7,709,Good,71000,1
+C00434,BR01,Mass Market,Harbor Coast,2017-01-21,9.7,556,Poor,44000,1
+C00435,BR01,Retiree,Harbor Coast,2017-01-25,9.7,785,Exceptional,33500,1
+C00436,BR06,Mass Market,Metro,2017-02-01,9.7,659,Fair,83000,0
+C00437,BR13,Retiree,Valley,2017-02-07,9.6,766,Very Good,28500,0
+C00438,BR10,Mass Market,Valley,2017-02-16,9.6,655,Fair,73500,0
+C00439,BR02,Retiree,Harbor Coast,2017-03-08,9.6,772,Very Good,77500,0
+C00440,BR16,Mass Market,Highlands,2017-03-13,9.5,627,Fair,54000,1
+C00441,BR09,Mass Market,Metro,2017-03-16,9.5,682,Good,60000,1
+C00442,BR02,Mass Market,Harbor Coast,2017-03-17,9.5,731,Very Good,70500,0
+C00443,BR18,Private Client,Highlands,2017-03-22,9.5,715,Good,196500,0
+C00444,BR18,Mass Market,Highlands,2017-03-26,9.5,675,Good,44500,1
+C00445,BR05,Mass Market,Metro,2017-03-28,9.5,690,Good,55000,0
+C00446,BR06,Mass Market,Metro,2017-04-20,9.4,631,Fair,46500,1
+C00447,BR12,Retiree,Valley,2017-05-02,9.4,710,Good,44000,0
+C00448,BR08,Private Client,Metro,2017-05-03,9.4,828,Exceptional,191000,1
+C00449,BR01,Mass Market,Harbor Coast,2017-05-05,9.4,686,Good,73500,1
+C00450,BR10,Mass Market,Valley,2017-05-08,9.4,615,Poor,45000,1
+C00451,BR05,Mass Market,Metro,2017-05-09,9.4,626,Fair,51500,1
+C00452,BR12,Mass Market,Valley,2017-05-10,9.4,730,Very Good,45500,0
+C00453,BR09,Mass Market,Metro,2017-05-15,9.4,614,Poor,33000,0
+C00454,BR13,Mass Market,Valley,2017-05-20,9.4,714,Good,32500,1
+C00455,BR11,Mass Market,Valley,2017-05-26,9.3,593,Poor,44000,1
+C00456,BR15,Mass Affluent,Highlands,2017-06-08,9.3,756,Very Good,144000,1
+C00457,BR04,Mass Market,Harbor Coast,2017-06-13,9.3,637,Fair,67000,1
+C00458,BR18,Private Client,Highlands,2017-06-24,9.3,809,Exceptional,345000,1
+C00459,BR06,Mass Market,Metro,2017-06-26,9.3,679,Good,43000,1
+C00460,BR09,Mass Market,Metro,2017-06-27,9.3,648,Fair,62500,0
+C00461,BR01,Mass Market,Harbor Coast,2017-06-30,9.3,665,Fair,64500,1
+C00462,BR11,Private Client,Valley,2017-06-30,9.3,802,Exceptional,349000,0
+C00463,BR18,Mass Market,Highlands,2017-07-01,9.2,649,Fair,55500,1
+C00464,BR02,Mass Market,Harbor Coast,2017-07-11,9.2,635,Fair,99000,1
+C00465,BR06,Mass Affluent,Metro,2017-07-13,9.2,669,Fair,128500,1
+C00466,BR08,Mass Market,Metro,2017-07-24,9.2,633,Fair,80500,1
+C00467,BR13,Retiree,Valley,2017-08-03,9.2,732,Very Good,28000,1
+C00468,BR06,Retiree,Metro,2017-08-05,9.2,793,Exceptional,56500,1
+C00469,BR07,Mass Market,Metro,2017-08-07,9.1,614,Poor,69500,1
+C00470,BR01,Mass Market,Harbor Coast,2017-08-08,9.1,614,Poor,50500,0
+C00471,BR07,Mass Market,Metro,2017-08-11,9.1,694,Good,43500,1
+C00472,BR01,Retiree,Harbor Coast,2017-08-12,9.1,772,Very Good,36500,0
+C00473,BR06,Mass Market,Metro,2017-08-14,9.1,712,Good,41500,0
+C00474,BR01,Mass Market,Harbor Coast,2017-08-24,9.1,729,Very Good,40500,0
+C00475,BR12,Mass Affluent,Valley,2017-08-24,9.1,694,Good,82000,1
+C00476,BR15,Mass Market,Highlands,2017-08-31,9.1,591,Poor,36500,1
+C00477,BR17,Mass Affluent,Highlands,2017-09-02,9.1,774,Very Good,76000,1
+C00478,BR18,Mass Market,Highlands,2017-09-04,9.1,832,Exceptional,56000,1
+C00479,BR15,Retiree,Highlands,2017-09-19,9.0,720,Very Good,65000,1
+C00480,BR10,Mass Market,Valley,2017-09-21,9.0,604,Poor,71500,1
+C00481,BR04,Mass Market,Harbor Coast,2017-09-29,9.0,705,Good,54000,1
+C00482,BR15,Mass Market,Highlands,2017-10-05,9.0,658,Fair,52000,1
+C00483,BR01,Mass Market,Harbor Coast,2017-10-07,9.0,658,Fair,97000,1
+C00484,BR07,Mass Affluent,Metro,2017-10-14,9.0,692,Good,58500,0
+C00485,BR06,Mass Market,Metro,2017-10-15,9.0,621,Fair,87000,0
+C00486,BR15,Mass Affluent,Highlands,2017-10-19,8.9,758,Very Good,67000,1
+C00487,BR07,Mass Affluent,Metro,2017-10-22,8.9,754,Very Good,164500,1
+C00488,BR06,Mass Affluent,Metro,2017-10-26,8.9,694,Good,104000,1
+C00489,BR09,Mass Market,Metro,2017-10-31,8.9,631,Fair,31000,0
+C00490,BR09,Private Client,Metro,2017-11-04,8.9,780,Exceptional,246000,1
+C00491,BR01,Mass Market,Harbor Coast,2017-11-09,8.9,713,Good,67000,1
+C00492,BR18,Private Client,Highlands,2017-11-10,8.9,797,Exceptional,205500,0
+C00493,BR01,Mass Market,Harbor Coast,2017-11-22,8.9,687,Good,69000,1
+C00494,BR08,Mass Market,Metro,2017-11-29,8.8,606,Poor,92500,1
+C00495,BR10,Mass Market,Valley,2017-12-16,8.8,637,Fair,58500,1
+C00496,BR16,Mass Market,Highlands,2017-12-18,8.8,741,Very Good,51500,1
+C00497,BR03,Mass Affluent,Harbor Coast,2017-12-29,8.8,696,Good,125500,1
+C00498,BR13,Private Client,Valley,2018-01-17,8.7,831,Exceptional,299500,1
+C00499,BR13,Mass Affluent,Valley,2018-01-26,8.7,725,Very Good,62000,1
+C00500,BR15,Mass Market,Highlands,2018-02-08,8.6,628,Fair,62000,0
+C00501,BR18,Mass Market,Highlands,2018-02-17,8.6,632,Fair,63000,1
+C00502,BR03,Mass Market,Harbor Coast,2018-03-10,8.6,738,Very Good,66000,1
+C00503,BR06,Mass Affluent,Metro,2018-03-18,8.5,710,Good,71000,1
+C00504,BR18,Private Client,Highlands,2018-03-19,8.5,754,Very Good,175000,0
+C00505,BR09,Mass Affluent,Metro,2018-03-20,8.5,693,Good,66000,1
+C00506,BR09,Retiree,Metro,2018-03-28,8.5,669,Fair,72000,1
+C00507,BR06,Mass Affluent,Metro,2018-04-21,8.4,793,Exceptional,134000,1
+C00508,BR14,Retiree,Valley,2018-04-29,8.4,757,Very Good,65000,1
+C00509,BR11,Mass Market,Valley,2018-05-07,8.4,736,Very Good,29000,1
+C00510,BR06,Retiree,Metro,2018-05-11,8.4,749,Very Good,34500,0
+C00511,BR05,Mass Market,Metro,2018-05-16,8.4,689,Good,83000,1
+C00512,BR07,Mass Market,Metro,2018-06-02,8.3,638,Fair,38000,1
+C00513,BR05,Retiree,Metro,2018-06-09,8.3,757,Very Good,30000,1
+C00514,BR16,Mass Market,Highlands,2018-06-11,8.3,638,Fair,40500,1
+C00515,BR03,Mass Affluent,Harbor Coast,2018-06-13,8.3,699,Good,94000,1
+C00516,BR06,Mass Affluent,Metro,2018-06-17,8.3,746,Very Good,97500,0
+C00517,BR17,Private Client,Highlands,2018-06-25,8.3,798,Exceptional,269000,1
+C00518,BR17,Mass Market,Highlands,2018-06-30,8.3,644,Fair,69500,1
+C00519,BR14,Mass Market,Valley,2018-07-12,8.2,647,Fair,62500,0
+C00520,BR15,Mass Affluent,Highlands,2018-07-16,8.2,693,Good,105000,1
+C00521,BR01,Private Client,Harbor Coast,2018-07-29,8.2,780,Exceptional,116500,0
+C00522,BR09,Mass Affluent,Metro,2018-08-01,8.2,751,Very Good,118500,1
+C00523,BR06,Mass Affluent,Metro,2018-08-07,8.1,702,Good,67500,1
+C00524,BR05,Mass Market,Metro,2018-08-13,8.1,708,Good,65500,0
+C00525,BR07,Mass Market,Metro,2018-08-17,8.1,667,Fair,73000,1
+C00526,BR18,Retiree,Highlands,2018-08-18,8.1,796,Exceptional,36500,0
+C00527,BR06,Mass Market,Metro,2018-08-28,8.1,726,Very Good,37000,1
+C00528,BR11,Mass Market,Valley,2018-09-06,8.1,736,Very Good,36500,1
+C00529,BR01,Mass Market,Harbor Coast,2018-09-27,8.0,693,Good,97000,1
+C00530,BR01,Mass Affluent,Harbor Coast,2018-09-28,8.0,693,Good,94500,0
+C00531,BR07,Young Adult,Metro,2018-09-30,8.0,520,Poor,43000,1
+C00532,BR16,Young Adult,Highlands,2018-09-30,8.0,647,Fair,34500,1
+C00533,BR11,Mass Market,Valley,2018-10-08,8.0,698,Good,52000,1
+C00534,BR11,Mass Affluent,Valley,2018-10-08,8.0,790,Exceptional,93500,1
+C00535,BR06,Retiree,Metro,2018-10-12,8.0,667,Fair,69500,1
+C00536,BR02,Mass Affluent,Harbor Coast,2018-10-17,8.0,678,Good,139000,1
+C00537,BR06,Mass Market,Metro,2018-10-21,7.9,715,Good,85000,1
+C00538,BR11,Mass Affluent,Valley,2018-11-01,7.9,644,Fair,105500,1
+C00539,BR10,Mass Market,Valley,2018-11-06,7.9,685,Good,92500,0
+C00540,BR05,Mass Market,Metro,2018-11-14,7.9,601,Poor,48000,1
+C00541,BR01,Mass Market,Harbor Coast,2018-11-15,7.9,695,Good,56000,1
+C00542,BR18,Mass Market,Highlands,2018-11-17,7.9,661,Fair,32500,1
+C00543,BR02,Mass Market,Harbor Coast,2018-11-22,7.9,759,Very Good,58000,1
+C00544,BR01,Mass Market,Harbor Coast,2018-11-23,7.9,672,Good,64500,1
+C00545,BR11,Mass Market,Valley,2018-11-27,7.8,817,Exceptional,54500,1
+C00546,BR05,Private Client,Metro,2018-11-28,7.8,774,Very Good,347000,1
+C00547,BR01,Mass Market,Harbor Coast,2018-11-30,7.8,644,Fair,46500,1
+C00548,BR02,Mass Market,Harbor Coast,2018-12-03,7.8,661,Fair,56000,1
+C00549,BR14,Mass Affluent,Valley,2018-12-09,7.8,734,Very Good,115000,1
+C00550,BR06,Retiree,Metro,2018-12-17,7.8,757,Very Good,44500,0
+C00551,BR03,Mass Market,Harbor Coast,2018-12-27,7.8,694,Good,49500,1
+C00552,BR15,Mass Market,Highlands,2018-12-28,7.8,701,Good,54500,1
+C00553,BR12,Mass Market,Valley,2019-01-06,7.7,772,Very Good,87000,1
+C00554,BR01,Private Client,Harbor Coast,2019-01-06,7.7,759,Very Good,178500,1
+C00555,BR10,Young Adult,Valley,2019-01-09,7.7,644,Fair,52000,1
+C00556,BR04,Mass Market,Harbor Coast,2019-01-16,7.7,661,Fair,45500,0
+C00557,BR06,Mass Market,Metro,2019-01-26,7.7,683,Good,44000,1
+C00558,BR16,Young Adult,Highlands,2019-01-29,7.7,628,Fair,31000,1
+C00559,BR10,Mass Market,Valley,2019-01-31,7.7,629,Fair,76500,1
+C00560,BR03,Mass Market,Harbor Coast,2019-01-31,7.7,769,Very Good,60500,1
+C00561,BR12,Mass Market,Valley,2019-02-10,7.6,683,Good,34000,0
+C00562,BR09,Mass Market,Metro,2019-02-27,7.6,637,Fair,75500,1
+C00563,BR18,Mass Affluent,Highlands,2019-02-28,7.6,677,Good,85500,1
+C00564,BR10,Mass Affluent,Valley,2019-03-02,7.6,730,Very Good,98000,1
+C00565,BR13,Mass Market,Valley,2019-03-04,7.6,585,Poor,55000,1
+C00566,BR10,Mass Affluent,Valley,2019-03-06,7.6,716,Good,61500,1
+C00567,BR17,Mass Market,Highlands,2019-03-16,7.5,720,Very Good,75000,0
+C00568,BR01,Mass Market,Harbor Coast,2019-03-19,7.5,671,Good,42500,1
+C00569,BR15,Mass Market,Highlands,2019-03-25,7.5,652,Fair,106500,1
+C00570,BR05,Mass Market,Metro,2019-04-01,7.5,725,Very Good,45000,1
+C00571,BR10,Mass Market,Valley,2019-04-02,7.5,520,Poor,71000,1
+C00572,BR06,Mass Market,Metro,2019-04-18,7.5,754,Very Good,39000,1
+C00573,BR06,Private Client,Metro,2019-04-21,7.4,727,Very Good,135500,0
+C00574,BR11,Mass Market,Valley,2019-04-27,7.4,770,Very Good,52000,1
+C00575,BR10,Mass Market,Valley,2019-05-05,7.4,689,Good,28500,1
+C00576,BR09,Mass Affluent,Metro,2019-05-14,7.4,674,Good,121500,0
+C00577,BR01,Mass Market,Harbor Coast,2019-05-23,7.4,713,Good,51500,0
+C00578,BR09,Mass Market,Metro,2019-05-26,7.3,678,Good,50000,1
+C00579,BR15,Mass Affluent,Highlands,2019-06-01,7.3,656,Fair,100000,1
+C00580,BR14,Mass Market,Valley,2019-06-03,7.3,620,Fair,51000,0
+C00581,BR07,Mass Market,Metro,2019-06-24,7.3,679,Good,37500,1
+C00582,BR15,Retiree,Highlands,2019-07-04,7.2,786,Exceptional,40000,1
+C00583,BR13,Mass Market,Valley,2019-07-05,7.2,659,Fair,33500,1
+C00584,BR01,Mass Market,Harbor Coast,2019-07-06,7.2,590,Poor,75000,0
+C00585,BR08,Mass Market,Metro,2019-07-14,7.2,683,Good,91500,1
+C00586,BR03,Mass Market,Harbor Coast,2019-07-18,7.2,693,Good,30000,1
+C00587,BR01,Mass Market,Harbor Coast,2019-07-27,7.2,692,Good,50500,1
+C00588,BR02,Mass Market,Harbor Coast,2019-07-27,7.2,761,Very Good,59500,1
+C00589,BR02,Mass Affluent,Harbor Coast,2019-07-29,7.2,770,Very Good,84500,0
+C00590,BR02,Mass Affluent,Harbor Coast,2019-08-04,7.2,662,Fair,103500,0
+C00591,BR16,Private Client,Highlands,2019-08-12,7.1,745,Very Good,191500,1
+C00592,BR07,Mass Market,Metro,2019-08-15,7.1,634,Fair,41000,1
+C00593,BR07,Retiree,Metro,2019-08-18,7.1,702,Good,28500,0
+C00594,BR02,Mass Market,Harbor Coast,2019-08-19,7.1,694,Good,77500,1
+C00595,BR05,Mass Market,Metro,2019-08-26,7.1,742,Very Good,60500,1
+C00596,BR05,Retiree,Metro,2019-08-27,7.1,711,Good,24000,1
+C00597,BR02,Mass Market,Harbor Coast,2019-09-03,7.1,739,Very Good,45000,1
+C00598,BR01,Mass Affluent,Harbor Coast,2019-09-03,7.1,708,Good,64000,1
+C00599,BR18,Mass Affluent,Highlands,2019-09-15,7.0,792,Exceptional,130000,0
+C00600,BR08,Mass Affluent,Metro,2019-09-18,7.0,671,Good,100000,1
+C00601,BR15,Mass Affluent,Highlands,2019-09-24,7.0,780,Exceptional,76500,1
+C00602,BR01,Mass Market,Harbor Coast,2019-10-10,7.0,663,Fair,51500,1
+C00603,BR14,Mass Market,Valley,2019-10-10,7.0,715,Good,72000,1
+C00604,BR10,Mass Market,Valley,2019-10-16,7.0,698,Good,43000,0
+C00605,BR14,Mass Market,Valley,2019-10-22,6.9,637,Fair,80500,1
+C00606,BR03,Mass Market,Harbor Coast,2019-10-27,6.9,633,Fair,66500,1
+C00607,BR18,Mass Affluent,Highlands,2019-11-07,6.9,645,Fair,79000,1
+C00608,BR02,Private Client,Harbor Coast,2019-11-25,6.8,763,Very Good,163000,1
+C00609,BR09,Mass Market,Metro,2019-12-10,6.8,625,Fair,56000,1
+C00610,BR12,Young Adult,Valley,2019-12-10,6.8,686,Good,28500,0
+C00611,BR01,Mass Market,Harbor Coast,2019-12-14,6.8,715,Good,70000,1
+C00612,BR07,Mass Affluent,Metro,2019-12-18,6.8,749,Very Good,73500,1
+C00613,BR03,Mass Market,Harbor Coast,2019-12-19,6.8,682,Good,38000,0
+C00614,BR02,Mass Market,Harbor Coast,2019-12-21,6.8,559,Poor,53000,1
+C00615,BR09,Mass Market,Metro,2019-12-30,6.8,582,Poor,42500,1
+C00616,BR05,Young Adult,Metro,2020-01-01,6.7,786,Exceptional,33000,1
+C00617,BR08,Mass Market,Metro,2020-01-02,6.7,653,Fair,52000,0
+C00618,BR09,Mass Affluent,Metro,2020-01-03,6.7,762,Very Good,115500,1
+C00619,BR01,Mass Market,Harbor Coast,2020-01-04,6.7,686,Good,53500,1
+C00620,BR01,Mass Market,Harbor Coast,2020-01-18,6.7,671,Good,42500,0
+C00621,BR06,Mass Market,Metro,2020-01-21,6.7,683,Good,55500,1
+C00622,BR07,Mass Affluent,Metro,2020-01-27,6.7,707,Good,95000,0
+C00623,BR06,Private Client,Metro,2020-01-30,6.7,778,Very Good,292000,1
+C00624,BR05,Mass Affluent,Metro,2020-02-02,6.7,701,Good,172000,1
+C00625,BR06,Mass Market,Metro,2020-02-05,6.7,657,Fair,47500,1
+C00626,BR17,Mass Market,Highlands,2020-02-06,6.6,702,Good,47500,0
+C00627,BR12,Young Adult,Valley,2020-02-09,6.6,665,Fair,55000,0
+C00628,BR16,Mass Market,Highlands,2020-02-12,6.6,700,Good,46500,0
+C00629,BR10,Mass Market,Valley,2020-02-14,6.6,718,Good,42500,0
+C00630,BR15,Mass Market,Highlands,2020-02-15,6.6,762,Very Good,61500,0
+C00631,BR14,Retiree,Valley,2020-02-23,6.6,745,Very Good,60000,1
+C00632,BR01,Mass Market,Harbor Coast,2020-03-10,6.6,681,Good,52000,1
+C00633,BR03,Mass Market,Harbor Coast,2020-03-11,6.6,668,Fair,44500,1
+C00634,BR09,Retiree,Metro,2020-03-21,6.5,752,Very Good,54500,0
+C00635,BR09,Mass Market,Metro,2020-03-24,6.5,645,Fair,59000,1
+C00636,BR02,Private Client,Harbor Coast,2020-03-26,6.5,737,Very Good,271500,1
+C00637,BR18,Mass Market,Highlands,2020-03-30,6.5,646,Fair,57000,0
+C00638,BR02,Mass Market,Harbor Coast,2020-04-03,6.5,624,Fair,62500,1
+C00639,BR06,Mass Market,Metro,2020-04-05,6.5,755,Very Good,53500,1
+C00640,BR01,Mass Affluent,Harbor Coast,2020-04-11,6.5,723,Very Good,85000,1
+C00641,BR06,Mass Affluent,Metro,2020-04-12,6.5,722,Very Good,172000,1
+C00642,BR02,Mass Market,Harbor Coast,2020-04-13,6.5,683,Good,53000,0
+C00643,BR01,Mass Market,Harbor Coast,2020-04-14,6.5,669,Fair,104500,1
+C00644,BR07,Mass Market,Metro,2020-04-15,6.5,668,Fair,38000,1
+C00645,BR13,Mass Affluent,Valley,2020-04-15,6.5,766,Very Good,136500,1
+C00646,BR01,Retiree,Harbor Coast,2020-04-23,6.4,766,Very Good,76000,0
+C00647,BR07,Mass Market,Metro,2020-04-26,6.4,670,Good,51500,1
+C00648,BR08,Mass Market,Metro,2020-05-02,6.4,698,Good,54500,0
+C00649,BR11,Mass Affluent,Valley,2020-05-10,6.4,678,Good,110000,1
+C00650,BR08,Mass Affluent,Metro,2020-05-19,6.4,740,Very Good,107500,1
+C00651,BR11,Mass Affluent,Valley,2020-05-30,6.3,763,Very Good,116000,1
+C00652,BR03,Young Adult,Harbor Coast,2020-05-31,6.3,647,Fair,46000,1
+C00653,BR17,Mass Market,Highlands,2020-06-02,6.3,656,Fair,49000,0
+C00654,BR01,Mass Market,Harbor Coast,2020-06-06,6.3,633,Fair,45000,1
+C00655,BR11,Mass Affluent,Valley,2020-06-08,6.3,644,Fair,115000,1
+C00656,BR06,Retiree,Metro,2020-06-12,6.3,638,Fair,35000,1
+C00657,BR10,Mass Market,Valley,2020-06-16,6.3,624,Fair,46000,0
+C00658,BR15,Mass Market,Highlands,2020-06-17,6.3,683,Good,38000,1
+C00659,BR13,Mass Market,Valley,2020-06-26,6.3,626,Fair,55000,1
+C00660,BR09,Mass Market,Metro,2020-07-03,6.2,614,Poor,43000,0
+C00661,BR02,Mass Affluent,Harbor Coast,2020-07-04,6.2,704,Good,132500,1
+C00662,BR02,Mass Market,Harbor Coast,2020-07-20,6.2,708,Good,50500,1
+C00663,BR09,Mass Market,Metro,2020-07-21,6.2,696,Good,76000,1
+C00664,BR01,Mass Affluent,Harbor Coast,2020-07-25,6.2,756,Very Good,101500,1
+C00665,BR10,Mass Market,Valley,2020-07-30,6.2,655,Fair,59500,0
+C00666,BR07,Mass Market,Metro,2020-08-09,6.1,744,Very Good,33000,0
+C00667,BR10,Mass Market,Valley,2020-08-10,6.1,690,Good,54000,1
+C00668,BR18,Mass Market,Highlands,2020-08-10,6.1,772,Very Good,58500,1
+C00669,BR18,Private Client,Highlands,2020-08-24,6.1,735,Very Good,251500,1
+C00670,BR02,Mass Affluent,Harbor Coast,2020-08-26,6.1,799,Exceptional,78500,1
+C00671,BR02,Mass Market,Harbor Coast,2020-08-27,6.1,680,Good,41500,1
+C00672,BR09,Private Client,Metro,2020-09-01,6.1,768,Very Good,213500,1
+C00673,BR02,Mass Affluent,Harbor Coast,2020-09-02,6.1,768,Very Good,125500,1
+C00674,BR06,Young Adult,Metro,2020-09-02,6.1,757,Very Good,42000,1
+C00675,BR10,Private Client,Valley,2020-09-02,6.1,782,Exceptional,701500,0
+C00676,BR05,Mass Market,Metro,2020-09-13,6.0,720,Very Good,47500,1
+C00677,BR14,Mass Market,Valley,2020-09-19,6.0,614,Poor,45000,0
+C00678,BR02,Mass Affluent,Harbor Coast,2020-09-21,6.0,714,Good,86000,1
+C00679,BR17,Mass Affluent,Highlands,2020-09-21,6.0,745,Very Good,104000,1
+C00680,BR10,Young Adult,Valley,2020-09-29,6.0,653,Fair,35500,1
+C00681,BR05,Mass Market,Metro,2020-10-03,6.0,694,Good,56000,1
+C00682,BR05,Mass Market,Metro,2020-10-12,6.0,633,Fair,55500,1
+C00683,BR18,Mass Affluent,Highlands,2020-10-24,5.9,729,Very Good,85000,1
+C00684,BR09,Retiree,Metro,2020-10-27,5.9,799,Exceptional,56000,1
+C00685,BR12,Mass Market,Valley,2020-10-28,5.9,642,Fair,51000,1
+C00686,BR01,Mass Market,Harbor Coast,2020-11-02,5.9,786,Exceptional,49000,0
+C00687,BR11,Mass Affluent,Valley,2020-11-03,5.9,681,Good,123500,1
+C00688,BR01,Mass Affluent,Harbor Coast,2020-11-04,5.9,695,Good,61000,1
+C00689,BR15,Mass Market,Highlands,2020-11-09,5.9,696,Good,44000,0
+C00690,BR09,Mass Market,Metro,2020-11-11,5.9,583,Poor,40000,1
+C00691,BR16,Mass Market,Highlands,2020-11-20,5.9,725,Very Good,60000,1
+C00692,BR05,Mass Market,Metro,2020-11-26,5.8,679,Good,86500,0
+C00693,BR06,Mass Market,Metro,2020-12-16,5.8,670,Good,66500,1
+C00694,BR11,Mass Affluent,Valley,2020-12-20,5.8,787,Exceptional,72500,1
+C00695,BR10,Mass Market,Valley,2020-12-27,5.8,689,Good,35500,1
+C00696,BR17,Private Client,Highlands,2021-01-07,5.7,833,Exceptional,500500,1
+C00697,BR07,Mass Market,Metro,2021-01-16,5.7,654,Fair,41500,0
+C00698,BR01,Mass Affluent,Harbor Coast,2021-01-17,5.7,806,Exceptional,124000,1
+C00699,BR06,Mass Affluent,Metro,2021-01-24,5.7,665,Fair,72000,1
+C00700,BR02,Mass Market,Harbor Coast,2021-02-04,5.7,610,Poor,33000,1
+C00701,BR09,Mass Market,Metro,2021-02-08,5.6,765,Very Good,49500,1
+C00702,BR15,Mass Market,Highlands,2021-02-09,5.6,644,Fair,49000,1
+C00703,BR03,Mass Market,Harbor Coast,2021-02-11,5.6,726,Very Good,58500,1
+C00704,BR04,Mass Market,Harbor Coast,2021-02-12,5.6,644,Fair,25500,1
+C00705,BR02,Young Adult,Harbor Coast,2021-02-25,5.6,558,Poor,27000,1
+C00706,BR01,Mass Market,Harbor Coast,2021-03-06,5.6,657,Fair,42500,1
+C00707,BR09,Young Adult,Metro,2021-03-07,5.6,675,Good,46000,1
+C00708,BR01,Mass Market,Harbor Coast,2021-03-18,5.5,644,Fair,55000,1
+C00709,BR07,Private Client,Metro,2021-03-19,5.5,772,Very Good,297500,1
+C00710,BR03,Mass Market,Harbor Coast,2021-03-21,5.5,657,Fair,29500,0
+C00711,BR14,Mass Market,Valley,2021-03-26,5.5,661,Fair,38000,1
+C00712,BR03,Mass Affluent,Harbor Coast,2021-03-31,5.5,757,Very Good,67000,0
+C00713,BR13,Private Client,Valley,2021-04-07,5.5,718,Good,242000,0
+C00714,BR02,Mass Market,Harbor Coast,2021-04-26,5.4,636,Fair,49500,0
+C00715,BR09,Mass Affluent,Metro,2021-05-07,5.4,729,Very Good,150000,1
+C00716,BR05,Mass Market,Metro,2021-05-09,5.4,653,Fair,47500,1
+C00717,BR01,Mass Affluent,Harbor Coast,2021-05-21,5.4,745,Very Good,117000,1
+C00718,BR16,Young Adult,Highlands,2021-05-23,5.4,651,Fair,50500,1
+C00719,BR07,Mass Market,Metro,2021-06-03,5.3,683,Good,56000,0
+C00720,BR03,Retiree,Harbor Coast,2021-06-03,5.3,730,Very Good,41000,0
+C00721,BR15,Mass Market,Highlands,2021-06-08,5.3,618,Poor,74500,1
+C00722,BR01,Mass Market,Harbor Coast,2021-06-19,5.3,696,Good,51000,1
+C00723,BR09,Young Adult,Metro,2021-06-21,5.3,604,Poor,51000,1
+C00724,BR05,Mass Market,Metro,2021-06-22,5.3,688,Good,68000,1
+C00725,BR05,Mass Market,Metro,2021-06-28,5.3,692,Good,62000,1
+C00726,BR16,Young Adult,Highlands,2021-06-29,5.3,680,Good,34000,1
+C00727,BR03,Mass Market,Harbor Coast,2021-07-15,5.2,670,Good,46000,1
+C00728,BR02,Mass Market,Harbor Coast,2021-07-25,5.2,660,Fair,54500,0
+C00729,BR01,Mass Affluent,Harbor Coast,2021-07-27,5.2,749,Very Good,90500,0
+C00730,BR15,Mass Affluent,Highlands,2021-08-04,5.2,685,Good,72500,1
+C00731,BR01,Mass Market,Harbor Coast,2021-08-12,5.1,609,Poor,69000,1
+C00732,BR07,Young Adult,Metro,2021-08-20,5.1,554,Poor,27500,1
+C00733,BR16,Mass Market,Highlands,2021-08-23,5.1,687,Good,54000,1
+C00734,BR13,Mass Affluent,Valley,2021-08-23,5.1,764,Very Good,115500,0
+C00735,BR05,Young Adult,Metro,2021-08-24,5.1,592,Poor,32000,1
+C00736,BR07,Mass Market,Metro,2021-08-25,5.1,650,Fair,25500,0
+C00737,BR12,Mass Affluent,Valley,2021-08-31,5.1,762,Very Good,84500,1
+C00738,BR15,Mass Market,Highlands,2021-09-02,5.1,644,Fair,62500,1
+C00739,BR01,Mass Affluent,Harbor Coast,2021-09-07,5.1,744,Very Good,59000,1
+C00740,BR07,Mass Affluent,Metro,2021-09-20,5.0,680,Good,79000,1
+C00741,BR01,Retiree,Harbor Coast,2021-09-22,5.0,687,Good,82000,1
+C00742,BR08,Young Adult,Metro,2021-09-30,5.0,626,Fair,43000,1
+C00743,BR01,Mass Market,Harbor Coast,2021-10-20,4.9,672,Good,47500,0
+C00744,BR01,Young Adult,Harbor Coast,2021-10-26,4.9,712,Good,38000,1
+C00745,BR16,Young Adult,Highlands,2021-10-30,4.9,564,Poor,28000,1
+C00746,BR14,Mass Affluent,Valley,2021-11-03,4.9,708,Good,111500,1
+C00747,BR01,Mass Market,Harbor Coast,2021-11-06,4.9,611,Poor,72500,1
+C00748,BR02,Mass Market,Harbor Coast,2021-11-09,4.9,782,Exceptional,36000,1
+C00749,BR06,Mass Market,Metro,2021-11-13,4.9,702,Good,45000,1
+C00750,BR16,Mass Market,Highlands,2021-11-26,4.8,580,Poor,69000,1
+C00751,BR01,Mass Market,Harbor Coast,2021-11-28,4.8,672,Good,49500,1
+C00752,BR09,Mass Market,Metro,2021-11-30,4.8,694,Good,52500,1
+C00753,BR15,Mass Affluent,Highlands,2021-12-06,4.8,762,Very Good,148500,1
+C00754,BR16,Young Adult,Highlands,2021-12-16,4.8,692,Good,39000,1
+C00755,BR05,Young Adult,Metro,2021-12-25,4.8,626,Fair,62500,0
+C00756,BR06,Mass Market,Metro,2021-12-29,4.8,693,Good,33500,1
+C00757,BR09,Mass Market,Metro,2022-01-04,4.7,732,Very Good,37000,0
+C00758,BR02,Young Adult,Harbor Coast,2022-01-05,4.7,615,Poor,44500,1
+C00759,BR17,Mass Affluent,Highlands,2022-01-07,4.7,728,Very Good,149500,1
+C00760,BR02,Private Client,Harbor Coast,2022-01-19,4.7,759,Very Good,283000,1
+C00761,BR15,Mass Affluent,Highlands,2022-01-27,4.7,727,Very Good,89500,0
+C00762,BR14,Young Adult,Valley,2022-01-27,4.7,623,Fair,24500,0
+C00763,BR01,Mass Market,Harbor Coast,2022-01-31,4.7,787,Exceptional,60500,1
+C00764,BR03,Young Adult,Harbor Coast,2022-02-06,4.6,655,Fair,34000,0
+C00765,BR05,Mass Affluent,Metro,2022-02-12,4.6,676,Good,103500,1
+C00766,BR07,Private Client,Metro,2022-02-13,4.6,780,Exceptional,245500,1
+C00767,BR16,Mass Affluent,Highlands,2022-02-17,4.6,762,Very Good,107000,1
+C00768,BR14,Young Adult,Valley,2022-03-03,4.6,609,Poor,51500,0
+C00769,BR09,Mass Market,Metro,2022-03-06,4.6,615,Poor,52000,1
+C00770,BR10,Mass Market,Valley,2022-03-12,4.6,659,Fair,65500,0
+C00771,BR15,Mass Affluent,Highlands,2022-03-22,4.5,671,Good,137500,0
+C00772,BR05,Young Adult,Metro,2022-03-22,4.5,593,Poor,39000,1
+C00773,BR17,Private Client,Highlands,2022-03-29,4.5,825,Exceptional,435500,1
+C00774,BR03,Young Adult,Harbor Coast,2022-03-30,4.5,730,Very Good,33500,1
+C00775,BR04,Mass Market,Harbor Coast,2022-04-19,4.4,724,Very Good,59000,0
+C00776,BR01,Mass Affluent,Harbor Coast,2022-04-21,4.4,777,Very Good,105500,1
+C00777,BR02,Mass Market,Harbor Coast,2022-04-23,4.4,719,Good,52000,1
+C00778,BR02,Young Adult,Harbor Coast,2022-05-01,4.4,687,Good,56000,1
+C00779,BR09,Mass Affluent,Metro,2022-05-12,4.4,742,Very Good,85500,1
+C00780,BR12,Mass Market,Valley,2022-05-20,4.4,689,Good,73500,1
+C00781,BR07,Mass Affluent,Metro,2022-06-04,4.3,783,Exceptional,74500,1
+C00782,BR03,Young Adult,Harbor Coast,2022-06-07,4.3,600,Poor,34500,1
+C00783,BR16,Mass Market,Highlands,2022-06-17,4.3,581,Poor,37500,0
+C00784,BR10,Mass Market,Valley,2022-06-19,4.3,671,Good,45000,0
+C00785,BR01,Mass Affluent,Harbor Coast,2022-06-21,4.3,748,Very Good,71500,1
+C00786,BR16,Mass Affluent,Highlands,2022-07-02,4.2,769,Very Good,85500,1
+C00787,BR10,Mass Market,Valley,2022-07-03,4.2,658,Fair,52500,1
+C00788,BR02,Mass Affluent,Harbor Coast,2022-07-03,4.2,770,Very Good,79500,1
+C00789,BR10,Young Adult,Valley,2022-07-08,4.2,595,Poor,26500,1
+C00790,BR02,Mass Market,Harbor Coast,2022-07-16,4.2,668,Fair,33000,0
+C00791,BR10,Mass Market,Valley,2022-07-20,4.2,658,Fair,76000,0
+C00792,BR09,Mass Market,Metro,2022-07-21,4.2,573,Poor,63000,1
+C00793,BR11,Mass Market,Valley,2022-07-24,4.2,678,Good,70500,0
+C00794,BR07,Private Client,Metro,2022-07-24,4.2,766,Very Good,508500,1
+C00795,BR01,Mass Market,Harbor Coast,2022-08-11,4.1,595,Poor,40000,1
+C00796,BR06,Mass Market,Metro,2022-08-12,4.1,657,Fair,73500,1
+C00797,BR07,Mass Market,Metro,2022-08-23,4.1,699,Good,61000,0
+C00798,BR10,Retiree,Valley,2022-08-23,4.1,716,Good,48500,0
+C00799,BR10,Mass Market,Valley,2022-08-29,4.1,754,Very Good,41000,1
+C00800,BR06,Mass Market,Metro,2022-08-31,4.1,733,Very Good,38500,1
+C00801,BR08,Young Adult,Metro,2022-09-03,4.1,638,Fair,34500,1
+C00802,BR14,Mass Market,Valley,2022-09-05,4.1,520,Poor,46000,0
+C00803,BR05,Young Adult,Metro,2022-09-13,4.0,617,Poor,50500,1
+C00804,BR07,Young Adult,Metro,2022-09-20,4.0,599,Poor,40000,1
+C00805,BR08,Young Adult,Metro,2022-09-26,4.0,744,Very Good,51000,1
+C00806,BR03,Mass Affluent,Harbor Coast,2022-09-28,4.0,735,Very Good,103000,1
+C00807,BR09,Mass Market,Metro,2022-09-29,4.0,657,Fair,45500,1
+C00808,BR10,Mass Market,Valley,2022-09-30,4.0,674,Good,76000,1
+C00809,BR06,Mass Market,Metro,2022-10-16,4.0,619,Poor,54000,1
+C00810,BR01,Private Client,Harbor Coast,2022-10-17,4.0,765,Very Good,147000,1
+C00811,BR10,Mass Affluent,Valley,2022-10-18,4.0,774,Very Good,59500,1
+C00812,BR02,Private Client,Harbor Coast,2022-10-19,3.9,811,Exceptional,260500,1
+C00813,BR05,Mass Market,Metro,2022-10-26,3.9,631,Fair,54500,1
+C00814,BR01,Mass Affluent,Harbor Coast,2022-10-28,3.9,760,Very Good,101500,1
+C00815,BR09,Mass Market,Metro,2022-11-02,3.9,603,Poor,43000,1
+C00816,BR05,Mass Market,Metro,2022-11-02,3.9,652,Fair,52000,1
+C00817,BR15,Mass Affluent,Highlands,2022-11-03,3.9,699,Good,101000,1
+C00818,BR01,Mass Market,Harbor Coast,2022-11-05,3.9,698,Good,69500,1
+C00819,BR09,Mass Market,Metro,2022-11-21,3.9,686,Good,53500,1
+C00820,BR01,Mass Market,Harbor Coast,2022-11-28,3.8,651,Fair,61500,0
+C00821,BR11,Mass Affluent,Valley,2022-11-30,3.8,750,Very Good,101500,1
+C00822,BR16,Young Adult,Highlands,2022-12-02,3.8,694,Good,58000,1
+C00823,BR06,Mass Market,Metro,2022-12-16,3.8,669,Fair,41500,0
+C00824,BR18,Mass Market,Highlands,2022-12-25,3.8,726,Very Good,79500,1
+C00825,BR07,Mass Market,Metro,2023-01-01,3.7,610,Poor,84500,0
+C00826,BR03,Mass Market,Harbor Coast,2023-01-06,3.7,687,Good,48500,1
+C00827,BR13,Mass Market,Valley,2023-01-12,3.7,662,Fair,60500,0
+C00828,BR03,Young Adult,Harbor Coast,2023-01-13,3.7,593,Poor,57500,1
+C00829,BR07,Mass Market,Metro,2023-01-18,3.7,740,Very Good,71000,1
+C00830,BR02,Young Adult,Harbor Coast,2023-01-25,3.7,601,Poor,43500,1
+C00831,BR01,Mass Market,Harbor Coast,2023-01-26,3.7,703,Good,35500,1
+C00832,BR12,Mass Affluent,Valley,2023-01-27,3.7,698,Good,170000,1
+C00833,BR15,Young Adult,Highlands,2023-01-28,3.7,621,Fair,55500,1
+C00834,BR14,Young Adult,Valley,2023-01-28,3.7,661,Fair,42500,1
+C00835,BR16,Mass Market,Highlands,2023-01-31,3.7,691,Good,62000,0
+C00836,BR16,Mass Affluent,Highlands,2023-01-31,3.7,699,Good,181500,1
+C00837,BR05,Mass Market,Metro,2023-02-04,3.7,686,Good,124000,0
+C00838,BR03,Young Adult,Harbor Coast,2023-02-04,3.7,536,Poor,34500,1
+C00839,BR13,Mass Market,Valley,2023-02-11,3.6,758,Very Good,72000,1
+C00840,BR01,Young Adult,Harbor Coast,2023-02-15,3.6,613,Poor,53000,1
+C00841,BR03,Mass Market,Harbor Coast,2023-02-20,3.6,721,Very Good,42000,1
+C00842,BR12,Mass Market,Valley,2023-02-22,3.6,682,Good,59500,0
+C00843,BR08,Young Adult,Metro,2023-02-23,3.6,613,Poor,30500,1
+C00844,BR11,Mass Market,Valley,2023-02-25,3.6,712,Good,44000,1
+C00845,BR01,Mass Market,Harbor Coast,2023-02-26,3.6,572,Poor,40500,1
+C00846,BR01,Mass Affluent,Harbor Coast,2023-02-27,3.6,726,Very Good,69500,1
+C00847,BR01,Mass Market,Harbor Coast,2023-03-10,3.6,701,Good,95000,1
+C00848,BR17,Mass Market,Highlands,2023-03-23,3.5,680,Good,59500,0
+C00849,BR03,Mass Market,Harbor Coast,2023-03-24,3.5,596,Poor,63500,1
+C00850,BR06,Mass Market,Metro,2023-03-24,3.5,634,Fair,93500,0
+C00851,BR03,Young Adult,Harbor Coast,2023-03-24,3.5,667,Fair,50000,1
+C00852,BR06,Mass Affluent,Metro,2023-03-28,3.5,665,Fair,155500,1
+C00853,BR11,Mass Market,Valley,2023-03-31,3.5,577,Poor,48000,1
+C00854,BR05,Mass Affluent,Metro,2023-04-01,3.5,724,Very Good,125000,1
+C00855,BR01,Mass Affluent,Harbor Coast,2023-04-21,3.4,698,Good,125500,1
+C00856,BR01,Mass Market,Harbor Coast,2023-04-22,3.4,698,Good,41000,1
+C00857,BR02,Mass Affluent,Harbor Coast,2023-05-03,3.4,724,Very Good,162000,1
+C00858,BR13,Mass Market,Valley,2023-05-04,3.4,662,Fair,77000,1
+C00859,BR14,Young Adult,Valley,2023-05-06,3.4,666,Fair,27000,1
+C00860,BR17,Mass Market,Highlands,2023-05-09,3.4,603,Poor,52000,0
+C00861,BR12,Young Adult,Valley,2023-05-16,3.4,650,Fair,44500,1
+C00862,BR13,Mass Market,Valley,2023-05-27,3.3,556,Poor,92500,1
+C00863,BR07,Mass Market,Metro,2023-05-27,3.3,671,Good,80000,0
+C00864,BR15,Mass Market,Highlands,2023-06-04,3.3,605,Poor,51000,1
+C00865,BR01,Young Adult,Harbor Coast,2023-06-15,3.3,600,Poor,31500,1
+C00866,BR18,Young Adult,Highlands,2023-07-08,3.2,601,Poor,33500,1
+C00867,BR05,Young Adult,Metro,2023-07-17,3.2,623,Fair,18500,1
+C00868,BR01,Private Client,Harbor Coast,2023-07-22,3.2,780,Exceptional,283000,1
+C00869,BR11,Young Adult,Valley,2023-07-28,3.2,676,Good,47500,1
+C00870,BR18,Mass Market,Highlands,2023-07-29,3.2,574,Poor,60000,0
+C00871,BR15,Mass Market,Highlands,2023-08-13,3.1,674,Good,54500,1
+C00872,BR14,Mass Market,Valley,2023-08-16,3.1,588,Poor,43500,1
+C00873,BR14,Young Adult,Valley,2023-08-30,3.1,603,Poor,58000,1
+C00874,BR05,Mass Market,Metro,2023-09-04,3.1,583,Poor,77500,1
+C00875,BR14,Mass Market,Valley,2023-09-12,3.0,833,Exceptional,72500,1
+C00876,BR05,Mass Market,Metro,2023-09-16,3.0,638,Fair,35500,0
+C00877,BR07,Young Adult,Metro,2023-09-16,3.0,694,Good,55500,1
+C00878,BR17,Mass Market,Highlands,2023-09-21,3.0,809,Exceptional,51500,0
+C00879,BR10,Young Adult,Valley,2023-09-23,3.0,748,Very Good,55000,1
+C00880,BR14,Retiree,Valley,2023-09-27,3.0,785,Exceptional,41500,1
+C00881,BR10,Mass Market,Valley,2023-09-28,3.0,620,Fair,49500,1
+C00882,BR06,Mass Market,Metro,2023-09-29,3.0,703,Good,44500,1
+C00883,BR02,Mass Market,Harbor Coast,2023-09-30,3.0,677,Good,41500,1
+C00884,BR05,Young Adult,Metro,2023-10-01,3.0,520,Poor,75500,1
+C00885,BR01,Mass Market,Harbor Coast,2023-10-03,3.0,619,Poor,50500,1
+C00886,BR05,Mass Market,Metro,2023-10-18,3.0,563,Poor,72000,1
+C00887,BR07,Young Adult,Metro,2023-10-21,2.9,614,Poor,29000,1
+C00888,BR04,Mass Market,Harbor Coast,2023-10-29,2.9,726,Very Good,64000,0
+C00889,BR05,Young Adult,Metro,2023-10-29,2.9,579,Poor,31500,1
+C00890,BR08,Mass Market,Metro,2023-10-31,2.9,719,Good,34000,1
+C00891,BR03,Young Adult,Harbor Coast,2023-11-06,2.9,627,Fair,51000,1
+C00892,BR07,Retiree,Metro,2023-11-09,2.9,840,Exceptional,50500,1
+C00893,BR13,Young Adult,Valley,2023-11-16,2.9,756,Very Good,32000,1
+C00894,BR05,Young Adult,Metro,2023-11-20,2.9,520,Poor,60000,1
+C00895,BR15,Mass Market,Highlands,2023-11-21,2.9,746,Very Good,48500,1
+C00896,BR13,Young Adult,Valley,2023-11-25,2.8,634,Fair,29000,1
+C00897,BR15,Young Adult,Highlands,2023-12-07,2.8,563,Poor,36000,1
+C00898,BR09,Mass Market,Metro,2023-12-13,2.8,737,Very Good,76000,1
+C00899,BR02,Young Adult,Harbor Coast,2023-12-18,2.8,709,Good,39500,1
+C00900,BR09,Young Adult,Metro,2023-12-23,2.8,677,Good,56500,1
+C00901,BR06,Young Adult,Metro,2024-01-04,2.7,695,Good,82500,1
+C00902,BR05,Young Adult,Metro,2024-01-17,2.7,652,Fair,43500,1
+C00903,BR05,Mass Market,Metro,2024-01-19,2.7,710,Good,39000,1
+C00904,BR01,Young Adult,Harbor Coast,2024-01-21,2.7,661,Fair,37000,1
+C00905,BR06,Mass Affluent,Metro,2024-01-26,2.7,766,Very Good,152000,1
+C00906,BR05,Young Adult,Metro,2024-01-26,2.7,588,Poor,45000,1
+C00907,BR16,Young Adult,Highlands,2024-02-02,2.7,692,Good,27000,1
+C00908,BR14,Mass Market,Valley,2024-02-07,2.6,684,Good,85000,0
+C00909,BR11,Young Adult,Valley,2024-02-07,2.6,709,Good,49500,1
+C00910,BR02,Mass Affluent,Harbor Coast,2024-02-13,2.6,724,Very Good,94000,1
+C00911,BR11,Young Adult,Valley,2024-02-16,2.6,724,Very Good,41500,1
+C00912,BR05,Young Adult,Metro,2024-03-06,2.6,576,Poor,72000,1
+C00913,BR15,Mass Market,Highlands,2024-03-07,2.6,555,Poor,62500,0
+C00914,BR18,Young Adult,Highlands,2024-03-07,2.6,713,Good,54000,1
+C00915,BR05,Mass Market,Metro,2024-03-09,2.6,715,Good,68500,1
+C00916,BR13,Young Adult,Valley,2024-03-27,2.5,644,Fair,26500,1
+C00917,BR03,Young Adult,Harbor Coast,2024-03-29,2.5,752,Very Good,44000,1
+C00918,BR05,Mass Market,Metro,2024-04-04,2.5,706,Good,53500,1
+C00919,BR04,Young Adult,Harbor Coast,2024-04-04,2.5,635,Fair,32500,1
+C00920,BR07,Young Adult,Metro,2024-04-08,2.5,669,Fair,38000,1
+C00921,BR10,Young Adult,Valley,2024-04-09,2.5,726,Very Good,37000,1
+C00922,BR09,Young Adult,Metro,2024-04-11,2.5,739,Very Good,26500,1
+C00923,BR13,Young Adult,Valley,2024-04-14,2.5,798,Exceptional,44000,1
+C00924,BR03,Mass Affluent,Harbor Coast,2024-05-02,2.4,731,Very Good,133000,1
+C00925,BR01,Mass Market,Harbor Coast,2024-05-09,2.4,574,Poor,42000,0
+C00926,BR06,Mass Market,Metro,2024-05-15,2.4,650,Fair,39000,0
+C00927,BR16,Young Adult,Highlands,2024-05-17,2.4,579,Poor,46500,1
+C00928,BR15,Young Adult,Highlands,2024-05-25,2.3,609,Poor,51500,1
+C00929,BR06,Mass Affluent,Metro,2024-05-26,2.3,758,Very Good,72500,1
+C00930,BR15,Young Adult,Highlands,2024-05-27,2.3,658,Fair,33000,1
+C00931,BR01,Mass Market,Harbor Coast,2024-05-31,2.3,610,Poor,45500,1
+C00932,BR06,Mass Market,Metro,2024-06-03,2.3,654,Fair,66000,1
+C00933,BR01,Young Adult,Harbor Coast,2024-06-04,2.3,677,Good,34500,1
+C00934,BR07,Mass Market,Metro,2024-06-14,2.3,580,Poor,30500,1
+C00935,BR05,Young Adult,Metro,2024-06-21,2.3,534,Poor,49500,1
+C00936,BR06,Mass Market,Metro,2024-06-23,2.3,625,Fair,93500,1
+C00937,BR05,Mass Market,Metro,2024-07-05,2.2,606,Poor,49000,0
+C00938,BR02,Mass Market,Harbor Coast,2024-07-22,2.2,761,Very Good,131500,1
+C00939,BR05,Mass Market,Metro,2024-07-23,2.2,654,Fair,79500,1
+C00940,BR05,Young Adult,Metro,2024-07-29,2.2,635,Fair,45000,1
+C00941,BR15,Mass Market,Highlands,2024-07-30,2.2,618,Poor,42500,0
+C00942,BR05,Mass Affluent,Metro,2024-08-18,2.1,698,Good,99500,1
+C00943,BR06,Mass Market,Metro,2024-09-03,2.1,645,Fair,59500,1
+C00944,BR17,Mass Market,Highlands,2024-09-10,2.1,672,Good,47500,0
+C00945,BR12,Young Adult,Valley,2024-09-11,2.1,755,Very Good,59000,1
+C00946,BR16,Young Adult,Highlands,2024-09-12,2.0,601,Poor,32500,1
+C00947,BR03,Young Adult,Harbor Coast,2024-09-12,2.0,645,Fair,39500,1
+C00948,BR12,Young Adult,Valley,2024-09-21,2.0,697,Good,29500,1
+C00949,BR03,Mass Market,Harbor Coast,2024-10-01,2.0,606,Poor,43500,0
+C00950,BR15,Mass Market,Highlands,2024-10-04,2.0,756,Very Good,73500,1
+C00951,BR10,Young Adult,Valley,2024-10-09,2.0,712,Good,60000,1
+C00952,BR01,Young Adult,Harbor Coast,2024-10-10,2.0,596,Poor,32500,1
+C00953,BR08,Mass Market,Metro,2024-10-11,2.0,676,Good,53500,0
+C00954,BR16,Young Adult,Highlands,2024-10-20,1.9,561,Poor,36500,1
+C00955,BR13,Young Adult,Valley,2024-10-23,1.9,649,Fair,45000,1
+C00956,BR01,Mass Market,Harbor Coast,2024-10-30,1.9,644,Fair,51500,0
+C00957,BR08,Mass Affluent,Metro,2024-10-31,1.9,685,Good,106500,1
+C00958,BR01,Young Adult,Harbor Coast,2024-11-15,1.9,722,Very Good,40000,1
+C00959,BR13,Young Adult,Valley,2024-11-19,1.9,602,Poor,30500,1
+C00960,BR11,Mass Market,Valley,2024-11-24,1.8,572,Poor,45000,1
+C00961,BR05,Mass Affluent,Metro,2024-12-04,1.8,729,Very Good,90500,1
+C00962,BR03,Mass Market,Harbor Coast,2024-12-31,1.7,696,Good,127500,0
+C00963,BR13,Young Adult,Valley,2024-12-31,1.7,659,Fair,50500,1
+C00964,BR16,Mass Market,Highlands,2025-01-01,1.7,666,Fair,62500,1
+C00965,BR04,Young Adult,Harbor Coast,2025-01-01,1.7,674,Good,25500,1
+C00966,BR11,Young Adult,Valley,2025-01-04,1.7,665,Fair,29500,1
+C00967,BR14,Young Adult,Valley,2025-01-09,1.7,667,Fair,52500,1
+C00968,BR06,Young Adult,Metro,2025-01-12,1.7,709,Good,39500,1
+C00969,BR11,Mass Market,Valley,2025-01-15,1.7,721,Very Good,66500,1
+C00970,BR11,Young Adult,Valley,2025-01-19,1.7,747,Very Good,33000,1
+C00971,BR16,Young Adult,Highlands,2025-01-23,1.7,760,Very Good,24500,1
+C00972,BR12,Young Adult,Valley,2025-02-07,1.6,735,Very Good,30500,1
+C00973,BR09,Young Adult,Metro,2025-02-26,1.6,693,Good,33000,1
+C00974,BR02,Young Adult,Harbor Coast,2025-03-02,1.6,600,Poor,33500,1
+C00975,BR11,Mass Market,Valley,2025-03-12,1.6,627,Fair,46500,0
+C00976,BR10,Young Adult,Valley,2025-03-13,1.5,529,Poor,62500,1
+C00977,BR01,Young Adult,Harbor Coast,2025-03-18,1.5,618,Poor,52500,1
+C00978,BR14,Young Adult,Valley,2025-03-21,1.5,643,Fair,40500,1
+C00979,BR01,Young Adult,Harbor Coast,2025-03-24,1.5,724,Very Good,31000,1
+C00980,BR17,Young Adult,Highlands,2025-03-27,1.5,700,Good,30500,1
+C00981,BR06,Young Adult,Metro,2025-04-06,1.5,608,Poor,39500,1
+C00982,BR15,Mass Affluent,Highlands,2025-04-20,1.4,713,Good,92500,1
+C00983,BR10,Young Adult,Valley,2025-04-26,1.4,619,Poor,54000,1
+C00984,BR15,Young Adult,Highlands,2025-04-29,1.4,762,Very Good,42000,1
+C00985,BR06,Young Adult,Metro,2025-05-04,1.4,660,Fair,34500,1
+C00986,BR02,Young Adult,Harbor Coast,2025-05-06,1.4,602,Poor,46000,1
+C00987,BR07,Young Adult,Metro,2025-05-18,1.4,654,Fair,50500,1
+C00988,BR02,Young Adult,Harbor Coast,2025-05-29,1.3,661,Fair,75000,1
+C00989,BR05,Young Adult,Metro,2025-06-08,1.3,646,Fair,47500,1
+C00990,BR15,Young Adult,Highlands,2025-06-13,1.3,660,Fair,48000,1
+C00991,BR04,Mass Market,Harbor Coast,2025-06-21,1.3,639,Fair,58500,0
+C00992,BR06,Young Adult,Metro,2025-07-04,1.2,591,Poor,31500,1
+C00993,BR06,Young Adult,Metro,2025-07-05,1.2,627,Fair,57500,1
+C00994,BR08,Private Client,Metro,2025-07-10,1.2,759,Very Good,170000,1
+C00995,BR05,Young Adult,Metro,2025-07-18,1.2,707,Good,47500,1
+C00996,BR05,Young Adult,Metro,2025-07-19,1.2,559,Poor,30500,1
+C00997,BR18,Mass Affluent,Highlands,2025-08-06,1.1,773,Very Good,117500,1
+C00998,BR06,Young Adult,Metro,2025-08-10,1.1,677,Good,26500,1
+C00999,BR10,Mass Market,Valley,2025-08-14,1.1,660,Fair,43500,1
+C01000,BR02,Young Adult,Harbor Coast,2025-08-22,1.1,562,Poor,42500,1
+C01001,BR08,Young Adult,Metro,2025-08-26,1.1,663,Fair,37500,1
+C01002,BR08,Young Adult,Metro,2025-08-28,1.1,666,Fair,76000,1
+C01003,BR12,Young Adult,Valley,2025-08-31,1.1,678,Good,41500,1
+C01004,BR16,Young Adult,Highlands,2025-09-04,1.1,671,Good,36500,1
+C01005,BR10,Young Adult,Valley,2025-09-06,1.1,739,Very Good,27000,1
+C01006,BR07,Young Adult,Metro,2025-09-13,1.0,636,Fair,41000,1
+C01007,BR02,Young Adult,Harbor Coast,2025-09-17,1.0,649,Fair,32500,1
+C01008,BR01,Young Adult,Harbor Coast,2025-09-19,1.0,661,Fair,55000,1
+C01009,BR12,Young Adult,Valley,2025-10-01,1.0,655,Fair,41000,1
+C01010,BR12,Young Adult,Valley,2025-10-03,1.0,660,Fair,27500,1
+C01011,BR02,Young Adult,Harbor Coast,2025-10-15,1.0,663,Fair,33500,1
+C01012,BR04,Young Adult,Harbor Coast,2025-10-18,1.0,672,Good,80000,1
+C01013,BR16,Young Adult,Highlands,2025-10-24,0.9,678,Good,54500,1
+C01014,BR09,Young Adult,Metro,2025-10-25,0.9,637,Fair,63000,1
+C01015,BR18,Young Adult,Highlands,2025-11-06,0.9,603,Poor,37000,1
+C01016,BR03,Young Adult,Harbor Coast,2025-11-06,0.9,702,Good,47500,1
+C01017,BR01,Young Adult,Harbor Coast,2025-11-06,0.9,751,Very Good,73000,1
+C01018,BR03,Young Adult,Harbor Coast,2025-11-18,0.9,677,Good,46000,1
+C01019,BR04,Young Adult,Harbor Coast,2025-11-28,0.8,661,Fair,32000,1
+C01020,BR08,Young Adult,Metro,2025-12-01,0.8,617,Poor,30500,1
+C01021,BR14,Young Adult,Valley,2025-12-15,0.8,591,Poor,43500,1
+C01022,BR13,Mass Market,Valley,2025-12-19,0.8,684,Good,69500,0
+C01023,BR07,Young Adult,Metro,2025-12-24,0.8,563,Poor,57000,0
+C01024,BR09,Young Adult,Metro,2025-12-24,0.8,594,Poor,54000,1
+C01025,BR07,Young Adult,Metro,2025-12-28,0.8,632,Fair,38000,1
+C01026,BR10,Mass Market,Valley,2026-01-01,0.7,744,Very Good,39000,1
+C01027,BR02,Young Adult,Harbor Coast,2026-01-02,0.7,677,Good,20500,1
+C01028,BR10,Young Adult,Valley,2026-01-08,0.7,564,Poor,47000,1
+C01029,BR18,Young Adult,Highlands,2026-01-10,0.7,598,Poor,43000,1
+C01030,BR10,Young Adult,Valley,2026-01-22,0.7,653,Fair,48000,1
+C01031,BR05,Young Adult,Metro,2026-01-24,0.7,707,Good,83000,1
+C01032,BR03,Young Adult,Harbor Coast,2026-01-25,0.7,614,Poor,39000,1
+C01033,BR02,Young Adult,Harbor Coast,2026-01-28,0.7,527,Poor,49500,1
+C01034,BR10,Young Adult,Valley,2026-01-31,0.7,641,Fair,37000,1
+C01035,BR12,Young Adult,Valley,2026-02-07,0.6,564,Poor,51500,1
+C01036,BR11,Mass Market,Valley,2026-02-16,0.6,637,Fair,64000,0
+C01037,BR01,Young Adult,Harbor Coast,2026-02-18,0.6,596,Poor,34500,1
+C01038,BR10,Mass Market,Valley,2026-02-19,0.6,749,Very Good,37500,0
+C01039,BR15,Young Adult,Highlands,2026-02-23,0.6,681,Good,76500,1
+C01040,BR07,Mass Market,Metro,2026-02-24,0.6,613,Poor,77000,1
+C01041,BR05,Young Adult,Metro,2026-03-05,0.6,656,Fair,19000,1
+C01042,BR14,Young Adult,Valley,2026-03-10,0.6,520,Poor,64000,1
+C01043,BR01,Mass Market,Harbor Coast,2026-03-17,0.5,685,Good,47000,1
+C01044,BR14,Young Adult,Valley,2026-03-19,0.5,615,Poor,58000,1
+C01045,BR16,Young Adult,Highlands,2026-03-29,0.5,683,Good,23500,1
+C01046,BR05,Young Adult,Metro,2026-04-01,0.5,572,Poor,59500,1
+C01047,BR08,Young Adult,Metro,2026-04-15,0.5,668,Fair,56000,1
+C01048,BR18,Young Adult,Highlands,2026-04-17,0.5,696,Good,63500,0
+C01049,BR12,Young Adult,Valley,2026-04-28,0.4,544,Poor,42500,1
+C01050,BR06,Young Adult,Metro,2026-05-02,0.4,699,Good,30000,1
+C01051,BR11,Young Adult,Valley,2026-05-07,0.4,604,Poor,51000,1
+C01052,BR05,Young Adult,Metro,2026-05-10,0.4,700,Good,37000,1
+C01053,BR05,Young Adult,Metro,2026-05-18,0.4,643,Fair,47000,1
+C01054,BR05,Young Adult,Metro,2026-05-19,0.4,520,Poor,52500,1
+C01055,BR04,Young Adult,Harbor Coast,2026-05-22,0.4,674,Good,37500,1
+C01056,BR08,Young Adult,Metro,2026-05-25,0.4,652,Fair,52500,1
+C01057,BR18,Young Adult,Highlands,2026-06-19,0.3,633,Fair,44500,1
+C01058,BR10,Young Adult,Valley,2026-07-08,0.2,762,Very Good,33000,1
+C01059,BR05,Young Adult,Metro,2026-07-16,0.2,589,Poor,47000,1
+C01060,BR06,Young Adult,Metro,2026-09-12,0.0,606,Poor,45500,1

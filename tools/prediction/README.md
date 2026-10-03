@@ -1,0 +1,102 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# prediction
+
+The `predict` MCP tool: per-entity predictions with NVIDIA Kumo Relational (`kumo-relational-client`
+1.0.2 against a Kumo Relational NIM) over any structured source of the knowledge catalog. `demo-prediction serve`
+(the image's only command) serves streamable HTTP at `:8322/mcp` and `GET /health`.
+
+The Kumo Relational NIM ships for x86_64 only. On the DGX Spark, point `KUMO_RELATIONAL_URL` at a remote NIM;
+without one the tool stays registered and every call answers `available: false` with the reason. The client and
+its engine (`kumo-relational-engine`, which builds the graph locally) have aarch64 wheels, so this image builds on
+both architectures.
+
+## How it fits
+
+The `ingest` service writes each structured source's DuckDB file (`/knowledge/sources/<id>/tables.duckdb`) and
+describes it in the source manifest (`/knowledge/catalog/sources/<id>.json`): tables with primary keys, time
+columns and foreign keys, and optional prediction templates. The API puts those in the run instructions, so the
+agent writes PQL without a schema tool. This service never writes the knowledge volume.
+
+Hermes calls `mcp__prediction__predict` at `http://host.openshell.internal:8322/mcp`. The agent plugin's
+`pre_tool_call` hook sets `source_ids` to the run's selected structured sources; the model never chooses them. The
+plugin turns each result into a `structured_prediction` receipt.
+
+Each call:
+
+1. Reads the manifest of each requested source (on every call). Every id must exist, be `kind: structured`,
+   have status `ready` or `ingesting` and have its DuckDB file; otherwise a `ToolError`.
+2. Expands `pql: "template:<id>"` to the template's PQL and anchor time (an explicit `anchor_time` wins).
+3. Reads the PQL (`pql.py`): the tables it names (the entity, the target and every aggregate's arguments), its
+   entity `FOR EACH <table>.<primary key>`, its entity filter (`WHERE` after the entity), and its horizon (the
+   target's window `(start, end, unit)`). The source is the one selected source whose tables include every named
+   table; none or several is a `ToolError`, as is an entity column that is not its table's primary key.
+4. Without `KUMO_RELATIONAL_URL`, returns `available: false`,
+   `reason: "No Kumo endpoint is configured (KUMO_RELATIONAL_URL)."`.
+5. Picks the entities: up to 100 primary keys of the entity table, in key order. A plain entity filter (a condition
+   on the entity table, such as `customers.tier = 'gold'`) is applied in a locked-down DuckDB (the source attached
+   read-only, external access off, the configuration locked, a 10 s interrupt), because Kumo predicts for every id
+   it is given whatever the filter says. A filter over time (`COUNT(orders.*, -90, 0, days) > 0`) only Kumo can
+   evaluate; the result then warns that the entities may include ones it excludes. `FOR <key> = ...` and
+   `FOR <key> IN (...)` leave the ids to the query.
+6. Builds the graph: `relational.Graph.from_duckdb(connection={"uri": <file>, "kwargs": {"read_only": True}},
+   tables=[{name, primary_key, time_column}], edges=[])`, then sets every table's keys and time column to the
+   catalog's (metadata inference would otherwise add its own guesses, such as `customers.joined_at` as a time
+   column), then `graph.link(table, column, references_table)` for each catalog foreign key that points at its
+   table's primary key, then `graph.validate()`.
+7. Predicts: `RelationalClient(url=..., api_key=..., timeout=60, max_retries=0).relational(graph).predict(pql, ids,
+   anchor_time=..., run_mode="fast", num_retries=0, verbose=False)`. One attempt within 60 s, so a slow or warming
+   NIM yields `available: false` before the agent's MCP timeout. Any failure of the graph or the endpoint is
+   `available: false` with `"<error type>: <message>"` as the reason.
+
+Spans: `kumo` (TOOL), under the MCP SDK's `tools/call predict`.
+
+Never install the client's `[explain]` extra: it sends raw cell values to a third-party LLM.
+
+## Tool result
+
+`predict(question, pql, source_ids, anchor_time=None)` returns:
+
+| Field | Meaning |
+|---|---|
+| `available`, `reason` | whether the prediction ran; why not |
+| `source_id`, `template_id` | the source predicted over; the template, when one was named |
+| `pql` | the query that ran (the template's own when one was named) |
+| `task_type` | `binary_classification`, `regression`, `multiclass_classification` or `temporal_link_prediction`: from Kumo's result columns, or from the target when the prediction did not run (`null` when the target does not show it) |
+| `anchor_time` | where the prediction starts, ISO 8601 UTC; `null` means the latest timestamp in the data |
+| `horizon` | `{value, unit}` from the target's window, or `null` |
+| `entity_table` | the `FOR EACH` table |
+| `rows` | `[{entity_id, probability, value, label}]`, at most 25, highest probability or value first |
+| `model` | `kumo-relational` |
+| `elapsed_ms`, `warnings` | the whole call; entities capped, filters not applied, links left out, rows cut |
+
+Rows by task: binary, `probability` (`TRUE_PROB`); regression, `value` (`PREDICTION`); multiclass, each entity's
+best `label` (`CLASS`) with its `SCORE` as `probability`; `RANK TOP k`, every `(entity, label, score)` row.
+
+Timestamps: an anchor with a time zone is converted to UTC and passed without one, as the sources' DuckDB
+`TIMESTAMP` columns are.
+
+## Environment
+
+| Variable | Default | Notes |
+|---|---|---|
+| `KNOWLEDGE_DIR` | `/knowledge` | The knowledge volume, mounted read-only |
+| `PREDICTION_PORT` | `8322` | |
+| `KUMO_RELATIONAL_URL` | unset | The NIM's base URL, e.g. `http://kumo-relational:8000` or a remote one; unset: `available: false` |
+| `KUMO_API_KEY` | unset | Or `/run/secrets/kumo_api_key`. Only for an authenticating gateway in front of the NIM (sent as `X-API-Key`) |
+| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | unset | e.g. `http://phoenix:6006/v1/traces`; no spans are exported when unset |
+
+The image runs as uid 10001. The source files must be readable by it.
+
+## Test
+
+```bash
+uv run pytest                                    # the shared catalog fixture and a stubbed Kumo client
+KUMO_RELATIONAL_URL=... KUMO_API_KEY=... uv run pytest -m live   # the fixture's churn template, for real
+```
+
+The offline suite builds real graphs and, once, sends a real request to a closed port, so the client's call shape is
+checked without an endpoint.

@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+[project]
+name = "demo-ingest"
+version = "0.1.0"
+description = "Ingestion service: parses uploads and industry packs into the knowledge catalog, Milvus and DuckDB."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    # The NVIDIA embed client's transports; retries tell their transient errors apart.
+    "aiohttp>=3.14.3",
+    # PDFs through Nemotron Parse (VlmPipeline, API engine) on the pypdfium2 backend, born-digital formats through
+    # docling's own backends, LaTeX tables from Parse as TableItems, and the HybridChunker. No torch, no layout models.
+    "docling-slim[format-pdf-pypdfium2,format-office,format-html,format-markdown,format-latex,feat-chunking,convert-core]==2.132.0",
+    # Same pin as api/ and the tables server; its excel extension reads .xlsx.
+    "duckdb==1.5.5",
+    "fastapi>=0.141,<1",
+    "filetype>=1.2,<2",
+    "jsonschema>=4.26,<5",
+    # Exact pin, as tools/retrieval: the next release turns usage telemetry on by default.
+    "langchain-nvidia-ai-endpoints==1.4.3",
+    "openpyxl>=3.1.5,<4",
+    "pydantic>=2.13,<3",
+    # Same 2.6 line as the Milvus server (milvusdb/milvus:v2.6.x).
+    "pymilvus>=2.6.17,<2.7",
+    "python-multipart>=0.0.20",
+    "pyyaml>=6.0.3,<7",
+    "requests>=2.34.2",
+    "tenacity>=9.1",
+    "uvicorn[standard]>=0.54,<1",
+]
+
+[project.scripts]
+demo-ingest = "demo_ingest.__main__:main"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1,<0.29",
+    "milvus-lite>=3.2.1",
+    "pytest>=9.1,<10",
+    "python-docx>=1.2",
+    "reportlab>=4.4",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]  # tests import helpers from conftest.py
+addopts = "--import-mode=importlib --strict-markers -m 'not live'"
+markers = [
+    "slow: slow test",
+    "live: calls real endpoints (needs keys or a running Parse server); never run in CI",
+]

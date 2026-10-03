@@ -1,0 +1,394 @@
+event_id,started_at,machine_id,event_type,task_code,failure_code,downtime_hours,parts_and_labor_cost_usd,notes
+ME-00001,2025-07-02 11:28:00,MTY-MIL-01,planned,PM-2,,8.9,1476.4,PM-2 full service completed on the cnc mill
+ME-00002,2025-07-02 20:00:00,MTY-LTH-05,unplanned,CM,SPN-BRG,38.5,3512.8,Spindle bearing wear: spindle cartridge replaced
+ME-00003,2025-07-03 13:48:00,DAY-MIL-02,planned,PM-2,,7.5,1472.83,PM-2 full service completed on the cnc mill
+ME-00004,2025-07-07 06:10:00,BRN-MIL-06,planned,PM-2,,7.6,1939.32,PM-2 full service completed on the cnc mill
+ME-00005,2025-07-07 07:01:00,MTY-MIL-05,planned,PM-2,,8.6,1994.92,PM-2 full service completed on the cnc mill
+ME-00006,2025-07-07 07:17:00,DAY-MIL-03,planned,PM-2,,6.6,1374.92,PM-2 full service completed on the cnc mill
+ME-00007,2025-07-08 08:11:00,DAY-PRS-02,unplanned,CM,HYD-LEAK,15.7,1828.27,Hydraulic leak: hydraulic line and seals replaced
+ME-00008,2025-07-09 06:36:00,DAY-MIL-06,planned,PM-2,,8.2,1330.18,PM-2 full service completed on the cnc mill
+ME-00009,2025-07-10 11:10:00,MTY-PRS-03,planned,PM-2,,4.4,986.49,PM-2 full service completed on the hydraulic press
+ME-00010,2025-07-10 15:40:00,BRN-PRS-01,unplanned,CM,HYD-LEAK,12.4,1121.87,Hydraulic leak: hydraulic line and seals replaced
+ME-00011,2025-07-10 18:06:00,MTY-MIL-02,unplanned,CM,ATC-JAM,4.7,1181.75,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00012,2025-07-16 17:27:00,MTY-LTH-02,unplanned,CM,SRV-DRV,17.0,2001.27,Servo drive fault: servo drive replaced and axis re-homed
+ME-00013,2025-07-18 11:44:00,MTY-MIL-03,planned,PM-2,,8.5,1612.71,PM-2 full service completed on the cnc mill
+ME-00014,2025-07-21 06:31:00,BRN-MIL-05,planned,PM-2,,6.0,1461.97,PM-2 full service completed on the cnc mill
+ME-00015,2025-07-21 10:02:00,MTY-MIL-06,planned,PM-2,,8.1,1396.39,PM-2 full service completed on the cnc mill
+ME-00016,2025-07-22 10:23:00,MTY-MIL-02,planned,PM-2,,8.9,1335.65,PM-2 full service completed on the cnc mill
+ME-00017,2025-07-24 07:09:00,MTY-LTH-01,unplanned,CM,SPN-BRG,59.5,7559.09,Spindle bearing wear: spindle cartridge replaced
+ME-00018,2025-07-24 13:48:00,MTY-MIL-05,unplanned,CM,SPN-BRG,34.0,2779.27,Spindle bearing wear: spindle cartridge replaced
+ME-00019,2025-07-24 19:48:00,BRN-MIL-01,unplanned,CM,SPN-BRG,59.0,7086.7,Spindle bearing wear: spindle cartridge replaced
+ME-00020,2025-07-25 06:30:00,DAY-LTH-05,planned,PM-2,,8.8,1677.26,PM-2 full service completed on the cnc lathe
+ME-00021,2025-07-25 07:14:00,MTY-PRS-01,planned,PM-2,,4.3,1312.95,PM-2 full service completed on the hydraulic press
+ME-00022,2025-07-25 08:18:00,MTY-LTH-01,planned,PM-2,,7.4,1083.11,PM-2 full service completed on the cnc lathe
+ME-00023,2025-07-25 08:51:00,BRN-RBT-02,unplanned,CM,SRV-DRV,9.5,1447.59,Servo drive fault: servo drive replaced and axis re-homed
+ME-00024,2025-07-25 09:28:00,BRN-GRD-01,planned,PM-2,,7.4,960.18,PM-2 full service completed on the surface grinder
+ME-00025,2025-07-28 08:46:00,BRN-MIL-03,planned,PM-2,,6.2,1644.29,PM-2 full service completed on the cnc mill
+ME-00026,2025-07-28 11:28:00,BRN-MIL-01,planned,PM-2,,8.3,982.97,PM-2 full service completed on the cnc mill
+ME-00027,2025-07-29 21:49:00,DAY-MIL-05,unplanned,CM,ATC-JAM,7.0,1004.44,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00028,2025-08-01 06:17:00,BRN-PRS-01,planned,PM-2,,4.5,1179.84,PM-2 full service completed on the hydraulic press
+ME-00029,2025-08-01 09:51:00,DAY-LTH-04,planned,PM-2,,8.2,1474.41,PM-2 full service completed on the cnc lathe
+ME-00030,2025-08-01 12:11:00,DAY-PRS-03,planned,PM-2,,4.2,960.02,PM-2 full service completed on the hydraulic press
+ME-00031,2025-08-04 11:28:00,DAY-GRD-01,planned,PM-2,,5.9,1372.47,PM-2 full service completed on the surface grinder
+ME-00032,2025-08-07 06:29:00,BRN-PRS-02,planned,PM-2,,5.6,724.24,PM-2 full service completed on the hydraulic press
+ME-00033,2025-08-07 13:36:00,MTY-PRS-02,planned,PM-2,,5.8,877.99,PM-2 full service completed on the hydraulic press
+ME-00034,2025-08-08 13:01:00,BRN-LTH-01,planned,PM-2,,9.0,1632.51,PM-2 full service completed on the cnc lathe
+ME-00035,2025-08-12 08:12:00,DAY-RBT-01,planned,PM-2,,10.1,1440.25,PM-2 full service completed on the robot cell
+ME-00036,2025-08-13 19:47:00,DAY-MIL-03,unplanned,CM,COOL-PMP,9.6,1001.36,Coolant pump failure: coolant pump replaced
+ME-00037,2025-08-15 10:48:00,BRN-MIL-02,planned,PM-2,,7.0,1497.64,PM-2 full service completed on the cnc mill
+ME-00038,2025-08-15 12:57:00,DAY-PRS-02,planned,PM-2,,5.9,827.92,PM-2 full service completed on the hydraulic press
+ME-00039,2025-08-19 09:20:00,DAY-PRS-04,planned,PM-2,,4.1,933.37,PM-2 full service completed on the hydraulic press
+ME-00040,2025-08-20 08:30:00,MTY-GRD-01,planned,PM-2,,5.3,1379.49,PM-2 full service completed on the surface grinder
+ME-00041,2025-08-20 11:56:00,DAY-PRS-01,planned,PM-2,,4.4,943.69,PM-2 full service completed on the hydraulic press
+ME-00042,2025-08-20 17:55:00,DAY-MIL-04,unplanned,CM,SRV-DRV,10.0,1856.66,Servo drive fault: servo drive replaced and axis re-homed
+ME-00043,2025-08-20 18:07:00,MTY-LTH-03,unplanned,CM,SPN-BRG,52.3,6303.03,Spindle bearing wear: spindle cartridge replaced
+ME-00044,2025-08-22 06:58:00,MTY-LTH-03,planned,PM-2,,7.6,1035.32,PM-2 full service completed on the cnc lathe
+ME-00045,2025-08-22 12:15:00,DAY-MIL-07,planned,PM-2,,8.2,1931.44,PM-2 full service completed on the cnc mill
+ME-00046,2025-08-26 07:41:00,MTY-LTH-05,planned,PM-2,,7.5,1868.21,PM-2 full service completed on the cnc lathe
+ME-00047,2025-08-27 10:30:00,MTY-LTH-04,planned,PM-2,,8.2,2052.99,PM-2 full service completed on the cnc lathe
+ME-00048,2025-08-27 17:40:00,DAY-PRS-01,unplanned,CM,HYD-LEAK,12.3,2006.36,Hydraulic leak: hydraulic line and seals replaced
+ME-00049,2025-08-28 06:53:00,MTY-LTH-02,planned,PM-2,,8.7,1717.1,PM-2 full service completed on the cnc lathe
+ME-00050,2025-08-28 09:38:00,DAY-LTH-01,planned,PM-2,,8.1,1662.73,PM-2 full service completed on the cnc lathe
+ME-00051,2025-08-28 10:06:00,BRN-MIL-04,planned,PM-2,,6.4,1765.39,PM-2 full service completed on the cnc mill
+ME-00052,2025-08-28 12:08:00,BRN-PRS-03,planned,PM-2,,5.5,849.42,PM-2 full service completed on the hydraulic press
+ME-00053,2025-08-29 10:24:00,DAY-LTH-04,unplanned,CM,COOL-PMP,4.7,616.91,Coolant pump failure: coolant pump replaced
+ME-00054,2025-09-03 12:01:00,BRN-MIL-06,unplanned,CM,SRV-DRV,9.3,1105.09,Servo drive fault: servo drive replaced and axis re-homed
+ME-00055,2025-09-05 06:06:00,MTY-PRS-03,planned,PM-2,,5.0,635.78,PM-2 full service completed on the hydraulic press
+ME-00056,2025-09-05 12:56:00,DAY-MIL-05,planned,PM-2,,8.0,1724.79,PM-2 full service completed on the cnc mill
+ME-00057,2025-09-10 11:06:00,MTY-GRD-02,unplanned,CM,COOL-PMP,6.3,1004.24,Coolant pump failure: coolant pump replaced
+ME-00058,2025-09-12 08:24:00,DAY-MIL-04,planned,PM-2,,6.1,1171.14,PM-2 full service completed on the cnc mill
+ME-00059,2025-09-12 10:41:00,BRN-LTH-02,planned,PM-2,,7.1,1601.76,PM-2 full service completed on the cnc lathe
+ME-00060,2025-09-15 11:47:00,DAY-MIL-01,planned,PM-2,,8.0,1782.08,PM-2 full service completed on the cnc mill
+ME-00061,2025-09-16 10:22:00,BRN-LTH-03,planned,PM-2,,8.4,1499.54,PM-2 full service completed on the cnc lathe
+ME-00062,2025-09-16 17:44:00,BRN-MIL-05,unplanned,CM,SRV-DRV,10.7,1783.11,Servo drive fault: servo drive replaced and axis re-homed
+ME-00063,2025-09-17 06:12:00,MTY-MIL-04,planned,PM-2,,7.4,935.65,PM-2 full service completed on the cnc mill
+ME-00064,2025-09-17 21:29:00,BRN-RBT-02,unplanned,CM,SRV-DRV,7.6,1328.81,Servo drive fault: servo drive replaced and axis re-homed
+ME-00065,2025-09-19 06:49:00,DAY-RBT-02,planned,PM-2,,9.3,2476.89,PM-2 full service completed on the robot cell
+ME-00066,2025-09-19 08:53:00,MTY-PRS-01,planned,PM-2,,5.9,736.02,PM-2 full service completed on the hydraulic press
+ME-00067,2025-09-19 11:21:00,MTY-GRD-02,planned,PM-2,,6.1,1602.52,PM-2 full service completed on the surface grinder
+ME-00068,2025-09-23 19:25:00,MTY-PRS-03,unplanned,CM,PMP-WEAR,33.4,3475.97,Hydraulic pump wear: hydraulic pump replaced
+ME-00069,2025-09-24 11:51:00,DAY-PRS-03,planned,PM-2,,5.0,662.91,PM-2 full service completed on the hydraulic press
+ME-00070,2025-09-26 08:55:00,MTY-MIL-01,planned,PM-2,,7.4,1051.35,PM-2 full service completed on the cnc mill
+ME-00071,2025-09-30 12:09:00,DAY-MIL-06,planned,PM-2,,6.4,1948.3,PM-2 full service completed on the cnc mill
+ME-00072,2025-09-30 12:31:00,MTY-MIL-05,planned,PM-2,,8.6,1660.0,PM-2 full service completed on the cnc mill
+ME-00073,2025-10-01 10:56:00,MTY-PRS-02,planned,PM-2,,5.3,636.78,PM-2 full service completed on the hydraulic press
+ME-00074,2025-10-01 19:44:00,DAY-MIL-03,unplanned,CM,SPN-BRG,58.5,4777.44,Spindle bearing wear: spindle cartridge replaced
+ME-00075,2025-10-02 06:58:00,DAY-MIL-02,planned,PM-2,,6.5,1014.36,PM-2 full service completed on the cnc mill
+ME-00076,2025-10-02 07:10:00,BRN-PRS-02,planned,PM-2,,5.9,1186.55,PM-2 full service completed on the hydraulic press
+ME-00077,2025-10-02 07:13:00,DAY-RBT-03,planned,PM-2,,9.1,2653.77,PM-2 full service completed on the robot cell
+ME-00078,2025-10-02 09:42:00,DAY-MIL-03,planned,PM-2,,8.9,1738.8,PM-2 full service completed on the cnc mill
+ME-00079,2025-10-02 09:58:00,BRN-MIL-06,planned,PM-2,,7.0,1850.57,PM-2 full service completed on the cnc mill
+ME-00080,2025-10-02 11:45:00,MTY-RBT-01,unplanned,CM,CBL-FLT,7.6,730.7,Cable harness fault: dress pack cable replaced
+ME-00081,2025-10-03 08:11:00,MTY-RBT-02,planned,PM-2,,9.7,2783.9,PM-2 full service completed on the robot cell
+ME-00082,2025-10-03 09:34:00,DAY-LTH-02,planned,PM-2,,9.5,1735.73,PM-2 full service completed on the cnc lathe
+ME-00083,2025-10-03 17:10:00,DAY-PRS-01,unplanned,CM,PMP-WEAR,47.4,3738.76,Hydraulic pump wear: hydraulic pump replaced
+ME-00084,2025-10-06 06:40:00,BRN-MIL-01,unplanned,CM,SPN-BRG,56.1,7314.06,Spindle bearing wear: spindle cartridge replaced
+ME-00085,2025-10-07 21:31:00,BRN-PRS-03,unplanned,CM,VLV-STK,5.7,1266.54,Valve sticking: proportional valve cleaned and recalibrated
+ME-00086,2025-10-09 06:07:00,DAY-LTH-03,planned,PM-2,,8.9,1568.18,PM-2 full service completed on the cnc lathe
+ME-00087,2025-10-10 06:38:00,MTY-MIL-03,planned,PM-2,,9.0,1859.28,PM-2 full service completed on the cnc mill
+ME-00088,2025-10-10 09:44:00,DAY-PRS-02,planned,PM-2,,5.0,1253.96,PM-2 full service completed on the hydraulic press
+ME-00089,2025-10-14 09:57:00,MTY-MIL-02,planned,PM-2,,8.2,1615.17,PM-2 full service completed on the cnc mill
+ME-00090,2025-10-14 12:53:00,DAY-PRS-04,planned,PM-2,,4.3,1115.28,PM-2 full service completed on the hydraulic press
+ME-00091,2025-10-15 12:27:00,DAY-PRS-01,planned,PM-2,,4.1,654.88,PM-2 full service completed on the hydraulic press
+ME-00092,2025-10-16 06:03:00,BRN-MIL-05,planned,PM-2,,9.0,1784.81,PM-2 full service completed on the cnc mill
+ME-00093,2025-10-17 07:11:00,MTY-MIL-06,planned,PM-2,,7.5,1839.66,PM-2 full service completed on the cnc mill
+ME-00094,2025-10-17 10:25:00,BRN-PRS-01,planned,PM-2,,4.7,600.86,PM-2 full service completed on the hydraulic press
+ME-00095,2025-10-17 11:49:00,BRN-MIL-03,planned,PM-2,,8.8,1295.5,PM-2 full service completed on the cnc mill
+ME-00096,2025-10-20 10:58:00,BRN-GRD-01,planned,PM-2,,7.2,1209.97,PM-2 full service completed on the surface grinder
+ME-00097,2025-10-20 17:40:00,DAY-PRS-03,unplanned,CM,VLV-STK,7.3,1348.87,Valve sticking: proportional valve cleaned and recalibrated
+ME-00098,2025-10-22 19:05:00,MTY-RBT-01,unplanned,CM,CBL-FLT,12.8,922.47,Cable harness fault: dress pack cable replaced
+ME-00099,2025-10-24 06:19:00,BRN-PRS-03,planned,PM-2,,5.8,963.58,PM-2 full service completed on the hydraulic press
+ME-00100,2025-10-24 08:59:00,BRN-MIL-01,planned,PM-2,,8.7,1220.28,PM-2 full service completed on the cnc mill
+ME-00101,2025-10-27 06:50:00,MTY-PRS-01,unplanned,CM,HYD-LEAK,16.5,2061.78,Hydraulic leak: hydraulic line and seals replaced
+ME-00102,2025-10-27 17:18:00,DAY-PRS-01,unplanned,CM,VLV-STK,11.4,2149.23,Valve sticking: proportional valve cleaned and recalibrated
+ME-00103,2025-10-30 06:02:00,DAY-PRS-02,unplanned,CM,VLV-STK,5.0,1097.17,Valve sticking: proportional valve cleaned and recalibrated
+ME-00104,2025-11-03 17:43:00,MTY-LTH-04,unplanned,CM,SRV-DRV,13.8,1427.65,Servo drive fault: servo drive replaced and axis re-homed
+ME-00105,2025-11-04 17:17:00,MTY-LTH-03,unplanned,CM,SRV-DRV,11.1,1316.57,Servo drive fault: servo drive replaced and axis re-homed
+ME-00106,2025-11-05 16:58:00,BRN-MIL-04,unplanned,CM,SPN-BRG,42.8,5906.08,Spindle bearing wear: spindle cartridge replaced
+ME-00107,2025-11-06 21:21:00,MTY-LTH-02,unplanned,CM,CHK-HYD,13.1,1063.86,Chuck hydraulic fault: chuck cylinder resealed
+ME-00108,2025-11-07 13:03:00,BRN-MIL-02,planned,PM-2,,8.4,1038.19,PM-2 full service completed on the cnc mill
+ME-00109,2025-11-10 07:31:00,DAY-GRD-01,planned,PM-2,,6.8,1515.94,PM-2 full service completed on the surface grinder
+ME-00110,2025-11-10 10:10:00,BRN-RBT-02,planned,PM-2,,8.1,1862.41,PM-2 full service completed on the robot cell
+ME-00111,2025-11-10 13:19:00,MTY-PRS-01,unplanned,CM,PMP-WEAR,28.6,1903.56,Hydraulic pump wear: hydraulic pump replaced
+ME-00112,2025-11-14 07:11:00,MTY-PRS-03,planned,PM-2,,4.1,819.6,PM-2 full service completed on the hydraulic press
+ME-00113,2025-11-14 08:54:00,MTY-PRS-01,planned,PM-2,,5.8,727.32,PM-2 full service completed on the hydraulic press
+ME-00114,2025-11-14 13:24:00,MTY-GRD-01,planned,PM-2,,6.4,783.09,PM-2 full service completed on the surface grinder
+ME-00115,2025-11-14 17:11:00,BRN-LTH-01,unplanned,CM,SRV-DRV,11.6,1823.32,Servo drive fault: servo drive replaced and axis re-homed
+ME-00116,2025-11-18 06:34:00,DAY-PRS-03,planned,PM-2,,4.3,849.89,PM-2 full service completed on the hydraulic press
+ME-00117,2025-11-18 10:52:00,DAY-MIL-07,planned,PM-2,,8.3,1023.85,PM-2 full service completed on the cnc mill
+ME-00118,2025-11-18 13:18:00,DAY-PRS-04,unplanned,CM,HYD-LEAK,16.3,2203.11,Hydraulic leak: hydraulic line and seals replaced
+ME-00119,2025-11-18 16:50:00,DAY-LTH-02,unplanned,CM,COOL-PMP,6.5,970.44,Coolant pump failure: coolant pump replaced
+ME-00120,2025-11-19 15:48:00,DAY-MIL-05,unplanned,CM,SRV-DRV,13.8,1930.61,Servo drive fault: servo drive replaced and axis re-homed
+ME-00121,2025-11-21 06:13:00,BRN-MIL-04,planned,PM-2,,7.1,1037.04,PM-2 full service completed on the cnc mill
+ME-00122,2025-11-21 07:18:00,DAY-LTH-05,planned,PM-2,,8.3,1867.33,PM-2 full service completed on the cnc lathe
+ME-00123,2025-11-21 08:05:00,MTY-LTH-01,planned,PM-2,,9.6,1809.62,PM-2 full service completed on the cnc lathe
+ME-00124,2025-11-21 11:41:00,BRN-RBT-01,planned,PM-2,,8.4,2774.97,PM-2 full service completed on the robot cell
+ME-00125,2025-11-21 13:24:00,BRN-LTH-03,unplanned,CM,SPN-BRG,59.7,3702.09,Spindle bearing wear: spindle cartridge replaced
+ME-00126,2025-11-24 08:24:00,MTY-RBT-01,planned,PM-2,,8.4,1738.76,PM-2 full service completed on the robot cell
+ME-00127,2025-11-25 06:51:00,MTY-PRS-02,planned,PM-2,,5.0,1034.59,PM-2 full service completed on the hydraulic press
+ME-00128,2025-11-26 09:15:00,DAY-MIL-05,planned,PM-2,,6.3,1552.41,PM-2 full service completed on the cnc mill
+ME-00129,2025-11-26 11:56:00,DAY-LTH-04,planned,PM-2,,7.6,1718.23,PM-2 full service completed on the cnc lathe
+ME-00130,2025-11-28 06:36:00,BRN-PRS-02,planned,PM-2,,4.7,1033.75,PM-2 full service completed on the hydraulic press
+ME-00131,2025-12-02 19:13:00,DAY-GRD-01,unplanned,CM,WHL-IMB,19.4,1523.73,Grinding wheel imbalance: wheel replaced and balanced
+ME-00132,2025-12-03 13:26:00,DAY-PRS-02,planned,PM-2,,5.5,828.69,PM-2 full service completed on the hydraulic press
+ME-00133,2025-12-05 09:44:00,BRN-LTH-01,planned,PM-2,,8.1,1718.98,PM-2 full service completed on the cnc lathe
+ME-00134,2025-12-05 21:40:00,BRN-MIL-05,unplanned,CM,SRV-DRV,13.3,1765.6,Servo drive fault: servo drive replaced and axis re-homed
+ME-00135,2025-12-08 09:17:00,DAY-MIL-04,planned,PM-2,,7.0,975.19,PM-2 full service completed on the cnc mill
+ME-00136,2025-12-09 08:02:00,MTY-MIL-04,planned,PM-2,,7.7,1417.07,PM-2 full service completed on the cnc mill
+ME-00137,2025-12-09 11:39:00,MTY-MIL-01,unplanned,CM,ATC-JAM,6.3,1395.61,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00138,2025-12-10 12:26:00,DAY-PRS-04,planned,PM-2,,5.4,1025.89,PM-2 full service completed on the hydraulic press
+ME-00139,2025-12-11 07:11:00,BRN-PRS-01,planned,PM-2,,5.1,920.1,PM-2 full service completed on the hydraulic press
+ME-00140,2025-12-11 09:21:00,MTY-GRD-02,planned,PM-2,,7.8,810.4,PM-2 full service completed on the surface grinder
+ME-00141,2025-12-12 06:41:00,DAY-MIL-01,planned,PM-2,,7.7,1135.26,PM-2 full service completed on the cnc mill
+ME-00142,2025-12-12 12:28:00,BRN-MIL-06,unplanned,CM,COOL-PMP,9.7,1062.43,Coolant pump failure: coolant pump replaced
+ME-00143,2025-12-17 07:49:00,MTY-LTH-04,planned,PM-2,,9.4,1236.32,PM-2 full service completed on the cnc lathe
+ME-00144,2025-12-17 18:26:00,DAY-LTH-02,unplanned,CM,COOL-PMP,4.3,500.44,Coolant pump failure: coolant pump replaced
+ME-00145,2025-12-19 07:35:00,MTY-LTH-03,planned,PM-2,,9.6,1249.13,PM-2 full service completed on the cnc lathe
+ME-00146,2025-12-19 13:35:00,MTY-LTH-05,planned,PM-2,,9.3,1101.18,PM-2 full service completed on the cnc lathe
+ME-00147,2025-12-23 06:00:00,DAY-PRS-01,planned,PM-2,,4.5,1157.56,PM-2 full service completed on the hydraulic press
+ME-00148,2025-12-23 07:02:00,DAY-MIL-06,planned,PM-2,,7.2,1269.79,PM-2 full service completed on the cnc mill
+ME-00149,2025-12-23 08:19:00,DAY-MIL-02,planned,PM-2,,7.5,1711.78,PM-2 full service completed on the cnc mill
+ME-00150,2025-12-23 08:37:00,DAY-LTH-01,planned,PM-2,,7.6,1364.51,PM-2 full service completed on the cnc lathe
+ME-00151,2025-12-23 09:19:00,BRN-MIL-06,planned,PM-2,,7.9,1900.14,PM-2 full service completed on the cnc mill
+ME-00152,2025-12-23 10:14:00,DAY-MIL-03,planned,PM-2,,6.1,1700.97,PM-2 full service completed on the cnc mill
+ME-00153,2025-12-23 12:06:00,BRN-PRS-03,planned,PM-2,,5.1,1345.55,PM-2 full service completed on the hydraulic press
+ME-00154,2025-12-23 12:43:00,MTY-LTH-02,planned,PM-2,,9.4,1203.38,PM-2 full service completed on the cnc lathe
+ME-00155,2025-12-23 13:39:00,MTY-MIL-01,planned,PM-2,,8.3,1727.34,PM-2 full service completed on the cnc mill
+ME-00156,2026-01-05 08:31:00,MTY-MIL-03,planned,PM-2,,7.6,1508.88,PM-2 full service completed on the cnc mill
+ME-00157,2026-01-05 09:21:00,MTY-MIL-02,planned,PM-2,,8.3,1758.36,PM-2 full service completed on the cnc mill
+ME-00158,2026-01-06 07:39:00,BRN-LTH-02,planned,PM-2,,9.8,2127.37,PM-2 full service completed on the cnc lathe
+ME-00159,2026-01-06 09:43:00,BRN-LTH-03,planned,PM-2,,9.9,999.96,PM-2 full service completed on the cnc lathe
+ME-00160,2026-01-06 17:39:00,DAY-PRS-03,unplanned,CM,HYD-LEAK,14.8,1127.42,Hydraulic leak: hydraulic line and seals replaced
+ME-00161,2026-01-07 12:27:00,BRN-MIL-01,unplanned,CM,SPN-BRG,43.0,4829.69,Spindle bearing wear: spindle cartridge replaced
+ME-00162,2026-01-08 08:34:00,MTY-PRS-01,planned,PM-2,,5.5,609.04,PM-2 full service completed on the hydraulic press
+ME-00163,2026-01-08 09:39:00,BRN-MIL-05,planned,PM-2,,6.4,1424.65,PM-2 full service completed on the cnc mill
+ME-00164,2026-01-08 09:56:00,MTY-MIL-06,planned,PM-2,,8.1,1972.49,PM-2 full service completed on the cnc mill
+ME-00165,2026-01-08 17:04:00,DAY-LTH-03,unplanned,CM,COOL-PMP,6.8,978.92,Coolant pump failure: coolant pump replaced
+ME-00166,2026-01-09 07:05:00,MTY-MIL-05,planned,PM-2,,7.0,1348.6,PM-2 full service completed on the cnc mill
+ME-00167,2026-01-12 06:00:00,BRN-GRD-01,planned,PM-2,,6.0,1462.27,PM-2 full service completed on the surface grinder
+ME-00168,2026-01-12 12:50:00,BRN-MIL-03,planned,PM-2,,8.7,1221.96,PM-2 full service completed on the cnc mill
+ME-00169,2026-01-13 07:16:00,DAY-PRS-03,planned,PM-2,,4.7,1252.26,PM-2 full service completed on the hydraulic press
+ME-00170,2026-01-14 07:35:00,MTY-PRS-03,planned,PM-2,,5.5,824.83,PM-2 full service completed on the hydraulic press
+ME-00171,2026-01-16 13:55:00,MTY-PRS-02,planned,PM-2,,5.3,1242.54,PM-2 full service completed on the hydraulic press
+ME-00172,2026-01-20 10:15:00,MTY-LTH-02,unplanned,CM,SRV-DRV,11.1,2010.19,Servo drive fault: servo drive replaced and axis re-homed
+ME-00173,2026-01-21 11:33:00,MTY-LTH-01,unplanned,CM,COOL-PMP,5.3,760.88,Coolant pump failure: coolant pump replaced
+ME-00174,2026-01-21 21:30:00,BRN-MIL-01,unplanned,CM,SRV-DRV,17.8,2117.27,Servo drive fault: servo drive replaced and axis re-homed
+ME-00175,2026-01-23 06:14:00,BRN-PRS-02,planned,PM-2,,5.4,1200.73,PM-2 full service completed on the hydraulic press
+ME-00176,2026-01-23 06:43:00,MTY-RBT-02,unplanned,CM,CBL-FLT,9.2,1415.43,Cable harness fault: dress pack cable replaced
+ME-00177,2026-01-23 12:14:00,BRN-PRS-03,unplanned,CM,HYD-LEAK,14.5,1809.85,Hydraulic leak: hydraulic line and seals replaced
+ME-00178,2026-01-26 16:43:00,DAY-LTH-05,unplanned,CM,COOL-PMP,8.7,1488.56,Coolant pump failure: coolant pump replaced
+ME-00179,2026-01-27 08:35:00,DAY-LTH-02,planned,PM-2,,10.0,1076.65,PM-2 full service completed on the cnc lathe
+ME-00180,2026-01-27 10:34:00,DAY-RBT-01,unplanned,CM,CBL-FLT,9.0,1238.21,Cable harness fault: dress pack cable replaced
+ME-00181,2026-01-30 13:35:00,DAY-PRS-02,planned,PM-2,,4.8,1098.29,PM-2 full service completed on the hydraulic press
+ME-00182,2026-01-30 13:36:00,DAY-GRD-01,planned,PM-2,,7.3,1335.96,PM-2 full service completed on the surface grinder
+ME-00183,2026-02-02 08:48:00,DAY-LTH-03,planned,PM-2,,8.0,991.55,PM-2 full service completed on the cnc lathe
+ME-00184,2026-02-02 16:25:00,BRN-PRS-01,unplanned,CM,VLV-STK,11.6,1440.51,Valve sticking: proportional valve cleaned and recalibrated
+ME-00185,2026-02-03 09:32:00,DAY-MIL-01,unplanned,CM,COOL-PMP,5.5,1228.85,Coolant pump failure: coolant pump replaced
+ME-00186,2026-02-03 09:47:00,DAY-RBT-01,planned,PM-2,,10.1,2741.23,PM-2 full service completed on the robot cell
+ME-00187,2026-02-03 13:40:00,DAY-PRS-04,planned,PM-2,,5.1,1186.51,PM-2 full service completed on the hydraulic press
+ME-00188,2026-02-04 14:21:00,MTY-LTH-01,unplanned,CM,SPN-BRG,31.7,4220.33,Spindle bearing wear: spindle cartridge replaced
+ME-00189,2026-02-05 06:13:00,MTY-GRD-01,planned,PM-2,,5.2,1437.01,PM-2 full service completed on the surface grinder
+ME-00190,2026-02-06 06:23:00,BRN-PRS-01,planned,PM-2,,4.4,636.12,PM-2 full service completed on the hydraulic press
+ME-00191,2026-02-06 10:42:00,BRN-MIL-01,planned,PM-2,,7.8,1218.17,PM-2 full service completed on the cnc mill
+ME-00192,2026-02-12 07:47:00,MTY-LTH-05,unplanned,CM,CHK-HYD,13.6,1699.86,Chuck hydraulic fault: chuck cylinder resealed
+ME-00193,2026-02-12 10:52:00,BRN-MIL-04,planned,PM-2,,7.7,1402.29,PM-2 full service completed on the cnc mill
+ME-00194,2026-02-13 09:02:00,DAY-MIL-07,planned,PM-2,,8.5,1121.93,PM-2 full service completed on the cnc mill
+ME-00195,2026-02-16 13:51:00,DAY-PRS-01,planned,PM-2,,5.2,1138.22,PM-2 full service completed on the hydraulic press
+ME-00196,2026-02-16 20:59:00,DAY-MIL-03,unplanned,CM,COOL-PMP,7.8,1329.26,Coolant pump failure: coolant pump replaced
+ME-00197,2026-02-19 08:23:00,BRN-PRS-03,planned,PM-2,,5.6,804.65,PM-2 full service completed on the hydraulic press
+ME-00198,2026-02-20 07:29:00,DAY-MIL-05,planned,PM-2,,7.1,1368.16,PM-2 full service completed on the cnc mill
+ME-00199,2026-02-24 08:10:00,DAY-MIL-01,unplanned,CM,SPN-BRG,51.1,4754.53,Spindle bearing wear: spindle cartridge replaced
+ME-00200,2026-02-24 14:48:00,MTY-GRD-02,unplanned,CM,COOL-PMP,8.6,1502.36,Coolant pump failure: coolant pump replaced
+ME-00201,2026-02-25 10:20:00,MTY-MIL-04,unplanned,CM,SRV-DRV,15.9,1660.34,Servo drive fault: servo drive replaced and axis re-homed
+ME-00202,2026-02-26 10:46:00,BRN-MIL-05,unplanned,CM,ATC-JAM,4.0,422.73,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00203,2026-02-26 12:37:00,BRN-MIL-02,planned,PM-2,,8.8,1282.06,PM-2 full service completed on the cnc mill
+ME-00204,2026-02-27 11:42:00,DAY-MIL-04,planned,PM-2,,6.3,1342.09,PM-2 full service completed on the cnc mill
+ME-00205,2026-03-02 06:03:00,MTY-LTH-04,unplanned,CM,CHK-HYD,11.7,2107.2,Chuck hydraulic fault: chuck cylinder resealed
+ME-00206,2026-03-02 10:41:00,MTY-GRD-02,planned,PM-2,,7.6,1637.0,PM-2 full service completed on the surface grinder
+ME-00207,2026-03-02 10:55:00,MTY-MIL-04,planned,PM-2,,7.2,1160.82,PM-2 full service completed on the cnc mill
+ME-00208,2026-03-03 07:41:00,BRN-MIL-04,unplanned,CM,SRV-DRV,15.1,1749.87,Servo drive fault: servo drive replaced and axis re-homed
+ME-00209,2026-03-04 15:42:00,DAY-PRS-03,unplanned,CM,VLV-STK,9.9,809.6,Valve sticking: proportional valve cleaned and recalibrated
+ME-00210,2026-03-05 08:59:00,DAY-MIL-06,unplanned,CM,SPN-BRG,55.7,5310.3,Spindle bearing wear: spindle cartridge replaced
+ME-00211,2026-03-05 11:01:00,DAY-PRS-03,planned,PM-2,,5.0,1364.23,PM-2 full service completed on the hydraulic press
+ME-00212,2026-03-05 14:28:00,MTY-PRS-01,unplanned,CM,PMP-WEAR,28.7,2664.27,Hydraulic pump wear: hydraulic pump replaced
+ME-00213,2026-03-06 09:25:00,MTY-PRS-01,planned,PM-2,,4.3,611.33,PM-2 full service completed on the hydraulic press
+ME-00214,2026-03-06 09:27:00,DAY-MIL-08,planned,PM-2,,6.5,884.52,PM-2 full service completed on the cnc mill
+ME-00215,2026-03-06 10:15:00,DAY-MIL-01,planned,PM-2,,7.0,1629.23,PM-2 full service completed on the cnc mill
+ME-00216,2026-03-09 07:57:00,DAY-RBT-02,planned,PM-2,,8.4,2115.18,PM-2 full service completed on the robot cell
+ME-00217,2026-03-09 09:19:00,MTY-PRS-02,planned,PM-2,,4.0,1197.45,PM-2 full service completed on the hydraulic press
+ME-00218,2026-03-10 11:35:00,MTY-RBT-03,planned,PM-2,,9.3,1914.23,PM-2 full service completed on the robot cell
+ME-00219,2026-03-13 08:10:00,DAY-LTH-05,planned,PM-2,,8.2,1492.25,PM-2 full service completed on the cnc lathe
+ME-00220,2026-03-13 11:13:00,MTY-PRS-03,planned,PM-2,,5.6,1009.93,PM-2 full service completed on the hydraulic press
+ME-00221,2026-03-13 17:11:00,BRN-RBT-02,unplanned,CM,RDC-WEAR,37.4,4512.24,Gear reducer wear: joint reducer replaced
+ME-00222,2026-03-19 12:13:00,DAY-MIL-02,unplanned,CM,SPN-BRG,31.5,3202.17,Spindle bearing wear: spindle cartridge replaced
+ME-00223,2026-03-20 07:13:00,MTY-LTH-01,planned,PM-2,,7.9,2231.72,PM-2 full service completed on the cnc lathe
+ME-00224,2026-03-20 10:20:00,BRN-MIL-06,planned,PM-2,,8.5,1577.29,PM-2 full service completed on the cnc mill
+ME-00225,2026-03-20 13:30:00,DAY-MIL-03,planned,PM-2,,7.4,1986.43,PM-2 full service completed on the cnc mill
+ME-00226,2026-03-23 07:48:00,BRN-GRD-01,unplanned,CM,WHL-IMB,10.5,1416.27,Grinding wheel imbalance: wheel replaced and balanced
+ME-00227,2026-03-23 09:19:00,BRN-MIL-05,unplanned,CM,ATC-JAM,8.9,954.88,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00228,2026-03-23 10:32:00,MTY-MIL-01,planned,PM-2,,8.1,1950.18,PM-2 full service completed on the cnc mill
+ME-00229,2026-03-23 10:36:00,DAY-RBT-03,planned,PM-2,,8.9,1614.93,PM-2 full service completed on the robot cell
+ME-00230,2026-03-23 11:46:00,BRN-PRS-02,planned,PM-2,,4.8,1163.3,PM-2 full service completed on the hydraulic press
+ME-00231,2026-03-23 12:57:00,DAY-LTH-04,planned,PM-2,,8.7,2282.94,PM-2 full service completed on the cnc lathe
+ME-00232,2026-03-23 19:14:00,DAY-PRS-02,unplanned,CM,PMP-WEAR,42.2,2939.1,Hydraulic pump wear: hydraulic pump replaced
+ME-00233,2026-03-24 09:34:00,MTY-RBT-02,planned,PM-2,,9.9,1469.84,PM-2 full service completed on the robot cell
+ME-00234,2026-03-24 15:52:00,MTY-MIL-02,unplanned,CM,SPN-BRG,59.6,7516.62,Spindle bearing wear: spindle cartridge replaced
+ME-00235,2026-03-25 10:53:00,DAY-PRS-02,planned,PM-2,,4.5,1101.31,PM-2 full service completed on the hydraulic press
+ME-00236,2026-03-26 12:05:00,DAY-LTH-04,unplanned,CM,SPN-BRG,42.2,3268.09,Spindle bearing wear: spindle cartridge replaced
+ME-00237,2026-03-27 10:56:00,DAY-MIL-02,planned,PM-2,,8.7,1048.73,PM-2 full service completed on the cnc mill
+ME-00238,2026-03-27 11:20:00,MTY-MIL-02,planned,PM-2,,7.5,1837.26,PM-2 full service completed on the cnc mill
+ME-00239,2026-03-27 12:30:00,DAY-MIL-06,planned,PM-2,,8.8,1646.28,PM-2 full service completed on the cnc mill
+ME-00240,2026-03-31 11:22:00,BRN-MIL-05,planned,PM-2,,8.7,1770.66,PM-2 full service completed on the cnc mill
+ME-00241,2026-03-31 13:11:00,DAY-PRS-04,planned,PM-2,,5.2,1223.45,PM-2 full service completed on the hydraulic press
+ME-00242,2026-04-01 08:41:00,BRN-PRS-01,planned,PM-2,,4.8,742.05,PM-2 full service completed on the hydraulic press
+ME-00243,2026-04-02 17:58:00,BRN-MIL-04,unplanned,CM,COOL-PMP,4.5,761.14,Coolant pump failure: coolant pump replaced
+ME-00244,2026-04-02 20:07:00,DAY-LTH-02,unplanned,CM,CHK-HYD,5.7,744.28,Chuck hydraulic fault: chuck cylinder resealed
+ME-00245,2026-04-03 06:20:00,MTY-MIL-03,planned,PM-2,,8.3,1974.91,PM-2 full service completed on the cnc mill
+ME-00246,2026-04-03 08:35:00,MTY-MIL-05,planned,PM-2,,8.3,1550.47,PM-2 full service completed on the cnc mill
+ME-00247,2026-04-03 11:49:00,BRN-LTH-01,planned,PM-2,,9.4,1053.02,PM-2 full service completed on the cnc lathe
+ME-00248,2026-04-03 11:55:00,MTY-MIL-06,planned,PM-2,,6.6,1269.44,PM-2 full service completed on the cnc mill
+ME-00249,2026-04-06 06:58:00,DAY-MIL-07,unplanned,CM,SPN-BRG,59.7,4839.71,Spindle bearing wear: spindle cartridge replaced
+ME-00250,2026-04-08 06:35:00,DAY-PRS-01,planned,PM-2,,5.8,726.32,PM-2 full service completed on the hydraulic press
+ME-00251,2026-04-08 11:21:00,BRN-MIL-03,planned,PM-2,,8.7,1362.08,PM-2 full service completed on the cnc mill
+ME-00252,2026-04-10 11:17:00,MTY-LTH-05,planned,PM-2,,7.1,1441.78,PM-2 full service completed on the cnc lathe
+ME-00253,2026-04-13 07:28:00,BRN-PRS-03,planned,PM-2,,4.8,1119.86,PM-2 full service completed on the hydraulic press
+ME-00254,2026-04-14 13:41:00,MTY-LTH-04,planned,PM-2,,7.0,1460.42,PM-2 full service completed on the cnc lathe
+ME-00255,2026-04-17 10:55:00,MTY-LTH-03,planned,PM-2,,9.5,1447.13,PM-2 full service completed on the cnc lathe
+ME-00256,2026-04-20 13:20:00,DAY-LTH-04,unplanned,CM,SPN-BRG,52.7,5028.89,Spindle bearing wear: spindle cartridge replaced
+ME-00257,2026-04-20 21:54:00,DAY-GRD-01,unplanned,CM,WHL-IMB,19.2,1408.8,Grinding wheel imbalance: wheel replaced and balanced
+ME-00258,2026-04-21 07:59:00,DAY-LTH-01,planned,PM-2,,7.3,2219.72,PM-2 full service completed on the cnc lathe
+ME-00259,2026-04-24 10:24:00,MTY-LTH-02,planned,PM-2,,8.2,1990.71,PM-2 full service completed on the cnc lathe
+ME-00260,2026-04-27 09:39:00,BRN-GRD-01,planned,PM-2,,6.8,1621.15,PM-2 full service completed on the surface grinder
+ME-00261,2026-04-29 11:52:00,MTY-GRD-01,planned,PM-2,,6.4,1538.47,PM-2 full service completed on the surface grinder
+ME-00262,2026-04-29 13:21:00,MTY-PRS-02,planned,PM-2,,4.6,1291.42,PM-2 full service completed on the hydraulic press
+ME-00263,2026-04-29 13:29:00,DAY-GRD-01,planned,PM-2,,6.6,1006.83,PM-2 full service completed on the surface grinder
+ME-00264,2026-04-30 08:56:00,BRN-LTH-03,planned,PM-2,,7.2,1678.1,PM-2 full service completed on the cnc lathe
+ME-00265,2026-04-30 12:42:00,BRN-LTH-02,planned,PM-2,,8.7,1173.06,PM-2 full service completed on the cnc lathe
+ME-00266,2026-05-01 07:57:00,DAY-PRS-03,planned,PM-2,,5.0,1200.54,PM-2 full service completed on the hydraulic press
+ME-00267,2026-05-05 12:42:00,BRN-MIL-01,planned,PM-2,,8.1,916.02,PM-2 full service completed on the cnc mill
+ME-00268,2026-05-05 16:25:00,DAY-MIL-07,unplanned,CM,SPN-BRG,58.7,4997.86,Spindle bearing wear: spindle cartridge replaced
+ME-00269,2026-05-06 13:10:00,BRN-MIL-04,planned,PM-2,,6.3,1243.7,PM-2 full service completed on the cnc mill
+ME-00270,2026-05-07 09:41:00,DAY-LTH-05,unplanned,CM,SRV-DRV,11.3,2021.35,Servo drive fault: servo drive replaced and axis re-homed
+ME-00271,2026-05-07 11:22:00,MTY-PRS-03,planned,PM-2,,4.9,902.64,PM-2 full service completed on the hydraulic press
+ME-00272,2026-05-07 11:32:00,BRN-RBT-02,planned,PM-2,,9.7,1595.26,PM-2 full service completed on the robot cell
+ME-00273,2026-05-11 10:56:00,BRN-LTH-01,unplanned,CM,SRV-DRV,10.2,1127.72,Servo drive fault: servo drive replaced and axis re-homed
+ME-00274,2026-05-11 18:23:00,DAY-MIL-01,unplanned,CM,ATC-JAM,6.5,1170.05,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00275,2026-05-15 09:04:00,BRN-RBT-01,planned,PM-2,,9.5,1411.23,PM-2 full service completed on the robot cell
+ME-00276,2026-05-15 10:12:00,MTY-PRS-01,planned,PM-2,,6.0,1356.3,PM-2 full service completed on the hydraulic press
+ME-00277,2026-05-15 11:14:00,BRN-PRS-02,planned,PM-2,,4.7,1286.64,PM-2 full service completed on the hydraulic press
+ME-00278,2026-05-15 13:47:00,MTY-RBT-01,planned,PM-2,,9.7,2762.01,PM-2 full service completed on the robot cell
+ME-00279,2026-05-19 07:31:00,DAY-LTH-02,planned,PM-2,,7.6,2035.62,PM-2 full service completed on the cnc lathe
+ME-00280,2026-05-19 11:07:00,DAY-MIL-05,planned,PM-2,,7.4,1276.86,PM-2 full service completed on the cnc mill
+ME-00281,2026-05-20 10:00:00,BRN-MIL-02,planned,PM-2,,6.2,2020.05,PM-2 full service completed on the cnc mill
+ME-00282,2026-05-22 06:19:00,DAY-PRS-02,planned,PM-2,,4.8,1357.05,PM-2 full service completed on the hydraulic press
+ME-00283,2026-05-22 08:47:00,MTY-MIL-04,planned,PM-2,,6.1,1286.17,PM-2 full service completed on the cnc mill
+ME-00284,2026-05-22 09:56:00,DAY-MIL-07,planned,PM-2,,7.1,1995.31,PM-2 full service completed on the cnc mill
+ME-00285,2026-05-22 13:06:00,DAY-MIL-04,planned,PM-2,,7.6,1466.39,PM-2 full service completed on the cnc mill
+ME-00286,2026-05-26 13:00:00,DAY-PRS-04,planned,PM-2,,4.6,1097.57,PM-2 full service completed on the hydraulic press
+ME-00287,2026-05-28 12:42:00,MTY-GRD-02,planned,PM-2,,6.7,910.46,PM-2 full service completed on the surface grinder
+ME-00288,2026-05-29 07:21:00,DAY-MIL-08,planned,PM-2,,8.3,2024.4,PM-2 full service completed on the cnc mill
+ME-00289,2026-05-29 08:12:00,DAY-LTH-03,planned,PM-2,,8.4,1428.46,PM-2 full service completed on the cnc lathe
+ME-00290,2026-05-29 08:54:00,BRN-PRS-01,planned,PM-2,,5.1,1300.84,PM-2 full service completed on the hydraulic press
+ME-00291,2026-05-29 11:36:00,DAY-MIL-01,planned,PM-2,,8.8,1804.26,PM-2 full service completed on the cnc mill
+ME-00292,2026-05-29 13:46:00,MTY-PRS-01,unplanned,CM,HYD-LEAK,9.7,1424.41,Hydraulic leak: hydraulic line and seals replaced
+ME-00293,2026-06-03 10:54:00,BRN-PRS-03,planned,PM-2,,5.2,726.86,PM-2 full service completed on the hydraulic press
+ME-00294,2026-06-03 12:22:00,DAY-PRS-01,planned,PM-2,,4.1,1284.16,PM-2 full service completed on the hydraulic press
+ME-00295,2026-06-05 18:19:00,DAY-MIL-06,unplanned,CM,SRV-DRV,8.0,954.5,Servo drive fault: servo drive replaced and axis re-homed
+ME-00296,2026-06-09 19:53:00,BRN-MIL-05,unplanned,CM,ATC-JAM,6.4,918.08,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00297,2026-06-12 12:36:00,DAY-MIL-05,unplanned,CM,SRV-DRV,14.6,1194.66,Servo drive fault: servo drive replaced and axis re-homed
+ME-00298,2026-06-15 10:05:00,DAY-MIL-03,planned,PM-2,,7.0,1090.58,PM-2 full service completed on the cnc mill
+ME-00299,2026-06-15 18:25:00,MTY-RBT-02,unplanned,CM,CBL-FLT,5.8,1490.11,Cable harness fault: dress pack cable replaced
+ME-00300,2026-06-16 11:21:00,BRN-MIL-06,planned,PM-2,,8.9,1182.89,PM-2 full service completed on the cnc mill
+ME-00301,2026-06-16 13:51:00,BRN-LTH-03,unplanned,CM,SPN-BRG,53.7,2809.7,Spindle bearing wear: spindle cartridge replaced
+ME-00302,2026-06-18 06:16:00,MTY-MIL-01,planned,PM-2,,6.4,1122.34,PM-2 full service completed on the cnc mill
+ME-00303,2026-06-19 10:22:00,BRN-LTH-04,planned,PM-2,,9.9,1102.69,PM-2 full service completed on the cnc lathe
+ME-00304,2026-06-22 10:03:00,MTY-MIL-02,planned,PM-2,,7.8,1182.18,PM-2 full service completed on the cnc mill
+ME-00305,2026-06-22 12:14:00,DAY-MIL-06,planned,PM-2,,8.1,1754.65,PM-2 full service completed on the cnc mill
+ME-00306,2026-06-23 11:32:00,DAY-MIL-02,planned,PM-2,,7.0,1649.07,PM-2 full service completed on the cnc mill
+ME-00307,2026-06-24 09:22:00,BRN-MIL-05,planned,PM-2,,8.5,1338.34,PM-2 full service completed on the cnc mill
+ME-00308,2026-06-24 09:52:00,MTY-PRS-02,planned,PM-2,,4.2,1192.37,PM-2 full service completed on the hydraulic press
+ME-00309,2026-06-24 10:06:00,MTY-MIL-03,unplanned,CM,SPN-BRG,46.5,4107.66,Spindle bearing wear: spindle cartridge replaced
+ME-00310,2026-06-26 06:41:00,MTY-MIL-06,planned,PM-2,,7.5,962.15,PM-2 full service completed on the cnc mill
+ME-00311,2026-06-26 11:45:00,DAY-PRS-04,unplanned,CM,VLV-STK,8.7,803.38,Valve sticking: proportional valve cleaned and recalibrated
+ME-00312,2026-06-26 13:59:00,DAY-PRS-03,planned,PM-2,,5.1,1221.34,PM-2 full service completed on the hydraulic press
+ME-00313,2026-06-29 09:29:00,MTY-MIL-03,planned,PM-2,,6.7,1643.91,PM-2 full service completed on the cnc mill
+ME-00314,2026-06-30 07:52:00,MTY-MIL-05,planned,PM-2,,9.0,1419.51,PM-2 full service completed on the cnc mill
+ME-00315,2026-07-03 08:53:00,MTY-PRS-03,planned,PM-2,,5.7,637.33,PM-2 full service completed on the hydraulic press
+ME-00316,2026-07-03 09:41:00,BRN-MIL-03,planned,PM-2,,7.6,1360.17,PM-2 full service completed on the cnc mill
+ME-00317,2026-07-09 10:12:00,BRN-PRS-02,planned,PM-2,,4.5,601.14,PM-2 full service completed on the hydraulic press
+ME-00318,2026-07-09 18:42:00,BRN-PRS-01,unplanned,CM,VLV-STK,10.8,1392.68,Valve sticking: proportional valve cleaned and recalibrated
+ME-00319,2026-07-09 20:11:00,DAY-LTH-01,unplanned,CM,CHK-HYD,6.8,1022.79,Chuck hydraulic fault: chuck cylinder resealed
+ME-00320,2026-07-10 09:48:00,DAY-LTH-05,planned,PM-2,,7.6,1625.72,PM-2 full service completed on the cnc lathe
+ME-00321,2026-07-13 08:50:00,MTY-PRS-01,planned,PM-2,,4.4,1220.31,PM-2 full service completed on the hydraulic press
+ME-00322,2026-07-14 06:33:00,MTY-LTH-01,planned,PM-2,,9.8,1440.29,PM-2 full service completed on the cnc lathe
+ME-00323,2026-07-15 09:12:00,DAY-LTH-04,planned,PM-2,,8.5,1750.41,PM-2 full service completed on the cnc lathe
+ME-00324,2026-07-20 12:40:00,BRN-GRD-01,planned,PM-2,,6.2,1516.72,PM-2 full service completed on the surface grinder
+ME-00325,2026-07-21 09:05:00,DAY-PRS-02,planned,PM-2,,4.8,1208.85,PM-2 full service completed on the hydraulic press
+ME-00326,2026-07-22 06:58:00,DAY-PRS-04,planned,PM-2,,5.5,678.59,PM-2 full service completed on the hydraulic press
+ME-00327,2026-07-22 14:47:00,DAY-MIL-07,unplanned,CM,COOL-PMP,9.3,1116.62,Coolant pump failure: coolant pump replaced
+ME-00328,2026-07-22 17:32:00,BRN-MIL-02,unplanned,CM,COOL-PMP,6.5,1598.66,Coolant pump failure: coolant pump replaced
+ME-00329,2026-07-22 21:31:00,MTY-LTH-05,unplanned,CM,SPN-BRG,47.2,5078.21,Spindle bearing wear: spindle cartridge replaced
+ME-00330,2026-07-23 06:36:00,BRN-PRS-01,planned,PM-2,,5.7,1341.4,PM-2 full service completed on the hydraulic press
+ME-00331,2026-07-24 06:26:00,DAY-GRD-01,planned,PM-2,,5.3,1648.87,PM-2 full service completed on the surface grinder
+ME-00332,2026-07-24 06:26:00,MTY-GRD-01,planned,PM-2,,5.7,1092.54,PM-2 full service completed on the surface grinder
+ME-00333,2026-07-27 10:25:00,BRN-LTH-01,planned,PM-2,,8.0,1367.78,PM-2 full service completed on the cnc lathe
+ME-00334,2026-07-27 13:42:00,DAY-RBT-01,planned,PM-2,,8.2,2141.2,PM-2 full service completed on the robot cell
+ME-00335,2026-07-28 07:41:00,BRN-PRS-03,planned,PM-2,,5.7,679.9,PM-2 full service completed on the hydraulic press
+ME-00336,2026-07-29 07:58:00,DAY-MIL-06,unplanned,CM,ATC-JAM,8.8,1606.85,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00337,2026-07-29 08:18:00,DAY-PRS-01,planned,PM-2,,4.1,1069.89,PM-2 full service completed on the hydraulic press
+ME-00338,2026-07-29 18:02:00,MTY-PRS-01,unplanned,CM,PMP-WEAR,45.1,5760.84,Hydraulic pump wear: hydraulic pump replaced
+ME-00339,2026-07-31 06:11:00,BRN-MIL-04,planned,PM-2,,8.1,1951.26,PM-2 full service completed on the cnc mill
+ME-00340,2026-07-31 12:43:00,BRN-MIL-01,planned,PM-2,,7.2,1838.68,PM-2 full service completed on the cnc mill
+ME-00341,2026-08-06 13:27:00,MTY-LTH-05,planned,PM-2,,7.9,2130.8,PM-2 full service completed on the cnc lathe
+ME-00342,2026-08-12 13:10:00,DAY-MIL-05,planned,PM-2,,6.3,1389.87,PM-2 full service completed on the cnc mill
+ME-00343,2026-08-13 06:23:00,DAY-LTH-01,planned,PM-2,,7.8,1809.18,PM-2 full service completed on the cnc lathe
+ME-00344,2026-08-13 12:12:00,MTY-MIL-04,planned,PM-2,,7.6,1686.3,PM-2 full service completed on the cnc mill
+ME-00345,2026-08-13 13:14:00,BRN-MIL-02,planned,PM-2,,6.8,1137.75,PM-2 full service completed on the cnc mill
+ME-00346,2026-08-14 06:32:00,MTY-PRS-02,planned,PM-2,,4.7,1068.16,PM-2 full service completed on the hydraulic press
+ME-00347,2026-08-14 07:01:00,DAY-MIL-04,planned,PM-2,,7.2,1366.48,PM-2 full service completed on the cnc mill
+ME-00348,2026-08-14 08:36:00,DAY-MIL-07,planned,PM-2,,8.5,1439.47,PM-2 full service completed on the cnc mill
+ME-00349,2026-08-14 13:55:00,MTY-LTH-03,planned,PM-2,,8.4,2116.25,PM-2 full service completed on the cnc lathe
+ME-00350,2026-08-17 06:52:00,MTY-LTH-02,planned,PM-2,,7.3,1094.28,PM-2 full service completed on the cnc lathe
+ME-00351,2026-08-17 20:03:00,MTY-MIL-02,unplanned,CM,SRV-DRV,6.4,1012.03,Servo drive fault: servo drive replaced and axis re-homed
+ME-00352,2026-08-18 20:37:00,MTY-MIL-06,unplanned,CM,COOL-PMP,7.6,1476.75,Coolant pump failure: coolant pump replaced
+ME-00353,2026-08-19 09:46:00,DAY-MIL-01,planned,PM-2,,7.3,1987.7,PM-2 full service completed on the cnc mill
+ME-00354,2026-08-20 07:41:00,DAY-MIL-08,planned,PM-2,,7.9,1868.95,PM-2 full service completed on the cnc mill
+ME-00355,2026-08-20 07:44:00,BRN-LTH-02,planned,PM-2,,9.5,1533.61,PM-2 full service completed on the cnc lathe
+ME-00356,2026-08-21 08:29:00,DAY-PRS-03,planned,PM-2,,4.4,943.8,PM-2 full service completed on the hydraulic press
+ME-00357,2026-08-21 17:27:00,DAY-LTH-04,unplanned,CM,SPN-BRG,47.1,5610.0,Spindle bearing wear: spindle cartridge replaced
+ME-00358,2026-08-24 12:13:00,MTY-LTH-04,unplanned,CM,SPN-BRG,52.0,3471.09,Spindle bearing wear: spindle cartridge replaced
+ME-00359,2026-08-26 10:15:00,BRN-MIL-04,unplanned,CM,SRV-DRV,11.4,1765.75,Servo drive fault: servo drive replaced and axis re-homed
+ME-00360,2026-08-28 06:19:00,DAY-RBT-02,planned,PM-2,,10.4,1461.89,PM-2 full service completed on the robot cell
+ME-00361,2026-08-28 09:52:00,MTY-PRS-03,planned,PM-2,,4.5,1321.0,PM-2 full service completed on the hydraulic press
+ME-00362,2026-08-31 09:34:00,DAY-MIL-07,unplanned,CM,SRV-DRV,6.9,1302.41,Servo drive fault: servo drive replaced and axis re-homed
+ME-00363,2026-09-02 13:45:00,MTY-PRS-01,planned,PM-2,,5.1,611.99,PM-2 full service completed on the hydraulic press
+ME-00364,2026-09-02 17:27:00,DAY-MIL-02,unplanned,CM,COOL-PMP,9.5,1126.6,Coolant pump failure: coolant pump replaced
+ME-00365,2026-09-03 13:21:00,MTY-RBT-03,planned,PM-2,,11.2,2796.67,PM-2 full service completed on the robot cell
+ME-00366,2026-09-07 07:10:00,BRN-MIL-06,planned,PM-2,,7.8,1253.46,PM-2 full service completed on the cnc mill
+ME-00367,2026-09-08 12:19:00,DAY-PRS-04,unplanned,CM,PMP-WEAR,40.6,3077.7,Hydraulic pump wear: hydraulic pump replaced
+ME-00368,2026-09-09 07:41:00,MTY-LTH-04,planned,PM-2,,7.3,1055.98,PM-2 full service completed on the cnc lathe
+ME-00369,2026-09-09 08:45:00,DAY-LTH-05,unplanned,CM,COOL-PMP,9.2,1633.42,Coolant pump failure: coolant pump replaced
+ME-00370,2026-09-09 12:49:00,DAY-MIL-03,planned,PM-2,,7.9,1106.5,PM-2 full service completed on the cnc mill
+ME-00371,2026-09-10 15:20:00,MTY-GRD-01,unplanned,CM,COOL-PMP,8.4,896.5,Coolant pump failure: coolant pump replaced
+ME-00372,2026-09-11 07:47:00,DAY-PRS-02,planned,PM-2,,5.4,1183.66,PM-2 full service completed on the hydraulic press
+ME-00373,2026-09-11 10:13:00,DAY-RBT-03,planned,PM-2,,10.2,2763.03,PM-2 full service completed on the robot cell
+ME-00374,2026-09-14 16:21:00,BRN-MIL-04,unplanned,CM,SPN-BRG,54.5,6017.82,Spindle bearing wear: spindle cartridge replaced
+ME-00375,2026-09-15 07:31:00,MTY-RBT-02,planned,PM-2,,10.9,2482.72,PM-2 full service completed on the robot cell
+ME-00376,2026-09-15 08:54:00,BRN-PRS-02,planned,PM-2,,4.8,1274.61,PM-2 full service completed on the hydraulic press
+ME-00377,2026-09-15 20:37:00,DAY-MIL-03,unplanned,CM,SPN-BRG,54.4,4794.99,Spindle bearing wear: spindle cartridge replaced
+ME-00378,2026-09-17 06:10:00,DAY-PRS-03,unplanned,CM,HYD-LEAK,14.0,1100.32,Hydraulic leak: hydraulic line and seals replaced
+ME-00379,2026-09-17 07:40:00,BRN-LTH-03,unplanned,CM,SPN-BRG,30.3,3536.62,Spindle bearing wear: spindle cartridge replaced
+ME-00380,2026-09-17 10:09:00,BRN-PRS-03,planned,PM-2,,4.7,819.27,PM-2 full service completed on the hydraulic press
+ME-00381,2026-09-17 13:54:00,DAY-PRS-01,unplanned,CM,VLV-STK,11.2,2068.43,Valve sticking: proportional valve cleaned and recalibrated
+ME-00382,2026-09-17 17:25:00,MTY-MIL-02,unplanned,CM,ATC-JAM,6.5,489.15,Automatic tool changer jam: tool changer cleared and re-timed
+ME-00383,2026-09-18 08:30:00,BRN-MIL-05,planned,PM-2,,6.5,1494.63,PM-2 full service completed on the cnc mill
+ME-00384,2026-09-18 08:59:00,MTY-MIL-03,planned,PM-2,,6.2,1849.36,PM-2 full service completed on the cnc mill
+ME-00385,2026-09-18 09:56:00,MTY-MIL-06,planned,PM-2,,6.7,1503.26,PM-2 full service completed on the cnc mill
+ME-00386,2026-09-18 12:46:00,DAY-MIL-06,planned,PM-2,,6.6,1943.39,PM-2 full service completed on the cnc mill
+ME-00387,2026-09-18 13:45:00,MTY-MIL-02,planned,PM-2,,8.2,1562.15,PM-2 full service completed on the cnc mill
+ME-00388,2026-09-21 07:12:00,DAY-PRS-01,planned,PM-2,,5.9,1106.01,PM-2 full service completed on the hydraulic press
+ME-00389,2026-09-24 14:35:00,MTY-MIL-05,unplanned,CM,SRV-DRV,12.0,1946.68,Servo drive fault: servo drive replaced and axis re-homed
+ME-00390,2026-09-24 17:32:00,DAY-LTH-04,unplanned,CM,SRV-DRV,20.0,2159.34,Servo drive fault: servo drive replaced and axis re-homed
+ME-00391,2026-09-25 07:30:00,MTY-MIL-05,planned,PM-2,,6.2,1830.77,PM-2 full service completed on the cnc mill
+ME-00392,2026-09-25 10:46:00,DAY-LTH-03,planned,PM-2,,8.7,1082.37,PM-2 full service completed on the cnc lathe
+ME-00393,2026-09-25 13:00:00,BRN-MIL-03,planned,PM-2,,6.0,1880.96,PM-2 full service completed on the cnc mill

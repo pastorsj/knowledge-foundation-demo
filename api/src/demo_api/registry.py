@@ -56,6 +56,11 @@ class ToolRegistry:
     def families(self, features: frozenset[str]) -> set[str]:
         return {tool.family for tool in self.available(features)}
 
+    def pills(self, features: frozenset[str]) -> set[str]:
+        """The pills of the tools in an agent image built with these features (``kumo`` needs the ``kumo``
+        feature, ``duckdb`` the ``tables`` one); a pack question is offered only when all its pills are."""
+        return {pill for tool in self.available(features) for pill in tool.pills}
+
     def toolsets(self, families: set[str], features: frozenset[str]) -> list[str]:
         """Hermes toolsets for a job: always ``skills``, plus the server of every usable tool."""
         servers = {tool.server for tool in self.available(features) if tool.family in families}

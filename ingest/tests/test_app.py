@@ -1,0 +1,284 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+from __future__ import annotations
+
+import asyncio
+import io
+import json
+import shutil
+import zipfile
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from dataclasses import replace
+from pathlib import Path
+from typing import Any
+
+import duckdb
+import httpx
+import pytest
+from conftest import CATALOG_FIXTURES
+from conftest import FIXTURES
+from conftest import FakeEmbedder
+from conftest import FakeParse
+from jsonschema import Draft202012Validator
+
+from demo_ingest.app import create_app
+from demo_ingest.catalog import Catalog
+from demo_ingest.index import KnowledgeIndex
+from demo_ingest.settings import Settings
+from demo_ingest.store import JobStore
+
+pytestmark = pytest.mark.anyio
+TABLES = CATALOG_FIXTURES / "tables"
+SOURCE_SCHEMA = Draft202012Validator(
+    json.loads((CATALOG_FIXTURES.parents[1] / "catalog" / "source-manifest.schema.json").read_text())
+)
+
+
+@pytest.fixture
+def anyio_backend() -> str:
+    return "asyncio"
+
+
+@asynccontextmanager
+async def running(settings: Settings, embedder: FakeEmbedder, tokenizer: Any) -> AsyncIterator[httpx.AsyncClient]:
+    index = KnowledgeIndex(settings.milvus_uri, settings.collection_alias)
+    app = create_app(settings, embedder=embedder, index=index, tokenizer=tokenizer)
+    try:
+        async with app.router.lifespan_context(app):
+            transport = httpx.ASGITransport(app=app)
+            async with httpx.AsyncClient(transport=transport, base_url="http://ingest", timeout=60) as client:
+                yield client
+    finally:
+        index.close()
+
+
+@pytest.fixture
+async def client(
+    parse_settings: Settings, fake_parse: FakeParse, embedder, tokenizer
+) -> AsyncIterator[httpx.AsyncClient]:
+    fake_parse.label = "policy-pdf"
+    async with running(parse_settings, embedder, tokenizer) as client:
+        yield client
+
+
+def upload(*files: tuple[str, bytes]) -> list[tuple[str, tuple[str, bytes, str]]]:
+    return [("files", (name, data, "application/octet-stream")) for name, data in files]
+
+
+async def wait(client: httpx.AsyncClient, job_id: str, timeout: float = 60) -> dict[str, Any]:
+    deadline = asyncio.get_running_loop().time() + timeout
+    while True:
+        response = await client.get(f"/v1/documents/{job_id}/status")
+        assert response.status_code == 200
+        status = response.json()
+        if status["status"] in ("completed", "failed"):
+            return status
+        assert asyncio.get_running_loop().time() < deadline, status
+        await asyncio.sleep(0.05)
+
+
+def details(status: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    return {f["file_name"]: f for f in status["file_details"]}
+
+
+async def test_health(client: httpx.AsyncClient):
+    response = await client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "ready"
+
+
+async def test_upload_a_table_and_a_pdf_then_watch_them_ingest(
+    client: httpx.AsyncClient, parse_settings: Settings, policy_pdf: Path
+):
+    catalog = Catalog(parse_settings.knowledge_dir)
+    csv = (TABLES / "orders.csv").read_bytes()
+
+    response = await client.post(
+        "/v1/collections/workspace/documents",
+        files=upload(("orders.csv", csv), ("policy.pdf", policy_pdf.read_bytes())),
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["file_ids"]) == 2 and body["job_id"]
+    status = await wait(client, body["job_id"])
+    assert status["status"] == "completed" and status["processed_files"] == 2
+    files = details(status)
+    assert {f["stage"] for f in files.values()} == {"ready"}
+    assert (files["orders.csv"]["kind"], files["orders.csv"]["tables"]) == ("table", ["orders"])
+    assert files["orders.csv"]["parser"] == "duckdb-csv"
+    assert (files["policy.pdf"]["kind"], files["policy.pdf"]["parser"]) == ("document", "nemotron-parse-2.0")
+    assert files["policy.pdf"]["chunks_created"] > 0 and files["policy.pdf"]["progress_percent"] == 100
+
+    manifest_path = parse_settings.knowledge_dir / "catalog" / "sources" / "workspace.tables.json"
+    tables_manifest = json.loads(manifest_path.read_text())
+    assert list(SOURCE_SCHEMA.iter_errors(tables_manifest)) == []
+    assert tables_manifest["status"] == "ready"
+    assert [t["name"] for t in tables_manifest["database"]["tables"]] == ["orders"]
+    assert tables_manifest["database"]["tables"][0]["time_column"] == "ordered_at"
+    documents_manifest = catalog.read_source("workspace.documents")
+    assert documents_manifest["documents"]["count"] == 1
+    assert documents_manifest["files"][0]["pages"] == 2
+    workspace = catalog.read_pack("workspace")
+    assert (workspace["status"], workspace["sources"]) == ("ready", ["workspace.documents", "workspace.tables"])
+
+    listed = (await client.get("/v1/collections/workspace/documents")).json()["files"]
+    assert {f["file_name"]: f["status"] for f in listed} == {"orders.csv": "success", "policy.pdf": "success"}
+
+
+async def test_reuploading_identical_bytes_returns_the_same_file(client: httpx.AsyncClient):
+    csv = (TABLES / "orders.csv").read_bytes()
+    first = (await client.post("/v1/collections/workspace/documents", files=upload(("orders.csv", csv)))).json()
+    await wait(client, first["job_id"])
+
+    again = (await client.post("/v1/collections/workspace/documents", files=upload(("copy.csv", csv)))).json()
+
+    assert again["file_ids"] == first["file_ids"]
+    status = await wait(client, again["job_id"])
+    assert status["status"] == "completed"
+    assert len((await client.get("/v1/collections/workspace/documents")).json()["files"]) == 1
+
+
+async def test_deleting_a_file_drops_its_table_and_rewrites_the_manifest(
+    client: httpx.AsyncClient, parse_settings: Settings
+):
+    files = upload(
+        ("customers.csv", (TABLES / "customers.csv").read_bytes()), ("orders.csv", (TABLES / "orders.csv").read_bytes())
+    )
+    job = (await client.post("/v1/collections/workspace/documents", files=files)).json()
+    status = await wait(client, job["job_id"])
+    orders_id = details(status)["orders.csv"]["file_id"]
+    catalog = Catalog(parse_settings.knowledge_dir)
+    orders = next(t for t in catalog.read_source("workspace.tables")["database"]["tables"] if t["name"] == "orders")
+    assert orders["foreign_keys"][0]["references_table"] == "customers"
+
+    response = await client.request("DELETE", "/v1/collections/workspace/documents", json={"file_ids": [orders_id]})
+
+    assert response.status_code == 200
+    manifest = catalog.read_source("workspace.tables")
+    assert [f["file_name"] for f in manifest["files"]] == ["customers.csv"]
+    assert [t["name"] for t in manifest["database"]["tables"]] == ["customers"]
+    with duckdb.connect(str(parse_settings.knowledge_dir / "sources" / "workspace.tables" / "tables.duckdb")) as db:
+        assert [row[0] for row in db.execute("SELECT table_name FROM duckdb_tables()").fetchall()] == ["customers"]
+
+    remaining = (await client.get("/v1/collections/workspace/documents")).json()["files"]
+    await client.request("DELETE", "/v1/collections/workspace/documents", json={"file_ids": [remaining[0]["file_id"]]})
+    assert catalog.read_source("workspace.tables") is None
+    assert catalog.read_pack("workspace")["status"] == "empty"
+
+
+async def test_deleting_a_document_removes_its_chunks(client: httpx.AsyncClient, parse_settings: Settings, policy_pdf):
+    job = (
+        await client.post("/v1/collections/workspace/documents", files=upload(("p.pdf", policy_pdf.read_bytes())))
+    ).json()
+    await wait(client, job["job_id"])
+
+    await client.request("DELETE", "/v1/collections/workspace/documents", json={"file_ids": job["file_ids"]})
+
+    index = KnowledgeIndex(parse_settings.milvus_uri, "knowledge")
+    try:
+        assert index.count(source_id="workspace.documents") == 0
+    finally:
+        index.close()
+    assert not list((parse_settings.knowledge_dir / "sources").glob("workspace.documents/documents/*.md"))
+
+
+async def test_a_renamed_or_empty_file_fails_alone_in_its_batch(client: httpx.AsyncClient, parse_settings: Settings):
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w") as z:
+        z.writestr("a.txt", "hello")
+    files = upload(
+        ("report.pdf", archive.getvalue()),
+        ("empty.csv", b""),
+        ("setup.exe", b"MZ\x90\x00"),
+        ("orders.csv", (TABLES / "orders.csv").read_bytes()),
+    )
+
+    job = (await client.post("/v1/collections/workspace/documents", files=files)).json()
+
+    status = await wait(client, job["job_id"])
+    assert status["status"] == "completed"
+    files = details(status)
+    assert files["orders.csv"]["status"] == "success"
+    assert (files["report.pdf"]["status"], files["report.pdf"]["error_code"]) == ("failed", "type_mismatch")
+    assert "report.pdf should be a PDF file, but it holds ZIP content" in files["report.pdf"]["error_message"]
+    assert (files["empty.csv"]["error_code"], files["empty.csv"]["error_message"]) == (
+        "empty_file",
+        "empty.csv is empty.",
+    )
+    assert files["setup.exe"]["error_code"] == "unsupported_type"
+    manifest = Catalog(parse_settings.knowledge_dir).read_source("workspace.tables")
+    assert manifest["status"] == "ready"
+    assert {f["file_name"]: f["status"] for f in manifest["files"]} == {"empty.csv": "failed", "orders.csv": "ready"}
+
+
+async def test_upload_limits(parse_settings: Settings, embedder, tokenizer):
+    settings = replace(parse_settings, max_files=2, max_file_mb=1)
+    async with running(settings, embedder, tokenizer) as client:
+        too_many = upload(("a.csv", b"a\n1\n"), ("b.csv", b"b\n1\n"), ("c.csv", b"c\n1\n"))
+        response = await client.post("/v1/collections/workspace/documents", files=too_many)
+        assert response.status_code == 400
+        assert "2 files" in response.json()["error"]["message"]
+
+        big = b"a\n" + b"1\n" * (600 * 1024)
+        job = (await client.post("/v1/collections/workspace/documents", files=upload(("big.csv", big)))).json()
+        status = await wait(client, job["job_id"])
+        assert details(status)["big.csv"]["error_code"] == "too_large"
+
+        assert (
+            await client.post("/v1/collections/nope/documents", files=upload(("a.csv", b"a\n1\n")))
+        ).status_code == 404
+        await client.post("/v1/collections", json={"name": "session-1"})
+        other = await client.post("/v1/collections/session-1/documents", files=upload(("a.csv", b"a\n1\n")))
+        assert other.status_code == 400
+
+
+async def test_collections(client: httpx.AsyncClient):
+    listed = (await client.get("/v1/collections")).json()["collections"]
+    assert [c["name"] for c in listed] == ["workspace"]
+    assert {"file_count", "chunk_count", "backend", "metadata"} <= listed[0].keys()
+
+    created = await client.post("/v1/collections", json={"name": "session-1", "description": "a chat"})
+    assert created.status_code == 201 and created.json()["name"] == "session-1"
+    assert (await client.post("/v1/collections", json={"name": "session-1"})).status_code == 200
+    assert (await client.get("/v1/collections/session-1")).json()["description"] == "a chat"
+    assert (await client.get("/v1/collections/missing")).status_code == 404
+
+    assert (await client.delete("/v1/collections/session-1")).status_code == 200
+    assert (await client.get("/v1/collections/session-1")).status_code == 404
+    assert (await client.get("/v1/documents/unknown/status")).status_code == 404
+
+
+async def test_a_restart_finishes_interrupted_files(parse_settings: Settings, embedder, tokenizer):
+    store = JobStore(parse_settings.db_path)
+    data = (TABLES / "orders.csv").read_bytes()
+    file_id = "f-00000000000000aa"
+    stored = parse_settings.knowledge_dir / "sources" / "workspace.tables" / "files" / file_id
+    stored.parent.mkdir(parents=True)
+    stored.write_bytes(data)
+    entry = {"file_id": file_id, "file_name": "orders.csv", "source_id": "workspace.tables", "sha256": "a" * 64}
+    job_id = store.create_job("workspace", [{**entry, "size_bytes": len(data), "kind": "table", "stage": "loading"}])
+
+    async with running(parse_settings, embedder, tokenizer) as client:
+        status = await wait(client, job_id)
+
+    assert status["status"] == "completed"
+    assert details(status)["orders.csv"]["tables"] == ["orders"]
+
+
+async def test_pack_sync_runs_at_startup_and_reports_progress(parse_settings: Settings, embedder, tokenizer, tmp_path):
+    packs_dir = tmp_path / "packs-mounted"
+    shutil.copytree(FIXTURES / "packs", packs_dir)
+    async with running(replace(parse_settings, packs_dir=packs_dir), embedder, tokenizer) as client:
+        for _ in range(600):
+            packs = (await client.get("/v1/packs/status")).json()["packs"]
+            if packs and packs[0]["status"] in ("ready", "failed"):
+                break
+            await asyncio.sleep(0.05)
+        assert packs == [{"id": "mini", "status": "ready", "files_total": 3, "files_done": 3, "error": None}]
+
+        again = await client.post("/v1/packs/sync")
+        assert again.status_code == 202

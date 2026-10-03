@@ -1,0 +1,129 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/questions.schema.json
+#
+# Demo questions for the manufacturing pack. Every answer is derivable from the committed files; the expected answers
+# are in README.md ("Answer key"), computed by generator/build.py.
+schema_version: "3"
+
+# The composer's picker: the featured questions first, then the rest.
+examples:
+  - pm2-interval-hydraulic-press
+  - round-sheet-press-findings
+  - unplanned-downtime-by-plant
+  - overdue-pm2
+  - eight-d-machine-history
+  - failure-risk-30d
+  - lockout-lock-removal
+  - top-failure-codes
+  - plan-attainment-q3
+  - high-alarm-risk
+
+questions:
+  - id: pm2-interval-hydraulic-press
+    label: PM-2 interval for hydraulic presses
+    tag: DOCUMENTS
+    description: A value read from the maintenance interval table in the manual's PDF.
+    question: >-
+      What PM-2 interval does the preventive maintenance manual set for a hydraulic press, and how often is its
+      hydraulic oil sampled?
+    sources: [procedures]
+    tools: [retrieval]
+    featured: true
+
+  - id: round-sheet-press-findings
+    label: Findings on the handwritten round sheet
+    tag: DOCUMENTS
+    description: Needs the scanned, handwritten PM-1 round sheet, which Nemotron Parse reads.
+    question: >-
+      On the scanned PM-1 round sheet for press DAY-PRS-03 dated 14 September 2026, what oil temperature did the
+      operator record, and what action was raised for the ram seal?
+    sources: [procedures]
+    tools: [retrieval]
+    featured: true
+
+  - id: lockout-lock-removal
+    label: Removing someone else's lock
+    tag: DOCUMENTS
+    description: The exceptional lock-removal rule in the lockout/tagout SOP.
+    question: >-
+      Under the lockout/tagout procedure, who may remove a lock applied by an authorized employee who is not on site,
+      and what must happen before they do?
+    sources: [procedures]
+    tools: [retrieval]
+
+  - id: unplanned-downtime-by-plant
+    label: Unplanned downtime by plant, Q3 2026
+    tag: SQL
+    description: A join of maintenance events, machines and plants, grouped by plant.
+    question: >-
+      Which plant had the most unplanned downtime hours in Q3 2026 (1 July to 30 September), and how many hours and
+      unplanned events was that?
+    sources: [operations]
+    tools: [duckdb]
+    featured: true
+
+  - id: top-failure-codes
+    label: Top failure codes by downtime
+    tag: SQL
+    description: Failure codes ranked by unplanned downtime hours over twelve months.
+    question: >-
+      Which three failure codes caused the most unplanned downtime hours between 1 October 2025 and 30 September 2026,
+      and how many hours did each cause?
+    sources: [operations]
+    tools: [duckdb]
+
+  - id: plan-attainment-q3
+    label: Production plan attainment, Q3 2026
+    tag: SQL
+    description: Reads the weekly output sheet of the production plan workbook.
+    question: >-
+      Over the 12 weeks starting 6 July through 21 September 2026, which plant had the lowest production plan
+      attainment (total actual units divided by total target units), and what was it?
+    sources: [operations]
+    tools: [duckdb]
+
+  - id: overdue-pm2
+    label: Machines overdue for PM-2
+    tag: HYBRID
+    description: Combines the interval table in the maintenance manual with each machine's last PM-2 in the tables.
+    question: >-
+      Using the PM-2 intervals in the preventive maintenance manual, which machines are overdue for their PM-2
+      service as of 30 September 2026, and by how many days?
+    sources: [procedures, operations]
+    tools: [retrieval, duckdb]
+    featured: true
+
+  - id: eight-d-machine-history
+    label: The 8D machine's recent history
+    tag: HYBRID
+    description: Finds the machine in the 8D report, then looks up its maintenance and quality history.
+    question: >-
+      The 8D report describes a bore-diameter escape on valve body AP-3312. Which machine does it name, and how many
+      unplanned maintenance events, hours of unplanned downtime and dollars of quality defect cost has that machine
+      logged since 1 July 2026?
+    sources: [reports, operations]
+    tools: [retrieval, duckdb]
+    featured: true
+
+  - id: failure-risk-30d
+    label: Machines most likely to fail next month
+    tag: PREDICTION
+    description: A Kumo prediction of unplanned failure per machine over the next 30 days.
+    question: >-
+      Which machines are most likely to have an unplanned failure in the next 30 days? Give the five with the highest
+      probability.
+    sources: [operations]
+    tools: [kumo]
+    featured: true
+
+  - id: high-alarm-risk
+    label: Machines likely to raise many alarms
+    tag: PREDICTION
+    description: A Kumo prediction of a high alarm count, joined to the machine details.
+    question: >-
+      Which five machines are most likely to log more than 10 alarms over the next 30 days, and what plant and
+      machine type is each?
+    sources: [operations]
+    tools: [kumo, duckdb]

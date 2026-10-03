@@ -1,6 +1,9 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
-"""Embed the query once, search each selected source for a fair share of candidates, rerank them all at once."""
+"""Embed the query once, search each selected source for a fair share of candidates, rerank them all at once.
+
+Without a rerank model the candidates keep their vector-search order: each hit's score is its cosine similarity.
+"""
 
 from __future__ import annotations
 
@@ -26,9 +29,8 @@ from . import store
 from .settings import Settings
 
 CANDIDATES_PER_HIT = 4
-# A passage is at most one chunk long (ingest.CHUNK_SIZE); a longer one ends in an ellipsis. Passages are not cut
-# shorter: the fact a question needs can sit at a chunk's end (Form 8-K's Item 1.05 deadline sits at characters
-# 1,403 to 1,540 of its chunk), so a result fits its size budget by returning fewer passages instead.
+# A passage is at most this long; a longer chunk ends in an ellipsis. Passages are not cut shorter: the fact a
+# question needs can sit at a chunk's end, so a result fits its size budget by returning fewer passages instead.
 MAX_SNIPPET_CHARS = 2400
 
 tracer = trace.get_tracer(__name__)
@@ -36,7 +38,10 @@ tracer = trace.get_tracer(__name__)
 
 class Hit(BaseModel):
     rank: int
-    score: float = Field(description="Reranker relevance (logit); hits are ordered by it")
+    score: float = Field(
+        description="Reranker relevance (logit), or the cosine similarity when no reranker is configured; hits are "
+        "ordered by it"
+    )
     vector_score: float = Field(description="Cosine similarity from the vector search")
     source_id: str
     document_id: str
@@ -45,12 +50,12 @@ class Hit(BaseModel):
     url: str | None
     published_at: str | None
     snippet: str
-    metadata: dict[str, Any] = Field(description="Source-specific fields, e.g. filing form or regulation section")
+    metadata: dict[str, Any] = Field(description="Source-specific fields, e.g. file name or page")
 
 
 class Models(BaseModel):
     embed: str
-    rerank: str
+    rerank: str | None = Field(description="None when no reranker is configured; hits keep their vector order")
 
 
 class IndexInfo(BaseModel):
@@ -71,17 +76,17 @@ class RetrievalResult(BaseModel):
     query: str
     source_ids: list[str]
     collection: str = Field(description="The alias the tool searches")
-    collection_version: str = Field(description="The index build the alias pointed at: <alias>__<fingerprint>")
+    collection_version: str = Field(description="The collection the alias pointed at during the call")
     hits: list[Hit]
-    candidate_counts: dict[str, int] = Field(description="Vector-search candidates per source, all reranked together")
+    candidate_counts: dict[str, int] = Field(description="Vector-search candidates per source, all ranked together")
     models: Models
     index: IndexInfo
     timings: Timings
 
 
 class Retriever:
-    def __init__(self, settings: Settings, collection: str) -> None:
-        self.collection = collection
+    def __init__(self, settings: Settings) -> None:
+        self.collection = store.ALIAS
         self.models = Models(embed=settings.embed_model, rerank=settings.rerank_model)
         self._embedder = nvidia.embedder(settings)
         self._reranker = nvidia.reranker(settings)
@@ -100,7 +105,7 @@ class Retriever:
         # Every source gets the same share, and the shares together fit in one rerank request.
         per_source = min(top_k * CANDIDATES_PER_HIT, nvidia.MAX_RERANK_PASSAGES // len(source_ids))
         with _span("search", SpanKind.RETRIEVER, {SpanAttributes.INPUT_VALUE: query}) as span:
-            # Resolve the alias once, so every source is searched in the same build, even during a reindex.
+            # Resolve the alias once, so every source is searched in the same collection, even during a re-embed.
             version = (await self._milvus.describe_alias(self.collection))["collection_name"]
             scope = {"collection": version, "source_ids": source_ids, "per_source": per_source}
             span.set_attribute(SpanAttributes.METADATA, json.dumps(scope))
@@ -109,18 +114,12 @@ class Retriever:
         searched = time.perf_counter()
 
         candidates = [candidate for group in groups for candidate in group]
-        rerank = {
-            RerankerAttributes.RERANKER_MODEL_NAME: self.models.rerank,
-            RerankerAttributes.RERANKER_QUERY: query,
-            RerankerAttributes.RERANKER_TOP_K: top_k,
-        }
-        with _span("rerank", SpanKind.RERANKER, rerank) as span:
-            ranked = (await self._rerank(query, candidates))[:top_k] if candidates else []
-            for i, ((fields, _), score) in enumerate(ranked):
-                document = f"{RerankerAttributes.RERANKER_OUTPUT_DOCUMENTS}.{i}."
-                span.set_attribute(document + DocumentAttributes.DOCUMENT_ID, fields["chunk_id"])
-                span.set_attribute(document + DocumentAttributes.DOCUMENT_SCORE, score)
-        finished = time.perf_counter()
+        if self._reranker is None:
+            ranked = sorted(((candidate, candidate[1]) for candidate in candidates), key=lambda pair: -pair[1])[:top_k]
+            finished = searched
+        else:
+            ranked = await self._traced_rerank(query, candidates, top_k)
+            finished = time.perf_counter()
 
         return RetrievalResult(
             query=query,
@@ -143,6 +142,22 @@ class Retriever:
                 total_ms=_ms(finished - started),
             ),
         )
+
+    async def _traced_rerank(
+        self, query: str, candidates: list[store.Candidate], top_k: int
+    ) -> list[tuple[store.Candidate, float]]:
+        rerank = {
+            RerankerAttributes.RERANKER_MODEL_NAME: self.models.rerank,
+            RerankerAttributes.RERANKER_QUERY: query,
+            RerankerAttributes.RERANKER_TOP_K: top_k,
+        }
+        with _span("rerank", SpanKind.RERANKER, rerank) as span:
+            ranked = (await self._rerank(query, candidates))[:top_k] if candidates else []
+            for i, ((fields, _), score) in enumerate(ranked):
+                document = f"{RerankerAttributes.RERANKER_OUTPUT_DOCUMENTS}.{i}."
+                span.set_attribute(document + DocumentAttributes.DOCUMENT_ID, fields["chunk_id"])
+                span.set_attribute(document + DocumentAttributes.DOCUMENT_SCORE, score)
+        return ranked
 
     @nvidia.retry_transient
     async def _embed_query(self, query: str) -> list[float]:

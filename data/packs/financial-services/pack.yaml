@@ -1,0 +1,314 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/pack.schema.json
+#
+# Retail banking for a fictional community bank, Harborview Community Bank: customers, accounts, loans, payments
+# and card disputes in tables, beside credit, compliance and disclosure documents (PDF, DOCX, PPTX and a scanned
+# PNG). Everything is synthetic and seeded; `uv run generator/build.py` rebuilds files/ and README.md.
+schema_version: "3"
+id: financial-services
+version: "1.0.0"
+title: Financial Services
+description: >-
+  Harborview Community Bank, a fictional regional bank with 18 branches: a sample of its retail customers, accounts,
+  monthly balances, loans, loan payments and card disputes from April 2025 to September 2026, a credit risk report
+  workbook, and its credit policy, KYC and AML procedure, complaint procedure, fee schedule, a Q3 2026 risk
+  committee deck and a scanned loan modification request.
+icon: Bank
+as_of: "2026-09-30"
+disclaimer: >-
+  Synthetic data for a software demonstration: Harborview Community Bank, its customers, loans and documents are
+  fictional and describe no real institution or person. Not financial, credit or legal advice.
+
+licenses:
+  - name: Apache-2.0
+    title: Apache License 2.0
+    path: https://www.apache.org/licenses/LICENSE-2.0
+    redistribution: allowed
+    notes: The generator and everything it generates are synthetic demonstration assets.
+
+provenance:
+  - id: banking-tables
+    title: Harborview Community Bank customers, accounts, loans, payments and disputes (seeded simulation)
+    kind: generated
+    synthetic: true
+    license: Apache-2.0
+    as_of: "2026-09-30"
+    notes: >-
+      generator/build.py, seed 20260930. Customers, stress episodes, account closures, balances, loan roll rates,
+      charge-offs and disputes are drawn from seeded numpy generators; the credit risk report workbook is computed
+      from the same tables.
+  - id: policy-and-disclosure-documents
+    title: Credit, compliance and disclosure documents, a risk committee deck and a scanned form
+    kind: generated
+    synthetic: true
+    license: Apache-2.0
+    as_of: "2026-09-30"
+    notes: >-
+      The prose is authored in generator/content/*.md and rendered to PDF, DOCX and PPTX by generator/build.py; the
+      figures in the deck come from the tables. The scanned request is a typeset form rendered to an image, then
+      rotated and given noise. Regulatory references are simplified for illustration.
+
+sources:
+  - id: banking
+    name: Customers, Accounts & Loans
+    description: >-
+      Harborview's branches, customers, accounts, monthly balances, loans, loan payments and card disputes, with a
+      credit risk workbook of delinquency and provisions.
+    agent_description: >-
+      Harborview Community Bank retail banking in DuckDB, as of 2026-09-30, a seeded sample of 1,060 customers.
+      Tables: branches, customers (segment, tenure, credit score and band, region), accounts (checking, savings, credit
+      card; open and close dates), monthly_balances (one row per account per month end), loans (personal, auto,
+      mortgage; DTI, LTV and credit band at origination; status), loan_payments (one row per installment; days_past_due
+      counts from the due date, and for an unpaid installment to 2026-09-30), card_disputes, and the credit risk report
+      sheets credit_risk_report_delinquency (30+ and 90+ day delinquency by product and month) and
+      credit_risk_report_provisions (allowance, provision expense and charge-offs by segment and quarter). Delinquent
+      means an active loan with an installment unpaid for 30 or more days; default means 90 or more days.
+    kind: structured
+    files:
+      - files/banking/*.csv
+      - files/banking/*.xlsx
+    capabilities:
+      - structured_retrieval
+      - structured_prediction
+    synthetic: true
+    example_questions:
+      - Which five branches held the most deposits at the end of September 2026?
+      - Which loan product had the highest 30-day delinquency rate in September 2026?
+      - Which active loans are most likely to be 30 or more days past due in the next 90 days?
+    tables:
+      branches:
+        description: One row per Harborview branch (18 branches in four regions).
+        primary_key: branch_id
+        columns:
+          branch_id: Branch code, BR01 to BR18.
+          branch_name: Branch name, such as Harborview Main Street.
+          city: Town where the branch is located.
+          region: Harbor Coast, Metro, Valley or Highlands.
+          branch_type: full_service or limited_service.
+          opened_year: Year the branch opened.
+          staff_count: Number of employees at the branch.
+      customers:
+        description: >-
+          One row per retail customer in the sample (1,060 of about 40,000 customers), with segment, tenure, credit
+          score and region. The credit score and band are the customer's latest.
+        primary_key: customer_id
+        time_column: customer_since
+        foreign_keys:
+          - column: home_branch_id
+            references: branches.branch_id
+        columns:
+          customer_id: Customer identifier, C00001 and up, oldest customers first.
+          home_branch_id: The customer's home branch.
+          segment: Mass Market, Mass Affluent, Young Adult, Retiree or Private Client.
+          region: Region of the home branch.
+          customer_since: Date the customer joined the bank.
+          tenure_years: Years as a customer at 2026-09-30, one decimal.
+          credit_score: Latest credit score, 520 to 840.
+          credit_score_band: Latest band, Exceptional (780+), Very Good (720-779), Good (670-719), Fair (620-669) or Poor (619 and below).
+          annual_income: Gross annual income in USD.
+          online_banking_enrolled: 1 if the customer uses online or mobile banking, else 0.
+      accounts:
+        description: >-
+          One row per account: checking, savings or credit card. closed_date is empty for an account that is still
+          open at 2026-09-30.
+        primary_key: account_id
+        time_column: opened_date
+        foreign_keys:
+          - column: customer_id
+            references: customers.customer_id
+          - column: branch_id
+            references: branches.branch_id
+        columns:
+          account_id: Account identifier, A000001 and up, in order of opening.
+          customer_id: Owner of the account.
+          branch_id: Branch that holds the account (usually the customer's home branch).
+          account_type: checking, savings or credit_card.
+          product_name: Everyday Checking, Premier Checking, Student Checking, Basic Savings, High-Yield Savings, Harbor Rewards Card or Harbor Secured Card.
+          opened_date: Date the account was opened.
+          closed_date: Date the account was closed; empty if open.
+          status: open or closed, as of 2026-09-30.
+          credit_limit: Credit limit in USD for credit cards; empty for deposit accounts.
+      monthly_balances:
+        description: >-
+          Monthly aggregates per account, one row per account for each month end from 2025-04-30 to 2026-09-30 in which
+          the account was open. A closed account's last row is the month before it closed.
+        primary_key: balance_id
+        time_column: month_end
+        foreign_keys:
+          - column: account_id
+            references: accounts.account_id
+        columns:
+          balance_id: Row identifier.
+          account_id: The account.
+          month_end: Last day of the month.
+          ending_balance: Balance at month end in USD; for a credit card, the amount owed. Negative for an overdrawn checking account.
+          average_daily_balance: Average daily balance during the month in USD.
+          total_inflows: Money in during the month in USD (deposits and transfers in; for a card, payments made).
+          total_outflows: Money out during the month in USD (withdrawals and payments; for a card, purchases).
+          transaction_count: Number of transactions in the month.
+          overdraft_count: Number of overdraft paid items in the month; 0 for savings and cards.
+          utilization_ratio: Credit cards only, ending_balance divided by credit_limit (0 to 1); empty otherwise.
+      loans:
+        description: >-
+          One row per consumer loan that was active at any time from 2025-04-01: personal (unsecured), auto or
+          mortgage. DTI, LTV and the credit band are recorded at origination. status and closed_date are as of 2026-09-30.
+        primary_key: loan_id
+        time_column: origination_date
+        foreign_keys:
+          - column: customer_id
+            references: customers.customer_id
+          - column: branch_id
+            references: branches.branch_id
+        columns:
+          loan_id: Loan identifier, L00001 and up, in order of origination.
+          customer_id: Borrower.
+          branch_id: Originating branch.
+          product: personal, auto or mortgage.
+          principal: Original loan amount in USD.
+          interest_rate: Annual interest rate in percent, for example 8.49.
+          term_months: Contractual term in months.
+          monthly_payment: Scheduled monthly payment in USD.
+          origination_date: Date the loan was originated; the first installment is due a month later.
+          maturity_date: Date of the final scheduled installment.
+          credit_score_at_origination: Credit score used to underwrite the loan.
+          credit_band: Credit band at origination (Exceptional, Very Good, Good, Fair or Poor), which sets the maximum DTI and LTV in the credit policy.
+          dti_at_origination: Debt-to-income ratio at origination as a fraction (0.38 = 38 percent), including the new payment.
+          ltv_at_origination: Loan-to-value ratio at origination as a fraction; empty for personal loans.
+          status: active, paid_off or charged_off, as of 2026-09-30.
+          closed_date: Payoff date or charge-off date; empty for an active loan.
+      loan_payments:
+        description: >-
+          One row per scheduled installment due from 2025-04-01 to 2026-09-30, plus installments from before that date
+          that were still open on 2025-04-01. paid_date is empty while an installment is unpaid.
+        primary_key: payment_id
+        time_column: due_date
+        foreign_keys:
+          - column: loan_id
+            references: loans.loan_id
+        columns:
+          payment_id: Row identifier, P000001 and up, in order of due date.
+          loan_id: The loan.
+          installment_number: Sequence number of the installment, 1 for the first.
+          due_date: Date the installment was due.
+          scheduled_amount: Amount due in USD.
+          paid_amount: Amount received in USD; 0 while unpaid.
+          paid_date: Date the payment was received; empty if unpaid at 2026-09-30.
+          days_past_due: Days from due_date to paid_date; for an unpaid installment, to 2026-09-30 (to the charge-off date if the loan was charged off); 0 if paid on or before the due date.
+          payment_status: paid_on_time, paid_late or unpaid.
+      card_disputes:
+        description: One row per disputed debit card (checking account) or credit card transaction.
+        primary_key: dispute_id
+        time_column: dispute_date
+        foreign_keys:
+          - column: account_id
+            references: accounts.account_id
+          - column: customer_id
+            references: customers.customer_id
+        columns:
+          dispute_id: Dispute identifier, D00001 and up, in order of filing.
+          account_id: The checking account (debit card) or credit card account.
+          customer_id: The customer who filed the dispute.
+          dispute_date: Date the dispute was filed.
+          amount: Disputed amount in USD.
+          reason: unauthorized_transaction, merchant_dispute, duplicate_charge, service_not_received or incorrect_amount.
+          channel: debit_card or credit_card.
+          status: open, customer_credited or denied.
+      credit_risk_report_delinquency:
+        description: >-
+          Credit risk report, sheet delinquency: delinquency of active loans by product at each month end from 2025-04-30
+          to 2026-09-30 (three rows a month). A loan counts as 30+ (or 90+) when it has an installment unpaid for that
+          many days at the month end; charged-off and paid-off loans are excluded.
+        time_column: month_end
+        columns:
+          month_end: Reporting date, a month end.
+          product: personal, auto or mortgage.
+          active_loans: Loans active at the reporting date.
+          loans_30plus: Active loans with an installment unpaid 30 or more days.
+          loans_90plus: Active loans with an installment unpaid 90 or more days.
+          delinquency_rate_30plus: loans_30plus divided by active_loans, as a fraction (0.0478 = 4.78 percent).
+          delinquency_rate_90plus: loans_90plus divided by active_loans, as a fraction.
+      credit_risk_report_provisions:
+        description: >-
+          Credit risk report, sheet provisions: allowance for loan losses, provision expense and charge-offs by customer
+          segment at each quarter end from 2025-06-30 to 2026-09-30 (five rows a quarter).
+        time_column: quarter_end
+        columns:
+          quarter_end: Reporting date, a quarter end.
+          segment: Customer segment of the borrower.
+          active_loans: Loans active at the quarter end.
+          outstanding_balance: Scheduled principal outstanding at the quarter end in USD.
+          allowance: Allowance for loan losses at the quarter end in USD.
+          provision_expense: Provision expense for the quarter in USD (change in allowance plus net charge-offs; negative is a release).
+          gross_charge_offs: Balance of loans charged off in the quarter in USD.
+          recoveries: Recoveries on those charge-offs in USD (15 percent).
+          net_charge_offs: gross_charge_offs minus recoveries in USD.
+          coverage_ratio: allowance divided by outstanding_balance, as a fraction.
+    prediction:
+      templates:
+        - id: loan_default_90d
+          name: Loan 30+ days past due in 90 days
+          description: >-
+            Likelihood that a loan has an installment that ends up 30 or more days past due among those due in the next
+            90 days.
+          pql: PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id
+          anchor_time: "2026-09-30T00:00:00Z"
+        - id: account_closure_90d
+          name: Checking account closure in 90 days
+          description: >-
+            Likelihood that a checking account is closed (customer attrition): no monthly balance row follows in the
+            next 90 days.
+          pql: >-
+            PREDICT COUNT(monthly_balances.*, 0, 90, days) = 0 FOR EACH accounts.account_id WHERE
+            accounts.account_type = 'checking'
+          anchor_time: "2026-09-30T00:00:00Z"
+        - id: card_dispute_30d
+          name: Card dispute in 30 days
+          description: Likelihood that a customer files a card dispute in the next 30 days.
+          pql: PREDICT COUNT(card_disputes.*, 0, 30, days) > 0 FOR EACH customers.customer_id
+          anchor_time: "2026-09-30T00:00:00Z"
+
+  - id: policies
+    name: Credit & Compliance Policies
+    description: >-
+      Consumer credit policy, KYC and AML customer due diligence procedure, complaint handling procedure and a scanned
+      loan modification request.
+    agent_description: >-
+      Harborview Community Bank's internal policy documents. The Consumer Credit Policy (v5.1, effective 1 July 2026)
+      has the underwriting table of credit-score bands with maximum DTI and LTV, lending authority, collections actions
+      and the hardship and loan modification rules. The Customer Due Diligence Procedure covers identification,
+      customer risk ratings, enhanced due diligence, monitoring and SAR deadlines. The Complaint Handling Procedure
+      (DOCX) has service levels by category. The loan modification request is a scanned, signed paper form (PNG).
+    kind: documents
+    files:
+      - files/policies/*.pdf
+      - files/policies/*.docx
+      - files/policies/*.png
+    capabilities:
+      - unstructured_retrieval
+    synthetic: true
+    example_questions:
+      - What is the maximum DTI and LTV for a mortgage applicant with a 700 credit score?
+      - How soon must the bank acknowledge and resolve a complaint about a denied loan modification?
+
+  - id: disclosures
+    name: Product Disclosures & Reports
+    description: The overdraft and fee schedule and the Q3 2026 credit risk committee deck.
+    agent_description: >-
+      Harborview Community Bank's overdraft practices and fee schedule (PDF with fee tables for checking, savings and
+      the Harbor credit cards) and the Q3 2026 Credit Risk Committee deck (PPTX) with delinquency by product, 90+ day
+      defaults, charge-offs, allowance and provisions, early warning indicators and regional concentration, as of 30
+      September 2026.
+    kind: documents
+    files:
+      - files/disclosures/*.pdf
+      - files/disclosures/*.pptx
+    capabilities:
+      - unstructured_retrieval
+    synthetic: true
+    example_questions:
+      - What is the overdraft paid-item fee and how many fees can be charged in one day?
+      - What 30-day delinquency rate did the Q3 2026 risk committee deck report for auto loans?
+
+questions: questions.yaml

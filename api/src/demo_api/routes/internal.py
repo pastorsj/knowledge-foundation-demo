@@ -37,7 +37,7 @@ from pydantic import Field
 from pydantic import TypeAdapter
 from pydantic import ValidationError
 
-from demo_api.events import COMPONENT_BY_FAMILY
+from demo_api.events import COMPONENT_BY_SERVER
 from demo_api.events import DisplaySafeProjection
 from demo_api.events import EventProvenance
 from demo_api.events import ExecutionEventV2
@@ -72,19 +72,16 @@ router = APIRouter(prefix="/internal/hermes", include_in_schema=False, dependenc
 
 @router.get("/jobs/{job_id}/execution-scope")
 async def execution_scope(job_id: str, services: ServicesDep) -> dict[str, Any]:
-    """The job's source ids (fixed at submit), its database, and the document collection."""
+    """The job's source ids, its database and its documents' collection, all fixed at submit."""
     job = await _live_job(services, job_id)
-    collection = None
-    if any(entry["kind"] == "documents" for entry in job.request["catalog"]):
-        collection = (services.pack.collection_manifest() or {}).get("collection")
     settings = services.settings
     models = {"efficient": settings.agent_efficient_model, "capable": settings.agent_capable_model}
     return {
         "job_id": job_id,
         "source_ids": job.request["source_ids"],
         "sources": [{"id": entry["id"], "capabilities": entry["capabilities"]} for entry in job.request["catalog"]],
-        "database_name": job.request["database_name"],
-        "collection": collection,
+        "database_name": job.request.get("database_name"),
+        "collection": job.request.get("collection"),
         "models": {tier: model for tier, model in models.items() if model},
     }
 
@@ -195,7 +192,7 @@ def _receipt_event(receipt: dict[str, Any], tool: Tool, job: Job) -> ExecutionEv
         turn_id=receipt["turnId"],
         event_kind="artifact.available" if available else "tool.observed",
         state="failed" if receipt["status"] == "failed" else "completed",
-        component_id=COMPONENT_BY_FAMILY[tool.family],
+        component_id=COMPONENT_BY_SERVER[tool.server],
         invocation_id=receipt["invocationId"],
         tool_server=tool.server,
         tool_name=tool.id,

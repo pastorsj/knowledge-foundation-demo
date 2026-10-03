@@ -7,7 +7,7 @@ from typing import get_args
 
 from jsonschema import Draft202012Validator
 
-from demo_api.events import COMPONENT_BY_FAMILY
+from demo_api.events import COMPONENT_BY_SERVER
 from demo_api.pills import PILL_ORDER
 from demo_api.receipts import ArtifactKind
 
@@ -42,8 +42,15 @@ def test_the_registry_holds_the_four_knowledge_tools(tools):
     }
 
 
-def test_each_family_has_an_event_component(registry_schema):
-    assert set(COMPONENT_BY_FAMILY) == set(registry_schema["$defs"]["Tool"]["properties"]["family"]["enum"])
+def test_each_tool_server_is_one_event_component(tools):
+    """Tools of one family on different servers are different components of the graph (DuckDB is not Auto Ontology)."""
+    assert COMPONENT_BY_SERVER == {
+        "retrieval": "milvus.retrieval",
+        "tables": "duckdb.tables",
+        "prediction": "nvidia.kumo",
+        "auto_ontology": "nvidia.ontology",
+    }
+    assert set(COMPONENT_BY_SERVER) == {tool["server"] for tool in tools}
 
 
 def test_pills_are_ordered_as_the_schema_lists_them(registry_schema):
