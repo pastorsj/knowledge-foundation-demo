@@ -63,9 +63,9 @@ with the `prediction` profile. These steps follow the design; they have not yet 
 
    ```bash
    docker run -d --name kumo-relational --gpus all --shm-size 16g --restart unless-stopped \
-     -p 127.0.0.1:8000:8000 \
+     -p 127.0.0.1:8322:8000 \
      nvcr.io/nim/nvidia/kumo-relational:1.0.1@sha256:d2fedf5583d01932efdb7d91d0bcc31b7ff951fcd516f069c4cd900adb87908f
-   curl -fsS http://127.0.0.1:8000/v1/health/ready   # on the VM, once it has started (a few minutes)
+   curl -fsS http://127.0.0.1:8322/v1/health/ready   # on the VM, once it has started (a few minutes)
    ```
 
 2. **On the Spark**, bring the stack up once (so its network exists), then forward a port on the Compose
@@ -73,7 +73,7 @@ with the `prediction` profile. These steps follow the design; they have not yet 
 
    ```bash
    gw=$(docker network inspect knowledge-foundation_default -f '{{(index .IPAM.Config 0).Gateway}}')
-   ssh -N -L "$gw:18322:127.0.0.1:8000" <vm>    # keep it running (or use autossh)
+   ssh -N -L "$gw:18322:127.0.0.1:8322" <vm>    # keep it running (or use autossh)
    ```
 
 3. In `.env`, set `COMPOSE_PROFILES=core,parse,prediction` and `KUMO_RELATIONAL_URL=http://<gw>:18322`, then run
