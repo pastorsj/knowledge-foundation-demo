@@ -1,0 +1,16 @@
+facility_id,facility_name,facility_type,service_focus,city,region,licensed_beds
+F01,Riverside Memorial Hospital,hospital,"Tertiary care, cardiac surgery",Riverton,Central,412
+F02,Lakeview Community Hospital,hospital,Community acute care,Lakeview,North,248
+F03,Eastgate Regional Hospital,hospital,"Regional acute care, emergency",Eastgate,East,186
+F04,Riverton Primary Care Clinic,clinic,Primary care,Riverton,Central,
+F05,Northgate Family Medicine,clinic,Primary care,Lakeview,North,
+F06,Southpark Internal Medicine,clinic,Primary care,Riverton,Central,
+F07,Elm Street Primary Care,clinic,Primary care,Eastgate,East,
+F08,Harbor View Family Clinic,clinic,Primary care,Harbor View,East,
+F09,Millbrook Primary Care,clinic,Primary care,Millbrook,West,
+F10,Pine Valley Heart Failure Clinic,clinic,"Cardiology, heart failure",Riverton,Central,
+F11,Oakridge Cardiology Clinic,clinic,Cardiology,Lakeview,North,
+F12,Summit Pulmonary & Sleep Clinic,clinic,Pulmonology,Eastgate,East,
+F13,Westfield Diabetes & Endocrine Clinic,clinic,Endocrinology,Millbrook,West,
+F14,Cedar Heights Primary Care,clinic,Primary care,Cedar Heights,West,
+F15,Brookside Urgent Care,clinic,Urgent care,Brookside,North,

@@ -1,0 +1,285 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/pack.schema.json
+#
+# Healthcare industry pack: Riverside Health Network, a fictional regional provider. Everything here is
+# synthetic and is rebuilt by generator/build.py. See README.md for the data card and the answer key.
+schema_version: "3"
+id: healthcare
+version: "1.0.0"
+title: Healthcare
+description: >-
+  Riverside Health Network, a fictional regional provider with 3 hospitals and 12 clinics: encounters, diagnoses and
+  claims tables with a quality scorecard workbook, beside heart failure and infection-control protocols, prior
+  authorization and payer contract documents, a quality committee deck and a scanned discharge checklist.
+icon: Heart
+as_of: "2026-09-30"
+disclaimer: >-
+  Synthetic data for a software demonstration: every patient, provider, payer, claim, document and figure is fictional.
+  There is no real PHI. Not clinical, legal or billing guidance.
+
+licenses:
+  - name: Apache-2.0
+    path: https://www.apache.org/licenses/LICENSE-2.0
+    redistribution: allowed
+    notes: The generated tables and documents are synthetic demonstration assets.
+
+provenance:
+  - id: healthcare-clinical-tables
+    title: Synthetic clinical and claims tables (seeded numpy simulation; generator/build.py)
+    kind: generated
+    synthetic: true
+    license: Apache-2.0
+    as_of: "2026-09-30"
+    notes: >-
+      Patients, encounters, diagnoses, claims and the quality scorecard workbook come from a seeded simulation of 1,400
+      synthetic patients over 2025-04-01 to 2026-09-30. ICD-10 code values are used as labels only. No real person or PHI.
+  - id: healthcare-documents
+    title: Synthetic clinical, payer and operations documents (authored in generator/content/, rendered by build.py)
+    kind: generated
+    synthetic: true
+    license: Apache-2.0
+    as_of: "2026-09-30"
+    notes: >-
+      The PDFs, DOCX, PPTX and the scanned checklist PNG are written for this demo. Figures in the quality committee
+      deck are computed from the tables; the scanned form uses a synthetic patient id from the tables.
+
+sources:
+  - id: clinical
+    name: Encounters & Claims
+    description: >-
+      Synthetic encounters, diagnoses, claims, patients, providers and facilities for Riverside Health Network, with a
+      quality scorecard workbook (readmissions and HCAHPS-style scores).
+    agent_description: >-
+      Riverside Health Network's synthetic clinical and claims tables in DuckDB, 2025-04-01 to 2026-09-30. facilities
+      (hospitals F01 to F03 and clinics F04 to F15); providers; patients (age_band, sex, payer, has_* chronic-condition
+      flags); encounters (encounter_type inpatient, ED or outpatient; admit_ts, discharge_ts, length_of_stay_days,
+      discharge_disposition such as home, home_health, snf, rehab, hospice, expired, ama; visit_reason); diagnoses (ICD-10
+      codes per encounter, is_primary = 1 for the primary diagnosis; I50.x heart failure, J44.x COPD, E11.x type 2
+      diabetes); claims (billed_amount, paid_amount, claim_status, denied 0/1, denial_reason, appeal_status, and
+      adjudicated_date, which is the denial notice date); and the workbook tables quality_scorecard_readmissions and
+      quality_scorecard_hcahps. A 30-day readmission is a later inpatient encounter of the same patient that starts within
+      30 days of an inpatient discharge. Patients are ids such as P000123; there is no PHI. Kumo predicts per patient from
+      encounters and claims.
+    kind: structured
+    files:
+      - files/clinical/*.csv
+      - files/clinical/*.xlsx
+    capabilities:
+      - structured_retrieval
+      - structured_prediction
+    synthetic: true
+    example_questions:
+      - What was the 30-day readmission rate at each hospital in Q2 2026?
+      - Which denial reasons cost the most in billed dollars this year?
+      - Which heart failure patients are most likely to be readmitted in the next 30 days?
+    tables:
+      facilities:
+        description: One row per facility of Riverside Health Network (3 hospitals and 12 clinics).
+        primary_key: facility_id
+        columns:
+          facility_id: Facility id, F01 to F03 are hospitals and F04 to F15 are clinics.
+          facility_name: Facility name.
+          facility_type: hospital or clinic.
+          service_focus: Main service line, for example Primary care, Cardiology, heart failure, Urgent care.
+          city: City, fictional.
+          region: Network region.
+          licensed_beds: Licensed beds, hospitals only.
+      providers:
+        description: One row per clinician (no names), with specialty and home facility.
+        primary_key: provider_id
+        foreign_keys:
+          - column: primary_facility_id
+            references: facilities.facility_id
+        columns:
+          provider_id: Provider id, for example PR0001.
+          specialty: Hospital Medicine, Cardiology, Pulmonology, Emergency Medicine, Family Medicine, Internal Medicine, Endocrinology or Urgent Care.
+          credential: MD, DO, NP or PA.
+          primary_facility_id: Facility where the provider mainly works.
+          years_in_practice: Years in practice.
+      patients:
+        description: One row per synthetic patient. No names, birth dates or addresses.
+        primary_key: patient_id
+        foreign_keys:
+          - column: primary_clinic_id
+            references: facilities.facility_id
+        columns:
+          patient_id: Synthetic patient id, for example P000123.
+          age_band: Age band, one of 18-34, 35-49, 50-64, 65-74, 75-84, 85+.
+          sex: female or male.
+          payer: Insurance, one of Medicare, Northstar Advantage, Medicaid, Evergreen Health Plan, Cascade Mutual, Self-pay.
+          primary_clinic_id: The patient's primary clinic (facility_id).
+          has_heart_failure: 1 if the patient has heart failure.
+          has_copd: 1 if the patient has COPD.
+          has_diabetes: 1 if the patient has type 2 diabetes.
+          has_ckd: 1 if the patient has chronic kidney disease.
+          has_hypertension: 1 if the patient has hypertension.
+      encounters:
+        description: One row per inpatient, ED or outpatient encounter. An ED visit that ends in admission has disposition admitted and is followed by the inpatient encounter.
+        primary_key: encounter_id
+        time_column: admit_ts
+        foreign_keys:
+          - column: patient_id
+            references: patients.patient_id
+          - column: facility_id
+            references: facilities.facility_id
+          - column: provider_id
+            references: providers.provider_id
+        columns:
+          encounter_id: Encounter id, for example E0000123.
+          patient_id: Patient (patients.patient_id).
+          facility_id: Facility where the encounter took place.
+          provider_id: Treating provider.
+          encounter_type: inpatient, ED or outpatient.
+          visit_reason: emergency_admission, direct_admission, elective_admission (inpatient); emergency (ED); post_discharge_followup, chronic_management, preventive, acute_episode (outpatient).
+          admit_ts: Admission or arrival timestamp.
+          discharge_ts: Discharge or departure timestamp.
+          length_of_stay_days: Calendar days from admission to discharge for inpatient stays (at least 1); 0 for ED and outpatient.
+          discharge_disposition: home, home_health, snf, rehab, hospice, expired or ama for inpatient; home, admitted, ama or transfer for ED; home for outpatient.
+      diagnoses:
+        description: ICD-10 diagnoses per encounter, one primary and up to two secondary. I50.x is heart failure, J44.x COPD, E11.x type 2 diabetes.
+        primary_key: diagnosis_id
+        time_column: diagnosed_date
+        foreign_keys:
+          - column: encounter_id
+            references: encounters.encounter_id
+          - column: patient_id
+            references: patients.patient_id
+        columns:
+          diagnosis_id: Diagnosis id, for example D0000123.
+          encounter_id: Encounter the diagnosis belongs to.
+          patient_id: Patient.
+          icd10_code: ICD-10 code, for example I50.9 heart failure unspecified, J44.1 COPD with exacerbation, E11.9 type 2 diabetes.
+          icd10_description: Description of the code.
+          is_primary: 1 for the encounter's primary diagnosis.
+          diagnosed_date: Date of the encounter.
+      claims:
+        description: One claim per billed encounter (ED visits that end in admission are billed on the inpatient claim). Pending claims have no adjudication date.
+        primary_key: claim_id
+        time_column: submitted_date
+        foreign_keys:
+          - column: encounter_id
+            references: encounters.encounter_id
+          - column: patient_id
+            references: patients.patient_id
+          - column: facility_id
+            references: facilities.facility_id
+        columns:
+          claim_id: Claim id, for example CL0000123.
+          encounter_id: Billed encounter.
+          patient_id: Patient.
+          facility_id: Billing facility.
+          payer: Payer billed (copied from the patient).
+          submitted_date: Date the claim was submitted.
+          adjudicated_date: Date the payer decided; for a denial this is the date of the denial notice. Empty while pending.
+          billed_amount: Billed charge in USD.
+          paid_amount: Amount paid in USD; 0 for denied claims, empty while pending.
+          claim_status: paid, denied or pending.
+          denied: 1 if the claim was denied, otherwise 0.
+          denial_reason: Reason for a denial, for example Prior authorization missing, Medical necessity, Coding error.
+          appeal_status: "For denied claims only: none (not appealed), filed, overturned or upheld."
+      quality_scorecard_readmissions:
+        description: Monthly 30-day readmission counts and rates by hospital and cohort (sheet Readmissions of quality_scorecard.xlsx). Computed from encounters.
+        primary_key: record_id
+        time_column: month
+        foreign_keys:
+          - column: facility_id
+            references: facilities.facility_id
+        columns:
+          record_id: Row id, for example RA-202606-F01-HF.
+          month: First day of the discharge month.
+          facility_id: Hospital.
+          facility_name: Hospital name.
+          cohort: All-cause, Heart failure or COPD.
+          index_discharges: Index discharges in the month (deaths and hospice excluded).
+          readmissions_30d: Index discharges followed by an inpatient admission within 30 days.
+          readmission_rate_pct: readmissions_30d as a percentage of index_discharges.
+          target_rate_pct: Target rate for the cohort in percent.
+          follow_up_complete: 1 if the 30-day follow-up window had closed by 2026-09-30.
+      quality_scorecard_hcahps:
+        description: Quarterly HCAHPS-style patient survey top-box scores by hospital and domain (sheet HCAHPS of quality_scorecard.xlsx).
+        primary_key: record_id
+        time_column: quarter_start
+        foreign_keys:
+          - column: facility_id
+            references: facilities.facility_id
+        columns:
+          record_id: Row id, for example HC-2026Q2-F01-05.
+          quarter_start: First day of the survey quarter.
+          quarter: Quarter label, for example 2026Q2.
+          facility_id: Hospital.
+          facility_name: Hospital name.
+          domain: Survey domain, for example Discharge information or Overall hospital rating (9-10).
+          top_box_pct: Share of respondents giving the most positive answer, in percent.
+          survey_responses: Number of survey responses.
+    prediction:
+      templates:
+        - id: readmission_30d
+          name: Inpatient admission within 30 days
+          description: >-
+            Likelihood that a patient has any inpatient admission in the next 30 days, which for a recently discharged
+            patient is a readmission. Add WHERE patients.has_heart_failure = 1 to rank heart failure patients only.
+          pql: >-
+            PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'inpatient', 0, 30, days) > 0
+            FOR EACH patients.patient_id
+          anchor_time: "2026-09-30T00:00:00Z"
+        - id: ed_visit_30d
+          name: Emergency department visit within 30 days
+          description: Likelihood that a patient has at least one emergency department visit in the next 30 days.
+          pql: >-
+            PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'ED', 0, 30, days) > 0
+            FOR EACH patients.patient_id
+          anchor_time: "2026-09-30T00:00:00Z"
+        - id: claim_denial_60d
+          name: Claim denial within 60 days
+          description: Likelihood that at least one claim submitted for a patient in the next 60 days is denied.
+          pql: >-
+            PREDICT COUNT(claims.* WHERE claims.denied = 1, 0, 60, days) > 0
+            FOR EACH patients.patient_id
+          anchor_time: "2026-09-30T00:00:00Z"
+
+  - id: guidelines
+    name: Clinical Guidelines & Policies
+    description: >-
+      Heart failure discharge and transitional care protocol, infection-control SOP and a scanned heart failure
+      discharge checklist.
+    agent_description: >-
+      Riverside Health Network clinical documents: the Heart Failure Discharge and Transitional Care Protocol
+      (RHN-CLN-HF-014 v4.2: discharge readiness, 48-hour call, 7-day follow-up visit, follow-up schedule table, which
+      discharge destinations are eligible, quality targets), the Infection Prevention and Control SOP (RHN-IC-007: hand
+      hygiene, precautions table, device bundles, outbreak response) and a scanned heart failure discharge checklist
+      (form RHN-F-0231) with typed fields, check marks and handwritten notes for one synthetic patient.
+    kind: documents
+    files:
+      - files/guidelines/*.pdf
+      - files/guidelines/*.png
+    capabilities:
+      - unstructured_retrieval
+    synthetic: true
+    example_questions:
+      - What follow-up steps does the heart failure discharge protocol require after discharge?
+      - Which items were left unchecked on the scanned discharge checklist?
+
+  - id: operations
+    name: Payer & Operations
+    description: Prior authorization policy, payer contract summary of appeal windows, and the Q2 2026 quality committee deck.
+    agent_description: >-
+      Riverside Health Network revenue-cycle and quality documents: the Prior Authorization Policy (RHN-REV-021: a table
+      of services that require authorization with standard and expedited decision times), the Payer Contract Summary
+      (RHN-CON-009: first-level appeal window in days from the denial notice, by payer) and the Q2 2026 Clinical Quality
+      Committee deck (30-day readmission rates by hospital, heart failure 7-day follow-up completion, denials, HCAHPS
+      scores and decisions).
+    kind: documents
+    files:
+      - files/operations/*.pdf
+      - files/operations/*.docx
+      - files/operations/*.pptx
+    capabilities:
+      - unstructured_retrieval
+    synthetic: true
+    example_questions:
+      - How long does the payer have to decide a prior authorization for an MRI?
+      - What did the quality committee decide about readmissions at Eastgate Regional Hospital?
+
+questions: questions.yaml

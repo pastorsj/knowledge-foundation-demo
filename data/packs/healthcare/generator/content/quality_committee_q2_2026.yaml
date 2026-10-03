@@ -1,0 +1,86 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Slides of the Q2 2026 Clinical Quality Committee deck. [[name]] placeholders are filled by build.py from the
+# generated tables, so every readmission figure in the deck is computed, not typed. Tables and the chart are
+# built by build.py from the slide's `table` key.
+title: Clinical Quality Committee, Q2 2026 Review
+author: Riverside Health Network, Clinical Quality
+meeting_date: "2026-08-20"
+slides:
+  - kind: title
+    title: Clinical Quality Committee
+    subtitle: Q2 2026 review (April to June 2026)
+    detail: Riverside Health Network | Meeting of 2026-08-20 | Synthetic data for demonstration
+    notes: Welcome and agenda. Figures in this deck are computed from the Encounters and Claims tables and the quality scorecard workbook.
+
+  - kind: table
+    title: Scorecard at a glance
+    table: scorecard
+    bullets:
+      - "Readmission rates count index inpatient discharges in the quarter, excluding deaths and discharges to hospice, followed by any inpatient admission within 30 days."
+    notes: Status is Met when the Q2 value is at or better than the target.
+
+  - kind: table_chart
+    title: 30-day readmissions by hospital
+    table: readmit_hospital
+    chart: readmit_hospital
+    bullets:
+      - "System all-cause rate was [[q2_all_rate]] in Q2 ([[q2_all_r]] readmissions after [[q2_all_n]] index discharges), against [[q1_all_rate]] in Q1."
+      - "[[q2_worst_name]] has the highest rate at [[q2_worst_rate]]; [[q2_best_name]] has the lowest at [[q2_best_rate]]."
+    notes: Per-hospital rates are noisy in a single quarter because each hospital has fewer than 150 index discharges.
+
+  - kind: table
+    title: Heart failure cohort
+    table: hf_cohort
+    bullets:
+      - "Protocol RHN-CLN-HF-014 v4.2 (48-hour call, 7-day visit, missed-visit escalation) took effect on 2026-01-15."
+      - "System HF readmission rate: [[q2_hf_rate]] in Q2 ([[q2_hf_r]] of [[q2_hf_n]]) versus [[q1_hf_rate]] in Q1 ([[q1_hf_r]] of [[q1_hf_n]]). Target: [[target.hf_readmit]] or lower."
+      - "COPD readmission rate in Q2: [[q2_copd_rate]] ([[q2_copd_r]] of [[q2_copd_n]]); target [[target.copd_readmit]] or lower."
+    notes: HF cohort is index stays with a primary diagnosis in I50.x. COPD is J44.x.
+
+  - kind: table
+    title: Heart failure 7-day follow-up completion
+    table: followup
+    bullets:
+      - "System completion in Q2: [[q2_fu_all_rate]] ([[q2_fu_all_ok]] of [[q2_fu_all_n]] eligible discharges) against the [[target.hf_followup]] target; Q1 was [[q1_fu_all_rate]]."
+      - "Lowest completion in Q2: [[q2_fu_low_name]] at [[q2_fu_low_rate]]."
+      - "Eligible means a discharge to home or home health; a kept outpatient visit within 7 calendar days counts, a phone call does not."
+    notes: Care Transitions will report missed visits by patient every month.
+
+  - kind: table
+    title: Denials and prior authorization
+    table: denials
+    bullets:
+      - "System denial rate on claims adjudicated in Q2: [[q2_den_all_rate]] ([[q2_den_all_n]] of [[q2_den_all_total]])."
+      - "Largest denial reason by claim count: [[q2_den_top_reason]] ([[q2_den_top_n]] claims). Prior authorization missing: [[q2_den_pa_n]] claims."
+      - "Appeal windows differ by payer: see the payer contract summary RHN-CON-009. Prior authorization turnarounds are in policy RHN-REV-021."
+    notes: Denial rate is denied claims divided by claims with an adjudication date in the quarter.
+
+  - kind: table
+    title: Patient experience, HCAHPS-style top-box scores
+    table: hcahps
+    bullets:
+      - "Discharge information is lowest at [[q2_hc_low_name]] ([[q2_hc_low_val]])."
+      - "Scores are the share of respondents choosing the most positive answer; Q2 2026 survey responses by hospital are in the scorecard workbook."
+    notes: Source is the HCAHPS sheet of quality_scorecard.xlsx.
+
+  - kind: bullets
+    title: Decisions and actions
+    bullets:
+      - "Approve the readmission targets: all-cause [[target.all_cause]], heart failure [[target.hf_readmit]], COPD [[target.copd_readmit]]."
+      - "[[q2_worst_name]]: present a readmission reduction plan at the Q3 meeting. Owner: hospital chief nursing officer. Due 2026-11-19."
+      - "Care Transitions: start a weekly missed 7-day follow-up report for heart failure discharges on 2026-09-01. Owner: Care Transitions manager."
+      - "Utilization Management: review orders that were denied for missing prior authorization and report the three services responsible. Due 2026-10-15."
+      - "Denials Management: appeal every denied claim that has not been appealed while the contract window is open."
+    notes: Decisions were recorded in the minutes of 2026-08-20.
+
+  - kind: bullets
+    title: "Appendix: definitions and data sources"
+    bullets:
+      - "Index discharge: inpatient encounter, excluding discharge disposition expired or hospice."
+      - "30-day readmission: the same patient has another inpatient admission that starts within 30 days of the index discharge."
+      - "Heart failure cohort: primary diagnosis I50.x. COPD cohort: primary diagnosis J44.x."
+      - "Quarter assignment uses the discharge date. Q2 2026 is 2026-04-01 to 2026-06-30."
+      - "Sources: encounters, diagnoses and claims tables (Encounters and Claims source); quality_scorecard.xlsx."
+    notes: All data in this deck is synthetic.
