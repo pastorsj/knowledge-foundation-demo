@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Contracts
 
 The JSON that services share. Services never import each other's code; they agree on these files.
@@ -6,68 +11,108 @@ The JSON that services share. Services never import each other's code; they agre
 | --- | --- | --- |
 | `tool-registry.json` | Hand-written | api, agent plugin, UI (as `TOOL_REGISTRY`), wiring tests |
 | `tool-registry.schema.json` | Hand-written | Validates the registry |
+| `catalog/source-manifest.schema.json` | Hand-written | ingest (validates every manifest it writes), api, retrieval, tables, prediction |
+| `catalog/pack-manifest.schema.json` | Hand-written | ingest, api |
 | `schemas/execution-event.schema.json` | Generated from `api/src/demo_api/events/` | UI types, replay bundles |
 | `schemas/receipt.schema.json` | Generated from `api/src/demo_api/receipts/` | UI types, agent plugin tests |
-| `schemas/benchmark.schema.json` | Generated from `api/src/demo_api/benchmark/` | UI types (the Benchmark tab), replay bundles |
-| `schemas/retrieval-benchmark.schema.json` | Generated from `api/src/demo_api/benchmark/retrieval.py` | `retrieval-benchmark` (`tools/retrieval`), UI types (the Benchmark tab's Milvus comparison), replay bundles |
 | `schemas/pack.schema.json` | Generated from `api/src/demo_api/pack.py` (`PackView`, `GET /v1/pack`) | UI types (the landing page and the composer's example picker) |
+| `schemas/packs.schema.json` | Generated (`PackList`, `GET /v1/packs`) | UI types (the industry selector) |
 | `fixtures/*.json` | Hand-curated, canonicalized by the generator | api and UI tests |
+| `fixtures/catalog/` | Hand-curated: a `retail` pack, the `workspace` pack, a documents and a structured source, and the CSVs of its tables | the tests of api, retrieval, tables and prediction |
 
-TypeScript for the schemas and the registry is generated into `ui/src/generated/`.
+TypeScript for the generated schemas and the registry is generated into `ui/src/generated/`. The industry pack
+format (`pack.yaml`, `questions.yaml`) is not a service contract: its schemas are in `data/schemas/`.
 
 ## Regenerate
 
 ```bash
 scripts/gen-contracts.sh           # after changing a model, the registry or a fixture
-scripts/gen-contracts.sh --check   # CI: fails if anything is out of date
+scripts/gen-contracts.sh --check   # fails if anything is out of date
 ```
 
-The script exports the Pydantic models as JSON Schema, validates every fixture and rewrites it
-in canonical form, then runs `json-schema-to-typescript` and Prettier (both pinned). Commit
-what it writes. Never edit `schemas/` or `ui/src/generated/` by hand.
+The script exports the Pydantic models as JSON Schema, validates every fixture and rewrites it in canonical form,
+then runs `json-schema-to-typescript` and Prettier (both pinned). Commit what it writes. Never edit `schemas/` or
+`ui/src/generated/` by hand. The catalog schemas are edited by hand; ingest's image copies `contracts/catalog/` in
+(a named build context), so rebuild it after a change.
 
 ## Tool registry
 
-One entry per MCP tool. Adding a tool starts here.
+One entry per MCP tool. Adding a tool starts here ([customize](../docs/customize.md)). Four tools:
+
+| `id` | `server` | `family` | `receipt_kind` | `explorer` | `profile` | `pills` |
+| --- | --- | --- | --- | --- | --- | --- |
+| `retrieve_evidence` | `retrieval` | `unstructured_retrieval` | `retrieval_evidence` | `retrieval` | `retrieval` | `retrieval` |
+| `query_tables` | `tables` | `structured_retrieval` | `structured_query` | `sql` | `tables` | `duckdb` |
+| `predict` | `prediction` | `structured_prediction` | `structured_prediction` | `pql` | `kumo` | `kumo` |
+| `ask_question` | `auto_ontology` | `structured_retrieval` | `structured_query` | `ontology` | `ontology` | `ontology` |
 
 | Field | Meaning |
 | --- | --- |
-| `id` | MCP tool name, e.g. `retrieve_evidence` |
-| `server` | Hermes MCP server key: `retrieval`, `market_analytics`, `auto_ontology` |
+| `id` | MCP tool name |
+| `server` | Hermes MCP server key (also its toolset): `retrieval`, `tables`, `prediction`, `auto_ontology` |
 | `hermes_name` | `mcp__<server>__<id>`, the name Hermes and the receipts use |
-| `family` | Capability a data source must grant: `unstructured_retrieval`, `market_analytics`, `structured_retrieval`, `structured_prediction` |
+| `family` | The capability a data source must grant: `unstructured_retrieval`, `structured_retrieval`, `structured_prediction` |
 | `label`, `description` | Display text for the UI |
-| `explorer` | UI explorer: `retrieval`, `market`, `sql`, `pql`, `ontology` |
+| `explorer` | UI explorer: `retrieval`, `sql`, `pql`, `ontology` |
 | `receipt_kind` | The `artifactKind` of the tool's receipts |
-| `pills` | The technology pills the UI shows for a run that used the tool (`Pill`: `cudf`, `cuml`, `cugraph`, `kumo`, `retrieval`, `ontology`, in display order). Every market tool has `cudf`; `market_anomaly_scan` adds `cuml` and `analyze_market_relationships` `cugraph`. A pack's `questions.yaml` `tools` uses the same names |
-| `profile` | Compose profile that provides the tool |
+| `profile` | The agent feature that bakes the tool into the image (`AGENT_FEATURES`): `retrieval`, `tables`, `kumo`, `ontology` |
+| `pills` | The technology pills the UI shows for a run that used the tool, in display order `retrieval`, `duckdb`, `kumo`, `ontology`. A pack's `questions.yaml` `tools` uses the same names |
+
+The API narrows each source's capabilities to the families of the features this stack runs, and offers a pack's
+question only when its pills are served.
+
+## Catalog manifests
+
+The knowledge catalog (`/knowledge/catalog/`) is written by ingest only and read on every request by the API and the
+tools ([architecture](../docs/architecture.md#the-knowledge-catalog)).
+
+**SourceManifest** (`catalog/sources/<source_id>.json`, `schema_version: "1"`):
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `pack_id` (`null` for the workspace), `name`, `description`, `agent_description` | Identity and copy. Ids are `<pack>.<name>`; the pattern also keeps an id from naming another path |
+| `kind` | `documents` or `structured` |
+| `capabilities` | `unstructured_retrieval`; or `structured_retrieval` and `structured_prediction` |
+| `synthetic`, `default_enabled`, `example_questions` | Flags and examples |
+| `status` | `ready`, `ingesting`, `empty`, `failed` |
+| `updated_at` | ISO 8601 UTC |
+| `files` | One entry per file: `file_id`, `file_name`, `sha256`, `size_bytes`, `status`, `parser`, `document_id`, `pages`, `chunks`, `tables`, `warnings`, `error_message` |
+| `documents` | Documents kind: `{count, chunks, collection, embed_model}` |
+| `database` | Structured kind: `{path, alias, tables: [TableInfo]}`; `path` is relative to `/knowledge` |
+| `prediction` | Optional: `{templates: [{id, name, description, pql, anchor_time}]}` |
+
+`TableInfo`: `name`, `description`, `row_count`, `primary_key` (or null), `time_column` (or null), `origin_file`,
+`columns: [{name, type, description, nullable}]`, `foreign_keys: [{column, references_table, references_column}]`.
+The `alias` is the snake-cased source id (`retail_sales`); agents address tables as `<alias>.<table>`.
+
+**PackManifest** (`catalog/packs/<pack_id>.json`): `id`, `kind` (`industry` or `workspace`), `title`,
+`description`, `icon`, `version`, `as_of`, `disclaimer`, `sources` (ids), `questions`, `examples`,
+`conversations`, `digest`, `status` (`ready`, `ingesting`, `failed`, `empty`), `updated_at`.
 
 ## Execution events (`execution.v2`)
 
-The API emits every execution observation as one `ExecutionEventV2`. The event store gives each
-row a monotonic per-job cursor. `GET /v1/jobs/async/job/{job_id}/stream` sends each event as an
-SSE frame with `event: execution.v2`, `id: <cursor>` and the event (without `cursor`) as data.
-Clients resume with `/v1/jobs/async/job/{job_id}/stream/{cursor}` or `Last-Event-ID`.
+The API emits every execution observation as one `ExecutionEventV2`. The event store gives each row a monotonic
+per-job cursor. `GET /v1/jobs/async/job/{job_id}/stream` sends each event as an SSE frame with
+`event: execution.v2`, `id: <cursor>` and the event (without `cursor`) as data. Clients resume with
+`/v1/jobs/async/job/{job_id}/stream/{cursor}` or `Last-Event-ID`.
 
-The `tool.*` and `artifact.*` events of a registered tool carry the tool's registry `family` as
-`capabilityId`, and the family decides `componentId` (`COMPONENT_BY_FAMILY` in
-`api/src/demo_api/events/execution.py`):
+The `tool.*` and `artifact.*` events of a registered tool carry the tool's registry `family` as `capabilityId`. The
+tool's `server` decides `componentId` (`COMPONENT_BY_SERVER` in `api/src/demo_api/events/execution.py`), so two
+servers that share a family are still two components of the execution graph:
 
-| `family` | `componentId` |
+| `server` | `componentId` |
 | --- | --- |
-| `unstructured_retrieval` | `milvus.retrieval` |
-| `market_analytics` | `nvidia.market_analytics` |
-| `structured_retrieval` | `nvidia.ontology` |
-| `structured_prediction` | `nvidia.kumo` |
+| `retrieval` | `milvus.retrieval` |
+| `tables` | `duckdb.tables` |
+| `prediction` | `nvidia.kumo` |
+| `auto_ontology` | `nvidia.ontology` |
 
-`display.attributes` is open JSON with snake_case keys. Model calls are `llm.call` events whose
-attributes carry `served_model` (the model Switchyard served) and `tier` (`efficient` or
-`capable`), so the UI can show when a run escalates. Token counts are `input_tokens` and
-`output_tokens`; `prompt_tokens` and `completion_tokens` are rejected (see
-[the limits](#display-safe-json-limits)).
+`display.attributes` is open JSON with snake_case keys. Model calls are `llm.call` events whose attributes carry
+`served_model` (the model Switchyard served) and `tier` (`efficient` or `capable`), so the UI can show when a run
+escalates. Token counts are `input_tokens` and `output_tokens`; `prompt_tokens` and `completion_tokens` are
+rejected (see [the limits](#display-safe-json-limits)).
 
-When a run succeeds, the API records its publication as three last events, in this order, as the original demo
-did:
+When a run succeeds, the API records its publication as three last events, in this order:
 
 | `eventKind` | Label | `display.attributes` |
 | --- | --- | --- |
@@ -77,53 +122,33 @@ did:
 
 ## Receipts (`ReceiptV2`)
 
-The agent plugin posts one receipt per registered tool call to
-`POST /internal/hermes/jobs/{job_id}/tool-receipts`. `receiptId` is the evidence id the agent
-cites; events reference it in `artifactRefs`. The union is discriminated by `artifactKind`,
-one variant per `receipt_kind` in the registry. Content mirrors the tool's own result:
+The agent plugin posts one receipt per registered tool call to `POST /internal/hermes/jobs/{job_id}/tool-receipts`.
+`receiptId` is the evidence id the agent cites; events reference it in `artifactRefs`. The union is discriminated
+by `artifactKind`, one variant per `receipt_kind` in the registry:
 
 | `artifactKind` | Tools | Content |
 | --- | --- | --- |
-| `retrieval_evidence` | `retrieve_evidence` | The tool's `RetrievalResult` |
-| `analytics_result` | the seven market tools | The tool's `MarketResult`, plus `public_parameters` |
-| `structured_query` | `ask_question` | Question, SQL, rows, ontology lineage |
-| `structured_prediction` | `predict_asset_outcomes` | The tool's `PredictionResult` |
+| `retrieval_evidence` | `retrieve_evidence` | The tool's result: hits with their snippets, citations and metadata, models, index and timings |
+| `structured_query` | `query_tables`, `ask_question` | `query` (the question, or the SQL), `database_name`, `answer` (Auto Ontology), `sql`, up to 25 `rows` of at most 40 columns, `source_row_count`, `truncated`, `resolution_lineage` (Auto Ontology) |
+| `structured_prediction` | `predict` | The tool's result: `available`, `reason`, `source_id`, `template_id`, `pql`, `task_type`, `anchor_time`, `horizon`, `entity_table`, `rows`, `model`, `warnings`. A completed one has scored rows |
 
-The API accepts field names in snake_case or camelCase and serves camelCase. Keys inside open
-JSON (`payload`, `publicParameters`, `rows`, `metadata`) are kept as sent.
-
-A completed receipt always has content. A failed one may carry `errorType`, `errorSummary` and
-any bounded content the tool returned.
+The API accepts field names in snake_case or camelCase and serves camelCase. Keys inside open JSON (`payload`,
+`rows`, `metadata`) are kept as sent. A completed receipt always has content. A failed one may carry `errorType`,
+`errorSummary` and any bounded content the tool returned.
 
 ### From tool result to receipt
 
-The plugin never makes up a value. When a tool does not report a fact, the receipt does not
-carry it.
+The plugin never makes up a value. When a tool does not report a fact, the receipt does not carry it.
 
 | Receipt field | Source |
 | --- | --- |
 | `toolName` | The registry `hermes_name` |
 | `durationMs` | Hermes' `post_tool_call` `duration_ms`: the tool's own execution time |
 | `occurredAt` | The plugin's clock at `post_tool_call` |
-| `status` | `failed` when the call raised or the result reports a failure (analytics `status: failed`, prediction `available: false`); otherwise `completed` |
-| `errorType` | The analytics `error.code`, `evidence_unavailable` for an unavailable prediction, or the Hermes error category when the call raised |
-| `errorSummary` | The analytics `error.message`, the prediction `reason`, or the Hermes error |
+| `status` | `failed` when the call raised or the result reports a failure (a prediction with `available: false`); otherwise `completed` |
+| `errorType` | `evidence_unavailable` for an unavailable prediction, or the Hermes error category when the call raised |
+| `errorSummary` | The prediction's `reason`, or the Hermes error |
 | `content` | The tool's result, fitted to the limits below |
-
-Per tool, `content` is:
-
-- `retrieve_evidence`: the result as returned. A `published_at` that is not a timestamp with a
-  timezone becomes null.
-- The market tools: the result as returned, plus `public_parameters`, the call's arguments
-  without `source_ids`.
-- `predict_asset_outcomes`: the result as returned.
-- `ask_question`: the question, the target database, Auto Ontology's answer and SQL, up to 25
-  rows (`truncated` and `source_row_count` record any cut) and the resolution lineage.
-
-Compared with the prototype's receipts, retrieval, analytics and prediction content now uses the
-current tools' field names. The synthetic `receipt_tool_name`, the locator and content digest
-(both derivable from `receiptId`), the derived counts and statuses, and the GPU-index, benchmark,
-cache and scope-grant fields are gone.
 
 ## Display-safe JSON limits
 
@@ -160,18 +185,15 @@ The plugin fits each result before it posts it, as the prototype's projection di
 1. Drop every key that matches the pattern, such as a SQL column named `token_count`.
 2. Cut each list to the schema's `maxItems`, or to 100 where the schema has none. SQL rows keep
    at most 40 columns, so 25 rows fit in the 2,000-node budget.
-3. Record every cut. A payload list with a sibling flag (`series_truncated`, `points_truncated`,
-   `events_truncated`) sets it to true; SQL rows set `truncated` and keep `source_row_count`.
+3. Record every cut: SQL rows set `truncated` and keep `source_row_count`.
 4. Cut each string to the schema's `maxLength`, for example a hit's `snippet` to 1,500 characters.
 5. Replace each control character the Text rule refuses with a space.
 
 ## Fixtures
 
-`fixtures/execution-events.json` is one sanitized run from the prototype's recordings (a market
-anomaly scan and a document retrieval) with two illustrative `llm.call` events added.
-`fixtures/receipts.json` holds that run's two receipts plus an Auto Ontology SQL receipt and a
-Kumo prediction receipt from other recorded runs. The recorded values were reshaped into the
-current tools' results: the index settings are the current retrieval tool's, and the analytics
-compute time and the collection fingerprint are illustrative. The failed prediction follows the
-tool's path for an unreachable Kumo NIM. There is one completed receipt per `artifactKind` and one
-failed prediction.
+`fixtures/execution-events.json` is one sanitized run with a table query and a document retrieval, with the agent,
+Switchyard, Milvus and DuckDB components and two illustrative `llm.call` events. `fixtures/receipts.json` holds one
+completed receipt per tool (`query_tables`, `retrieve_evidence`, `ask_question`, `predict`), a second retrieval
+receipt, and a failed prediction that follows the tool's path for an unreachable Kumo NIM. `fixtures/catalog/` is
+the catalog the tools' and the API's tests read: the `retail` and `workspace` pack manifests, the
+`retail.policies` and `retail.sales` source manifests, and the CSVs from which the tests build `tables.duckdb`.

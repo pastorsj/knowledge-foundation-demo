@@ -5,59 +5,116 @@ SPDX-License-Identifier: Apache-2.0
 
 # Models and routing
 
-Hermes sends every model call to Switchyard as the route `market-research`. `SWITCHYARD_ROUTES` in `.env`
-picks how Switchyard serves that route, and `AGENT_*_MODEL` pick the models. How the templates, the judge and
-the latch work is in [`infra/switchyard/README.md`](../infra/switchyard/README.md). This page records which
-combination is the default and why.
+Hermes sends every model call to Switchyard as the route `knowledge`. `SWITCHYARD_ROUTES` in `.env` picks how
+Switchyard serves that route, and `AGENT_*_MODEL` pick the models. Every template serves `knowledge`,
+`knowledge-aux` (Hermes' auxiliary calls), `knowledge-fallback` (the overload fallback) and `knowledge-efficient`,
+plus `knowledge-capable` when it has a capable model. How the templates, the judge and the latch work is in
+[`infra/switchyard/README.md`](../infra/switchyard/README.md). This page records which combination is the default
+and why.
+
+The routing layer, the templates and the default models are inherited unchanged from the market-analysis demo this
+repository was converted from, and so are the bake-offs that chose them ([history](#history-the-market-demos-bake-offs)).
+They have not been re-run on the industry packs yet.
 
 ## Recommendation
 
 **On build.nvidia.com (the default), Nemotron 3 Ultra alone: `SWITCHYARD_ROUTES=passthrough.nemotron`**, with
 `nvidia/nemotron-3-ultra-550b-a55b` as the efficient model and Nemotron 3 Super (thinking off) for Hermes'
-auxiliary and fallback calls. `.env.example` ships this. build.nvidia.com serves no GPT model, so the choice
-there is between Ultra alone and the all-Nemotron escalation (Super answers, Ultra takes over). In the
-2026-09-30 bake-off (17 questions over both packs, two runs each), Ultra alone passed 13 of 34 runs and
-Super → Ultra 12. Super → Ultra was also twice as slow at the median (140 s against 72 s), failed 4 jobs
-against none, and left 6 of its 30 reports without a citation (Ultra alone: 4 of 34).
+auxiliary and fallback calls. `.env.example` ships this. build.nvidia.com serves no GPT or Claude model, so the
+choice there is between Ultra alone and the all-Nemotron escalation (Super answers, Ultra takes over); in the
+market demo's 2026-09-30 bake-off Ultra alone passed slightly more runs, twice as fast, with no failed job.
 
 **With a provider that serves a frontier model, let Nemotron 3 Ultra lead and escalate to GPT-6.1 Sol:
 `SWITCHYARD_ROUTES=escalation.nemotron-gpt`**, with GPT-6.1 Sol as the capable model and as the escalation judge
-(under a second id at that provider), Nemotron 3 Super for auxiliary and fallback calls, and `CAPABLE_BASE_URL`
-and `CAPABLE_API_KEY` pointed at the provider ([configuration](configuration.md#1-inference-endpoint)). In the
-2026-10-01 frontier bake-off ([below](#the-2026-10-01-frontier-bake-off)) it passed 10 of 16 runs with the
-primary grader and 14 with the second, ahead of GPT-6.1 Sol pinned (7 and 9) and Claude Opus 5.5 pinned (9 and
-13), while GPT-6.1 Sol served 10% of the agent turns and, with its judge calls, 20% of the tokens.
+(under a second id at that provider), Nemotron 3 Super for auxiliary and fallback calls, and `CAPABLE_BASE_URL` and
+`CAPABLE_API_KEY` pointed at the provider ([configuration](configuration.md#1-inference-endpoint)). In the market
+demo's 2026-10-01 frontier bake-off it was the best arm with both graders, above both pinned frontier arms, while
+GPT-6.1 Sol served 10% of the agent turns.
 
-**Pinned frontier is the fallback.** Claude Opus 5.5 pinned (`pinned-capable.nemotron-claude`) was the stronger
-and steadier pinned arm (p95 72 s, no tool errors). GPT-6.1 Sol pinned lost runs to repeated tool-argument errors
-and two stalled streams ([below](#the-2026-10-01-frontier-bake-off)). On 2026-09-30, GPT-6 Sol pinned had beaten
-Ultra → Sol with a Nemotron 3 Super judge (24 against 20 of 34); a frontier judge reversed that.
-
-**What to use where** (the two bake-offs used different question sets and endpoints, so compare within a date):
-
-| Situation | `SWITCHYARD_ROUTES` and models | Passed |
+| Situation | `SWITCHYARD_ROUTES` and models | Market demo result |
 |---|---|---|
 | build.nvidia.com (default) | `passthrough.nemotron`, efficient Nemotron 3 Ultra (`nvidia/nemotron-3-ultra-550b-a55b`) | 2026-09-30: 13 of 34; 2026-10-01: 7 of 16 |
 | A provider serving GPT-6.1 Sol (recommended) | `escalation.nemotron-gpt`: Ultra → GPT-6.1 Sol, judged by GPT-6.1 Sol | 2026-10-01: 10 of 16 |
 | A provider serving Claude Opus 5.5 | `pinned-capable.nemotron-claude`, capable Claude Opus 5.5 on `CAPABLE_BASE_URL` | 2026-10-01: 9 of 16 |
 | GPT-6.1 Sol on every turn | `pinned-capable.nemotron-gpt` | 2026-10-01: 7 of 16 (GPT-6 Sol on 2026-09-30: 24 of 34) |
 | Ultra escalating to Claude Opus 5.5 | `escalation.nemotron-claude`, judged by Claude Opus 5.5 | 2026-10-01: 8 of 16 |
-| All-Nemotron escalation on build.nvidia.com | `escalation.nemotron`: Super → Ultra, 3.5 Lightning judge (the commented block in `.env.example`) | 2026-09-30: 12 of 34 |
+| All-Nemotron escalation on build.nvidia.com | `escalation.nemotron`: Super → Ultra, 3.5 Lightning judge | 2026-09-30: 12 of 34 |
 
 Switching is an `.env` edit plus `./scripts/demo.sh restart switchyard`; the sandbox is not rebuilt.
 
-**One OpenAI-compatible endpoint for every model.** If your organization runs an OpenAI-compatible gateway
-that serves both Nemotron and GPT models, there are two ways to use it:
-- *Only for the capable model* (as the 2026-09-30 bake-off did): keep `INFERENCE_BASE_URL` on build.nvidia.com and set
-  `CAPABLE_BASE_URL` and `CAPABLE_API_KEY` to the gateway.
-- *For every model* (as the 2026-10-01 bake-off did): set `INFERENCE_BASE_URL` and `INFERENCE_API_KEY` to the gateway, leave `CAPABLE_*` empty,
-  use the model ids its `GET /v1/models` lists, and give the retriever its own build.nvidia.com key
-  (`RETRIEVER_API_KEY`).
+## Models and ids
 
-Either way the gateway's URL and key live only in your `.env`, and `./scripts/demo.sh doctor --keys` checks
-that every model id the template uses is listed.
+| Role | Model | build.nvidia.com id (`https://integrate.api.nvidia.com/v1`) |
+|---|---|---|
+| Efficient (default: every turn) | Nemotron 3 Ultra 550B-A55B | `nvidia/nemotron-3-ultra-550b-a55b` |
+| Auxiliary and fallback calls (`AGENT_AUX_MODEL`), thinking off | Nemotron 3 Super 120B-A12B | `nvidia/nemotron-3-super-120b-a12b` |
+| Escalation judge in `*-gpt` and `*-claude` (`AGENT_JUDGE_MODEL`) | a frontier model from the capable provider: GPT-6.1 Sol or Claude Opus 5.5, under a second id there | not served |
+| Capable (escalation and pinned templates) | GPT-6.1 Sol, over the Responses API | not served; the id your provider lists, e.g. `gpt-6.1-sol` |
+| Capable (`*-claude` templates) | Claude Opus 5.5, over the Anthropic Messages API | not served; the id your provider lists, e.g. `claude-opus-5-5` |
+| Judge (and aux) for the all-Nemotron escalation | Nemotron 3.5 Lightning 30B-A3B | `nvidia/nemotron-3.5-lightning-30b-a3b` |
+| Embedding (ingest, retrieval) | Nemotron 3 Embed 1B | `nvidia/nemotron-3-embed-1b` |
+| Reranking (retrieval) | Llama Nemotron Rerank VL 1B v2 | `nvidia/llama-nemotron-rerank-vl-1b-v2` |
+| Document parsing (ingest) | Nemotron Parse 2.0 | local vLLM (`nvidia/NVIDIA-Nemotron-Parse-2.0`), or hosted `nvidia/nemotron-parse-2.0` |
+| Candidate efficient model | Nemotron 3.5 Super | to be evaluated once it is served publicly |
 
-### The default on build.nvidia.com
+On any other OpenAI-compatible endpoint, use the ids its `GET /v1/models` lists; `./scripts/demo.sh doctor --keys`
+checks every id the template uses, and the embed model on the retriever endpoint. Parse and Kumo are the only
+models that run locally ([ingestion](ingestion.md), [operations](operations.md#dgx-spark-mode)).
+
+## One OpenAI-compatible gateway
+
+If your organization runs an OpenAI-compatible gateway, there are three ways to use it:
+
+- *Only for the capable model*: keep `INFERENCE_BASE_URL` on build.nvidia.com and set `CAPABLE_BASE_URL` and
+  `CAPABLE_API_KEY` to the gateway.
+- *For the agent's models*: set `INFERENCE_BASE_URL` and `INFERENCE_API_KEY` to the gateway, leave `CAPABLE_*`
+  empty, use the model ids its `GET /v1/models` lists, and give the retriever its own build.nvidia.com key
+  (`RETRIEVER_API_KEY`), which keeps reranking on.
+- *For every hosted model*: point the retriever at the gateway too. Some gateways serve reranking as a Cohere-style
+  `/v1/rerank`, not NVIDIA's `/ranking`, which the retrieval client calls; with such a gateway, turn reranking off
+  and hits keep their vector order. For example:
+
+```bash
+# .env, section 1: the agent's models on the gateway (ids as its GET /v1/models lists them)
+INFERENCE_BASE_URL=https://<gateway>/v1
+INFERENCE_API_KEY=<the gateway's key>
+SWITCHYARD_ROUTES=passthrough.nemotron
+AGENT_EFFICIENT_MODEL=nvidia/nvidia/nemotron-3-ultra
+AGENT_AUX_MODEL=nvidia/nvidia/nemotron-3-super-v3
+# .env, section 2: embeddings on the gateway, no reranker
+RETRIEVER_BASE_URL=https://<gateway>/v1
+RETRIEVER_API_KEY=<the gateway's key>
+RETRIEVER_EMBED_MODEL=<the embed model id the gateway lists>
+RETRIEVER_RERANK_MODEL=
+```
+
+Then `./scripts/demo.sh doctor --keys` and `./scripts/demo.sh restart switchyard`. Changing the embed model
+re-ingests every pack on the next sync. The gateway's URL and key live only in your `.env`. Voice input needs a
+build.nvidia.com key of its own (`SPEECH_API_KEY`) once the retriever is elsewhere.
+
+## Repeating the bake-off
+
+Repeat it when a model id, a template, the judge prompt or the endpoint's model set changes, and before changing
+the default.
+
+1. `./scripts/demo.sh up` with the profiles to measure (`core,parse,kumo` covers every question kind), then
+   `./scripts/demo.sh check`.
+2. For each arm: set the arm's lines in `.env`, run `./scripts/demo.sh restart switchyard`, and confirm the rendered
+   line in `./scripts/demo.sh logs switchyard` (`switchyard: <template> on <endpoint> …`).
+3. Run the eval on every industry, twice, the second pass in reverse arm order:
+   `./scripts/demo.sh eval --pack <id> --runs 2`, with `GRADER_BASE_URL`, `GRADER_API_KEY` and `GRADER_MODEL` set
+   for the LLM grader ([eval](../eval/README.md)). Each run directory keeps every job's export.
+4. Per arm, read Switchyard's per-session stats for the frontier share:
+   `curl -s "127.0.0.1:4300/v1/routing/session-stats?session_id=<job id>"`.
+5. Put `.env` back on the winner and restart Switchyard.
+
+## History: the market demo's bake-offs
+
+Everything below is inherited from the market-analysis demo and kept as the record behind the defaults above. It
+uses that demo's names: the route `market-research`, its market tools, its `synthetic-market` and `us-equities`
+packs and its ports. None of it describes this repository's stack.
+
+### The default on build.nvidia.com, as recorded
 
 `synthetic-market`'s committed replay bundle was recorded with this default: Ultra alone on build.nvidia.com, every
 profile, on a Brev A100 VM. Its ten questions were recorded on 2026-10-01 and five of them again on 2026-10-02, and
@@ -86,7 +143,7 @@ the featured questions (three of all six, one of two). What they showed:
 - The anomaly and Galena answers matched their receipts in every run. Auto Ontology took 68 to 186 s per
   query with Super and 3.5 Lightning on build.nvidia.com, and 332 s on each unanswerable request.
 
-### Tuning Ultra for the current packs
+### Tuning Ultra for the market packs
 
 On 2026-09-30 the featured questions of both packs ran with Ultra alone on build.nvidia.com, on the Brev
 A100 VM, before and after tuning: 14 runs before (one failed), 30 after, unjudged. What they showed, and what changed:
@@ -114,23 +171,7 @@ The escalation judge's prompt now escalates only for a failure it can name: a st
 error used as data, or a report with a missing citation, a wrong window or unit, an unanswered part, a
 contradiction or no evidence. The bake-off below measures it ([the tuned judge](#the-tuned-judge-measured)).
 
-## Models and ids
-
-| Role | Model | build.nvidia.com id (`https://integrate.api.nvidia.com/v1`) |
-|---|---|---|
-| Efficient (default: every turn) | Nemotron 3 Ultra 550B-A55B | `nvidia/nemotron-3-ultra-550b-a55b` |
-| Auxiliary and fallback calls (`AGENT_AUX_MODEL`), thinking off | Nemotron 3 Super 120B-A12B | `nvidia/nemotron-3-super-120b-a12b` |
-| Escalation judge in `*-gpt` and `*-claude` (`AGENT_JUDGE_MODEL`) | a frontier model from the capable provider: GPT-6.1 Sol or Claude Opus 5.5, under a second id there | not served |
-| Capable (escalation and pinned templates) | GPT-6.1 Sol (GPT-6 Sol in the 2026-09-30 bake-off), over the Responses API | not served; the id your provider lists, e.g. `gpt-6.1-sol` |
-| Capable (`*-claude` templates) | Claude Opus 5.5, over the Anthropic Messages API | not served; the id your provider lists, e.g. `claude-opus-5-5` |
-| Judge (and aux) for the all-Nemotron escalation | Nemotron 3.5 Lightning 30B-A3B | `nvidia/nemotron-3.5-lightning-30b-a3b` |
-| Candidate efficient model | Nemotron 3.5 Super | to be evaluated once it is served publicly |
-
-On any other OpenAI-compatible endpoint, use the ids its `GET /v1/models` lists; `./scripts/demo.sh doctor
---keys` checks every id the template uses. Retrieval always uses the retriever endpoint (build.nvidia.com):
-`nvidia/nemotron-3-embed-1b` and `nvidia/llama-nemotron-rerank-vl-1b-v2`.
-
-## The 2026-10-01 frontier bake-off
+### The 2026-10-01 frontier bake-off
 
 **Question.** Does Nemotron 3 Ultra with frontier escalation get close to frontier quality at lower frontier
 usage? Only the Nemotron-led arms are deployment candidates; the pinned frontier arms are reference ceilings.
@@ -183,7 +224,7 @@ What it shows:
 Limits: 16 runs per arm on one pack, so a difference of one or two runs is noise; the gateway's Ultra rather than
 build.nvidia.com's; the pinned Sol arm's result depends on the `market_scan` argument rule above.
 
-## How the bake-off was run
+### How the bake-off was run
 
 **When and where.** 2026-09-30, after the tuning above, on a Brev VM with one A100 (40 GB) and every profile
 (`core,retrieval,analytics-gpu,kumo,ontology`: the GPU market tools, the local Kumo NIM and Auto Ontology),
@@ -275,7 +316,7 @@ Then give overall (1-5) and pass: true only if you would show this report to a c
 - *Fallback turns*: agent turns served by `market-research-fallback` after the agent's model was overloaded.
 - *Latency*: submit to completion, as the API records it (one job at a time, so no queueing).
 
-## Results
+### Results
 
 | Arm | Pass | synthetic | us-equities | Deterministic | Judge pass | Judge mean | Grounded % | Tool calls / errors / duplicates | Escalated | False latch | Rescue | p50 s | p95 s | Failed jobs | Median input tokens |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -336,9 +377,9 @@ What the numbers show:
   negative correlation means opposite moves, so on `us-equities` most reports called it a whole-market graph
   or listed an opposite-moving pair among those that "moved together".
 
-### The tuned judge, measured
+#### The tuned judge, measured
 
-The tuned judge prompt ([above](#tuning-ultra-for-the-current-packs)) against the 2026-09-29 one (on the
+The tuned judge prompt ([above](#tuning-ultra-for-the-market-packs)) against the 2026-09-29 one (on the
 retired `market-analysis` pack, one run per question), in A2:
 
 | | 2026-09-29 | 2026-09-30, tuned |
@@ -356,7 +397,7 @@ which sees each message cut to 900 characters, rarely catches. The rule set befo
 adopt escalation only if it passes within one question of Sol pinned with false latches at 10% or less; it
 meets neither.
 
-### After the tool fixes
+#### After the tool fixes
 
 The news-universe, `market_scan` window and relationship-description fixes reached the box after the
 bake-off. The two questions they change then ran twice more on the two build.nvidia.com arms, graded the same
@@ -373,7 +414,7 @@ to Lightning, which replied with a plan instead of calling the tool. The other n
 issuers' 13 news items, and every `us-equities` report said the graph links declared peers and kept the
 opposite-moving pair apart from the pairs that moved together.
 
-### Limits of this bake-off
+#### Limits of this bake-off
 
 - **Two runs per question.** A one-run difference on a question is noise: A0 passed 7 of its 17 questions
   once and failed them once. Across 34 runs the gaps between A1, A2 and A0 (24, 20, 13) are larger than that.
@@ -397,26 +438,9 @@ opposite-moving pair apart from the pairs that moved together.
   `market_scan` window and relationship-graph fixes only after the run ([after the tool
   fixes](#after-the-tool-fixes)).
 
-## The earlier bake-off (2026-09-29)
+### The earlier bake-off (2026-09-29)
 
 The first bake-off ran on the retired `market-analysis` pack: its seven hero questions (H1 to H7) and five
 more, once per arm, on the same kind of gateway for every model, with the stack on a laptop and Auto
 Ontology off. Sol pinned passed 11 of 12; Ultra alone and Ultra → Sol 6 each (the old judge latched falsely on
 half of Ultra's passes); Ultra → Sol with two confirmations 6; and Super → Ultra 3. Those results set today's defaults, and the 2026-09-30 bake-off confirms them.
-
-## Repeating the bake-off
-
-Repeat it when a model id, a template, the judge prompt or the endpoint's model set changes.
-
-1. `./scripts/demo.sh up` with the profiles to measure, then `./scripts/demo.sh check`.
-2. For each arm: set the arm's lines in `.env` (table above), run `./scripts/demo.sh restart switchyard`, and
-   confirm the rendered line in `./scripts/demo.sh logs switchyard` (`switchyard: <template> on <endpoint> …`).
-3. Submit each question one at a time through the API (`POST /v1/jobs/async/submit`, with the question's
-   `sources` from `questions.yaml` as `data_sources`), wait for it to finish, and save
-   `GET /v1/jobs/async/job/{id}/export` and `GET 127.0.0.1:4000/v1/routing/session-stats?session_id={id}`.
-4. Run every arm twice, the second pass in reverse arm order.
-5. Score each run with the checks and the judge prompt above, and fill in the tables.
-6. Put `.env` back on the winner and restart Switchyard.
-
-The bake-off took about 8 hours, one run at a time; the Sol arms' stalls and build.nvidia.com's overloads took
-a large share of it.

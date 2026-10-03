@@ -5,202 +5,156 @@ SPDX-License-Identifier: Apache-2.0
 
 # Data packs
 
-A data pack is one directory under `data/packs/` that describes a whole demo world: its tables, its document
-corpora, the sources the UI and the agent see, the analytics and prediction settings, the demo questions and
-the recorded sessions. The `demo-data` builder turns the selected pack into files under `/data` and points
-`/data/active` at the result. Services read only `/data/active`, so swapping the data means adding a pack, not
-changing code.
+An industry pack is raw files plus metadata, ingested by the same pipeline as an upload. Each pack is one directory
+of [`data/packs/`](../data/packs); the UI's top-right selector lists every pack the catalog holds, plus "Your data".
+All packs are co-resident in the knowledge catalog, so switching industry is instant and rebuilds nothing.
 
-The format, the runtime layout and the builder's commands are specified in
-[`data/README.md`](../data/README.md). How external data is fetched, imported and scaled is in
-[data platform](data-platform.md). This page is the guide.
+## The industries
 
-## The packs
+Four packs, each a fictional company with its own tables, documents and questions. Everything in them is
+synthetic and labeled so.
 
-The repository ships two packs in one format: the same tables, built by the same importer from a raw market
-dataset. In both, SEC EDGAR filings are a separate document source, searched by retrieval. They are never
-converted into news events or written to a news table: the demo shows the agent combining a price database and
-a document corpus, each through its own tool.
+| Pack (`id`) | Company | Structured source (DuckDB alias) | Document sources | Kumo templates |
+|---|---|---|---|---|
+| Retail (`retail`) | Lumen Retail Group, an omnichannel home-and-lifestyle retailer | `sales` (`retail_sales`): stores, products, customers, orders, order items, returns, a merchandising plan workbook | `policies` (2 PDF, DOCX, scanned PNG), `reports` (PDF with tables, PPTX) | `churn_90d`, `return_risk_30d`, `high_value_30d` |
+| Manufacturing (`manufacturing`) | Atlas Precision Components, a maker of machined parts | `operations` (`manufacturing_operations`): plants, machines, sensor readings, maintenance events, work orders, quality defects, a production plan workbook | `procedures` (2 PDF, scanned PNG), `reports` (8D report PDF, DOCX, PPTX) | `unplanned_failure_30d`, `quality_defect_14d`, `high_alarm_count_30d` |
+| Healthcare (`healthcare`) | Riverside Health Network, 3 hospitals and 12 clinics | `clinical` (`healthcare_clinical`): facilities, providers, patients, encounters, diagnoses, claims, a quality scorecard workbook | `guidelines` (2 PDF, scanned PNG), `operations` (PDF, DOCX, PPTX) | `readmission_30d`, `ed_visit_30d`, `claim_denial_60d` |
+| Financial Services (`financial-services`) | Harborview Community Bank, a regional bank with 18 branches (retail banking, not markets) | `banking` (`financial_services_banking`): branches, customers, accounts, monthly balances, loans, loan payments, card disputes, a credit risk workbook | `policies` (2 PDF, DOCX, scanned PNG), `disclosures` (PDF, PPTX) | `loan_default_90d`, `account_closure_90d`, `card_dispute_30d` |
 
-| | [`synthetic-market`](../data/packs/synthetic-market/README.md) (default) | [`us-equities`](../data/packs/us-equities/README.md) (optional; the demo deployment's pack) |
-|---|---|---|
-| Prices | Fictional issuers (2,000 at the default `standard` profile), seeded prices; one-minute bars in the `ci` and `intraday` profiles | About 1,600 real US stocks, January 2025 to March 2026, rolled up from real one-minute bars that stay outside the repository |
-| Company data | Names and profiles written by Nemotron with NeMo Data Designer, checked against SEC's ticker lists | SEC names, CIKs and SIC codes |
-| Ticker-linked news | `company_news`: seeded events with Nemotron headlines, and 12 planted stories | None: `sentiment_timeline` and `analyze_news_price_relationship` report that they are unavailable |
-| `sec_filings` | 1,000 real 8-K and 6-K filings from 2026 Q2, by any filer (the issuers are fictional) | 1,074 8-Ks filed by the pack's own companies over its price window |
-| Other documents | `market_regulations`: eCFR Title 17 and the SEC's 2023 cybersecurity disclosure rule (Form 8-K Item 1.05 and its deadline) | `market_regulations`, and `world_news`: 8,192 GDELT headlines (opt-in) |
-| Needs | Nothing for the structured part; `SEC_USER_AGENT` for `sec_filings` | `demo.sh data fetch` first; `SEC_USER_AGENT` for company data and `sec_filings` |
+Each pack has 10 questions: 3 over documents, 3 over SQL, 2 hybrid (documents and tables) and 2 predictions, 6 of
+them featured. Every pack holds at least one scanned page that only Nemotron Parse can read, and figures in its
+reports that agree with its tables. Each pack's README is its data card: provenance, seed, tables, planted
+stories and an answer key.
 
-The synthetic market has planted facts, so answers can be checked: `eval/oracles/*.sql` computes them from a
-build. The downloaded documents are fetched at build time from pinned URLs and checked against their SHA-256;
-they are never committed. `us-equities`' data reaches a machine through a fetch step:
+`DEFAULT_PACK` (default `retail`) picks the industry the UI opens on.
 
-```bash
-# .env: DATA_PACK=us-equities, and DATA_SOURCE_MINUTE_BARS=<a directory, host:/path or URL>
-./scripts/demo.sh data fetch          # into $DATA_SOURCE_DIR/minute-bars, verified against the pinned manifest
-./scripts/demo.sh up                  # builds the pack; on a running stack, also switches everything to it
-```
-
-The hosted demo deployment runs `us-equities` with every corpus
-(`DATA_CORPORA=sec_filings,market_regulations,world_news`), so its visitors see real prices. `synthetic-market` stays the default in `.env.example` and CI because
-`us-equities`' data cannot be committed: a fresh clone builds and replays the synthetic pack with nothing to fetch.
-
-## How a pack is built
+## The pack format (schema version 3)
 
 ```text
-./scripts/demo.sh up                  # runs the data one-shots as dependencies
-./scripts/demo.sh data prepare        # rebuild the active pack, e.g. after changing its files or DATA_CORPORA
+data/packs/<id>/
+  pack.yaml          identity, licenses, provenance, sources (each: kind, file globs, capabilities, descriptions,
+                     optional declared keys and prediction templates)
+  questions.yaml     questions with tool pills, the picker's examples (at most 12), conversations
+  files/             the committed synthetic files: PDFs (some scanned, as images), DOCX, PPTX, PNG, CSV, XLSX
+  generator/         the seeded build.py and the authored text (content/) that produced files/
+  recordings/        replay bundle v2, written by `demo.sh record --pack <id>`
+  README.md          data card, written by the generator
 ```
 
-| Step | Service | Writes |
-|---|---|---|
-| Structured part | `data` (core) | `tables/*.parquet`, `structured/<database>.duckdb`, `ontology/model.yaml`, `prediction/`, `pack.json` |
-| Corpus | `data-corpus` (retrieval) | `corpus/documents.jsonl` |
-| Index | `retrieval-index` (retrieval) | the Milvus collection and `collection-manifest.json` |
+The schemas are [`data/schemas/pack.schema.json`](../data/schemas/pack.schema.json) and
+[`data/schemas/questions.schema.json`](../data/schemas/questions.schema.json).
 
-Each build lives in `/data/builds/<pack>@<version>+<profile>+<digest>`. The digest covers the pack's files
-(not its `README.md`, `eval/`, `recordings/` or `tests/`), the profile, the selected corpora and the builder
-itself, so preparing an unchanged pack is a no-op and any change starts a new build. `/data/active` switches
-atomically. `data prepare` also restarts market analytics and retrieval, which keep the build they resolved at
-startup, and recreates the sandbox when the new build changes the tools' schemas (Hermes lists them once, when
-the sandbox starts). After changing `DATA_PACK` or `DATA_PACK_PROFILE` on a running stack, run
-`./scripts/demo.sh up`, which does all of that and also recreates what names the pack's database.
+### `pack.yaml`
 
-`pack.json` in the build is what services read: the sources and questions this build can serve, the database
-name and paths, the analytics and prediction settings, the minute bars' location, and the digests of every file.
+| Field | Meaning |
+|---|---|
+| `schema_version` | `"3"` |
+| `id` | The directory name (`^[a-z][a-z0-9-]*$`) |
+| `version`, `as_of` | Pack version and the data's as-of date |
+| `title`, `description`, `icon` | The selector's text; `icon` is a name from `ui/src/adapters/ui/icons.tsx` |
+| `disclaimer` | Shown with the pack's answers |
+| `licenses`, `provenance` | Where every file came from and under which terms |
+| `sources` | The pack's sources (below) |
+| `questions` | Always `questions.yaml` |
 
-Settings (`.env`, [configuration](configuration.md#4-data-pack)): `DATA_PACK`, `DATA_PACK_PROFILE`,
-`DATA_CORPORA` and `SEC_USER_AGENT`. An empty `DATA_CORPORA` builds every corpus the pack does not mark `opt_in`:
-`sec_filings` and `market_regulations` in both packs. Add `world_news` to build the GDELT headlines of
-`us-equities`.
+Each source:
 
-Other commands, all run in the data image:
+| Field | Meaning |
+|---|---|
+| `id` | Pack-local id; the catalog id is `<pack>.<id>` (`retail.sales`) |
+| `name`, `description` | The UI's text |
+| `agent_description` | What the agent reads about the source in its run instructions |
+| `kind` | `documents` or `structured` |
+| `files` | Globs relative to the pack (`files/policies/*.pdf`); each must match a file |
+| `capabilities` | `[unstructured_retrieval]` for documents; `[structured_retrieval, structured_prediction]` for tables |
+| `synthetic`, `default_enabled`, `example_questions` | Flags and the source's own examples |
+| `tables` | Structured only, optional: per table `description`, `primary_key`, `time_column`, `foreign_keys` (`column`, `references: <table>.<column>`) and column descriptions. Declarations win over profiling |
+| `prediction.templates` | Structured only, optional: `{id, name, description, pql, anchor_time}`; the agent can call `predict` with `pql: "template:<id>"` |
+
+Table names in `tables` are the names ingest gives (`<file stem>`, plus `_<sheet>` for a workbook of several
+sheets: `merchandising_plan_promo_calendar`).
+
+### `questions.yaml`
+
+| Field | Meaning |
+|---|---|
+| `examples` | The composer's example picker, in order: every featured question first, at most 12 |
+| `questions[]` | `id`, `label`, `tag` (`DOCUMENTS`, `SQL`, `HYBRID`, `PREDICTION`, `ONTOLOGY`), `description`, `question`, `sources` (pack-local ids), `tools` (pills: `retrieval`, `duckdb`, `kumo`, `ontology`), `featured` |
+| `conversations[]` | Multi-turn sessions: `id`, `label`, `tag`, `sources`, `turns`; each is recorded as one replay session |
+
+The pills name the tools a recorded answer must use; the live test and the eval check them. The API offers a
+question only when this stack serves its sources and its pills (`kumo` needs the prediction tool).
+
+### Validation
 
 ```bash
-./scripts/demo.sh data validate       # the pack's schema, cross-references and tool contracts
-./scripts/demo.sh data verify         # the active build still matches the digests in its pack.json
-./scripts/demo.sh data list           # packs and builds
-./scripts/demo.sh data clean [--all]  # remove inactive builds and unused caches (--all: every cache)
-./scripts/demo.sh data fetch          # fetch and verify the pack's external datasets
-./scripts/demo.sh data generate       # write synthetic-market's Nemotron text (rarely; needs a key)
-./scripts/demo.sh data reindex        # rebuild only the retrieval index
+./scripts/demo.sh data validate     # every pack, with uv on the host
 ```
 
-## Sources, capabilities and questions
+[`scripts/validate_packs.py`](../scripts/validate_packs.py) checks both files against the schemas, then the rules
+the schemas cannot state: the id is the directory name, source ids are unique, every file glob matches a file,
+question and conversation ids are unique, every question names known sources, the examples name known questions
+and include every featured one, and at least one question is featured. Ingest validates the same schemas when it
+syncs a pack.
 
-Each source in `pack.yaml` declares its `capabilities`, which are tool families from
-`contracts/tool-registry.json`: `unstructured_retrieval`, `market_analytics`, `structured_retrieval`,
-`structured_prediction`. The API offers a source with only the capabilities the running tools provide, and a
-job's selected sources decide which tools the agent gets. For example, `market_data` offers
-`structured_retrieval` only when the ontology profile runs.
+## How a pack reaches the catalog
 
-A tool whose data a pack lacks stays registered, so the registry, the sandbox policy and the UI never change with
-the pack. Its MCP description starts with "Unavailable in the active data pack", and a call fails at once with
-`news_unavailable` (no ticker-linked news table) or `minute_bars_unavailable` (no minute bars, as in
-`synthetic-market`'s daily-bar profiles). The market skill tells the agent not to call it.
+`./data/packs` is mounted read-only at `/packs` in ingest. At startup, and on `./scripts/demo.sh data sync`, ingest
+syncs every pack whose digest changed ([ingestion](ingestion.md#pack-sync)): its files are copied into the
+catalog sources `<pack>.<source>`, documents are parsed, chunked, embedded and indexed, tables are loaded into the
+source's DuckDB file and profiled with the pack's declarations. `./scripts/demo.sh data status` shows each pack's
+progress; a pack's questions are offered once its sources are `ready` or `ingesting`.
 
-`questions.yaml` holds each pack's demo questions. A question is offered only when every source it names is in
-the build and, if it lists `profiles`, the build uses one of them. Each declares the `tools` it is expected to use
-as technology pills, which the composer's demo scenario picker shows beside its label: `cudf` for any market tool,
-plus `cuml` for `market_anomaly_scan` and `cugraph` for `analyze_market_relationships`; `kumo`
-(`predict_asset_outcomes`), `retrieval` (`retrieve_evidence`, one pill whatever the sources) and `ontology`
-(`ask_question`). The names are the tool registry's `pills` ([contracts](../contracts/README.md#tool-registry)), and
-a test fails when a recorded answer did not use every tool its question declares (questions without a recording are
-skipped). `tag` (ANALYTICS, RETRIEVAL, ...) only groups questions in the docs. Six are `featured` in each pack: they need
-only the default profiles, fit the landing page on one screen, and are what `record` asks by default. Every
-analytics question has an oracle in `eval/oracles/`, and `eval/retrieval.yaml` names the documents a retrieval
-answer should cite. `eval/answers.yaml` holds the answer checks of `demo.sh eval`, and `eval/perf.yaml` the GPU
-guard's cases ([eval](../eval/README.md)).
+## Generators
 
-`examples` in `questions.yaml` lists, in order, the questions the composer's "Choose an example" picker offers:
-at most 12, every featured question among them, and together declaring every tool the pack's questions declare
-(`data validate` checks all three). The picker shows five rows and scrolls for the rest, so the first five
-should show the widest mix of tools. A build offers the examples it serves (their sources built, their profiles
-matching), and `GET /v1/pack` those whose sources the running tools serve. A pack without the list offers its
-featured questions, then the others, up to 12. Every question stays in the pack for the landing page links, `record`
-and `eval`, whether or not it is an example. `us-equities` lists its six featured questions and one question for
-each tool and source they leave out (Kumo, Auto Ontology, the whole-market scan, regulations, NVIDIA's prices beside
-its filings, world headlines); `synthetic-market` lists all eleven.
+Every file under `files/` is produced by the pack's `generator/build.py`, a PEP 723 script (its dependencies are in
+its header), from a fixed seed and the authored text in `generator/content/`. Runs are deterministic: two runs
+give byte-identical files. The generator also asserts the pack's planted stories, so a change that breaks an
+answer fails the build, and writes the pack's README.
 
-`questions.yaml` can also hold `conversations`: two to six turns asked in order in one conversation, so a later
-turn can refer to an earlier answer ("For those same two examples, ..."). They follow the same source and profile
-rules, share the questions' ids, are not listed in the UI, and are recorded by `record --all`, each as one replay
-session. `us-equities` has 30 questions and 15 conversations, 45 sessions in all.
+```bash
+./scripts/demo.sh data generate retail    # uv run data/packs/retail/generator/build.py
+./scripts/demo.sh data validate
+./scripts/demo.sh data sync               # on a running stack: re-ingests the changed pack
+```
 
-`documents.benchmark_queries` in `pack.yaml` lists held-out queries for the Benchmark tab's CPU/GPU Milvus
-comparison on a GPU host, each with the document sources it searches; they are never demo questions. A build keeps
-those whose sources it indexed ([retrieval](retrieval.md#cpugpu-index-comparison-analytics-gpu)). Each pack has 15.
+Commit the regenerated `files/` and README with the generator change. Scanned pages are PNGs rendered from text
+with seeded noise, so only a vision parser reads them.
+
+## Adding an industry
+
+1. Create `data/packs/<id>/` with `generator/build.py` and `generator/content/`, following an existing pack: 4 to 6
+   related tables with keys and timestamps (so Kumo can predict something meaningful), 5 to 8 documents (policies,
+   SOPs, reports with tables, a slide deck, at least one scanned page), and figures in the documents computed from
+   the tables.
+2. Write `pack.yaml` (sources, declared keys, prediction templates) and `questions.yaml` (8 to 10 questions over
+   documents, SQL, both and prediction; the featured ones in `examples`).
+3. `./scripts/demo.sh data generate <id>`, then `./scripts/demo.sh data validate`.
+4. On a running stack, `./scripts/demo.sh data sync`; the new pack appears in the selector once ingested.
+5. Ask the featured questions, check the answers against the README's answer key, then record them (below).
+
+No service changes: the tools' schemas are data-independent, and the API and UI list whatever the catalog holds.
 
 ## Recordings
 
-The replay bundle lives with its pack, in `data/packs/<pack>/recordings/`, and is committed. It is written by:
-
 ```bash
-./scripts/demo.sh record                          # the featured questions
-./scripts/demo.sh record --all                    # every question and conversation the build offers
-./scripts/demo.sh record --question market-leaders --question peer-network
+./scripts/demo.sh record --pack retail              # the featured questions
+./scripts/demo.sh record --pack retail --all        # every question and conversation
+./scripts/demo.sh record --pack retail --question gold-churn-risk
+./scripts/demo.sh replay                            # the UI alone on every pack's recordings
 ```
 
-`record` asks each question on the running stack, one at a time, and each conversation's turns in order in one
-conversation. A whole set (the featured questions, or `--all`) replaces the bundle; `--question` re-records only
-the named questions or conversations and keeps the bundle's other sessions. A question or conversation that does
-not succeed is left out (a re-recorded one keeps its earlier session), and the command exits 1. Review the files before committing: they hold questions, answers, evidence
-excerpts and model names. `./scripts/demo.sh replay` then serves the UI on the bundle alone, and stops with a
-hint when the pack has none. The format is in [`api/README.md`](../api/README.md#recordings).
+`record` runs `demo-api record` against the running stack and writes the pack's bundle (v2) to
+`data/packs/<id>/recordings/`: `index.json`, `pack.json`, `sources.json`, `sessions/<id>.json` and
+`database.json` (the data viewer's schema, previews and query results, so it works in replay too). The format is
+in [`api/README.md`](../api/README.md#recordings). The UI serves each pack's bundle at `/api/recordings/<pack>/...`
+and replays a session without the API.
 
-The replays list shows, under each recorded session, pills for the tools its runs actually used (the union over
-its turns). `record` writes them into `index.json`; for a bundle recorded before, the UI derives them from the
-recorded events. A market tool that ran on the CPU shows its CPU library (pandas, scikit-learn or NetworkX) in the
-same RAPIDS color, not the GPU name.
-
-Both packs are recorded: `synthetic-market`'s ten questions of its default (`standard`) profile, and every
-`us-equities` session, its 30 questions and 15 two-turn conversations (45 sessions, 60 answers). The
-synthetic pack's eleventh question, `intraday-ranges`, needs a minute-bar profile (`ci` or `intraday`), so its
-bundle leaves it out.
-
-```bash
-./scripts/demo.sh replay                          # synthetic-market, the default
-DATA_PACK=us-equities ./scripts/demo.sh replay
-```
-
-Both were recorded on 2026-10-01, and some of their sessions again on 2026-10-02 (each pack's README names
-them), on a Brev A100 VM with every profile, including `ontology`, the local Kumo
-NIM and the GPU Milvus, so every answer that called the market tools carries its CPU/GPU comparison for the
-Benchmark tab, and every answer that searched documents carries the Milvus CPU/GPU index comparison
-(`retrievalBenchmark`). `synthetic-market` was recorded with the `.env.example` models and corpora (Nemotron 3
-Ultra alone, on build.nvidia.com), as a public user runs it. `us-equities`, the hosted demo's pack, was recorded
-as that deployment runs: `DATA_CORPORA=sec_filings,market_regulations,world_news` and Nemotron 3 Ultra escalating
-to GPT-6.1 Sol (`escalation.nemotron-gpt`) on an OpenAI-compatible endpoint serving both. The recorder writes
-served model ids without a gateway's provider prefix, keeping the last segment of the id the endpoint served. Every answer was reviewed against
-the pack's oracles and evidence; the ones that were wrong were asked again, and the bundles keep the faults that
-remained rather than hiding them (each pack's README lists them).
-The `us-equities` bundle holds results derived from its external dataset: the answers' figures and, in
-`database.json`, the first rows of each table (a few dozen rows of daily prices), never the minute bars.
-
-## Adding or swapping a pack
-
-1. Copy `data/packs/us-equities` (bars you fetch) or `data/packs/synthetic-market` (a generator) to
-   `data/packs/<new-id>`. For your own bars, pin their dataset under `external` and describe their layout under
-   `market.bars` ([data platform](data-platform.md)).
-2. Edit `pack.yaml` (identity, licenses, provenance, sources, disclaimer, analytics universes, prediction),
-   `schema.sql`, `ontology.yaml` and `questions.yaml`. Only the columns in the tool contracts are mandatory.
-3. Set `DATA_PACK=<new-id>` in `.env`, then run `./scripts/demo.sh data validate` and
-   `./scripts/demo.sh up`. Record its sessions with `./scripts/demo.sh record`.
-
-Auto Ontology answers from the descriptions in `ontology.yaml`. After you edit them, the next `up` rebuilds the
-model and seeds the pack's catalog again ([seeding](../tools/auto-ontology/README.md#seeding)).
-
-No code changes are needed while the pack satisfies the contracts its tools own. Market analytics requires what
-`tools/market-analytics/contract/market-analytics.v1.json` lists (a pack declares
-`analytics.contract: market-analytics/v1`); `validate` checks the declared schema and `prepare` checks the
-built tables. The database name is the pack id in snake case.
+`replay` needs at least one pack with recordings; until a pack is recorded, it has nothing to show. A bundle holds
+questions, answers, evidence excerpts and model names: review it before committing, and record again after a
+change to the pack's files or questions.
 
 ## Licenses
 
-- The synthetic market data and its Nemotron-written text are Apache-2.0.
-- `us-equities`' minute bars and GDELT headlines are a private dataset, used as provided and never committed or
-  redistributed here.
-- eCFR is United States government public information. The eCFR is authoritative but is not the official legal
-  edition of the CFR. The Federal Register rule is United States government public information too.
-- SEC EDGAR content falls under the SEC's website reuse terms, and issuer-authored content may carry its own
-  rights; its redistribution terms are unknown. The filings are fetched at build time and never committed.
+Every pack is synthetic, generated by its own script, and licensed Apache-2.0 like the repository. Each pack's
+`licenses` and `provenance` say so file by file.
