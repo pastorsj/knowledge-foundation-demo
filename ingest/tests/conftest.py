@@ -39,3 +39,30 @@ def settings(tmp_path: Path, knowledge_dir: Path) -> Settings:
 @pytest.fixture
 def catalog(knowledge_dir: Path) -> Catalog:
     return Catalog(knowledge_dir)
+
+
+AWKWARD_HEADER = ["Store #", "Net Sales ($)", "Net Sales ($)", "Région"]
+
+
+def write_awkward_xlsx(path: Path) -> Path:
+    """Two sheets with spaces, symbols, a duplicate and a non-ASCII header; the second starts with blank rows."""
+    import openpyxl
+
+    workbook = openpyxl.Workbook()
+    q1 = workbook.active
+    q1.title = "Q1 Sales"
+    q1.append(AWKWARD_HEADER)
+    q1.append([1, 100.5, 90.0, "Nord"])
+    q1.append([2, 200.0, 180.0, "Sud"])
+    q2 = workbook.create_sheet("Q2 Sales")
+    q2.append([None] * 4)
+    q2.append([None] * 4)
+    q2.append(AWKWARD_HEADER)
+    q2.append([1, 110.5, 95.0, "Nord"])
+    workbook.save(path)
+    return path
+
+
+@pytest.fixture
+def awkward_xlsx(tmp_path: Path) -> Path:
+    return write_awkward_xlsx(tmp_path / "awkward.xlsx")
