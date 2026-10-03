@@ -34,12 +34,12 @@ repos:
 
   - repo: local
     hooks:
-      - id: no-market-data
-        name: no data files outside the synthetic text and test fixtures (docs/data-platform.md)
+      - id: no-binary-tables
+        name: no Parquet, Arrow, Feather or DuckDB files outside the test fixtures (packs commit CSV and XLSX)
         language: fail
-        entry: Real market data is never committed; external datasets belong in DATA_SOURCE_DIR.
+        entry: Packs commit their tables as CSV and XLSX; database files are built by ingest.
         files: \.(parquet|arrow|feather|duckdb)$
-        exclude: ^(data/packs/[^/]+/text|(.+/)?tests/fixtures)/
+        exclude: ^(.+/)?tests/fixtures/
       - id: no-makefile
         name: no Makefile (scripts/demo.sh is the entry point)
         language: fail
