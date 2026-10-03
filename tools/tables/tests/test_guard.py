@@ -84,6 +84,50 @@ ESCAPES = {
     "SELECT * FROM duckdb_databases",
     "a_recursive_cte_named_in_a_subquery_of_its_recursive_term": "WITH RECURSIVE t AS (SELECT 1 AS n UNION ALL "
     "SELECT n + 1 FROM (SELECT * FROM t) s WHERE n < 5) SELECT * FROM t",
+    # DuckDB recurses only over a plain UNION or UNION ALL. sqlglot parses BY NAME as a Union too, but DuckDB binds
+    # a name on its right side to the catalog: these return the attached database file's path.
+    "a_recursive_cte_over_union_by_name": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path UNION BY NAME "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_union_all_by_name": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path UNION ALL BY "
+    "NAME SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_union_distinct_by_name": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path UNION "
+    "DISTINCT BY NAME SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_union_by_name_after_a_union": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path "
+    "UNION SELECT 'y' AS path UNION BY NAME SELECT path::VARCHAR AS path FROM duckdb_databases) "
+    "SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_parenthesized_union_by_name_terms": "WITH RECURSIVE duckdb_databases AS ((SELECT 'x' AS "
+    "path) UNION BY NAME (SELECT path::VARCHAR AS path FROM duckdb_databases)) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_a_parenthesized_union_by_name": "WITH RECURSIVE duckdb_databases AS ((SELECT 'x' AS path "
+    "UNION BY NAME SELECT path::VARCHAR AS path FROM duckdb_databases)) SELECT * FROM duckdb_databases",
+    # The other set-operation forms sqlglot reads (DuckDB 1.5.5 does not parse them) are not recursive either, nor
+    # is a parenthesized recursive term, which the guard does not unwrap.
+    "a_recursive_cte_over_union_corresponding": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path UNION "
+    "CORRESPONDING SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_union_strict_corresponding": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path "
+    "UNION STRICT CORRESPONDING SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_union_all_corresponding_by": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path "
+    "UNION ALL CORRESPONDING BY (path) SELECT path::VARCHAR AS path FROM duckdb_databases) "
+    "SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_union_by_name_on": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path UNION BY NAME "
+    "ON (path) SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_a_left_union": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path LEFT UNION "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_a_full_union_all": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path FULL UNION ALL "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_an_inner_union": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path INNER UNION "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_an_outer_union": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path OUTER UNION "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_a_union_with_a_limit": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path UNION "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases LIMIT 5) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_intersect_all": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path INTERSECT ALL "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_except_all": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path EXCEPT ALL "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_with_a_parenthesized_recursive_term": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS path "
+    "UNION (SELECT path::VARCHAR AS path FROM duckdb_databases)) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_with_a_parenthesized_body": "WITH RECURSIVE duckdb_databases AS ((SELECT 'x' AS path UNION "
+    "SELECT path::VARCHAR AS path FROM duckdb_databases)) SELECT * FROM duckdb_databases",
     # DuckDB folds ASCII letters only; Unicode case folding would make these CTE names match the system views.
     "a_cte_name_with_a_long_s": 'WITH "duckdb_databaſes" AS (SELECT 1 AS x) SELECT * FROM duckdb_databases',
     "a_cte_name_with_a_kelvin_sign": 'WITH "ducKdb_tables" AS (SELECT 1 AS x) SELECT * FROM duckdb_tables',
@@ -114,6 +158,10 @@ ALLOWED = {
     "a_recursive_cte": "WITH RECURSIVE t(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM t WHERE n < 5) SELECT * FROM t",
     "a_recursive_cte_joining_a_table": "WITH RECURSIVE t(n) AS (SELECT 1 UNION SELECT t.n + 1 FROM t "
     "JOIN retail_sales.orders o ON o.net_amount > t.n WHERE t.n < 3) SELECT * FROM t",
+    "a_recursive_cte_over_union_distinct": "WITH RECURSIVE t(n) AS (SELECT 1 UNION DISTINCT SELECT n + 1 FROM t "
+    "WHERE n < 5) SELECT * FROM t",
+    "a_recursive_cte_whose_anchor_is_a_union_by_name": "WITH RECURSIVE t(n) AS (SELECT 1 AS n UNION BY NAME "
+    "SELECT 2 AS n UNION ALL SELECT n + 1 FROM t WHERE n < 5) SELECT * FROM t",
     "a_recursive_with_whose_ctes_do_not_recurse": "WITH RECURSIVE a AS (SELECT * FROM retail_sales.orders), "
     "b AS (SELECT * FROM a INTERSECT SELECT * FROM a) SELECT * FROM b",
     "a_cte_inside_a_subquery": "SELECT * FROM (WITH a AS (SELECT * FROM retail_sales.orders) SELECT * FROM a) s",
