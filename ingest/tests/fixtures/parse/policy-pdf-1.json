@@ -1,0 +1,39 @@
+{
+  "id": "chatcmpl-a611d736e78bff8c",
+  "object": "chat.completion",
+  "created": 1790997221,
+  "model": "nvidia/NVIDIA-Nemotron-Parse-2.0",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<x_0.373><y_0.1906>Northwind Return Policy<x_0.626><y_0.2102><class_Section-header>\n\n<x_0.2256><y_0.218># Restocking fees<x_0.3916><y_0.2375><class_Section-header>\n\n<x_0.2256><y_0.2445>Northwind Retail accepts returns of unused merchandise with a receipt. A restocking fee applies to\nopened electronics and assembled furniture, as the table below shows. This policy is synthetic.<x_0.749><y_0.2672><class_Text>\n\n<x_0.3652><y_0.2773>\\begin{tabular}{ccc}\n**Category** & **Return window** & **Restocking fee**\\\\\nElectronics & 15 days & 15\\%\\\\\nFurniture & 30 days & 10\\%\\\\\nApparel & 60 days & None\\\\\n\\end{tabular}<x_0.6328><y_0.3516><class_Table>",
+        "refusal": null,
+        "annotations": null,
+        "audio": null,
+        "function_call": null,
+        "reasoning": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "stop_reason": null,
+      "token_ids": null,
+      "routed_experts": null
+    }
+  ],
+  "service_tier": null,
+  "system_fingerprint": "vllm-0.27.1-563bd04a",
+  "usage": {
+    "prompt_tokens": 6,
+    "total_tokens": 167,
+    "completion_tokens": 161,
+    "prompt_tokens_details": null
+  },
+  "prompt_logprobs": null,
+  "prompt_token_ids": null,
+  "prompt_text": null,
+  "kv_transfer_params": null,
+  "ec_transfer_params": null,
+  "metrics": null
+}
