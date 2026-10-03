@@ -3,10 +3,9 @@
 
 /**
  * The execution graph: one fixed topology of everything a Hermes run can use
- * (tool control, structured data, unstructured data, market analytics,
- * synthesis). Events only change node and edge states, so the layout never
- * moves during replay and capabilities a run did not use stay visible as
- * such.
+ * (tool control, structured data, documents, synthesis). Events only change
+ * node and edge states, so the layout never moves during replay and
+ * capabilities a run did not use stay visible as such.
  */
 
 import type {
@@ -14,6 +13,7 @@ import type {
   GraphInvocation,
   GraphInvocationStatus,
   GraphProjection,
+  GraphResource,
 } from './graph-events'
 
 export type ExecutionNodeState = 'unobserved' | 'pending' | 'running' | 'completed' | 'failed'
@@ -30,6 +30,8 @@ export type ExecutionNodeId =
   | 'skills-list'
   | 'skill-view'
   | 'ontology-tool'
+  | 'tables-tool'
+  | 'prediction-tool'
   | 'retriever-tool'
   | 'hermes-tools'
   | 'structured-prediction'
@@ -37,13 +39,11 @@ export type ExecutionNodeId =
   | 'nvidia-ontology'
   | 'structured-database'
   | 'structured-retrieval'
+  | 'nemotron-parse'
+  | 'nemotron-embed'
+  | 'milvus'
+  | 'nemotron-rerank'
   | 'unstructured-retrieval'
-  | 'market-scan'
-  | 'market-anomaly-scan'
-  | 'price-context'
-  | 'sentiment-timeline'
-  | 'news-price-relationship'
-  | 'market-relationship-analysis'
   | 'synthesis'
   | 'report-generation'
   | 'trusted-answer'
@@ -55,12 +55,6 @@ export type InspectableExecutionNodeId =
   | 'structured-retrieval'
   | 'unstructured-retrieval'
   | 'structured-database'
-  | 'market-scan'
-  | 'market-anomaly-scan'
-  | 'price-context'
-  | 'sentiment-timeline'
-  | 'news-price-relationship'
-  | 'market-relationship-analysis'
 
 export type NodeIcon =
   | 'question'
@@ -73,7 +67,9 @@ export type NodeIcon =
   | 'database'
   | 'table'
   | 'retrieval'
-  | 'analytics'
+  | 'parse'
+  | 'embed'
+  | 'rerank'
   | 'synthesis'
   | 'report'
   | 'answer'
@@ -85,7 +81,6 @@ export type ExecutionGraphGroupId =
   | 'agent-utilities'
   | 'structured-data'
   | 'unstructured-data'
-  | 'market-analytics'
 
 export type ExecutionGraphNodeKind = 'input' | 'agent' | 'tool' | 'stage' | 'resource' | 'output'
 
@@ -108,13 +103,7 @@ export type ExecutionGraphNodeDefinition = {
   width?: number
   height?: number
   icon: NodeIcon
-  branch:
-    | 'orchestration'
-    | 'prediction'
-    | 'structured'
-    | 'unstructured'
-    | 'analytics'
-    | 'foundation'
+  branch: 'orchestration' | 'prediction' | 'structured' | 'unstructured' | 'foundation'
   group?: ExecutionGraphGroupId
   kind?: ExecutionGraphNodeKind
   inspectable?: boolean
@@ -173,6 +162,8 @@ export const EXECUTION_NODE_HEIGHT = 80
 /**
  * The topology is fixed at run start; events only change node and edge state.
  * Direct Hermes tools are drawn apart from the stages and resources behind them.
+ * Structured data has three rows (Auto Ontology, DuckDB tables, NVIDIA Kumo);
+ * documents are one chain, from the parsed corpus to the selected evidence.
  */
 export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] = [
   {
@@ -288,11 +279,22 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
     inspectable: true,
   },
   {
+    id: 'tables-tool',
+    label: 'Query Tables',
+    subtitle: 'query_tables · MCP tool',
+    x: 750,
+    y: 570,
+    icon: 'tools',
+    branch: 'structured',
+    group: 'structured-data',
+    kind: 'tool',
+  },
+  {
     id: 'structured-retrieval',
     label: 'Structured Retrieval',
-    subtitle: 'Ontology-grounded SQL result',
+    subtitle: 'Read-only SQL and its rows',
     x: 1370,
-    y: 420,
+    y: 570,
     icon: 'table',
     branch: 'structured',
     group: 'structured-data',
@@ -301,10 +303,10 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
   },
   {
     id: 'structured-database',
-    label: 'Structured Database',
-    subtitle: 'Selected read-only data source',
+    label: 'DuckDB Tables',
+    subtitle: 'Selected read-only sources',
     x: 1690,
-    y: 420,
+    y: 570,
     icon: 'database',
     branch: 'foundation',
     group: 'structured-data',
@@ -312,11 +314,22 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
     inspectable: true,
   },
   {
+    id: 'prediction-tool',
+    label: 'Predict',
+    subtitle: 'predict · MCP tool',
+    x: 750,
+    y: 720,
+    icon: 'tools',
+    branch: 'prediction',
+    group: 'structured-data',
+    kind: 'tool',
+  },
+  {
     id: 'structured-prediction',
     label: 'Structured Prediction',
-    subtitle: 'Ontology-grounded PQL result',
+    subtitle: 'PQL scored per entity',
     x: 1370,
-    y: 690,
+    y: 720,
     icon: 'prediction',
     branch: 'prediction',
     group: 'structured-data',
@@ -327,7 +340,7 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
     label: 'NVIDIA Kumo',
     subtitle: 'Relational foundation model',
     x: 1690,
-    y: 690,
+    y: 720,
     icon: 'model',
     branch: 'foundation',
     group: 'structured-data',
@@ -337,7 +350,7 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
   {
     id: 'retriever-tool',
     label: 'Retrieve Evidence',
-    subtitle: 'Milvus · NVIDIA Nemotron',
+    subtitle: 'retrieve_evidence · MCP tool',
     x: 1420,
     y: 1020,
     icon: 'tools',
@@ -346,97 +359,59 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
     kind: 'tool',
   },
   {
+    id: 'nemotron-parse',
+    label: 'Nemotron Parse',
+    subtitle: 'Parsed the documents at ingest',
+    x: 1720,
+    y: 1020,
+    icon: 'parse',
+    branch: 'foundation',
+    group: 'unstructured-data',
+    kind: 'resource',
+  },
+  {
+    id: 'nemotron-embed',
+    label: 'Nemotron Embed',
+    subtitle: 'Passage and query vectors',
+    x: 2020,
+    y: 1020,
+    icon: 'embed',
+    branch: 'foundation',
+    group: 'unstructured-data',
+    kind: 'resource',
+  },
+  {
+    id: 'milvus',
+    label: 'Milvus',
+    subtitle: 'Vector search per source',
+    x: 2320,
+    y: 1020,
+    icon: 'database',
+    branch: 'foundation',
+    group: 'unstructured-data',
+    kind: 'resource',
+  },
+  {
+    id: 'nemotron-rerank',
+    label: 'Nemotron Rerank',
+    subtitle: 'Reorders the candidates',
+    x: 2620,
+    y: 1020,
+    icon: 'rerank',
+    branch: 'foundation',
+    group: 'unstructured-data',
+    kind: 'resource',
+  },
+  {
     id: 'unstructured-retrieval',
     label: 'Unstructured Retrieval',
-    subtitle: 'Candidate passages · reranking · evidence',
-    x: 1740,
+    subtitle: 'Cited passages · evidence',
+    x: 2920,
     y: 1020,
     width: 220,
     icon: 'retrieval',
     branch: 'unstructured',
     group: 'unstructured-data',
-    kind: 'stage',
-    inspectable: true,
-  },
-  // The lower market row is offset by half a column. Its centers sit in the
-  // gaps between the upper nodes, giving dispatches a clear vertical path.
-  // Result lanes use the same left-to-right order below the nodes before
-  // entering Synthesis, so the fixed topology remains legible during replay.
-  {
-    id: 'market-scan',
-    label: 'Market Scan',
-    subtitle: 'Ranks observed market signals',
-    x: 2050,
-    y: 410,
-    width: 220,
-    icon: 'analytics',
-    branch: 'analytics',
-    group: 'market-analytics',
-    kind: 'stage',
-    inspectable: true,
-  },
-  {
-    id: 'price-context',
-    label: 'Price Context',
-    subtitle: 'Summarizes observed price history',
-    x: 2360,
-    y: 410,
-    width: 220,
-    icon: 'analytics',
-    branch: 'analytics',
-    group: 'market-analytics',
-    kind: 'stage',
-    inspectable: true,
-  },
-  {
-    id: 'market-anomaly-scan',
-    label: 'Market Anomaly Scan',
-    subtitle: 'Ranks unusual observed feature combinations',
-    x: 2670,
-    y: 410,
-    width: 220,
-    icon: 'analytics',
-    branch: 'analytics',
-    group: 'market-analytics',
-    kind: 'stage',
-    inspectable: true,
-  },
-  {
-    id: 'sentiment-timeline',
-    label: 'Sentiment Timeline',
-    subtitle: 'Aggregates observed news sentiment',
-    x: 2205,
-    y: 650,
-    width: 220,
-    icon: 'analytics',
-    branch: 'analytics',
-    group: 'market-analytics',
-    kind: 'stage',
-    inspectable: true,
-  },
-  {
-    id: 'news-price-relationship',
-    label: 'News and Price Relationship',
-    subtitle: 'Aligns news with forward returns',
-    x: 2515,
-    y: 650,
-    width: 220,
-    icon: 'analytics',
-    branch: 'analytics',
-    group: 'market-analytics',
-    kind: 'stage',
-    inspectable: true,
-  },
-  {
-    id: 'market-relationship-analysis',
-    label: 'Market Relationships',
-    subtitle: 'Ranks observed relationship centrality',
-    x: 2825,
-    y: 650,
-    width: 220,
-    icon: 'analytics',
-    branch: 'analytics',
-    group: 'market-analytics',
     kind: 'stage',
     inspectable: true,
   },
@@ -487,7 +462,7 @@ export const hermesExecutionGraphGroups: readonly ExecutionGraphGroupDefinition[
   {
     id: 'structured-data',
     label: 'Structured Data',
-    description: 'Ontology-grounded retrieval and prediction',
+    description: 'DuckDB tables · Auto Ontology · NVIDIA Kumo predictions',
     x: 700,
     y: 350,
     width: 1200,
@@ -504,26 +479,23 @@ export const hermesExecutionGraphGroups: readonly ExecutionGraphGroupDefinition[
   },
   {
     id: 'unstructured-data',
-    label: 'Unstructured Data',
-    description: 'Milvus + NVIDIA Nemotron evidence workflow',
+    label: 'Documents',
+    description: 'Nemotron Parse · Nemotron Embed · Milvus · Nemotron Rerank',
     x: 1370,
     y: 955,
-    width: 620,
-    height: 190,
-  },
-  {
-    id: 'market-analytics',
-    label: 'Market Analytics',
-    description: 'Snapshot-backed market and news operations',
-    x: 1990,
-    y: 300,
-    width: 1115,
-    height: 540,
+    width: 1820,
+    height: 205,
   },
 ]
 
 export const HERMES_EXECUTION_CANVAS_WIDTH = 4180
 export const HERMES_EXECUTION_CANVAS_HEIGHT = 1200
+
+/** The tool calls' shared dispatch bus, left of the structured rows */
+const DISPATCH_BUS: ReadonlyArray<readonly [number, number]> = [
+  [1400, 300],
+  [620, 300],
+]
 
 export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] = [
   {
@@ -613,12 +585,24 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     label: 'DISPATCHES',
     fromPort: 'bottom',
     toPort: 'left',
-    via: [
-      [1400, 300],
-      [620, 300],
-      [620, 460],
-    ],
+    via: [...DISPATCH_BUS, [620, 460]],
     labelAt: [685, 452],
+  },
+  {
+    id: 'tool-call-tables',
+    from: 'tool-call',
+    to: 'tables-tool',
+    fromPort: 'bottom',
+    toPort: 'left',
+    via: [...DISPATCH_BUS, [620, 610]],
+  },
+  {
+    id: 'tool-call-prediction',
+    from: 'tool-call',
+    to: 'prediction-tool',
+    fromPort: 'bottom',
+    toPort: 'left',
+    via: [...DISPATCH_BUS, [620, 760]],
   },
   {
     id: 'ontology-tool-resource',
@@ -635,18 +619,17 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     to: 'structured-retrieval',
     label: 'GROUNDS SQL',
     fromPort: 'right',
-    toPort: 'left',
-    labelAt: [1300, 452],
+    toPort: 'top',
+    toOffset: -30,
+    via: [[1430, 460]],
   },
   {
-    id: 'ontology-predict',
-    from: 'nvidia-ontology',
-    to: 'structured-prediction',
-    label: 'GROUNDS PQL',
-    fromPort: 'bottom',
+    id: 'tables-query',
+    from: 'tables-tool',
+    to: 'structured-retrieval',
+    label: 'RUNS SQL',
+    fromPort: 'right',
     toPort: 'left',
-    via: [[1140, 730]],
-    labelAt: [1255, 722],
   },
   {
     id: 'query-source',
@@ -655,7 +638,14 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     label: 'READS',
     fromPort: 'right',
     toPort: 'left',
-    labelAt: [1630, 452],
+  },
+  {
+    id: 'prediction-query',
+    from: 'prediction-tool',
+    to: 'structured-prediction',
+    label: 'PQL',
+    fromPort: 'right',
+    toPort: 'left',
   },
   {
     id: 'predict-kumo',
@@ -664,16 +654,15 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     label: 'INFERENCE',
     fromPort: 'right',
     toPort: 'left',
-    labelAt: [1630, 722],
   },
   {
     id: 'source-kumo',
     from: 'structured-database',
     to: 'nvidia-kumo',
-    label: 'HISTORICAL GRAPH',
+    label: 'GRAPH',
     fromPort: 'bottom',
     toPort: 'top',
-    labelAt: [1840, 600],
+    labelAt: [1840, 685],
   },
   {
     id: 'tool-call-retriever',
@@ -682,88 +671,61 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     label: 'DISPATCHES',
     fromPort: 'bottom',
     toPort: 'top',
-    via: [
-      [1400, 300],
-      [620, 300],
-      [620, 900],
-      [1510, 900],
-    ],
+    via: [...DISPATCH_BUS, [620, 900], [1510, 900]],
     labelAt: [1065, 892],
   },
   {
-    id: 'tool-call-market-scan',
-    from: 'tool-call',
-    to: 'market-scan',
-    fromPort: 'bottom',
-    toPort: 'top',
-    via: [
-      [1400, 275],
-      [2160, 275],
-    ],
-  },
-  {
-    id: 'tool-call-price-context',
-    from: 'tool-call',
-    to: 'price-context',
-    fromPort: 'bottom',
-    toPort: 'top',
-    via: [
-      [1400, 275],
-      [2470, 275],
-    ],
-  },
-  {
-    id: 'tool-call-market-anomaly-scan',
-    from: 'tool-call',
-    to: 'market-anomaly-scan',
-    fromPort: 'bottom',
-    toPort: 'top',
-    via: [
-      [1400, 275],
-      [2780, 275],
-    ],
-  },
-  {
-    id: 'tool-call-sentiment-timeline',
-    from: 'tool-call',
-    to: 'sentiment-timeline',
-    fromPort: 'bottom',
-    toPort: 'top',
-    via: [
-      [1400, 275],
-      [2315, 275],
-    ],
-  },
-  {
-    id: 'tool-call-news-price-relationship',
-    from: 'tool-call',
-    to: 'news-price-relationship',
-    fromPort: 'bottom',
-    toPort: 'top',
-    via: [
-      [1400, 275],
-      [2625, 275],
-    ],
-  },
-  {
-    id: 'tool-call-market-relationship-analysis',
-    from: 'tool-call',
-    to: 'market-relationship-analysis',
-    fromPort: 'bottom',
-    toPort: 'top',
-    via: [
-      [1400, 275],
-      [2935, 275],
-    ],
-  },
-  {
-    id: 'retriever-tool-result',
+    id: 'retriever-parse',
     from: 'retriever-tool',
-    to: 'unstructured-retrieval',
-    label: 'EVIDENCE',
+    to: 'nemotron-parse',
+    label: 'CORPUS',
     fromPort: 'right',
     toPort: 'left',
-    labelAt: [1680, 1052],
+  },
+  {
+    id: 'parse-embed',
+    from: 'nemotron-parse',
+    to: 'nemotron-embed',
+    label: 'CHUNKS',
+    fromPort: 'right',
+    toPort: 'left',
+  },
+  {
+    id: 'embed-milvus',
+    from: 'nemotron-embed',
+    to: 'milvus',
+    label: 'VECTORS',
+    fromPort: 'right',
+    toPort: 'left',
+  },
+  {
+    id: 'milvus-rerank',
+    from: 'milvus',
+    to: 'nemotron-rerank',
+    label: 'HITS',
+    fromPort: 'right',
+    toPort: 'left',
+  },
+  {
+    id: 'rerank-evidence',
+    from: 'nemotron-rerank',
+    to: 'unstructured-retrieval',
+    label: 'RANKED',
+    fromPort: 'right',
+    toPort: 'left',
+  },
+  // A retrieval without a rerank model keeps the vector order (BYPASS_EDGE)
+  {
+    id: 'milvus-evidence',
+    from: 'milvus',
+    to: 'unstructured-retrieval',
+    label: 'VECTOR ORDER',
+    fromPort: 'bottom',
+    toPort: 'bottom',
+    via: [
+      [2410, 1135],
+      [3030, 1135],
+    ],
   },
   {
     id: 'query-synthesis',
@@ -771,17 +733,13 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     to: 'synthesis',
     label: 'SQL ROWS',
     fromPort: 'top',
-    fromOffset: 80,
+    fromOffset: 60,
     toPort: 'top',
-    toOffset: -60,
+    toOffset: -40,
     via: [
-      [1540, 320],
-      [1980, 320],
-      [1980, 860],
-      [3310, 860],
-      [3310, 710],
+      [1520, 330],
+      [3330, 330],
     ],
-    labelAt: [2645, 852],
   },
   {
     id: 'predict-synthesis',
@@ -789,14 +747,8 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     to: 'synthesis',
     label: 'PREDICTION RESULT',
     fromPort: 'right',
-    toPort: 'bottom',
-    toOffset: -40,
-    via: [
-      [1940, 730],
-      [1940, 920],
-      [3330, 920],
-    ],
-    labelAt: [2635, 905],
+    toPort: 'left',
+    toOffset: 10,
   },
   {
     id: 'retrieve-synthesis',
@@ -805,64 +757,8 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     label: 'SELECTED EVIDENCE',
     fromPort: 'right',
     toPort: 'bottom',
-    toOffset: 40,
-    via: [[3410, 1060]],
-    labelAt: [2685, 1052],
-  },
-  {
-    id: 'market-scan-synthesis',
-    from: 'market-scan',
-    to: 'synthesis',
-    label: 'RESULTS',
-    fromPort: 'bottom',
-    toPort: 'left',
-    toOffset: 35,
-    via: [[2160, 785]],
-  },
-  {
-    id: 'price-context-synthesis',
-    from: 'price-context',
-    to: 'synthesis',
-    fromPort: 'bottom',
-    toPort: 'left',
-    toOffset: 15,
-    via: [[2470, 765]],
-  },
-  {
-    id: 'market-anomaly-scan-synthesis',
-    from: 'market-anomaly-scan',
-    to: 'synthesis',
-    fromPort: 'bottom',
-    toPort: 'left',
-    toOffset: -5,
-    via: [[2780, 745]],
-  },
-  {
-    id: 'sentiment-timeline-synthesis',
-    from: 'sentiment-timeline',
-    to: 'synthesis',
-    fromPort: 'bottom',
-    toPort: 'left',
-    toOffset: 25,
-    via: [[2315, 775]],
-  },
-  {
-    id: 'news-price-relationship-synthesis',
-    from: 'news-price-relationship',
-    to: 'synthesis',
-    fromPort: 'bottom',
-    toPort: 'left',
-    toOffset: 5,
-    via: [[2625, 755]],
-  },
-  {
-    id: 'market-relationship-analysis-synthesis',
-    from: 'market-relationship-analysis',
-    to: 'synthesis',
-    fromPort: 'bottom',
-    toPort: 'left',
-    toOffset: -15,
-    via: [[2935, 735]],
+    toOffset: 20,
+    via: [[3390, 1060]],
   },
   {
     id: 'hermes-synthesis',
@@ -898,6 +794,9 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
   },
 ]
 
+/** The edge a retrieval without a rerank model takes instead of Nemotron Rerank. */
+const BYPASS_EDGE = 'milvus-evidence'
+
 const hermesComponentNodeMap: Partial<Record<GraphEvent['component'], ExecutionNodeId[]>> = {
   agent: ['hermes-agent'],
   ontology: ['nvidia-ontology'],
@@ -917,30 +816,33 @@ export const TOOL_NODE_BY_NAME: Readonly<Partial<Record<string, ExecutionNodeId>
   skills_list: 'skills-list',
   skill_view: 'skill-view',
   ask_question: 'ontology-tool',
+  query_tables: 'tables-tool',
+  predict: 'prediction-tool',
   retrieve_evidence: 'retriever-tool',
-  market_scan: 'market-scan',
-  market_anomaly_scan: 'market-anomaly-scan',
-  price_context: 'price-context',
-  sentiment_timeline: 'sentiment-timeline',
-  analyze_news_price_relationship: 'news-price-relationship',
-  analyze_market_relationships: 'market-relationship-analysis',
 }
 
 /** Tools the agent dispatches through Tool Invocation. */
 const DISPATCHED_TOOL_NODES: ReadonlySet<ExecutionNodeId> = new Set([
   'ontology-tool',
+  'tables-tool',
+  'prediction-tool',
   'retriever-tool',
-  'market-scan',
-  'market-anomaly-scan',
-  'price-context',
-  'sentiment-timeline',
-  'news-price-relationship',
-  'market-relationship-analysis',
 ])
+
+/** The node of each service a call is known to have used. */
+const RESOURCE_NODES: Readonly<Record<GraphResource, ExecutionNodeId>> = {
+  structured_database: 'structured-database',
+  nvidia_kumo: 'nvidia-kumo',
+  nvidia_ontology: 'nvidia-ontology',
+  nemotron_parse: 'nemotron-parse',
+  nemotron_embed: 'nemotron-embed',
+  milvus: 'milvus',
+  nemotron_rerank: 'nemotron-rerank',
+}
 
 /**
  * A registered capability tool without a node of its own is drawn by its
- * capability (component and resources), e.g. structured prediction.
+ * capability (component and resources).
  */
 const toolNode = (event: GraphEvent): ExecutionNodeId | undefined => {
   if (!event.toolName) return undefined
@@ -955,13 +857,8 @@ const toolNode = (event: GraphEvent): ExecutionNodeId | undefined => {
  * Resources light only from the resources a call is known to have used; a
  * display name is never enough.
  */
-const resourceMatches = (event: GraphEvent): ExecutionNodeId[] => {
-  const nodes: ExecutionNodeId[] = []
-  if (event.observedResources.includes('structured_database')) nodes.push('structured-database')
-  if (event.observedResources.includes('nvidia_kumo')) nodes.push('nvidia-kumo')
-  if (event.observedResources.includes('nvidia_ontology')) nodes.push('nvidia-ontology')
-  return nodes
-}
+const resourceMatches = (event: GraphEvent): ExecutionNodeId[] =>
+  event.observedResources.map((resource) => RESOURCE_NODES[resource])
 
 export const nodeIdsForEvent = (event: GraphEvent): ExecutionNodeId[] => {
   const nodeIds = new Set<ExecutionNodeId>(hermesComponentNodeMap[event.component] || [])
@@ -1119,6 +1016,8 @@ const edgeEvidence = (
     edge.id === 'tool-search-describe' ||
     edge.id === 'tool-describe-call' ||
     edge.id === 'tool-call-ontology' ||
+    edge.id === 'tool-call-tables' ||
+    edge.id === 'tool-call-prediction' ||
     edge.id === 'tool-call-retriever' ||
     edge.id === 'skills-list-view'
 
@@ -1160,7 +1059,12 @@ export const buildExecutionGraphViewModel = ({
     }
   })
 
+  // A run whose retrieval reranked never takes the bypass, even before the rerank is reached
+  const reranked = allEvents.some((event) => nodeIdsForEvent(event).includes('nemotron-rerank'))
   const edges = hermesExecutionGraphEdges.map((edge) => {
+    if (edge.id === BYPASS_EDGE && reranked) {
+      return { ...edge, state: 'unobserved' as const, current: false }
+    }
     const visibleEvidence = edgeEvidence(edge, visibleEvents)
     const futureEvidence = visibleEvidence ? null : edgeEvidence(edge, allEvents)
     const state = visibleEvidence

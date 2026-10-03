@@ -1002,7 +1002,7 @@ export const useChatStore = create<ChatStore>()(
         }
       },
       {
-        name: 'aiq-chat-store',
+        name: 'kf-chat-store',
         storage: typeof window === 'undefined' ? undefined : createResilientStorage(),
         partialize: (state) => ({
           // Persist conversations and user context, not streaming state
@@ -1026,7 +1026,7 @@ if (typeof window !== 'undefined') {
 
   // Monitor storage events from other tabs or browser extensions
   window.addEventListener('storage', (event) => {
-    if (event.key !== 'aiq-chat-store') return
+    if (event.key !== 'kf-chat-store') return
     logExternalStorageEvent(event.key, event.oldValue, event.newValue)
     if (event.oldValue !== null && event.newValue === null) {
       console.error(

@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within } from '@/test-utils'
 import type { StructuredQueryReceipt } from '../contract'
 import type { ExecutionNodeDetail } from '../graph'
-import { receiptOf } from '../test-utils/fixtures'
+import { receiptOfTool } from '../test-utils/fixtures'
 import { OntologyLineageInspector } from './OntologyLineageInspector'
 
 const DETAIL: ExecutionNodeDetail = {
@@ -19,7 +19,7 @@ const DETAIL: ExecutionNodeDetail = {
 }
 
 const call = (index: number, query: string): StructuredQueryReceipt => {
-  const receipt = receiptOf('structured_query')
+  const receipt = receiptOfTool('ask_question') as StructuredQueryReceipt
   return {
     ...receipt,
     receiptId: `receipt-${index}`,
@@ -103,7 +103,7 @@ describe('OntologyLineageInspector', () => {
     expect(screen.queryByRole('button', { name: 'Open in Data Viewer' })).toBeNull()
     unmount()
 
-    renderInspector([receipt], { onOpenQuery, queryDatabases: ['market_analysis'] })
+    renderInspector([receipt], { onOpenQuery, queryDatabases: ['retail_sales'] })
     fireEvent.click(screen.getByRole('button', { name: 'Open in Data Viewer' }))
     expect(onOpenQuery).toHaveBeenCalledWith(receipt)
   })

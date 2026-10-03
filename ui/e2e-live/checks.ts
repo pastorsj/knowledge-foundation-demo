@@ -202,7 +202,7 @@ export const checkPills = (
   shown: string[] | null,
   turn: LiveTurn | null
 ): Check => {
-  const used = sessionPills([{ events: turn?.events ?? [], receipts: turn?.receipts ?? [] }])
+  const used = sessionPills([{ events: turn?.events ?? [] }])
   const usedKinds = new Set<string>(used.map((use) => use.pill))
   const labels = used.map(pillLabel).join(' ') || 'none'
   if (shown !== null && [...shown].sort().join() !== [...declared].sort().join()) {

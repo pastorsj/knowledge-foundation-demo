@@ -9,16 +9,7 @@
  */
 
 import { create } from 'zustand'
-import {
-  toBenchmark,
-  toExecutionEvent,
-  toReceipt,
-  toRetrievalBenchmark,
-  type Benchmark,
-  type ExecutionEventV2,
-  type ReceiptV2,
-  type RetrievalBenchmark,
-} from './contract'
+import { toExecutionEvent, toReceipt, type ExecutionEventV2, type ReceiptV2 } from './contract'
 
 /** Events kept per run. The stream replays from the start, so it can only repeat, not grow. */
 const MAX_EVENTS = 5000
@@ -33,10 +24,6 @@ export interface ExecutionRun {
   jobStatus: string | null
   /** Evidence (receipt) ids the answer cites; null until its report is known */
   citedEvidenceIds: string[] | null
-  /** The CPU/GPU comparison of its market calls, once one has run (the Benchmark tab) */
-  benchmark: Benchmark | null
-  /** The Milvus CPU/GPU index comparison that applies to its retrieval calls, once known */
-  retrievalBenchmark: RetrievalBenchmark | null
   /** From the data pack's recordings: no live job behind it, in either mode */
   recorded: boolean
   /** The recordings archive it came from (`archiveId`), when known */
@@ -50,8 +37,6 @@ export interface ExecutionRecord {
   receipts: unknown[]
   status?: string
   report?: { citations: unknown[] } | null
-  benchmark?: unknown
-  retrievalBenchmark?: unknown
   /** Loaded from the data pack's recordings */
   recorded?: boolean
   /** The recordings archive it came from */
@@ -65,8 +50,6 @@ interface ExecutionState {
   addEvent: (jobId: string, value: unknown, cursor?: string | null) => void
   addRecord: (record: ExecutionRecord) => void
   setJobStatus: (jobId: string, status: string) => void
-  setBenchmark: (jobId: string, benchmark: Benchmark) => void
-  setRetrievalBenchmark: (jobId: string, benchmark: RetrievalBenchmark) => void
 }
 
 const emptyRun = (jobId: string): ExecutionRun => ({
@@ -75,8 +58,6 @@ const emptyRun = (jobId: string): ExecutionRun => ({
   receipts: {},
   jobStatus: null,
   citedEvidenceIds: null,
-  benchmark: null,
-  retrievalBenchmark: null,
   recorded: false,
   archive: null,
 })
@@ -137,17 +118,7 @@ export const useExecutionStore = create<ExecutionState>()((set) => ({
     )
   },
 
-  addRecord: ({
-    jobId,
-    events,
-    receipts,
-    status,
-    report,
-    benchmark,
-    retrievalBenchmark,
-    recorded,
-    archive,
-  }) => {
+  addRecord: ({ jobId, events, receipts, status, report, recorded, archive }) => {
     const validEvents = events.map((event) => toExecutionEvent(event)).filter((e) => e !== null)
     const validReceipts = receipts.map(toReceipt).filter((r) => r !== null)
     const dropped = events.length + receipts.length - validEvents.length - validReceipts.length
@@ -160,8 +131,6 @@ export const useExecutionStore = create<ExecutionState>()((set) => ({
             ...run,
             jobStatus: status ?? run.jobStatus,
             citedEvidenceIds: citedEvidence(report) ?? run.citedEvidenceIds,
-            benchmark: toBenchmark(benchmark) ?? run.benchmark,
-            retrievalBenchmark: toRetrievalBenchmark(retrievalBenchmark) ?? run.retrievalBenchmark,
             recorded: recorded ?? run.recorded,
             archive: archive ?? run.archive,
           },
@@ -170,22 +139,6 @@ export const useExecutionStore = create<ExecutionState>()((set) => ({
       }
     })
   },
-
-  setBenchmark: (jobId, benchmark) =>
-    set((state) => ({
-      runs: {
-        ...state.runs,
-        [jobId]: { ...(state.runs[jobId] ?? emptyRun(jobId)), benchmark },
-      },
-    })),
-
-  setRetrievalBenchmark: (jobId, retrievalBenchmark) =>
-    set((state) => ({
-      runs: {
-        ...state.runs,
-        [jobId]: { ...(state.runs[jobId] ?? emptyRun(jobId)), retrievalBenchmark },
-      },
-    })),
 
   setJobStatus: (jobId, status) =>
     set((state) => ({

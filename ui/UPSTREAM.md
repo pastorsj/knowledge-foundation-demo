@@ -62,21 +62,23 @@ chat, panel, HITL and upload code used. Three were added: `finishDeepResearch`,
   `/api/v1` proxy; `pack-client` is new.
 - `shared/components/Sources`: references of the form ``Label — evidence `id` —
 invocation `id` `` become inspectable evidence (`EvidenceDisclosure`).
-- `app`: `layout.tsx` title "Enterprise Research"; `page.tsx` is the landing
-  page; the chat moved to `research/page.tsx`.
+- `app`: `layout.tsx` title "NVIDIA Knowledge Foundation"; `page.tsx` is the landing
+  page; the chat moved to `research/page.tsx`. The package is `knowledge-foundation-ui` and the
+  browser storage keys are `kf-chat-store` and `kf-deep-research-<job id>`.
 - Visible copy: the sign-in states and the "AI-Q" label next to the logo are
   gone (as in the prototype); the "Answer complete" banner is gone, since a
   successful job shows its answer instead (answer-first); the no-sources banner
   no longer mentions files;
   the landing page names LangChain instead of LlamaIndex and adds OpenShell and
   Switchyard to the Hermes card.
-- Landing page: it keeps the prototype's technology logos
-  (`public/ecosystem-logos`) and adds the LangChain symbol; Kumo, which has no
-  logo file, gets a text badge of the same size. The Market Analytics card
-  lists RAPIDS cuDF, cuGraph and cuML. The featured questions sit in a 3 × 2 grid of
-  short cards (the full question is in the link and its tooltip), and the
-  observability flow shares the footer row, so the page fits 1280×800,
-  1440×900 and 1920×1080 without scrolling.
+- Landing page: "Ask your enterprise knowledge". It keeps the prototype's technology logos
+  (`public/ecosystem-logos`, without RAPIDS) and adds the LangChain symbol; NVIDIA technologies
+  without a logo file (Kumo, Auto Ontology, Docling's pipeline) carry the NVIDIA mark, the Nemotron
+  models the NIM mark. Its cards are Documents, Tables and Ingestion, and its foundation strip names
+  the one ingestion pipeline (parse, chunk, embed, index, load tables). The featured questions of the
+  selected pack sit in a 3 × 2 grid of short cards (the full question is in the link and its
+  tooltip), and the observability flow shares the footer row, so the page fits 1280×800, 1440×900
+  and 1920×1080 without scrolling.
 
 ### Added
 

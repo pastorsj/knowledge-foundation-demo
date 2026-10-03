@@ -27,15 +27,15 @@ describe('projectRun', () => {
       }))
     ).toEqual([
       {
-        name: 'market_anomaly_scan',
-        label: 'Market Anomaly Scan',
-        family: 'market_analytics',
+        name: 'query_tables',
+        label: 'Table Query',
+        family: 'structured_retrieval',
         state: 'completed',
         receipts: 1,
       },
       {
         name: 'retrieve_evidence',
-        label: 'Unstructured Retrieval',
+        label: 'Document Retrieval',
         family: 'unstructured_retrieval',
         state: 'completed',
         receipts: 1,
@@ -78,14 +78,14 @@ describe('projectRun', () => {
       receiptIds: failedReceipt.artifactRefs,
     })
     const events = [fixtureEvents[0], fixtureEvents[2], failedReceipt, fixtureEvents[6]].map(
-      toGraphEvent
+      (event) => toGraphEvent(event)
     )
     const graph = buildExecutionGraphViewModel({
       allEvents: events,
       visibleEvents: events,
       projection: toGraphProjection(run, events),
     })
-    expect(graph.nodes.find((node) => node.id === 'market-anomaly-scan')!.state).toBe('failed')
+    expect(graph.nodes.find((node) => node.id === 'tables-tool')!.state).toBe('failed')
   })
 
   it('ends the run with the job when no run event says how it ended', () => {

@@ -9,17 +9,20 @@
 
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import type { ArtifactKind, ExecutionEventV2, ReceiptV2, RetrievalBenchmark } from '../contract'
+import type { ArtifactKind, ExecutionEventV2, ReceiptV2 } from '../contract'
 
 const readJson = (...parts: string[]): unknown =>
   JSON.parse(readFileSync(path.resolve(process.cwd(), ...parts), 'utf8'))
 
-/** One recorded run: a market anomaly scan and a document retrieval, plus two model calls. */
+/** One recorded run: a DuckDB table query and a document retrieval, plus two model calls. */
 export const fixtureEvents = readJson(
   '../contracts/fixtures/execution-events.json'
 ) as ExecutionEventV2[]
 
-/** One completed receipt per artifactKind, and a failed prediction. */
+/**
+ * One completed receipt per artifactKind (and per structured query tool), a retrieval without a
+ * rerank model, and a failed prediction.
+ */
 export const fixtureReceipts = readJson('../contracts/fixtures/receipts.json') as ReceiptV2[]
 
 export const receiptOf = <K extends ArtifactKind>(
@@ -30,13 +33,14 @@ export const receiptOf = <K extends ArtifactKind>(
     (receipt) => receipt.artifactKind === kind && receipt.status === status
   ) as Extract<ReceiptV2, { artifactKind: K }>
 
-/** A Milvus comparison on a GPU stack: CPU faster for single queries, the GPU for batches and concurrency. */
-export const [fixtureRetrievalBenchmark] = readJson(
-  '../contracts/fixtures/retrieval-benchmarks.json'
-) as RetrievalBenchmark[]
+/** The first receipt of a registered tool, by its MCP name (`ask_question`, `query_tables`, …). */
+export const receiptOfTool = (toolId: string, status: ReceiptV2['status'] = 'completed'): ReceiptV2 =>
+  fixtureReceipts.find(
+    (receipt) => receipt.toolName.endsWith(`__${toolId}`) && receipt.status === status
+  )!
 
 export const readRecording = (file: string): unknown =>
-  readJson('e2e/fixtures/packs/e2e/recordings', file)
+  readJson('e2e/fixtures/packs/retail/recordings', file)
 
 /**
  * The events the API records when it publishes the fixture run's answer: response formatted,

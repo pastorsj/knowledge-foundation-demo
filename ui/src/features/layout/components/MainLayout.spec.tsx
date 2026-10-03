@@ -19,8 +19,8 @@ const initialChat = useChatStore.getState()
 const initialLayout = useLayoutStore.getState()
 
 const SOURCES = [
-  { id: 'market_analysis_structured', name: 'Market data' },
-  { id: 'market_news', name: 'Market news' },
+  { id: 'retail.sales', name: 'Market data' },
+  { id: 'retail.policies', name: 'Market news' },
 ]
 
 const recordings: RecordingsSource = {
@@ -42,7 +42,7 @@ const recordings: RecordingsSource = {
         question: 'Which assets led?',
         answer: 'Asset A led.',
         jobId: 'job-1',
-        sourceIds: ['market_analysis_structured'],
+        sourceIds: ['retail.sales'],
       },
     ],
   }),
@@ -83,7 +83,7 @@ describe('MainLayout', () => {
     expect(await screen.findByText('Asset A led.')).toBeInTheDocument()
     expect(useChatStore.getState().currentConversation?.readOnly).toBe(true)
     // Its data sources show in the composer's counter
-    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['market_analysis_structured'])
+    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.sales'])
     // Recorded sessions are shown, never saved.
     expect(useChatStore.getState().conversations).toEqual([])
   })
@@ -129,12 +129,12 @@ describe('MainLayout', () => {
       <MainLayout
         demoScenarios={[
           {
-            id: 'market-leaders',
-            label: 'Market Leaders',
-            tools: ['cudf'],
+            id: 'top-customers',
+            label: 'Top Customers',
+            tools: ['duckdb'],
             description: 'Scan the most liquid issuers.',
             question: 'Which assets led?',
-            sourceIds: ['market_news'],
+            sourceIds: ['retail.policies'],
           },
         ]}
       />
@@ -142,20 +142,20 @@ describe('MainLayout', () => {
 
     expect(screen.getByTestId('demo-scenario-control')).toHaveTextContent('Demo scenario')
     await userEvent.click(screen.getByTestId('demo-scenario-select'))
-    const option = await screen.findByRole('option', { name: /Market Leaders/ })
+    const option = await screen.findByRole('option', { name: /Top Customers/ })
     // The tools it is expected to use, as pills in place of the old type tag
-    expect(option.querySelector('.tool-pill')).toHaveTextContent('cuDF')
+    expect(option.querySelector('.tool-pill')).toHaveTextContent('DuckDB')
     await userEvent.click(option)
 
     expect(screen.getByRole('textbox', { name: 'Chat message input' })).toHaveValue(
       'Which assets led?'
     )
-    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['market_news'])
+    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.policies'])
   })
 
   test('places a featured question and its data sources in a new session', async () => {
     render(
-      <MainLayout initialQuestion={{ question: 'Which assets led?', sourceIds: ['market_news'] }} />
+      <MainLayout initialQuestion={{ question: 'Which assets led?', sourceIds: ['retail.policies'] }} />
     )
 
     await waitFor(() =>
@@ -163,7 +163,7 @@ describe('MainLayout', () => {
         'Which assets led?'
       )
     )
-    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['market_news'])
+    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.policies'])
   })
 
   test('shows the execution workspace for an opened run', async () => {
@@ -193,7 +193,7 @@ describe('MainLayout', () => {
 
     useLayoutStore.getState().openExecution('job-1')
     expect(
-      await screen.findByText('Which assets led? from market_analysis_structured')
+      await screen.findByText('Which assets led? from retail.sales')
     ).toBeInTheDocument()
   })
 })

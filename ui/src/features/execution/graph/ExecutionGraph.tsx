@@ -5,8 +5,6 @@
 
 import {
   type FC,
-  type FocusEvent as ReactFocusEvent,
-  type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   type WheelEvent as ReactWheelEvent,
   useCallback,
@@ -20,7 +18,6 @@ import Image from 'next/image'
 import type { NodeLogo } from '../registry'
 import styles from '../execution-workspace.module.css'
 import { ExecutionNodeIcon } from './ExecutionNodeIcon'
-import type { ExecutionNodeGpuAcceleration } from './gpu-acceleration'
 import {
   HERMES_EXECUTION_CANVAS_HEIGHT,
   HERMES_EXECUTION_CANVAS_WIDTH,
@@ -58,8 +55,7 @@ export type ExecutionGraphProps = {
   unobservedLegendLabel?: string
   initialZoom?: number
   structuredDatabaseProviderMark?: { src: string; alt: string }
-  gpuAccelerations?: ReadonlyMap<string, ExecutionNodeGpuAcceleration>
-  /** Logos of the libraries a node's tool is built on, by node id */
+  /** Logos of the technologies a node is built on, by node id */
   nodeLogos?: ReadonlyMap<string, readonly NodeLogo[]>
   onNodeSelect?: (nodeId: InspectableExecutionNodeId) => void
 }
@@ -69,10 +65,15 @@ const MAX_ZOOM = 1.4
 const ZOOM_STEP = 0.1
 const FIT_VIEWPORT_PADDING = 16
 const FIT_GRAPH_MARGIN = 44
-const MIN_MARKET_FOCUS_ZOOM = 0.58
-const GPU_TOOLTIP_WIDTH = 292
-const GPU_TOOLTIP_MARGIN = 12
-const GPU_TOOLTIP_ESTIMATED_HEIGHT = 150
+
+/** Nodes of NVIDIA technologies, which carry the NVIDIA mark */
+const NVIDIA_NODES: ReadonlySet<string> = new Set([
+  'nvidia-kumo',
+  'nvidia-ontology',
+  'nemotron-parse',
+  'nemotron-embed',
+  'nemotron-rerank',
+])
 
 // Chromium renders these uppercase, 14px, 750-weight labels at roughly
 // 9.5px/character. Preserve visible breathing room on both sides rather than
@@ -94,19 +95,7 @@ export const fitObservedExecutionNodes = ({
 }): { zoom: number; pan: Point } | null => {
   if (viewportWidth <= 0 || viewportHeight <= 0 || !nodes.length) return null
   const observedNodes = nodes.filter((node) => node.state !== 'unobserved')
-  const observedMarketNodes = observedNodes.filter((node) => node.group === 'market-analytics')
-  const observedMarketReturn = observedMarketNodes.length
-    ? observedNodes.filter((node) => node.id === 'synthesis')
-    : []
-  // A completed market run can span the entire static manifest from intake to
-  // answer. Fitting every observed node makes the operation labels unreadable
-  // on a demo display. Focus the observed market cluster and its return point;
-  // the complete static topology remains available through pan and zoom.
-  const targets = observedMarketNodes.length
-    ? [...observedMarketNodes, ...observedMarketReturn]
-    : observedNodes.length
-      ? observedNodes
-      : nodes
+  const targets = observedNodes.length ? observedNodes : nodes
   const left = Math.min(...targets.map((node) => node.x)) - FIT_GRAPH_MARGIN
   const top = Math.min(...targets.map((node) => node.y)) - FIT_GRAPH_MARGIN
   const right =
@@ -119,12 +108,9 @@ export const fitObservedExecutionNodes = ({
   const contentHeight = Math.max(1, bottom - top)
   const availableWidth = Math.max(1, viewportWidth - FIT_VIEWPORT_PADDING * 2)
   const availableHeight = Math.max(1, viewportHeight - FIT_VIEWPORT_PADDING * 2)
-  const fittedZoom = clampZoom(
+  const zoom = clampZoom(
     Math.min(clampZoom(maxZoom), availableWidth / contentWidth, availableHeight / contentHeight)
   )
-  const zoom = observedMarketNodes.length
-    ? Math.min(clampZoom(maxZoom), Math.max(MIN_MARKET_FOCUS_ZOOM, fittedZoom))
-    : fittedZoom
 
   return {
     zoom,
@@ -338,24 +324,15 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
   unobservedLegendLabel = 'Never activated',
   initialZoom = 0.86,
   structuredDatabaseProviderMark,
-  gpuAccelerations,
   nodeLogos,
   onNodeSelect,
 }) => {
   const markerPrefix = useId().replace(/[^a-zA-Z0-9_-]/g, '')
-  const shellRef = useRef<HTMLDivElement>(null)
   const viewportRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ pointerId: number; origin: Point; pan: Point } | null>(null)
   const manuallyPositionedRef = useRef(false)
   const [zoom, setZoom] = useState(() => clampZoom(initialZoom))
   const [pan, setPan] = useState<Point>({ x: 18, y: 16 })
-  const [gpuTooltip, setGpuTooltip] = useState<{
-    nodeId: string
-    left: number
-    top: number
-    placement: 'above' | 'below'
-    alignment: 'left' | 'right'
-  } | null>(null)
   const canvasWidth = model.canvasWidth || HERMES_EXECUTION_CANVAS_WIDTH
   const canvasHeight = model.canvasHeight || HERMES_EXECUTION_CANVAS_HEIGHT
   const nodeDefinitions = useMemo(
@@ -457,49 +434,8 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
     delete event.currentTarget.dataset.dragging
   }
 
-  const showGpuTooltip = (nodeId: string, anchor: HTMLElement): void => {
-    const shell = shellRef.current
-    if (!shell || !gpuAccelerations?.has(nodeId)) return
-    const shellBox = shell.getBoundingClientRect()
-    const toolNode = anchor.closest<HTMLElement>('[data-execution-node="true"]') || anchor
-    const anchorBox = toolNode.getBoundingClientRect()
-    const availableLeft = anchorBox.left - shellBox.left
-    const availableRight = shellBox.right - anchorBox.right
-    const alignment =
-      availableLeft >= GPU_TOOLTIP_WIDTH + GPU_TOOLTIP_MARGIN || availableLeft >= availableRight
-        ? 'left'
-        : 'right'
-    const requestedLeft =
-      alignment === 'left'
-        ? anchorBox.left - shellBox.left - GPU_TOOLTIP_WIDTH
-        : anchorBox.right - shellBox.left
-    const maximumLeft = Math.max(
-      GPU_TOOLTIP_MARGIN,
-      shellBox.width - GPU_TOOLTIP_WIDTH - GPU_TOOLTIP_MARGIN
-    )
-    const left = Math.round(Math.min(maximumLeft, Math.max(GPU_TOOLTIP_MARGIN, requestedLeft)))
-    const availableBelow = shellBox.bottom - anchorBox.bottom
-    const placement =
-      availableBelow >= GPU_TOOLTIP_ESTIMATED_HEIGHT + GPU_TOOLTIP_MARGIN ? 'below' : 'above'
-    setGpuTooltip({
-      nodeId,
-      left,
-      top: Math.round(
-        placement === 'above' ? anchorBox.top - shellBox.top : anchorBox.bottom - shellBox.top
-      ),
-      placement,
-      alignment,
-    })
-  }
-
-  const activeGpuAcceleration = gpuTooltip ? gpuAccelerations?.get(gpuTooltip.nodeId) || null : null
-
-  useEffect(() => {
-    setGpuTooltip((current) => (current && !gpuAccelerations?.has(current.nodeId) ? null : current))
-  }, [gpuAccelerations])
-
   return (
-    <div ref={shellRef} className={styles.graphShell}>
+    <div className={styles.graphShell}>
       <div className={styles.graphStateLegend} role="list" aria-label="Execution graph legend">
         <span className={styles.graphStateLegendItem} role="listitem">
           <i data-availability="available-now" aria-hidden="true" />
@@ -513,25 +449,6 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
           <i data-availability="not-observed" aria-hidden="true" />
           {unobservedLegendLabel}
         </span>
-        {(gpuAccelerations?.size || 0) > 0 ? (
-          <span
-            className={[styles.graphStateLegendItem, styles.gpuLegendItem].join(' ')}
-            role="listitem"
-            title="Hover the GPU badge on an accelerated node to see its NVIDIA technology."
-          >
-            <i
-              className={[styles.gpuAccelerationBadge, styles.gpuLegendBadge].join(' ')}
-              data-testid="gpu-legend-badge"
-              aria-hidden="true"
-            >
-              GPU
-            </i>
-            <span className={styles.gpuLegendCopy}>
-              <span>NVIDIA GPU accelerated</span>
-              <small>Hover node badge for details</small>
-            </span>
-          </span>
-        ) : null}
       </div>
       <div className={styles.zoomControls} aria-label="Execution graph zoom controls">
         <button
@@ -668,9 +585,7 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
                 ? 'not-observed'
                 : 'used-in-run'
             const stateDescriptionId = `${markerPrefix}-${node.id}-state`
-            const accelerationDescriptionId = `${markerPrefix}-${node.id}-gpu`
-            const acceleration = gpuAccelerations?.get(node.id)
-            const nvidiaBranded = node.id === 'nvidia-kumo' || node.id === 'nvidia-ontology'
+            const nvidiaBranded = NVIDIA_NODES.has(node.id)
             const logos = nodeLogos?.get(node.id) ?? []
             const nodeContents = (
               <>
@@ -723,29 +638,6 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
                     ×{node.count}
                   </span>
                 )}
-                {acceleration && (
-                  <>
-                    <span
-                      className={styles.gpuAccelerationBadge}
-                      data-testid="gpu-acceleration-badge"
-                      aria-hidden="true"
-                      onMouseEnter={(event) => showGpuTooltip(node.id, event.currentTarget)}
-                      onMouseLeave={() => setGpuTooltip(null)}
-                    >
-                      GPU
-                    </span>
-                    <span id={accelerationDescriptionId} className={styles.visuallyHidden}>
-                      NVIDIA GPU accelerated. {acceleration.invocationCount} observed GPU{' '}
-                      {acceleration.invocationCount === 1 ? 'call' : 'calls'}.{' '}
-                      {acceleration.technologies
-                        .map(
-                          (technology) =>
-                            `${technology.label}${technology.libraryVersion ? ` ${technology.libraryVersion}` : ''}: ${technology.description}`
-                        )
-                        .join(' ')}
-                    </span>
-                  </>
-                )}
                 <span id={stateDescriptionId} className={styles.visuallyHidden}>
                   {node.state}; {availability.replaceAll('-', ' ')}
                 </span>
@@ -770,21 +662,8 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
               'data-selected': selectedNodeId === node.id || undefined,
               'data-availability': availability,
               'data-interactive': inspectableNodeId ? 'true' : 'false',
-              'data-gpu-accelerated': acceleration ? 'true' : undefined,
-              onFocus: acceleration
-                ? (event: ReactFocusEvent<HTMLElement>) =>
-                    showGpuTooltip(node.id, event.currentTarget)
-                : undefined,
-              onBlur: acceleration ? () => setGpuTooltip(null) : undefined,
-              onKeyDown: acceleration
-                ? (event: ReactKeyboardEvent<HTMLElement>) => {
-                    if (event.key === 'Escape') setGpuTooltip(null)
-                  }
-                : undefined,
             } as const
-            const describedBy = acceleration
-              ? `${stateDescriptionId} ${accelerationDescriptionId}`
-              : stateDescriptionId
+            const describedBy = stateDescriptionId
 
             return inspectableNodeId ? (
               <button
@@ -801,7 +680,6 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
               <div
                 key={node.id}
                 {...sharedProps}
-                tabIndex={acceleration ? 0 : undefined}
                 aria-describedby={describedBy}
               >
                 {nodeContents}
@@ -810,39 +688,6 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
           })}
         </div>
       </div>
-      {gpuTooltip && activeGpuAcceleration ? (
-        <aside
-          className={styles.gpuAccelerationTooltip}
-          role="tooltip"
-          data-testid="gpu-acceleration-tooltip"
-          data-node-id={activeGpuAcceleration.nodeId}
-          data-placement={gpuTooltip.placement}
-          data-alignment={gpuTooltip.alignment}
-          style={{ left: gpuTooltip.left, top: gpuTooltip.top }}
-        >
-          <header>
-            <span aria-hidden="true">GPU</span>
-            <div>
-              <strong>NVIDIA GPU accelerated</strong>
-              <small>
-                {activeGpuAcceleration.invocationCount} observed GPU{' '}
-                {activeGpuAcceleration.invocationCount === 1 ? 'call' : 'calls'}
-              </small>
-            </div>
-          </header>
-          <div className={styles.gpuAccelerationTechnologies}>
-            {activeGpuAcceleration.technologies.map((technology) => (
-              <section key={technology.id} data-technology-id={technology.id}>
-                <div>
-                  <strong>{technology.label}</strong>
-                  {technology.libraryVersion ? <code>{technology.libraryVersion}</code> : null}
-                </div>
-                <p>{technology.description}</p>
-              </section>
-            ))}
-          </div>
-        </aside>
-      ) : null}
     </div>
   )
 }

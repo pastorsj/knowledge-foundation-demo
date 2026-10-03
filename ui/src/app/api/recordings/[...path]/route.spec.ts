@@ -17,7 +17,7 @@ describe('/api/recordings', () => {
 
   beforeAll(async () => {
     packsDir = await mkdtemp(path.join(tmpdir(), 'packs-'))
-    const recordings = path.join(packsDir, 'market-analysis', 'recordings')
+    const recordings = path.join(packsDir, 'retail', 'recordings')
     await mkdir(path.join(recordings, 'sessions'), { recursive: true })
     await writeFile(path.join(recordings, 'index.json'), '{"formatVersion":2}')
     await writeFile(path.join(recordings, 'sessions', 'events.jsonl'), '{}\n{}\n')
@@ -25,7 +25,7 @@ describe('/api/recordings', () => {
     await writeFile(path.join(packsDir, 'secret.json'), '{}')
     await symlink(path.join(packsDir, 'secret.json'), path.join(recordings, 'escape.json'))
     vi.stubEnv('PACKS_DIR', packsDir)
-    vi.stubEnv('DATA_PACK', 'market-analysis')
+    vi.stubEnv('DATA_PACK', 'retail')
   })
 
   afterAll(async () => {
@@ -53,15 +53,15 @@ describe('/api/recordings', () => {
 
 describe('/api/recordings/index.json of a bundle recorded before sessions listed their tools', () => {
   let packsDir: string
-  const recorded = { pill: 'retrieval', device: null, tools: ['retrieve_evidence'] }
+  const recorded = { pill: 'retrieval', tools: ['retrieve_evidence'] }
 
   beforeAll(async () => {
     packsDir = await mkdtemp(path.join(tmpdir(), 'packs-'))
     const recordings = path.join(packsDir, 'older', 'recordings')
     await mkdir(path.join(recordings, 'sessions'), { recursive: true })
     const sessions = [
-      { id: 'filings', title: 'Filings', turns: [], tools: [recorded] },
-      { id: 'peers', title: 'Peers', turns: [] },
+      { id: 'policies', title: 'Policies', turns: [], tools: [recorded] },
+      { id: 'revenue', title: 'Revenue', turns: [] },
     ]
     await writeFile(path.join(recordings, 'index.json'), JSON.stringify({ sessions }))
     const turn = {
@@ -69,14 +69,14 @@ describe('/api/recordings/index.json of a bundle recorded before sessions listed
         { eventKind: 'tool.completed', toolName: 'skill_view' },
         {
           eventKind: 'artifact.available',
-          toolName: 'analyze_market_relationships',
+          toolName: 'query_tables',
           artifactRefs: ['r1'],
         },
       ],
-      receipts: [{ receiptId: 'r1', content: { engine: { device: 'cpu', library: 'networkx' } } }],
+      receipts: [{ receiptId: 'r1', content: {} }],
     }
     await writeFile(
-      path.join(recordings, 'sessions', 'peers.json'),
+      path.join(recordings, 'sessions', 'revenue.json'),
       JSON.stringify({ turns: [turn] })
     )
     vi.stubEnv('PACKS_DIR', packsDir)
@@ -88,13 +88,10 @@ describe('/api/recordings/index.json of a bundle recorded before sessions listed
     await rm(packsDir, { recursive: true, force: true })
   })
 
-  test('derives the missing tools from the recorded events, with the engine that ran them', async () => {
+  test('derives the missing tools from the recorded events', async () => {
     const index = await (await get('index.json')).json()
 
     expect(index.sessions[0].tools).toEqual([recorded])
-    expect(index.sessions[1].tools).toEqual([
-      { pill: 'cudf', device: 'cpu', tools: ['analyze_market_relationships'] },
-      { pill: 'cugraph', device: 'cpu', tools: ['analyze_market_relationships'] },
-    ])
+    expect(index.sessions[1].tools).toEqual([{ pill: 'duckdb', tools: ['query_tables'] }])
   })
 })

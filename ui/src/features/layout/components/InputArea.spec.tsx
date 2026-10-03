@@ -26,10 +26,10 @@ const VOICE = { speechInput: { enabled: true, maxSeconds: 60 } }
 const EXAMPLES = Array.from({ length: 8 }, (_, i) => ({
   id: `example-${i + 1}`,
   label: `Example ${i + 1}`,
-  tools: ['cudf' as const],
+  tools: ['duckdb' as const],
   description: `Example question ${i + 1}`,
   question: `Example question ${i + 1}?`,
-  sourceIds: ['market_analysis_structured'],
+  sourceIds: ['retail.sales'],
 }))
 const ROW_HEIGHT = 32
 
@@ -57,10 +57,10 @@ describe('InputArea', () => {
       {
         ...initialLayout,
         availableDataSources: [
-          { id: 'market_analysis_structured', name: 'Market data', kind: 'structured' },
-          { id: 'market_news', name: 'Market news', kind: 'documents' },
+          { id: 'retail.sales', name: 'Market data', kind: 'structured' },
+          { id: 'retail.policies', name: 'Market news', kind: 'documents' },
         ],
-        enabledDataSourceIds: ['market_analysis_structured'],
+        enabledDataSourceIds: ['retail.sales'],
       },
       true
     )
@@ -139,15 +139,15 @@ describe('InputArea', () => {
     expect(useLayoutStore.getState().promptDraft).toBeNull()
   })
 
-  test('counts the enabled database connections, as the original UI did', () => {
+  test('counts the enabled connections of the selected pack, as upstream did', () => {
     const { rerender } = render(<InputArea />)
     const counter = screen.getByRole('button', { name: 'Toggle data sources connections' })
-    expect(counter).toHaveTextContent('1/1')
+    expect(counter).toHaveTextContent('1/2')
 
-    // A document collection is not a database connection
-    useLayoutStore.setState({ enabledDataSourceIds: ['market_news'] })
+    // Documents count as much as tables
+    useLayoutStore.setState({ enabledDataSourceIds: ['retail.sales', 'retail.policies'] })
     rerender(<InputArea />)
-    expect(counter).toHaveTextContent('0/1')
+    expect(counter).toHaveTextContent('2/2')
   })
 
   test('has no microphone unless voice input is on', () => {

@@ -14,8 +14,8 @@ const initialLayout = useLayoutStore.getState()
 const initialChat = useChatStore.getState()
 
 const SOURCES = [
-  { id: 'market_analysis_structured', name: 'Market data', description: 'Prices and volumes' },
-  { id: 'market_news', name: 'Market news', description: 'Reviewed news' },
+  { id: 'retail.sales', name: 'Market data', description: 'Prices and volumes' },
+  { id: 'retail.policies', name: 'Store policies', description: 'Reviewed news' },
 ]
 
 describe('DataSourcesPanel', () => {
@@ -26,7 +26,7 @@ describe('DataSourcesPanel', () => {
       {
         ...initialLayout,
         availableDataSources: SOURCES,
-        enabledDataSourceIds: ['market_analysis_structured'],
+        enabledDataSourceIds: ['retail.sales'],
       },
       true
     )
@@ -37,24 +37,24 @@ describe('DataSourcesPanel', () => {
 
     expect(screen.getByText('Individual Connections (2)')).toBeInTheDocument()
     expect(
-      screen.getByText(/one market database plus its document collections/)
+      screen.getByText(/Each industry has its own documents and tables/)
     ).toBeInTheDocument()
-    expect(screen.getByText('Market news')).toBeInTheDocument()
+    expect(screen.getByText('Store policies')).toBeInTheDocument()
     expect(screen.getByText(/1 of 2 available connections enabled/)).toBeInTheDocument()
   })
 
   test('enables a source and saves the selection to the conversation', async () => {
     render(<DataSourcesPanel />)
 
-    await userEvent.click(screen.getByRole('button', { name: 'Market news: disabled' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Store policies: disabled' }))
 
     expect(useLayoutStore.getState().enabledDataSourceIds).toEqual([
-      'market_analysis_structured',
-      'market_news',
+      'retail.sales',
+      'retail.policies',
     ])
     expect(useChatStore.getState().currentConversation?.enabledDataSourceIds).toEqual([
-      'market_analysis_structured',
-      'market_news',
+      'retail.sales',
+      'retail.policies',
     ])
   })
 

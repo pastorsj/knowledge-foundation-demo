@@ -122,7 +122,7 @@ describe('REST functions', () => {
     await submitJob({
       input: 'Which assets led?',
       conversationId: 's_1',
-      dataSources: ['market_news'],
+      dataSources: ['retail.policies'],
       jobId: 'job-1',
     })
 
@@ -133,7 +133,7 @@ describe('REST functions', () => {
     expect(JSON.parse(init.body)).toEqual({
       agent_type: 'hermes',
       input: 'Which assets led?',
-      data_sources: ['market_news'],
+      data_sources: ['retail.policies'],
       job_id: 'job-1',
     })
   })

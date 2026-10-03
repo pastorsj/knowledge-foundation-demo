@@ -246,7 +246,7 @@ test.describe('replay mode', () => {
       if (new URL(request.url()).pathname.startsWith('/api/v1/')) apiCalls.push(request.url())
     })
     await page.addInitScript((saved) => {
-      if (!localStorage.getItem('aiq-chat-store')) localStorage.setItem('aiq-chat-store', saved)
+      if (!localStorage.getItem('kf-chat-store')) localStorage.setItem('kf-chat-store', saved)
     }, SAVED_LIVE_SESSION)
 
     await page.goto('/')
@@ -260,7 +260,7 @@ test.describe('replay mode', () => {
     await page.getByRole('tab', { name: 'My sessions' }).click()
     await expect(page.getByText('Replay mode shows the recorded sessions only.')).toBeVisible()
     expect(apiCalls).toEqual([])
-    const saved = await page.evaluate(() => localStorage.getItem('aiq-chat-store'))
+    const saved = await page.evaluate(() => localStorage.getItem('kf-chat-store'))
     expect(JSON.parse(saved!).state.conversations[0].messages[0].deepResearchJobStatus).toBe(
       'running'
     )

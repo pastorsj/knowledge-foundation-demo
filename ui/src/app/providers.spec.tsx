@@ -56,7 +56,7 @@ const savedJobStatus = () =>
 describe('Providers', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    vi.mocked(fetchDataSources).mockResolvedValue([{ id: 'market_news', name: 'News' }])
+    vi.mocked(fetchDataSources).mockResolvedValue([{ id: 'retail.policies', name: 'News' }])
     useChatStore.setState(initialChat, true)
     useLayoutStore.setState(initialLayout, true)
   })
@@ -70,7 +70,7 @@ describe('Providers', () => {
 
     await waitFor(() =>
       expect(useLayoutStore.getState().availableDataSources).toEqual([
-        { id: 'market_news', name: 'News' },
+        { id: 'retail.policies', name: 'News' },
       ])
     )
     expect(useChatStore.getState().currentUserId).toBe('local')

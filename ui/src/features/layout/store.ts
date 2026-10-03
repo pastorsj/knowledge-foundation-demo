@@ -134,10 +134,3 @@ export const useLayoutStore = create<LayoutStore>()(
     { name: 'LayoutStore' }
   )
 )
-
-/**
- * The active pack's database: its structured source's (a pack has one). A Kumo prediction reads it,
- * though its receipt does not name it.
- */
-export const selectPackDatabaseName = (state: LayoutState): string | undefined =>
-  state.availableDataSources?.find((source) => source.database_name)?.database_name ?? undefined

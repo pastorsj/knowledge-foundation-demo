@@ -182,8 +182,8 @@ export const DataSourcesPanel: FC = memo(function DataSourcesPanel() {
             Individual Connections ({sources.length})
           </Text>
           <Text kind="body/regular/xs" className="text-subtle mb-3">
-            Each pack has one market database plus its document collections. Enable any
-            combination; the agent uses only the enabled ones.
+            Each industry has its own documents and tables. Enable any combination; the agent
+            uses only the enabled ones.
           </Text>
 
           {dataSourcesLoading ? (

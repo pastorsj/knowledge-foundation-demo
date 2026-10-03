@@ -21,17 +21,6 @@ import { toolFor, type Family } from '../registry'
 
 export type ActivityComponent = Family | 'agent' | 'tool' | 'synthesis'
 
-/** Labels of the market operations, as the Thinking and Timeline views name them. */
-const MARKET_OPERATION_LABELS: Readonly<Record<string, string>> = {
-  market_scan: 'Market Scan',
-  market_anomaly_scan: 'Market Anomaly Scan',
-  price_context: 'Price Context',
-  sentiment_timeline: 'Sentiment Timeline',
-  analyze_news_price_relationship: 'News and Price Relationship',
-  analyze_market_relationships: 'Market Relationship Analysis',
-  intraday_scan: 'Intraday Scan',
-}
-
 /** Hermes' own tools, which the tool registry does not list. */
 const HERMES_TOOL_LABELS: Readonly<Record<string, string>> = {
   skill_view: 'Reading skill',
@@ -48,7 +37,6 @@ const COMPONENT_LABELS: Record<ActivityComponent, string> = {
   structured_retrieval: 'Retrieving structured data',
   structured_prediction: 'Running structured prediction',
   unstructured_retrieval: 'Retrieving document evidence',
-  market_analytics: 'Analyzing market data',
   tool: 'Using a connected tool',
   synthesis: 'Preparing the answer',
 }
@@ -56,9 +44,8 @@ const COMPONENT_LABELS: Record<ActivityComponent, string> = {
 const COMPONENT_DESCRIPTIONS: Record<ActivityComponent, string> = {
   agent: 'Planning the work and evaluating the available evidence.',
   structured_retrieval: 'Generating, validating, and running a structured query.',
-  structured_prediction: 'Grounding a predictive query and invoking NVIDIA Kumo.',
+  structured_prediction: 'Scoring a predictive query over the selected tables with NVIDIA Kumo.',
   unstructured_retrieval: 'Searching, ranking, and selecting supporting passages.',
-  market_analytics: 'Running a registered market operation against an observed snapshot.',
   tool: 'Calling one of the tools enabled for this run.',
   synthesis: 'Combining verified evidence into the final response.',
 }
@@ -80,9 +67,6 @@ export const activityLabel = (
   detail?: string | null
 ): string => {
   if (name === 'skill_view') return detail ? `Reading skill: ${detail}` : 'Reading a skill'
-  if (component === 'market_analytics' && name && MARKET_OPERATION_LABELS[name]) {
-    return MARKET_OPERATION_LABELS[name]
-  }
   if (name && HERMES_TOOL_LABELS[name]) return HERMES_TOOL_LABELS[name]
   const tool = toolFor(name)
   if (tool) return tool.label
@@ -105,18 +89,19 @@ export const activityDescription = (
   if (name === 'tool_search') return 'Finding tools that can provide the required evidence.'
   if (name === 'tool_describe') return 'Loading the callable definitions for selected tools.'
   if (name === 'tool_call') return 'Invoking a selected tool through the Hermes tool catalog.'
-  if (component === 'market_analytics' && name && MARKET_OPERATION_LABELS[name]) {
-    return `Running the registered ${MARKET_OPERATION_LABELS[name]} operation.`
+  if (toolFor(name)?.id === 'query_tables') {
+    return 'Running one read-only SQL query over the selected tables in DuckDB.'
   }
   return COMPONENT_DESCRIPTIONS[component]
 }
 
 /** The service a Timeline row names under its action. */
 export const activityService = (component: ActivityComponent, name: string | null): string => {
-  if (component === 'structured_retrieval') return 'Auto Ontology'
+  if (component === 'structured_retrieval') {
+    return toolFor(name)?.server === 'auto_ontology' ? 'Auto Ontology' : 'DuckDB'
+  }
   if (component === 'structured_prediction') return 'NVIDIA Kumo'
   if (component === 'unstructured_retrieval') return 'Milvus + NVIDIA Nemotron'
-  if (component === 'market_analytics') return 'Market Analytics'
   if (component === 'synthesis') return 'Response pipeline'
   if (component === 'agent') return 'Hermes Agent'
   if (name === 'skill_view' || name === 'skills_list') return 'Hermes skills'

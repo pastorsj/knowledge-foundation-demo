@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-/** Small technology pills (pills.ts): RAPIDS purple for the market tools' libraries, NVIDIA green for the rest. */
+/** Small technology pills (pills.ts): NVIDIA green for NVIDIA technologies, a neutral tint for partners. */
 
 import { Fragment, type FC } from 'react'
 import { Tooltip } from '@/adapters/ui'
@@ -23,7 +23,7 @@ export const ToolPills: FC<{ pills: readonly ToolPillUse[]; className?: string }
             {label}
           </span>
         )
-        const key = `${use.pill}:${use.device ?? ''}`
+        const key = use.pill
         return tools.length ? (
           <Tooltip key={key} side="top" openDelayDuration={200} slotContent={tools.join(', ')}>
             {pill}

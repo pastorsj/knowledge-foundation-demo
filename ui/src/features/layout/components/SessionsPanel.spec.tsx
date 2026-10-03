@@ -600,23 +600,19 @@ describe('SessionsPanel - Delete Button States', () => {
     const recordedSessions = [
       {
         id: 'leaders',
-        title: 'Market Leaders',
+        title: 'Top Customers',
         recordedAt: '2026-09-29T06:00:00Z',
-        questions: ['Which assets led over the last 20 sessions?'],
-        tools: [{ pill: 'cudf' as const, device: 'gpu' as const, tools: ['market_scan'] }],
+        questions: ['Which customers spent the most last quarter?'],
+        tools: [{ pill: 'duckdb' as const, tools: ['query_tables'] }],
       },
       {
         id: 'filings',
-        title: 'Moves and Filings',
+        title: 'Returns and Churn',
         recordedAt: '2026-09-29T06:00:00Z',
-        questions: ['Which assets moved most?', 'What did their 8-K filings say?'],
+        questions: ['Which customers returned the most?', 'What does the RMA policy say?'],
         tools: [
-          { pill: 'retrieval' as const, device: null, tools: ['retrieve_evidence'] },
-          {
-            pill: 'cudf' as const,
-            device: 'cpu' as const,
-            tools: ['market_scan', 'price_context'],
-          },
+          { pill: 'retrieval' as const, tools: ['retrieve_evidence'] },
+          { pill: 'kumo' as const, tools: ['predict'] },
         ],
       },
     ]
@@ -643,23 +639,23 @@ describe('SessionsPanel - Delete Button States', () => {
       expect(screen.getByText('Showing 2 of 2 sessions · 3 of 3 questions')).toBeInTheDocument()
       expect(screen.getByText('1 turn')).toBeInTheDocument()
       expect(screen.getByText('2 turns')).toBeInTheDocument()
-      // The tools each run used, a CPU run named for its CPU library
+      // The tools each run used
       const pills = (title: string) =>
         [
           ...screen
             .getByRole('button', { name: `Recorded session: ${title}; Completed` })
             .querySelectorAll('.tool-pill'),
         ].map((pill) => pill.textContent)
-      expect(pills('Market Leaders')).toEqual(['cuDF'])
-      expect(pills('Moves and Filings')).toEqual(['pandas', 'Retrieval'])
+      expect(pills('Top Customers')).toEqual(['DuckDB'])
+      expect(pills('Returns and Churn')).toEqual(['Retrieval', 'Kumo'])
       // The label names the session; its turns and tools reach a screen reader as the description
       expect(
-        screen.getByRole('button', { name: 'Recorded session: Market Leaders; Completed' })
-      ).toHaveAccessibleDescription('1 turn. Tools: cuDF (Market Scan).')
+        screen.getByRole('button', { name: 'Recorded session: Top Customers; Completed' })
+      ).toHaveAccessibleDescription('1 turn. Tools: DuckDB (Table Query).')
       expect(
-        screen.getByRole('button', { name: 'Recorded session: Moves and Filings; Completed' })
+        screen.getByRole('button', { name: 'Recorded session: Returns and Churn; Completed' })
       ).toHaveAccessibleDescription(
-        '2 turns. Tools: pandas (Market Scan, Price Context), Retrieval (Unstructured Retrieval).'
+        '2 turns. Tools: Retrieval (Document Retrieval), Kumo (Structured Prediction).'
       )
       expect(
         screen.getByText(
@@ -667,10 +663,10 @@ describe('SessionsPanel - Delete Button States', () => {
         )
       ).toBeInTheDocument()
 
-      await user.type(screen.getByRole('searchbox', { name: 'Search recorded sessions' }), '8-K')
+      await user.type(screen.getByRole('searchbox', { name: 'Search recorded sessions' }), 'RMA')
       expect(screen.getByText('Showing 1 of 2 sessions · 2 of 3 questions')).toBeInTheDocument()
       await user.click(
-        screen.getByRole('button', { name: 'Recorded session: Moves and Filings; Completed' })
+        screen.getByRole('button', { name: 'Recorded session: Returns and Churn; Completed' })
       )
       expect(recorded.onSelect).toHaveBeenCalledWith('filings')
 

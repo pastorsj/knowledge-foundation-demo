@@ -30,7 +30,7 @@ describe('useHermesChat', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     useChatStore.setState(initialChat, true)
-    useLayoutStore.setState({ ...initialLayout, enabledDataSourceIds: ['market_news'] }, true)
+    useLayoutStore.setState({ ...initialLayout, enabledDataSourceIds: ['retail.policies'] }, true)
     chat().setCurrentUser('local')
     chat().ensureSession()
   })
@@ -47,7 +47,7 @@ describe('useHermesChat', () => {
     expect(request).toMatchObject({
       input: 'Which assets led?',
       conversationId: chat().currentConversation!.id,
-      dataSources: ['market_news'],
+      dataSources: ['retail.policies'],
     })
     // The answer placeholder carries the job ID before the request returns.
     const placeholder = chat().currentConversation!.messages[1]

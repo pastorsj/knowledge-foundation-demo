@@ -876,17 +876,15 @@ body.activity-panel-resizing * {
   color: var(--color-brand);
 }
 
-/* Technology pills (shared/components/ToolPills): tinted like .brand-chip, in RAPIDS purple (the RAPIDS logo's
-   #7400ff) for the market tools' libraries and NVIDIA green for the rest. The tint is opaque over the raised
-   surface, so a highlighted row does not change it, and the text shade keeps WCAG AA contrast against it in each
-   theme (dark: 5.1:1 purple, 6.4:1 green; light: 5.3:1 purple, 5.4:1 green). */
+/* Technology pills (shared/components/ToolPills): tinted like .brand-chip, in NVIDIA green for NVIDIA
+   technologies and in the secondary text color for partner technologies (DuckDB). The tint is opaque over the
+   raised surface, so a highlighted row does not change it, and the text shade keeps WCAG AA contrast against it
+   in each theme. */
 :where(:root, .nv-light) {
-  --tool-pill-rapids-text: #7400ff;
   --tool-pill-nvidia-text: var(--color-green-600);
 }
 
 .nv-dark {
-  --tool-pill-rapids-text: color-mix(in srgb, #7400ff 60%, #ffffff);
   --tool-pill-nvidia-text: var(--color-brand);
 }
 
@@ -917,9 +915,9 @@ body.activity-panel-resizing * {
   white-space: nowrap;
 }
 
-.tool-pill[data-family='rapids'] {
-  --tool-pill-color: #7400ff;
-  color: var(--tool-pill-rapids-text);
+.tool-pill[data-family='partner'] {
+  --tool-pill-color: var(--text-color-secondary);
+  color: var(--text-color-primary);
 }
 
 .assistant-turn {

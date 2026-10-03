@@ -3,13 +3,13 @@
 
 /**
  * One receipt as the execution inspectors describe it: a title, a one-line
- * summary, detail chips, the statement it ran (SQL, PQL, a search query or
- * its parameters) and its bounded output (rows or passages). The API has
- * already validated and bounded every receipt; this only chooses what to show.
+ * summary, detail chips, the statement it ran (SQL, PQL or a search query)
+ * and its bounded output (rows or passages). The API has already validated
+ * and bounded every receipt; this only chooses what to show.
  */
 
 import type {
-  AnalyticsResult,
+  EntityPrediction,
   ReceiptV2,
   RetrievalEvidence,
   StructuredPrediction,
@@ -33,7 +33,7 @@ export interface ReceiptSummary {
 export type ReceiptOutput =
   | {
       kind: 'table'
-      label: 'Query result' | 'Prediction result' | 'Analytics result'
+      label: 'Query result' | 'Prediction result'
       columns: string[]
       rows: string[][]
       displayedCount: number
@@ -75,14 +75,6 @@ const cellText = (value: unknown): string => {
   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
   return boundedText(JSON.stringify(value), 1_000) ?? '—'
 }
-
-const records = (value: unknown): Row[] =>
-  Array.isArray(value)
-    ? value.filter((item): item is Row => typeof item === 'object' && item !== null)
-    : []
-
-const count = (value: unknown): number | undefined =>
-  typeof value === 'number' && Number.isFinite(value) && value >= 0 ? Math.floor(value) : undefined
 
 const detail = (label: string, value: unknown): string[] =>
   value === undefined || value === null || value === '' ? [] : [`${label}: ${value}`]
@@ -129,190 +121,54 @@ const structuredQuery = (content: StructuredQuery): ReceiptSummary => {
   }
 }
 
+/** Most likely first: by probability (a binary task or a class score), else by predicted value. */
+const byScore = (a: EntityPrediction, b: EntityPrediction): number =>
+  (b.probability ?? b.value ?? -Infinity) - (a.probability ?? a.value ?? -Infinity)
+
 /**
- * A prediction in Kumo's binary-classification columns, as the original UI showed them: the most
- * likely entity first. The receipt keeps each entity's TRUE_PROB; ANCHOR_TIMESTAMP is the run's
- * anchor, FALSE_PROB its complement and PREDICTION whether TRUE_PROB is the larger of the two.
+ * A prediction in Kumo's output columns, as the original UI showed them, the most likely entity
+ * first: a binary task's TRUE_PROB with its complement FALSE_PROB and PREDICTION (whether TRUE_PROB
+ * is the larger), a multiclass task's CLASS with its SCORE, a regression's predicted value. Every
+ * row carries the run's ANCHOR_TIMESTAMP when the receipt has one.
  */
 const kumoRows = (content: StructuredPrediction): Row[] =>
-  [...content.rows]
-    .sort((a, b) => b.probability - a.probability)
-    .map((row) => ({
-      ANCHOR_TIMESTAMP: content.anchor,
-      ENTITY: row.assetId,
-      FALSE_PROB: 1 - row.probability,
-      PREDICTION: row.probability > 0.5,
-      TRUE_PROB: row.probability,
-    }))
+  [...content.rows].sort(byScore).map((row) => {
+    const anchor = content.anchorTime ? { ANCHOR_TIMESTAMP: content.anchorTime } : {}
+    if (row.label !== null) {
+      return { ...anchor, ENTITY: row.entityId, CLASS: row.label, SCORE: row.probability }
+    }
+    if (row.probability !== null) {
+      return {
+        ...anchor,
+        ENTITY: row.entityId,
+        FALSE_PROB: 1 - row.probability,
+        PREDICTION: row.probability > 0.5,
+        TRUE_PROB: row.probability,
+      }
+    }
+    return { ...anchor, ENTITY: row.entityId, PREDICTION: row.value }
+  })
 
-const structuredPrediction = (
-  content: StructuredPrediction,
-  databaseName: string | undefined
-): ReceiptSummary => {
+const structuredPrediction = (content: StructuredPrediction): ReceiptSummary => {
   const pql = statementText(content.pql, 8_000)
   return {
     title: 'Prediction result',
     summary: content.available
       ? countSummary(content.rows.length, undefined, 'prediction')
       : (content.reason ?? 'The prediction could not run.'),
-    details: detail('Database', databaseName),
+    details: [
+      `Source: ${content.sourceId}`,
+      ...detail('Template', content.templateId),
+      ...detail('Task', content.taskType?.replaceAll('_', ' ')),
+      ...detail('Entities', content.entityTable),
+      ...detail('Anchor time', content.anchorTime),
+      ...(content.horizon ? [`Horizon: ${content.horizon.value} ${content.horizon.unit}`] : []),
+      ...detail('Model', content.model),
+    ],
     statement: pql && { label: 'Generated PQL', language: 'pql', ...pql },
     output: content.available
       ? tableOutput(kumoRows(content), 'Prediction result', undefined, false)
       : undefined,
-  }
-}
-
-export const OPERATION_LABELS: Readonly<Record<AnalyticsResult['operationId'], string>> = {
-  market_scan: 'Market Scan',
-  market_anomaly_scan: 'Market Anomaly Scan',
-  price_context: 'Price Context',
-  sentiment_timeline: 'Sentiment Timeline',
-  analyze_news_price_relationship: 'News and Price Relationship',
-  analyze_market_relationships: 'Market Relationship Analysis',
-  intraday_scan: 'Intraday Scan',
-}
-
-/** The rows each operation returns, one per ranked asset, session, event or period. */
-const analyticsRows = (content: AnalyticsResult): Row[] => {
-  const payload = content.payload ?? {}
-  switch (content.operationId) {
-    case 'market_scan':
-      return records(payload.observations).map((observation) => ({
-        rank: observation.rank,
-        asset_id: observation.asset_id,
-        score: observation.score,
-        ...(typeof observation.values === 'object' && observation.values !== null
-          ? (observation.values as Row)
-          : {}),
-        observation_count: observation.observation_count,
-        coverage_ratio: observation.coverage_ratio,
-      }))
-    case 'market_anomaly_scan':
-      return records(payload.observations).map((observation) => ({
-        rank: observation.rank,
-        asset_id: observation.asset_id,
-        timestamp: observation.timestamp,
-        anomaly_score: observation.anomaly_score,
-        cohort_percentile: observation.cohort_percentile,
-        is_anomaly: observation.is_anomaly,
-        observed_deviations: observation.observed_deviations,
-      }))
-    case 'sentiment_timeline':
-      return records(payload.points)
-    case 'analyze_news_price_relationship':
-      return records(payload.events)
-    case 'analyze_market_relationships':
-      return records(payload.central_assets)
-    case 'intraday_scan':
-      return records(payload.observations)
-    case 'price_context':
-      return records(payload.summaries)
-  }
-}
-
-const analyticsDetails = (content: AnalyticsResult): string[] => {
-  const payload = content.payload ?? {}
-  switch (content.operationId) {
-    case 'price_context':
-      return [
-        `Series points: ${records(payload.series).length}`,
-        `Series truncated: ${payload.series_truncated === true ? 'yes' : 'no'}`,
-      ]
-    case 'market_anomaly_scan':
-      return [
-        ...detail('Training observations', count(payload.training_observations)),
-        ...detail('Scoring observations', count(payload.scoring_observations)),
-        ...detail('Flagged observations', count(payload.flagged_observations)),
-      ]
-    case 'sentiment_timeline':
-      return [
-        ...detail('Articles considered', count(payload.articles_considered)),
-        ...detail('Frequency', boundedText(payload.frequency, 32)),
-      ]
-    case 'analyze_news_price_relationship': {
-      const coverage = typeof payload.coverage_ratio === 'number' ? payload.coverage_ratio : null
-      return [
-        ...detail('Eligible events', count(payload.eligible_event_count)),
-        ...detail('Aligned events', count(payload.aligned_event_count)),
-        ...(count(payload.return_horizon_sessions) === undefined
-          ? []
-          : [`Forward horizon: ${count(payload.return_horizon_sessions)} sessions`]),
-        ...(coverage === null ? [] : [`Alignment coverage: ${Math.round(coverage * 100)}%`]),
-        ...detail(
-          'Descriptive correlation',
-          typeof payload.sentiment_return_correlation === 'number'
-            ? payload.sentiment_return_correlation
-            : undefined
-        ),
-      ]
-    }
-    case 'analyze_market_relationships':
-      return [
-        ...(boundedText(payload.window_start, 32) && boundedText(payload.window_end, 32)
-          ? [`Window: ${payload.window_start} to ${payload.window_end}`]
-          : []),
-        ...detail('Graph nodes', count(payload.node_count)),
-        ...detail('Graph edges', count(payload.edge_count)),
-      ]
-    case 'intraday_scan':
-      return [
-        ...detail('Assets scanned', count(payload.assets_scanned)),
-        ...detail('Sessions scanned', count(payload.sessions_scanned)),
-        ...detail('Files read', count(payload.files_read)),
-      ]
-    case 'market_scan':
-      return []
-  }
-}
-
-const analytics = (content: AnalyticsResult, durationMs: number): ReceiptSummary => {
-  const label = OPERATION_LABELS[content.operationId]
-  const rows = analyticsRows(content)
-  const payload = content.payload ?? {}
-  const assetsRanked = count(payload.assets_ranked)
-  const sourceCount = content.operationId === 'market_scan' ? assetsRanked : undefined
-  const engine = content.engine
-  const summaries: Partial<Record<AnalyticsResult['operationId'], string>> = {
-    market_anomaly_scan: `${plural(rows.length, 'ranked anomaly observation')} returned.`,
-    sentiment_timeline: `${plural(rows.length, 'timeline period')} returned.`,
-    analyze_news_price_relationship: `${plural(rows.length, 'aligned event')} returned.`,
-    analyze_market_relationships: `${plural(rows.length, 'ranked asset')} returned.`,
-    intraday_scan: `${plural(rows.length, 'ranked session')} returned.`,
-  }
-  const parameters = statementText(JSON.stringify(content.publicParameters, null, 2), 8_000)
-  return {
-    title: `${label} result`,
-    summary:
-      content.status === 'failed'
-        ? (content.error?.message ?? 'The analytics operation failed.')
-        : (summaries[content.operationId] ?? countSummary(rows.length, sourceCount, 'row')),
-    details: [
-      `Database: ${content.databaseName}`,
-      `Source: ${content.sourceId}`,
-      `Status: ${content.status}`,
-      ...(engine
-        ? [`Engine: ${engine.library} ${engine.version} (${engine.device.toUpperCase()})`]
-        : []),
-      `Observed duration: ${durationMs} ms`,
-      `Input rows: ${content.rowsScanned}`,
-      ...analyticsDetails(content),
-    ],
-    notices: [
-      ...content.warnings,
-      ...content.limitations,
-      ...(content.error ? [content.error.message] : []),
-    ].slice(0, 4),
-    statement: parameters && { label: 'Public parameters', language: 'json', ...parameters },
-    output: tableOutput(
-      rows,
-      'Analytics result',
-      sourceCount,
-      payload.series_truncated === true ||
-        payload.points_truncated === true ||
-        payload.events_truncated === true ||
-        (sourceCount !== undefined && sourceCount > rows.length)
-    ),
   }
 }
 
@@ -322,10 +178,11 @@ const retrieval = (content: RetrievalEvidence): ReceiptSummary => {
     ...content.index.params,
     ...content.index.searchParams,
   })
+  const reranked = Boolean(content.models.rerank)
   const timings: Array<[string, number]> = [
     ['Embedding', content.timings.embedMs],
     ['Vector search', content.timings.searchMs],
-    ['Reranking', content.timings.rerankMs],
+    ...(reranked ? [['Reranking', content.timings.rerankMs] as [string, number]] : []),
     ['Total retrieval', content.timings.totalMs],
   ]
   const query = statementText(content.query, 1_000)
@@ -344,9 +201,9 @@ const retrieval = (content: RetrievalEvidence): ReceiptSummary => {
             `Search parameters: ${searchParameters.map(([name, value]) => `${name} ${value}`).join(' · ')}`,
           ]
         : []),
-      ...(content.models.rerank ? ['Ranking: reranker'] : []),
+      reranked ? 'Ranking: reranker' : 'Ranking: vector score (no rerank model)',
       `Embedding model: ${content.models.embed}`,
-      ...(content.models.rerank ? [`Reranker model: ${content.models.rerank}`] : []),
+      ...(reranked ? [`Reranker model: ${content.models.rerank}`] : []),
       ...timings.map(([label, ms]) => `${label}: ${ms.toFixed(1)} ms`),
     ],
     statement: query && { label: 'Search query', language: 'text', ...query },
@@ -362,9 +219,12 @@ const retrieval = (content: RetrievalEvidence): ReceiptSummary => {
           `Document: ${hit.documentId}`,
           `Chunk: ${hit.chunkId}`,
           // As the original listed it: a rerank logit only when it is not negative
-          ...(hit.score >= 0 ? [`Rerank score: ${hit.score}`] : []),
+          ...(reranked && hit.score >= 0 ? [`Rerank score: ${hit.score}`] : []),
           `Vector score: ${hit.vectorScore}`,
           ...(hit.publishedAt ? [`Published: ${hit.publishedAt}`] : []),
+          ...(typeof hit.metadata?.parser === 'string' && hit.metadata.parser.trim()
+            ? [`Parser: ${boundedText(hit.metadata.parser, 80)}`]
+            : []),
           ...(typeof hit.metadata?.citation === 'string' && hit.metadata.citation.trim()
             ? [`Citation: ${boundedText(hit.metadata.citation, 400)}`]
             : []),
@@ -378,30 +238,27 @@ const retrieval = (content: RetrievalEvidence): ReceiptSummary => {
   }
 }
 
-/**
- * Summarizes one receipt for the inspectors (and the timeline). A prediction receipt does not name
- * its database; `databaseName` is the pack's, which Kumo's graph is read from.
- */
-export const summarizeReceipt = (
-  receipt: ReceiptV2,
-  { databaseName }: { databaseName?: string } = {}
-): ReceiptSummary => {
+/** Summarizes one receipt for the inspectors (and the timeline). */
+export const summarizeReceipt = (receipt: ReceiptV2): ReceiptSummary => {
   if (receipt.status === 'failed' || !receipt.content) {
+    const prediction = receipt.artifactKind === 'structured_prediction' ? receipt.content : null
     return {
       title: 'Tool result',
       summary: 'The tool call ended with a failure.',
-      details:
-        receipt.artifactKind === 'structured_prediction' ? detail('Database', databaseName) : [],
-      notices: receipt.errorSummary ? [receipt.errorSummary] : [],
+      details: prediction ? [`Source: ${prediction.sourceId}`] : [],
+      notices: [
+        ...(receipt.errorSummary ? [receipt.errorSummary] : []),
+        ...(prediction?.reason && prediction.reason !== receipt.errorSummary
+          ? [prediction.reason]
+          : []),
+      ],
     }
   }
   switch (receipt.artifactKind) {
     case 'structured_query':
       return structuredQuery(receipt.content)
     case 'structured_prediction':
-      return structuredPrediction(receipt.content, databaseName)
-    case 'analytics_result':
-      return analytics(receipt.content, receipt.durationMs)
+      return structuredPrediction(receipt.content)
     case 'retrieval_evidence':
       return retrieval(receipt.content)
   }

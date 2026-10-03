@@ -4,7 +4,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { fetchDataSources, fetchRecordedDataSources } from './data-sources-client'
 
-const SOURCES = [{ id: 'market_news', name: 'Market news' }]
+const SOURCES = [{ id: 'retail.policies', name: 'Market news' }]
 
 describe('fetchDataSources', () => {
   afterEach(() => {
@@ -44,23 +44,23 @@ describe('fetchRecordedDataSources', () => {
     const pack = {
       id: 'synthetic-market',
       sources: [
-        { id: 'market_data', name: 'Market data', description: 'Prices', kind: 'structured' },
-        { id: 'market_news', name: 'Market news', description: 'Filings', kind: 'documents' },
+        { id: 'retail.sales', name: 'Market data', description: 'Prices', kind: 'structured' },
+        { id: 'retail.policies', name: 'Market news', description: 'Filings', kind: 'documents' },
       ],
-      structured: { source: 'market_data', database_name: 'synthetic_market' },
+      structured: { source: 'retail.sales', database_name: 'synthetic_market' },
     }
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(pack)))
 
     await expect(fetchRecordedDataSources()).resolves.toEqual([
       {
-        id: 'market_data',
+        id: 'retail.sales',
         name: 'Market data',
         description: 'Prices',
         kind: 'structured',
         database_name: 'synthetic_market',
       },
       {
-        id: 'market_news',
+        id: 'retail.policies',
         name: 'Market news',
         description: 'Filings',
         kind: 'documents',

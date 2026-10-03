@@ -9,21 +9,12 @@
  * so the UI only checks the shape it relies on and drops anything else.
  */
 
-import type { Benchmark } from '@/generated/benchmark'
 import type { ExecutionEventV2 } from '@/generated/execution-event'
 import type { ReceiptV2 } from '@/generated/receipt'
-import type { RetrievalBenchmark } from '@/generated/retrieval-benchmark'
 
-export type { Benchmark, BenchmarkStage, EngineTrials } from '@/generated/benchmark'
-export type {
-  RetrievalBackend,
-  RetrievalBenchmark,
-  RetrievalProfile,
-} from '@/generated/retrieval-benchmark'
 export type { ExecutionEventV2 } from '@/generated/execution-event'
 export type {
-  AnalyticsResult,
-  AnalyticsResultReceipt,
+  EntityPrediction,
   ReceiptV2,
   RetrievalEvidence,
   RetrievalEvidenceReceipt,
@@ -47,7 +38,6 @@ const EVENT_STATES: readonly string[] = Object.keys({
 } satisfies Record<EventState, true>)
 const ARTIFACT_KINDS: readonly string[] = Object.keys({
   retrieval_evidence: true,
-  analytics_result: true,
   structured_query: true,
   structured_prediction: true,
 } satisfies Record<ArtifactKind, true>)
@@ -99,66 +89,4 @@ export const toReceipt = (value: unknown): ReceiptV2 | null => {
     (value.status === 'completed' || value.status === 'failed') &&
     (value.content === null || isRecord(value.content))
   return valid ? (value as unknown as ReceiptV2) : null
-}
-
-const isEngineTrials = (value: unknown): boolean =>
-  value === null ||
-  (isRecord(value) &&
-    (value.device === 'cpu' || value.device === 'gpu') &&
-    typeof value.library === 'string' &&
-    Array.isArray(value.trialsMs) &&
-    value.trialsMs.every((ms) => typeof ms === 'number' && Number.isFinite(ms)))
-
-/** Returns the comparison when `value` is a `Benchmark`, else null. */
-export const toBenchmark = (value: unknown): Benchmark | null => {
-  if (!isRecord(value) || value.schemaVersion !== '1') return null
-  const valid =
-    isString(value.jobId) &&
-    (value.status === 'completed' || value.status === 'unavailable' || value.status === 'failed') &&
-    Array.isArray(value.stages) &&
-    value.stages.every(
-      (stage) =>
-        isRecord(stage) &&
-        isString(stage.invocationId) &&
-        isString(stage.toolName) &&
-        isString(stage.outcome) &&
-        typeof stage.qualified === 'boolean' &&
-        isEngineTrials(stage.cpu) &&
-        isEngineTrials(stage.gpu)
-    )
-  return valid ? (value as unknown as Benchmark) : null
-}
-
-const isNumber = (value: unknown): value is number =>
-  typeof value === 'number' && Number.isFinite(value)
-
-const isRetrievalBackend = (value: unknown, role: 'cpu' | 'gpu'): boolean =>
-  isRecord(value) &&
-  value.role === role &&
-  isString(value.indexType) &&
-  (value.status === 'completed' || value.status === 'failed') &&
-  [value.p50Ms, value.p95Ms, value.vectorSearchMs, value.vectorQps].every(isNumber)
-
-/** Returns the Milvus index comparison when `value` is a `RetrievalBenchmark`, else null. */
-export const toRetrievalBenchmark = (value: unknown): RetrievalBenchmark | null => {
-  if (!isRecord(value) || value.schemaVersion !== '1') return null
-  const valid =
-    isString(value.collectionVersion) &&
-    isNumber(value.queryCount) &&
-    Array.isArray(value.profiles) &&
-    value.profiles.length > 0 &&
-    value.profiles.every(
-      (profile) =>
-        isRecord(profile) &&
-        isString(profile.profileId) &&
-        isString(profile.executionMode) &&
-        isNumber(profile.topK) &&
-        isRetrievalBackend(profile.cpu, 'cpu') &&
-        isRetrievalBackend(profile.gpu, 'gpu') &&
-        isRecord(profile.quality) &&
-        typeof profile.quality.passed === 'boolean' &&
-        isRecord(profile.claim) &&
-        isString(profile.claim.decision)
-    )
-  return valid ? (value as unknown as RetrievalBenchmark) : null
 }

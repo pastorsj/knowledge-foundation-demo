@@ -19,8 +19,8 @@ import { Providers } from './providers'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Enterprise Research',
-  description: 'AI-powered research assistant',
+  title: 'NVIDIA Knowledge Foundation',
+  description: 'Ask your enterprise knowledge: cited answers over documents and tables',
   icons: {
     icon: '/favicon.ico',
   },

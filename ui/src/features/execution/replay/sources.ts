@@ -32,10 +32,6 @@ export interface RecordedTurn {
   receipts: unknown[]
   /** The job's data sources, when the recording has them */
   sourceIds?: string[]
-  /** The CPU/GPU comparison of its market calls (`Benchmark`), when one ran */
-  benchmark?: unknown
-  /** The Milvus CPU/GPU index comparison for its retrieval calls (`RetrievalBenchmark`), on a GPU stack */
-  retrievalBenchmark?: unknown
 }
 
 export interface RecordingIndex {
@@ -100,7 +96,6 @@ const toToolPills = (value: unknown): ToolPillUse[] =>
         ? [
             {
               pill: entry.pill,
-              device: entry.device === 'gpu' || entry.device === 'cpu' ? entry.device : null,
               tools: Array.isArray(entry.tools)
                 ? entry.tools.filter((tool): tool is string => typeof tool === 'string')
                 : [],

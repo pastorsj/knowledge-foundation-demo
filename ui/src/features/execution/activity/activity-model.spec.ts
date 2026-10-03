@@ -62,29 +62,31 @@ describe('Thinking', () => {
 
     expect(items.map((item) => [item.label, item.status])).toEqual([
       ['Request accepted', 'completed'],
-      ['Market Anomaly Scan', 'completed'],
-      ['Unstructured Retrieval', 'completed'],
+      ['Table Query', 'completed'],
+      ['Document Retrieval', 'completed'],
       ['Answer ready', 'completed'],
     ])
-    expect(items[1].description).toBe('Running the registered Market Anomaly Scan operation.')
+    expect(items[1].description).toBe(
+      'Running one read-only SQL query over the selected tables in DuckDB.'
+    )
     expect(items[2].description).toBe('Searching, ranking, and selecting supporting passages.')
   })
 
   test('names skills and Hermes tools, numbers repeated calls and marks a failure', () => {
     const events = [
       run('run.created', 0, 'started'),
-      tool('tool.started', 'skill_view', 'skill-1', 1, { summary: 'market-analysis' }),
+      tool('tool.started', 'skill_view', 'skill-1', 1, { summary: 'querying-tables' }),
       tool('tool.completed', 'skill_view', 'skill-1', 1),
       tool('tool.started', 'tool_describe', 'describe-1', 2),
       tool('tool.completed', 'tool_describe', 'describe-1', 2),
       run('reasoning.available', 3, 'progress'),
       run('reasoning.available', 3, 'progress'),
-      tool('tool.started', 'market_scan', 'scan-1', 4),
-      tool('tool.completed', 'market_scan', 'scan-1', 5),
-      tool('tool.started', 'market_scan', 'scan-2', 6),
-      tool('tool.completed', 'market_scan', 'scan-2', 7, { error: true }),
-      tool('tool.started', 'ask_question', 'sql-1', 7),
-      tool('tool.completed', 'ask_question', 'sql-1', 7),
+      tool('tool.started', 'query_tables', 'sql-1', 4),
+      tool('tool.completed', 'query_tables', 'sql-1', 5),
+      tool('tool.started', 'query_tables', 'sql-2', 6),
+      tool('tool.completed', 'query_tables', 'sql-2', 7, { error: true }),
+      tool('tool.started', 'ask_question', 'ontology-1', 7),
+      tool('tool.completed', 'ask_question', 'ontology-1', 7),
       run('run.failed', 8, 'failed'),
     ]
 
@@ -92,23 +94,23 @@ describe('Thinking', () => {
 
     expect(items.map((item) => [item.label, item.status])).toEqual([
       ['Request accepted', 'completed'],
-      ['Reading skill: market-analysis', 'completed'],
+      ['Reading skill: querying-tables', 'completed'],
       ['Inspecting tool definitions', 'completed'],
       ['Evaluating evidence', 'completed'],
-      ['Market Scan · Call 1', 'completed'],
-      ['Market Scan · Call 2', 'failed'],
+      ['Table Query · Call 1', 'completed'],
+      ['Table Query · Call 2', 'failed'],
       // As the original named an Auto Ontology call
       ['Auto Ontology Text-to-SQL', 'completed'],
       ['Run stopped', 'failed'],
     ])
     expect(items[1].description).toBe(
-      'Loading the market-analysis workflow instructions for this run.'
+      'Loading the querying-tables workflow instructions for this run.'
     )
     expect(items[5].failureDetail).toBe('This observed activity ended with a failure.')
   })
 
   test('shows a call in progress while the run streams', () => {
-    const events = [run('run.created', 0, 'started'), tool('tool.started', 'market_scan', 's', 1)]
+    const events = [run('run.created', 0, 'started'), tool('tool.started', 'predict', 's', 1)]
 
     expect(buildThinkingActivity(events).map((item) => item.status)).toEqual([
       'completed',
@@ -118,6 +120,21 @@ describe('Thinking', () => {
 })
 
 describe('Timeline', () => {
+  test('names each action by its service: DuckDB, Auto Ontology, NVIDIA Kumo, Milvus', () => {
+    const model = buildActionTimeline([
+      run('run.created', 0, 'started'),
+      tool('tool.started', 'ask_question', 'ontology', 1),
+      tool('tool.completed', 'ask_question', 'ontology', 2),
+      tool('tool.started', 'predict', 'kumo', 3),
+      tool('tool.completed', 'predict', 'kumo', 4),
+      run('run.completed', 5, 'completed'),
+    ])!
+    expect(model.items.slice(0, 2).map((item) => [item.label, item.service])).toEqual([
+      ['Auto Ontology Text-to-SQL', 'Auto Ontology'],
+      ['Structured Prediction', 'NVIDIA Kumo'],
+    ])
+  })
+
   test('draws observed spans and milestones with the run totals', () => {
     const model = buildActionTimeline(fixtureEvents)!
 
@@ -131,8 +148,8 @@ describe('Timeline', () => {
     })
     expect(formatTimelineDuration(model.metrics.knownToolDurationMs)).toBe('5 s')
     expect(model.items.map((item) => [item.label, item.service, item.kind, item.timing])).toEqual([
-      ['Market Anomaly Scan', 'Market Analytics', 'span', 'observed'],
-      ['Unstructured Retrieval', 'Milvus + NVIDIA Nemotron', 'span', 'observed'],
+      ['Table Query', 'DuckDB', 'span', 'observed'],
+      ['Document Retrieval', 'Milvus + NVIDIA Nemotron', 'span', 'observed'],
       ['Answer ready', 'Response pipeline', 'milestone', 'point'],
     ])
     expect(model.items[0].receiptId).toBe(fixtureEvents[4].artifactRefs[0])
@@ -163,9 +180,9 @@ describe('Timeline', () => {
   test('marks a start without an end incomplete, and a failed call failed', () => {
     const model = buildActionTimeline([
       run('run.created', 0, 'started'),
-      tool('tool.started', 'market_scan', 'open', 1),
-      tool('tool.started', 'price_context', 'bad', 2),
-      tool('tool.completed', 'price_context', 'bad', 3, { error: true }),
+      tool('tool.started', 'retrieve_evidence', 'open', 1),
+      tool('tool.started', 'predict', 'bad', 2),
+      tool('tool.completed', 'predict', 'bad', 3, { error: true }),
       run('run.failed', 10, 'failed'),
     ])!
 

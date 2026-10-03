@@ -18,7 +18,7 @@ export interface DataSourceFromAPI {
   description?: string | null
   /** Whether the source starts enabled (defaults to true) */
   default_enabled?: boolean
-  /** `structured` for the pack's market database, `documents` for a document collection */
+  /** `structured` for a source of tables (one DuckDB database), `documents` for a document collection */
   kind?: 'structured' | 'documents'
   /** The structured source's database; null for document sources */
   database_name?: string | null

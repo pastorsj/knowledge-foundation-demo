@@ -12,12 +12,12 @@ import {
 
 const SCENARIOS = toDemoScenarios([
   {
-    id: 'market-leaders',
-    label: 'Market Leaders',
-    tools: ['cudf'],
+    id: 'top-customers',
+    label: 'Top Customers',
+    tools: ['duckdb'],
     description: 'Scan the most liquid issuers.',
     question: 'Which issuers led?',
-    sources: ['market_data'],
+    sources: ['retail.sales'],
     featured: true,
   },
   {
@@ -25,7 +25,7 @@ const SCENARIOS = toDemoScenarios([
     label: 'Cybersecurity Disclosures',
     tools: ['retrieval'],
     question: 'What does Item 1.05 require?',
-    sources: ['sec_filings', 'market_regulations'],
+    sources: ['retail.policies', 'retail.manuals'],
     featured: false,
   },
 ])
@@ -33,12 +33,12 @@ const SCENARIOS = toDemoScenarios([
 describe('demo scenarios', () => {
   test('come from the pack questions, with the tools they are expected to use', () => {
     expect(SCENARIOS[0]).toEqual({
-      id: 'market-leaders',
-      label: 'Market Leaders',
-      tools: ['cudf'],
+      id: 'top-customers',
+      label: 'Top Customers',
+      tools: ['duckdb'],
       description: 'Scan the most liquid issuers.',
       question: 'Which issuers led?',
-      sourceIds: ['market_data'],
+      sourceIds: ['retail.sales'],
     })
     // A question without a description describes itself
     expect(SCENARIOS[1].description).toBe('What does Item 1.05 require?')
@@ -48,9 +48,9 @@ describe('demo scenarios', () => {
     const questions: PackQuestion[] = ['a', 'b', 'c', 'd'].map((id) => ({
       id,
       label: id.toUpperCase(),
-      tools: ['cudf'],
+      tools: ['duckdb'],
       question: `Question ${id}?`,
-      sources: ['market_data'],
+      sources: ['retail.sales'],
       featured: id === 'd',
     }))
 
@@ -69,9 +69,9 @@ describe('demo scenarios', () => {
     const questions: PackQuestion[] = Array.from({ length: 20 }, (_, i) => ({
       id: `q${i}`,
       label: `Q${i}`,
-      tools: ['cudf'],
+      tools: ['duckdb'],
       question: `Question ${i}?`,
-      sources: ['market_data'],
+      sources: ['retail.sales'],
       featured: i === 15,
     }))
 
@@ -84,21 +84,21 @@ describe('demo scenarios', () => {
   })
 
   test('are offered only when every data source they need is available', () => {
-    expect(getAvailableDemoScenarios(SCENARIOS, ['market_data']).map((s) => s.id)).toEqual([
-      'market-leaders',
+    expect(getAvailableDemoScenarios(SCENARIOS, ['retail.sales']).map((s) => s.id)).toEqual([
+      'top-customers',
     ])
     expect(
-      getAvailableDemoScenarios(SCENARIOS, ['market_data', 'sec_filings', 'market_regulations'])
+      getAvailableDemoScenarios(SCENARIOS, ['retail.sales', 'retail.policies', 'retail.manuals'])
     ).toHaveLength(2)
   })
 
   test('the active one has the staged question and exactly its data sources', () => {
-    expect(getActiveDemoScenario('Which issuers led?', ['market_data'], SCENARIOS)?.id).toBe(
-      'market-leaders'
+    expect(getActiveDemoScenario('Which issuers led?', ['retail.sales'], SCENARIOS)?.id).toBe(
+      'top-customers'
     )
     expect(
-      getActiveDemoScenario('Which issuers led?', ['market_data', 'sec_filings'], SCENARIOS)
+      getActiveDemoScenario('Which issuers led?', ['retail.sales', 'retail.policies'], SCENARIOS)
     ).toBeUndefined()
-    expect(getActiveDemoScenario('Something else', ['market_data'], SCENARIOS)).toBeUndefined()
+    expect(getActiveDemoScenario('Something else', ['retail.sales'], SCENARIOS)).toBeUndefined()
   })
 })

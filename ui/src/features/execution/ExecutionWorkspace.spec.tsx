@@ -12,11 +12,11 @@ import type { ExecutionRecord } from './store'
 const JOB = fixtureEvents[0].jobId
 const turn = {
   jobId: JOB,
-  question: 'Which assets moved unusually?',
+  question: 'What is the return window, and which loyalty tier brought the most revenue?',
   events: fixtureEvents,
-  receipts: [receiptOf('analytics_result'), receiptOf('retrieval_evidence')],
+  receipts: [receiptOf('structured_query'), receiptOf('retrieval_evidence')],
   report: {
-    citations: [{ number: 1, evidenceId: receiptOf('analytics_result').receiptId }],
+    citations: [{ number: 1, evidenceId: receiptOf('structured_query').receiptId }],
   },
 }
 
@@ -64,15 +64,31 @@ describe('ExecutionWorkspace', () => {
     ).toBeVisible()
     expect(within(summary).getByText('106,217 tokens')).toBeVisible()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Inspect Market Anomaly Scan' }))
-    const explorer = screen.getByRole('dialog', { name: 'Market Anomaly Scan explorer' })
-    expect(within(explorer).getByText('NVIDIA GPU tool receipt')).toBeVisible()
-    expect(within(explorer).getByLabelText('Anomaly score ranking')).toBeVisible()
+    // The DuckDB tables node carries DuckDB's mark, the Milvus node its logo
+    expect(document.querySelector('[data-node-id="structured-database"] [role="img"]')).toHaveAttribute(
+      'aria-label',
+      'DuckDB'
+    )
+    expect(
+      within(document.querySelector('[data-node-id="milvus"]') as HTMLElement).getByRole('img', {
+        name: 'Milvus',
+      })
+    ).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Inspect Structured Retrieval' }))
+    const explorer = screen.getByRole('dialog', { name: 'Structured Retrieval execution details' })
+    expect(within(explorer).getByRole('heading', { name: 'DuckDB Table Query' })).toBeVisible()
+    expect(within(explorer).getByText('Generated SQL')).toBeVisible()
+    expect(within(explorer).getByTestId('execution-evidence-output')).toHaveTextContent('gold')
+    // A bundle without a copy of the database has nothing to open in the data viewer
+    expect(within(explorer).queryByRole('button', { name: 'Open in Data Viewer' })).toBeNull()
     // The explorer covers the graph, and the header gives way to it
     expect(screen.queryByRole('heading', { name: 'Execution Graph' })).toBeNull()
 
     fireEvent.click(
-      within(explorer).getByRole('button', { name: 'Close Market Anomaly Scan explorer' })
+      within(explorer).getByRole('button', {
+        name: 'Close Structured Retrieval execution details',
+      })
     )
     fireEvent.click(screen.getByRole('button', { name: /Back to Answer/ }))
     expect(onClose).toHaveBeenCalled()
@@ -130,18 +146,20 @@ describe('ExecutionWorkspace', () => {
     expect(screen.getByText('Step 1 of 10')).toBeVisible()
     expect(screen.getByText('Hermes Agent started')).toBeVisible()
     expect(screen.queryByRole('region', { name: 'Hermes run summary' })).toBeNull()
-    expect(screen.queryByRole('button', { name: 'Inspect Market Anomaly Scan' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Inspect Structured Retrieval' })).toBeNull()
 
     fireEvent.change(position, { target: { value: '3' } })
-    expect(screen.getByText('Market Anomaly Scan started')).toBeVisible()
-    fireEvent.click(screen.getByRole('button', { name: 'Inspect Market Anomaly Scan' }))
-    expect(screen.getByRole('dialog', { name: 'Market Anomaly Scan explorer' })).toBeVisible()
+    expect(screen.getByText('Table query started')).toBeVisible()
+    fireEvent.click(screen.getByRole('button', { name: 'Inspect Structured Retrieval' }))
+    expect(
+      screen.getByRole('dialog', { name: 'Structured Retrieval execution details' })
+    ).toBeVisible()
 
     // Moving on leaves the explorer's call behind
     fireEvent.click(screen.getByRole('button', { name: 'Next execution step' }))
     expect(
-      screen.getByRole('dialog', { name: 'Market Anomaly Scan replay status' })
-    ).toHaveTextContent('Market Anomaly Scan is between observed calls')
+      screen.getByRole('dialog', { name: 'Structured Retrieval replay status' })
+    ).toHaveTextContent('Structured Retrieval is between observed calls')
   })
 
   it('opens on the evidence a citation points at, again for the same one, and for the next one', () => {
@@ -154,10 +172,10 @@ describe('ExecutionWorkspace', () => {
     const details = 'Unstructured Retrieval execution details'
     const explorer = screen.getByRole('dialog', { name: details })
     expect(within(explorer).getByText(turn.question)).toBeVisible()
-    expect(within(explorer).getByText('market_news')).toBeVisible()
+    expect(within(explorer).getByText('retail.policies')).toBeVisible()
     expect(within(explorer).getByText('Search query')).toBeVisible()
     expect(within(explorer).getByTestId('execution-evidence-output')).toHaveTextContent(
-      'CB Financial Services'
+      'Northwind Retail Return Policy'
     )
     fireEvent.click(within(explorer).getByRole('button', { name: `Close ${details}` }))
     expect(screen.queryByRole('dialog', { name: details })).toBeNull()
@@ -176,17 +194,19 @@ describe('ExecutionWorkspace', () => {
     rerender(
       <ExecutionWorkspace
         jobId={JOB}
-        focus={{ referenceId: receiptOf('analytics_result').receiptId }}
+        focus={{ referenceId: receiptOf('structured_query').receiptId }}
         onClose={vi.fn()}
       />
     )
-    expect(screen.getByRole('dialog', { name: 'Market Anomaly Scan explorer' })).toBeVisible()
+    expect(
+      screen.getByRole('dialog', { name: 'Structured Retrieval execution details' })
+    ).toBeVisible()
   })
 
   it('opens each node’s own explorer: agent, ontology lineage, Kumo and database', () => {
     serveDatabase()
     const [sqlTurn, predictionTurn] = (
-      readRecording('sessions/structured-evidence.json') as { turns: ExecutionRecord[] }
+      readRecording('sessions/gold-tier-and-churn.json') as { turns: ExecutionRecord[] }
     ).turns
     useExecutionStore.getState().addRecord(turn)
     useExecutionStore.getState().addRecord(sqlTurn)
@@ -206,7 +226,7 @@ describe('ExecutionWorkspace', () => {
     // A bundle without a copy of the database: no query to open, and no database to browse
     expect(screen.queryByRole('button', { name: 'Open in Data Viewer' })).toBeNull()
     fireEvent.keyDown(window, { key: 'Escape' })
-    fireEvent.click(screen.getByRole('button', { name: 'Inspect Structured Database' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Inspect DuckDB Tables' }))
     expect(screen.getByRole('dialog', { name: 'Structured Database browser' })).toHaveTextContent(
       'No run-scoped structured database is available for this execution.'
     )
@@ -219,12 +239,13 @@ describe('ExecutionWorkspace', () => {
     const kumo = screen.getByRole('dialog', { name: 'NVIDIA Kumo execution details' })
     expect(within(kumo).getByRole('heading', { name: 'NVIDIA Kumo Prediction' })).toBeVisible()
     expect(within(kumo).getByText('Generated PQL')).toBeVisible()
+    expect(within(kumo).getByText('Template: churn_90d')).toBeVisible()
   })
 
   it('opens the data viewer in replay on the bundle’s copy of the database', async () => {
     const fetchMock = serveDatabase(readRecording('database.json'))
     const [sqlTurn] = (
-      readRecording('sessions/structured-evidence.json') as { turns: ExecutionRecord[] }
+      readRecording('sessions/gold-tier-and-churn.json') as { turns: ExecutionRecord[] }
     ).turns
     useExecutionStore.getState().addRecord(sqlTurn)
     render(<ExecutionWorkspace jobId={sqlTurn.jobId} focus={null} onClose={vi.fn()} />, {
@@ -236,7 +257,7 @@ describe('ExecutionWorkspace', () => {
     const browser = screen.getByRole('dialog', { name: 'Structured Database browser' })
     fireEvent.click(await within(browser).findByRole('button', { name: 'Run query' }))
     const results = await within(browser).findByRole('region', { name: 'SQL results' })
-    expect(results).toHaveTextContent('asset-meridian')
+    expect(results).toHaveTextContent('128.88')
 
     // A query the recording did not run cannot run without the API
     fireEvent.change(within(browser).getByLabelText('SQL'), { target: { value: 'SELECT 42' } })
@@ -245,6 +266,27 @@ describe('ExecutionWorkspace', () => {
       await within(browser).findByText(/Replay can rerun only the queries its recorded answers ran/)
     ).toBeVisible()
     expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(['/api/recordings/database.json'])
+  })
+
+  it('opens a DuckDB table query in the data viewer from its explorer', async () => {
+    serveDatabase(readRecording('database.json'))
+    useExecutionStore.getState().addRecord({ ...turn, sourceIds: ['retail.sales'] } as ExecutionRecord)
+    render(
+      <ExecutionWorkspace
+        jobId={JOB}
+        focus={null}
+        sourceIds={['retail.sales', 'retail.policies']}
+        onClose={vi.fn()}
+      />,
+      { config: { mode: 'replay' } }
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Inspect Structured Retrieval' }))
+    fireEvent.click(await screen.findByRole('button', { name: 'Open in Data Viewer' }))
+    const browser = screen.getByRole('dialog', { name: 'Structured Database browser' })
+    fireEvent.click(await within(browser).findByRole('button', { name: 'Run query' }))
+    const results = await within(browser).findByRole('region', { name: 'SQL results' })
+    expect(results).toHaveTextContent('395')
   })
 
   it('loads a live run from the job export', async () => {
@@ -265,9 +307,9 @@ describe('ExecutionWorkspace', () => {
     serveDatabase()
     useExecutionStore
       .getState()
-      .addRecord({ ...turn, recorded: true, archive: '20260928T060000Z-e2e' })
+      .addRecord({ ...turn, recorded: true, archive: '20260928T060000Z-retail' })
     const { unmount } = renderWorkspace('replay')
-    const label = `recorded:20260928T060000Z-e2e:${JOB}`
+    const label = `recorded:20260928T060000Z-retail:${JOB}`
     expect(screen.getByText(label)).toHaveAttribute('title', label)
     unmount()
 

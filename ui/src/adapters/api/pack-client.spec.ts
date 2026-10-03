@@ -8,21 +8,24 @@ import { fetchPack, type PackSchema } from './pack-client'
 
 /** What the API sends, typed by the generated contract */
 const PACK: PackView = {
-  id: 'market-analysis',
-  version: '1.0.0',
-  title: 'Synthetic Multi-Asset Market Analysis',
+  id: 'retail',
+  kind: 'industry',
+  title: 'Retail',
   description: null,
-  as_of: '2026-08-31',
-  disclaimer: 'Synthetic market data for a software demonstration. Not investment advice.',
+  icon: 'Store',
+  status: 'ready',
+  version: '1.0.0',
+  as_of: '2026-09-30',
+  disclaimer: 'Synthetic data for a software demonstration.',
   questions: [
     {
-      id: 'market-leaders',
-      label: 'Market Leaders',
+      id: 'top-customers',
+      label: 'Top Customers',
       tag: 'ANALYTICS',
       description: null,
-      question: 'Which assets had the strongest returns?',
-      sources: ['market_analysis_structured'],
-      tools: ['cudf', 'quantum'],
+      question: 'Which customers spent the most?',
+      sources: ['retail.sales'],
+      tools: ['duckdb', 'quantum'],
       featured: true,
     },
     {
@@ -31,12 +34,12 @@ const PACK: PackView = {
       tag: 'PREDICTION',
       description: null,
       question: 'What comes next?',
-      sources: ['market_analysis_structured'],
+      sources: ['retail.sales'],
       tools: ['kumo'],
       featured: false,
     },
   ],
-  examples: ['outlook', 'market-leaders'],
+  examples: ['outlook', 'top-customers'],
   conversations: [],
 }
 
@@ -57,8 +60,8 @@ describe('fetchPack', () => {
 
     expect(fetch).toHaveBeenCalledWith('http://api.test:8000/v1/pack', expect.anything())
     expect(pack?.questions[0]).toMatchObject({
-      id: 'market-leaders',
-      tools: ['cudf'], // only the pills the UI knows
+      id: 'top-customers',
+      tools: ['duckdb'], // only the pills the UI knows
       featured: true,
     })
   })
@@ -66,7 +69,7 @@ describe('fetchPack', () => {
   test("reads the example picker's questions in their order", async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(PACK)))
 
-    expect((await fetchPack())?.examples).toEqual(['outlook', 'market-leaders'])
+    expect((await fetchPack())?.examples).toEqual(['outlook', 'top-customers'])
   })
 
   test('accepts a pack from an API without examples', async () => {

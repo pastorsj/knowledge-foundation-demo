@@ -9,10 +9,16 @@ import type { PackQuestion } from '@/adapters/api/pack-client'
 import styles from './ecosystem-landing.module.css'
 
 interface EcosystemLandingProps {
-  /** Featured questions of the active data pack; each opens the research view */
+  /** Featured questions of the selected pack; each opens the research view */
   featuredQuestions: PackQuestion[]
-  /** The data pack's disclaimer, shown under the introduction */
+  /** The selected pack's disclaimer, shown under the introduction */
   disclaimer: string | null
+  /** The selected pack, which the research view opens on (`?pack=`); null for the default */
+  packId?: string | null
+  /** The selected pack's title, named in the header */
+  packTitle?: string | null
+  /** The industry selector, in the header */
+  industrySelect?: ReactNode
 }
 
 const NvidiaMark = ({ size = 'medium' }: { size?: 'small' | 'medium' }): ReactNode => (
@@ -36,14 +42,12 @@ const LOGOS = {
   nous: '/ecosystem-logos/nous.png',
   opentelemetry: '/ecosystem-logos/opentelemetry.png',
   phoenix: '/ecosystem-logos/phoenix.png',
-  rapids: '/ecosystem-logos/rapids.svg',
   react: '/ecosystem-logos/react.svg',
 } as const
 
 const MARK_SIZES = {
   small: styles.brandMarkSmall,
   large: styles.brandMarkLarge,
-  wide: styles.brandMarkWide,
 }
 
 /** A decorative logo; the technology's name is always written next to it. */
@@ -87,42 +91,52 @@ const Technology = ({ children, mark }: { children: ReactNode; mark: ReactNode }
   </span>
 )
 
+/** The research view, on the selected pack, optionally with a question in the composer. */
+const researchHref = (packId: string | null | undefined, questionId?: string): string => {
+  const params = new URLSearchParams()
+  if (packId) params.set('pack', packId)
+  if (questionId) params.set('question', questionId)
+  const query = params.toString()
+  return query ? `/research?${query}` : '/research'
+}
+
 export const EcosystemLanding = ({
   featuredQuestions,
   disclaimer,
+  packId = null,
+  packTitle = null,
+  industrySelect = null,
 }: EcosystemLandingProps): ReactNode => (
   <main className={styles.page}>
     <div className={styles.shell}>
       <header className={styles.header}>
         <div className={styles.brand}>
           <NvidiaMark />
-          <span>NVIDIA</span>
+          <span>NVIDIA Knowledge Foundation</span>
         </div>
         <div className={styles.context}>
           <span className={styles.statusDot} aria-hidden="true" />
-          Architecture overview · Market analysis
+          {packTitle ? `Architecture overview · ${packTitle}` : 'Architecture overview'}
+          {industrySelect}
         </div>
       </header>
 
       <div className={styles.content}>
         <section className={styles.intro} aria-labelledby="ecosystem-title">
           <div>
-            <p className={styles.eyebrow}>One agent · NVIDIA AI models · GPU acceleration</p>
-            <h1 id="ecosystem-title">From market question to grounded decision.</h1>
+            <p className={styles.eyebrow}>One agent · NVIDIA AI models · Your knowledge, cited</p>
+            <h1 id="ecosystem-title">Ask your enterprise knowledge.</h1>
           </div>
           <div>
             <p className={styles.introCopy}>
-              A connected intelligence stack for structured data, unstructured public knowledge, and
-              accelerated market analysis.
+              Documents and tables, parsed and indexed by one pipeline, answered by one agent with a
+              citation for every claim and a visible execution graph.
             </p>
             {disclaimer && <p className={styles.disclaimer}>{disclaimer}</p>}
           </div>
         </section>
 
-        <section
-          className={styles.architecture}
-          aria-label="Market analysis technology architecture"
-        >
+        <section className={styles.architecture} aria-label="Knowledge Foundation architecture">
           <article
             className={`${styles.node} ${styles.terminal} ${styles.question}`}
             data-testid="ecosystem-node"
@@ -131,8 +145,8 @@ export const EcosystemLanding = ({
               ?
             </span>
             <p className={styles.nodeKicker}>Natural language</p>
-            <h2>Market question</h2>
-            <p className={styles.nodeNote}>Ask what happened, why, and what may happen next.</p>
+            <h2>Business question</h2>
+            <p className={styles.nodeNote}>Ask about policies, reports, records and outcomes.</p>
           </article>
 
           <article className={`${styles.node} ${styles.hermes}`} data-testid="ecosystem-node">
@@ -151,7 +165,7 @@ export const EcosystemLanding = ({
             <div className={styles.agentSteps} aria-label="Hermes responsibilities">
               <span>Plan</span>
               <span>Call tools</span>
-              <span>Synthesize</span>
+              <span>Cite</span>
             </div>
             <div className={styles.technologyRow} aria-label="Agent runtime">
               <Technology mark={<NvidiaMark size="small" />}>OpenShell</Technology>
@@ -170,22 +184,8 @@ export const EcosystemLanding = ({
           <div className={styles.capabilities} aria-label="Agent capabilities">
             <article className={`${styles.node} ${styles.capability}`} data-testid="ecosystem-node">
               <div className={styles.capabilityHeader}>
-                <span className={styles.capabilityTitle}>Structured Data</span>
-                <span className={styles.role}>Retrieve · Predict</span>
-              </div>
-              <div className={styles.technologyRow}>
-                <Technology mark={<NvidiaMark size="small" />}>Auto Ontology</Technology>
-                <Technology mark={<NvidiaMark size="small" />}>NVIDIA Kumo</Technology>
-                <Technology mark={<BrandMark brand="DuckDB" src={LOGOS.duckdb} />}>
-                  DuckDB
-                </Technology>
-              </div>
-            </article>
-
-            <article className={`${styles.node} ${styles.capability}`} data-testid="ecosystem-node">
-              <div className={styles.capabilityHeader}>
-                <span className={styles.capabilityTitle}>Public Knowledge</span>
-                <span className={styles.role}>Search</span>
+                <span className={styles.capabilityTitle}>Documents</span>
+                <span className={styles.role}>Search · Cite</span>
               </div>
               <div className={styles.technologyGroups}>
                 <div className={styles.technologyGroup}>
@@ -214,22 +214,29 @@ export const EcosystemLanding = ({
 
             <article className={`${styles.node} ${styles.capability}`} data-testid="ecosystem-node">
               <div className={styles.capabilityHeader}>
-                <span className={styles.capabilityTitle}>
-                  <NvidiaMark size="small" />
-                  Market Analytics
-                </span>
-                <span className={styles.role}>Analyze</span>
+                <span className={styles.capabilityTitle}>Tables</span>
+                <span className={styles.role}>Query · Predict</span>
               </div>
               <div className={styles.technologyRow}>
-                <Technology mark={<BrandMark brand="RAPIDS" src={LOGOS.rapids} size="wide" />}>
-                  cuDF
+                <Technology mark={<BrandMark brand="DuckDB" src={LOGOS.duckdb} />}>
+                  DuckDB
                 </Technology>
-                <Technology mark={<BrandMark brand="RAPIDS" src={LOGOS.rapids} size="wide" />}>
-                  cuGraph
-                </Technology>
-                <Technology mark={<BrandMark brand="RAPIDS" src={LOGOS.rapids} size="wide" />}>
-                  cuML
-                </Technology>
+                <Technology mark={<NvidiaMark size="small" />}>NVIDIA Kumo</Technology>
+                <Technology mark={<NvidiaMark size="small" />}>Auto Ontology</Technology>
+              </div>
+            </article>
+
+            <article className={`${styles.node} ${styles.capability}`} data-testid="ecosystem-node">
+              <div className={styles.capabilityHeader}>
+                <span className={styles.capabilityTitle}>
+                  <NvidiaMark size="small" />
+                  Ingestion
+                </span>
+                <span className={styles.role}>Parse · Load</span>
+              </div>
+              <div className={styles.technologyRow}>
+                <Technology mark={<NimMark />}>Nemotron Parse</Technology>
+                <Technology mark={<NvidiaMark size="small" />}>Docling</Technology>
               </div>
             </article>
           </div>
@@ -242,28 +249,30 @@ export const EcosystemLanding = ({
               ✦
             </span>
             <p className={styles.nodeKicker}>Inspectable output</p>
-            <h2>Grounded decision</h2>
+            <h2>Cited answer</h2>
             <ul className={styles.answerList}>
-              <li>Cited answers</li>
+              <li>Cited passages</li>
+              <li>SQL rows</li>
               <li>Predictions</li>
-              <li>GPU analysis</li>
-              <li>Replayable evidence</li>
+              <li>Replayable runs</li>
             </ul>
           </article>
 
-          <div className={styles.gpuFoundation} aria-label="NVIDIA GPU foundation">
-            <div className={styles.gpuIdentity}>
+          <div className={styles.foundation} aria-label="Knowledge foundation">
+            <div className={styles.foundationIdentity}>
               <NvidiaMark />
               <span>
-                <strong>NVIDIA GPU foundation</strong>
+                <strong>One ingestion pipeline</strong>
                 <br />
-                Accelerated compute across the intelligence stack
+                Industry packs and your uploads alike
               </span>
             </div>
-            <div className={styles.gpuScope} aria-label="Accelerated workloads">
-              <span>Model inference</span>
-              <span>Tabular analytics</span>
-              <span>Graph analytics</span>
+            <div className={styles.foundationScope} aria-label="Pipeline stages">
+              <span>Parse</span>
+              <span>Chunk</span>
+              <span>Embed</span>
+              <span>Index</span>
+              <span>Load tables</span>
             </div>
           </div>
         </section>
@@ -278,7 +287,7 @@ export const EcosystemLanding = ({
                 <li key={question.id}>
                   <Link
                     className={styles.featuredQuestion}
-                    href={`/research?${new URLSearchParams({ question: question.id })}`}
+                    href={researchHref(packId, question.id)}
                     title={question.question}
                   >
                     <strong>{question.label}</strong>
@@ -327,8 +336,8 @@ export const EcosystemLanding = ({
               FastAPI
             </span>
           </div>
-          <Link className={styles.enterLink} href="/research">
-            Enter market analysis <span aria-hidden="true">→</span>
+          <Link className={styles.enterLink} href={researchHref(packId)}>
+            Ask your knowledge <span aria-hidden="true">→</span>
           </Link>
         </footer>
       </div>

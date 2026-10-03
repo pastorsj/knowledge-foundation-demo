@@ -3,16 +3,12 @@
 
 export { ExecutionGraph } from './ExecutionGraph'
 export {
-  buildGpuAccelerationByNode,
-  gpuAccelerationForReceipt,
-  type ExecutionNodeGpuAcceleration,
-} from './gpu-acceleration'
-export {
   toGraphEvent,
   toGraphProjection,
   type GraphComponent,
   type GraphEvent,
   type GraphProjection,
+  type GraphReceipts,
 } from './graph-events'
 export {
   buildExecutionGraphViewModel,

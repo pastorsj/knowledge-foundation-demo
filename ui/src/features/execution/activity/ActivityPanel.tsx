@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * The Agent Activity panel's tabs: Thinking (the run as it happens), Timeline
- * (the finished run's timing) and Benchmark (its market calls on the CPU and
- * the NVIDIA GPU). In live mode what the store lacks loads from the job's
- * export (`useJobHistory`); recorded runs are already in the store.
+ * The Agent Activity panel's tabs: Thinking (the run as it happens) and
+ * Timeline (the finished run's timing). In live mode what the store lacks
+ * loads from the job's export (`useJobHistory`); recorded runs are already in
+ * the store.
  */
 
 'use client'
@@ -15,7 +15,6 @@ import { Flex, Spinner, Text } from '@/adapters/ui'
 import { ThinkingReasoning } from '@/adapters/ui/icons'
 import { useAppConfig, type ActivityPanelProps } from '@/shared/context'
 import type { ExecutionEventV2 } from '../contract'
-import { BenchmarkTab } from '../benchmark/BenchmarkTab'
 import { projectRun, runEnded } from '../projection'
 import { loadJobExport } from '../replay/sources'
 import { useExecutionRun, type ExecutionRun } from '../store'
@@ -24,13 +23,12 @@ import { ActionTimeline } from './ActionTimeline'
 import { buildActionTimeline, buildThinkingActivity, type ThinkingStatus } from './activity-model'
 import { ThinkingTab, type ActivityLoadState, type FailureLinks } from './ThinkingTab'
 
-type ActivityTab = 'thinking' | 'timeline' | 'benchmark'
+type ActivityTab = 'thinking' | 'timeline'
 
-const ACTIVITY_TABS = ['thinking', 'timeline', 'benchmark'] as const
+const ACTIVITY_TABS = ['thinking', 'timeline'] as const
 const TAB_LABELS: Record<ActivityTab, string> = {
   thinking: 'Thinking',
   timeline: 'Timeline',
-  benchmark: 'Benchmark',
 }
 const NO_EVENTS: ExecutionEventV2[] = []
 
@@ -282,25 +280,6 @@ export const ActivityPanel: FC<ActivityPanelProps> = ({ jobId, streaming, open }
         className="flex min-h-0 flex-1 flex-col overflow-hidden py-4 pl-6 pr-8"
       >
         {open && activeTab === 'timeline' ? timelineContent : null}
-      </div>
-      <div
-        id="activity-benchmark-panel"
-        role="tabpanel"
-        aria-labelledby="activity-benchmark-tab"
-        hidden={activeTab !== 'benchmark'}
-        className="flex min-h-0 flex-1 flex-col overflow-hidden py-4 pl-6 pr-8"
-      >
-        {open && activeTab === 'benchmark' ? (
-          <BenchmarkTab
-            key={jobId ?? 'none'}
-            jobId={jobId}
-            events={events}
-            timeline={timeline}
-            benchmark={run?.benchmark ?? null}
-            retrievalBenchmark={run?.retrievalBenchmark ?? null}
-            recorded={!live}
-          />
-        ) : null}
       </div>
     </>
   )

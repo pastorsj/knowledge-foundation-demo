@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 2,
+  "pack": {
+    "id": "manufacturing",
+    "version": "1.0.0"
+  },
+  "recordedAt": "2026-09-28T06:30:00Z",
+  "sessions": [
+    {
+      "id": "press-line-lockout",
+      "title": "Press line lockout",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "question": "What must an operator do before clearing a jam on press line 3?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    }
+  ]
+}

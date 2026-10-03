@@ -72,39 +72,39 @@ describe('useLayoutStore', () => {
   })
 
   test('toggles a data source on and off', () => {
-    useLayoutStore.getState().toggleDataSource('market_news')
-    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['market_news'])
+    useLayoutStore.getState().toggleDataSource('retail.policies')
+    expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.policies'])
 
-    useLayoutStore.getState().toggleDataSource('market_news')
+    useLayoutStore.getState().toggleDataSource('retail.policies')
     expect(useLayoutStore.getState().enabledDataSourceIds).toEqual([])
   })
 
   describe('fetchDataSources', () => {
     test('stores the sources and enables those enabled by default', async () => {
       vi.mocked(fetchDataSources).mockResolvedValue([
-        { id: 'market_analysis_structured', name: 'Market data' },
-        { id: 'market_news', name: 'News', default_enabled: false },
+        { id: 'retail.sales', name: 'Market data' },
+        { id: 'retail.policies', name: 'News', default_enabled: false },
       ])
 
       await useLayoutStore.getState().fetchDataSources()
 
       expect(useLayoutStore.getState()).toMatchObject({
-        availableDataSources: [{ id: 'market_analysis_structured' }, { id: 'market_news' }],
-        enabledDataSourceIds: ['market_analysis_structured'],
+        availableDataSources: [{ id: 'retail.sales' }, { id: 'retail.policies' }],
+        enabledDataSourceIds: ['retail.sales'],
         dataSourcesLoading: false,
         dataSourcesError: null,
       })
     })
 
     test('reads the replay bundle instead of the API when asked', async () => {
-      vi.mocked(fetchRecordedDataSources).mockResolvedValue([{ id: 'market_news', name: 'News' }])
+      vi.mocked(fetchRecordedDataSources).mockResolvedValue([{ id: 'retail.policies', name: 'News' }])
 
       await useLayoutStore.getState().fetchDataSources('recordings')
 
       expect(fetchDataSources).not.toHaveBeenCalled()
       expect(useLayoutStore.getState()).toMatchObject({
-        availableDataSources: [{ id: 'market_news' }],
-        enabledDataSourceIds: ['market_news'],
+        availableDataSources: [{ id: 'retail.policies' }],
+        enabledDataSourceIds: ['retail.policies'],
       })
     })
 

@@ -25,7 +25,6 @@ const ROUTES: ReadonlyArray<readonly [Method, RegExp]> = [
   ['POST', /^jobs\/async\/submit$/],
   ['GET', /^jobs\/async\/job\/[^/]+(\/.+)?$/],
   ['POST', /^jobs\/async\/job\/[^/]+\/cancel$/],
-  ['POST', /^jobs\/async\/job\/[^/]+\/benchmark$/],
   ['POST', /^speech\/transcriptions$/],
 ]
 

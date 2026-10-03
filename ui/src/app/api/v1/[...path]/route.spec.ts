@@ -26,14 +26,12 @@ describe('/api/v1 proxy', () => {
   test.each([
     ['GET', 'pack'],
     ['GET', 'data_sources'],
-    ['GET', 'data_sources/market_analysis_structured/tables/prices/preview?limit=5'],
-    ['POST', 'data_sources/market_analysis_structured/query'],
+    ['GET', 'data_sources/retail.sales/preview?table=orders&limit=5'],
+    ['POST', 'data_sources/retail.sales/query'],
     ['POST', 'jobs/async/submit'],
     ['GET', 'jobs/async/job/job-1'],
     ['GET', 'jobs/async/job/job-1/stream/42'],
     ['POST', 'jobs/async/job/job-1/cancel'],
-    ['POST', 'jobs/async/job/job-1/benchmark'],
-    ['GET', 'jobs/async/job/job-1/benchmark'],
   ])('forwards %s /v1/%s', async (method, path) => {
     const response = await call(method === 'GET' ? GET : POST, path, {
       method,
@@ -48,6 +46,8 @@ describe('/api/v1 proxy', () => {
     ['GET', 'internal/hermes/jobs/job-1/execution-scope'],
     ['POST', 'data_sources'],
     ['POST', 'jobs/async/job/job-1/report'],
+    // The market demo's CPU/GPU benchmark is gone
+    ['POST', 'jobs/async/job/job-1/benchmark'],
     ['GET', 'jobs/async/job/../../internal'],
     ['GET', 'jobs/async/job/.hidden'],
   ])('rejects %s /v1/%s without calling the API', async (method, path) => {

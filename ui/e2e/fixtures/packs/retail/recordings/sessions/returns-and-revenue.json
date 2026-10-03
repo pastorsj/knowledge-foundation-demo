@@ -1,0 +1,691 @@
+{
+  "schemaVersion": 2,
+  "id": "returns-and-revenue",
+  "title": "Returns policy and loyalty revenue",
+  "turns": [
+    {
+      "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+      "question": "What is the return window for opened electronics, and which loyalty tier brought the most net revenue in the third quarter of 2026?",
+      "submittedAt": "2026-09-28T05:00:09.000000Z",
+      "completedAt": "2026-09-28T05:01:03.175123Z",
+      "status": "success",
+      "report": {
+        "markdown": "Opened electronics can be returned within 30 days with the original receipt, less a 15% restocking fee unless the item is defective [1]. Gold-tier members brought the most net revenue in the third quarter: $395.00 over 3 orders [2].\n\n**References:**\n- [1] Unstructured retrieval evidence — evidence `hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433` — invocation `hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H`\n- [2] Structured query result — evidence `hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52` — invocation `hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2`",
+        "citations": [
+          {
+            "number": 1,
+            "label": "Unstructured retrieval evidence",
+            "evidenceId": "hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433",
+            "invocationId": "hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H"
+          },
+          {
+            "number": 2,
+            "label": "Structured query result",
+            "evidenceId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+            "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "ad44bc59-514a-5920-b04e-4f526476ba92",
+          "cursor": 1,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:09.159535Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:3bb67d4690a4adb39ad0d38285345555d5e1091be2a32010b9ab0f28ac521a7f",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c2e2e4c8-29e5-5d84-abef-dc070bf9d7aa",
+          "cursor": 2,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:e65bc6dc9d5251387970a2f1:1",
+          "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:11.980000Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "tier": "efficient",
+              "input_tokens": 9120,
+              "output_tokens": 412
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:e65bc6dc9d5251387970a2f1:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "153cb08f-e4d9-5122-b872-36f1faf00ff9",
+          "cursor": 3,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
+          "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:21.589518Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:47d0fbd30453b81dde7b04c55e5bd5609b166154e52273fc589ed18c204ab261",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0cd15c68-dc10-59de-b71f-8dfb5ade6b04",
+          "cursor": 4,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H",
+          "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:21.626751Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:54c0a18d8e2041ee9139d0675d6d81b20ec7f0906c9c0a884264b6e117be7499",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "796580c7-dbac-5566-9d68-22e9d6142431",
+          "cursor": 5,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:21.762077Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 173,
+              "tool_status": "completed",
+              "trace_id": "01a0e6627c447b83a27dc6ec13c18349",
+              "span_id": "bcf375c672770770"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f7480651-e362-5904-bc7b-8cdcdb4e554c",
+          "cursor": 6,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:23.867804Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 2241,
+              "tool_status": "completed",
+              "trace_id": "01a0e6627c447b83a27dc6ec13c18349",
+              "span_id": "81569081e47c3353"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "be4441d4-f3a6-5d32-8222-5f325303555c",
+          "cursor": 7,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
+          "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:23.899827Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.212
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b05b14b0cbc2563e186a8e3e24fcc708679d8cd09a5754a2540f23022ceda603",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9fd971ad-e3d3-54ab-9e94-ae7df2565dc0",
+          "cursor": 8,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H",
+          "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:00:23.945133Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 2.318
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4a1aee7dc25f5d9e7c671c1c010ad0a3f7e47ee6bb507626dbcee33086c1d475",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "97b41ef9-aab7-5b6f-9eb1-44debbad4d9c",
+          "cursor": 9,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:e65bc6dc9d5251387970a2f1:4",
+          "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:01:02.910000Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "gpt-6-sol",
+              "tier": "capable",
+              "input_tokens": 41870,
+              "output_tokens": 2796
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:e65bc6dc9d5251387970a2f1:4",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e3b5dffe-c937-53b9-be60-a33f45311fc6",
+          "cursor": 10,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:01:03.175123Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 103009,
+              "output_tokens": 3208,
+              "total_tokens": 106217
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:62612950f05b65c857ca33d33bb2ed667d9a66361928bb811649bb62ec2df301",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3690b958-86f7-53b4-af9d-8f26f106d4c2",
+          "cursor": 11,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "demo.api",
+          "invocationId": null,
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:01:03.275123Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": null,
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "demo-api.v1",
+            "observation": "derived",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "35d8731f-66b1-566e-9604-866ef0916b6e",
+          "cursor": 12,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "demo.api",
+          "invocationId": null,
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:01:03.375123Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 2,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": null,
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "demo-api.v1",
+            "observation": "derived",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f1cb8dc9-0b9e-56d1-8ece-e403b0d1a34f",
+          "cursor": 13,
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "runId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "sessionId": "session-2e1e9c6d",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "demo.api",
+          "invocationId": null,
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T05:01:03.475123Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "knowledge-foundation",
+              "wall_duration_ms": 54300,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 2414
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": null,
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "demo-api.v1",
+            "observation": "derived",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
+          "turnId": null,
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 173,
+          "traceId": "01a0e6627c447b83a27dc6ec13c18349",
+          "spanId": "bcf375c672770770",
+          "occurredAt": "2026-09-28T05:00:21.762077Z",
+          "content": {
+            "query": "Which loyalty tier brought the most net revenue in the third quarter of 2026?",
+            "databaseName": "retail_sales",
+            "answer": null,
+            "sql": "SELECT c.tier, count(*) AS orders, round(sum(o.net_amount), 2) AS net_revenue\nFROM retail_sales.orders AS o\nJOIN retail_sales.customers AS c USING (customer_id)\nWHERE o.ordered_at >= TIMESTAMP '2026-07-01' AND o.ordered_at < TIMESTAMP '2026-10-01'\nGROUP BY c.tier\nORDER BY net_revenue DESC",
+            "rows": [
+              {
+                "tier": "gold",
+                "orders": 3,
+                "net_revenue": 395.0
+              },
+              {
+                "tier": "silver",
+                "orders": 1,
+                "net_revenue": 45.25
+              }
+            ],
+            "sourceRowCount": 2,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433",
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "invocationId": "hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H",
+          "turnId": null,
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 2241,
+          "traceId": "01a0e6627c447b83a27dc6ec13c18349",
+          "spanId": "81569081e47c3353",
+          "occurredAt": "2026-09-28T05:00:23.867804Z",
+          "content": {
+            "query": "Return window and restocking fee for electronics, and any exceptions for gold-tier loyalty members",
+            "sourceIds": [
+              "retail.policies"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 4.53125,
+                "vectorScore": 0.7105180311203003,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:return-policy.pdf",
+                "chunkId": "retail.policies:return-policy.pdf:0002",
+                "title": "Northwind Retail Return Policy",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Returns and exchanges > Electronics\nElectronics (computers, tablets, phones, cameras and audio) may be returned within 30 days of purchase with the original receipt. Opened electronics carry a 15% restocking fee unless the item is defective. Gift receipts allow an exchange or store credit only.",
+                "metadata": {
+                  "citation": "return-policy.pdf, p. 1",
+                  "file_name": "return-policy.pdf",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": [
+                    "Returns and exchanges",
+                    "Electronics"
+                  ],
+                  "doc_items": [
+                    "section_header",
+                    "text"
+                  ],
+                  "parser": "nemotron-parse-2.0"
+                }
+              },
+              {
+                "rank": 2,
+                "score": 1.2734375,
+                "vectorScore": 0.5811106777191162,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:loyalty-program-terms.pdf",
+                "chunkId": "retail.policies:loyalty-program-terms.pdf:0005",
+                "title": "Northwind Rewards Program Terms",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Member benefits by tier\n| Benefit | Bronze | Silver | Gold |\n| Extended return window | none | 15 days | 30 days |\n| Restocking fee waived | no | no | yes |\nGold members' restocking fee waiver does not apply to special-order items.",
+                "metadata": {
+                  "citation": "loyalty-program-terms.pdf, p. 3",
+                  "file_name": "loyalty-program-terms.pdf",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": [
+                    "Member benefits by tier"
+                  ],
+                  "doc_items": [
+                    "section_header",
+                    "table",
+                    "text"
+                  ],
+                  "parser": "nemotron-parse-2.0"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -0.84375,
+                "vectorScore": 0.5504258501529694,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:store-operations-manual.docx",
+                "chunkId": "retail.policies:store-operations-manual.docx:0011",
+                "title": "Store Operations Manual",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Returns desk procedure\nScan the receipt, inspect the item for damage and missing accessories, and record the restocking fee in the point-of-sale system before issuing the refund to the original tender.",
+                "metadata": {
+                  "citation": "store-operations-manual.docx, Returns desk procedure",
+                  "file_name": "store-operations-manual.docx",
+                  "headings": [
+                    "Customer service",
+                    "Returns desk procedure"
+                  ],
+                  "doc_items": [
+                    "section_header",
+                    "text"
+                  ],
+                  "parser": "docling-docx"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "retail.policies": 24
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 471.5,
+              "searchMs": 15.4,
+              "rerankMs": 1714.9,
+              "totalMs": 2202.3
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "retail.sales",
+        "retail.policies"
+      ]
+    }
+  ]
+}

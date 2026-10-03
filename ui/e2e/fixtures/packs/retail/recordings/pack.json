@@ -1,0 +1,33 @@
+{
+  "id": "retail",
+  "kind": "industry",
+  "title": "Retail",
+  "description": "A fictional retailer's policies, orders and customers (fixture).",
+  "icon": "Store",
+  "status": "ready",
+  "version": "1.0.0",
+  "as_of": "2026-09-30",
+  "disclaimer": "Synthetic data for tests.",
+  "questions": [
+    {
+      "id": "returns-and-revenue",
+      "label": "Returns and revenue",
+      "tag": null,
+      "description": null,
+      "question": "What is the return window for opened electronics, and which loyalty tier brought the most net revenue in the third quarter of 2026?",
+      "sources": [
+        "retail.sales",
+        "retail.policies"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    }
+  ],
+  "examples": [
+    "returns-and-revenue"
+  ],
+  "conversations": []
+}

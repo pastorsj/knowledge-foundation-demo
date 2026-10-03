@@ -238,15 +238,9 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
     void speechInput.start()
   }, [speechInput])
 
-  // The counter counts database connections, as the original UI's did (its one registered
-  // connection was the market database): each pack has one, its structured source. The document
-  // collections beside it are listed in the Data Sources panel.
-  const databaseIds = new Set(
-    (availableDataSources ?? [])
-      .filter((source) => source.kind === 'structured')
-      .map((source) => source.id)
-  )
-  const enabledDatabaseCount = enabledDataSourceIds.filter((id) => databaseIds.has(id)).length
+  // Data sources counts for indicator, as upstream: the selected pack's enabled connections
+  const sourceIds = new Set((availableDataSources ?? []).map((source) => source.id))
+  const enabledSourcesCount = enabledDataSourceIds.filter((id) => sourceIds.has(id)).length
   // Replay keeps the original's microphone in the read-only composer; it never records there.
   const showMicrophone = speechInputConfig.enabled || mode === 'replay'
 
@@ -380,7 +374,7 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
             <Flex align="center" gap="1">
               <Globe className="h-3 w-3" />
               <Text kind="label/bold/sm">
-                {enabledDatabaseCount}/{databaseIds.size}
+                {enabledSourcesCount}/{sourceIds.size}
               </Text>
             </Flex>
           </Button>
