@@ -86,7 +86,7 @@ def create_app(
                 await runner.shutdown()
                 await hermes.aclose()
 
-    app = FastAPI(title="Market analysis job API", lifespan=lifespan)
+    app = FastAPI(title="NVIDIA Knowledge Foundation job API", lifespan=lifespan)
     app.include_router(jobs.router)
     app.include_router(sources.router)
     app.include_router(speech.router)

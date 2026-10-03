@@ -68,7 +68,7 @@ async def test_a_question_runs_on_hermes_and_publishes_a_cited_answer(app, api, 
     assert start.headers["Authorization"] == "Bearer test-hermes-key"
     assert payload["model"] == "enterprise-research"
     assert payload["session_id"] == "job-1"
-    assert payload["enabled_toolsets"] == ["skills", "market_analytics", "retrieval"]
+    assert payload["enabled_toolsets"] == ["skills", "retrieval", "tables"]
     assert payload["metadata"]["aiq.job.ref"] == correlation_ref("job-1")
     assert "market_news, market_analysis_structured" in payload["instructions"]
 
@@ -151,11 +151,7 @@ async def test_a_question_runs_on_hermes_and_publishes_a_cited_answer(app, api, 
         "events",
         "receipts",
         "sourceIds",
-        "benchmark",
-        "retrievalBenchmark",
     }
-    assert turn["benchmark"] is None
-    assert turn["retrievalBenchmark"] is None
     assert turn["sourceIds"] == ["market_news", "market_analysis_structured"]
     assert turn["status"] == "success"
     assert turn["report"]["citations"][0]["evidenceId"] == receipt["receiptId"]
@@ -299,7 +295,7 @@ async def test_the_trace_link_is_resolved_in_phoenix(api, upstreams, fake_hermes
 
     response = await api.get("/v1/jobs/async/job/job-1/trace")
     assert response.json() == {"job_id": "job-1", "trace_id": "ab" * 16, "path": f"/redirects/traces/{'ab' * 16}"}
-    assert seen[0].url.path == "/v1/projects/market-analysis-agent/spans"
+    assert seen[0].url.path == "/v1/projects/knowledge-foundation/spans"
     assert seen[0].url.params["attribute"] == f"aiq.job.ref:{correlation_ref('job-1')}"
 
     upstreams["phoenix.test"] = lambda request: httpx.Response(200, json={"data": []})

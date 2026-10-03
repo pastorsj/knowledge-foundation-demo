@@ -18,9 +18,7 @@ The v2 bundle, which the UI replays from ``data/packs/<pack>/recordings/``::
 
 Each pack question becomes one single-turn session, asked one at a time. Each pack conversation
 (questions.yaml ``conversations``, recorded with ``--all`` or by id) becomes one session of several
-turns, asked in order in one conversation, so a later turn sees the earlier answers. After an
-answer that called market analytics tools, the recorder asks for its CPU/GPU comparison
-(POST .../benchmark), which the export then carries; on a CPU-only stack there is none. A
+turns, asked in order in one conversation, so a later turn sees the earlier answers. A
 question or conversation that does not succeed is left out of the bundle and makes the command
 exit 1. Recording named ids (``--question``) updates those sessions of an existing bundle and
 keeps its other sessions, naming them when they come from another build; recording a whole set replaces the
@@ -58,7 +56,6 @@ POLL_SECONDS = 2.0
 PREVIEW_ROWS = 8  # the rows the data viewer previews (ui/src/features/execution/data-viewer)
 # The query the data viewer's SQL tab starts from for a table (DatabaseBrowser.tsx), so replay can run it too
 DEFAULT_TABLE_SQL = 'SELECT * FROM "{schema}"."{table}" LIMIT 25'
-BENCHMARK_TIMEOUT_SECONDS = 900.0
 USAGE_ERROR = 2  # a request the pack or the bundle cannot take; nothing was asked
 # A gateway's provider-prefixed model id: <provider>/<publisher>/<model>, e.g. vertex/google/example-model-1
 PREFIXED_MODEL = re.compile(
@@ -221,18 +218,7 @@ def _ask(
         time.sleep(POLL_SECONDS)
     if status.get("error"):
         print(f"  error: {status['error']}", file=sys.stderr)
-    if status["status"] == "success":
-        _benchmark(client, job_id)
     return public_model_ids(client.get(f"/v1/jobs/async/job/{job_id}/export").raise_for_status().json())
-
-
-def _benchmark(client: httpx.Client, job_id: str) -> None:
-    """Compare the answer's market calls on the CPU and the GPU; a run without any, or a CPU-only stack, has none."""
-    response = client.post(f"/v1/jobs/async/job/{job_id}/benchmark", timeout=BENCHMARK_TIMEOUT_SECONDS)
-    if response.status_code == 422:
-        return
-    body = response.json() if response.status_code == 200 else {}
-    print(f"  benchmark: {body.get('status', response.status_code)}", file=sys.stderr)
 
 
 def snapshot_database(client: httpx.Client, out_dir: Path) -> None:

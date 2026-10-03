@@ -39,16 +39,7 @@ from demo_api.events.models import validate_bounded_display_json
 from demo_api.events.models import validate_display_text
 
 ReceiptStatus = Literal["completed", "failed"]
-ArtifactKind = Literal["retrieval_evidence", "analytics_result", "structured_query", "structured_prediction"]
-MarketOperation = Literal[
-    "market_scan",
-    "market_anomaly_scan",
-    "price_context",
-    "sentiment_timeline",
-    "analyze_news_price_relationship",
-    "analyze_market_relationships",
-    "intraday_scan",
-]
+ArtifactKind = Literal["retrieval_evidence", "structured_query", "structured_prediction"]
 
 TraceId = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{32}$")]
 SpanId = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{16}$")]
@@ -60,7 +51,8 @@ MAX_HITS = 25  # retrieve_evidence's largest top_k
 
 
 class RetrievalHit(ContractModel):
-    """One passage from `retrieve_evidence`, ordered by its rerank logit (`score`); the vector score is cosine."""
+    """One passage from `retrieve_evidence`, ordered by `score`: its rerank logit, or its vector score (cosine)
+    when the retrieval ran without a rerank model."""
 
     rank: int = Field(ge=1)
     score: float
@@ -76,8 +68,10 @@ class RetrievalHit(ContractModel):
 
 
 class RetrievalModels(ContractModel):
+    """The models behind a retrieval; `rerank` is null when none is configured and the hits keep vector order."""
+
     embed: str = Field(min_length=1, max_length=256)
-    rerank: str = Field(min_length=1, max_length=256)
+    rerank: str | None = Field(min_length=1, max_length=256)
 
 
 class RetrievalIndex(ContractModel):
@@ -88,7 +82,7 @@ class RetrievalIndex(ContractModel):
 
 
 class RetrievalTimings(ContractModel):
-    """Wall-clock stages of one retrieval, in milliseconds."""
+    """Wall-clock stages of one retrieval, in milliseconds; `rerank_ms` is 0 when it ran without a rerank model."""
 
     embed_ms: float = Field(ge=0)
     search_ms: float = Field(ge=0)
@@ -97,7 +91,8 @@ class RetrievalTimings(ContractModel):
 
 
 class RetrievalEvidence(ContractModel):
-    """A `retrieve_evidence` result: per-source vector search, one merged rerank, the best hits.
+    """A `retrieve_evidence` result: per-source vector search, one merged rerank (when a rerank model is
+    configured), the best hits.
 
     `collection` is the alias the tool searched; the collection version is the index build behind it.
     """
@@ -121,71 +116,6 @@ class RetrievalEvidence(ContractModel):
         return self
 
 
-class AnalyticsEngine(ContractModel):
-    """The device and library that computed a market analytics result.
-
-    `engine_id` names the engine by method and device (`cudf-gpu.v1`, its CPU twin `pandas-cpu.v1`); results
-    recorded before it was added have none.
-    """
-
-    device: Literal["cpu", "gpu"]
-    library: str = Field(min_length=1, max_length=64)
-    version: str = Field(min_length=1, max_length=64)
-    engine_id: OpenIdentifier | None = None
-
-
-class AnalyticsTiming(ContractModel):
-    """Milliseconds, to the microsecond: the worker's calculation (`compute_ms`), its other work on the call
-    (`setup_ms`: the arguments before, the result after), the two together (`engine_ms`), and the call end to end
-    in the tool service, including the wait for the worker (`total_ms`). Results recorded before setup and engine
-    times were added have neither.
-    """
-
-    compute_ms: float = Field(ge=0)
-    setup_ms: float | None = Field(default=None, ge=0)
-    engine_ms: float | None = Field(default=None, ge=0)
-    total_ms: float = Field(ge=0)
-
-
-class AnalyticsError(ContractModel):
-    code: OpenIdentifier
-    message: str = Field(min_length=1, max_length=1_000)
-
-
-class AnalyticsResult(ContractModel):
-    """One market analytics result; `payload` is operation-specific JSON.
-
-    The tool does not echo its arguments, so the plugin adds them, without the
-    source ids, as the public parameters. `engine` is null when the operation
-    failed before it ran. `asset_count` is the number of distinct assets in the
-    rows scanned; results recorded before it was added have none.
-    """
-
-    operation_id: MarketOperation
-    status: Literal["succeeded", "empty", "failed"]
-    source_id: OpenIdentifier
-    database_name: OpenIdentifier
-    public_parameters: dict[str, JsonValue]
-    payload: dict[str, JsonValue] | None = None
-    error: AnalyticsError | None = None
-    engine: AnalyticsEngine | None = None
-    timing: AnalyticsTiming
-    rows_scanned: NonNegativeInt = 0
-    asset_count: NonNegativeInt | None = None
-    warnings: tuple[str, ...] = Field(default=(), max_length=20)
-    limitations: tuple[str, ...] = Field(default=(), max_length=20)
-
-    @model_validator(mode="after")
-    def _validate_outcome(self) -> AnalyticsResult:
-        if self.status == "succeeded" and self.payload is None:
-            raise ValueError("a succeeded result requires a payload")
-        if (self.status == "failed") != (self.error is not None):
-            raise ValueError("an error is required exactly when the operation failed")
-        if self.status != "failed" and self.engine is None:
-            raise ValueError("a result that ran must name its engine")
-        return self
-
-
 class LineageBinding(ContractModel):
     """How Auto Ontology bound one phrase of the question to a column."""
 
@@ -196,10 +126,12 @@ class LineageBinding(ContractModel):
 
 
 class StructuredQuery(ContractModel):
-    """An ontology-grounded SQL answer from Auto Ontology `ask_question`.
+    """A SQL result over structured sources: `query_tables` (DuckDB) or Auto Ontology `ask_question`.
 
-    `sql` is null when Auto Ontology resolved the question's terms but could not
-    construct a query.
+    `query` is the question the SQL answers, and `database_name` the database it ran on: the DuckDB alias of the
+    one structured source `query_tables` attached (`knowledge` when it attached several), or Auto Ontology's
+    database. `answer` and `resolution_lineage` come from Auto Ontology only. `sql` is null when Auto Ontology
+    resolved the question's terms but could not construct a query.
     """
 
     query: str = Field(min_length=1, max_length=1_000)
@@ -213,30 +145,41 @@ class StructuredQuery(ContractModel):
 
 
 class PredictionHorizon(ContractModel):
-    """How far past the anchor the outcome is counted, read from the PQL window."""
+    """How far past the anchor time the outcome is counted, read from the PQL window."""
 
     value: int
     unit: str = Field(min_length=1, max_length=32)
 
 
-class AssetProbability(ContractModel):
-    asset_id: OpenIdentifier
-    probability: float = Field(ge=0, le=1)
+class EntityPrediction(ContractModel):
+    """One entity's predicted outcome: `probability` for a binary task (or the score of a multiclass `label`),
+    `value` for a regression."""
+
+    entity_id: OpenIdentifier
+    probability: float | None = Field(default=None, ge=0, le=1)
+    value: float | None = None
+    label: str | None = Field(default=None, max_length=256)
 
 
 class StructuredPrediction(ContractModel):
-    """A curated PQL template scored per asset by NVIDIA Kumo (`predict_asset_outcomes`).
+    """A PQL query scored per entity by NVIDIA Kumo (`predict`) over one structured source.
 
-    `available` is false, with a `reason`, when the prediction could not run.
+    `template_id` names the source's prediction template when the PQL came from one. `task_type` is the task Kumo
+    ran (binary, regression, multiclass), `anchor_time` the time predictions are made from, `horizon` the PQL
+    window, and `entity_table` the table of the `FOR EACH` entities, when known. `available` is false, with a
+    `reason`, when the prediction could not run.
     """
 
     available: bool
     reason: str | None = Field(default=None, max_length=500)
-    template_id: OpenIdentifier
+    source_id: OpenIdentifier
+    template_id: OpenIdentifier | None = None
     pql: str = Field(min_length=1, max_length=8_000)
-    anchor: AwareDatetime
-    horizon: PredictionHorizon
-    rows: tuple[AssetProbability, ...] = Field(default=(), max_length=MAX_JSON_ITEMS)
+    task_type: str | None = Field(default=None, max_length=64)
+    anchor_time: AwareDatetime | None = None
+    horizon: PredictionHorizon | None = None
+    entity_table: str | None = Field(default=None, max_length=256)
+    rows: tuple[EntityPrediction, ...] = Field(default=(), max_length=MAX_JSON_ITEMS)
     model: str = Field(min_length=1, max_length=128)
 
     @model_validator(mode="after")
@@ -297,21 +240,6 @@ class RetrievalEvidenceReceipt(ReceiptBase):
     content: RetrievalEvidence | None = None
 
 
-class AnalyticsResultReceipt(ReceiptBase):
-    artifact_kind: Literal["analytics_result"]
-    content: AnalyticsResult | None = None
-
-    @model_validator(mode="after")
-    def _validate_operation(self) -> AnalyticsResultReceipt:
-        if self.content is None:
-            return self
-        if self.tool_name.rsplit("__", maxsplit=1)[-1] != self.content.operation_id:
-            raise ValueError("analytics content must come from the tool that ran its operation")
-        if self.status == "completed" and self.content.status == "failed":
-            raise ValueError("a failed operation cannot be a completed receipt")
-        return self
-
-
 class StructuredQueryReceipt(ReceiptBase):
     artifact_kind: Literal["structured_query"]
     content: StructuredQuery | None = None
@@ -329,20 +257,14 @@ class StructuredPredictionReceipt(ReceiptBase):
 
 
 ReceiptV2 = Annotated[
-    RetrievalEvidenceReceipt | AnalyticsResultReceipt | StructuredQueryReceipt | StructuredPredictionReceipt,
+    RetrievalEvidenceReceipt | StructuredQueryReceipt | StructuredPredictionReceipt,
     Field(discriminator="artifact_kind"),
 ]
 
 __all__ = [
-    "AnalyticsEngine",
-    "AnalyticsError",
-    "AnalyticsResult",
-    "AnalyticsResultReceipt",
-    "AnalyticsTiming",
     "ArtifactKind",
-    "AssetProbability",
+    "EntityPrediction",
     "LineageBinding",
-    "MarketOperation",
     "PredictionHorizon",
     "ReceiptBase",
     "ReceiptStatus",

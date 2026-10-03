@@ -11,7 +11,7 @@ from demo_api.hermes.normalizer import tool_invocation_id
 from demo_api.hermes.request import PriorTurn
 from demo_api.hermes.request import build_run_request
 
-SCAN = "mcp__market_analytics__market_scan"
+QUERY = "mcp__tables__query_tables"
 
 
 def run_events(*events: tuple[str, dict]) -> list[RunEvent]:
@@ -28,18 +28,18 @@ def normalize(tool_registry, *events: tuple[str, dict]):
 def test_registered_tool_calls_carry_registry_identity_and_join_their_receipts(tool_registry):
     normalizer, (started, completed) = normalize(
         tool_registry,
-        ("tool.started", {"tool": SCAN, "tool_call_id": "call_9"}),
-        ("tool.completed", {"tool": SCAN, "tool_call_id": "call_9", "duration": 0.25, "error": False}),
+        ("tool.started", {"tool": QUERY, "tool_call_id": "call_9"}),
+        ("tool.completed", {"tool": QUERY, "tool_call_id": "call_9", "duration": 0.25, "error": False}),
     )
 
     assert started.invocation_id == completed.invocation_id == "hermes-tool:call_9" == tool_invocation_id("call_9")
     assert (completed.tool_name, completed.tool_server, completed.capability_id) == (
-        "market_scan",
-        "market_analytics",
-        "market_analytics",
+        "query_tables",
+        "tables",
+        "structured_retrieval",
     )
-    assert completed.component_id == "nvidia.market_analytics"
-    assert completed.display.label == "Market Scan completed"
+    assert completed.component_id == "nvidia.ontology"
+    assert completed.display.label == "Table Query completed"
     assert completed.display.attributes == {"reported_error": False, "duration_seconds": 0.25}
     assert completed.parent_invocation_id == started.parent_invocation_id
     assert normalizer.completed_registered_calls == {"hermes-tool:call_9"}

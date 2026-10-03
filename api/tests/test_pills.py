@@ -16,80 +16,62 @@ from demo_api.registry import ToolRegistry
 
 REGISTRY = ToolRegistry.load(REPO / "contracts" / "tool-registry.json")
 PACKS = REPO / "data" / "packs"
+QUESTIONS_SCHEMA_VERSION = "3"
 
 
 def available(tool: str, receipt_id: str) -> dict:
     return {"eventKind": "artifact.available", "state": "completed", "toolName": tool, "artifactRefs": [receipt_id]}
 
 
-def analytics(receipt_id: str, device: str, library: str) -> dict:
-    engine = {"device": device, "library": library, "version": "26.6.0"}
-    return {"receiptId": receipt_id, "status": "completed", "content": {"engine": engine}}
-
-
-def test_a_session_has_one_pill_per_kind_in_order_with_its_engine():
+def test_a_session_has_one_pill_per_kind_in_order():
     turns = [
         {
             "events": [
                 {"eventKind": "tool.completed", "state": "completed", "toolName": "skill_view"},  # Hermes's own
-                available("retrieve_evidence", "r1"),
-                available("market_anomaly_scan", "r2"),
-                {"eventKind": "tool.observed", "state": "failed", "toolName": "predict_asset_outcomes"},  # failed
+                available("predict", "r1"),
+                available("retrieve_evidence", "r2"),
+                {"eventKind": "tool.observed", "state": "failed", "toolName": "ask_question"},  # failed
             ],
-            "receipts": [{"receiptId": "r1", "status": "completed"}, analytics("r2", "gpu", "cuml.accel")],
         },
         {
-            "events": [available("market_scan", "r3"), available("retrieve_evidence", "r4")],
-            "receipts": [analytics("r3", "gpu", "cudf.pandas"), {"receiptId": "r4", "status": "completed"}],
+            "events": [available("query_tables", "r3"), available("retrieve_evidence", "r4")],
         },
     ]
 
     assert session_pills(turns, REGISTRY) == [
-        {"pill": "cudf", "device": "gpu", "tools": ["market_anomaly_scan", "market_scan"]},
-        {"pill": "cuml", "device": "gpu", "tools": ["market_anomaly_scan"]},
-        {"pill": "retrieval", "device": None, "tools": ["retrieve_evidence"]},
+        {"pill": "retrieval", "tools": ["retrieve_evidence"]},
+        {"pill": "duckdb", "tools": ["query_tables"]},
+        {"pill": "kumo", "tools": ["predict"]},
     ]
 
 
-def test_a_run_on_the_cpu_keeps_its_engine():
-    turns = [
-        {
-            "events": [available("analyze_market_relationships", "r1")],
-            "receipts": [analytics("r1", "cpu", "networkx")],
-        }
-    ]
+def test_unregistered_and_retired_tools_have_no_pill():
+    turns = [{"events": [available("market_scan", "r1"), available("memory", "r2")]}]
 
-    assert session_pills(turns, REGISTRY) == [
-        {"pill": "cudf", "device": "cpu", "tools": ["analyze_market_relationships"]},
-        {"pill": "cugraph", "device": "cpu", "tools": ["analyze_market_relationships"]},
-    ]
+    assert session_pills(turns, REGISTRY) == []
 
 
-def _declared() -> list[tuple[str, str, list[str], list[str] | None]]:
-    return [
-        (pack.name, question["id"], question["tools"], question.get("profiles"))
-        for pack in sorted(PACKS.iterdir())
-        for question in yaml.safe_load((pack / "questions.yaml").read_text())["questions"]
-    ]
+def _declared() -> list[tuple[str, str, list[str]]]:
+    """Every question of every pack in the current questions.yaml format; packs of an older format are retired."""
+    declared = []
+    for pack in sorted(PACKS.iterdir()) if PACKS.is_dir() else []:
+        questions = yaml.safe_load((pack / "questions.yaml").read_text())
+        if questions.get("schema_version") == QUESTIONS_SCHEMA_VERSION:
+            declared += [(pack.name, question["id"], question["tools"]) for question in questions["questions"]]
+    return declared
 
 
-@pytest.mark.parametrize(("pack", "question", "tools", "profiles"), _declared(), ids=str)
-def test_a_recorded_question_used_every_tool_it_declares(
-    pack: str, question: str, tools: list[str], profiles: list[str] | None
-):
+@pytest.mark.parametrize(("pack", "question", "tools"), _declared(), ids=str)
+def test_a_recorded_question_used_every_tool_it_declares(pack: str, question: str, tools: list[str]):
     """questions.yaml `tools` (the picker's pills) against the committed recording, for every question.
 
-    A pack with a bundle must hold every question its profile offers: only a question for another profile (e.g. a
-    minute-bar one) may be missing. A pack without a bundle is skipped whole.
+    A pack with a bundle must hold every question; a pack without a bundle is skipped whole.
     """
     recordings = PACKS / pack / "recordings"
     if not (recordings / "index.json").is_file():
         pytest.skip(f"{pack} has no recordings")
     session = recordings / "sessions" / f"{question}.json"
     if not session.is_file():
-        profile = json.loads((recordings / "pack.json").read_text()).get("profile")
-        if profiles and profile not in profiles:
-            pytest.skip(f"{pack}/{question} needs the {', '.join(profiles)} profile; the bundle is {profile}")
         pytest.fail(f"{pack}/{question} has no recording")
     used = {pill["pill"] for pill in session_pills(json.loads(session.read_text())["turns"], REGISTRY)}
 

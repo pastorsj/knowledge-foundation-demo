@@ -63,7 +63,7 @@ def settings(tmp_path: Path, data_dir: Path) -> Settings:
     return Settings(
         data_active_dir=data_dir,
         api_db_path=tmp_path / "api" / "jobs.db",
-        agent_features="retrieval,analytics",
+        agent_features="retrieval,tables",
         hermes_url="http://hermes.test",
         hermes_api_server_key="test-hermes-key",
         hermes_receipt_api_key=RECEIPT_KEY,

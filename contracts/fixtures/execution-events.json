@@ -82,17 +82,17 @@
     "turnId": null,
     "eventKind": "tool.started",
     "state": "started",
-    "componentId": "nvidia.market_analytics",
+    "componentId": "nvidia.ontology",
     "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
     "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
-    "toolServer": "market_analytics",
-    "toolName": "market_anomaly_scan",
-    "capabilityId": "market_analytics",
+    "toolServer": "tables",
+    "toolName": "query_tables",
+    "capabilityId": "structured_retrieval",
     "artifactRefs": [],
     "metricsRef": null,
     "occurredAt": "2026-09-28T05:00:21.589518Z",
     "display": {
-      "label": "Market Anomaly Scan started",
+      "label": "Table Query started",
       "summary": null,
       "attributes": {},
       "inspectable": true
@@ -126,7 +126,7 @@
     "metricsRef": null,
     "occurredAt": "2026-09-28T05:00:21.626751Z",
     "display": {
-      "label": "Unstructured Retrieval started",
+      "label": "Document Retrieval started",
       "summary": null,
       "attributes": {},
       "inspectable": true
@@ -150,19 +150,19 @@
     "turnId": null,
     "eventKind": "artifact.available",
     "state": "completed",
-    "componentId": "nvidia.market_analytics",
+    "componentId": "nvidia.ontology",
     "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
     "parentInvocationId": null,
-    "toolServer": "market_analytics",
-    "toolName": "market_anomaly_scan",
-    "capabilityId": "market_analytics",
+    "toolServer": "tables",
+    "toolName": "query_tables",
+    "capabilityId": "structured_retrieval",
     "artifactRefs": [
-      "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba"
+      "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52"
     ],
     "metricsRef": null,
     "occurredAt": "2026-09-28T05:00:21.762077Z",
     "display": {
-      "label": "Market analytics result available",
+      "label": "Structured query result available",
       "summary": null,
       "attributes": {
         "duration_ms": 173,
@@ -174,7 +174,7 @@
     },
     "provenance": {
       "sourceSystem": "hermes.plugin",
-      "sourceEventId": "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba",
+      "sourceEventId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
       "sourceEventKind": "post_tool_call",
       "normalizationVersion": "hermes-plugin-receipt.v1",
       "observation": "observed",
@@ -232,21 +232,21 @@
     "turnId": null,
     "eventKind": "tool.completed",
     "state": "completed",
-    "componentId": "nvidia.market_analytics",
+    "componentId": "nvidia.ontology",
     "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
     "parentInvocationId": "hermes-run:e65bc6dc9d5251387970a2f1:0",
-    "toolServer": "market_analytics",
-    "toolName": "market_anomaly_scan",
-    "capabilityId": "market_analytics",
+    "toolServer": "tables",
+    "toolName": "query_tables",
+    "capabilityId": "structured_retrieval",
     "artifactRefs": [],
     "metricsRef": null,
     "occurredAt": "2026-09-28T05:00:23.899827Z",
     "display": {
-      "label": "Market Anomaly Scan completed",
+      "label": "Table Query completed",
       "summary": null,
       "attributes": {
         "reported_error": false,
-        "duration_seconds": 2.31
+        "duration_seconds": 0.212
       },
       "inspectable": true
     },
@@ -279,7 +279,7 @@
     "metricsRef": null,
     "occurredAt": "2026-09-28T05:00:23.945133Z",
     "display": {
-      "label": "Unstructured Retrieval completed",
+      "label": "Document Retrieval completed",
       "summary": null,
       "attributes": {
         "reported_error": false,

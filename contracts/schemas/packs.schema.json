@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "PackSummary": {
+      "additionalProperties": false,
+      "description": "One pack a user can pick: an industry, or the workspace of their own uploads (``kind: workspace``).",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "industry",
+            "workspace"
+          ],
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "icon": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "An icon name from ui/src/adapters/ui/icons.tsx."
+        },
+        "status": {
+          "description": "ingesting while some of its files are in the pipeline; empty before it has any source.",
+          "enum": [
+            "ready",
+            "ingesting",
+            "failed",
+            "empty"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "description",
+        "icon",
+        "status"
+      ],
+      "title": "PackSummary",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "``GET /v1/packs``: the packs a user can pick, the industries by title, then the workspace.",
+  "properties": {
+    "packs": {
+      "items": {
+        "$ref": "#/$defs/PackSummary"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "packs"
+  ],
+  "title": "PackList",
+  "type": "object"
+}

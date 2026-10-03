@@ -20,6 +20,7 @@ STRUCTURED = "/v1/data_sources/market_analysis_structured"
 async def test_pack_lists_questions_the_running_sources_can_answer(api, data_dir):
     pack = (await api.get("/v1/pack")).json()
     assert (pack["id"], pack["title"]) == ("market-analysis", "Synthetic Multi-Asset Market Analysis")
+    assert (pack["kind"], pack["icon"], pack["status"]) == ("industry", None, "ready")  # a pack.json without them
     assert [(q["id"], q["featured"]) for q in pack["questions"]] == [("market-leaders", True), ("filings", False)]
     assert pack["examples"] == ["market-leaders", "filings"]
     assert [(c["id"], len(c["turns"])) for c in pack["conversations"]] == [("leaders-follow-up", 2)]
@@ -68,8 +69,8 @@ async def test_without_a_list_the_picker_offers_the_featured_questions_then_the_
 async def test_data_sources_offer_only_capabilities_of_the_running_tools(api):
     sources = {source["id"]: source for source in (await api.get("/v1/data_sources")).json()}
 
-    # AGENT_FEATURES=retrieval,analytics: no Auto Ontology, no Kumo.
-    assert sources["market_analysis_structured"]["capabilities"] == ["market_analytics"]
+    # AGENT_FEATURES=retrieval,tables: no Auto Ontology, no Kumo.
+    assert sources["market_analysis_structured"]["capabilities"] == ["structured_retrieval"]
     assert sources["market_analysis_structured"]["database_name"] == "market_analysis"
     assert sources["market_news"]["capabilities"] == ["unstructured_retrieval"]
 

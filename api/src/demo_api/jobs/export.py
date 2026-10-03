@@ -7,23 +7,17 @@
 into ``sessions/<id>.json``. Its shape::
 
     {jobId, question, submittedAt, completedAt, status, report: {markdown, citations[]} | null,
-     events: [execution.v2, in stream order], receipts: [ReceiptV2], sourceIds, benchmark,
-     retrievalBenchmark}
+     events: [execution.v2, in stream order], receipts: [ReceiptV2], sourceIds}
 
 ``report`` is null until the job has an answer. ``sourceIds`` are the sources the question used.
-``benchmark`` is the job's CPU/GPU comparison (``demo_api.benchmark.Benchmark``), or null.
-``retrievalBenchmark`` is the Milvus CPU/GPU index comparison that applies to the job's retrieval calls
-(``demo_api.benchmark.RetrievalBenchmark``), or null: a CPU-only stack has none.
 """
 
 from __future__ import annotations
 
 from datetime import UTC
 from datetime import datetime
-from pathlib import Path
 from typing import Any
 
-from demo_api.benchmark import retrieval
 from demo_api.events import EVENT_STORE_TYPE
 from demo_api.events import ExecutionEventV2
 
@@ -33,8 +27,7 @@ from .store import JobStore
 _PAGE = 10_000
 
 
-async def export_turn(store: JobStore, job: Job, data_dir: Path) -> dict[str, Any]:
-    """``data_dir`` is the active build, which holds the Milvus comparison on a GPU host."""
+async def export_turn(store: JobStore, job: Job) -> dict[str, Any]:
     events: list[dict[str, Any]] = []
     cursor = 0
     while page := await store.events(job.job_id, after_id=cursor, limit=_PAGE):
@@ -45,11 +38,6 @@ async def export_turn(store: JobStore, job: Job, data_dir: Path) -> dict[str, An
             if event.get("type") == EVENT_STORE_TYPE
         )
     output = job.output or {}
-    receipts = await store.receipts(job.job_id)
-    try:
-        retrieval_benchmark = None if job.is_active else retrieval.for_run(data_dir, receipts).model_dump(mode="json")
-    except retrieval.RetrievalBenchmarkUnavailable:
-        retrieval_benchmark = None
     return {
         "jobId": job.job_id,
         "question": job.request["question"],
@@ -58,10 +46,8 @@ async def export_turn(store: JobStore, job: Job, data_dir: Path) -> dict[str, An
         "status": job.status,
         "report": {"markdown": output["report"], "citations": output["citations"]} if "report" in output else None,
         "events": events,
-        "receipts": receipts,
+        "receipts": await store.receipts(job.job_id),
         "sourceIds": job.request.get("source_ids", []),
-        "benchmark": await store.benchmark(job.job_id),
-        "retrievalBenchmark": retrieval_benchmark,
     }
 
 

@@ -7,9 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 A FastAPI service (`demo_api`) between the UI and the agent. It turns each question into a job, runs
 the job on Hermes through the Hermes Runs API, stores what happens as `execution.v2` events, and
-serves the answer, its evidence and a read-only view of the pack's database. It also replays a
-finished job's market calls on the CPU and the GPU (the Benchmark tab, with the Milvus index comparison on a GPU
-host), and transcribes voice input.
+serves the answer, its evidence and a read-only view of the pack's database. It also transcribes voice input.
 
 ```text
 UI ──/api/v1 proxy──▶ API ──Runs API──▶ hermes-gateway ──▶ Hermes (OpenShell sandbox)
@@ -68,9 +66,6 @@ Hermes to stop their runs, waiting up to 10 s. The container therefore needs a s
 | `GET /v1/jobs/async/job/{id}/stream[/{cursor}]` | Server-Sent Events (below) |
 | `GET /v1/jobs/async/job/{id}/trace` | `{trace_id, path}`: the job's trace in Phoenix |
 | `GET /v1/jobs/async/job/{id}/export` | The job as one turn of the recordings bundle |
-| `POST /v1/jobs/async/job/{id}/benchmark` | Compare the finished job's market calls on the CPU and the GPU ([below](#benchmark)); a stored comparison is returned as is |
-| `GET /v1/jobs/async/job/{id}/benchmark` | The stored comparison; 404 until one has run |
-| `GET /v1/jobs/async/job/{id}/retrieval-benchmark` | The Milvus CPU/GPU index comparison that applies to the finished job's retrieval calls ([below](#benchmark)); 404 on a CPU-only stack |
 | `POST /v1/speech/transcriptions` | One 16 kHz mono PCM16 WAV (`audio/wav`, at most 3 MiB) → `{text}` ([below](#voice-input)) |
 | `GET /internal/hermes/jobs/{id}/execution-scope` | Plugin: the job's sources, database, collection and model tiers |
 | `POST /internal/hermes/jobs/{id}/tool-receipts` | Plugin: one `ReceiptV2` |
@@ -88,33 +83,6 @@ Stored events are sent with their store cursor as the SSE `id:`; frames the stre
 `job.status` frame once the job is finished (`reconnected: true` on a resumed stream). Execution
 events are `execution.v2` (`contracts/README.md`); the answer is an `artifact.update` with
 `output_category: final_report`.
-
-## Benchmark
-
-The Benchmark tab compares a finished job's market analytics calls on the CPU and the NVIDIA GPU
-(`src/demo_api/benchmark/`, contract `contracts/schemas/benchmark.schema.json`). For each call that
-returned a result, in order, the API sends the arguments its receipt recorded to the market-analytics
-service's `POST /benchmark` (`tools/market-analytics/README.md`). There the GPU worker and a CPU worker
-run the same MCP tool: once each untimed, then in matched pairs that alternate which engine goes
-first, until `BENCHMARK_PAIRS` pairs or `BENCHMARK_BUDGET_SECONDS` per call. A trial's time is the
-tool's own compute timer, the one receipts show; the agent is not rerun. The service compares the
-two payloads (floats within 1e-4).
-
-A stage claims a speedup (`qualified`, `speedup` = median CPU / median GPU, and the range of the pair
-ratios) only when the payloads matched, at least 5 pairs ran, and the GPU was faster in every pair;
-otherwise the medians are shown with no claim. One comparison runs at a time (429 otherwise); a
-running job is 409, and a job without market calls 422. On the CPU-only `analytics` profile, or with
-no analytics service, the answer is `status: "unavailable"` with the reason, and nothing is stored;
-a completed or failed comparison is stored with the job, which `export` then carries.
-
-**Milvus.** On a GPU host (analytics-gpu with retrieval) the `retrieval-benchmark` one-shot measures each index
-build once: the pack's held-out queries on the CPU index and on a `GPU_IVF_FLAT` copy in a GPU Milvus
-([retrieval](../docs/retrieval.md#cpugpu-index-comparison-analytics-gpu)), into
-`/data/active/retrieval-benchmark.json` (`src/demo_api/benchmark/retrieval.py`, contract
-`contracts/schemas/retrieval-benchmark.schema.json`). `GET .../retrieval-benchmark` returns it for a finished job
-whose retrieval calls searched that build (their receipts' `collectionVersion`): 404 when the stack has none, 409
-while the job runs or once the index was rebuilt, 422 when the job searched no documents. `export` carries it as
-`retrievalBenchmark`, or null.
 
 ## Voice input
 
@@ -144,14 +112,12 @@ data/packs/<pack>/recordings/
   database.json       {schemaVersion: 1, sources: [{id, name, databaseName, schema, previews, queries: [{sql, result}]}]}
 ```
 
-Each `index.json` session also lists the `tools` its runs used, `[{pill, device, tools}]`
-(`src/demo_api/pills.py`): one per technology pill, with the engine a market tool reported (`gpu` or `cpu`) and
-the tool ids behind it, for the UI's replays list.
+Each `index.json` session also lists the `tools` its runs used, `[{pill, tools}]`
+(`src/demo_api/pills.py`): one per technology pill (`retrieval`, `duckdb`, `kumo`, `ontology`), with the tool ids
+behind it, for the UI's replays list.
 
 An export turn is `{jobId, question, submittedAt, completedAt, status, report: {markdown, citations[]} | null,
-events: [execution.v2], receipts: [ReceiptV2], sourceIds, benchmark, retrievalBenchmark}`. After each answer the
-recorder asks for its CPU/GPU comparison, so a bundle recorded on the GPU profile replays the
-Benchmark tab (`benchmark` and `retrievalBenchmark` stay null on the CPU profile). `database.json` lets the data viewer work
+events: [execution.v2], receipts: [ReceiptV2], sourceIds}`. `database.json` lets the data viewer work
 in replay: each structured source's `GET .../schema`, the first 8 rows of each table
 (`GET .../preview`), and the `POST .../query` results of the SQL the recorded answers ran and of the
 viewer's starting query for each table. `demo-api snapshot-database --out <recordings>` rewrites only
@@ -170,7 +136,7 @@ Secrets can also be files in `/run/secrets` named after the setting (Compose sec
 | `HERMES_URL` | `http://hermes-gateway:8642` | Hermes Runs API |
 | `HERMES_API_SERVER_KEY` | – (secret) | Bearer key of the Hermes API server |
 | `HERMES_RECEIPT_API_KEY` | – (secret) | `X-Receipt-Key` of the internal routes |
-| `AGENT_FEATURES` | `retrieval,analytics` | Tool groups in the agent image (as its build argument); limits capabilities and toolsets |
+| `AGENT_FEATURES` | `retrieval,tables` | Tool groups in the agent image (as its build argument); limits capabilities and toolsets |
 | `AGENT_EFFICIENT_MODEL`, `AGENT_CAPABLE_MODEL` | empty | Switchyard's model ids, for the tier of each model call |
 | `DATA_ACTIVE_DIR` | `/data/active` | The built data pack |
 | `API_DB_PATH` | `/var/lib/demo-api/jobs.db` | SQLite job store |
@@ -183,11 +149,9 @@ Secrets can also be files in `/run/secrets` named after the setting (Compose sec
 | `HERMES_RUN_STOP_GRACE_SECONDS`, `HERMES_RUN_POLL_INTERVAL_SECONDS` | `30`, `1` | Stopping and polling a run |
 | `HERMES_HEARTBEAT_SECONDS` | `15` | Progress heartbeat while a run is silent |
 | `HERMES_RECEIPT_SETTLE_SECONDS` | `2` (at most 5) | Wait for the last receipts |
-| `AIQ_PHOENIX_INTERNAL_URL`, `PHOENIX_PROJECT` | `http://phoenix:6006`, `market-analysis-agent` | Trace lookup |
+| `AIQ_PHOENIX_INTERNAL_URL`, `PHOENIX_PROJECT` | `http://phoenix:6006`, `knowledge-foundation` | Trace lookup |
 | `AUTO_ONTOLOGY_URL`, `AUTO_ONTOLOGY_EMAIL`, `AUTO_ONTOLOGY_PASSWORD` | empty | Ontology view; an empty URL turns it off |
 | `AUTO_ONTOLOGY_ORIGIN` | `AUTO_ONTOLOGY_URL` | The `Origin` Auto Ontology's sign-in trusts |
-| `MARKET_ANALYTICS_URL` | `http://market-analytics:3010` | The market-analytics service, for the Benchmark tab |
-| `BENCHMARK_PAIRS`, `BENCHMARK_BUDGET_SECONDS` | `5`, `20` | Matched pairs asked of each call, and the time after which no new pair starts |
 | `SPEECH_INPUT_ENABLED` | `false` | Voice input |
 | `SPEECH_API_KEY` | – (secret) | An nvapi- key for build.nvidia.com; `demo.sh` uses `RETRIEVER_API_KEY` when this is empty and the retriever is build.nvidia.com |
 | `SPEECH_INPUT_MAX_SECONDS`, `SPEECH_MAX_CONCURRENT` | `60` (1 to 90), `2` | The longest recording, and transcriptions at once |
@@ -199,11 +163,11 @@ Secrets can also be files in `/run/secrets` named after the setting (Compose sec
 
 ```bash
 uv run --directory api pytest                     # offline: fake Hermes, Phoenix and Auto Ontology
-docker build --build-context contracts=contracts -t market-demo/api:local api
+docker build --build-context contracts=contracts -t knowledge-foundation/api:local api
 scripts/demo.sh record                            # record the featured questions on the running stack
 ```
 
 `tests/jobs/test_runner.py` pins the job semantics the prototype got from Dask and NAT: order, the
 queue cap, cancelling queued and running jobs, the deadline, progress budgets, restart recovery,
-shutdown and retention. The contract models in `src/demo_api/events/`, `receipts/` and `benchmark/`
+shutdown and retention. The contract models in `src/demo_api/events/`, `receipts/` and `pack.py`
 feed `scripts/gen-contracts.sh`.

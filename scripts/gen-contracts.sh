@@ -52,9 +52,8 @@ to_typescript() {
 }
 to_typescript "$out/contracts/schemas/execution-event.schema.json" "$generated/execution-event.ts"
 to_typescript "$out/contracts/schemas/receipt.schema.json" "$generated/receipt.ts"
-to_typescript "$out/contracts/schemas/benchmark.schema.json" "$generated/benchmark.ts"
-to_typescript "$out/contracts/schemas/retrieval-benchmark.schema.json" "$generated/retrieval-benchmark.ts"
 to_typescript "$out/contracts/schemas/pack.schema.json" "$generated/pack.ts"
+to_typescript "$out/contracts/schemas/packs.schema.json" "$generated/packs.ts"
 to_typescript "$root/contracts/tool-registry.schema.json" "$generated/tool-registry.ts"
 printf '\nexport const TOOL_REGISTRY: ToolRegistry = %s\n' "$(cat "$root/contracts/tool-registry.json")" \
   >>"$generated/tool-registry.ts"

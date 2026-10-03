@@ -32,7 +32,7 @@ PACK = {
             "description": "Synthetic market history in DuckDB.",
             "agent_description": "Analyze synthetic market history.",
             "kind": "structured",
-            "capabilities": ["structured_retrieval", "structured_prediction", "market_analytics"],
+            "capabilities": ["structured_retrieval", "structured_prediction"],
             "synthetic": True,
             "example_questions": ["Which assets led returns?"],
         },

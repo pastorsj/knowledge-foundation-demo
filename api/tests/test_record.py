@@ -68,8 +68,6 @@ def fake_api(
             return httpx.Response(200, json={"table": request.url.params["table"], **ROWS})
         if path.endswith("/query"):
             return httpx.Response(200, json=ROWS)
-        if path.endswith("/benchmark"):
-            return httpx.Response(422, json={"detail": "no market calls"})
         if path == "/v1/jobs/async/submit":
             body = json.loads(request.content)
             jobs[body["job_id"]] = {"question": body["input"], "status": statuses.get(body["input"], "success")}
@@ -118,8 +116,8 @@ def test_record_writes_index_pack_snapshot_and_one_session_per_question_and_conv
     assert conversations[2] == conversations[3]
     assert not stale.exists()
     assert json.loads((tmp_path / "rec" / "pack.json").read_text()) == PACK
-    # Every answer was offered for a CPU/GPU comparison, and the data viewer's copy covers the recorded query
-    assert sum(request.endswith("/benchmark") for request in requests) == len(ALL_QUESTIONS)
+    # Each question was asked once, and the data viewer's copy covers the recorded query
+    assert sum(request.endswith("/submit") for request in requests) == len(ALL_QUESTIONS)
     database = json.loads((tmp_path / "rec" / "database.json").read_text())
     assert database == {
         "schemaVersion": 1,
