@@ -1,0 +1,882 @@
+{
+  "schemaVersion": 2,
+  "id": "eight-d-machine-history",
+  "title": "The 8D machine's recent history",
+  "turns": [
+    {
+      "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+      "question": "The 8D report describes a bore-diameter escape on valve body AP-3312. Which machine does it name, and how many unplanned maintenance events, hours of unplanned downtime and dollars of quality defect cost has that machine logged since 1 July 2026?",
+      "submittedAt": "2026-10-03T04:17:19.401872Z",
+      "completedAt": "2026-10-03T04:17:29.904947Z",
+      "status": "success",
+      "report": {
+        "markdown": "The 8D report (8D-2026-014) names **MTY-LTH-04** (a CNC lathe at the Monterrey Plant, Cell D) as the source of the bore-diameter escape on valve body AP-3312 [1].\n\nSince 1 July 2026, that machine has logged:\n\n| Metric | Value |\n|---|---|\n| Unplanned maintenance events | 1 |\n| Unplanned downtime hours | 52.0 |\n| Unplanned maintenance cost (parts & labor) | $3,471.09 |\n| Quality defect cost | $18,358.40 |\n\n[2]\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 8d_report_valve_body_bore_oversize.pdf — evidence `hermes-receipt:2b0e96a54db965010edea5c06f78ddbdbf48e8104a2ec70ec2efc584f8520ef9`\n- [2] Structured retrieval result — manufacturing_operations — evidence `hermes-receipt:5a130e8e749fb23bf53376e0846ec385cda17c437e33eb0ea76c75cc4f21fc7e`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:2b0e96a54db965010edea5c06f78ddbdbf48e8104a2ec70ec2efc584f8520ef9",
+            "label": "Unstructured Retrieval evidence — 8d_report_valve_body_bore_oversize.pdf",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-819b65a608634ecd88fddf39f1d93820"
+          },
+          {
+            "number": 2,
+            "evidenceId": "hermes-receipt:5a130e8e749fb23bf53376e0846ec385cda17c437e33eb0ea76c75cc4f21fc7e",
+            "label": "Structured retrieval result — manufacturing_operations",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-301b4490eec7479fadbb589747db6c54"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "567eff5d-b724-5d31-a9c2-c7b9e7356bc5",
+          "cursor": 224,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:19.520833Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b0d21443c2164a255f8427d39b0a5da33128404830841cec39383494230dbcb2",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b5817796-a3aa-5f67-abca-dbf85e082a8a",
+          "cursor": 225,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": "cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b:api:1",
+          "parentInvocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:21.142950Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 7932,
+              "output_tokens": 251
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "07f47366-6928-522e-a96e-7f5ec01379fd",
+          "cursor": 226,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-819b65a608634ecd88fddf39f1d93820",
+          "parentInvocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:21.187185Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:98bbfd5509a669122dd1dbadb811ba745a499914beda476a4cf7e001f992f028",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c1db2811-d67b-5c33-b6c7-48dd12e8e2a5",
+          "cursor": 227,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": "cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-819b65a608634ecd88fddf39f1d93820",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:2b0e96a54db965010edea5c06f78ddbdbf48e8104a2ec70ec2efc584f8520ef9"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:22.915120Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1726,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:2b0e96a54db965010edea5c06f78ddbdbf48e8104a2ec70ec2efc584f8520ef9",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "998de59d-833e-5283-b692-19fc690c41f6",
+          "cursor": 228,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-819b65a608634ecd88fddf39f1d93820",
+          "parentInvocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:22.955145Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.759
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b203413b7825b2e3fc09f74218870736bdac5aed4a9170748305857be48c6110",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "13731919-f741-5118-8305-4f4444756ad2",
+          "cursor": 229,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": "cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b:api:2",
+          "parentInvocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:27.061080Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 13462,
+              "output_tokens": 433
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "19ccbaa0-9010-50e7-9a45-f2b43fb2b819",
+          "cursor": 230,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-301b4490eec7479fadbb589747db6c54",
+          "parentInvocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:27.089463Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:0d378216c10a9fd96d42ef96be343cee669c62dba9ad0c2bd84be55337894e93",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "cb99fc8c-574f-5c4b-8d06-b73864c3d33e",
+          "cursor": 231,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": "cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-301b4490eec7479fadbb589747db6c54",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:5a130e8e749fb23bf53376e0846ec385cda17c437e33eb0ea76c75cc4f21fc7e"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:27.372332Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 281,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:5a130e8e749fb23bf53376e0846ec385cda17c437e33eb0ea76c75cc4f21fc7e",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "88f8cd97-0221-5415-b4b2-d99a1553e42e",
+          "cursor": 232,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-301b4490eec7479fadbb589747db6c54",
+          "parentInvocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:27.404679Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.311
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8f27b5e4850ef2b7c3d9fbd23670b57246537e076ec6b10c802a45e03d3fad31",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "43bc1c85-f410-57a5-a534-c74821ed6f98",
+          "cursor": 233,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": "cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b:api:3",
+          "parentInvocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:29.836850Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14529,
+              "output_tokens": 436
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "fbf4f67c-550a-5a94-96c3-fd94e62c120b",
+          "cursor": 234,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:29.869491Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:190e054f5e14dd0d0b4ff123221b758f6d54e837a2e6689bd84d31c5317da99a",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "507f9c25-8760-5ef3-abad-8eb6e3a351c0",
+          "cursor": 235,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:29.887981Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 35923,
+              "output_tokens": 1120,
+              "total_tokens": 37043,
+              "output_characters": 585
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4aaee4acdaa54f41d24b94994a5156cd2af1c3ea32e993f77da2227db5c3ba96",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ad9dc0f4-1efd-51f9-80d5-0f7ac3968eba",
+          "cursor": 236,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:29.904605Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:cf7878e0-739a-421e-8a39-eebc536f8cb6:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "09cc3cc3-901d-5ee7-b7c9-5b1ca53a9f6c",
+          "cursor": 237,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:29.904668Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 2,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:cf7878e0-739a-421e-8a39-eebc536f8cb6:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "7a9803ef-e0b7-5b2a-9c04-773fa28997c0",
+          "cursor": 238,
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "runId": "run_601b71548a5e4b7aa6978495eca96811",
+          "sessionId": "record-eac0e565-67f2-47a5-97cd-08bb233e2c90",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1ea5eba53c5be7d2d6c163ba:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:29.904702Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 10436,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 2070,
+              "input_tokens": 35923,
+              "output_tokens": 1120,
+              "total_tokens": 37043
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:cf7878e0-739a-421e-8a39-eebc536f8cb6:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:2b0e96a54db965010edea5c06f78ddbdbf48e8104a2ec70ec2efc584f8520ef9",
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "invocationId": "hermes-tool:chatcmpl-tool-819b65a608634ecd88fddf39f1d93820",
+          "turnId": "cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1726,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:17:22.915120Z",
+          "content": {
+            "query": "Which machine is named as the source of the bore-diameter escape on valve body AP-3312 in the 8D report",
+            "sourceIds": [
+              "manufacturing.reports"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.6514769196510315,
+                "vectorScore": 0.6514769196510315,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0010",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nFive whys\nRoot causes\nSynthetic document for a software demonstration. Not for operational use. Page 3\nATLAS PRECISION COMPONENTS 8D-2026-014 | Final",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 4,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312 › Five whys › Root causes",
+                  "labels": [
+                    "page_footer",
+                    "page_header"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.6441273093223572,
+                "vectorScore": 0.6441273093223572,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0002",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nMonterrey Plant, CNC lathe MTY-LTH-04, customer Brightline Hydraulics\n- Document ID 8D-2026-014\n- Revision Final\n- Effective Opened 14 August 2026, closed 18 September 2026\n- Owner Quality Engineering, Monterrey Plant\n- Applies to Part AP-3312 (Proportional valve body PV-12)",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312",
+                  "labels": [
+                    "caption",
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.6426493525505066,
+                "vectorScore": 0.6426493525505066,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0006",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nD2. Problem description\nD3. Interim containment actions\n- • 15 August: all AP-3312 stock at Monterrey (finished goods and work in progress) was quarantined and 100 percent checked with an air gauge.\n- • 15 August: every AP-3312 piece produced on MTY-LTH-04 is gauged at the machine until further notice, instead of one in every 25 pieces.\n- • 17 August: Brightline Hydraulics sorted the remaining pieces from the affected lot at its own site; no further nonconforming pieces were found.\n- • 19 August: the operator was told to stop the machine for any bore reading above 22.015 mm and call the maintenance supervisor.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312 › D2. Problem description › D3. Interim containment actions",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.634247362613678,
+                "vectorScore": 0.634247362613678,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0005",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nD2. Problem description\nWhat, Answer = Main bore of valve body AP-3312 (proportional valve body PV-12) oversize; bore specification 22.000 mm, +0.021 / 0 mm.. Where, Answer = Monterrey Plant, CNC lathe MTY-LTH-04 (Cell D). Found at in-process gauging and by the customer.. When, Answer = Customer return detected 14 August 2026; in-plant records from 3 August to 21 August 2026.. Who, Answer = Monterrey operators and quality inspectors; Brightline Hydraulics incoming inspection.. How many, Answer = 48 pieces returned by the customer; 285 pieces in 12 in-plant records.. How detected, Answer = Customer incoming inspection; in-process air gauge on one piece in 25.. Cost, Answer = $12,844.80 of scrap and rework, including the customer return.\nTable 1. Problem statement (5W2H).\nThe in-plan nonconformances were all recorded as defect type dimension_oob against part AP-3312 on lathe MTY-LTH-04, under work orders WO-00725 and WO-00784. Of the 285 pieces affected, 96 were scrapped and 189 were reworked.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312 › D2. Problem description",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.6280761361122131,
+                "vectorScore": 0.6280761361122131,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0003",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nD0. Summary\nOn 14 August 2026 Brightline Hydraulics returned 48 proportional valve bodies (AP-3312) because the main bore was oversize. Between 3 August and 21 August, 12 further bore-diameter nonconformances (285 pieces) were recorded in process on the same part, all on CNC lathe MTY-LTH-04 at the Monterrey Plant. The cost of the nonconforming parts, including the customer return, was $12,844.80.\nThe root cause was a worn spindle bearing. The bearing’s vibration rose for several weeks while the machine’s PM-2 service was 12 days overdue, and the in-process gauge plan was too sparse to catch the drift. The spindle bearing failed on 24 August 2026 and the spindle cartridge was replaced. No further bore-diameter nonconformances were recorded after the repair.\nThis is a synthetic document written for a software demonstration. Atlas Precision Components, Brightline Hydraulics and every person named here are fictional.\nChampion, Name = Elena Marsh. Champion, Function = Plant Manager, Monterrey. Team leader, Name = Rafael Ocampo. Team leader, Function = Quality Engineering Manager, Monterrey. Member, Name = Dario Quintero. Member, Function = Maintenance Supervisor, Monterrey. Member, Name = Ines Valdivia. Member, Function = CNC Programmer, Monterrey. Member, Name = Tomas Reyes. Member, Function = Process Engineer, Monterrey. Customer contact, Name = Helen Park. Customer contact, Function = Supplier Quality Engineer, Brightline",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312 › D0. Summary",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.6108148694038391,
+                "vectorScore": 0.6108148694038391,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0008",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nD2. Problem description\nD4. Root cause analysis\nEvidence from the machine data\n| Date   |   MTY-LTH-04 |   Other CNC lathes (median) |   CNC lathe warning level (3.5 mm/s) |\n|--------|--------------|-----------------------------|--------------------------------------|\n| 1 Jun  |          2.1 |                         2.7 |                                  3.9 |\n| 8 Jun  |          2.0 |                         2.6 |                                  3.9 |\n| 15 Jun |          1.9 |                         2.5 |                                  3.9 |\n| 22 Jun |          2.1 |                         2.6 |                                  3.9 |\n| 29 Jun |          2.0 |                         2.5 |                                  3.9 |\n| 6 Jul  |          1.9 |                         2.6 |                                  3.9 |\n| 13 Jul |          1.8 |                         2.5 |                                  3.9 |\n| 20 Jul |          1.7 |                         2.4 |                                  3.9 |\n| 27 Jul |          1.8 |                         2.6 |                                  3.9 |\n| 3 Aug  |          1.8 |                         3.0 |                                  3.9 |\n| 10 Aug |          1.8 |                         4.5 |                                  3.9 |\n| 17 Aug |          1.8 |                         5.2 |                                  3.9 |\n| 24 Aug |          1.8 |          ",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312 › D2. Problem description › D4. Root cause analysis › Evidence from the machine data",
+                  "labels": [
+                    "picture"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.5994206666946411,
+                "vectorScore": 0.5994206666946411,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0004",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nD1. Team\nSynthetic document for a software demonstration. Not for operational use. Page 1\nATLAS PRECISION COMPONENTS 8D-2026-014 | Final",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312 › D1. Team",
+                  "labels": [
+                    "page_footer",
+                    "page_header"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.5634070038795471,
+                "vectorScore": 0.5634070038795471,
+                "sourceId": "manufacturing.reports",
+                "documentId": "manufacturing.reports:f-3cee2535ce10c3a6",
+                "chunkId": "manufacturing.reports:f-3cee2535ce10c3a6:0009",
+                "title": "8d_report_valve_body_bore_oversize.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "8D Report: Bore Diameter Oversize on Valve Body AP-3312\nFive whys\nWhy was the bore oversize?, Answer = The spindle ran out of true and the cutting position drifted as the bearing wore.. Why did the bearing wear out?, Answer = The bearing reached the end of its life while the lubrication and preload checks of PM-2 were not done on time.. Why was PM-2 late?, Answer = The last PM-2 was on 14 April 2026. The 120-day interval for CNC lathes (PM-MAN-001, Table 1) made it due on 12 August 2026. The planner deferred it twice to protect the Brightline delivery.. Why was the drift not caught earlier?, Answer = The vibration warning level was exceeded for 14 days before the failure but the alert went to a shared mailbox that nobody owned.. Why did the nonconforming parts leave the plant?, Answer = The gauge plan checked one piece in 25, which cannot detect a drift of a few microns an hour.\nOccurrence, Root cause = Spindle bearing wear on MTY-LTH-04, failure code SPN-BRG.. Detection, Root cause = Gauge frequency of one piece in 25 was insufficient for a drifting process.. Systemic, Root cause = The CMMS allowed work orders to be released on a machine more than 14 days past its PM-2 interval, and vibration alerts had no owner.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-3cee2535ce10c3a6",
+                  "file_name": "8d_report_valve_body_bore_oversize.pdf",
+                  "citation": "8d_report_valve_body_bore_oversize.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "8D Report: Bore Diameter Oversize on Valve Body AP-3312 › Five whys",
+                  "labels": [
+                    "table"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "manufacturing.reports": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 1708.0,
+              "searchMs": 6.6,
+              "rerankMs": 0.0,
+              "totalMs": 1714.7
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:5a130e8e749fb23bf53376e0846ec385cda17c437e33eb0ea76c75cc4f21fc7e",
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "invocationId": "hermes-tool:chatcmpl-tool-301b4490eec7479fadbb589747db6c54",
+          "turnId": "cf7878e0-739a-421e-8a39-eebc536f8cb6:cf7878e0-739a-421e-8a39-eebc536f8cb6:a9d3a97b",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 281,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:17:27.372332Z",
+          "content": {
+            "query": "Count unplanned maintenance events, downtime hours, and quality defect costs for machine MTY-LTH-04 since 1 July 2026",
+            "databaseName": "manufacturing_operations",
+            "answer": null,
+            "sql": "WITH unplanned_events AS (\n  SELECT\n    COUNT(*) AS unplanned_event_count,\n    SUM(downtime_hours) AS total_unplanned_downtime_hours,\n    SUM(parts_and_labor_cost_usd) AS total_unplanned_cost_usd\n  FROM manufacturing_operations.maintenance_events\n  WHERE machine_id = 'MTY-LTH-04'\n    AND event_type = 'unplanned'\n    AND started_at >= '2026-07-01'\n),\ndefect_costs AS (\n  SELECT\n    SUM(cost_usd) AS total_defect_cost_usd\n  FROM manufacturing_operations.quality_defects\n  WHERE machine_id = 'MTY-LTH-04'\n    AND detected_at >= '2026-07-01'\n)\nSELECT\n  ue.unplanned_event_count,\n  ue.total_unplanned_downtime_hours,\n  ue.total_unplanned_cost_usd,\n  dc.total_defect_cost_usd\nFROM unplanned_events ue\nCROSS JOIN defect_costs dc;",
+            "rows": [
+              {
+                "unplanned_event_count": 1,
+                "total_unplanned_downtime_hours": 52.0,
+                "total_unplanned_cost_usd": 3471.09,
+                "total_defect_cost_usd": 18358.4
+              }
+            ],
+            "sourceRowCount": 1,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "manufacturing.reports",
+        "manufacturing.operations"
+      ]
+    }
+  ]
+}

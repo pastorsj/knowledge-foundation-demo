@@ -1,0 +1,695 @@
+{
+  "schemaVersion": 2,
+  "id": "round-sheet-press-findings",
+  "title": "Findings on the handwritten round sheet",
+  "turns": [
+    {
+      "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+      "question": "On the scanned PM-1 round sheet for press DAY-PRS-03 dated 14 September 2026, what oil temperature did the operator record, and what action was raised for the ram seal?",
+      "submittedAt": "2026-10-03T04:15:11.505179Z",
+      "completedAt": "2026-10-03T04:15:16.541804Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the scanned PM-1 round sheet for hydraulic press **DAY-PRS-03** dated **14 September 2026**:\n\n| Item | Recorded Value / Action |\n|------|--------------------------|\n| **Oil temperature** | **63 °C** — marked **NOT OK** with remark “63 C too hot” (limit is 62 °C) [1] |\n| **Ram seal condition** | **NOT OK** — remark “weep at ram seal, drip tray half full” [1] |\n| **Action raised** | **Maintenance Request MR‑2287** — “replace ram seal kit + check pump. Run light duty only until fixed. Told D. Whitfield.” [1] |\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:48ad7887eb3c087ed002b0c3e7ef70c6af036dfc4f948cf194e69410d7d78203`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:48ad7887eb3c087ed002b0c3e7ef70c6af036dfc4f948cf194e69410d7d78203",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-18c5e450d6134e6fb1083036338aa0e2"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "26cc4e77-35b8-59c7-a893-eb43718ea4df",
+          "cursor": 162,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:11.584273Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:7aeb09dbb30986c9c3edce667e81ec66f4159a3d79ba239f810bf55114b15262",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "15b2a6b4-0d78-5b21-84af-aefd63f9c4fb",
+          "cursor": 163,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59:api:1",
+          "parentInvocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:12.699274Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4773,
+              "output_tokens": 168
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "be22f675-87ac-53e1-bd36-7d780112ac79",
+          "cursor": 164,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-18c5e450d6134e6fb1083036338aa0e2",
+          "parentInvocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:12.737236Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:613754b7ccbbc24713f975497b8823221bac485cce281eb71aee282a2fa824f2",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3f97d8f8-3d67-5e93-9145-86b2631fdd02",
+          "cursor": 165,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-18c5e450d6134e6fb1083036338aa0e2",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:48ad7887eb3c087ed002b0c3e7ef70c6af036dfc4f948cf194e69410d7d78203"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:13.365070Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 626,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:48ad7887eb3c087ed002b0c3e7ef70c6af036dfc4f948cf194e69410d7d78203",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "45c85bdb-0a37-5349-b633-1a94c3a0baaf",
+          "cursor": 166,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-18c5e450d6134e6fb1083036338aa0e2",
+          "parentInvocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:13.400358Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.654
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8b2836c79b9eeb66194a4f8bea870fe46fbd1e221b61a9888e7bb8bcb4784a02",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b53285e5-8658-5a5c-9e36-bf4a1d1190dc",
+          "cursor": 167,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59:api:2",
+          "parentInvocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:16.483015Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 10121,
+              "output_tokens": 634
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "cc8061ba-05eb-5e47-bb67-bf7850faaa35",
+          "cursor": 168,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:16.507148Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:afc085ad6056353cf753c48b69ab7f548f0bd9b7ed7a538bc6ed124964496e1c",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c20fa074-52ec-57e0-94c7-abb4bfec2510",
+          "cursor": 169,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:16.522276Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 14894,
+              "output_tokens": 802,
+              "total_tokens": 15696,
+              "output_characters": 782
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:93f5757515d20b447fc84a56482983e4eceedefd9d3f116c467e5e50c409ed7b",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "70883d51-595c-565b-be0d-5827f6a90906",
+          "cursor": 170,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:16.541324Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:6993ad1b-154f-40c6-918c-81ac1f0fc1be:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4ea4a18c-7911-54a7-aa4c-ba91c63faa20",
+          "cursor": 171,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:16.541391Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:6993ad1b-154f-40c6-918c-81ac1f0fc1be:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0423ad79-3651-5cd0-9f33-ae175f65f792",
+          "cursor": 172,
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "runId": "run_6372f592445b44038a301439402fd54f",
+          "sessionId": "record-209cdc9d-dc33-43fe-bca7-ba5c44b06e5a",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a5928e1969f6fe3cc1151e7a:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:16.541448Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 4981,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 654,
+              "input_tokens": 14894,
+              "output_tokens": 802,
+              "total_tokens": 15696
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:6993ad1b-154f-40c6-918c-81ac1f0fc1be:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:48ad7887eb3c087ed002b0c3e7ef70c6af036dfc4f948cf194e69410d7d78203",
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "invocationId": "hermes-tool:chatcmpl-tool-18c5e450d6134e6fb1083036338aa0e2",
+          "turnId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be:6993ad1b-154f-40c6-918c-81ac1f0fc1be:ec7aba59",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 626,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:15:13.365070Z",
+          "content": {
+            "query": "PM-1 round sheet for press DAY-PRS-03 dated 14 September 2026 oil temperature recorded operator action raised ram seal",
+            "sourceIds": [
+              "manufacturing.procedures"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.6277588605880737,
+                "vectorScore": 0.6277588605880737,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-ce670e6c046d21a1",
+                "chunkId": "manufacturing.procedures:f-ce670e6c046d21a1:0001",
+                "title": "pm1_round_sheet_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "ATLAS PRECISION COMPONENTS PM-1 OPERATOR ROUND SHEET - HYDRAULIC PRESS Form MNT-F-012 Rev C Keep on machine; file 12 months\nDate 14 Sep 2026, Machine ID DAY-PRS-03 = Shift / Operator 2 T. Brennan. Date 14 Sep 2026,  = \n1, CHECK ITEM = Hydraulic oil level in sight glass (above minimum mark). 1, OK = . 1, NOT OK = . 1, REMARKS / READING = topped up 2 L. 2, CHECK ITEM = Oil temperature at working load (limit 62 C). 2, OK = . 2, NOT OK = X. 2, REMARKS / READING = 63 C too hot. 3, CHECK ITEM = Ram seal and cylinder rod free of leaks. 3, OK = . 3, NOT OK = X. 3, REMARKS / READING = weep at ram seal, drip tray half full. 4, CHECK ITEM = Pump noise and vibration normal. 4, OK = . 4, NOT OK = X. 4, REMARKS / READING = pump white: louder than last wk. 5, CHECK ITEM = Guard interlocks and light curtain test. 5, OK = . 5, NOT OK = . 5, REMARKS / READING = . 6, CHECK ITEM = Two-hand control and E-stop test. 6, OK = . 6, NOT OK = . 6, REMARKS / READING = . 7, CHECK ITEM = Accumulator pre-charge gauge in green band. 7, OK = . 7, NOT OK = . 7, REMARKS / READING = in green. 8, CHECK ITEM = Work area clean, no slip hazards. 8, OK = . 8, NOT OK = . 8, REMARKS / READING = ",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ce670e6c046d21a1",
+                  "file_name": "pm1_round_sheet_scan.png",
+                  "citation": "pm1_round_sheet_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "",
+                  "labels": [
+                    "page_header",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.31253141164779663,
+                "vectorScore": 0.31253141164779663,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0010",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n5. PM-2 task lists\n5.2 Hydraulic press\n- • Take a hydraulic oil sample for particle count and water content; replace return filters.\n- • Inspect the ram seal, cylinder rod and hose fittings for weeping or wear.\n- • Check accumulator pre-charge and the pressure relief setting against the nameplate.\n- • Test the two-hand control and light curtain stopping time.\n- • Check platen parallelism at every second PM-2.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Preventive Maintenance Manual › 5. PM-2 task lists › 5.2 Hydraulic press",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.31000450253486633,
+                "vectorScore": 0.31000450253486633,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-ce670e6c046d21a1",
+                "chunkId": "manufacturing.procedures:f-ce670e6c046d21a1:0002",
+                "title": "pm1_round_sheet_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Action raised (maintenance request no. and what was asked for):\nMR-2287 raised - replace ram seal kit + check pump.\nRun light duty only until fixed. Told D. Whitfield.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ce670e6c046d21a1",
+                  "file_name": "pm1_round_sheet_scan.png",
+                  "citation": "pm1_round_sheet_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Action raised (maintenance request no. and what was asked for):",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.2707851231098175,
+                "vectorScore": 0.2707851231098175,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0006",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n3. Maintenance levels\n4. Maintenance intervals by machine type\nTable 1 gives the PM-2 interval for each machine type. The interval is counted in calendar days from the date of the last completed PM-2 on that machine. Weekends and plant holidays count as days.\nCNC Mill, PM-1 operator check = Daily. CNC Mill, PM-2 interval (calendar days) = 90. CNC Mill, Fluid and lubricant analysis = Coolant concentration and pH weekly. CNC Mill, Geometry and calibration = Ballbar circularity check at every PM-2. CNC Lathe, PM-1 operator check = Daily. CNC Lathe, PM-2 interval (calendar days) = 120. CNC Lathe, Fluid and lubricant analysis = Coolant concentration and pH weekly. CNC Lathe, Geometry and calibration = Chuck runout and turret indexing at every PM-2. Hydraulic Press, PM-1 operator check = Daily. Hydraulic Press, PM-2 interval (calendar days) = 60. Hydraulic Press, Fluid and lubricant analysis = Hydraulic oil sample every 90 days. Hydraulic Press, Geometry and calibration = Platen parallelism at every second PM-2. Robot Cell, PM-1 operator check = Weekly. Robot Cell, PM-2 interval (calendar days) = 180. Robot Cell, Fluid and lubricant analysis = Reducer grease sample at every PM-2. Robot Cell, Geometry and calibration = Tool center point calibration at every PM-2. Surface Grinder, PM-1 operator check = Daily. Surface Grinder, PM-2 interval (calendar days) = 90. Surface Grinder, Fluid and lubricant analysis = Coolant concentration weekly. Surface Grinder,",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Preventive Maintenance Manual › 3. Maintenance levels › 4. Maintenance intervals by machine type",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.26992979645729065,
+                "vectorScore": 0.26992979645729065,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0002",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\nCNC mills and lathes, hydraulic presses, robot cells and surface grinders\nRevision, PM-MAN-001 = Rev D. Effective, PM-MAN-001 = 1 March 2026. Owner, PM-MAN-001 = Corporate Maintenance Engineering. Applies to, PM-MAN-001 = Dayton Plant, Monterrey Plant and Brno Plant",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Preventive Maintenance Manual",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.2660849988460541,
+                "vectorScore": 0.2660849988460541,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0005",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n3. Maintenance levels\nAtlas uses two scheduled maintenance levels and one corrective level.\nPM-1, Performed by = Machine operator. PM-1, What it is = Daily or weekly inspection and lubrication on the round sheet. PM-1, Recorded = Paper round sheet, kept 12 months. PM-2, Performed by = Maintenance technician. PM-2, What it is = Full preventive service to the task list for the machine type. PM-2, Recorded = CMMS event, event type planned, task code PM-2. Corrective (CM), Performed by = Maintenance technician. Corrective (CM), What it is = Repair after a failure or a condition alarm. Corrective (CM), Recorded = CMMS event, event type unplanned, task code CM, with a failure code\nPM-1 is not entered in the CMMS. Only PM-2 services and corrective repairs appear in the maintenance event history.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Preventive Maintenance Manual › 3. Maintenance levels",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.25093162059783936,
+                "vectorScore": 0.25093162059783936,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0013",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n6. Condition-based triggers\nSensors on every machine record daily vibration (average velocity in mm/s RMS), maximum temperature and alarm counts. A condition trigger can bring a PM-2 forward or start a corrective inspection before the interval in Table 1 is reached. Table 2 gives the levels for each machine type.\nCNC Mill, Vibration warning (mm/s) = 3.0. CNC Mill, Vibration alarm (mm/s) = 4.0. CNC Mill, Max temperature warning (C) = 60. CNC Mill, Max temperature alarm (C) = 70. CNC Lathe, Vibration warning (mm/s) = 3.5. CNC Lathe, Vibration alarm (mm/s) = 4.5. CNC Lathe, Max temperature warning (C) = 62. CNC Lathe, Max temperature alarm (C) = 72. Hydraulic Press, Vibration warning (mm/s) = 4.0. Hydraulic Press, Vibration alarm (mm/s) = 5.0. Hydraulic Press, Max temperature warning (C) = 62. Hydraulic Press, Max temperature alarm (C) = 70. Robot Cell, Vibration warning (mm/s) = 2.5. Robot Cell, Vibration alarm (mm/s) = 3.5. Robot Cell, Max temperature warning (C) = 55. Robot Cell, Max temperature alarm (C) = 65. Surface Grinder, Vibration warning (mm/s) = 2.5. Surface Grinder, Vibration alarm (mm/s) = 3.5. Surface Grinder, Max temperature warning (C) = 58. Surface Grinder, Max temperature alarm (C) = 68\nTable 2. Vibration and temperature warning and alarm levels by machine type.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Preventive Maintenance Manual › 6. Condition-based triggers",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.223178431391716,
+                "vectorScore": 0.223178431391716,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0015",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n6. Condition-based triggers\n7. Overdue services and escalation\nThe CMMS lists every machine whose PM-2 is overdue under rule 1 of section 4. Escalation depends on how many days beyond the 1 interval a machine has run:\n1 to 14 days, Action = The planner reschedules within 7 days and tells the Plant Maintenance Manager.. 15 to 30 days, Action = The Plant Manager is told. The machine runs only on work orders approved by the Production Supervisor and the Maintenance Manager.. More than 30 days, Action = The Plant Manager signs a written risk acceptance every week, or the machine is locked out until the PM-2 is complete.\nDeferral requests are limited to 14 days per PM-2 and must state the production reason.\nSynthetic document for a software demonstration. Not for operational use. Page 4\nATLAS PRECISION COMPONENTS PM-MAN-001 | Rev D",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 5,
+                  "headings": "Preventive Maintenance Manual › 6. Condition-based triggers › 7. Overdue services and escalation",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "table",
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "manufacturing.procedures": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 610.8,
+              "searchMs": 6.7,
+              "rerankMs": 0.0,
+              "totalMs": 617.4
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "manufacturing.procedures"
+      ]
+    }
+  ]
+}

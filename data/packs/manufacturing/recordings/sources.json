@@ -1,0 +1,44 @@
+[
+  {
+    "id": "manufacturing.operations",
+    "pack_id": "manufacturing",
+    "name": "Plant Operations",
+    "description": "Plants, machines, daily sensor readings, maintenance events, work orders, quality defects and the production plan of Atlas Precision Components, July 2025 to September 2026.",
+    "default_enabled": true,
+    "kind": "structured",
+    "capabilities": [
+      "structured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": "manufacturing_operations"
+  },
+  {
+    "id": "manufacturing.procedures",
+    "pack_id": "manufacturing",
+    "name": "Maintenance & Safety Procedures",
+    "description": "The preventive maintenance manual, the lockout/tagout procedure and a scanned handwritten PM-1 round sheet.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  },
+  {
+    "id": "manufacturing.reports",
+    "pack_id": "manufacturing",
+    "name": "Quality & Plant Reports",
+    "description": "An 8D report on a bore-diameter escape, a supplier quality agreement and the Q3 2026 plant performance review.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  }
+]

@@ -1,0 +1,1269 @@
+{
+  "schemaVersion": 2,
+  "id": "overdue-pm2",
+  "title": "Machines overdue for PM-2",
+  "turns": [
+    {
+      "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+      "question": "Using the PM-2 intervals in the preventive maintenance manual, which machines are overdue for their PM-2 service as of 30 September 2026, and by how many days?",
+      "submittedAt": "2026-10-03T04:17:03.350299Z",
+      "completedAt": "2026-10-03T04:17:17.383745Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the PM-2 intervals from the preventive maintenance manual (PM-MAN-001 Rev D) and the maintenance event history, **7 machines are overdue for PM-2 service as of 30 September 2026**:\n\n| Machine ID | Machine Type | Plant | Last PM-2 Date | PM-2 Interval (days) | Days Since PM-2 | **Days Overdue** |\n|------------|--------------|-------|----------------|----------------------|-----------------|------------------|\n| MTY-GRD-02 | Surface Grinder | MTY (Monterrey) | 2026-05-28 | 90 | 125 | **35** |\n| BRN-LTH-03 | CNC Lathe | BRN (Brno) | 2026-04-30 | 120 | 153 | **33** |\n| MTY-MIL-01 | CNC Mill | MTY (Monterrey) | 2026-06-18 | 90 | 104 | **14** |\n| DAY-LTH-02 | CNC Lathe | DAY (Dayton) | 2026-05-19 | 120 | 134 | **14** |\n| DAY-PRS-04 | Hydraulic Press | DAY (Dayton) | 2026-07-22 | 60 | 70 | **10** |\n| DAY-MIL-02 | CNC Mill | DAY (Dayton) | 2026-06-23 | 90 | 99 | **9** |\n| BRN-PRS-01 | Hydraulic Press | BRN (Brno) | 2026-07-23 | 60 | 69 | **9** |\n\n**PM-2 intervals used** (from Table 1 of PM-MAN-001): CNC Mill 90 days, CNC Lathe 120 days, Hydraulic Press 60 days, Robot Cell 180 days, Surface Grinder 90 days — all counted in calendar days from the last completed PM-2 [1].\n\n**Overdue calculation**: For each machine, days since last PM-2 minus the interval for its machine type; positive values mean overdue [2].\n\n**Notable**: The two most overdue machines (MTY-GRD-02 at 35 days, BRN-LTH-03 at 33 days) exceed the 30-day threshold where the manual requires the Plant Manager to sign a written risk acceptance weekly or lock out the machine until PM-2 is complete [1].\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — preventive_maintenance_manual.pdf — evidence `hermes-receipt:cbee86460139b20acafa5041f9188d6df6a195ccedb32ad1d0723243ba076771`\n- [2] Structured retrieval result — manufacturing_operations — evidence `hermes-receipt:650900f86b0a6e6851677bcc20791be1d65afa56cd3beccb1109d478019e46cf`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:cbee86460139b20acafa5041f9188d6df6a195ccedb32ad1d0723243ba076771",
+            "label": "Unstructured Retrieval evidence — preventive_maintenance_manual.pdf",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-5ce94873315d47a7a317bd84102283c7"
+          },
+          {
+            "number": 2,
+            "evidenceId": "hermes-receipt:650900f86b0a6e6851677bcc20791be1d65afa56cd3beccb1109d478019e46cf",
+            "label": "Structured retrieval result — manufacturing_operations",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-2e2375bf23e243939fdb32fa28364b59"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "104c00f4-03ea-514c-95bf-2292ac8fd86f",
+          "cursor": 204,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:03.485427Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:9468796ecb5ed51f63b3848dadbddddb48973364e39fd96c001075fc039f6f10",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "1801bca0-67e0-5cb5-b90e-ae36fa2751ab",
+          "cursor": 205,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:1",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:04.613004Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 7908,
+              "output_tokens": 189
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d67475c6-e5b2-52f3-90c5-ec799424bc46",
+          "cursor": 206,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-5ce94873315d47a7a317bd84102283c7",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:04.643988Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:df97d0b092f174b8196b533bb4c7d554a8e938b051d768e5ca1905dba430359d",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "dc2fb90a-f9dc-51b6-82b4-53ade9504a70",
+          "cursor": 207,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-5ce94873315d47a7a317bd84102283c7",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:cbee86460139b20acafa5041f9188d6df6a195ccedb32ad1d0723243ba076771"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:05.456164Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 809,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:cbee86460139b20acafa5041f9188d6df6a195ccedb32ad1d0723243ba076771",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "aa56102f-fe57-5afa-be02-36aff20f6b72",
+          "cursor": 208,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-5ce94873315d47a7a317bd84102283c7",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:05.497223Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.844
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:eddea7ac1f993c32c5519520c83dbb5447fb51ae9349299120cc13a7461b526f",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "37ec7566-cdb2-5ee5-a524-dc2a2cc0caa8",
+          "cursor": 209,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:2",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:07.548208Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 13122,
+              "output_tokens": 356
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ce4ef54c-501d-5360-b411-c3e663be2fad",
+          "cursor": 210,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-bfd9ee990ea3462f9808ea3bb45fb643",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:07.584962Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:ccf25961d8779d4e3859e3ff57e2b9f6f1b4c560821fb862440b9684012ba5fe",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8421d61f-5bf6-5edd-9ff3-386487d1ccba",
+          "cursor": 211,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-bfd9ee990ea3462f9808ea3bb45fb643",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:3cbd26e830d1f61ce95d60f0303dc792281615d708580976c605b8126bbfb33d"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:07.885414Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 299,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:3cbd26e830d1f61ce95d60f0303dc792281615d708580976c605b8126bbfb33d",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d29c36fe-2375-55fd-9f68-8c0068572de9",
+          "cursor": 212,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-bfd9ee990ea3462f9808ea3bb45fb643",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:07.923853Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.331
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:c699017523820ede3d422a78d478b64d57b5b8ab938cae0410b04f50ac1da34c",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f2d3cb73-b8b7-50f9-a9cb-09d9b7153d9d",
+          "cursor": 213,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:3",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:11.275406Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 17553,
+              "output_tokens": 642
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "dffc0ae4-b477-504a-bbe1-d58a1a594eb0",
+          "cursor": 214,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-2e2375bf23e243939fdb32fa28364b59",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:11.314574Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e0e7aa0e6b6ffba49817900b4f3e7932203714c535eb00f799289fb271c5600d",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d704b9f7-5b9f-5c5c-a6ab-1eda7cd0d3ae",
+          "cursor": 215,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-2e2375bf23e243939fdb32fa28364b59",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:650900f86b0a6e6851677bcc20791be1d65afa56cd3beccb1109d478019e46cf"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:11.595951Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 280,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:650900f86b0a6e6851677bcc20791be1d65afa56cd3beccb1109d478019e46cf",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "fd13b147-f480-5868-a26b-8a79b3fb836f",
+          "cursor": 216,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-2e2375bf23e243939fdb32fa28364b59",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:11.629448Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.31
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:5fd4960bf3fc991023d824f6d220dc9758ee5a18a5af748977d9090ef9b34a44",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "6bba23e9-25bd-503c-a697-9761a69ae572",
+          "cursor": 217,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:4",
+          "parentInvocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:17.309369Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 19643,
+              "output_tokens": 1235
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6:api:4",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "49352c8e-2c8a-5f3d-b45b-edcefd331159",
+          "cursor": 218,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:17.340977Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:78b829b5d18e8eb57f512ba2dfdf039302f9a449aec1e8f104efaa58bdef261a",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9ea829d6-9207-54eb-adbb-e1eef7bb30ab",
+          "cursor": 219,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:17.360744Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 58226,
+              "output_tokens": 2422,
+              "total_tokens": 60648,
+              "output_characters": 1845
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:2ec375b9e073a1ae556a26f5793a5468a1c63f6c3c0b6fe365081e383793dde6",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "6b7b2773-2361-5c5a-b1e0-6e767bec556d",
+          "cursor": 220,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:17.383430Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:73d52dfd-8031-48be-bb2f-477f817cbf3f:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "43d87a7f-8ebe-542b-97cf-2c184176f7e4",
+          "cursor": 221,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:17.383488Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 2,
+              "uncited_evidence_count": 1,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:73d52dfd-8031-48be-bb2f-477f817cbf3f:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d36454cf-5d02-5124-a87f-528edf57acc1",
+          "cursor": 222,
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "runId": "run_44408e4fe2594b46b8f1866e99c51566",
+          "sessionId": "record-6136d987-a0d4-4613-b371-c7e18790a6a8",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:a8b0c9ecd3df1e9b493da52c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:17.383521Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 13950,
+              "tool_call_count": 3,
+              "known_tool_duration_ms": 1485,
+              "input_tokens": 58226,
+              "output_tokens": 2422,
+              "total_tokens": 60648
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:73d52dfd-8031-48be-bb2f-477f817cbf3f:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:cbee86460139b20acafa5041f9188d6df6a195ccedb32ad1d0723243ba076771",
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "invocationId": "hermes-tool:chatcmpl-tool-5ce94873315d47a7a317bd84102283c7",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 809,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:17:05.456164Z",
+          "content": {
+            "query": "PM-2 interval table by machine type preventive maintenance manual",
+            "sourceIds": [
+              "manufacturing.procedures"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.66019207239151,
+                "vectorScore": 0.66019207239151,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0007",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n3. Maintenance levels\n4. Maintenance intervals by machine type\n- A PM-2 is due when the number of days since the machine’s last completed PM-2 reaches the interval in Table 1, and overdue when it exceeds that interval.\n- A corrective repair does not restart the PM-2 clock, even when the repair replaces a component that PM-2 would have inspected.\n- A PM-2 started on one day and finished on the next is dated by the day it started.\n- For a new machine the clock starts at its commissioning date and runs until its first PM-2 is completed.\n- Planners should book each PM-2 two to nine days before its due date so that a short slip does not make the machine overdue.\nSynthetic document for a software demonstration. Not for operational use. Page 2\nATLAS PRECISION COMPONENTS PM-MAN-001 | Rev D",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Preventive Maintenance Manual › 3. Maintenance levels › 4. Maintenance intervals by machine type",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.6261313557624817,
+                "vectorScore": 0.6261313557624817,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0006",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n3. Maintenance levels\n4. Maintenance intervals by machine type\nTable 1 gives the PM-2 interval for each machine type. The interval is counted in calendar days from the date of the last completed PM-2 on that machine. Weekends and plant holidays count as days.\nCNC Mill, PM-1 operator check = Daily. CNC Mill, PM-2 interval (calendar days) = 90. CNC Mill, Fluid and lubricant analysis = Coolant concentration and pH weekly. CNC Mill, Geometry and calibration = Ballbar circularity check at every PM-2. CNC Lathe, PM-1 operator check = Daily. CNC Lathe, PM-2 interval (calendar days) = 120. CNC Lathe, Fluid and lubricant analysis = Coolant concentration and pH weekly. CNC Lathe, Geometry and calibration = Chuck runout and turret indexing at every PM-2. Hydraulic Press, PM-1 operator check = Daily. Hydraulic Press, PM-2 interval (calendar days) = 60. Hydraulic Press, Fluid and lubricant analysis = Hydraulic oil sample every 90 days. Hydraulic Press, Geometry and calibration = Platen parallelism at every second PM-2. Robot Cell, PM-1 operator check = Weekly. Robot Cell, PM-2 interval (calendar days) = 180. Robot Cell, Fluid and lubricant analysis = Reducer grease sample at every PM-2. Robot Cell, Geometry and calibration = Tool center point calibration at every PM-2. Surface Grinder, PM-1 operator check = Daily. Surface Grinder, PM-2 interval (calendar days) = 90. Surface Grinder, Fluid and lubricant analysis = Coolant concentration weekly. Surface Grinder,",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Preventive Maintenance Manual › 3. Maintenance levels › 4. Maintenance intervals by machine type",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.4900769591331482,
+                "vectorScore": 0.4900769591331482,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0008",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n5. PM-2 task lists\nEvery PM-2 begins with lockout/tagout under SAF-SOP-007 and ends with a recorded test run. In addition to the tasks below, technicians complete the common checks: tighten electrical terminals, inspect cables and guards, test every E-stop and interlock, clean and replace filters, and record as-found vibration and temperature readings.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Preventive Maintenance Manual › 5. PM-2 task lists",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.48930928111076355,
+                "vectorScore": 0.48930928111076355,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0003",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n1. Purpose and scope\nThis manual sets the preventive maintenance (PM) program for the production machines of Atlas Precision Components. It defines the maintenance levels, how often each machine type must be serviced, the condition-based triggers that bring a service forward, how overdue services are escalated, and how maintenance work is recorded.\nIt applies to all 56 machines at the Dayton Plant (21 machines), the Monterrey Plant (19) and the Brno Plant (16): CNC mills, CNC lathes, hydraulic presses, robot cells and surface grinders. Auxiliary equipment (compressors, chillers, cranes) is covered by PM-MAN-004.\nThis is a synthetic document written for a software demonstration. Atlas Precision Components and everything in it are fictional.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Preventive Maintenance Manual › 1. Purpose and scope",
+                  "labels": [
+                    "caption",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.48547133803367615,
+                "vectorScore": 0.48547133803367615,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0005",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n3. Maintenance levels\nAtlas uses two scheduled maintenance levels and one corrective level.\nPM-1, Performed by = Machine operator. PM-1, What it is = Daily or weekly inspection and lubrication on the round sheet. PM-1, Recorded = Paper round sheet, kept 12 months. PM-2, Performed by = Maintenance technician. PM-2, What it is = Full preventive service to the task list for the machine type. PM-2, Recorded = CMMS event, event type planned, task code PM-2. Corrective (CM), Performed by = Maintenance technician. Corrective (CM), What it is = Repair after a failure or a condition alarm. Corrective (CM), Recorded = CMMS event, event type unplanned, task code CM, with a failure code\nPM-1 is not entered in the CMMS. Only PM-2 services and corrective repairs appear in the maintenance event history.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Preventive Maintenance Manual › 3. Maintenance levels",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.4577699303627014,
+                "vectorScore": 0.4577699303627014,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0011",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n5. PM-2 task lists\n5.3 Robot cell\n- • Check joint reducer backlash and grease condition; sample grease at every PM-2.\n- • Inspect the dress pack, cable harness and torch or gripper for wear.\n- • Verify the tool center point (TCP) calibration and the safety fence interlocks.\n- • Back up the controller program and check the encoder battery.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Preventive Maintenance Manual › 5. PM-2 task lists › 5.3 Robot cell",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.4508410394191742,
+                "vectorScore": 0.4508410394191742,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0015",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n6. Condition-based triggers\n7. Overdue services and escalation\nThe CMMS lists every machine whose PM-2 is overdue under rule 1 of section 4. Escalation depends on how many days beyond the 1 interval a machine has run:\n1 to 14 days, Action = The planner reschedules within 7 days and tells the Plant Maintenance Manager.. 15 to 30 days, Action = The Plant Manager is told. The machine runs only on work orders approved by the Production Supervisor and the Maintenance Manager.. More than 30 days, Action = The Plant Manager signs a written risk acceptance every week, or the machine is locked out until the PM-2 is complete.\nDeferral requests are limited to 14 days per PM-2 and must state the production reason.\nSynthetic document for a software demonstration. Not for operational use. Page 4\nATLAS PRECISION COMPONENTS PM-MAN-001 | Rev D",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 5,
+                  "headings": "Preventive Maintenance Manual › 6. Condition-based triggers › 7. Overdue services and escalation",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.4407788813114166,
+                "vectorScore": 0.4407788813114166,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-495b1a1880120d0e",
+                "chunkId": "manufacturing.procedures:f-495b1a1880120d0e:0013",
+                "title": "preventive_maintenance_manual.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Preventive Maintenance Manual\n6. Condition-based triggers\nSensors on every machine record daily vibration (average velocity in mm/s RMS), maximum temperature and alarm counts. A condition trigger can bring a PM-2 forward or start a corrective inspection before the interval in Table 1 is reached. Table 2 gives the levels for each machine type.\nCNC Mill, Vibration warning (mm/s) = 3.0. CNC Mill, Vibration alarm (mm/s) = 4.0. CNC Mill, Max temperature warning (C) = 60. CNC Mill, Max temperature alarm (C) = 70. CNC Lathe, Vibration warning (mm/s) = 3.5. CNC Lathe, Vibration alarm (mm/s) = 4.5. CNC Lathe, Max temperature warning (C) = 62. CNC Lathe, Max temperature alarm (C) = 72. Hydraulic Press, Vibration warning (mm/s) = 4.0. Hydraulic Press, Vibration alarm (mm/s) = 5.0. Hydraulic Press, Max temperature warning (C) = 62. Hydraulic Press, Max temperature alarm (C) = 70. Robot Cell, Vibration warning (mm/s) = 2.5. Robot Cell, Vibration alarm (mm/s) = 3.5. Robot Cell, Max temperature warning (C) = 55. Robot Cell, Max temperature alarm (C) = 65. Surface Grinder, Vibration warning (mm/s) = 2.5. Surface Grinder, Vibration alarm (mm/s) = 3.5. Surface Grinder, Max temperature warning (C) = 58. Surface Grinder, Max temperature alarm (C) = 68\nTable 2. Vibration and temperature warning and alarm levels by machine type.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-495b1a1880120d0e",
+                  "file_name": "preventive_maintenance_manual.pdf",
+                  "citation": "preventive_maintenance_manual.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Preventive Maintenance Manual › 6. Condition-based triggers",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "manufacturing.procedures": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 790.5,
+              "searchMs": 7.7,
+              "rerankMs": 0.0,
+              "totalMs": 798.1
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:3cbd26e830d1f61ce95d60f0303dc792281615d708580976c605b8126bbfb33d",
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "invocationId": "hermes-tool:chatcmpl-tool-bfd9ee990ea3462f9808ea3bb45fb643",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 299,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:17:07.885414Z",
+          "content": {
+            "query": "Find the last completed PM-2 date for each machine",
+            "databaseName": "manufacturing_operations",
+            "answer": null,
+            "sql": "WITH last_pm2 AS (\n  SELECT\n    m.machine_id,\n    m.machine_type,\n    m.plant_id,\n    MAX(me.started_at)::date as last_pm2_date\n  FROM manufacturing_operations.machines m\n  LEFT JOIN manufacturing_operations.maintenance_events me\n    ON m.machine_id = me.machine_id\n    AND me.event_type = 'planned'\n    AND me.task_code = 'PM-2'\n  GROUP BY m.machine_id, m.machine_type, m.plant_id\n)\nSELECT * FROM last_pm2 ORDER BY machine_id;",
+            "rows": [
+              {
+                "machine_id": "BRN-GRD-01",
+                "machine_type": "Surface Grinder",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-07-20"
+              },
+              {
+                "machine_id": "BRN-LTH-01",
+                "machine_type": "CNC Lathe",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-07-27"
+              },
+              {
+                "machine_id": "BRN-LTH-02",
+                "machine_type": "CNC Lathe",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-08-20"
+              },
+              {
+                "machine_id": "BRN-LTH-03",
+                "machine_type": "CNC Lathe",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-04-30"
+              },
+              {
+                "machine_id": "BRN-LTH-04",
+                "machine_type": "CNC Lathe",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-06-19"
+              },
+              {
+                "machine_id": "BRN-MIL-01",
+                "machine_type": "CNC Mill",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-07-31"
+              },
+              {
+                "machine_id": "BRN-MIL-02",
+                "machine_type": "CNC Mill",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-08-13"
+              },
+              {
+                "machine_id": "BRN-MIL-03",
+                "machine_type": "CNC Mill",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-09-25"
+              },
+              {
+                "machine_id": "BRN-MIL-04",
+                "machine_type": "CNC Mill",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-07-31"
+              },
+              {
+                "machine_id": "BRN-MIL-05",
+                "machine_type": "CNC Mill",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-09-18"
+              },
+              {
+                "machine_id": "BRN-MIL-06",
+                "machine_type": "CNC Mill",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-09-07"
+              },
+              {
+                "machine_id": "BRN-PRS-01",
+                "machine_type": "Hydraulic Press",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-07-23"
+              },
+              {
+                "machine_id": "BRN-PRS-02",
+                "machine_type": "Hydraulic Press",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-09-15"
+              },
+              {
+                "machine_id": "BRN-PRS-03",
+                "machine_type": "Hydraulic Press",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-09-17"
+              },
+              {
+                "machine_id": "BRN-RBT-01",
+                "machine_type": "Robot Cell",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-05-15"
+              },
+              {
+                "machine_id": "BRN-RBT-02",
+                "machine_type": "Robot Cell",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-05-07"
+              },
+              {
+                "machine_id": "DAY-GRD-01",
+                "machine_type": "Surface Grinder",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-07-24"
+              },
+              {
+                "machine_id": "DAY-LTH-01",
+                "machine_type": "CNC Lathe",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-08-13"
+              },
+              {
+                "machine_id": "DAY-LTH-02",
+                "machine_type": "CNC Lathe",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-05-19"
+              },
+              {
+                "machine_id": "DAY-LTH-03",
+                "machine_type": "CNC Lathe",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-09-25"
+              },
+              {
+                "machine_id": "DAY-LTH-04",
+                "machine_type": "CNC Lathe",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-07-15"
+              },
+              {
+                "machine_id": "DAY-LTH-05",
+                "machine_type": "CNC Lathe",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-07-10"
+              },
+              {
+                "machine_id": "DAY-MIL-01",
+                "machine_type": "CNC Mill",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-08-19"
+              },
+              {
+                "machine_id": "DAY-MIL-02",
+                "machine_type": "CNC Mill",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-06-23"
+              },
+              {
+                "machine_id": "DAY-MIL-03",
+                "machine_type": "CNC Mill",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-09-09"
+              }
+            ],
+            "sourceRowCount": 56,
+            "truncated": true,
+            "resolutionLineage": []
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:650900f86b0a6e6851677bcc20791be1d65afa56cd3beccb1109d478019e46cf",
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "invocationId": "hermes-tool:chatcmpl-tool-2e2375bf23e243939fdb32fa28364b59",
+          "turnId": "73d52dfd-8031-48be-bb2f-477f817cbf3f:73d52dfd-8031-48be-bb2f-477f817cbf3f:db6890b6",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 280,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:17:11.595951Z",
+          "content": {
+            "query": "Calculate which machines are overdue for PM-2 as of 30 September 2026",
+            "databaseName": "manufacturing_operations",
+            "answer": null,
+            "sql": "WITH last_pm2 AS (\n  SELECT\n    m.machine_id,\n    m.machine_type,\n    m.plant_id,\n    COALESCE(MAX(me.started_at)::date, m.commissioned_date) as last_pm2_date\n  FROM manufacturing_operations.machines m\n  LEFT JOIN manufacturing_operations.maintenance_events me\n    ON m.machine_id = me.machine_id\n    AND me.event_type = 'planned'\n    AND me.task_code = 'PM-2'\n  GROUP BY m.machine_id, m.machine_type, m.plant_id, m.commissioned_date\n),\nintervals AS (\n  SELECT\n    machine_id,\n    machine_type,\n    plant_id,\n    last_pm2_date,\n    CASE machine_type\n      WHEN 'CNC Mill' THEN 90\n      WHEN 'CNC Lathe' THEN 120\n      WHEN 'Hydraulic Press' THEN 60\n      WHEN 'Robot Cell' THEN 180\n      WHEN 'Surface Grinder' THEN 90\n      ELSE NULL\n    END as pm2_interval_days,\n    DATE '2026-09-30' as reference_date\n  FROM last_pm2\n),\noverdue AS (\n  SELECT\n    machine_id,\n    machine_type,\n    plant_id,\n    last_pm2_date,\n    pm2_interval_days,\n    reference_date,\n    (reference_date - last_pm2_date) as days_since_pm2,\n    (reference_date - last_pm2_date) - pm2_interval_days as days_overdue\n  FROM intervals\n)\nSELECT\n  machine_id,\n  machine_type,\n  plant_id,\n  last_pm2_date,\n  pm2_interval_days,\n  days_since_pm2,\n  days_overdue\nFROM overdue\nWHERE days_overdue > 0\nORDER BY days_overdue DESC;",
+            "rows": [
+              {
+                "machine_id": "MTY-GRD-02",
+                "machine_type": "Surface Grinder",
+                "plant_id": "MTY",
+                "last_pm2_date": "2026-05-28",
+                "pm2_interval_days": 90,
+                "days_since_pm2": 125,
+                "days_overdue": 35
+              },
+              {
+                "machine_id": "BRN-LTH-03",
+                "machine_type": "CNC Lathe",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-04-30",
+                "pm2_interval_days": 120,
+                "days_since_pm2": 153,
+                "days_overdue": 33
+              },
+              {
+                "machine_id": "MTY-MIL-01",
+                "machine_type": "CNC Mill",
+                "plant_id": "MTY",
+                "last_pm2_date": "2026-06-18",
+                "pm2_interval_days": 90,
+                "days_since_pm2": 104,
+                "days_overdue": 14
+              },
+              {
+                "machine_id": "DAY-LTH-02",
+                "machine_type": "CNC Lathe",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-05-19",
+                "pm2_interval_days": 120,
+                "days_since_pm2": 134,
+                "days_overdue": 14
+              },
+              {
+                "machine_id": "DAY-PRS-04",
+                "machine_type": "Hydraulic Press",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-07-22",
+                "pm2_interval_days": 60,
+                "days_since_pm2": 70,
+                "days_overdue": 10
+              },
+              {
+                "machine_id": "DAY-MIL-02",
+                "machine_type": "CNC Mill",
+                "plant_id": "DAY",
+                "last_pm2_date": "2026-06-23",
+                "pm2_interval_days": 90,
+                "days_since_pm2": 99,
+                "days_overdue": 9
+              },
+              {
+                "machine_id": "BRN-PRS-01",
+                "machine_type": "Hydraulic Press",
+                "plant_id": "BRN",
+                "last_pm2_date": "2026-07-23",
+                "pm2_interval_days": 60,
+                "days_since_pm2": 69,
+                "days_overdue": 9
+              }
+            ],
+            "sourceRowCount": 7,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "manufacturing.procedures",
+        "manufacturing.operations"
+      ]
+    }
+  ]
+}

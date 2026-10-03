@@ -1,0 +1,140 @@
+{
+  "id": "manufacturing",
+  "kind": "industry",
+  "title": "Manufacturing",
+  "description": "Atlas Precision Components, a fictional maker of machined aluminum and steel parts with plants in Dayton, Monterrey and Brno: 56 CNC machines, presses, robot cells and grinders, 15 months of daily sensor readings, maintenance events, work orders and quality defects, beside maintenance and safety procedures, an 8D report, a supplier agreement, a plant review deck and a scanned handwritten round sheet.",
+  "icon": "Factory",
+  "status": "ready",
+  "version": "1.0.0",
+  "as_of": "2026-09-30",
+  "disclaimer": "Synthetic data for a software demonstration; Atlas Precision Components and every plant, machine, supplier, customer and person in it are fictional.",
+  "questions": [
+    {
+      "id": "pm2-interval-hydraulic-press",
+      "label": "PM-2 interval for hydraulic presses",
+      "tag": "DOCUMENTS",
+      "description": "A value read from the maintenance interval table in the manual's PDF.",
+      "question": "What PM-2 interval does the preventive maintenance manual set for a hydraulic press, and how often is its hydraulic oil sampled?",
+      "sources": [
+        "manufacturing.procedures"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "round-sheet-press-findings",
+      "label": "Findings on the handwritten round sheet",
+      "tag": "DOCUMENTS",
+      "description": "Needs the scanned, handwritten PM-1 round sheet, which Nemotron Parse reads.",
+      "question": "On the scanned PM-1 round sheet for press DAY-PRS-03 dated 14 September 2026, what oil temperature did the operator record, and what action was raised for the ram seal?",
+      "sources": [
+        "manufacturing.procedures"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "lockout-lock-removal",
+      "label": "Removing someone else's lock",
+      "tag": "DOCUMENTS",
+      "description": "The exceptional lock-removal rule in the lockout/tagout SOP.",
+      "question": "Under the lockout/tagout procedure, who may remove a lock applied by an authorized employee who is not on site, and what must happen before they do?",
+      "sources": [
+        "manufacturing.procedures"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": false
+    },
+    {
+      "id": "unplanned-downtime-by-plant",
+      "label": "Unplanned downtime by plant, Q3 2026",
+      "tag": "SQL",
+      "description": "A join of maintenance events, machines and plants, grouped by plant.",
+      "question": "Which plant had the most unplanned downtime hours in Q3 2026 (1 July to 30 September), and how many hours and unplanned events was that?",
+      "sources": [
+        "manufacturing.operations"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "top-failure-codes",
+      "label": "Top failure codes by downtime",
+      "tag": "SQL",
+      "description": "Failure codes ranked by unplanned downtime hours over twelve months.",
+      "question": "Which three failure codes caused the most unplanned downtime hours between 1 October 2025 and 30 September 2026, and how many hours did each cause?",
+      "sources": [
+        "manufacturing.operations"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "plan-attainment-q3",
+      "label": "Production plan attainment, Q3 2026",
+      "tag": "SQL",
+      "description": "Reads the weekly output sheet of the production plan workbook.",
+      "question": "Over the 12 weeks starting 6 July through 21 September 2026, which plant had the lowest production plan attainment (total actual units divided by total target units), and what was it?",
+      "sources": [
+        "manufacturing.operations"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "overdue-pm2",
+      "label": "Machines overdue for PM-2",
+      "tag": "HYBRID",
+      "description": "Combines the interval table in the maintenance manual with each machine's last PM-2 in the tables.",
+      "question": "Using the PM-2 intervals in the preventive maintenance manual, which machines are overdue for their PM-2 service as of 30 September 2026, and by how many days?",
+      "sources": [
+        "manufacturing.procedures",
+        "manufacturing.operations"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "eight-d-machine-history",
+      "label": "The 8D machine's recent history",
+      "tag": "HYBRID",
+      "description": "Finds the machine in the 8D report, then looks up its maintenance and quality history.",
+      "question": "The 8D report describes a bore-diameter escape on valve body AP-3312. Which machine does it name, and how many unplanned maintenance events, hours of unplanned downtime and dollars of quality defect cost has that machine logged since 1 July 2026?",
+      "sources": [
+        "manufacturing.reports",
+        "manufacturing.operations"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    }
+  ],
+  "examples": [
+    "pm2-interval-hydraulic-press",
+    "round-sheet-press-findings",
+    "unplanned-downtime-by-plant",
+    "overdue-pm2",
+    "eight-d-machine-history",
+    "lockout-lock-removal",
+    "top-failure-codes",
+    "plan-attainment-q3"
+  ],
+  "conversations": []
+}

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "pack": {
+    "id": "manufacturing",
+    "version": "1.0.0"
+  },
+  "recordedAt": "2026-10-03T04:17:37.275957Z",
+  "sessions": [
+    {
+      "id": "pm2-interval-hydraulic-press",
+      "title": "PM-2 interval for hydraulic presses",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "ee8c85b3-52a4-4bf5-a820-822e346e0bc5",
+          "question": "What PM-2 interval does the preventive maintenance manual set for a hydraulic press, and how often is its hydraulic oil sampled?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-sheet-press-findings",
+      "title": "Findings on the handwritten round sheet",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "6993ad1b-154f-40c6-918c-81ac1f0fc1be",
+          "question": "On the scanned PM-1 round sheet for press DAY-PRS-03 dated 14 September 2026, what oil temperature did the operator record, and what action was raised for the ram seal?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unplanned-downtime-by-plant",
+      "title": "Unplanned downtime by plant, Q3 2026",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "7c8fb2a1-c4c3-4f1a-a5d5-ad2c25873c0b",
+          "question": "Which plant had the most unplanned downtime hours in Q3 2026 (1 July to 30 September), and how many hours and unplanned events was that?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overdue-pm2",
+      "title": "Machines overdue for PM-2",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "73d52dfd-8031-48be-bb2f-477f817cbf3f",
+          "question": "Using the PM-2 intervals in the preventive maintenance manual, which machines are overdue for their PM-2 service as of 30 September 2026, and by how many days?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eight-d-machine-history",
+      "title": "The 8D machine's recent history",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "cf7878e0-739a-421e-8a39-eebc536f8cb6",
+          "question": "The 8D report describes a bore-diameter escape on valve body AP-3312. Which machine does it name, and how many unplanned maintenance events, hours of unplanned downtime and dollars of quality defect cost has that machine logged since 1 July 2026?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    }
+  ]
+}
