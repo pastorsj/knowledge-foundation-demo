@@ -4,17 +4,18 @@
 /**
  * The recorded calls behind a node, one card each: what ran, its statement
  * (SQL, PQL, the search query) and its bounded result. Used for retrieval,
- * Auto Ontology SQL, Kumo predictions and the agent itself. A flat list, so
- * no second workflow graph is nested inside the execution graph.
+ * DuckDB table queries, Kumo predictions and the agent itself. A flat list, so
+ * no second workflow graph is nested inside the execution graph. A table
+ * query opens in the data viewer when its database is browsable.
  */
 
 'use client'
 
 import { useEffect, useMemo, useRef, type ReactNode } from 'react'
-import type { ReceiptV2 } from '../contract'
+import type { ReceiptV2, StructuredQueryReceipt } from '../contract'
 import styles from '../execution-workspace.module.css'
 import type { ExecutionNodeDetail } from '../graph'
-import { OPERATION_LABELS, receiptOutputCount, summarizeReceipt } from '../receipt-summary'
+import { receiptOutputCount, summarizeReceipt } from '../receipt-summary'
 import { toolFor } from '../registry'
 import { ResultOutput } from './ResultOutput'
 
@@ -24,69 +25,65 @@ export interface EvidenceInspectorProps {
   cursor: string
   question?: string | null
   receipts: readonly ReceiptV2[]
-  /** The pack's database, which a Kumo prediction reads but its receipt does not name */
-  databaseName?: string
   /** The data sources the question used */
   sourceIds?: readonly string[]
   /** The pack's structured sources, which name the question's database source */
   structuredSources?: ReadonlyArray<{ id: string; name: string }>
   loading?: boolean
   onClose: () => void
+  /** Opens a table query's SQL in the data viewer; offered only for `queryDatabases` */
+  onOpenQuery?: (receipt: StructuredQueryReceipt) => void
+  queryDatabases?: readonly string[]
 }
 
 const callLabel = (receipt: ReceiptV2): string => {
   switch (receipt.artifactKind) {
     case 'structured_query':
-      return 'Auto Ontology Text-to-SQL'
+      return toolFor(receipt.toolName)?.id === 'ask_question'
+        ? 'Auto Ontology Text-to-SQL'
+        : 'DuckDB Table Query'
     case 'structured_prediction':
       return 'NVIDIA Kumo Prediction'
-    case 'analytics_result':
-      return receipt.content
-        ? OPERATION_LABELS[receipt.content.operationId]
-        : (toolFor(receipt.toolName)?.label ?? receipt.toolName)
     case 'retrieval_evidence':
       return 'Unstructured Retrieval'
   }
 }
 
-/** The logical sources a receipt read: the retrieval sources, or the database it queried. */
-const receiptSources = (receipt: ReceiptV2, databaseName: string | undefined): string[] => {
+/** The logical sources a receipt read: the retrieval or prediction sources, or the database it queried. */
+const receiptSources = (receipt: ReceiptV2): string[] => {
   switch (receipt.artifactKind) {
     case 'retrieval_evidence':
       return receipt.content?.sourceIds ?? []
-    case 'analytics_result':
     case 'structured_query':
       return receipt.content ? [receipt.content.databaseName] : []
     case 'structured_prediction':
-      return databaseName ? [databaseName] : []
+      return receipt.content ? [receipt.content.sourceId] : []
   }
 }
 
 const NO_SOURCE_IDS: readonly string[] = []
 const NO_STRUCTURED_SOURCES: ReadonlyArray<{ id: string; name: string }> = []
+const NO_DATABASES: readonly string[] = []
 
 export const EvidenceInspector = ({
   detail,
   cursor,
   question,
   receipts,
-  databaseName,
   sourceIds = NO_SOURCE_IDS,
   structuredSources = NO_STRUCTURED_SOURCES,
   loading = false,
   onClose,
+  onOpenQuery,
+  queryDatabases = NO_DATABASES,
 }: EvidenceInspectorProps): ReactNode => {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const summaries = useMemo(
-    () =>
-      receipts.map((receipt) => ({
-        receipt,
-        summary: summarizeReceipt(receipt, { databaseName }),
-      })),
-    [databaseName, receipts]
+    () => receipts.map((receipt) => ({ receipt, summary: summarizeReceipt(receipt) })),
+    [receipts]
   )
   // As the original showed them: the question's structured source by name, then what each receipt read
-  // (a retrieval source by name when it is a structured one, else by id).
+  // (a retrieval or prediction source by name when it is a structured one, else by id).
   const sourceNames = useMemo(() => {
     const nameOf = (id: string) => structuredSources.find((source) => source.id === id)?.name || id
     return [
@@ -96,14 +93,14 @@ export const EvidenceInspector = ({
             structuredSources.some((source) => source.id === id) ? [nameOf(id)] : []
           ),
           ...receipts.flatMap((receipt) =>
-            receipt.artifactKind === 'retrieval_evidence'
-              ? receiptSources(receipt, databaseName).map(nameOf)
-              : receiptSources(receipt, databaseName)
+            receipt.artifactKind === 'structured_query'
+              ? receiptSources(receipt)
+              : receiptSources(receipt).map(nameOf)
           ),
         ].filter((name) => name.trim())
       ),
     ]
-  }, [databaseName, receipts, sourceIds, structuredSources])
+  }, [receipts, sourceIds, structuredSources])
 
   useEffect(() => {
     closeButtonRef.current?.focus()
@@ -213,6 +210,18 @@ export const EvidenceInspector = ({
                     </pre>
                     {summary.statement.truncated ? (
                       <small>The recorded statement reached its display-safe size limit.</small>
+                    ) : null}
+                    {onOpenQuery &&
+                    receipt.artifactKind === 'structured_query' &&
+                    receipt.content?.sql &&
+                    queryDatabases.includes(receipt.content.databaseName) ? (
+                      <button
+                        type="button"
+                        className={`${styles.backButton} ${styles.evidenceOpenQuery}`}
+                        onClick={() => onOpenQuery(receipt)}
+                      >
+                        Open in Data Viewer
+                      </button>
                     ) : null}
                   </section>
                 ) : null}

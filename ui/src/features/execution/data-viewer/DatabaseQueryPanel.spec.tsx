@@ -15,7 +15,7 @@ const RESULT = {
 
 describe('DatabaseQueryPanel', () => {
   it('highlights the SQL as it is typed', () => {
-    render(<DatabaseQueryPanel sourceId="market_data" receipts={[]} defaultSql="" />)
+    render(<DatabaseQueryPanel sourceId="retail.sales" receipts={[]} defaultSql="" />)
     fireEvent.change(screen.getByRole('textbox', { name: 'SQL query' }), {
       target: { value: "SELECT count(*) FROM assets WHERE name = 'A' -- note" },
     })
@@ -39,7 +39,7 @@ describe('DatabaseQueryPanel', () => {
     const queryRunner = vi.fn().mockResolvedValue(RESULT)
     render(
       <DatabaseQueryPanel
-        sourceId="market_data"
+        sourceId="retail.sales"
         receipts={[receipt]}
         initialReceiptId={receipt.receiptId}
         queryRunner={queryRunner}
@@ -50,7 +50,7 @@ describe('DatabaseQueryPanel', () => {
 
     fireEvent.keyDown(editor, { key: 'Enter', ctrlKey: true })
     const results = await waitFor(() => screen.getByRole('region', { name: 'SQL results' }))
-    expect(queryRunner).toHaveBeenCalledWith('market_data', receipt.content!.sql, expect.anything())
+    expect(queryRunner).toHaveBeenCalledWith('retail.sales', receipt.content!.sql, expect.anything())
     expect(within(results).getByText('NULL')).toBeVisible()
     expect(within(results).getByText('BIGINT')).toBeVisible()
   })

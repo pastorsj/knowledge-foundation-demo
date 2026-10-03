@@ -4,9 +4,13 @@
 /**
  * Recordings Route
  *
- * Serves the active data pack's replay bundle, read-only, from
- * `$PACKS_DIR/$DATA_PACK/recordings` (e.g. `/api/recordings/index.json`).
- * Only JSON and JSON Lines files inside that directory are served.
+ * Serves each pack's replay bundle, read-only, from `$PACKS_DIR/<pack>/recordings`
+ * (e.g. `/api/recordings/retail/index.json`). Only JSON and JSON Lines files
+ * inside that directory are served, and the pack id must be well formed.
+ *
+ * `/api/recordings/packs.json` lists the packs that have a bundle, as
+ * `GET /v1/packs` lists them (replay mode has no API): each bundle's
+ * `pack.json` is its pack's `PackView`.
  *
  * `index.json` from a bundle recorded before the index listed each session's
  * `tools` gets them derived from the sessions' recorded events.
@@ -15,7 +19,8 @@
 import { readFile, realpath, stat } from 'node:fs/promises'
 import path from 'node:path'
 import { sessionPills, type ToolPillUse } from '@/shared/components/ToolPills'
-import { readRecordingsDir } from '@/shared/config/env'
+import { readRecordedPacks } from '@/adapters/api/pack-client'
+import { isPackId, readRecordingsDir } from '@/shared/config/env'
 
 const CONTENT_TYPES: Record<string, string> = {
   '.json': 'application/json',
@@ -32,13 +37,17 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ path: string[] }> }
 ): Promise<Response> {
-  const segments = (await params).path
+  const [pack, ...segments] = (await params).path
+  if (pack === 'packs.json' && segments.length === 0)
+    return Response.json({ packs: await readRecordedPacks() })
   const contentType = CONTENT_TYPES[path.extname(segments.at(-1) ?? '')]
-  if (!contentType || !segments.every((segment) => SEGMENT.test(segment))) return notFound()
+  if (!isPackId(pack) || !contentType || !segments.every((segment) => SEGMENT.test(segment))) {
+    return notFound()
+  }
 
   try {
     // Resolve symlinks on both sides so a link cannot escape the bundle.
-    const root = await realpath(readRecordingsDir())
+    const root = await realpath(readRecordingsDir(pack))
     const file = await realpath(path.join(root, ...segments))
     if (!file.startsWith(root + path.sep)) return notFound()
     const body =

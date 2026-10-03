@@ -63,7 +63,7 @@ export const useHermesChat = (): UseHermesChatReturn => {
     const content = rawContent.trim()
     if (!content) return
 
-    const dataSources = useLayoutStore.getState().enabledDataSourceIds
+    const { enabledDataSourceIds: dataSources, packId } = useLayoutStore.getState()
     const store = useChatStore.getState()
     store.addUserMessage(content, { enabledDataSources: dataSources })
 
@@ -85,7 +85,7 @@ export const useHermesChat = (): UseHermesChatReturn => {
     store.setCurrentStatus('thinking')
     store.setStreaming(true)
 
-    submitJob({ input: content, conversationId, dataSources, jobId })
+    submitJob({ input: content, conversationId, dataSources, jobId, packId })
       .then(({ job_id: admittedJobId }) => {
         if (!acceptsResultsRef.current) return
         if (admittedJobId !== jobId) {

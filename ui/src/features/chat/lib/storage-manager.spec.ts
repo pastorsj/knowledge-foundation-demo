@@ -34,7 +34,7 @@ const setStoreData = (conversations: Conversation[], currentId: string | null = 
     },
     version: 0,
   }
-  localStorage.setItem('aiq-chat-store', JSON.stringify(storeData))
+  localStorage.setItem('kf-chat-store', JSON.stringify(storeData))
 }
 
 describe('storage-manager', () => {
@@ -64,7 +64,7 @@ describe('storage-manager', () => {
 
   describe('checkStorageHealth', () => {
     test('returns healthy when under threshold', () => {
-      localStorage.setItem('aiq-chat-store', 'small data')
+      localStorage.setItem('kf-chat-store', 'small data')
 
       const health = checkStorageHealth()
 
@@ -75,7 +75,7 @@ describe('storage-manager', () => {
 
     test('returns unhealthy when over threshold', () => {
       const largeData = 'x'.repeat(2_500_000) // ~5MB
-      localStorage.setItem('aiq-chat-store', largeData)
+      localStorage.setItem('kf-chat-store', largeData)
 
       const health = checkStorageHealth()
 
@@ -167,7 +167,7 @@ describe('storage-manager', () => {
 
       cleanupOldSessions('s_current', 'user1')
 
-      const stored = JSON.parse(localStorage.getItem('aiq-chat-store') || '{}')
+      const stored = JSON.parse(localStorage.getItem('kf-chat-store') || '{}')
       const remainingIds = stored.state?.conversations?.map((c: Conversation) => c.id) || []
 
       expect(remainingIds).toContain('s_current')
@@ -208,13 +208,13 @@ describe('storage-manager', () => {
     })
 
     test('does not throw error when storage is healthy', () => {
-      localStorage.setItem('aiq-chat-store', '{"state":{"conversations":[]}}')
+      localStorage.setItem('kf-chat-store', '{"state":{"conversations":[]}}')
 
       expect(() => ensureStorageCapacity(null, null)).not.toThrow()
     })
 
     test('accepts userId parameter', () => {
-      localStorage.setItem('aiq-chat-store', '{"state":{"conversations":[]}}')
+      localStorage.setItem('kf-chat-store', '{"state":{"conversations":[]}}')
 
       expect(() => ensureStorageCapacity('s_1', 'user1')).not.toThrow()
     })

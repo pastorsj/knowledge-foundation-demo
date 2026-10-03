@@ -2,24 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { FC } from 'react'
+import type { NodeIcon } from './graph-model'
 
-type ExecutionNodeIconProps = {
-  kind:
-    | 'question'
-    | 'router'
-    | 'model'
-    | 'agent'
-    | 'tools'
-    | 'prediction'
-    | 'ontology'
-    | 'database'
-    | 'table'
-    | 'retrieval'
-    | 'analytics'
-    | 'synthesis'
-    | 'report'
-    | 'answer'
-}
+type ExecutionNodeIconProps = { kind: NodeIcon }
 
 const Dot = ({ cx, cy, r = 2.2 }: { cx: number; cy: number; r?: number }) => (
   <circle cx={cx} cy={cy} r={r} fill="currentColor" />
@@ -89,14 +74,28 @@ export const ExecutionNodeIcon: FC<ExecutionNodeIconProps> = ({ kind }) => {
     )
   }
 
-  if (kind === 'analytics') {
+  if (kind === 'parse') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 19h16M6 16v-4M11 16V8M16 16V5M5 9l5-3 5 1 4-4" />
-        <Dot cx={5} cy={9} />
-        <Dot cx={10} cy={6} />
-        <Dot cx={15} cy={7} />
-        <Dot cx={19} cy={3} />
+        <path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h4M3 14h18" />
+      </svg>
+    )
+  }
+
+  if (kind === 'embed') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 19 19 5M13 5h6v6M5 12v7h7" />
+        <Dot cx={5} cy={19} />
+        <Dot cx={19} cy={5} />
+      </svg>
+    )
+  }
+
+  if (kind === 'rerank') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 6h10M4 12h7M4 18h4M17 5v14M14 16l3 3 3-3" />
       </svg>
     )
   }

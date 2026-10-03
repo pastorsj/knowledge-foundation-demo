@@ -11,8 +11,8 @@
  * |--------------|-----------------------|-------------------------------------------------|
  * | `UI_MODE`    | `live`                | `live` talks to the API; `replay` never does     |
  * | `API_URL`    | `http://api:8000`     | Base URL of the demo API (server-side only)      |
- * | `PACKS_DIR`  | `/packs`              | Directory holding the data packs                 |
- * | `DATA_PACK`  | `synthetic-market`    | Active pack; recordings are read from its folder |
+ * | `PACKS_DIR`  | `/packs`              | Directory of the packs (their replay bundles)    |
+ * | `DEFAULT_PACK` | `retail`            | The pack shown until the user picks another      |
  * | `PHOENIX_URL`| unset                 | Browser-reachable Phoenix UI; unset hides links  |
  * | `SPEECH_INPUT_ENABLED` | `false`     | Show the microphone (live mode; the API transcribes) |
  * | `SPEECH_INPUT_MAX_SECONDS` | `60`    | Longest recording, 1 to 90 seconds               |
@@ -20,10 +20,16 @@
 
 import path from 'node:path'
 import type { AppConfig, UiMode } from '@/shared/context'
+import { getFileUploadConfigFromEnv } from './file-upload'
 
 type Env = Record<string, string | undefined>
 
-const PACK_ID = /^[a-z0-9][a-z0-9-]*$/
+/** A pack id, as the API's catalog has them (`retail`, `financial-services`, `workspace`). */
+export const PACK_ID = /^[a-z][a-z0-9-]{0,63}$/
+
+/** Whether a value is a well-formed pack id. */
+export const isPackId = (value: unknown): value is string =>
+  typeof value === 'string' && PACK_ID.test(value)
 
 const readMode = (env: Env): UiMode => {
   const value = env.UI_MODE?.trim() || 'live'
@@ -53,6 +59,7 @@ export const readAppConfig = (env: Env = process.env): AppConfig => {
   const mode = readMode(env)
   return {
     mode,
+    defaultPack: readDefaultPack(env),
     phoenixUrl: phoenixUrl ? readHttpUrl('PHOENIX_URL', phoenixUrl) : null,
     speechInput: {
       // Replay never calls the API, so it has no transcription
@@ -61,7 +68,14 @@ export const readAppConfig = (env: Env = process.env): AppConfig => {
         ['true', '1', 'yes', 'on'].includes(env.SPEECH_INPUT_ENABLED?.trim().toLowerCase() ?? ''),
       maxSeconds: readMaxSeconds(env),
     },
+    fileUpload: getFileUploadConfigFromEnv(env as NodeJS.ProcessEnv),
   }
+}
+
+/** FILE_UPLOAD_MAX_REQUEST_MB: the largest upload request the proxy forwards (default 512 MB). */
+export const readMaxUploadRequestBytes = (env: Env = process.env): number => {
+  const raw = Number(env.FILE_UPLOAD_MAX_REQUEST_MB?.trim() || 512)
+  return (Number.isFinite(raw) && raw > 0 ? raw : 512) * 1024 * 1024
 }
 
 export const readUiMode = (env: Env = process.env): UiMode => readMode(env)
@@ -69,11 +83,19 @@ export const readUiMode = (env: Env = process.env): UiMode => readMode(env)
 export const readApiUrl = (env: Env = process.env): string =>
   readHttpUrl('API_URL', env.API_URL?.trim() || 'http://api:8000')
 
-/** `$PACKS_DIR/$DATA_PACK/recordings`: the replay bundle of the active data pack. */
-export const readRecordingsDir = (env: Env = process.env): string => {
-  const pack = env.DATA_PACK?.trim() || 'synthetic-market'
-  if (!PACK_ID.test(pack)) {
-    throw new Error(`DATA_PACK must match ${PACK_ID}, got "${pack}"`)
-  }
-  return path.resolve(env.PACKS_DIR?.trim() || '/packs', pack, 'recordings')
+/** `DEFAULT_PACK`: the pack shown until the user picks another (`?pack=`, cookie `kf-pack`). */
+export const readDefaultPack = (env: Env = process.env): string => {
+  const pack = env.DEFAULT_PACK?.trim() || 'retail'
+  if (!isPackId(pack)) throw new Error(`DEFAULT_PACK must match ${PACK_ID}, got "${pack}"`)
+  return pack
+}
+
+/** `$PACKS_DIR`: the directory of the packs, each with its replay bundle in `<pack>/recordings`. */
+export const readPacksDir = (env: Env = process.env): string =>
+  path.resolve(env.PACKS_DIR?.trim() || '/packs')
+
+/** `$PACKS_DIR/<pack>/recordings`: a pack's replay bundle. */
+export const readRecordingsDir = (pack: string, env: Env = process.env): string => {
+  if (!isPackId(pack)) throw new Error(`A pack id must match ${PACK_ID}, got "${pack}"`)
+  return path.join(readPacksDir(env), pack, 'recordings')
 }

@@ -7,7 +7,13 @@
  * Re-exports all shared context providers and hooks.
  */
 
-export { AppConfigProvider, useAppConfig, type AppConfig, type UiMode } from './AppConfigContext'
+export {
+  AppConfigProvider,
+  useAppConfig,
+  type AppConfig,
+  type FileUploadConfig,
+  type UiMode,
+} from './AppConfigContext'
 export {
   ExecutionFeatureProvider,
   noExecutionFeature,

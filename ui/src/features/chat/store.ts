@@ -181,6 +181,7 @@ const initialState: ChatState = {
 const createNewConversation = (userId: string): Conversation => ({
   id: `s_${uuidv4().replace(/-/g, '_')}`,
   userId,
+  packId: useLayoutStore.getState().packId,
   title: '',
   messages: [],
   createdAt: new Date(),
@@ -267,6 +268,15 @@ const getDefaultEnabledDataSourceIds = (): string[] =>
 
 const restoreConversationDataSources = (conversation: Conversation): void => {
   const layoutStore = useLayoutStore.getState()
+
+  // A session asked in another pack brings its pack back, with its sources, rather than losing them
+  if (conversation.packId && layoutStore.packId && conversation.packId !== layoutStore.packId) {
+    void layoutStore.switchPack(conversation.packId, {
+      draft: false,
+      enabledIds: conversation.enabledDataSourceIds,
+    })
+    return
+  }
 
   if (conversation.enabledDataSourceIds) {
     // Only restore sources that are still available.
@@ -1002,7 +1012,7 @@ export const useChatStore = create<ChatStore>()(
         }
       },
       {
-        name: 'aiq-chat-store',
+        name: 'kf-chat-store',
         storage: typeof window === 'undefined' ? undefined : createResilientStorage(),
         partialize: (state) => ({
           // Persist conversations and user context, not streaming state
@@ -1026,7 +1036,7 @@ if (typeof window !== 'undefined') {
 
   // Monitor storage events from other tabs or browser extensions
   window.addEventListener('storage', (event) => {
-    if (event.key !== 'aiq-chat-store') return
+    if (event.key !== 'kf-chat-store') return
     logExternalStorageEvent(event.key, event.oldValue, event.newValue)
     if (event.oldValue !== null && event.newValue === null) {
       console.error(

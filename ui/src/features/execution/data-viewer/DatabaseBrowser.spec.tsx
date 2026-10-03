@@ -8,11 +8,11 @@ import type { StructuredQueryReceipt } from '../contract'
 import { receiptOf } from '../test-utils/fixtures'
 import { DatabaseBrowser } from './DatabaseBrowser'
 
-const SOURCE = { id: 'market_data', name: 'Market data', databaseName: 'market_analysis' }
+const SOURCE = { id: 'retail.sales', name: 'Sales', databaseName: 'retail_sales' }
 
 const SCHEMA = {
-  source_id: 'market_data',
-  database_name: 'market_analysis',
+  source_id: 'retail.sales',
+  database_name: 'retail_sales',
   tables: [
     {
       name: 'assets',
@@ -85,7 +85,7 @@ describe('DatabaseBrowser', () => {
 
     const dialog = screen.getByRole('dialog', { name: 'Structured Database browser' })
     expect(within(dialog).getByText('Physical data source')).toBeVisible()
-    expect(within(dialog).getByText('Market data')).toBeVisible()
+    expect(within(dialog).getByText('Sales')).toBeVisible()
     const rail = await screen.findByRole('complementary', { name: 'Database tables' })
     expect(within(rail).getByText('2 tables')).toBeVisible()
     expect(within(rail).getByRole('button', { name: /^main\s*assets/ })).toHaveAttribute(
@@ -100,7 +100,7 @@ describe('DatabaseBrowser', () => {
     )
     expect(await screen.findByTestId('database-sample-rows')).toHaveTextContent('asset-delta')
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/v1/data_sources/market_data/preview?table=assets&limit=8',
+      '/api/v1/data_sources/retail.sales/preview?table=assets&limit=8',
       expect.anything()
     )
   })
@@ -125,7 +125,7 @@ describe('DatabaseBrowser', () => {
     )
   })
 
-  it('opens on an Auto Ontology call’s SQL', async () => {
+  it('opens on a table query’s SQL', async () => {
     serveApi()
     const receipt: StructuredQueryReceipt = receiptOf('structured_query')
     renderBrowser({ receipts: [receipt], initialReceipt: receipt })

@@ -127,14 +127,14 @@ body {
   .nv-side-panel-content.nv-side-panel-content--side-left {
     transform: translate(-100%);
   }
-  .nv-side-panel-content.nv-side-panel-content--side-left[data-state="open"] {
+  .nv-side-panel-content.nv-side-panel-content--side-left[data-state='open'] {
     transform: translate(0);
   }
 
   .nv-side-panel-content.nv-side-panel-content--side-right {
     transform: translate(100%);
   }
-  .nv-side-panel-content.nv-side-panel-content--side-right[data-state="open"] {
+  .nv-side-panel-content.nv-side-panel-content--side-right[data-state='open'] {
     transform: translate(0);
   }
 
@@ -142,12 +142,12 @@ body {
     opacity: 0;
     pointer-events: none;
   }
-  .nv-side-panel-overlay[data-state="open"] {
+  .nv-side-panel-overlay[data-state='open'] {
     opacity: 1;
     pointer-events: auto;
   }
 
-  .nv-collapsible-content[data-state="closed"] {
+  .nv-collapsible-content[data-state='closed'] {
     height: 0;
   }
 }
@@ -280,7 +280,11 @@ body {
 /* Opaque variant for chat bubbles - ensures full opacity to prevent bleed-through in light theme */
 @utility bg-surface-sunken-opaque {
   /* Force 100% opacity using color-mix, preventing transparency bleed-through */
-  background-color: color-mix(in srgb, var(--background-color-surface-sunken) 100%, var(--background-color-surface-base));
+  background-color: color-mix(
+    in srgb,
+    var(--background-color-surface-sunken) 100%,
+    var(--background-color-surface-base)
+  );
 }
 
 /* Background utilities with opacity variants */
@@ -467,7 +471,9 @@ body.activity-panel-resizing * {
   font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
-  transition: color 120ms ease, border-color 120ms ease;
+  transition:
+    color 120ms ease,
+    border-color 120ms ease;
 }
 .result-chart-tool:hover {
   color: var(--text-color-primary);
@@ -835,7 +841,6 @@ body.activity-panel-resizing * {
   .agent-final-response {
     animation: none;
   }
-
 }
 
 /* =============================================================================
@@ -876,17 +881,15 @@ body.activity-panel-resizing * {
   color: var(--color-brand);
 }
 
-/* Technology pills (shared/components/ToolPills): tinted like .brand-chip, in RAPIDS purple (the RAPIDS logo's
-   #7400ff) for the market tools' libraries and NVIDIA green for the rest. The tint is opaque over the raised
-   surface, so a highlighted row does not change it, and the text shade keeps WCAG AA contrast against it in each
-   theme (dark: 5.1:1 purple, 6.4:1 green; light: 5.3:1 purple, 5.4:1 green). */
+/* Technology pills (shared/components/ToolPills): tinted like .brand-chip, in NVIDIA green for NVIDIA
+   technologies and in the secondary text color for partner technologies (DuckDB). The tint is opaque over the
+   raised surface, so a highlighted row does not change it, and the text shade keeps WCAG AA contrast against it
+   in each theme. */
 :where(:root, .nv-light) {
-  --tool-pill-rapids-text: #7400ff;
   --tool-pill-nvidia-text: var(--color-green-600);
 }
 
 .nv-dark {
-  --tool-pill-rapids-text: color-mix(in srgb, #7400ff 60%, #ffffff);
   --tool-pill-nvidia-text: var(--color-brand);
 }
 
@@ -917,9 +920,9 @@ body.activity-panel-resizing * {
   white-space: nowrap;
 }
 
-.tool-pill[data-family='rapids'] {
-  --tool-pill-color: #7400ff;
-  color: var(--tool-pill-rapids-text);
+.tool-pill[data-family='partner'] {
+  --tool-pill-color: var(--text-color-secondary);
+  color: var(--text-color-primary);
 }
 
 .assistant-turn {

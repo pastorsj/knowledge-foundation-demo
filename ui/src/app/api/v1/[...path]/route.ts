@@ -11,21 +11,33 @@
  * else, including the sandbox-only `/internal/**` routes, is a 404. Responses,
  * including Server-Sent Event streams, are passed through unbuffered. A voice
  * recording (`speech/transcriptions`) is forwarded as bytes, up to 3 MiB.
+ *
+ * Your data's documents routes (AI-Q's contract, which the API forwards to the
+ * ingest service) are allowed too. An upload's multipart body is streamed, not
+ * buffered, with its content type (and so its boundary), and is cut off with a
+ * 413 past FILE_UPLOAD_MAX_REQUEST_MB.
  */
 
-import { readApiUrl, readUiMode } from '@/shared/config/env'
+import { readApiUrl, readMaxUploadRequestBytes, readUiMode } from '@/shared/config/env'
 
-type Method = 'GET' | 'POST'
+type Method = 'GET' | 'POST' | 'DELETE'
 
 /** The API routes the UI may call, matched against the path after `/v1/`. */
 const ROUTES: ReadonlyArray<readonly [Method, RegExp]> = [
   ['GET', /^pack$/],
+  ['GET', /^packs$/],
+  ['GET', /^collections(\/[^/]+)?$/],
+  ['POST', /^collections$/],
+  ['DELETE', /^collections\/[^/]+$/],
+  ['GET', /^collections\/[^/]+\/documents$/],
+  ['POST', /^collections\/[^/]+\/documents$/],
+  ['DELETE', /^collections\/[^/]+\/documents$/],
+  ['GET', /^documents\/[^/]+\/status$/],
   ['GET', /^data_sources(\/.+)?$/],
   ['POST', /^data_sources\/[^/]+\/query$/],
   ['POST', /^jobs\/async\/submit$/],
   ['GET', /^jobs\/async\/job\/[^/]+(\/.+)?$/],
   ['POST', /^jobs\/async\/job\/[^/]+\/cancel$/],
-  ['POST', /^jobs\/async\/job\/[^/]+\/benchmark$/],
   ['POST', /^speech\/transcriptions$/],
 ]
 
@@ -51,6 +63,41 @@ const resolveTarget = (method: Method, segments: string[], search: string): stri
   const path = segments.join('/')
   if (!ROUTES.some(([allowed, pattern]) => allowed === method && pattern.test(path))) return null
   return `${readApiUrl()}/v1/${path}${search}`
+}
+
+/** An upload: a multipart body of files for a collection. */
+const UPLOAD = /^collections\/[^/]+\/documents$/
+
+const tooLarge = (): Response =>
+  errorResponse(413, 'UPLOAD_TOO_LARGE', 'The upload is larger than this deployment accepts')
+
+/** The upload's body as it arrives, failing once it passes `limit` bytes (and saying so in `cut`). */
+const boundedStream = (
+  body: ReadableStream<Uint8Array>,
+  limit: number,
+  cut: { exceeded: boolean }
+): ReadableStream => {
+  let received = 0
+  return body.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        received += chunk.byteLength
+        if (received <= limit) return controller.enqueue(chunk)
+        cut.exceeded = true
+        controller.error(new RangeError('The upload is too large'))
+      },
+    })
+  )
+}
+
+/** An upload's body, streamed and bounded; a declared length past the limit is refused at once. */
+const readUpload = (request: Request, cut: { exceeded: boolean }): BodyInit | Response => {
+  const limit = readMaxUploadRequestBytes()
+  if (!request.headers.get('content-type')?.toLowerCase().startsWith('multipart/form-data')) {
+    return errorResponse(415, 'UNSUPPORTED_UPLOAD', 'An upload is a multipart form of files')
+  }
+  if (Number(request.headers.get('content-length') ?? 0) > limit) return tooLarge()
+  return request.body ? boundedStream(request.body, limit, cut) : ''
 }
 
 /** The request body to forward: text, or a bounded voice recording as bytes. */
@@ -80,8 +127,14 @@ const proxy = async (
   const segments = (await params).path
   const target = resolveTarget(method, segments, new URL(request.url).search)
   if (!target) return errorResponse(404, 'NOT_FOUND', 'Not found')
-  const body =
-    method === 'POST' ? await readBody(request, segments.join('/') === SPEECH_PATH) : undefined
+  const path = segments.join('/')
+  const upload = method === 'POST' && UPLOAD.test(path)
+  const cut = { exceeded: false }
+  const body = upload
+    ? readUpload(request, cut)
+    : method === 'GET'
+      ? undefined
+      : await readBody(request, path === SPEECH_PATH)
   if (body instanceof Response) return body
 
   const headers = new Headers()
@@ -99,8 +152,11 @@ const proxy = async (
       cache: 'no-store',
       // Closing the browser stream closes the upstream SSE connection.
       signal: request.signal,
-    })
+      // A streamed upload is sent as it arrives (Node's fetch requires saying so)
+      ...(upload ? { duplex: 'half' } : {}),
+    } as RequestInit)
   } catch {
+    if (cut.exceeded) return tooLarge()
     return errorResponse(502, 'PROXY_ERROR', 'The API is unavailable')
   }
 
@@ -126,3 +182,6 @@ export const GET = (request: Request, { params }: RouteContext): Promise<Respons
 
 export const POST = (request: Request, { params }: RouteContext): Promise<Response> =>
   proxy(request, 'POST', params)
+
+export const DELETE = (request: Request, { params }: RouteContext): Promise<Response> =>
+  proxy(request, 'DELETE', params)

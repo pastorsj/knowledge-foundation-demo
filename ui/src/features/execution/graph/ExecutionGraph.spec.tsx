@@ -4,13 +4,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within } from '@/test-utils'
 import { projectRun } from '../projection'
-import { fixtureEvents, receiptOf } from '../test-utils/fixtures'
+import { fixtureEvents, fixtureReceipts } from '../test-utils/fixtures'
 import { ExecutionGraph, fitObservedExecutionNodes } from './ExecutionGraph'
-import { buildGpuAccelerationByNode } from './gpu-acceleration'
 import { toGraphEvent, toGraphProjection } from './graph-events'
 import { buildExecutionGraphViewModel } from './graph-model'
 
-const events = fixtureEvents.map(toGraphEvent)
+const receipts = Object.fromEntries(fixtureReceipts.map((receipt) => [receipt.receiptId, receipt]))
+const events = fixtureEvents.map((event) => toGraphEvent(event, receipts))
 const model = buildExecutionGraphViewModel({
   allEvents: events,
   visibleEvents: events,
@@ -18,6 +18,7 @@ const model = buildExecutionGraphViewModel({
 })
 const LOGOS = new Map([
   ['retriever-tool', [{ brand: 'LangChain', src: '/ecosystem-logos/langchain.svg' }]],
+  ['milvus', [{ brand: 'Milvus', src: '/ecosystem-logos/milvus.svg' }]],
 ])
 
 describe('ExecutionGraph', () => {
@@ -29,7 +30,7 @@ describe('ExecutionGraph', () => {
         .getAllByRole('listitem')
         .map((item) => item.textContent)
     ).toEqual(['Available now', 'Activated in this run', 'Never activated'])
-    expect(container.querySelectorAll('[data-group-id]')).toHaveLength(5)
+    expect(container.querySelectorAll('[data-group-id]')).toHaveLength(4)
     expect(container.querySelectorAll('[data-execution-node="true"]')).toHaveLength(25)
     expect(container.querySelectorAll('[data-edge-id]')).toHaveLength(model.edges.length)
 
@@ -41,41 +42,47 @@ describe('ExecutionGraph', () => {
   it('opens inspectable nodes the run used, and only those', () => {
     const onNodeSelect = vi.fn()
     render(<ExecutionGraph model={model} onNodeSelect={onNodeSelect} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Inspect Market Anomaly Scan' }))
-    expect(onNodeSelect).toHaveBeenCalledWith('market-anomaly-scan')
-    expect(screen.queryByRole('button', { name: 'Inspect Market Scan' })).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Inspect Structured Retrieval' }))
+    expect(onNodeSelect).toHaveBeenCalledWith('structured-retrieval')
+    fireEvent.click(screen.getByRole('button', { name: 'Inspect DuckDB Tables' }))
+    expect(onNodeSelect).toHaveBeenCalledWith('structured-database')
+    expect(screen.queryByRole('button', { name: 'Inspect NVIDIA Kumo' })).toBeNull()
     expect(screen.queryByRole('button', { name: /Inspect Retrieve Evidence/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: /Inspect Milvus/ })).toBeNull()
   })
 
-  it('draws the LangChain logo on Retrieve Evidence and the GPU badge from receipts', () => {
+  it('draws the logos of the technologies behind a node, the DuckDB mark and the NVIDIA mark', () => {
     const { container } = render(
       <ExecutionGraph
         model={model}
         nodeLogos={LOGOS}
-        gpuAccelerations={buildGpuAccelerationByNode([receiptOf('analytics_result')])}
+        structuredDatabaseProviderMark={{
+          src: '/capability-assets/provider-duckdb.svg',
+          alt: 'DuckDB',
+        }}
       />
     )
-    const retrieval = container.querySelector('[data-node-id="retriever-tool"]') as HTMLElement
-    expect(within(retrieval).getByRole('img', { name: 'LangChain' })).toHaveAttribute(
+    const node = (id: string) => container.querySelector(`[data-node-id="${id}"]`) as HTMLElement
+    expect(within(node('retriever-tool')).getByRole('img', { name: 'LangChain' })).toHaveAttribute(
       'src',
       '/ecosystem-logos/langchain.svg'
     )
-    expect(screen.getAllByTestId('gpu-acceleration-badge')).toHaveLength(1)
-    expect(screen.getByTestId('gpu-legend-badge')).toBeInTheDocument()
-    expect(container.querySelector('[data-node-id="market-anomaly-scan"]')).toHaveAttribute(
-      'data-gpu-accelerated',
-      'true'
-    )
+    expect(within(node('milvus')).getByRole('img', { name: 'Milvus' })).toBeInTheDocument()
+    expect(within(node('structured-database')).getByRole('img', { name: 'DuckDB' })).toBeVisible()
+    for (const id of ['nemotron-parse', 'nemotron-embed', 'nemotron-rerank', 'nvidia-kumo']) {
+      expect(within(node(id)).getByRole('img', { name: 'NVIDIA' }), id).toBeInTheDocument()
+    }
+    expect(within(node('milvus')).queryByRole('img', { name: 'NVIDIA' })).toBeNull()
   })
 
-  it('fits the observed market cluster and its return point', () => {
+  it('fits the observed nodes into the viewport, no larger than the initial zoom', () => {
     const fitted = fitObservedExecutionNodes({
       nodes: model.nodes,
       viewportWidth: 1000,
       viewportHeight: 600,
       maxZoom: 0.86,
     })
-    expect(fitted?.zoom).toBeGreaterThanOrEqual(0.58)
+    expect(fitted?.zoom).toBeGreaterThanOrEqual(0.28)
     expect(fitted?.zoom).toBeLessThanOrEqual(0.86)
   })
 })

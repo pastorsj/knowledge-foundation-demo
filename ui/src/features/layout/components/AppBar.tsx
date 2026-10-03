@@ -5,14 +5,14 @@
  * AppBar Component
  *
  * Top navigation bar with the logo (new session), session title, and actions:
- * data sources, the Phoenix trace viewer (when configured; shown disabled in
+ * the industry selector, data sources, the Phoenix trace viewer (when configured; shown disabled in
  * replay, which has no traces), theme, and the Default User avatar (the demo
  * has no sign-in).
  */
 
 'use client'
 
-import { type FC, memo, useCallback, useEffect, useState } from 'react'
+import { type FC, type ReactNode, memo, useCallback, useEffect, useState } from 'react'
 import { Flex, Text, Button, Logo, Avatar, Popover, Divider, Tooltip } from '@/adapters/ui'
 import { Globe, Info, Moon, OpenExternal, Sun } from '@/adapters/ui/icons'
 import { useAppConfig } from '@/shared/context'
@@ -31,6 +31,8 @@ interface AppBarProps {
   isNewSessionDisabled?: boolean
   /** Disable the data sources action (replay mode: recorded sessions are read only) */
   isDataSourceSelectionDisabled?: boolean
+  /** The industry selector, the right group's first item */
+  industrySelect?: ReactNode
 }
 
 /**
@@ -42,6 +44,7 @@ export const AppBar: FC<AppBarProps> = memo(function AppBar({
   newSessionActionLabel = 'Create new session',
   isNewSessionDisabled = false,
   isDataSourceSelectionDisabled = false,
+  industrySelect = null,
 }) {
   const { mode, phoenixUrl } = useAppConfig()
   const rightPanel = useLayoutStore((s) => s.rightPanel)
@@ -115,6 +118,7 @@ export const AppBar: FC<AppBarProps> = memo(function AppBar({
 
         {/* Right section: Actions */}
         <Flex align="center" gap="2" className="shrink-0">
+          {industrySelect}
           <Button
             kind="tertiary"
             size="small"

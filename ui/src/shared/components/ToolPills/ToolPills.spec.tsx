@@ -17,38 +17,28 @@ describe('ToolPills', () => {
     expect(PILL_ORDER).toEqual(schema.$defs.Pill.enum)
   })
 
-  test('shows the pills in order, colored by family, and names a CPU run truthfully', () => {
+  test('shows the pills in order, colored by family', () => {
     render(
       <ToolPills
-        pills={[
-          { pill: 'retrieval' },
-          { pill: 'cuml', device: 'cpu' },
-          { pill: 'cudf', device: 'gpu' },
-          { pill: 'kumo' },
-        ]}
+        pills={[{ pill: 'ontology' }, { pill: 'kumo' }, { pill: 'duckdb' }, { pill: 'retrieval' }]}
       />
     )
 
     const pills = screen.getByTestId('tool-pills').querySelectorAll('.tool-pill')
     expect([...pills].map((pill) => [pill.textContent, pill.getAttribute('data-family')])).toEqual([
-      ['cuDF', 'rapids'],
-      ['scikit-learn', 'rapids'],
-      ['Kumo', 'nvidia'],
       ['Retrieval', 'nvidia'],
+      ['DuckDB', 'partner'],
+      ['Kumo', 'nvidia'],
+      ['Ontology', 'nvidia'],
     ])
-    expect(pillLabel({ pill: 'cugraph', device: 'cpu' })).toBe('NetworkX')
-    expect(pillLabel({ pill: 'cugraph', device: null })).toBe('cuGraph')
+    expect(pillLabel({ pill: 'duckdb' })).toBe('DuckDB')
   })
 
   test('a pill from a run lists the tools behind it on hover', async () => {
-    render(
-      <ToolPills
-        pills={[{ pill: 'cudf', device: 'gpu', tools: ['market_scan', 'price_context'] }]}
-      />
-    )
+    render(<ToolPills pills={[{ pill: 'duckdb', tools: ['query_tables'] }]} />)
 
-    await userEvent.hover(screen.getByText('cuDF'))
-    expect((await screen.findAllByText('Market Scan, Price Context')).length).toBeGreaterThan(0)
+    await userEvent.hover(screen.getByText('DuckDB'))
+    expect((await screen.findAllByText('Table Query')).length).toBeGreaterThan(0)
   })
 
   test('nothing to show without pills', () => {

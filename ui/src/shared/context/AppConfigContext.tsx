@@ -29,15 +29,37 @@ export interface SpeechInputConfig {
   maxSeconds: number
 }
 
+/** File upload limits and accepted types (FILE_UPLOAD_*), as upstream AI-Q reads them. */
+export interface FileUploadConfig {
+  /** Accepted extensions, comma-separated, for file inputs */
+  acceptedTypes: string
+  /** Accepted MIME types, for drag-and-drop feedback */
+  acceptedMimeTypes: string[]
+  /** FILE_UPLOAD_MAX_SIZE_MB */
+  maxTotalSizeMB: number
+  /** Largest file, in bytes */
+  maxFileSize: number
+  /** Largest upload, in bytes */
+  maxTotalSize: number
+  /** Most files per upload (FILE_UPLOAD_MAX_FILE_COUNT) */
+  maxFileCount: number
+  /** Hours before an uploaded file may expire; 0 shows no expiry */
+  fileExpirationCheckIntervalHours: number
+}
+
 /**
  * Runtime configuration passed from server to client
  */
 export interface AppConfig {
   /** Whether the UI talks to the API or replays recordings (UI_MODE) */
   mode: UiMode
+  /** The pack shown until the user picks another (DEFAULT_PACK) */
+  defaultPack: string
   /** Browser-reachable Phoenix UI (PHOENIX_URL); null hides the Phoenix link */
   phoenixUrl: string | null
   speechInput: SpeechInputConfig
+  /** Your data: what the composer and the Files tab accept */
+  fileUpload: FileUploadConfig
 }
 
 const AppConfigContext = createContext<AppConfig | null>(null)

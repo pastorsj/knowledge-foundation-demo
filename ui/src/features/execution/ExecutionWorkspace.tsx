@@ -13,14 +13,9 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { selectPackDatabaseName, useLayoutStore } from '@/features/layout/store'
+import { useLayoutStore } from '@/features/layout/store'
 import { useAppConfig, type ExecutionFocus, type ExecutionWorkspaceProps } from '@/shared/context'
-import type {
-  AnalyticsResultReceipt,
-  ExecutionEventV2,
-  ReceiptV2,
-  StructuredQueryReceipt,
-} from './contract'
+import type { ExecutionEventV2, ReceiptV2, StructuredQueryReceipt } from './contract'
 import { DatabaseBrowser, type StructuredSource } from './data-viewer/DatabaseBrowser'
 import {
   loadReplayDatabase,
@@ -30,13 +25,11 @@ import {
 } from './data-viewer/database-client'
 import styles from './execution-workspace.module.css'
 import { EvidenceInspector } from './explorers/EvidenceInspector'
-import { MarketToolExplorer } from './explorers/MarketToolExplorer'
 import { OntologyLineageInspector } from './explorers/OntologyLineageInspector'
 import { elapsedMs } from './format'
 import {
   buildExecutionGraphViewModel,
   buildExecutionNodeDetail,
-  buildGpuAccelerationByNode,
   ExecutionGraph,
   isInspectableExecutionNodeState,
   isInspectableNode,
@@ -55,8 +48,7 @@ import {
   type RunProjection,
   type ToolCall,
 } from './projection'
-import { OPERATION_LABELS } from './receipt-summary'
-import { TOOL_LOGOS, toolFor, type NodeLogo } from './registry'
+import { RESOURCE_LOGOS, TOOL_LOGOS, toolFor, type NodeLogo } from './registry'
 import { ReplayControls } from './replay/ReplayControls'
 import { loadJobExport } from './replay/sources'
 import { useReplay } from './replay/use-replay'
@@ -67,7 +59,7 @@ type ReplayScopeState = 'future' | 'between' | 'past'
 
 const NO_EVENTS: ExecutionEventV2[] = []
 const NO_RECEIPTS: Record<string, ReceiptV2> = {}
-/** Every data pack's structured source is a DuckDB database. */
+/** Every structured source is a DuckDB database. */
 const DUCKDB_MARK = { src: '/capability-assets/provider-duckdb.svg', alt: 'DuckDB' }
 
 /**
@@ -117,36 +109,12 @@ const nodeOfCall = (
     .flatMap((event) => nodeIdsForEvent(toGraphEvent(event)))
     .find((nodeId): nodeId is InspectableExecutionNodeId => isInspectableNode(nodeId)) ?? null
 
-/** Structured sources the run's receipts name. */
-const structuredSourcesOf = (receipts: Record<string, ReceiptV2>): string[] => [
-  ...new Set(
-    Object.values(receipts).flatMap((receipt) =>
-      receipt.artifactKind === 'analytics_result' && receipt.content
-        ? [receipt.content.sourceId]
-        : []
-    )
-  ),
-]
-
-/** The market analytics nodes, each explored one call at a time. */
-const MARKET_NODES: ReadonlySet<InspectableExecutionNodeId> = new Set([
-  'market-scan',
-  'market-anomaly-scan',
-  'price-context',
-  'sentiment-timeline',
-  'news-price-relationship',
-  'market-relationship-analysis',
-])
-
-const isAnalytics = (receipt: ReceiptV2): receipt is AnalyticsResultReceipt =>
-  receipt.artifactKind === 'analytics_result'
-
 const isStructuredQuery = (receipt: ReceiptV2): receipt is StructuredQueryReceipt =>
   receipt.artifactKind === 'structured_query'
 
 /**
  * The structured sources the data viewer can browse: the pack's sources with a
- * database that the question selected or a receipt read.
+ * database that the question selected, a prediction read or a query ran on.
  */
 const browsableSources = (
   available: ReadonlyArray<{ id: string; name: string; database_name?: string | null }>,
@@ -156,7 +124,9 @@ const browsableSources = (
   const used = new Set([
     ...sourceIds,
     ...receipts.flatMap((receipt) =>
-      isAnalytics(receipt) && receipt.content ? [receipt.content.sourceId] : []
+      receipt.artifactKind === 'structured_prediction' && receipt.content
+        ? [receipt.content.sourceId]
+        : []
     ),
   ])
   const databases = new Set(
@@ -171,13 +141,16 @@ const browsableSources = (
   )
 }
 
-/** The logos of each node whose tool is built on a library, from the registry. */
-const NODE_LOGOS: ReadonlyMap<string, readonly NodeLogo[]> = new Map(
-  Object.entries(TOOL_LOGOS).flatMap(([toolId, logos]) => {
+/** The logos of each node whose tool or resource is built on a library, from the registry. */
+const NODE_LOGOS: ReadonlyMap<string, readonly NodeLogo[]> = new Map([
+  ...Object.entries(TOOL_LOGOS).flatMap(([toolId, logos]) => {
     const nodeId = TOOL_NODE_BY_NAME[toolId]
     return nodeId && logos ? [[nodeId, logos] as const] : []
-  })
-)
+  }),
+  ...Object.entries(RESOURCE_LOGOS).flatMap(([nodeId, logos]) =>
+    logos ? [[nodeId, logos] as const] : []
+  ),
+])
 
 const STEP_TOOL_LABELS: Readonly<Record<string, string>> = {
   tool_search: 'Tool Search',
@@ -186,6 +159,8 @@ const STEP_TOOL_LABELS: Readonly<Record<string, string>> = {
   skills_list: 'Skills List',
   skill_view: 'Skill View',
   ask_question: 'Auto Ontology query',
+  query_tables: 'Table query',
+  predict: 'NVIDIA Kumo prediction',
   retrieve_evidence: 'Unstructured Retrieval',
 }
 
@@ -193,7 +168,6 @@ const RESULT_LABELS: Readonly<Partial<Record<GraphComponent, string>>> = {
   structured_retrieval: 'Structured result available',
   structured_prediction: 'Prediction result available',
   unstructured_retrieval: 'Retrieved evidence available',
-  market_analytics: 'Market analytics result available',
 }
 
 /** What the event at the replay cursor did, in the words of the replay bar. */
@@ -236,16 +210,18 @@ const LIVE_OWNERS: Readonly<Record<GraphComponent, string>> = {
   structured_retrieval: 'Structured Retrieval',
   structured_prediction: 'Structured Prediction',
   unstructured_retrieval: 'Unstructured Retrieval',
-  market_analytics: 'Market Analytics',
+}
+
+const LIVE_DESCRIPTIONS: Readonly<Record<string, string>> = {
+  retrieve_evidence: 'Retrieving evidence with Milvus and NVIDIA Nemotron',
+  query_tables: 'Running read-only SQL over the selected tables in DuckDB',
+  ask_question: 'Generating and executing SQL with Auto Ontology',
+  predict: 'Scoring a predictive query with NVIDIA Kumo',
 }
 
 const liveActivityDescription = (call: ToolCall | undefined): string => {
   if (!call) return 'Planning, invoking tools, or synthesizing the response'
-  if (call.tool?.id === 'retrieve_evidence') {
-    return 'Retrieving evidence with Milvus and NVIDIA Nemotron'
-  }
-  if (call.tool?.id === 'ask_question') return 'Generating and executing SQL with Auto Ontology'
-  return `${call.label} is running`
+  return (call.tool && LIVE_DESCRIPTIONS[call.tool.id]) ?? `${call.label} is running`
 }
 
 const formatElapsed = (elapsedSeconds: number): string => {
@@ -458,13 +434,13 @@ const ReplayScopedInspectorNotice = ({
 type AvailableSource = { id: string; name: string; database_name?: string | null }
 const NO_SOURCES: AvailableSource[] = []
 
-/** Replay: the structured sources the recordings bundle copied into `database.json`. */
-const useReplaySources = (enabled: boolean): AvailableSource[] => {
+/** Replay: the structured sources the pack's recordings bundle copied into `database.json`. */
+const useReplaySources = (enabled: boolean, packId: string | null): AvailableSource[] => {
   const [sources, setSources] = useState<AvailableSource[]>(NO_SOURCES)
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled || !packId) return
     let active = true
-    void loadReplayDatabase().then((database) => {
+    void loadReplayDatabase(packId).then((database) => {
       if (!active || !database) return
       setSources(
         database.sources.map((source) => ({
@@ -477,7 +453,7 @@ const useReplaySources = (enabled: boolean): AvailableSource[] => {
     return () => {
       active = false
     }
-  }, [enabled])
+  }, [enabled, packId])
   return sources
 }
 
@@ -495,8 +471,8 @@ export const ExecutionWorkspace = ({
   // As the original labeled them: a recorded run by its archive and job id, a live one by its job id
   const runKey = stored?.archive ? `recorded:${stored.archive}:${jobId}` : jobId
   const availableDataSources = useLayoutStore((state) => state.availableDataSources)
-  const packDatabaseName = useLayoutStore(selectPackDatabaseName)
-  const replaySources = useReplaySources(!liveMode)
+  const packId = useLayoutStore((state) => state.packId)
+  const replaySources = useReplaySources(!liveMode, packId)
   const events = stored?.events ?? NO_EVENTS
   const receipts = stored?.receipts ?? NO_RECEIPTS
   const jobStatus = stored?.jobStatus ?? null
@@ -512,7 +488,11 @@ export const ExecutionWorkspace = ({
     [shownEvents, atEnd, jobStatus]
   )
 
-  const allGraphEvents = useMemo(() => events.map(toGraphEvent), [events])
+  // A retrieval's receipt tells whether it reranked
+  const allGraphEvents = useMemo(
+    () => events.map((event) => toGraphEvent(event, receipts)),
+    [events, receipts]
+  )
   const shownGraphEvents = useMemo(
     () => allGraphEvents.slice(0, replay.step),
     [allGraphEvents, replay.step]
@@ -543,14 +523,6 @@ export const ExecutionWorkspace = ({
       }),
     [allGraphEvents, wholeProjection]
   )
-  const gpuAccelerations = useMemo(
-    () =>
-      buildGpuAccelerationByNode(
-        shown.toolCalls.flatMap((call) => call.receiptIds.flatMap((id) => receipts[id] ?? []))
-      ),
-    [shown, receipts]
-  )
-  const structuredSources = useMemo(() => structuredSourcesOf(receipts), [receipts])
 
   const currentEvent = shownEvents.at(-1)
   const currentGraphEvent = shownGraphEvents.at(-1)
@@ -570,7 +542,7 @@ export const ExecutionWorkspace = ({
   // A cited source opens its node. Choosing or closing a node wins until the next citation click, which
   // brings a new focus object even when it cites the same source again.
   const [selectedNodeId, setSelectedNodeId] = useState<InspectableExecutionNodeId | null>(null)
-  // An Auto Ontology call opened in the data viewer from its explorer
+  // A table query or an Auto Ontology call opened in the data viewer from its explorer
   const [queryReceipt, setQueryReceipt] = useState<StructuredQueryReceipt | null>(null)
   const focusCall = focusedCall(whole, focus)
   const focusNodeId = focusCall ? nodeOfCall(focusCall, events) : null
@@ -736,21 +708,6 @@ export const ExecutionWorkspace = ({
         onClose={closeInspector}
       />
     )
-  } else if (selectedDetail && MARKET_NODES.has(selectedDetail.id)) {
-    const analytics = inspectorReceipts.filter(isAnalytics)
-    const operation = analytics.find((receipt) => receipt.content)?.content?.operationId
-    inspector = (
-      <MarketToolExplorer
-        key={`${selectedDetail.id}:${focusCount}`}
-        nodeId={selectedDetail.id}
-        title={operation ? OPERATION_LABELS[operation] : selectedDetail.label}
-        cursor={activeCursor}
-        receipts={analytics}
-        preferredInvocationId={focusedInvocationId}
-        loading={receiptsLoading}
-        onClose={closeInspector}
-      />
-    )
   } else if (selectedDetail) {
     inspector = (
       <EvidenceInspector
@@ -758,10 +715,14 @@ export const ExecutionWorkspace = ({
         cursor={activeCursor}
         question={question}
         receipts={inspectorReceipts}
-        databaseName={packDatabaseName}
         sourceIds={sourceIds}
         structuredSources={databaseSources}
         loading={receiptsLoading}
+        queryDatabases={browsable.map((source) => source.databaseName)}
+        onOpenQuery={(receipt) => {
+          replay.pause()
+          setQueryReceipt(receipt)
+        }}
         onClose={closeInspector}
       />
     )
@@ -839,10 +800,7 @@ export const ExecutionWorkspace = ({
               selectedNodeId={selectedNodeId}
               interactiveNodeIds={interactiveNodeIds}
               unobservedLegendLabel={unobservedLegendLabel}
-              structuredDatabaseProviderMark={
-                structuredSources.length === 1 ? DUCKDB_MARK : undefined
-              }
-              gpuAccelerations={gpuAccelerations}
+              structuredDatabaseProviderMark={DUCKDB_MARK}
               nodeLogos={NODE_LOGOS}
               onNodeSelect={handleNodeSelect}
             />

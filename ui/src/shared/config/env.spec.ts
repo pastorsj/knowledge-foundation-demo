@@ -2,12 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, expect, test } from 'vitest'
-import { readApiUrl, readAppConfig, readRecordingsDir, readUiMode } from './env'
+import {
+  isPackId,
+  readApiUrl,
+  readAppConfig,
+  readDefaultPack,
+  readRecordingsDir,
+  readUiMode,
+} from './env'
 
 describe('runtime configuration', () => {
   test('defaults to live mode without Phoenix and the compose API address', () => {
-    expect(readAppConfig({})).toEqual({
+    expect(readAppConfig({})).toMatchObject({
       mode: 'live',
+      defaultPack: 'retail',
       phoenixUrl: null,
       speechInput: { enabled: false, maxSeconds: 60 },
     })
@@ -15,9 +23,11 @@ describe('runtime configuration', () => {
   })
 
   test('reads the mode and a Phoenix URL without a trailing slash', () => {
-    expect(readAppConfig({ UI_MODE: 'replay', PHOENIX_URL: 'http://127.0.0.1:6006/' })).toEqual({
+    expect(
+      readAppConfig({ UI_MODE: 'replay', PHOENIX_URL: 'http://127.0.0.1:6306/' })
+    ).toMatchObject({
       mode: 'replay',
-      phoenixUrl: 'http://127.0.0.1:6006',
+      phoenixUrl: 'http://127.0.0.1:6306',
       speechInput: { enabled: false, maxSeconds: 60 },
     })
   })
@@ -35,13 +45,22 @@ describe('runtime configuration', () => {
       'PHOENIX_URL must be an http(s) URL'
     )
     expect(() => readApiUrl({ API_URL: 'not a url' })).toThrow()
-    expect(() => readRecordingsDir({ DATA_PACK: '../etc' })).toThrow('DATA_PACK must match')
+    expect(() => readRecordingsDir('../etc', {})).toThrow('A pack id must match')
+    expect(() => readDefaultPack({ DEFAULT_PACK: 'Retail!' })).toThrow('DEFAULT_PACK must match')
   })
 
-  test('resolves the active pack recordings under the packs directory', () => {
-    expect(readRecordingsDir({})).toBe('/packs/synthetic-market/recordings')
-    expect(readRecordingsDir({ PACKS_DIR: '/data/packs', DATA_PACK: 'other-pack' })).toBe(
-      '/data/packs/other-pack/recordings'
+  test('resolves each pack’s recordings under the packs directory', () => {
+    expect(readRecordingsDir('retail', {})).toBe('/packs/retail/recordings')
+    expect(readRecordingsDir('financial-services', { PACKS_DIR: '/data/packs' })).toBe(
+      '/data/packs/financial-services/recordings'
     )
+    expect(readDefaultPack({ DEFAULT_PACK: 'manufacturing' })).toBe('manufacturing')
+  })
+
+  test('knows a well-formed pack id', () => {
+    for (const id of ['retail', 'financial-services', 'workspace']) expect(isPackId(id)).toBe(true)
+    for (const id of ['', '..', 'Retail', '-x', 'a/b', 'retail.sales', 7]) {
+      expect(isPackId(id)).toBe(false)
+    }
   })
 })

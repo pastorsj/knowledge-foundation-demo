@@ -126,12 +126,12 @@ describe('storage-logger', () => {
     test('logs storage events in development', () => {
       vi.stubEnv('NODE_ENV', 'development')
 
-      logExternalStorageEvent('aiq-chat-store', 'oldValue', null)
+      logExternalStorageEvent('kf-chat-store', 'oldValue', null)
 
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         expect.stringContaining('Storage event detected'),
         expect.objectContaining({
-          key: 'aiq-chat-store',
+          key: 'kf-chat-store',
           cleared: true,
         })
       )
@@ -140,7 +140,7 @@ describe('storage-logger', () => {
     test('does not log in production', () => {
       vi.stubEnv('NODE_ENV', 'production')
 
-      logExternalStorageEvent('aiq-chat-store', 'old', 'new')
+      logExternalStorageEvent('kf-chat-store', 'old', 'new')
 
       expect(consoleWarnSpy).not.toHaveBeenCalled()
     })

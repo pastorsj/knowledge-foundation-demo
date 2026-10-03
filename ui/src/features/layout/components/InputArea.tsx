@@ -10,6 +10,11 @@
  * stop while a run is in progress). A recorded session shows it read only, as
  * the original demo UI did; in replay mode that includes the original's
  * microphone, disabled.
+ *
+ * In Your data (the workspace pack) it also has upstream's file upload: the
+ * paperclip, drag and drop onto the composer, the file counter, the pending
+ * files chip, and the banners of an upload in progress and of a question sent
+ * while files are still pending (the first send warns, the second sends).
  */
 
 'use client'
@@ -27,6 +32,13 @@ import {
 } from 'react'
 import { Banner, Flex, Text, Button, Select, TextArea } from '@/adapters/ui'
 import { useHermesChat, useChatStore, useIsCurrentSessionBusy } from '@/features/chat'
+import { FileUploadBanner } from '@/features/chat/components/FileUploadBanner'
+import {
+  useFileDragDrop,
+  useFileUpload,
+  useFileUploadBanners,
+  WORKSPACE_COLLECTION,
+} from '@/features/documents'
 import {
   getSpeechInputStatusMessage,
   SpeechInputButton,
@@ -36,7 +48,15 @@ import { useAppConfig } from '@/shared/context'
 import { useLayoutStore } from '../store'
 import { ToolPills } from '@/shared/components/ToolPills'
 import { getActiveDemoScenario, getAvailableDemoScenarios, type DemoScenario } from '../scenarios'
-import { ChartFlow, Globe, Paperplane, StopCircle } from '@/adapters/ui/icons'
+import {
+  Cancel,
+  ChartFlow,
+  Document,
+  Globe,
+  Paperclip,
+  Paperplane,
+  StopCircle,
+} from '@/adapters/ui/icons'
 import { VISIBLE_EXAMPLE_ROWS, visibleRowsHeight } from './visible-rows'
 
 const NO_SCENARIOS: DemoScenario[] = []
@@ -66,7 +86,7 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const speechInsertionRef = useRef({ start: 0, end: 0 })
   const { sendMessage, stop } = useHermesChat()
-  const { mode, speechInput: speechInputConfig } = useAppConfig()
+  const { mode, speechInput: speechInputConfig, fileUpload: fileUploadConfig } = useAppConfig()
 
   // A running job in this session pauses the composer; it can be stopped.
   const isBusy = useIsCurrentSessionBusy()
@@ -82,6 +102,67 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
   const setEnabledDataSources = useLayoutStore((s) => s.setEnabledDataSources)
   const promptDraft = useLayoutStore((s) => s.promptDraft)
   const setPromptDraft = useLayoutStore((s) => s.setPromptDraft)
+
+  // Your data: uploads go to the workspace collection, in live mode only
+  const packId = useLayoutStore((s) => s.packId)
+  const canUpload = packId === WORKSPACE_COLLECTION && mode === 'live' && !isRecordedSession
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const {
+    uploadFiles,
+    sessionFiles,
+    isUploading,
+    error: uploadError,
+    clearError,
+  } = useFileUpload({ sessionId: canUpload ? WORKSPACE_COLLECTION : undefined })
+  // Opens the Files tab when an upload's files have all settled
+  useFileUploadBanners()
+  const pendingCount = canUpload
+    ? sessionFiles.filter((f) => f.status === 'uploading' || f.status === 'ingesting').length
+    : 0
+  const attachedFilesCount = sessionFiles.filter(
+    (f) => f.status === 'uploading' || f.status === 'ingesting' || f.status === 'success'
+  ).length
+  // The first send while files are pending warns; the next one sends without them
+  const [pendingFilesWarningActive, setPendingFilesWarningActive] = useState(false)
+  const [uploadBannerDismissed, setUploadBannerDismissed] = useState(false)
+  const prevPendingCountRef = useRef(0)
+  useEffect(() => {
+    const previous = prevPendingCountRef.current
+    if (previous === 0 && pendingCount > 0) {
+      setPendingFilesWarningActive(false)
+      setUploadBannerDismissed(false)
+    }
+    if (previous > 0 && pendingCount === 0) setPendingFilesWarningActive(false)
+    prevPendingCountRef.current = pendingCount
+  }, [pendingCount])
+
+  const handleFilesSelected = useCallback(
+    async (files: File[]) => {
+      if (files.length === 0 || !canUpload || isUploading || isBusy) return
+      // Open the files tab immediately so the user sees instant feedback
+      const { setDataSourcesPanelTab, openRightPanel } = useLayoutStore.getState()
+      setDataSourcesPanelTab('files')
+      openRightPanel('data-sources')
+      // uploadFiles validates internally and sets error if invalid
+      await uploadFiles(files, WORKSPACE_COLLECTION)
+    },
+    [canUpload, isBusy, isUploading, uploadFiles]
+  )
+
+  const { isDragging, isUnsupportedDrag, dragHandlers } = useFileDragDrop({
+    onDrop: handleFilesSelected,
+    disabled: !canUpload || isUploading || isBusy,
+  })
+
+  const handleFileChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || [])
+      // Reset input so same file can be selected again
+      e.target.value = ''
+      await handleFilesSelected(files)
+    },
+    [handleFilesSelected]
+  )
 
   const availableDemoScenarios = useMemo(
     () =>
@@ -152,12 +233,18 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
 
   const handleSubmit = useCallback(() => {
     if (!message.trim() || disabled) return
+    // Files still ingesting cannot answer yet: warn once, then send without them
+    if (pendingCount > 0 && !pendingFilesWarningActive) {
+      setPendingFilesWarningActive(true)
+      return
+    }
+    setPendingFilesWarningActive(false)
     // Session creation needs the user ID, which is set at startup.
     if (!ensureSession()) return
     messageRef.current = ''
     setMessage('')
     sendMessage(message)
-  }, [message, disabled, ensureSession, sendMessage])
+  }, [message, disabled, ensureSession, sendMessage, pendingCount, pendingFilesWarningActive])
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -238,15 +325,9 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
     void speechInput.start()
   }, [speechInput])
 
-  // The counter counts database connections, as the original UI's did (its one registered
-  // connection was the market database): each pack has one, its structured source. The document
-  // collections beside it are listed in the Data Sources panel.
-  const databaseIds = new Set(
-    (availableDataSources ?? [])
-      .filter((source) => source.kind === 'structured')
-      .map((source) => source.id)
-  )
-  const enabledDatabaseCount = enabledDataSourceIds.filter((id) => databaseIds.has(id)).length
+  // Data sources counts for indicator, as upstream: the selected pack's enabled connections
+  const sourceIds = new Set((availableDataSources ?? []).map((source) => source.id))
+  const enabledSourcesCount = enabledDataSourceIds.filter((id) => sourceIds.has(id)).length
   // Replay keeps the original's microphone in the read-only composer; it never records there.
   const showMicrophone = speechInputConfig.enabled || mode === 'replay'
 
@@ -263,8 +344,39 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
     <Flex direction="col" className="mx-auto w-full max-w-4xl px-6 py-4">
       <Flex
         direction="col"
-        className="composer-surface relative rounded-[var(--radius-composer)] border p-3.5 transition-colors"
+        className={`composer-surface relative rounded-[var(--radius-composer)] border p-3.5 transition-colors ${
+          isDragging && isUnsupportedDrag
+            ? 'border-error border-dashed'
+            : isDragging
+              ? 'border-brand border-dashed'
+              : ''
+        }`}
+        data-testid="composer"
+        {...(canUpload ? dragHandlers : {})}
       >
+        {/* Drag overlay */}
+        {isDragging && (
+          <div className="bg-surface-raised-90 absolute inset-0 z-10 flex items-center justify-center rounded-[var(--radius-composer)]">
+            <Flex direction="col" align="center" gap="2">
+              {isUnsupportedDrag ? (
+                <Cancel className="text-error h-8 w-8" />
+              ) : (
+                <Paperclip className="text-brand h-8 w-8" />
+              )}
+              <Text
+                kind="label/semibold/sm"
+                className={isUnsupportedDrag ? 'text-error' : 'text-brand'}
+              >
+                {isUnsupportedDrag ? 'Unsupported file type' : 'Drop files to upload'}
+              </Text>
+              {isUnsupportedDrag && (
+                <Text kind="body/regular/xs" className="text-subtle">
+                  Accepts: {fileUploadConfig.acceptedTypes}
+                </Text>
+              )}
+            </Flex>
+          </div>
+        )}
         {showDemoScenarios && !isRecordedSession && availableDemoScenarios.length > 0 && (
           <div
             className="border-base mb-2 grid grid-cols-1 gap-1.5 border-b pb-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-2"
@@ -359,6 +471,26 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
           </span>
         )}
 
+        {/* Upload Error Display */}
+        {uploadError && (
+          <Banner kind="inline" status="error" onClose={clearError} className="mt-2">
+            {uploadError}
+          </Banner>
+        )}
+        {pendingFilesWarningActive ? (
+          <div className="mt-2" data-testid="pending-files-warning">
+            <FileUploadBanner type="pending_warning" fileCount={pendingCount} />
+          </div>
+        ) : pendingCount > 0 && !uploadBannerDismissed ? (
+          <div className="mt-2" data-testid="upload-banner">
+            <FileUploadBanner
+              type="uploaded"
+              fileCount={pendingCount}
+              onDismiss={() => setUploadBannerDismissed(true)}
+            />
+          </div>
+        ) : null}
+
         {speechInput.error && (
           <Banner kind="inline" status="error" onClose={speechInput.clearError} className="mt-2">
             {speechInput.error}
@@ -367,6 +499,11 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
 
         {/* Bottom Actions Bar */}
         <Flex align="center" justify="end" gap="1.5" className="border-base mt-3 border-t pt-3">
+          {pendingCount > 0 && (
+            <span className="text-warning bg-surface-raised-30 border-warning mr-auto inline-flex h-7 items-center rounded-full border px-2.5 text-xs font-medium">
+              {pendingCount} pending
+            </span>
+          )}
           {/* Sources indicator - clickable to toggle data connections */}
           <Button
             kind="tertiary"
@@ -380,10 +517,62 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
             <Flex align="center" gap="1">
               <Globe className="h-3 w-3" />
               <Text kind="label/bold/sm">
-                {enabledDatabaseCount}/{databaseIds.size}
+                {enabledSourcesCount}/{sourceIds.size}
               </Text>
             </Flex>
           </Button>
+
+          {canUpload && (
+            <>
+              {/* Files indicator - clickable to open the Files tab */}
+              <Button
+                kind="tertiary"
+                size="tiny"
+                onClick={() => {
+                  const { setDataSourcesPanelTab, openRightPanel } = useLayoutStore.getState()
+                  setDataSourcesPanelTab('files')
+                  openRightPanel('data-sources')
+                }}
+                tabIndex={-1}
+                aria-label="Open uploaded files"
+                title="Available files"
+              >
+                <Flex align="center" gap="1">
+                  <Document className="h-3 w-3" />
+                  <Text kind="label/bold/sm">{attachedFilesCount}</Text>
+                </Flex>
+              </Button>
+
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept={fileUploadConfig.acceptedTypes}
+                className="hidden"
+                tabIndex={-1}
+                data-testid="composer-file-input"
+                onChange={handleFileChange}
+              />
+
+              {/* Attach files */}
+              <Button
+                kind="tertiary"
+                size="small"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading || isBusy}
+                tabIndex={-1}
+                aria-label="Attach files"
+                title={
+                  isBusy
+                    ? 'File upload disabled during active operations'
+                    : 'Select files to upload'
+                }
+              >
+                <Paperclip className="h-4 w-4" />
+              </Button>
+            </>
+          )}
 
           {isBusy ? (
             <Button

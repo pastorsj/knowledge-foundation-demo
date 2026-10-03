@@ -37,12 +37,11 @@ interface RecordedTurn {
   status: string
   report: { markdown: string; citations: Citation[] } | null
   events: RecordedEvent[]
-  receipts: { receiptId: string; content?: { engine?: { device?: string } } }[]
+  receipts: { receiptId: string }[]
 }
 
 interface ToolPillUse {
   pill: string
-  device: string | null
 }
 
 interface IndexSession {
@@ -53,12 +52,10 @@ interface IndexSession {
 }
 
 /** The UI's pill labels: a market tool's pill names its CPU library when its run reported the CPU. */
-const PILLS: Record<string, { label: string; cpuLabel?: string; family: 'rapids' | 'nvidia' }> = {
-  cudf: { label: 'cuDF', cpuLabel: 'pandas', family: 'rapids' },
-  cuml: { label: 'cuML', cpuLabel: 'scikit-learn', family: 'rapids' },
-  cugraph: { label: 'cuGraph', cpuLabel: 'NetworkX', family: 'rapids' },
-  kumo: { label: 'Kumo', family: 'nvidia' },
+const PILLS: Record<string, { label: string; family: 'partner' | 'nvidia' }> = {
   retrieval: { label: 'Retrieval', family: 'nvidia' },
+  duckdb: { label: 'DuckDB', family: 'partner' },
+  kumo: { label: 'Kumo', family: 'nvidia' },
   ontology: { label: 'Ontology', family: 'nvidia' },
 }
 const PILL_ORDER = Object.keys(PILLS)
@@ -72,38 +69,25 @@ const REGISTRY = new Map(
 )
 
 const orderPills = (pills: ToolPillUse[]): ToolPillUse[] =>
-  [...pills].sort(
-    (a, b) =>
-      PILL_ORDER.indexOf(a.pill) - PILL_ORDER.indexOf(b.pill) ||
-      Number(a.device === 'cpu') - Number(b.device === 'cpu')
-  )
+  [...pills].sort((a, b) => PILL_ORDER.indexOf(a.pill) - PILL_ORDER.indexOf(b.pill) || 0)
 
 /**
  * The pills of a session's runs (api/src/demo_api/pills.py): each completed registered tool call
- * brings its registry pills, the market tools' with the engine device their receipt reports.
+ * brings its registry pills.
  */
 const pillsOfRuns = (turns: RecordedTurn[]): ToolPillUse[] => {
   const found = new Map<string, ToolPillUse>()
   for (const turn of turns) {
-    const devices = new Map(turn.receipts.map((r) => [r.receiptId, r.content?.engine?.device]))
     for (const event of turn.events) {
       const tool = event.eventKind === 'artifact.available' && REGISTRY.get(event.toolName ?? '')
       if (!tool) continue
-      const device =
-        (event.artifactRefs ?? [])
-          .map((ref) => devices.get(ref))
-          .find((value) => value === 'gpu' || value === 'cpu') ?? null
-      for (const pill of tool.pills) {
-        const use = { pill, device: PILLS[pill].family === 'rapids' ? device : null }
-        found.set(`${use.pill}:${use.device}`, use)
-      }
+      for (const pill of tool.pills) found.set(pill, { pill })
     }
   }
   return orderPills([...found.values()])
 }
 
-const pillLabel = ({ pill, device }: ToolPillUse) =>
-  device === 'cpu' ? (PILLS[pill].cpuLabel ?? PILLS[pill].label) : PILLS[pill].label
+const pillLabel = ({ pill }: ToolPillUse) => PILLS[pill].label
 
 /** The answer's trailing references block, which the UI shows as its Sources list */
 const REFERENCES_BLOCK =
@@ -176,7 +160,7 @@ const expectWordsInOrder = (actual: string[], expected: string[], what: string) 
     }
   }
   const missing: string[] = []
-  for (let i = 0, j = 0; i < n; ) {
+  for (let i = 0, j = 0; i < n;) {
     if (j < m && expected[i] === actual[j]) [i, j] = [i + 1, j + 1]
     else if (j < m && longest[i][j + 1] >= longest[i + 1][j]) j++
     else missing.push(`${expected[i++]} (word ${i})`)
@@ -184,8 +168,8 @@ const expectWordsInOrder = (actual: string[], expected: string[], what: string) 
   expect(missing, `${what}: words of the recorded answer not shown, in order`).toEqual([])
 }
 
-const recordedEntry = async (page: Page, title: string): Promise<Locator> => {
-  await page.goto('/research')
+const recordedEntry = async (page: Page, pack: string, title: string): Promise<Locator> => {
+  await page.goto(`/research?pack=${pack}`)
   const entry = page.getByRole('button', {
     name: new RegExp(`^Recorded session: ${escapeRegExp(title)}; `),
   })
@@ -239,11 +223,11 @@ for (const [pack, baseURL] of Object.entries(RECORDED_PACKS)) {
         await test.step('its Recorded list entry shows the tools its runs used', async () => {
           if (session.tools) {
             expect(
-              orderPills(session.tools.map(({ pill, device }) => ({ pill, device }))),
+              orderPills(session.tools.map(({ pill }) => ({ pill }))),
               'the index pills are the ones its runs used'
             ).toEqual(pills)
           }
-          const entry = await recordedEntry(page, title)
+          const entry = await recordedEntry(page, pack, title)
           await expect(entry).toContainText(`${turns.length} turn${turns.length === 1 ? '' : 's'}`)
           await expect(entry.locator('.tool-pill')).toHaveText(pills.map(pillLabel))
           for (const [i, use] of pills.entries()) {

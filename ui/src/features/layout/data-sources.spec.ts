@@ -12,6 +12,6 @@ describe('getDataSourceKind', () => {
 
   test('maps everything else to the doc kind', () => {
     expect(getDataSourceKind('confluence')).toBe('doc')
-    expect(getDataSourceKind('market_analysis_structured')).toBe('doc')
+    expect(getDataSourceKind('retail.sales')).toBe('doc')
   })
 })

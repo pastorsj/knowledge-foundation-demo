@@ -31,10 +31,14 @@ vi.mock('@/features/chat', () => ({
   useChatStore: vi.fn((selector?: (s: typeof state) => unknown) =>
     selector ? selector(state) : state
   ),
-  AgentResponse: ({ content }: { content: string }) => <div data-testid="agent-response">{content}</div>,
+  AgentResponse: ({ content }: { content: string }) => (
+    <div data-testid="agent-response">{content}</div>
+  ),
   ErrorBanner: () => <div />,
   DeepResearchBanner: () => <div />,
-  UserMessage: ({ content }: { content: string }) => <div data-testid="user-message">{content}</div>,
+  UserMessage: ({ content }: { content: string }) => (
+    <div data-testid="user-message">{content}</div>
+  ),
 }))
 
 type Geometry = { scrollTop: number; scrollHeight: number; clientHeight: number }
@@ -87,7 +91,11 @@ describe('ChatArea auto-follow', () => {
     render(<ChatArea />)
     const container = screen.getByLabelText(/chat messages/i) as HTMLElement
     // distance from bottom = 1000 - 800 - 200 = 0 => pinned
-    const scrollTop = setGeometry(container, { scrollTop: 800, scrollHeight: 1000, clientHeight: 200 })
+    const scrollTop = setGeometry(container, {
+      scrollTop: 800,
+      scrollHeight: 1000,
+      clientHeight: 200,
+    })
 
     fireEvent.scroll(container) // record that the user is pinned
     growContent() // simulate a new answer
@@ -99,7 +107,11 @@ describe('ChatArea auto-follow', () => {
     render(<ChatArea />)
     const container = screen.getByLabelText(/chat messages/i) as HTMLElement
     // distance from bottom = 1000 - 0 - 200 = 800 => NOT pinned
-    const scrollTop = setGeometry(container, { scrollTop: 0, scrollHeight: 1000, clientHeight: 200 })
+    const scrollTop = setGeometry(container, {
+      scrollTop: 0,
+      scrollHeight: 1000,
+      clientHeight: 200,
+    })
 
     fireEvent.scroll(container) // record that the user scrolled up
     growContent() // content grows underneath
@@ -112,7 +124,11 @@ describe('ChatArea auto-follow', () => {
     const container = screen.getByLabelText(/chat messages/i) as HTMLElement
 
     // First scroll up (not pinned), grow -> no movement
-    const scrollTop = setGeometry(container, { scrollTop: 0, scrollHeight: 1000, clientHeight: 200 })
+    const scrollTop = setGeometry(container, {
+      scrollTop: 0,
+      scrollHeight: 1000,
+      clientHeight: 200,
+    })
     fireEvent.scroll(container)
     growContent()
     expect(scrollTop.current).toBe(0)

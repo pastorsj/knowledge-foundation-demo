@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { fetchDataSources, getJobStatus } from '@/adapters/api'
 import { useChatStore } from '@/features/chat/store'
 import type { Conversation } from '@/features/chat/types'
+import { getFileUploadConfigFromEnv } from '@/shared/config/file-upload'
 import { useLayoutStore } from '@/features/layout'
 import { Providers } from './providers'
 
@@ -16,6 +17,7 @@ vi.mock('@/adapters/api', () => ({
 
 const initialChat = useChatStore.getState()
 const SPEECH_OFF = { enabled: false, maxSeconds: 60 }
+const FILE_UPLOAD = getFileUploadConfigFromEnv({} as NodeJS.ProcessEnv)
 const initialLayout = useLayoutStore.getState()
 
 /** Saves a live session whose job was running when the page closed, then reloads the store. */
@@ -56,21 +58,31 @@ const savedJobStatus = () =>
 describe('Providers', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    vi.mocked(fetchDataSources).mockResolvedValue([{ id: 'market_news', name: 'News' }])
+    vi.mocked(fetchDataSources).mockResolvedValue([{ id: 'retail.policies', name: 'News' }])
     useChatStore.setState(initialChat, true)
     useLayoutStore.setState(initialLayout, true)
   })
 
-  test('live mode selects the local user and loads the data sources', async () => {
+  test('live mode selects the local user and loads the data sources of the page’s pack', async () => {
+    // Nothing loads until a page names its pack
+    useLayoutStore.setState({ packId: 'retail' })
     render(
-      <Providers config={{ mode: 'live', phoenixUrl: null, speechInput: SPEECH_OFF }}>
+      <Providers
+        config={{
+          mode: 'live',
+          defaultPack: 'retail',
+          phoenixUrl: null,
+          speechInput: SPEECH_OFF,
+          fileUpload: FILE_UPLOAD,
+        }}
+      >
         content
       </Providers>
     )
 
     await waitFor(() =>
       expect(useLayoutStore.getState().availableDataSources).toEqual([
-        { id: 'market_news', name: 'News' },
+        { id: 'retail.policies', name: 'News' },
       ])
     )
     expect(useChatStore.getState().currentUserId).toBe('local')
@@ -81,7 +93,15 @@ describe('Providers', () => {
     await loadSavedSessionWithRunningJob()
 
     render(
-      <Providers config={{ mode: 'live', phoenixUrl: null, speechInput: SPEECH_OFF }}>
+      <Providers
+        config={{
+          mode: 'live',
+          defaultPack: 'retail',
+          phoenixUrl: null,
+          speechInput: SPEECH_OFF,
+          fileUpload: FILE_UPLOAD,
+        }}
+      >
         content
       </Providers>
     )
@@ -94,7 +114,15 @@ describe('Providers', () => {
     await loadSavedSessionWithRunningJob()
 
     render(
-      <Providers config={{ mode: 'replay', phoenixUrl: null, speechInput: SPEECH_OFF }}>
+      <Providers
+        config={{
+          mode: 'replay',
+          defaultPack: 'retail',
+          phoenixUrl: null,
+          speechInput: SPEECH_OFF,
+          fileUpload: FILE_UPLOAD,
+        }}
+      >
         content
       </Providers>
     )

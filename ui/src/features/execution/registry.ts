@@ -23,14 +23,6 @@ const TOOLS_BY_NAME = new Map<string, Tool>(
 export const toolFor = (name: string | null | undefined): Tool | undefined =>
   name ? TOOLS_BY_NAME.get(name) : undefined
 
-/** The service behind each capability family, drawn as a resource node in the graph. */
-export const RESOURCES: Record<Family, { label: string; detail: string }> = {
-  unstructured_retrieval: { label: 'Milvus', detail: 'Vector search and rerank' },
-  market_analytics: { label: 'Market analytics', detail: 'pandas or RAPIDS workers' },
-  structured_retrieval: { label: 'Auto Ontology', detail: 'Ontology-grounded SQL' },
-  structured_prediction: { label: 'NVIDIA Kumo', detail: 'Relational predictions' },
-}
-
 /** A technology logo drawn on a graph node, served from `public/ecosystem-logos`. */
 export interface NodeLogo {
   /** The technology's name, the image's tooltip */
@@ -41,8 +33,14 @@ export interface NodeLogo {
 /**
  * The libraries a registered tool is built on, by tool id, drawn as logos on
  * its tool node. `retrieve_evidence` embeds and reranks through LangChain
- * (langchain-nvidia-ai-endpoints, in tools/retrieval).
+ * (langchain-nvidia-ai-endpoints, in tools/retrieval); `query_tables` runs on DuckDB.
  */
 export const TOOL_LOGOS: Readonly<Partial<Record<string, readonly NodeLogo[]>>> = {
   retrieve_evidence: [{ brand: 'LangChain', src: '/ecosystem-logos/langchain.svg' }],
+  query_tables: [{ brand: 'DuckDB', src: '/ecosystem-logos/duckdb.svg' }],
+}
+
+/** The logos of the graph's resource nodes, by node id. */
+export const RESOURCE_LOGOS: Readonly<Partial<Record<string, readonly NodeLogo[]>>> = {
+  milvus: [{ brand: 'Milvus', src: '/ecosystem-logos/milvus.svg' }],
 }

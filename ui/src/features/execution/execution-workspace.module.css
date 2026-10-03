@@ -510,27 +510,6 @@
   opacity: 0.3;
 }
 
-.gpuLegendItem {
-  padding-left: 12px;
-  border-left: 1px solid var(--border-color-base);
-}
-
-.gpuLegendCopy {
-  display: grid;
-  gap: 1px;
-  line-height: 1.1;
-}
-
-.gpuLegendCopy > span {
-  color: var(--text-color-primary);
-}
-
-.gpuLegendCopy > small {
-  color: var(--text-color-secondary);
-  font-size: 9.5px;
-  font-weight: 520;
-}
-
 .zoomControls {
   position: absolute;
   z-index: 5;
@@ -946,157 +925,6 @@ button.graphNode[data-state='failed'][data-availability='available-now']:hover {
   font-weight: 800;
 }
 
-.gpuAccelerationBadge {
-  position: absolute;
-  left: -9px;
-  bottom: -9px;
-  display: grid;
-  width: 27px;
-  height: 27px;
-  box-sizing: border-box;
-  place-items: center;
-  border: 2px solid var(--background-color-surface-sunken);
-  border-radius: 999px;
-  color: #101105;
-  background: var(--execution-green);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--execution-green) 32%, transparent);
-  font-size: 7.5px;
-  font-weight: 850;
-  letter-spacing: 0.025em;
-  line-height: 1;
-  cursor: help;
-  pointer-events: auto;
-}
-
-.gpuAccelerationBadge.gpuLegendBadge {
-  position: static;
-  left: auto;
-  right: auto;
-  bottom: auto;
-  display: grid;
-  width: 27px;
-  min-width: 27px;
-  height: 27px;
-  flex: 0 0 auto;
-  place-items: center;
-  border: 2px solid var(--background-color-surface-sunken);
-  border-radius: 999px;
-  padding: 0;
-  color: #101105;
-  background: var(--execution-green);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--execution-green) 32%, transparent);
-  cursor: default;
-  font-size: 7.5px;
-  font-style: normal;
-  font-weight: 850;
-  line-height: 1;
-}
-
-.graphNode[data-gpu-accelerated='true']:hover,
-.graphNode[data-gpu-accelerated='true']:focus-visible {
-  z-index: 6;
-}
-
-.gpuAccelerationTooltip {
-  position: absolute;
-  z-index: 9;
-  width: 292px;
-  box-sizing: border-box;
-  border: 1px solid color-mix(in srgb, var(--execution-green) 48%, var(--border-color-base));
-  border-radius: 12px;
-  padding: 12px;
-  color: var(--text-color-primary);
-  background: color-mix(in srgb, var(--background-color-surface-raised) 97%, transparent);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--execution-green) 9%, transparent),
-    0 16px 38px color-mix(in srgb, #000 28%, transparent);
-  backdrop-filter: blur(12px);
-  pointer-events: none;
-}
-
-.gpuAccelerationTooltip[data-placement='above'] {
-  transform: translateY(-100%);
-}
-
-.gpuAccelerationTooltip > header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-color-base);
-}
-
-.gpuAccelerationTooltip > header > span {
-  display: grid;
-  width: 31px;
-  height: 31px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 999px;
-  color: #101105;
-  background: var(--execution-green);
-  font-size: 8px;
-  font-weight: 850;
-  letter-spacing: 0.025em;
-}
-
-.gpuAccelerationTooltip > header > div {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.gpuAccelerationTooltip > header strong {
-  font-size: 12.5px;
-  line-height: 1.2;
-}
-
-.gpuAccelerationTooltip > header small {
-  color: var(--text-color-secondary);
-  font-size: 10px;
-}
-
-.gpuAccelerationTechnologies {
-  display: grid;
-  gap: 9px;
-  padding-top: 10px;
-}
-
-.gpuAccelerationTechnologies section {
-  display: grid;
-  gap: 5px;
-}
-
-.gpuAccelerationTechnologies section + section {
-  padding-top: 9px;
-  border-top: 1px solid var(--border-color-base);
-}
-
-.gpuAccelerationTechnologies section > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.gpuAccelerationTechnologies strong {
-  color: var(--execution-green);
-  font-size: 12px;
-}
-
-.gpuAccelerationTechnologies code {
-  color: var(--text-color-secondary);
-  font-size: 9px;
-}
-
-.gpuAccelerationTechnologies p {
-  margin: 0;
-  color: var(--text-color-secondary);
-  font-size: 10.5px;
-  line-height: 1.42;
-}
-
 .inspectorHeader {
   display: flex;
   align-items: flex-start;
@@ -1369,82 +1197,6 @@ button.graphNode[data-state='failed'][data-availability='available-now']:hover {
   outline-offset: -2px;
 }
 
-.capabilityViewSelector {
-  display: flex;
-  min-height: 52px;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  border-bottom: 1px solid var(--border-color-base);
-  padding: 8px 22px;
-  color: var(--text-color-secondary);
-  background: color-mix(in srgb, var(--background-color-surface-raised) 72%, transparent);
-  font-size: 0.78rem;
-  font-weight: 680;
-}
-
-.capabilityViewSelector select {
-  width: min(250px, 42vw);
-  min-height: 34px;
-  border: 1px solid var(--border-color-base);
-  border-radius: 7px;
-  padding: 5px 30px 5px 10px;
-  color: var(--text-color-primary);
-  background: var(--background-color-surface-raised);
-  font: inherit;
-  cursor: pointer;
-}
-
-.capabilityViewValue {
-  display: flex;
-  width: min(250px, 42vw);
-  min-height: 34px;
-  align-items: center;
-  overflow: hidden;
-  border: 1px solid var(--border-color-base);
-  border-radius: 7px;
-  padding: 5px 10px;
-  color: var(--text-color-primary);
-  background: var(--background-color-surface-raised);
-  font: inherit;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.capabilityViewSelector select:focus-visible {
-  outline: 2px solid var(--border-color-brand);
-  outline-offset: 2px;
-}
-
-.capabilityViewSelector small {
-  color: var(--text-color-subtle);
-  font-size: 0.7rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.capabilityExplorerBody {
-  display: flex;
-  min-height: 0;
-  flex: 1;
-  flex-direction: column;
-  gap: 22px;
-  overflow: auto;
-  padding: clamp(20px, 2.2vw, 32px);
-}
-
-.capabilityExplorerBody[data-graph-focused='true'] {
-  gap: 0;
-  overflow: hidden;
-  padding: 12px 16px 16px;
-}
-
-.capabilityExplorerBody[data-focused='true'] {
-  gap: 0;
-  padding: 14px 18px 18px;
-}
-
 .evidenceInspectorBody {
   display: flex;
   min-height: 0;
@@ -1657,6 +1409,10 @@ button.graphNode[data-state='failed'][data-availability='available-now']:hover {
   margin-top: 7px;
   color: var(--text-color-subtle);
   font-size: 0.69rem;
+}
+
+.evidenceOpenQuery {
+  margin-top: 10px;
 }
 
 .evidenceOutput > header {

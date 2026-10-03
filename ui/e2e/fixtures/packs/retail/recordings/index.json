@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 2,
+  "pack": {
+    "id": "retail",
+    "version": "1.0.0"
+  },
+  "recordedAt": "2026-09-28T06:00:00Z",
+  "sessions": [
+    {
+      "id": "returns-and-revenue",
+      "title": "Returns policy and loyalty revenue",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+          "question": "What is the return window for opened electronics, and which loyalty tier brought the most net revenue in the third quarter of 2026?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": ["retrieve_evidence"]
+        },
+        {
+          "pill": "duckdb",
+          "tools": ["query_tables"]
+        }
+      ]
+    },
+    {
+      "id": "gold-tier-and-churn",
+      "title": "Gold-tier orders and churn risk",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "0dcd9841-b68a-456b-9dc5-87403c34efcb",
+          "question": "How many orders did gold-tier customers place, and what was their average order value?"
+        },
+        {
+          "jobId": "18d6824d-df8e-4d57-89eb-22a055226124",
+          "question": "Which customers are most likely to stop ordering in the next 90 days?"
+        }
+      ]
+    }
+  ]
+}

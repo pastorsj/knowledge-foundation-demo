@@ -37,7 +37,7 @@ const closing = (profile = 'enterprise-research'): LiveEvent[] => [
   },
 ]
 
-/** A successful anomaly-scan run on the GPU, cited, ending on the closing events. */
+/** A successful table query and retrieval, cited, ending on the closing events. */
 const turn = (overrides: Partial<LiveTurn> = {}): LiveTurn => ({
   jobId: 'job-1',
   status: 'success',
@@ -48,36 +48,39 @@ const turn = (overrides: Partial<LiveTurn> = {}): LiveTurn => ({
     {
       eventKind: 'artifact.available',
       state: 'completed',
-      toolName: 'market_anomaly_scan',
+      toolName: 'query_tables',
       artifactRefs: ['r1'],
+    },
+    {
+      eventKind: 'artifact.available',
+      state: 'completed',
+      toolName: 'retrieve_evidence',
+      artifactRefs: ['r2'],
     },
     ...closing(),
     { eventKind: 'run.heartbeat', state: 'progress' },
   ],
   receipts: [
-    {
-      receiptId: 'r1',
-      status: 'completed',
-      content: { engine: { device: 'gpu', library: 'cuml.accel' } },
-    },
+    { receiptId: 'r1', status: 'completed', content: {} },
+    { receiptId: 'r2', status: 'completed', content: {} },
   ],
   ...overrides,
 })
 
 const QUESTIONS = [
   {
-    id: 'market-leaders',
+    id: 'top-customers',
     question: 'Who led?',
-    sources: ['market_data'],
-    tools: ['cudf'],
+    sources: ['retail.sales'],
+    tools: ['duckdb'],
     featured: true,
   },
-  { id: 'sector-sql', question: 'Sectors?', sources: ['market_data'], tools: ['ontology'] },
+  { id: 'sector-sql', question: 'Sectors?', sources: ['retail.sales'], tools: ['ontology'] },
   {
-    id: 'peer-network',
+    id: 'churn-risk',
     question: 'Peers?',
-    sources: ['market_data'],
-    tools: ['cudf'],
+    sources: ['retail.sales'],
+    tools: ['duckdb'],
     featured: true,
   },
 ]
@@ -85,23 +88,23 @@ const QUESTIONS = [
 describe('questions and budgets', () => {
   it('runs the featured questions by default, or the requested ones in the order asked', () => {
     expect(selectQuestions(QUESTIONS, undefined).map((q) => q.id)).toEqual([
-      'market-leaders',
-      'peer-network',
+      'top-customers',
+      'churn-risk',
     ])
-    expect(selectQuestions(QUESTIONS, 'sector-sql, market-leaders').map((q) => q.id)).toEqual([
+    expect(selectQuestions(QUESTIONS, 'sector-sql, top-customers').map((q) => q.id)).toEqual([
       'sector-sql',
-      'market-leaders',
+      'top-customers',
     ])
     expect(() => selectQuestions(QUESTIONS, 'nope')).toThrow(
-      /no question nope; it offers market-leaders/
+      /no question nope; it offers top-customers/
     )
   })
 
   it('takes one budget for all and budgets by question, and refuses anything else', () => {
-    const budgets = parseBudgets('300, market-leaders=60')
-    expect(budgets).toEqual({ all: 300, byQuestion: { 'market-leaders': 60 } })
-    expect(budgetFor('market-leaders', budgets, 10)).toBe(60)
-    expect(budgetFor('peer-network', budgets, 10)).toBe(300)
+    const budgets = parseBudgets('300, top-customers=60')
+    expect(budgets).toEqual({ all: 300, byQuestion: { 'top-customers': 60 } })
+    expect(budgetFor('top-customers', budgets, 10)).toBe(60)
+    expect(budgetFor('churn-risk', budgets, 10)).toBe(300)
     expect(() => parseBudgets('fast')).toThrow(/not a budget: fast/)
     expect(() => parseBudgets('=30')).toThrow(/not a budget/)
     expect(() => parseBudgets('a=-1')).toThrow(/not a budget/)
@@ -119,14 +122,8 @@ describe('questions and budgets', () => {
   it('reads the recorded duration of a session, and of each committed featured recording', () => {
     expect(recordedSeconds({ turns: [turn()] })).toBe(32.5)
     expect(recordedSeconds({ turns: [] })).toBeNull()
-    const sessions = path.resolve(
-      process.cwd(),
-      '..',
-      'data',
-      'packs',
-      'synthetic-market',
-      'recordings'
-    )
+    // The fixture pack's bundle: the industry packs' recordings are re-recorded, so not a test input
+    const sessions = path.resolve(process.cwd(), 'e2e', 'fixtures', 'packs', 'retail', 'recordings')
     const index = JSON.parse(readFileSync(path.join(sessions, 'index.json'), 'utf8')) as {
       sessions: Array<{ id: string; featured: boolean }>
     }
@@ -141,9 +138,9 @@ describe('the checks of one run', () => {
   it('passes a good run', () => {
     expect(checkSuccess('success', turn()).ok).toBe(true)
     expect(checkCitations(turn())).toEqual({ ok: true, detail: '1 cited' })
-    expect(checkPills(['cudf', 'cuml'], ['cuml', 'cudf'], turn())).toEqual({
+    expect(checkPills(['duckdb', 'retrieval'], ['retrieval', 'duckdb'], turn())).toEqual({
       ok: true,
-      detail: 'cuDF cuML',
+      detail: 'Retrieval DuckDB',
     })
     expect(checkClosing(turn())).toEqual({ ok: true, detail: 'enterprise-research' })
     expect(checkLatency(42.4, 120)).toEqual({ ok: true, detail: '42 s of 120' })
@@ -169,17 +166,13 @@ describe('the checks of one run', () => {
   })
 
   it('compares the picker with the declared pills, and the declared pills with the tools the run used', () => {
-    expect(checkPills(['cudf'], ['cudf', 'cuml'], turn()).detail).toBe(
-      'picker shows cudf cuml, declared cudf'
+    expect(checkPills(['duckdb'], ['duckdb', 'kumo'], turn()).detail).toBe(
+      'picker shows duckdb kumo, declared duckdb'
     )
-    expect(checkPills(['cudf', 'cugraph'], null, turn())).toEqual({
+    expect(checkPills(['duckdb', 'kumo'], null, turn())).toEqual({
       ok: false,
-      detail: 'declared cugraph unused; used cuDF cuML',
+      detail: 'declared kumo unused; used Retrieval DuckDB',
     })
-    const cpu = turn({
-      receipts: [{ receiptId: 'r1', status: 'completed', content: { engine: { device: 'cpu' } } }],
-    })
-    expect(checkPills(['cudf'], ['cudf'], cpu)).toEqual({ ok: true, detail: 'pandas scikit-learn' })
   })
 
   it('needs the closing events last and in order', () => {
@@ -198,21 +191,21 @@ describe('the checks of one run', () => {
 
   it('needs the export, a full replay of the stream and the reopened session', () => {
     const good = { ok: true, detail: '' }
-    expect(checkReplay('job-1', turn(), { events: 8, status: 'success' }, good)).toEqual({
+    expect(checkReplay('job-1', turn(), { events: 9, status: 'success' }, good)).toEqual({
       ok: true,
-      detail: '8 events',
+      detail: '9 events',
     })
-    expect(checkReplay('job-2', turn(), { events: 8, status: 'success' }, good).detail).toBe(
+    expect(checkReplay('job-2', turn(), { events: 9, status: 'success' }, good).detail).toBe(
       'the export did not load'
     )
     expect(checkReplay('job-1', turn(), { events: 5, status: 'success' }, good).detail).toBe(
-      'the stream replayed 5 of 8 events'
+      'the stream replayed 5 of 9 events'
     )
-    expect(checkReplay('job-1', turn(), { events: 8, status: null }, good).detail).toBe(
+    expect(checkReplay('job-1', turn(), { events: 9, status: null }, good).detail).toBe(
       'the stream ended without a status'
     )
     const reopened = { ok: false, detail: 'reopened session: timeout' }
-    expect(checkReplay('job-1', turn(), { events: 8, status: 'success' }, reopened)).toBe(reopened)
+    expect(checkReplay('job-1', turn(), { events: 9, status: 'success' }, reopened)).toBe(reopened)
   })
 
   it('holds each run to its budget', () => {
@@ -237,14 +230,14 @@ describe('the stream and the table', () => {
 
   it('prints one row per question and the deployment checks, and counts the failures', () => {
     const passing: QuestionResult = {
-      id: 'market-leaders',
+      id: 'top-customers',
       jobId: 'job-1',
       seconds: 30,
       budget: 120,
       checks: {
         success: { ok: true, detail: '' },
         citations: { ok: true, detail: '1 cited' },
-        pills: { ok: true, detail: 'cuDF' },
+        pills: { ok: true, detail: 'DuckDB' },
         replay: { ok: true, detail: '13 events' },
         closing: { ok: true, detail: 'enterprise-research' },
         latency: { ok: true, detail: '30 s of 120' },
@@ -252,7 +245,7 @@ describe('the stream and the table', () => {
     }
     const slow = {
       ...passing,
-      id: 'peer-network',
+      id: 'churn-risk',
       checks: { ...passing.checks, latency: { ok: false, detail: '200 s, over 120' } },
     }
     expect(failed(slow)).toEqual(['latency'])
@@ -260,14 +253,14 @@ describe('the stream and the table', () => {
       [passing, slow],
       [
         ['health', { ok: true, detail: 'status ok, mode live' }],
-        ['landing', { ok: false, detail: 'missing peer-network' }],
+        ['landing', { ok: false, detail: 'missing churn-risk' }],
       ]
     )
     expect(table).toContain('ok   health: status ok, mode live')
-    expect(table).toContain('FAIL landing: missing peer-network')
-    expect(table).toMatch(/^market-leaders\s+PASS(\s+ok){6}\s+citations: 1 cited/m)
+    expect(table).toContain('FAIL landing: missing churn-risk')
+    expect(table).toMatch(/^top-customers\s+PASS(\s+ok){6}\s+citations: 1 cited/m)
     expect(table).toMatch(
-      /^peer-network\s+FAIL\s+ok\s+ok\s+ok\s+ok\s+ok\s+FAIL\s+.*latency: 200 s, over 120/m
+      /^churn-risk\s+FAIL\s+ok\s+ok\s+ok\s+ok\s+ok\s+FAIL\s+.*latency: 200 s, over 120/m
     )
     expect(table).toContain('1 of 2 questions passed; deployment checks 1 of 2')
   })

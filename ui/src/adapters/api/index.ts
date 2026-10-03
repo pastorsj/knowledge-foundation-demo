@@ -9,6 +9,12 @@
  */
 
 export {
+  createDocumentsClient,
+  type DocumentsClient,
+  type DocumentsClientOptions,
+} from './documents-client'
+
+export {
   fetchDataSources,
   fetchRecordedDataSources,
   type DataSourceFromAPI,

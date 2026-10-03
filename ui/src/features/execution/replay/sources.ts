@@ -4,8 +4,8 @@
 /**
  * Where a run's events and receipts come from outside the live stream:
  *
- * - a recorded session (in either mode) comes from the data pack's
- *   recordings bundle (v2) through `/api/recordings/…`: `index.json` lists
+ * - a recorded session (in either mode) comes from its pack's
+ *   recordings bundle (v2) through `/api/recordings/<pack>/…`: `index.json` lists
  *   the sessions and `sessions/<id>.json` holds each turn with its events and
  *   receipts;
  * - a live job reads its export, `GET /v1/jobs/async/job/{id}/export`, which
@@ -32,10 +32,6 @@ export interface RecordedTurn {
   receipts: unknown[]
   /** The job's data sources, when the recording has them */
   sourceIds?: string[]
-  /** The CPU/GPU comparison of its market calls (`Benchmark`), when one ran */
-  benchmark?: unknown
-  /** The Milvus CPU/GPU index comparison for its retrieval calls (`RetrievalBenchmark`), on a GPU stack */
-  retrievalBenchmark?: unknown
 }
 
 export interface RecordingIndex {
@@ -100,7 +96,6 @@ const toToolPills = (value: unknown): ToolPillUse[] =>
         ? [
             {
               pill: entry.pill,
-              device: entry.device === 'gpu' || entry.device === 'cpu' ? entry.device : null,
               tools: Array.isArray(entry.tools)
                 ? entry.tools.filter((tool): tool is string => typeof tool === 'string')
                 : [],
@@ -142,10 +137,12 @@ const getJson = async (url: string): Promise<unknown> => {
   return response.json()
 }
 
-/** Recorded sessions of the active data pack. */
+const bundle = (packId: string): string => `/api/recordings/${encodeURIComponent(packId)}`
+
+/** Recorded sessions of a pack. */
 export const recordings: RecordingsSource = {
-  list: async () => {
-    const index = parseIndex(await getJson('/api/recordings/index.json'))
+  list: async (packId) => {
+    const index = parseIndex(await getJson(`${bundle(packId)}/index.json`))
     return index.sessions.map(({ id, title, turns, tools }) => ({
       id,
       title,
@@ -154,11 +151,13 @@ export const recordings: RecordingsSource = {
       tools: toToolPills(tools),
     }))
   },
-  load: async (sessionId) => {
+  load: async (packId, sessionId) => {
     const [session, archive] = await Promise.all([
-      getJson(`/api/recordings/sessions/${encodeURIComponent(sessionId)}.json`).then(parseSession),
+      getJson(`${bundle(packId)}/sessions/${encodeURIComponent(sessionId)}.json`).then(
+        parseSession
+      ),
       // Only the run's label needs it: without the index, the run shows its job id alone
-      getJson('/api/recordings/index.json')
+      getJson(`${bundle(packId)}/index.json`)
         .then((index) => archiveId(parseIndex(index)))
         .catch(() => null),
     ])

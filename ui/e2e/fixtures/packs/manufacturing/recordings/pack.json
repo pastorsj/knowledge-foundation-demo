@@ -1,0 +1,14 @@
+{
+  "id": "manufacturing",
+  "kind": "industry",
+  "title": "Manufacturing",
+  "description": "A fictional plant's procedures and maintenance records (fixture).",
+  "icon": "Factory",
+  "status": "ready",
+  "version": "1.0.0",
+  "as_of": "2026-09-30",
+  "disclaimer": "Synthetic data for tests.",
+  "questions": [],
+  "examples": [],
+  "conversations": []
+}

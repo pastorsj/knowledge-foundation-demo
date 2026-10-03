@@ -5,13 +5,13 @@ import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within } from '@/test-utils'
 import type { ReceiptV2 } from '../contract'
 import type { ExecutionNodeDetail } from '../graph'
-import { receiptOf } from '../test-utils/fixtures'
+import { receiptOf, receiptOfTool } from '../test-utils/fixtures'
 import { EvidenceInspector } from './EvidenceInspector'
 
 const detail = (overrides: Partial<ExecutionNodeDetail> = {}): ExecutionNodeDetail => ({
   id: 'unstructured-retrieval',
   label: 'Unstructured Retrieval',
-  subtitle: 'Candidate passages · reranking · evidence',
+  subtitle: 'Cited passages · evidence',
   state: 'completed',
   observed: true,
   invocations: [],
@@ -28,7 +28,7 @@ const renderInspector = (
     <EvidenceInspector
       detail={detail()}
       cursor="779"
-      question="Which filings report an outage?"
+      question="What is the return window for opened electronics?"
       receipts={receipts}
       onClose={onClose}
       {...props}
@@ -45,12 +45,14 @@ describe('EvidenceInspector', () => {
     expect(within(dialog).getByText('Observed execution details')).toBeVisible()
     expect(
       within(dialog).getByText(
-        'Candidate passages · reranking · evidence. Queries and display-safe results are shown directly below.'
+        'Cited passages · evidence. Queries and display-safe results are shown directly below.'
       )
     ).toBeVisible()
     expect(within(dialog).getByText('Replay step 779')).toBeVisible()
-    expect(within(dialog).getByText('Which filings report an outage?')).toBeVisible()
-    expect(within(dialog).getByLabelText('Sources used')).toHaveTextContent('market_news')
+    expect(
+      within(dialog).getByText('What is the return window for opened electronics?')
+    ).toBeVisible()
+    expect(within(dialog).getByLabelText('Sources used')).toHaveTextContent('retail.policies')
     const call = within(dialog).getByTestId('execution-evidence-call')
     expect(within(call).getByText('Recorded call')).toBeVisible()
     expect(within(call).getByRole('heading', { name: 'Unstructured Retrieval' })).toBeVisible()
@@ -63,27 +65,26 @@ describe('EvidenceInspector', () => {
     expect(onClose).toHaveBeenCalled()
   })
 
-  it('shows a Kumo prediction’s PQL and scores under its database, and numbers several calls', () => {
+  it('shows a Kumo prediction’s PQL and scores under its source, and numbers several calls', () => {
     renderInspector(
       [receiptOf('structured_prediction'), receiptOf('structured_prediction', 'failed')],
       {
         detail: detail({ id: 'nvidia-kumo', label: 'NVIDIA Kumo' }),
-        databaseName: 'market_analysis',
-        sourceIds: ['market_data', 'sec_filings'],
-        structuredSources: [{ id: 'market_data', name: 'Market Prices & Events' }],
+        sourceIds: ['retail.sales', 'retail.policies'],
+        structuredSources: [{ id: 'retail.sales', name: 'Sales' }],
       }
     )
-    // The question's structured source by name, then the database the prediction read
+    // The question's structured source by name, which the prediction read too
     const sources = screen.getByLabelText('Sources used')
-    expect(within(sources).getByText('Sources used')).toBeVisible()
+    expect(within(sources).getByText('Source used')).toBeVisible()
     expect([...sources.querySelectorAll('span')].map((chip) => chip.textContent)).toEqual([
-      'Market Prices & Events',
-      'market_analysis',
+      'Sales',
     ])
     const calls = screen.getAllByTestId('execution-evidence-call')
     expect(within(calls[0]).getByText('Recorded call 1 of 2')).toBeVisible()
     expect(within(calls[0]).getByRole('heading', { name: 'NVIDIA Kumo Prediction' })).toBeVisible()
-    expect(within(calls[0]).getByText('Database: market_analysis')).toBeVisible()
+    expect(within(calls[0]).getByText('Source: retail.sales')).toBeVisible()
+    expect(within(calls[0]).getByText('Template: churn_90d')).toBeVisible()
     expect(within(calls[0]).getByText('Generated PQL')).toBeVisible()
     const output = within(calls[0]).getByTestId('execution-evidence-output')
     expect(
@@ -91,19 +92,36 @@ describe('EvidenceInspector', () => {
         .getAllByRole('columnheader')
         .map((th) => th.textContent)
     ).toEqual(['ANCHOR TIMESTAMP', 'ENTITY', 'FALSE PROB', 'PREDICTION', 'TRUE PROB'])
-    expect(output).toHaveTextContent('asset-delta')
+    expect(output).toHaveTextContent('C2')
     expect(within(calls[1]).getByText('The tool call ended with a failure.')).toBeVisible()
-    expect(within(calls[1]).getByText('Database: market_analysis')).toBeVisible()
+    expect(
+      within(calls[1]).getByText('No Kumo endpoint is configured (KUMO_RELATIONAL_URL).')
+    ).toBeVisible()
   })
 
-  it('shows Auto Ontology’s SQL and rows under the database it queried', () => {
-    renderInspector([receiptOf('structured_query')], {
+  it('shows a DuckDB table query’s SQL and rows under its database, and opens it in the data viewer', () => {
+    const onOpenQuery = vi.fn()
+    const { unmount } = renderInspector([receiptOf('structured_query')], {
       detail: detail({ id: 'structured-retrieval', label: 'Structured Retrieval' }),
+      queryDatabases: ['retail_sales'],
+      onOpenQuery,
     })
-    expect(screen.getByLabelText('Sources used')).toHaveTextContent('market_analysis')
-    expect(screen.getByRole('heading', { name: 'Auto Ontology Text-to-SQL' })).toBeVisible()
+    expect(screen.getByLabelText('Sources used')).toHaveTextContent('retail_sales')
+    expect(screen.getByRole('heading', { name: 'DuckDB Table Query' })).toBeVisible()
     expect(screen.getByText('Generated SQL')).toBeVisible()
     expect(screen.getByText('Query result')).toBeVisible()
+    fireEvent.click(screen.getByRole('button', { name: 'Open in Data Viewer' }))
+    expect(onOpenQuery).toHaveBeenCalledWith(receiptOf('structured_query'))
+    unmount()
+
+    // Auto Ontology's answers are named for it; a database the run cannot browse is not offered
+    const ontology = receiptOfTool('ask_question')
+    renderInspector([ontology], {
+      detail: detail({ id: 'structured-retrieval', label: 'Structured Retrieval' }),
+      onOpenQuery,
+    })
+    expect(screen.getByRole('heading', { name: 'Auto Ontology Text-to-SQL' })).toBeVisible()
+    expect(screen.queryByRole('button', { name: 'Open in Data Viewer' })).toBeNull()
   })
 
   it('says why there is no result: loading, or the calls seen so far', () => {
@@ -126,6 +144,6 @@ describe('EvidenceInspector', () => {
     expect(
       screen.getByText('No display-safe query result was retained at this replay step.')
     ).toBeVisible()
-    expect(screen.getByRole('listitem')).toHaveTextContent('Unstructured Retrievalrunning')
+    expect(screen.getByRole('listitem')).toHaveTextContent('Document Retrievalrunning')
   })
 })

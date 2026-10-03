@@ -207,30 +207,41 @@ export interface ReplayDatabase {
 export const REPLAY_QUERY_ONLY =
   'Replay can rerun only the queries its recorded answers ran. Start the live demo to run your own SQL.'
 
-let replayDatabase: Promise<ReplayDatabase | null> | null = null
+const replayDatabases = new Map<string, Promise<ReplayDatabase | null>>()
 
-/** The bundle's `database.json`, fetched once; null when the bundle has none. */
-export const loadReplayDatabase = (): Promise<ReplayDatabase | null> => {
-  replayDatabase ??= fetch('/api/recordings/database.json', { cache: 'no-store' })
-    .then(async (response) => {
-      if (!response.ok) return null
-      const body = (await response.json()) as ReplayDatabase
-      return body?.schemaVersion === 1 && Array.isArray(body.sources) ? body : null
+/** A pack's bundle `database.json`, fetched once; null when the bundle has none. */
+export const loadReplayDatabase = (packId: string): Promise<ReplayDatabase | null> => {
+  let database = replayDatabases.get(packId)
+  if (!database) {
+    database = fetch(`/api/recordings/${encodeURIComponent(packId)}/database.json`, {
+      cache: 'no-store',
     })
-    .catch(() => {
-      replayDatabase = null
-      return null
-    })
-  return replayDatabase
+      .then(async (response) => {
+        if (!response.ok) return null
+        const body = (await response.json()) as ReplayDatabase
+        return body?.schemaVersion === 1 && Array.isArray(body.sources) ? body : null
+      })
+      .catch(() => {
+        replayDatabases.delete(packId)
+        return null
+      })
+    replayDatabases.set(packId, database)
+  }
+  return database
 }
 
-/** For tests: forget the fetched bundle. */
+/** For tests: forget the fetched bundles. */
 export const resetReplayDatabase = (): void => {
-  replayDatabase = null
+  replayDatabases.clear()
 }
+
+/** A source's pack: its id's namespace (`retail.sales` is the retail pack's). */
+const packOf = (sourceId: string): string => sourceId.split('.')[0]
 
 const replaySource = async (sourceId: string): Promise<ReplaySource> => {
-  const source = (await loadReplayDatabase())?.sources.find((item) => item.id === sourceId)
+  const source = (await loadReplayDatabase(packOf(sourceId)))?.sources.find(
+    (item) => item.id === sourceId
+  )
   if (!source) throw new Error('This recording has no copy of that database.')
   return source
 }

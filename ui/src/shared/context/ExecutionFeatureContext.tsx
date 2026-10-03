@@ -82,9 +82,10 @@ export interface RecordedSessionSummary extends Pick<
   tools: ToolPillUse[]
 }
 
+/** A pack's recorded sessions (its replay bundle). */
 export interface RecordingsSource {
-  list: () => Promise<RecordedSessionSummary[]>
-  load: (sessionId: string) => Promise<RecordedSession>
+  list: (packId: string) => Promise<RecordedSessionSummary[]>
+  load: (packId: string, sessionId: string) => Promise<RecordedSession>
 }
 
 export interface ExecutionFeature {
@@ -96,6 +97,8 @@ export interface ExecutionFeature {
   ActivityPanel: ComponentType<ActivityPanelProps> | null
   /** Recorded sessions listed in replay mode. */
   recordings: RecordingsSource | null
+  /** The data viewer over the selected pack's structured sources (Your data's tables) */
+  DataViewer: ComponentType<{ onClose: () => void }> | null
 }
 
 /** The base UI without an execution view. */
@@ -104,6 +107,7 @@ export const noExecutionFeature: ExecutionFeature = {
   Workspace: null,
   ActivityPanel: null,
   recordings: null,
+  DataViewer: null,
 }
 
 const ExecutionFeatureContext = createContext<ExecutionFeature>(noExecutionFeature)

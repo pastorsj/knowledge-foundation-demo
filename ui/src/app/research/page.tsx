@@ -4,33 +4,38 @@
 /**
  * Research Page
  *
- * The chat experience. In live mode the active data pack's examples are the
- * composer's demo scenarios, and `?question=<id>` (from the landing page)
- * places that question, any of the pack's, in the composer.
+ * The chat experience, on the selected pack (`?pack=`, the `kf-pack` cookie or
+ * DEFAULT_PACK). In live mode the pack's examples are the composer's demo
+ * scenarios, and `?question=<id>` (from the landing page) places that
+ * question, any of the pack's, in the composer.
  */
 
 import { type ReactNode, Suspense } from 'react'
 import { fetchPack } from '@/adapters/api/pack-client'
 import { MainLayout, toDemoScenarios, type InitialQuestion } from '@/features/layout'
 import { readUiMode } from '@/shared/config/env'
+import { selectedPack } from '../selected-pack'
 
 interface ResearchPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 const ResearchPage = async ({ searchParams }: ResearchPageProps): Promise<ReactNode> => {
-  const pack = readUiMode() === 'live' ? await fetchPack() : null
-  const questionId = (await searchParams).question
+  const params = await searchParams
+  const packId = await selectedPack(params.pack)
+  const pack = readUiMode() === 'live' ? await fetchPack(packId) : null
+  const questionId = params.question
   const question =
     typeof questionId === 'string' ? pack?.questions.find((q) => q.id === questionId) : undefined
   const initialQuestion: InitialQuestion | null = question
     ? { question: question.question, sourceIds: question.sources }
     : null
 
-  // MainLayout reads the ?session= parameter, which needs a Suspense boundary.
+  // MainLayout reads the ?session= and ?pack= parameters, which need a Suspense boundary.
   return (
     <Suspense fallback={null}>
       <MainLayout
+        packId={packId}
         initialQuestion={initialQuestion}
         demoScenarios={toDemoScenarios(pack?.questions ?? [], pack?.examples)}
       />

@@ -58,8 +58,8 @@
 .inference,
 .technology,
 .groupLabel,
-.gpuIdentity,
-.gpuScope,
+.foundationIdentity,
+.foundationScope,
 .observability,
 .observabilityItem,
 .application,
@@ -100,11 +100,6 @@
 .brandMarkLarge {
   width: 34px;
   height: 34px;
-}
-
-.brandMarkWide {
-  width: 46px;
-  height: 19px;
 }
 
 .brandImage {
@@ -392,7 +387,7 @@
 
 .inference strong,
 .technology strong,
-.gpuIdentity strong {
+.foundationIdentity strong {
   color: var(--text-color-primary);
   font-weight: 500;
 }
@@ -478,7 +473,7 @@
   content: '';
 }
 
-.gpuFoundation {
+.foundation {
   display: flex;
   grid-column: 2 / 5;
   align-items: center;
@@ -495,18 +490,18 @@
   clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
 }
 
-.gpuIdentity {
+.foundationIdentity {
   gap: var(--logo-label-gap);
   color: var(--text-color-secondary);
   font-size: 9px;
   line-height: 1.5;
 }
 
-.gpuIdentity strong {
+.foundationIdentity strong {
   font-size: 12px;
 }
 
-.gpuScope {
+.foundationScope {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0;
@@ -514,7 +509,7 @@
   font-size: 9px;
 }
 
-.gpuScope span {
+.foundationScope span {
   padding: 0 10px;
   border-left: 1px solid var(--border-color-base);
   white-space: nowrap;
@@ -716,7 +711,7 @@
     padding-block: 9px;
   }
 
-  .gpuFoundation {
+  .foundation {
     min-height: 44px;
     padding-block: 6px;
   }
@@ -757,7 +752,7 @@
     row-gap: 6px;
   }
 
-  .gpuFoundation {
+  .foundation {
     min-height: 46px;
     padding-block: 6px;
   }
@@ -831,7 +826,7 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .gpuFoundation {
+  .foundation {
     grid-column: 1 / -1;
     grid-row: 4;
   }
@@ -858,7 +853,7 @@
 
   .header,
   .footer,
-  .gpuFoundation {
+  .foundation {
     align-items: flex-start;
     flex-direction: column;
   }
@@ -881,7 +876,7 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .gpuScope {
+  .foundationScope {
     justify-content: flex-start;
   }
 

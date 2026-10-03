@@ -1,0 +1,26 @@
+[
+  {
+    "id": "retail.sales",
+    "pack_id": "retail",
+    "name": "Sales",
+    "description": "Orders and customers (synthetic).",
+    "default_enabled": true,
+    "kind": "structured",
+    "database_name": "retail_sales",
+    "capabilities": ["structured_retrieval", "structured_prediction"],
+    "synthetic": true,
+    "status": "ready"
+  },
+  {
+    "id": "retail.policies",
+    "pack_id": "retail",
+    "name": "Policies",
+    "description": "Store policies (synthetic).",
+    "default_enabled": true,
+    "kind": "documents",
+    "database_name": null,
+    "capabilities": ["unstructured_retrieval"],
+    "synthetic": true,
+    "status": "ready"
+  }
+]

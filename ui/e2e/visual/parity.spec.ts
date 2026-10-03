@@ -4,11 +4,11 @@
 /**
  * Screenshot baselines of the views that keep the original demo UI's look: the landing page, a new
  * research session with its Data Sources panel, the question picker and the replays list with
- * their tool pills, a recorded answer, the execution
- * graph, the explorers (market, retrieval, Auto Ontology SQL, Kumo), the Agent Activity panel
- * (Thinking, Timeline, Benchmark with the Milvus comparison) and the data viewer.
+ * their tool pills, a recorded answer, the execution graph, the explorers (DuckDB SQL, retrieval,
+ * Auto Ontology SQL, Kumo), the Agent Activity panel (Thinking, Timeline), the data viewer and Your
+ * data's Files tab.
  *
- * The data is fixed: the fixture pack (e2e/fixtures/packs/e2e, synthetic) and the fake API, never a
+ * The data is fixed: the fixture packs (e2e/fixtures/packs, synthetic) and the fake API, never a
  * pack's recordings, which are re-recorded. Time and Math.random are frozen, CSS animations are
  * finished by toHaveScreenshot, and the starfield canvas is hidden (screenshot.css).
  * How to update the baselines: e2e/visual/README.md.
@@ -68,7 +68,7 @@ const matchesBaseline = async (target: Page | Locator, name: string) => {
 }
 
 const openRecording = async (page: Page, title: string) => {
-  await page.goto(`${REPLAY_URL}/research`)
+  await page.goto(`${REPLAY_URL}/research?pack=retail`)
   await page
     .getByRole('button', { name: `Recorded session: ${title}; Completed` })
     .first()
@@ -96,25 +96,25 @@ test.describe('live mode', () => {
       await page.emulateMedia({ colorScheme })
       // The server renders the featured questions only if the API answers within 3 s
       await expect(async () => {
-        await page.goto(`${VISUAL_LIVE_URL}/`)
+        await page.goto(`${VISUAL_LIVE_URL}/?pack=retail`)
         await expect(
           page.getByRole('region', { name: 'Featured questions' }).getByRole('link')
         ).toHaveCount(6, { timeout: 1_000 })
       }).toPass()
-      await expect(page.locator('main [data-brand] img')).toHaveCount(14)
+      await expect(page.locator('main [data-brand] img')).toHaveCount(12)
       await matchesBaseline(page, `landing-${colorScheme}`)
     })
   }
 
   test('new research session with the Data Sources panel', async ({ page }) => {
-    await page.goto(`${VISUAL_LIVE_URL}/research`)
+    await page.goto(`${VISUAL_LIVE_URL}/research?pack=retail`)
     await expect(page.getByRole('button', { name: 'Close data sources panel' })).toBeVisible()
-    await expect(page.getByText('Market data', { exact: true })).toBeVisible()
+    await expect(page.getByText('Sales', { exact: true })).toBeVisible()
     await matchesBaseline(page, 'research-data-sources')
   })
 
   test('question picker with tool pills', async ({ page }) => {
-    await page.goto(`${VISUAL_LIVE_URL}/research`)
+    await page.goto(`${VISUAL_LIVE_URL}/research?pack=retail`)
     // As the parity screenshots against the original were taken: with the Data Sources panel closed
     await page.getByRole('button', { name: 'Close data sources panel' }).click()
     await page.getByTestId('demo-scenario-select').click()
@@ -130,41 +130,38 @@ test.describe('live mode', () => {
 
 test.describe('replay mode', () => {
   test('recorded sessions list with tool pills', async ({ page }) => {
-    await page.goto(`${REPLAY_URL}/research`)
+    await page.goto(`${REPLAY_URL}/research?pack=retail`)
     const sessions = page.getByRole('button', { name: /^Recorded session: / })
     await expect(sessions).toHaveCount(2)
-    await expect(sessions.locator('.tool-pill')).toHaveCount(5)
+    await expect(sessions.locator('.tool-pill')).toHaveCount(4)
     await matchesBaseline(page, 'recorded-list')
   })
 
   test('recorded answer with its sources', async ({ page }) => {
-    await openRecording(page, 'Unusual moves and filings')
+    await openRecording(page, 'Returns policy and loyalty revenue')
     await expect(page.getByRole('region', { name: 'Sources' }).getByRole('listitem')).toHaveCount(2)
     await matchesBaseline(page, 'recorded-answer')
   })
 
   test('execution graph', async ({ page }) => {
-    await openRecording(page, 'Unusual moves and filings')
+    await openRecording(page, 'Returns policy and loyalty revenue')
     await page.getByRole('button', { name: 'View execution for this response' }).click()
-    await expect(workspace(page).getByText('Step 10 of 10')).toBeVisible()
+    await expect(workspace(page).getByText('Step 13 of 13')).toBeVisible()
     await matchesBaseline(page, 'execution-graph')
   })
 
-  test('market tool explorer', async ({ page }) => {
-    await openRecording(page, 'Unusual moves and filings')
-    await page.getByRole('button', { name: 'View execution for this response' }).click()
-    await workspace(page).locator('[data-node-id="market-anomaly-scan"]').click()
+  test('DuckDB SQL explorer', async ({ page }) => {
+    await openRecording(page, 'Returns policy and loyalty revenue')
+    await openCitedSource(page, 0, 1)
     await expect(
-      page
-        .getByRole('dialog', { name: 'Market Anomaly Scan explorer' })
-        .getByLabel('Anomaly score ranking')
+      page.getByRole('dialog', { name: 'Structured Retrieval execution details' })
     ).toBeVisible()
-    await matchesBaseline(page, 'explorer-market')
+    await matchesBaseline(page, 'explorer-duckdb-sql')
   })
 
   test('retrieval explorer', async ({ page }) => {
-    await openRecording(page, 'Unusual moves and filings')
-    await openCitedSource(page, 0, 1)
+    await openRecording(page, 'Returns policy and loyalty revenue')
+    await openCitedSource(page, 0, 0)
     await expect(
       page.getByRole('dialog', { name: 'Unstructured Retrieval execution details' })
     ).toBeVisible()
@@ -172,23 +169,23 @@ test.describe('replay mode', () => {
   })
 
   test('Auto Ontology text-to-SQL explorer', async ({ page }) => {
-    await openRecording(page, 'Dividends and news likelihood')
+    await openRecording(page, 'Gold-tier orders and churn risk')
     await openCitedSource(page, 0, 0)
     const explorer = page.getByRole('dialog', { name: 'Auto Ontology text-to-SQL details' })
-    await expect(explorer.getByText(/WITH price_history AS/)).toBeVisible()
+    await expect(explorer.getByText(/SELECT count/)).toBeVisible()
     await matchesBaseline(page, 'explorer-auto-ontology-sql')
   })
 
   test('Kumo explorer', async ({ page }) => {
-    await openRecording(page, 'Dividends and news likelihood')
+    await openRecording(page, 'Gold-tier orders and churn risk')
     await openCitedSource(page, 1, 0)
     const explorer = page.getByRole('dialog', { name: 'NVIDIA Kumo execution details' })
-    await expect(explorer.getByText('PREDICT COUNT(news_events.*, 0, 5, days)')).toBeVisible()
+    await expect(explorer.getByText(/PREDICT COUNT\(orders/)).toBeVisible()
     await matchesBaseline(page, 'explorer-kumo')
   })
 
-  test('Agent Activity panel: thinking, timeline and benchmark with Milvus', async ({ page }) => {
-    await openRecording(page, 'Unusual moves and filings')
+  test('Agent Activity panel: thinking and timeline', async ({ page }) => {
+    await openRecording(page, 'Returns policy and loyalty revenue')
     await page.getByRole('button', { name: 'Open agent activity panel' }).click()
     await expect(
       page.getByRole('list', { name: 'Hermes thinking activity' }).getByText('Answer ready')
@@ -198,31 +195,20 @@ test.describe('replay mode', () => {
     await page.getByRole('tab', { name: 'Timeline' }).click()
     await expect(page.getByRole('region', { name: 'Execution action timeline' })).toBeVisible()
     await matchesBaseline(page, 'activity-timeline')
-
-    await page.getByRole('tab', { name: 'Benchmark' }).click()
-    await expect(page.getByTestId('benchmark-tool-time-ratio')).toHaveText('1.86× faster')
-    await matchesBaseline(page, 'activity-benchmark')
-
-    const milvus = page.getByTestId('retrieval-benchmark-panel')
-    await milvus.scrollIntoViewIfNeeded()
-    await expect(milvus).toContainText('1.2× faster vector search')
-    await matchesBaseline(milvus, 'activity-benchmark-milvus')
   })
 
   test('data viewer: a table and a SQL query', async ({ page }) => {
-    await openRecording(page, 'Dividends and news likelihood')
+    await openRecording(page, 'Gold-tier orders and churn risk')
     await page.getByRole('button', { name: 'View execution for this response' }).first().click()
-    await workspace(page).getByRole('button', { name: 'Inspect Structured Database' }).click()
+    await workspace(page).getByRole('button', { name: 'Inspect DuckDB Tables' }).click()
     const browser = workspace(page).getByRole('dialog', { name: 'Structured Database browser' })
-    await browser.getByRole('button', { name: /corporate_actions/ }).click()
-    await expect(browser.getByText('ca-001')).toBeVisible()
+    await browser.getByRole('button', { name: /customers/ }).click()
+    await expect(browser.getByText('Ada Park')).toBeVisible()
     await matchesBaseline(page, 'data-viewer-table')
 
     await browser.getByRole('button', { name: 'SQL Query' }).click()
     await browser.getByRole('button', { name: 'Run query' }).click()
-    await expect(browser.getByRole('region', { name: 'SQL results' })).toContainText(
-      'asset-meridian'
-    )
+    await expect(browser.getByRole('region', { name: 'SQL results' })).toContainText('Cy Moreau')
     await matchesBaseline(page, 'data-viewer-sql')
   })
 })

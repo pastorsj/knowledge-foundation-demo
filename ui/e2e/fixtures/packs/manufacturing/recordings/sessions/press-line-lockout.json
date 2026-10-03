@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 2,
+  "id": "press-line-lockout",
+  "title": "Press line lockout",
+  "turns": [
+    {
+      "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+      "question": "What must an operator do before clearing a jam on press line 3?",
+      "submittedAt": "2026-09-28T06:10:00.000000Z",
+      "completedAt": "2026-09-28T06:10:11.000000Z",
+      "status": "success",
+      "report": {
+        "markdown": "Isolate the press at the main disconnect, lock and tag it, bleed hydraulic pressure and verify zero energy before reaching in. [1]\n\n**References:**\n- [1] Unstructured retrieval evidence — evidence `hermes-receipt:5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e` — invocation `hermes-tool:call_Mf4uLockoutTagout0001`",
+        "citations": [
+          {
+            "number": 1,
+            "label": "Unstructured retrieval evidence",
+            "evidenceId": "hermes-receipt:5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e",
+            "invocationId": "hermes-tool:call_Mf4uLockoutTagout0001"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "c20e229f-2dda-5849-8045-486c6f4b6a1a",
+          "cursor": 1,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:7a3f1c2e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:00.000000Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": null,
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b6058017-06ad-52f0-9ad3-4ee1a368de0d",
+          "cursor": 2,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_Mf4uLockoutTagout0001",
+          "parentInvocationId": "hermes-run:7a3f1c2e:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:03.000000Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": null,
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9721b0e3-dc3e-52bc-9097-b09d23829e5d",
+          "cursor": 3,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_Mf4uLockoutTagout0001",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:05.000000Z",
+          "display": {
+            "label": "Document Retrieval result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 2241,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": null,
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "792e846c-73d4-5d6b-9773-4a971ffbd73e",
+          "cursor": 4,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_Mf4uLockoutTagout0001",
+          "parentInvocationId": "hermes-run:7a3f1c2e:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:06.000000Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": null,
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "bb0d9acd-8b3b-59af-9056-83a25ceae5b8",
+          "cursor": 5,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:7a3f1c2e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:11.000000Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 18000,
+              "output_tokens": 900,
+              "total_tokens": 18900
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": null,
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "808fce34-2079-5420-bc07-66dc69f58f96",
+          "cursor": 6,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "demo.api",
+          "invocationId": null,
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:11.100000Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": null,
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "demo-api.v1",
+            "observation": "derived",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "80c0aff4-7c36-5020-9b06-b2b6eb9d056c",
+          "cursor": 7,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "demo.api",
+          "invocationId": null,
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:11.200000Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": null,
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "demo-api.v1",
+            "observation": "derived",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "5b1b34e2-c3cb-5797-8b64-851abbed248e",
+          "cursor": 8,
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "runId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "sessionId": "session-7a3f1c2e",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "demo.api",
+          "invocationId": null,
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-09-28T06:10:11.300000Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "knowledge-foundation",
+              "wall_duration_ms": 11300,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 2241
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": null,
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "demo-api.v1",
+            "observation": "derived",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e",
+          "jobId": "7a3f1c2e-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+          "invocationId": "hermes-tool:call_Mf4uLockoutTagout0001",
+          "turnId": null,
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 2241,
+          "traceId": "01a0e6627c447b83a27dc6ec13c18349",
+          "spanId": "81569081e47c3353",
+          "occurredAt": "2026-09-28T05:00:23.867804Z",
+          "content": {
+            "query": "Lockout/tagout steps before clearing a jam on press line 3",
+            "sourceIds": ["manufacturing.sops"],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.6912,
+                "vectorScore": 0.6912,
+                "sourceId": "manufacturing.sops",
+                "documentId": "manufacturing.sops:press-line-sop.pdf",
+                "chunkId": "manufacturing.sops:press-line-sop.pdf:0003",
+                "title": "Press Line Standard Operating Procedure",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Clearing a jam\nIsolate the press at the main disconnect, apply a personal lock and tag, bleed hydraulic pressure to zero and verify zero energy with a test cycle before reaching in.",
+                "metadata": {
+                  "citation": "press-line-sop.pdf, p. 3",
+                  "file_name": "press-line-sop.pdf",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": ["Clearing a jam"],
+                  "doc_items": ["section_header", "text"],
+                  "parser": "nemotron-parse-2.0"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "manufacturing.sops": 18
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 471.5,
+              "searchMs": 15.4,
+              "rerankMs": 0.0,
+              "totalMs": 2202.3
+            }
+          }
+        }
+      ],
+      "sourceIds": ["manufacturing.sops"]
+    }
+  ]
+}
