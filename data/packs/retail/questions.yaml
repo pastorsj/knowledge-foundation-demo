@@ -1,0 +1,114 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/questions.schema.json
+#
+# The Retail questions: the UI scenario list, the README quickstart and the replay recording set (featured). The
+# expected answers, computed from the generated files, are in README.md ("Answer key"). Pills name the tools a
+# recorded answer must use: retrieval (documents), duckdb (SQL over the tables), kumo (NVIDIA Kumo predictions).
+schema_version: "3"
+# The composer's example picker, in order: the featured questions first, then the rest.
+examples:
+  - return-window-fees
+  - no-receipt-limits
+  - top-stores-q3
+  - electronics-returns-fee
+  - monitored-store-returns
+  - gold-churn-risk
+  - regional-growth-report
+  - category-vs-plan
+  - category-return-rate
+  - return-risk-30d
+questions:
+  - id: return-window-fees
+    label: Return windows and restocking fees
+    tag: DOCUMENTS
+    description: Read the restocking fee table in the return policy PDF.
+    question: >-
+      What return window and restocking fee apply to electronics and to furniture under Lumen's return policy, and are
+      defective items charged the fee?
+    sources: [policies]
+    tools: [retrieval]
+    featured: true
+  - id: no-receipt-limits
+    label: No-receipt return limits
+    tag: DOCUMENTS
+    description: The answer is in a scanned memo, which only a vision parser can read.
+    question: >-
+      What does the loss-prevention memo set as the maximum value of a no-receipt return, how many no-receipt returns can
+      one customer make in 90 days, and what is the lower limit at stores on enhanced monitoring?
+    sources: [policies]
+    tools: [retrieval]
+    featured: true
+  - id: regional-growth-report
+    label: Fastest-growing region in Q3
+    tag: DOCUMENTS
+    description: Find the regional table in the Q3 2026 performance report PDF.
+    question: >-
+      According to the Q3 2026 regional performance report, which region grew net sales fastest year over year, and what
+      were its Q3 2026 net sales?
+    sources: [reports]
+    tools: [retrieval]
+  - id: top-stores-q3
+    label: Top stores by Q3 net sales
+    tag: SQL
+    description: Rank physical stores by net sales for the last full quarter.
+    question: >-
+      Which five physical stores (excluding the online store) had the highest net sales in Q3 2026, July 1 to September 30?
+    sources: [sales]
+    tools: [duckdb]
+    featured: true
+  - id: category-vs-plan
+    label: Categories against plan
+    tag: SQL
+    description: Join the planning workbook's targets to order lines.
+    question: >-
+      Which product categories missed their Q3 2026 net sales target in the merchandising plan, and by what percentage?
+    sources: [sales]
+    tools: [duckdb]
+  - id: category-return-rate
+    label: Highest return rate by category
+    tag: SQL
+    description: Returned value as a share of net sales, by product category.
+    question: >-
+      Which product category had the highest return rate in Q3 2026, measured as the value of items returned in the quarter
+      divided by net sales in the quarter?
+    sources: [sales]
+    tools: [duckdb]
+  - id: electronics-returns-fee
+    label: Electronics returns and restocking fee
+    tag: HYBRID
+    description: Count returns in the tables, then apply the policy's restocking fee.
+    question: >-
+      Which physical store processed the most electronics returns in Q3 2026, and under the return policy how much
+      restocking fee would be due on that store's opened, non-defective electronics returns?
+    sources: [policies, sales]
+    tools: [retrieval, duckdb]
+    featured: true
+  - id: monitored-store-returns
+    label: Stores on enhanced return monitoring
+    tag: HYBRID
+    description: Read the store list from the scanned memo, then total their returns in the tables.
+    question: >-
+      The loss-prevention memo puts three stores on enhanced return monitoring. How many returns did those stores process in
+      Q3 2026, and what share of the chain's returned value is that?
+    sources: [policies, sales]
+    tools: [retrieval, duckdb]
+    featured: true
+  - id: gold-churn-risk
+    label: Gold customers likely to churn
+    tag: PREDICTION
+    description: Predict which gold-tier customers place no order in the next 90 days.
+    question: >-
+      Which gold-tier customers are most likely to place no order in the next 90 days?
+    sources: [sales]
+    tools: [kumo]
+    featured: true
+  - id: return-risk-30d
+    label: Customers likely to return an item
+    tag: PREDICTION
+    description: Predict which customers return at least one item in the next 30 days.
+    question: >-
+      Which customers are most likely to return at least one item in the next 30 days?
+    sources: [sales]
+    tools: [kumo]
