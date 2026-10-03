@@ -79,7 +79,7 @@ Toolkit; the `kumo` profile also needs an x86_64 host. OpenShell 0.1.2 runs in c
 and builds, so there is no CLI to install.
 
 ```bash
-git clone <this repository> knowledge-foundation && cd knowledge-foundation
+git clone https://github.com/pastorsj/knowledge-foundation-demo.git && cd knowledge-foundation-demo
 ./scripts/demo.sh init            # creates .env (mode 600) and its internal secrets
 "${EDITOR:-vi}" .env              # set INFERENCE_API_KEY and COMPOSE_PROFILES (below)
 ./scripts/demo.sh doctor --keys   # checks the host, .env and every model id
