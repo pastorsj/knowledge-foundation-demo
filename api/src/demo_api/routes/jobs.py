@@ -23,6 +23,8 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from pydantic import Field
 
+from demo_api.catalog import PACK_ID
+from demo_api.catalog import CatalogUnavailableError
 from demo_api.jobs.export import export_turn
 from demo_api.jobs.runner import QueueFullError
 from demo_api.jobs.runner import RunnerUnavailableError
@@ -30,7 +32,6 @@ from demo_api.jobs.store import Job
 from demo_api.jobs.store import JobExistsError
 from demo_api.jobs.stream import job_stream
 from demo_api.jobs.stream import resolve_cursor
-from demo_api.pack import PackUnavailableError
 from demo_api.phoenix import PhoenixUnavailableError
 from demo_api.phoenix import find_trace_id
 from demo_api.services import Services
@@ -48,8 +49,16 @@ class SubmitRequest(BaseModel):
     agent_type: Literal["hermes"] = "hermes"
     input: str
     job_id: str | None = Field(default=None, pattern=r"^[A-Za-z0-9_-]{1,64}$")
+    pack_id: str | None = Field(
+        default=None,
+        pattern=PACK_ID,
+        max_length=64,
+        description="The pack the question is asked in; inferred when every selected source is of one pack.",
+    )
     data_sources: list[str] | None = Field(
-        default=None, description="Source ids to use; omit for every available source, [] for none."
+        default=None,
+        description="Catalog source ids to use; omit for every available source of the pack (of every pack without "
+        "one), [] for none.",
     )
 
 
@@ -67,23 +76,32 @@ async def submit(
     if conversation_id is not None and not _CONVERSATION_ID.fullmatch(conversation_id):
         raise HTTPException(422, "The conversation-id header is not a valid id.")
     try:
-        available = {source.id: source for source in services.pack.sources()}
-    except PackUnavailableError as error:
+        available = {source.id: source for source in services.catalog.sources()}
+        if body.pack_id is not None and body.pack_id not in {pack.id for pack in services.catalog.packs()}:
+            raise HTTPException(422, f"Unknown pack: {body.pack_id}")
+    except CatalogUnavailableError as error:
         raise HTTPException(503, str(error)) from error
-    source_ids = list(dict.fromkeys(body.data_sources)) if body.data_sources is not None else list(available)
+    if body.data_sources is not None:
+        source_ids = list(dict.fromkeys(body.data_sources))
+    else:
+        source_ids = [id_ for id_, source in available.items() if body.pack_id in (None, source.pack_id)]
     if unknown := [source_id for source_id in source_ids if source_id not in available]:
         detail = {"message": f"Unknown data source(s): {', '.join(unknown)}", "invalid_ids": unknown}
         raise HTTPException(422, detail | {"known_ids": sorted(available)})
 
     selected = [available[source_id] for source_id in source_ids]
     families = {family for source in selected for family in source.capabilities}
+    packs = {source.pack_id for source in selected}
     request: dict[str, Any] = {
         "question": question,
+        "pack_id": body.pack_id or (packs.pop() if len(packs) == 1 else None),
         "source_ids": source_ids,
         "conversation_id": conversation_id,
         "catalog": [source.catalog_entry() for source in selected],
         "toolsets": services.registry.toolsets(families, services.settings.features),
+        # The agent plugin's execution scope: the first structured source's DuckDB alias, the documents' collection
         "database_name": next((source.database_name for source in selected if source.database_name), None),
+        "collection": next((source.collection for source in selected if source.collection), None),
     }
     job_id = body.job_id or str(uuid.uuid4())
     try:

@@ -5,6 +5,8 @@
 
 from __future__ import annotations
 
+import json
+
 from demo_api.hermes.client import RunEvent
 from demo_api.hermes.normalizer import EventNormalizer
 from demo_api.hermes.normalizer import tool_invocation_id
@@ -80,7 +82,9 @@ def test_unknown_events_are_kept_generically(tool_registry):
 
 
 def test_run_request_follows_the_agent_run_contract():
-    catalog = [{"id": "market_news", "name": "SEC Filings", "capabilities": ["unstructured_retrieval"]}]
+    catalog = [
+        {"id": "retail.policies", "name": "Policies", "kind": "documents", "capabilities": ["unstructured_retrieval"]}
+    ]
     request = build_run_request(
         job_id="job-1",
         session_id="conv-1",
@@ -100,4 +104,37 @@ def test_run_request_follows_the_agent_run_contract():
         {"role": "user", "content": "Earlier?"},
         {"role": "assistant", "content": "Yes [1]."},
     ]
-    assert '"id":"market_news"' in request["instructions"]
+    assert '"id":"retail.policies"' in request["instructions"]
+    assert "<alias>.<table>" not in request["instructions"]  # no structured source, no word about SQL
+
+
+def test_run_instructions_carry_each_structured_source_s_database_and_templates():
+    entry = {
+        "id": "retail.sales",
+        "name": "Sales",
+        "kind": "structured",
+        "capabilities": ["structured_retrieval", "structured_prediction"],
+        "database": {
+            "alias": "retail_sales",
+            "tables": [
+                {
+                    "name": "orders",
+                    "description": "One row per order.",
+                    "row_count": 5,
+                    "primary_key": "order_id",
+                    "time_column": "ordered_at",
+                    "columns": [{"name": "net_amount", "type": "DOUBLE", "description": "After discounts, in USD."}],
+                    "foreign_keys": [],
+                }
+            ],
+        },
+        "prediction_templates": [{"id": "churn_90d", "name": "Churn", "description": "", "pql": "PREDICT 1"}],
+    }
+    instructions = build_run_request(
+        job_id="job-1", session_id="job-1", question="q", catalog=[entry], toolsets=["skills"], prior_turns=[]
+    )["instructions"]
+
+    assert "Selected source IDs for this turn: retail.sales." in instructions
+    assert "<alias>.<table>" in instructions
+    catalog = json.loads(instructions.split("Selected-source catalog (JSON): ", 1)[1])
+    assert catalog == [entry]

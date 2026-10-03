@@ -12,7 +12,10 @@ from typing import Any
 import httpx
 import pytest
 from support import event
+from support import read_manifest
 from support import receipt_for
+from support import update_manifest
+from support import write_manifest
 
 from demo_api.hermes.request import correlation_ref
 from demo_api.jobs.executor import HermesJobExecutor
@@ -24,7 +27,7 @@ RETRIEVE = "mcp__retrieval__retrieve_evidence"
 
 
 async def submit(api: httpx.AsyncClient, job_id: str, **body: Any) -> httpx.Response:
-    payload = {"agent_type": "hermes", "input": "Which filings mention outages?", "job_id": job_id} | body
+    payload = {"agent_type": "hermes", "input": "Which return policies mention electronics?", "job_id": job_id} | body
     return await api.post("/v1/jobs/async/submit", json=payload, headers={"conversation-id": "conv-1"})
 
 
@@ -58,7 +61,7 @@ def tool_events(call_id: str = "call_1") -> list[dict[str, Any]]:
 
 
 async def test_a_question_runs_on_hermes_and_publishes_a_cited_answer(app, api, fake_hermes, post_receipt):
-    response = await submit(api, "job-1", data_sources=["market_news", "market_analysis_structured"])
+    response = await submit(api, "job-1", data_sources=["retail.policies", "retail.sales"])
     assert response.json() == {"job_id": "job-1", "status": "submitted"}
 
     run_id = await fake_hermes.wait_for_run()
@@ -70,7 +73,7 @@ async def test_a_question_runs_on_hermes_and_publishes_a_cited_answer(app, api, 
     assert payload["session_id"] == "job-1"
     assert payload["enabled_toolsets"] == ["skills", "retrieval", "tables"]
     assert payload["metadata"]["aiq.job.ref"] == correlation_ref("job-1")
-    assert "market_news, market_analysis_structured" in payload["instructions"]
+    assert "retail.policies, retail.sales" in payload["instructions"]
 
     await wait_until_bound(app, "job-1")
     receipt = receipt_for("job-1")
@@ -152,7 +155,7 @@ async def test_a_question_runs_on_hermes_and_publishes_a_cited_answer(app, api, 
         "receipts",
         "sourceIds",
     }
-    assert turn["sourceIds"] == ["market_news", "market_analysis_structured"]
+    assert turn["sourceIds"] == ["retail.policies", "retail.sales"]
     assert turn["status"] == "success"
     assert turn["report"]["citations"][0]["evidenceId"] == receipt["receiptId"]
     assert [e["cursor"] for e in turn["events"]] == sorted(e["cursor"] for e in turn["events"])
@@ -270,12 +273,83 @@ async def test_submit_rejects_a_duplicate_job_id(api, fake_hermes):
     assert (await submit(api, "job-1")).status_code == 409
 
 
-async def test_submit_rejects_a_source_the_running_tools_cannot_serve(api, data_dir):
-    manifest = data_dir / "collection-manifest.json"
-    manifest.unlink()  # retrieval-index has not run, so documents cannot be searched
-    response = await submit(api, "job-1", data_sources=["market_news"])
+async def test_submit_rejects_a_source_the_running_tools_cannot_serve(api, knowledge_dir):
+    update_manifest(knowledge_dir, "sources", "retail.policies", status="empty")  # nothing ingested yet
+    response = await submit(api, "job-1", data_sources=["retail.policies"])
     assert response.status_code == 422
-    assert response.json()["detail"]["invalid_ids"] == ["market_news"]
+    assert response.json()["detail"]["invalid_ids"] == ["retail.policies"]
+
+
+async def stored_request(app, job_id: str) -> dict[str, Any]:
+    return (await app.state.services.store.get(job_id)).request
+
+
+async def test_submit_stores_the_pack_and_what_the_agent_sees_of_each_source(app, api, fake_hermes):
+    response = await submit(api, "job-1", data_sources=["retail.sales"], pack_id="retail")
+    assert response.status_code == 200
+
+    request = await stored_request(app, "job-1")
+    assert (request["pack_id"], request["source_ids"]) == ("retail", ["retail.sales"])
+    assert (request["database_name"], request["collection"], request["toolsets"]) == (
+        "retail_sales",
+        None,
+        ["skills", "tables"],
+    )
+    (entry,) = request["catalog"]
+    assert entry["database"]["alias"] == "retail_sales"
+    assert [table["name"] for table in entry["database"]["tables"]] == ["customers", "orders"]
+    assert entry["database"]["tables"][1]["foreign_keys"] == [
+        {"column": "customer_id", "references_table": "customers", "references_column": "customer_id"}
+    ]
+    assert entry["prediction_templates"] == []  # no Kumo in this stack
+    # The run's instructions carry the same catalog, so the agent writes SQL without a schema tool
+    instructions = fake_hermes.runs[await fake_hermes.wait_for_run()]["payload"]["instructions"]
+    assert '"alias":"retail_sales"' in instructions and '"row_count":5' in instructions
+
+
+@pytest.mark.parametrize("features", ["retrieval,tables,kumo"])
+async def test_with_kumo_the_agent_sees_the_source_s_prediction_templates(app, api, fake_hermes):
+    await submit(api, "job-1", data_sources=["retail.sales"])
+
+    request = await stored_request(app, "job-1")
+    assert request["toolsets"] == ["skills", "prediction", "tables"]
+    assert [template["id"] for template in request["catalog"][0]["prediction_templates"]] == ["churn_90d"]
+
+
+async def test_the_pack_is_inferred_from_sources_of_one_pack(app, api, knowledge_dir, fake_hermes):
+    await submit(api, "job-1", data_sources=["retail.policies", "retail.sales"])
+    assert (await stored_request(app, "job-1"))["pack_id"] == "retail"
+
+    uploads = read_manifest(knowledge_dir, "sources", "retail.policies") | {
+        "id": "workspace.documents",
+        "pack_id": "workspace",
+    }
+    write_manifest(knowledge_dir, "sources", uploads)
+    await submit(api, "job-2", data_sources=["retail.sales", "workspace.documents"])
+    request = await stored_request(app, "job-2")
+    assert (request["pack_id"], request["source_ids"]) == (None, ["retail.sales", "workspace.documents"])
+
+
+async def test_without_sources_a_job_uses_every_source_of_its_pack(app, api, knowledge_dir, fake_hermes):
+    uploads = read_manifest(knowledge_dir, "sources", "retail.policies") | {
+        "id": "workspace.documents",
+        "pack_id": "workspace",
+    }
+    write_manifest(knowledge_dir, "sources", uploads)
+
+    await submit(api, "job-1", pack_id="workspace")
+    assert (await stored_request(app, "job-1"))["source_ids"] == ["workspace.documents"]
+    await submit(api, "job-2")
+    assert (await stored_request(app, "job-2"))["source_ids"] == [
+        "retail.policies",
+        "retail.sales",
+        "workspace.documents",
+    ]
+
+
+@pytest.mark.parametrize(("pack_id", "status"), [("aerospace", 422), ("Not A Pack", 422)])
+async def test_submit_rejects_an_unknown_pack(api, pack_id, status):
+    assert (await submit(api, "job-1", pack_id=pack_id)).status_code == status
 
 
 @pytest.mark.parametrize("path", ["", "/report", "/stream", "/stream/3", "/export", "/trace"])
@@ -346,7 +420,7 @@ async def test_a_follow_up_carries_the_earlier_answers_of_its_conversation(api, 
     payload = fake_hermes.runs["run-2"]["payload"]
     assert payload["input"] == "And after that?"
     assert payload["conversation_history"] == [
-        {"role": "user", "content": "Which filings mention outages?"},
+        {"role": "user", "content": "Which return policies mention electronics?"},
         {"role": "assistant", "content": "First answer."},
     ]
 

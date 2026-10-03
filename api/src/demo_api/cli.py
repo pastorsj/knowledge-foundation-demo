@@ -1,35 +1,35 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""``demo-api record``: ask the pack's questions on a running stack and write the replay bundle.
+"""``demo-api record --pack <id>``: ask one pack's questions on a running stack and write its replay bundle.
 
 The v2 bundle, which the UI replays from ``data/packs/<pack>/recordings/``::
 
     index.json             {schemaVersion: 2, pack: {id, version}, recordedAt,
                             sessions: [{id, title, featured, turns: [{jobId, question}], tools}]}
                            tools: the pills of the tools its runs used (pills.py), for the replays list
-    pack.json              a copy of /data/active/pack.json, so replay needs no API
+    pack.json              the pack's PackView (GET /v1/pack?id=<pack>), so replay needs no API
+    sources.json           the pack's data sources (GET /v1/data_sources?pack=<pack>)
     sessions/<id>.json     {schemaVersion: 2, id, title, turns: [<GET .../job/{id}/export>]}
     database.json          {schemaVersion: 1, sources: [{id, name, databaseName, schema, previews, queries}]}:
-                           each structured source's schema (GET .../schema), the first rows of each table
-                           (GET .../preview), and the result (POST .../query) of each SQL query the recorded
-                           answers ran and of the data viewer's starting query for each table, so the data
-                           viewer works in replay
+                           for each structured source of the pack, by source id: its schema (GET .../schema), the
+                           first rows of each table (GET .../preview), and the result (POST .../query) of each SQL
+                           query the recorded answers ran on its database and of the data viewer's starting query
+                           for each table, so the data viewer works in replay
 
-Each pack question becomes one single-turn session, asked one at a time. Each pack conversation
-(questions.yaml ``conversations``, recorded with ``--all`` or by id) becomes one session of several
-turns, asked in order in one conversation, so a later turn sees the earlier answers. A
-question or conversation that does not succeed is left out of the bundle and makes the command
-exit 1. Recording named ids (``--question``) updates those sessions of an existing bundle and
-keeps its other sessions, naming them when they come from another build; recording a whole set replaces the
-bundle. An id the pack does not offer, or a bundle of another version of the pack, stops the command before
-anything is asked (exit 2).
+Each pack question becomes one single-turn session, asked one at a time in its pack with its own sources. Each
+pack conversation (questions.yaml ``conversations``, recorded with ``--all`` or by id) becomes one session of
+several turns, asked in order in one conversation, so a later turn sees the earlier answers. A question or
+conversation that does not succeed is left out of the bundle and makes the command exit 1. Recording named ids
+(``--question``) updates those sessions of an existing bundle and keeps its other sessions; recording a whole set
+replaces the bundle. A pack the catalog does not hold, an id the pack does not offer on this stack, or a bundle
+of another version of the pack stops the command before anything is asked (exit 2).
 
 Served model ids are written without a gateway's provider prefix. An OpenAI-compatible gateway may serve a model
 under a provider-prefixed id (``<provider>/<publisher>/<model>``); the bundle keeps the last segment, the
 model's own name, wherever the id appears.
 
-``demo-api snapshot-database --out <recordings>`` rewrites only ``database.json`` of a bundle.
+``demo-api snapshot-database --pack <id> --out <recordings>`` rewrites only ``database.json`` of a bundle.
 """
 
 from __future__ import annotations
@@ -37,7 +37,6 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import shutil
 import sys
 import time
 import uuid
@@ -76,9 +75,13 @@ def public_model_ids(value: Any) -> Any:
 
 
 def record(
-    client: httpx.Client, *, data_dir: Path, out_dir: Path, question_ids: list[str], featured_only: bool, timeout: float
+    client: httpx.Client, *, pack_id: str, out_dir: Path, question_ids: list[str], featured_only: bool, timeout: float
 ) -> int:
-    pack = client.get("/v1/pack").raise_for_status().json()
+    response = client.get("/v1/pack", params={"id": pack_id})
+    if response.status_code in (404, 422):
+        print(f"{pack_id} is not a pack of the running stack's catalog", file=sys.stderr)
+        return USAGE_ERROR
+    pack = response.raise_for_status().json()
     # Every session the pack can record, in pack order: (id, title, featured, sources, the questions of its turns)
     planned = [
         (question["id"], question["label"], question["featured"], question["sources"], [question["question"]])
@@ -89,10 +92,11 @@ def record(
     ]
     order = [session_id for session_id, *_ in planned]
     if unknown := [question_id for question_id in question_ids if question_id not in order]:
-        # /v1/pack leaves out a question whose sources this build lacks, so a pack's own id can be missing too
+        # /v1/pack leaves out a question whose sources or tools this stack does not serve, so a pack's own id can
+        # be missing too
         print(
-            f"Not in this build's pack (unknown, or its sources are not in this build): {', '.join(unknown)}. "
-            f"It offers: {', '.join(order)}",
+            f"Not offered by {pack_id} on this stack (unknown, or its sources or tools are not running): "
+            f"{', '.join(unknown)}. It offers: {', '.join(order)}",
             file=sys.stderr,
         )
         return USAGE_ERROR
@@ -107,9 +111,7 @@ def record(
     sessions: dict[str, dict[str, Any]] = {}
     index_path = out_dir / "index.json"
     if question_ids and index_path.is_file():
-        previous = json.loads(index_path.read_text(encoding="utf-8"))
-        named = {session[0] for session in wanted}
-        kept = _kept_sessions(previous, pack, out_dir=out_dir, data_dir=data_dir, replaced=named)
+        kept = _kept_sessions(json.loads(index_path.read_text(encoding="utf-8")), pack, out_dir=out_dir)
         if kept is None:
             return USAGE_ERROR
         sessions = {session["id"]: session for session in kept if session["id"] in order}
@@ -122,7 +124,7 @@ def record(
         for number, question in enumerate(questions, 1):
             step = f" (turn {number} of {len(questions)})" if len(questions) > 1 else ""
             print(f"Asking {session_id}{step}: {question}", file=sys.stderr)
-            turn = _ask(client, question, sources, conversation_id=conversation_id, timeout=timeout)
+            turn = _ask(client, question, pack_id, sources, conversation_id=conversation_id, timeout=timeout)
             if turn["status"] != "success":
                 print(f"  {turn['status']}; left out of the bundle", file=sys.stderr)
                 failures += 1
@@ -141,8 +143,9 @@ def record(
     for path in sessions_dir.glob("*.json"):
         if path.stem not in sessions:
             path.unlink()
-    shutil.copyfile(data_dir / "pack.json", out_dir / "pack.json")
-    snapshot_database(client, out_dir)
+    _write_json(out_dir / "pack.json", pack)
+    _write_json(out_dir / "sources.json", _pack_sources(client, pack_id))
+    snapshot_database(client, out_dir, pack_id)
     # The tools each session's runs used, as the replays list shows them (pills.py)
     registry = ToolRegistry.load(Settings().tool_registry_file)
     for session_id, session in sessions.items():
@@ -150,7 +153,7 @@ def record(
         session["tools"] = session_pills(turns, registry)
     index = {
         "schemaVersion": 2,
-        "pack": {"id": pack["id"], "version": pack["version"]},
+        "pack": {"id": pack["id"], "version": pack.get("version")},
         "recordedAt": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "sessions": sorted(sessions.values(), key=lambda session: order.index(session["id"])),
     }
@@ -160,51 +163,30 @@ def record(
     return 1 if failures else 0
 
 
-def _kept_sessions(
-    previous: dict[str, Any], pack: dict[str, Any], *, out_dir: Path, data_dir: Path, replaced: set[str]
-) -> list[dict[str, Any]] | None:
+def _kept_sessions(previous: dict[str, Any], pack: dict[str, Any], *, out_dir: Path) -> list[dict[str, Any]] | None:
     """The sessions of an existing bundle that recording named ids keeps; None when it must keep none of them.
 
     A bundle of another pack is replaced. One of another version of this pack is not updated piecemeal: its
-    questions may have changed, and its index would claim the new version for every session. On another build of
-    the same version (after a corpus change, say) the earlier sessions are kept and named, since their evidence and
-    answers come from that build.
+    questions may have changed, and its index would claim the new version for every session.
     """
     recorded = previous.get("pack", {})
     if recorded.get("id") != pack["id"]:
         return []
-    if recorded.get("version") != pack["version"]:
+    if recorded.get("version") != pack.get("version"):
         print(
-            f"{out_dir} holds {pack['id']} {recorded.get('version')} and this stack serves {pack['version']}: "
+            f"{out_dir} holds {pack['id']} {recorded.get('version')} and this stack serves {pack.get('version')}: "
             "record every session again (--all, without --question)",
             file=sys.stderr,
         )
         return None
-    sessions = list(previous.get("sessions", []))
-    earlier, current = _build(out_dir / "pack.json"), _build(data_dir / "pack.json")
-    if earlier != current and (others := [session["id"] for session in sessions if session["id"] not in replaced]):
-        print(
-            f"Keeping {len(others)} sessions recorded on build {earlier or 'unknown'}, not on this build "
-            f"({current or 'unknown'}): {', '.join(others)}",
-            file=sys.stderr,
-        )
-    return sessions
-
-
-def _build(pack_json: Path) -> str | None:
-    """The build id of a pack.json: the active build's, or the copy a bundle keeps."""
-    try:
-        build = json.loads(pack_json.read_text(encoding="utf-8")).get("build")
-    except (OSError, ValueError, AttributeError):
-        return None
-    return build if isinstance(build, str) else None
+    return list(previous.get("sessions", []))
 
 
 def _ask(
-    client: httpx.Client, question: str, sources: list[str], *, conversation_id: str, timeout: float
+    client: httpx.Client, question: str, pack_id: str, sources: list[str], *, conversation_id: str, timeout: float
 ) -> dict[str, Any]:
     job_id = str(uuid.uuid4())
-    body = {"agent_type": "hermes", "input": question, "data_sources": sources, "job_id": job_id}
+    body = {"agent_type": "hermes", "input": question, "pack_id": pack_id, "data_sources": sources, "job_id": job_id}
     headers = {"conversation-id": conversation_id}
     client.post("/v1/jobs/async/submit", json=body, headers=headers).raise_for_status()
     deadline = time.monotonic() + timeout
@@ -221,8 +203,12 @@ def _ask(
     return public_model_ids(client.get(f"/v1/jobs/async/job/{job_id}/export").raise_for_status().json())
 
 
-def snapshot_database(client: httpx.Client, out_dir: Path) -> None:
-    """Write ``database.json``: what the data viewer shows of each structured source, from the running API."""
+def _pack_sources(client: httpx.Client, pack_id: str) -> list[dict[str, Any]]:
+    return client.get("/v1/data_sources", params={"pack": pack_id}).raise_for_status().json()
+
+
+def snapshot_database(client: httpx.Client, out_dir: Path, pack_id: str) -> None:
+    """Write ``database.json``: what the data viewer shows of each structured source of the pack, from the API."""
     queries: set[tuple[str, str]] = set()
     for path in sorted((out_dir / "sessions").glob("*.json")):
         for turn in json.loads(path.read_text(encoding="utf-8"))["turns"]:
@@ -231,7 +217,7 @@ def snapshot_database(client: httpx.Client, out_dir: Path) -> None:
                 if receipt.get("artifactKind") == "structured_query" and content.get("sql"):
                     queries.add((content["databaseName"], content["sql"]))
     sources = []
-    for source in client.get("/v1/data_sources").raise_for_status().json():
+    for source in _pack_sources(client, pack_id):
         if not source.get("database_name"):
             continue
         base = f"/v1/data_sources/{source['id']}"
@@ -247,6 +233,7 @@ def snapshot_database(client: httpx.Client, out_dir: Path) -> None:
             DEFAULT_TABLE_SQL.format(schema=table["schema"], table=table["name"].rsplit(".", 1)[-1])
             for table in schema["tables"]
         ]
+        # A query over several sources names no single database (the tables tool's "knowledge"); none reruns it
         recorded = sorted(sql for database, sql in queries if database == source["database_name"])
         for sql in dict.fromkeys([*recorded, *defaults]):
             response = client.post(f"{base}/query", json={"sql": sql})
@@ -270,16 +257,17 @@ def snapshot_database(client: httpx.Client, out_dir: Path) -> None:
 
 
 def _write_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="demo-api", description="Job API tools.")
     commands = parser.add_subparsers(dest="command", required=True)
-    record_parser = commands.add_parser("record", help="record the pack's questions as a v2 replay bundle")
+    record_parser = commands.add_parser("record", help="record one pack's questions as a v2 replay bundle")
+    record_parser.add_argument("--pack", required=True, help="the pack to record (an id from GET /v1/packs)")
     record_parser.add_argument("--api-url", default="http://api:8000", help="the running API (default: on the stack)")
     record_parser.add_argument("--out", type=Path, required=True, help="the pack's recordings directory")
-    record_parser.add_argument("--data-dir", type=Path, help="the active pack (default: DATA_ACTIVE_DIR)")
     record_parser.add_argument(
         "--question",
         action="append",
@@ -291,17 +279,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     record_parser.add_argument("--timeout", type=float, default=1_500, help="seconds to wait for one answer")
     snapshot_parser = commands.add_parser("snapshot-database", help="rewrite a bundle's database.json")
+    snapshot_parser.add_argument("--pack", required=True, help="the pack the bundle records")
     snapshot_parser.add_argument("--api-url", default="http://api:8000", help="the running API (default: on the stack)")
     snapshot_parser.add_argument("--out", type=Path, required=True, help="the pack's recordings directory")
     args = parser.parse_args(argv)
 
     with httpx.Client(base_url=args.api_url, timeout=30.0) as client:
         if args.command == "snapshot-database":
-            snapshot_database(client, args.out)
+            snapshot_database(client, args.out, args.pack)
             return 0
         return record(
             client,
-            data_dir=args.data_dir or Settings().data_active_dir,
+            pack_id=args.pack,
             out_dir=args.out,
             question_ids=args.question,
             featured_only=not args.all,

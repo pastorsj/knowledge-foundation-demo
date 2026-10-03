@@ -28,12 +28,18 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # Data and contracts
-    data_active_dir: Path = Path("/data/active")
+    # Knowledge and contracts
+    # The knowledge volume (read-only here): catalog/packs, catalog/sources and each structured source's DuckDB
+    knowledge_dir: Path = Path("/knowledge")
     tool_registry_file: Path = _REPO_REGISTRY
     # Tool groups baked into the agent image (the agent's AGENT_FEATURES build argument). A source
     # capability is offered only when a tool of that family is in one of these compose profiles.
     agent_features: str = "retrieval,tables"
+
+    # The ingest service, which the documents routes (/v1/collections, /v1/documents) forward to
+    ingest_url: str = "http://ingest:8330"
+    # The largest upload request the API forwards (all its files together), in MiB
+    ingest_max_request_mb: int = Field(default=512, ge=1)
 
     # Job store and runner
     api_db_path: Path = Path("/var/lib/demo-api/jobs.db")

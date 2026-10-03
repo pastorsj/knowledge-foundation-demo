@@ -15,7 +15,7 @@ from demo_api.jobs.store import JobStatus
 
 
 async def start_job(api, app, job_id: str = "job-1", sources: list[str] | None = None) -> None:
-    body = {"input": "q", "job_id": job_id, "data_sources": sources or ["market_news", "market_analysis_structured"]}
+    body = {"input": "q", "job_id": job_id, "data_sources": sources or ["retail.policies", "retail.sales"]}
     assert (await api.post("/v1/jobs/async/submit", json=body)).status_code == 200
     async with asyncio.timeout(5):
         while (await app.state.services.store.get(job_id)).hermes_run_id is None:
@@ -32,22 +32,27 @@ async def test_execution_scope_names_the_jobs_sources_database_and_collection(se
 
     assert (await scope(api)).json() == {
         "job_id": "job-1",
-        "source_ids": ["market_news", "market_analysis_structured"],
+        "source_ids": ["retail.policies", "retail.sales"],
         "sources": [
-            {"id": "market_news", "capabilities": ["unstructured_retrieval"]},
-            {"id": "market_analysis_structured", "capabilities": ["structured_retrieval"]},
+            {"id": "retail.policies", "capabilities": ["unstructured_retrieval"]},
+            {"id": "retail.sales", "capabilities": ["structured_retrieval"]},
         ],
-        "database_name": "market_analysis",
-        "collection": "aiq_market_intelligence_current",
+        "database_name": "retail_sales",
+        "collection": "knowledge",
         "models": {"efficient": "nvidia/efficient", "capable": "openai/capable"},
     }
 
 
 async def test_execution_scope_omits_what_the_job_did_not_select(api, app, fake_hermes):
-    await start_job(api, app, sources=["market_analysis_structured"])
+    await start_job(api, app, sources=["retail.sales"])
 
     body = (await scope(api)).json()
-    assert (body["source_ids"], body["collection"]) == (["market_analysis_structured"], None)
+    assert (body["source_ids"], body["database_name"], body["collection"]) == (["retail.sales"], "retail_sales", None)
+    body = {"input": "q", "job_id": "job-2", "data_sources": ["retail.policies"]}
+    assert (await api.post("/v1/jobs/async/submit", json=body)).status_code == 200  # queued behind job-1
+
+    body = (await scope(api, "job-2")).json()
+    assert (body["source_ids"], body["database_name"], body["collection"]) == (["retail.policies"], None, "knowledge")
 
 
 @pytest.mark.parametrize("key", ["", "wrong-key"])

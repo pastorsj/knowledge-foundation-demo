@@ -9,7 +9,7 @@ readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    # Read-only data viewer. Bump together with data/ (data/tests/test_duckdb_versions.py).
+    # Read-only data viewer of the DuckDB files ingest writes. Bump together with ingest and tools/tables.
     "duckdb==1.5.5",
     "fastapi>=0.141,<1",
     "httpx>=0.28.1,<0.29",

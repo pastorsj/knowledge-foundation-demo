@@ -12,9 +12,9 @@ import httpx
 from fastapi import Depends
 from fastapi import Request
 
+from .catalog import KnowledgeCatalog
 from .jobs.runner import JobRunner
 from .jobs.store import JobStore
-from .pack import ActivePack
 from .registry import ToolRegistry
 from .settings import Settings
 from .speech import SpeechService
@@ -24,10 +24,11 @@ from .speech import SpeechService
 class Services:
     settings: Settings
     registry: ToolRegistry
-    pack: ActivePack
+    catalog: KnowledgeCatalog
     store: JobStore
     runner: JobRunner
     http: httpx.AsyncClient  # outgoing calls to Phoenix
+    ingest: httpx.AsyncClient  # the documents routes, forwarded to INGEST_URL
     transport: httpx.AsyncBaseTransport | None  # for clients made per request (Auto Ontology); tests fake it
     speech: SpeechService  # voice input; off unless configured
 

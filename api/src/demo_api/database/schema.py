@@ -1,10 +1,11 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""The structured source's physical schema, read from its DuckDB file (read-only)."""
+"""A structured source's physical schema, read from its DuckDB file (read-only)."""
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -16,8 +17,12 @@ def qualified_name(schema: str, table: str) -> str:
     return table if schema == "main" else f"{schema}.{table}"
 
 
-def read_schema(path: Path) -> dict[str, Any]:
-    """Tables and views with their columns, primary keys and foreign keys. Blocking; run it in a thread."""
+def read_schema(path: Path, profiled: Sequence[dict[str, Any]] = ()) -> dict[str, Any]:
+    """Tables and views with their columns, primary keys and foreign keys. Blocking; run it in a thread.
+
+    Ingest loads files without constraints and records the keys it profiled in the source manifest
+    (``profiled``, its ``TableInfo`` list of ``main`` tables); they fill in what the file does not declare.
+    """
     with duckdb.connect(str(path), read_only=True, config={"enable_external_access": "false"}) as connection:
         tables = connection.execute(
             "SELECT table_schema, table_name, table_type FROM information_schema.tables "
@@ -35,6 +40,21 @@ def read_schema(path: Path) -> dict[str, Any]:
         ).fetchall()
 
     primary_keys = {(s, t): list(cols) for s, t, kind, cols, _, _ in constraints if kind == "PRIMARY KEY"}
+    declared_keys = {table for schema, table, kind, *_ in constraints if kind == "FOREIGN KEY" and schema == "main"}
+    known = {(schema, table) for schema, table, _ in tables}
+    profiled_keys: list[tuple[str, str, str, str]] = []  # (table, column, references_table, references_column)
+    for info in profiled:
+        name = info.get("name")
+        if ("main", name) not in known:
+            continue
+        if info.get("primary_key") and ("main", name) not in primary_keys:
+            primary_keys["main", name] = [info["primary_key"]]
+        if name not in declared_keys:
+            profiled_keys += [
+                (name, key["column"], key["references_table"], key["references_column"])
+                for key in info.get("foreign_keys", [])
+                if ("main", key["references_table"]) in known
+            ]
     result: list[dict[str, Any]] = []
     for schema, table, table_type in tables:
         keys = primary_keys.get((schema, table), [])
@@ -61,6 +81,9 @@ def read_schema(path: Path) -> dict[str, Any]:
         for schema, table, kind, cols, referenced, referenced_cols in constraints
         if kind == "FOREIGN KEY"
         for column, referenced_column in zip(cols, referenced_cols, strict=True)
+    ] + [
+        {"from_table": table, "from_column": column, "to_table": referenced, "to_column": referenced_column}
+        for table, column, referenced, referenced_column in profiled_keys
     ]
     return {"tables": result, "relationships": relationships}
 

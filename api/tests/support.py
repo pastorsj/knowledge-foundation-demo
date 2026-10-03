@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""Test helpers: a small data pack, contract receipts, and a fake Hermes Runs API."""
+"""Test helpers: the fixture knowledge catalog, contract receipts, and a fake Hermes Runs API."""
 
 from __future__ import annotations
 
@@ -16,74 +16,31 @@ import httpx
 
 REPO = Path(__file__).resolve().parents[2]
 RECEIPT_KEY = "test-receipt-key"
-PACK = {
-    "schema_version": "1",
-    "id": "market-analysis",
-    "version": "1.0.0",
-    "title": "Synthetic Multi-Asset Market Analysis",
-    "description": "Test pack",
-    "as_of": "2026-08-31",
-    "disclaimer": "Synthetic market data. Not investment advice.",
-    "profile": "interactive",
-    "sources": [
-        {
-            "id": "market_analysis_structured",
-            "name": "Market Prices & Events",
-            "description": "Synthetic market history in DuckDB.",
-            "agent_description": "Analyze synthetic market history.",
-            "kind": "structured",
-            "capabilities": ["structured_retrieval", "structured_prediction"],
-            "synthetic": True,
-            "example_questions": ["Which assets led returns?"],
-        },
-        {
-            "id": "market_news",
-            "name": "SEC Filings",
-            "description": "EDGAR filings.",
-            "kind": "documents",
-            "capabilities": ["unstructured_retrieval"],
-            "synthetic": False,
-            "example_questions": [],
-        },
-    ],
-    "questions": [
-        {
-            "id": "market-leaders",
-            "label": "Market Leaders",
-            "tag": "ANALYTICS",
-            "description": "A market scan.",
-            "question": "Which assets had the strongest returns?",
-            "sources": ["market_analysis_structured"],
-            "featured": True,
-        },
-        {
-            "id": "filings",
-            "label": "Filings",
-            "tag": "DOCUMENTS",
-            "description": "Document search.",
-            "question": "Which filings mention outages?",
-            "sources": ["market_news"],
-            "featured": False,
-        },
-    ],
-    "conversations": [
-        {
-            "id": "leaders-follow-up",
-            "label": "Leaders Follow-up",
-            "tag": "ANALYTICS",
-            "description": "A scan, then a follow-up.",
-            "sources": ["market_analysis_structured"],
-            "turns": ["Which assets had the weakest returns?", "How volatile were those assets?"],
-        },
-    ],
-    "structured": {
-        "source": "market_analysis_structured",
-        "database_name": "market_analysis",
-        "database": "structured/market_analysis.duckdb",
-        "tables": {},
-    },
-    "documents": {"collection": "aiq_market_intelligence_current", "sources": ["market_news"]},
-}
+# The shared catalog fixture: the retail pack (retail.policies documents, retail.sales tables) and the workspace
+CATALOG = REPO / "contracts" / "fixtures" / "catalog"
+DOCUMENTS = "retail.policies"
+TABLES = "retail.sales"
+
+
+def manifest_path(knowledge_dir: Path, kind: str, manifest_id: str) -> Path:
+    """``catalog/packs/<id>.json`` (``kind`` packs) or ``catalog/sources/<id>.json`` (``kind`` sources)."""
+    return knowledge_dir / "catalog" / kind / f"{manifest_id}.json"
+
+
+def read_manifest(knowledge_dir: Path, kind: str, manifest_id: str) -> dict[str, Any]:
+    return json.loads(manifest_path(knowledge_dir, kind, manifest_id).read_text(encoding="utf-8"))
+
+
+def write_manifest(knowledge_dir: Path, kind: str, manifest: dict[str, Any]) -> None:
+    path = manifest_path(knowledge_dir, kind, manifest["id"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+
+
+def update_manifest(knowledge_dir: Path, kind: str, manifest_id: str, **changes: Any) -> dict[str, Any]:
+    manifest = read_manifest(knowledge_dir, kind, manifest_id) | changes
+    write_manifest(knowledge_dir, kind, manifest)
+    return manifest
 
 
 def load_contract(name: str) -> Any:

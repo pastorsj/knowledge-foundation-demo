@@ -22,15 +22,17 @@ import httpx
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+from .catalog import KnowledgeCatalog
 from .hermes.client import HermesClient
 from .jobs.executor import HermesJobExecutor
 from .jobs.runner import JobExecutor
 from .jobs.runner import JobRunner
 from .jobs.store import JobStore
-from .pack import ActivePack
 from .registry import ToolRegistry
+from .routes import documents
 from .routes import internal
 from .routes import jobs
+from .routes import packs
 from .routes import sources
 from .routes import speech
 from .services import Services
@@ -66,14 +68,18 @@ def create_app(
             max_queued=settings.job_max_queued,
             job_deadline_seconds=settings.job_deadline_seconds,
         )
-        async with httpx.AsyncClient(transport=transport) as http:
+        async with (
+            httpx.AsyncClient(transport=transport) as http,
+            httpx.AsyncClient(base_url=settings.ingest_url, transport=transport, timeout=documents.TIMEOUT) as ingest,
+        ):
             app.state.services = Services(
                 settings=settings,
                 registry=registry,
-                pack=ActivePack(settings.data_active_dir, registry, settings.features),
+                catalog=KnowledgeCatalog(settings.knowledge_dir, registry, settings.features),
                 store=store,
                 runner=runner,
                 http=http,
+                ingest=ingest,
                 transport=transport,
                 speech=build_speech_service(settings),
             )
@@ -88,7 +94,9 @@ def create_app(
 
     app = FastAPI(title="NVIDIA Knowledge Foundation job API", lifespan=lifespan)
     app.include_router(jobs.router)
+    app.include_router(packs.router)
     app.include_router(sources.router)
+    app.include_router(documents.router)
     app.include_router(speech.router)
     app.include_router(internal.router)
 

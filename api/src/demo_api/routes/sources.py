@@ -1,17 +1,21 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""The active pack and its data sources, and the read-only data viewer for the structured source.
+"""The catalog's data sources, and the read-only data viewer of each structured source.
 
-- ``schema``: tables, views, columns and keys, read from the DuckDB file.
+- ``GET /v1/data_sources?pack=``: the sources of one pack (all packs when omitted) that this stack can serve.
+- ``schema``: tables, views, columns and keys, read from the source's DuckDB file; the keys ingest profiled
+  into the source manifest stand in for constraints the file does not declare.
 - ``preview``: the first 100 rows of one table or view.
-- ``query``: one bounded SELECT, run in a separate process (``database/worker.py``).
+- ``query``: one bounded SELECT, run in a separate process (``database/worker.py``) with the database attached
+  under its alias, so the SQL the agent wrote (``retail_sales.orders``) runs as it did.
 - ``ontology``: the Auto Ontology graph of the database (ontology profile only).
 """
 
 from __future__ import annotations
 
 import asyncio
+from pathlib import Path
 from typing import Annotated
 from typing import Any
 
@@ -24,13 +28,14 @@ from pydantic import Field
 from demo_api.auto_ontology.client import AutoOntologyClient
 from demo_api.auto_ontology.client import AutoOntologyError
 from demo_api.auto_ontology.models import OntologySnapshot
+from demo_api.catalog import PACK_ID
+from demo_api.catalog import CatalogUnavailableError
+from demo_api.catalog import PackNotFoundError
+from demo_api.catalog import Source
 from demo_api.database.query import QueryError
 from demo_api.database.query import run_query
 from demo_api.database.schema import governed_columns
 from demo_api.database.schema import read_schema
-from demo_api.pack import PackUnavailableError
-from demo_api.pack import PackView
-from demo_api.pack import Source
 from demo_api.services import Services
 from demo_api.services import ServicesDep
 
@@ -41,28 +46,24 @@ class QueryRequest(BaseModel):
     sql: str = Field(min_length=1, max_length=20_000)
 
 
-@router.get("/pack")
-async def pack(services: ServicesDep) -> PackView:
-    """Title, disclaimer, demo questions and the example picker's questions of the active data pack."""
-    try:
-        return services.pack.public_view()
-    except PackUnavailableError as error:
-        raise HTTPException(503, str(error)) from error
-
-
 @router.get("/data_sources")
-async def data_sources(services: ServicesDep) -> list[dict[str, Any]]:
-    """The sources a question can use: those the running tools can serve."""
+async def data_sources(
+    services: ServicesDep,
+    pack: Annotated[str | None, Query(pattern=PACK_ID, max_length=64)] = None,
+) -> list[dict[str, Any]]:
+    """The sources a question can use: those of ``pack`` (every pack when omitted) the running tools can serve."""
     try:
-        return [source.public() for source in services.pack.sources()]
-    except PackUnavailableError as error:
+        return [source.public() for source in services.catalog.sources(pack)]
+    except CatalogUnavailableError as error:
         raise HTTPException(503, str(error)) from error
+    except PackNotFoundError as error:
+        raise HTTPException(404, str(error)) from error
 
 
 @router.get("/data_sources/{source_id}/schema")
 async def schema(source_id: str, services: ServicesDep) -> dict[str, Any]:
-    source = _structured(services, source_id)
-    tables = await asyncio.to_thread(read_schema, services.pack.database_path())
+    source, path = _structured(services, source_id)
+    tables = await asyncio.to_thread(read_schema, path, source.tables)
     return {"source_id": source.id, "database_name": source.database_name, **tables}
 
 
@@ -71,25 +72,25 @@ async def preview(
     source_id: str, table: str, services: ServicesDep, limit: Annotated[int, Query(ge=1, le=100)] = 100
 ) -> dict[str, Any]:
     """The first ``limit`` rows of ``table`` (``name``, or ``schema.name`` outside ``main``)."""
-    source = _structured(services, source_id)
-    tables = await asyncio.to_thread(read_schema, services.pack.database_path())
+    source, path = _structured(services, source_id)
+    tables = await asyncio.to_thread(read_schema, path, source.tables)
     match = next((item for item in tables["tables"] if item["name"] == table), None)
     if match is None:
         raise HTTPException(404, f"No table or view named {table}.")
     relation = f'"{match["schema"]}"."{table.rsplit(".", 1)[-1]}"'
-    return {"table": table, **await _query(services, source, f"SELECT * FROM {relation}", tables, max_rows=limit)}
+    return {"table": table, **await _query(source, path, f"SELECT * FROM {relation}", tables, max_rows=limit)}
 
 
 @router.post("/data_sources/{source_id}/query")
 async def query(source_id: str, body: QueryRequest, services: ServicesDep) -> dict[str, Any]:
-    source = _structured(services, source_id)
-    tables = await asyncio.to_thread(read_schema, services.pack.database_path())
-    return await _query(services, source, body.sql, tables)
+    source, path = _structured(services, source_id)
+    tables = await asyncio.to_thread(read_schema, path, source.tables)
+    return await _query(source, path, body.sql, tables)
 
 
 @router.get("/data_sources/{source_id}/ontology")
 async def ontology(source_id: str, services: ServicesDep) -> OntologySnapshot:
-    source = _structured(services, source_id)
+    source, _ = _structured(services, source_id)
     settings = services.settings
     if not settings.auto_ontology_url:
         raise HTTPException(404, "Auto Ontology is not running (ontology profile).")
@@ -107,21 +108,22 @@ async def ontology(source_id: str, services: ServicesDep) -> OntologySnapshot:
         raise HTTPException(error.status_code, str(error)) from error
 
 
-def _structured(services: Services, source_id: str) -> Source:
+def _structured(services: Services, source_id: str) -> tuple[Source, Path]:
+    """An offered structured source and its DuckDB file, or 404."""
     try:
-        source = next((source for source in services.pack.sources() if source.id == source_id), None)
-    except PackUnavailableError as error:
+        source = services.catalog.source(source_id)
+    except CatalogUnavailableError as error:
         raise HTTPException(503, str(error)) from error
-    if source is None or source.database_name is None:
+    path = services.catalog.database_path(source_id) if source is not None else None
+    if source is None or source.database_name is None or path is None or not path.is_file():
         raise HTTPException(404, f"{source_id} is not an available structured data source.")
-    return source
+    return source, path
 
 
 async def _query(
-    services: Services, source: Source, sql: str, schema: dict[str, Any], *, max_rows: int = 100
+    source: Source, path: Path, sql: str, schema: dict[str, Any], *, max_rows: int = 100
 ) -> dict[str, Any]:
     try:
-        path = services.pack.database_path()
         return await run_query(path, source.database_name, sql, governed_columns(schema), max_rows=max_rows)
     except QueryError as error:
         raise HTTPException(error.status_code, error.message) from error
