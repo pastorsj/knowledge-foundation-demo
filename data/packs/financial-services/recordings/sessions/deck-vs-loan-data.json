@@ -1,0 +1,904 @@
+{
+  "schemaVersion": 2,
+  "id": "deck-vs-loan-data",
+  "title": "Risk deck against the loan data",
+  "turns": [
+    {
+      "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+      "question": "The Q3 2026 risk committee deck reports a 30-day delinquency rate for each loan product. Do those figures match what the loan and payment tables show at 30 September 2026?",
+      "submittedAt": "2026-10-03T04:20:53.574354Z",
+      "completedAt": "2026-10-03T04:21:03.658197Z",
+      "status": "success",
+      "report": {
+        "markdown": "**Comparison: Q3 2026 Risk Committee Deck vs. Loan/Payment Tables (as of 30 Sep 2026)**\n\n| Product | Deck (p. 3) | Table (credit_risk_report_delinquency) | Active Loans | 30+ Loans | Match? |\n|---------|-------------|----------------------------------------|--------------|-----------|--------|\n| Personal | 3.3% | 3.35% (7/209) | 209 | 7 | Close (deck rounds to 3.3%, table = 3.35%) |\n| Auto | 4.8% | 4.78% (12/251) | 251 | 12 | Yes (4.78% → 4.8%) |\n| Mortgage | 3.0% | 3.01% (4/133) | 133 | 4 | Yes (3.01% → 3.0%) |\n| **All consumer** | **3.9%** | **3.88% (23/593)** | **593** | **23** | **Yes (3.88% → 3.9%)** |\n\n**Key findings:**\n\n1. **Auto, Mortgage, and All-consumer figures match** when the table’s rates are rounded to one decimal place (the deck’s apparent precision).\n\n2. **Personal loans show a small discrepancy**: the table computes 7 ÷ 209 = **3.35%**, which would round to **3.4%**, but the deck reports **3.3%**. This suggests the deck may have used a slightly different denominator, truncated instead of rounded, or drawn from a snapshot taken at a slightly different time.\n\n3. **Active-loan counts agree** across all three products (Personal 209, Auto 251, Mortgage 133, Total 593), and the 30+ loan counts (7, 12, 4, 23) also align with the deck’s statement that “23 loans are in the 30-day bucket or worse.”\n\n**Conclusion**: The deck’s delinquency rates are broadly consistent with the underlying loan and payment data, with only the personal-loan figure showing a minor rounding or definitional difference. [1][2]\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — q3_2026_risk_committee.pptx — evidence `hermes-receipt:b6153cd95f6e9df71d5ae05b5f7ea180374ae321c5827771de74023c7a8a5ed2`\n- [2] Structured retrieval result — financial_services_banking — evidence `hermes-receipt:398d48f059d76f950a09a81d0e47c52fa95733b1c7bc1488df65dcc4a29b8734`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:b6153cd95f6e9df71d5ae05b5f7ea180374ae321c5827771de74023c7a8a5ed2",
+            "label": "Unstructured Retrieval evidence — q3_2026_risk_committee.pptx",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-32f08236b70442cf8bb608f753e53d04"
+          },
+          {
+            "number": 2,
+            "evidenceId": "hermes-receipt:398d48f059d76f950a09a81d0e47c52fa95733b1c7bc1488df65dcc4a29b8734",
+            "label": "Structured retrieval result — financial_services_banking",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-6b058abe07e54211b3311a4eceac4c8b"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "31848ffd-86e8-5097-a203-889de1c309e8",
+          "cursor": 414,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:53.691026Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:63ba7c11efa25ca629cbaef78e8bc44515814a394ea5edf166db718a11b73988",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b14afeae-d9cc-59b4-9239-680d5167cb42",
+          "cursor": 415,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": "5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45:api:1",
+          "parentInvocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:55.080726Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 8911,
+              "output_tokens": 236
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c61251be-b6c1-598b-9f71-21373eb30d42",
+          "cursor": 416,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-32f08236b70442cf8bb608f753e53d04",
+          "parentInvocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:55.129344Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:de4e8e878eeb10b241a24df23f8783b7636e73aa608b308e12d6475ee20fb5d0",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a5c1950a-0ef8-5e33-a4a5-c4af0c0fb9b4",
+          "cursor": 417,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": "5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-32f08236b70442cf8bb608f753e53d04",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:b6153cd95f6e9df71d5ae05b5f7ea180374ae321c5827771de74023c7a8a5ed2"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:56.031070Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 900,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:b6153cd95f6e9df71d5ae05b5f7ea180374ae321c5827771de74023c7a8a5ed2",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ca206328-4e87-566f-996e-d190e8026a30",
+          "cursor": 418,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-32f08236b70442cf8bb608f753e53d04",
+          "parentInvocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:56.071335Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.933
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d7a5edf5fd74ff59053cecee37131b9d637c3a8278ad43c1c82a693b97eda1e2",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "47ffcbf9-6ada-5264-a85a-4afb02acd45f",
+          "cursor": 419,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": "5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45:api:2",
+          "parentInvocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:58.359406Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14204,
+              "output_tokens": 456
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "364ee09c-7649-56fe-9654-f0a72230ca3b",
+          "cursor": 420,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-6b058abe07e54211b3311a4eceac4c8b",
+          "parentInvocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:58.386221Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:3529b31c4e90f9f2c900ca85fd7419af6caf7c94792e3f84ee457685abdd010d",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "1f42143f-490d-509f-a96c-60d259a962fe",
+          "cursor": 421,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": "5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-6b058abe07e54211b3311a4eceac4c8b",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:398d48f059d76f950a09a81d0e47c52fa95733b1c7bc1488df65dcc4a29b8734"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:58.676331Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 289,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:398d48f059d76f950a09a81d0e47c52fa95733b1c7bc1488df65dcc4a29b8734",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ef52da45-a01a-597f-85df-8c608bfe467f",
+          "cursor": 422,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-6b058abe07e54211b3311a4eceac4c8b",
+          "parentInvocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:58.710576Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.321
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d16fbf80a3d852002b6860d1f0037cb1686806ecfa847cb492a08d3364343ae0",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "84eaf0ed-246c-5d40-80bd-d071e998414d",
+          "cursor": 423,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": "5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45:api:3",
+          "parentInvocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:03.592093Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 15204,
+              "output_tokens": 1310
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "2dbc82a2-0684-591a-8c56-38358b56fd4f",
+          "cursor": 424,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:03.613368Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:45231d0aae62bd4575dddece46a8cf49d0cd764b97ad0213e1f8f6fc1876cd5b",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c35f106e-ed75-5d40-99ad-c61cb93e8c24",
+          "cursor": 425,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:03.636790Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 38319,
+              "output_tokens": 2002,
+              "total_tokens": 40321,
+              "output_characters": 1708
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:24b1cca856d00927d340f247a2b5fb676d0c8b464f55223d6afc4173c7667622",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "247590e9-9da1-5623-aa1d-dfa2341c0f66",
+          "cursor": 426,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:03.657750Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5324e765-db94-4ed0-bc93-fb6e27211537:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b97845a7-41c9-5334-9515-b0ac73f95537",
+          "cursor": 427,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:03.657823Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 2,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5324e765-db94-4ed0-bc93-fb6e27211537:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e6af29e5-ecb4-5153-ad5f-e985d3ab8503",
+          "cursor": 428,
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "runId": "run_54c1477eb051458bbe192ada6bb11d6c",
+          "sessionId": "record-330a67df-bc3e-4943-945d-5caa1fd8ed8f",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ace3a6abaf479c2531b2356c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:03.657879Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 10014,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 1254,
+              "input_tokens": 38319,
+              "output_tokens": 2002,
+              "total_tokens": 40321
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5324e765-db94-4ed0-bc93-fb6e27211537:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:b6153cd95f6e9df71d5ae05b5f7ea180374ae321c5827771de74023c7a8a5ed2",
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "invocationId": "hermes-tool:chatcmpl-tool-32f08236b70442cf8bb608f753e53d04",
+          "turnId": "5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 900,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:20:56.031070Z",
+          "content": {
+            "query": "30-day delinquency rate by loan product Q3 2026 risk committee deck",
+            "sourceIds": [
+              "financial-services.disclosures"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.5849853157997131,
+                "vectorScore": 0.5849853157997131,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0003",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Delinquency: loans 30 or more days past due\nPersonal loans, 30 Sep 2025 = 3.0%. Personal loans, 30 Jun 2026 = 5.9%. Personal loans, 30 Sep 2026 = 3.3%. Personal loans, Change since 30 Jun = -2.6 pts. Auto loans, 30 Sep 2025 = 1.4%. Auto loans, 30 Jun 2026 = 3.1%. Auto loans, 30 Sep 2026 = 4.8%. Auto loans, Change since 30 Jun = +1.7 pts. Mortgages, 30 Sep 2025 = 0.8%. Mortgages, 30 Jun 2026 = 1.5%. Mortgages, 30 Sep 2026 = 3.0%. Mortgages, Change since 30 Jun = +1.5 pts. All consumer loans, 30 Sep 2025 = 1.7%. All consumer loans, 30 Jun 2026 = 3.6%. All consumer loans, 30 Sep 2026 = 3.9%. All consumer loans, Change since 30 Jun = +0.2 pts\n30+ days past due, 30 Sep 2026\nPersonal loans\n3.3%\nAuto loans\n4.8%\nMortgages\n3.0%\nAll consumer loans\n- Across all products 3.9% of active loans were 30 or more days past due at 30 September, against 3.6% at 30 June and 1.7% a year earlier.\n- The highest rate is on auto loans at 4.8%; the lowest is on mortgages at 3.0%.\n- 23 loans are in the 30-day bucket or worse.\n3.9%\nHarborview Community Bank  |  Credit Risk Committee, Q3 2026  |  Synthetic data for a software demonstration\n3",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Delinquency: loans 30 or more days past due",
+                  "labels": [
+                    "list_item",
+                    "paragraph",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.4979388117790222,
+                "vectorScore": 0.4979388117790222,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0009",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Decisions and next steps\n- Note that 30-day delinquency is 3.9%, up from 1.7% a year earlier, and keep the version 5.1 maximum debt-to-income limits, in force since 1 July 2026, under review.\n- Instruct Loan Servicing to contact every borrower that is 30 to 59 days past due within 5 business days, as Table 4 of the Consumer Credit Policy requires.\n- Ask Credit Risk to bring the first results of the monitoring of recent originations required by section 7 of the policy to the next meeting.\n- Approve the allowance for the quarter as presented.\nHarborview Community Bank  |  Credit Risk Committee, Q3 2026  |  Synthetic data for a software demonstration\n8",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 8",
+                  "page_start": 8,
+                  "page_end": 8,
+                  "headings": "Decisions and next steps",
+                  "labels": [
+                    "list_item",
+                    "paragraph"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.4572319984436035,
+                "vectorScore": 0.4572319984436035,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0001",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Credit Risk Committee, Q3 2026\nHarborview Community Bank | Data as of 30 September 2026 | Meeting of 14 October 2026\nPrepared by Credit Risk Management",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Credit Risk Committee, Q3 2026",
+                  "labels": [
+                    "paragraph"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.45459482073783875,
+                "vectorScore": 0.45459482073783875,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0008",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Where delinquency is concentrated\nHarbor Coast, Active loans = 184. Harbor Coast, Loans 30+ days past due = 10. Harbor Coast, Delinquency rate = 5.4%. Metro, Active loans = 200. Metro, Loans 30+ days past due = 9. Metro, Delinquency rate = 4.5%. Highlands, Active loans = 92. Highlands, Loans 30+ days past due = 2. Highlands, Delinquency rate = 2.2%. Valley, Active loans = 117. Valley, Loans 30+ days past due = 2. Valley, Delinquency rate = 1.7%\n- Harbor Coast has the highest delinquency rate at 5.4%; Valley has the lowest at 1.7%.\n- 74% of the loans that are 30 or more days past due were underwritten in the Fair or Poor credit band, which hold 35% of the active book.\nHarborview Community Bank  |  Credit Risk Committee, Q3 2026  |  Synthetic data for a software demonstration\n7",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 7",
+                  "page_start": 7,
+                  "page_end": 7,
+                  "headings": "Where delinquency is concentrated",
+                  "labels": [
+                    "list_item",
+                    "paragraph",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.4481939375400543,
+                "vectorScore": 0.4481939375400543,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0002",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Portfolio at a glance\nPersonal loans, Active loans = 209. Personal loans, Outstanding principal = $1,939,834. Personal loans, Average interest rate = 13.73%. Auto loans, Active loans = 251. Auto loans, Outstanding principal = $5,946,821. Auto loans, Average interest rate = 8.22%. Mortgages, Active loans = 133. Mortgages, Outstanding principal = $39,864,597. Mortgages, Average interest rate = 5.47%. All consumer loans, Active loans = 593. All consumer loans, Outstanding principal = $47,751,252. All consumer loans, Average interest rate = 9.55%\n- 593 consumer loans were active at 30 September 2026, with $47.8 million outstanding.\n- By count, 35% of active loans are personal loans, 42% are auto loans and 22% are mortgages.\n- 68 new loans were originated in the quarter (36 personal, 32 auto, 0 mortgage).\nHarborview Community Bank  |  Credit Risk Committee, Q3 2026  |  Synthetic data for a software demonstration\n2",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Portfolio at a glance",
+                  "labels": [
+                    "list_item",
+                    "paragraph",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.42822355031967163,
+                "vectorScore": 0.42822355031967163,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0004",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Default: loans 90 or more days past due\nPersonal loans, Active loans = 209. Personal loans, Loans 90+ days past due = 1. Personal loans, 90+ rate = 0.5%. Auto loans, Active loans = 251. Auto loans, Loans 90+ days past due = 7. Auto loans, 90+ rate = 2.8%. Mortgages, Active loans = 133. Mortgages, Loans 90+ days past due = 3. Mortgages, 90+ rate = 2.3%. All consumer loans, Active loans = 593. All consumer loans, Loans 90+ days past due = 11. All consumer loans, 90+ rate = 1.9%\n- 11 active loans were 90 or more days past due at 30 September, 1.9% of the portfolio.\n- 9 loans were charged off in the quarter with net charge-offs of $82,034 after recoveries.\nHarborview Community Bank  |  Credit Risk Committee, Q3 2026  |  Synthetic data for a software demonstration\n4",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Default: loans 90 or more days past due",
+                  "labels": [
+                    "list_item",
+                    "paragraph",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.416927695274353,
+                "vectorScore": 0.416927695274353,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0007",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Early warning indicators\n- Average credit card utilization on open cards: 31.9% in September 2026, against 27.0% in September 2025.\n- Checking accounts with at least one overdraft in the month: 18.2% in September 2026, against 16.4% a year earlier.\n- 12 cardholders are above 70 percent utilization, and 5 of them also hold a Harborview loan.\n- Customers who miss one installment are far more likely to miss the next: 50% of loans with an installment 30 or more days past due at 30 June were still unpaid or worse at 30 September.\nHarborview Community Bank  |  Credit Risk Committee, Q3 2026  |  Synthetic data for a software demonstration\n6",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 6",
+                  "page_start": 6,
+                  "page_end": 6,
+                  "headings": "Early warning indicators",
+                  "labels": [
+                    "list_item",
+                    "paragraph"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.36184391379356384,
+                "vectorScore": 0.36184391379356384,
+                "sourceId": "financial-services.disclosures",
+                "documentId": "financial-services.disclosures:f-3284c31b6605220d",
+                "chunkId": "financial-services.disclosures:f-3284c31b6605220d:0006",
+                "title": "q3_2026_risk_committee.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Allowance and provisions\n- The allowance for loan losses is $649,198 at 30 September, 1.36% of outstanding balances.\n- Provision expense for the quarter was $248,673, against $184,548 in the second quarter.\nHarborview Community Bank  |  Credit Risk Committee, Q3 2026  |  Synthetic data for a software demonstration\n5",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-3284c31b6605220d",
+                  "file_name": "q3_2026_risk_committee.pptx",
+                  "citation": "q3_2026_risk_committee.pptx, p. 5",
+                  "page_start": 5,
+                  "page_end": 5,
+                  "headings": "Allowance and provisions",
+                  "labels": [
+                    "list_item",
+                    "paragraph"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "financial-services.disclosures": 18
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 882.7,
+              "searchMs": 6.0,
+              "rerankMs": 0.0,
+              "totalMs": 888.6
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:398d48f059d76f950a09a81d0e47c52fa95733b1c7bc1488df65dcc4a29b8734",
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "invocationId": "hermes-tool:chatcmpl-tool-6b058abe07e54211b3311a4eceac4c8b",
+          "turnId": "5324e765-db94-4ed0-bc93-fb6e27211537:5324e765-db94-4ed0-bc93-fb6e27211537:086fdd45",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 289,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:20:58.676331Z",
+          "content": {
+            "query": "Get the 30+ day delinquency rates by product at 2026-09-30 from the credit risk report delinquency table",
+            "databaseName": "financial_services_banking",
+            "answer": null,
+            "sql": "SELECT \n    month_end,\n    product,\n    active_loans,\n    loans_30plus,\n    delinquency_rate_30plus,\n    ROUND(delinquency_rate_30plus * 100, 2) AS delinquency_rate_pct\nFROM financial_services_banking.credit_risk_report_delinquency\nWHERE month_end = '2026-09-30'\nORDER BY product;",
+            "rows": [
+              {
+                "month_end": "2026-09-30",
+                "product": "auto",
+                "active_loans": 251.0,
+                "loans_30plus": 12.0,
+                "delinquency_rate_30plus": 0.0478,
+                "delinquency_rate_pct": 4.78
+              },
+              {
+                "month_end": "2026-09-30",
+                "product": "mortgage",
+                "active_loans": 133.0,
+                "loans_30plus": 4.0,
+                "delinquency_rate_30plus": 0.0301,
+                "delinquency_rate_pct": 3.01
+              },
+              {
+                "month_end": "2026-09-30",
+                "product": "personal",
+                "active_loans": 209.0,
+                "loans_30plus": 7.0,
+                "delinquency_rate_30plus": 0.0335,
+                "delinquency_rate_pct": 3.35
+              }
+            ],
+            "sourceRowCount": 3,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "financial-services.disclosures",
+        "financial-services.banking"
+      ]
+    }
+  ]
+}

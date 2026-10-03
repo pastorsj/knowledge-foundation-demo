@@ -1,0 +1,689 @@
+{
+  "schemaVersion": 2,
+  "id": "modification-request-scan",
+  "title": "Scanned loan modification request",
+  "turns": [
+    {
+      "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+      "question": "In the scanned loan modification request, which loan is the borrower asking to modify, and what payment relief are they requesting?",
+      "submittedAt": "2026-10-03T04:21:17.348719Z",
+      "completedAt": "2026-10-03T04:21:27.516834Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the scanned loan modification request (Form LS-114), the borrower **Marisol H. Lindqvist** (Customer ID **C00828**) is asking to modify their **personal loan (unsecured), Loan Number L00168**, with an original principal of **$11,500.00** and current monthly payment of **$425.10** [1].\n\nThe payment relief requested includes:\n\n1. **Temporary payment reduction** to **$255 per month for 6 months**, beginning **10/01/2026** [1]\n2. **Term extension** of up to **12 months** [1]\n3. **Waiver of late fees** assessed in the last **60 days** [1]\n\nThe borrower cites a reduction in work hours (from 40 to 22 per week) and a ~40% drop in take-home pay starting in July 2026 as the hardship reason, and has attached a work schedule letter as documentation [1]. The form was signed and dated **09/14/2026** and received by Loan Servicing on **09/16/2026** (Case HM-2026-0412) [1].\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:e25312d64ec9cbd5dc73036c420e23be3cbebaabd5b6eb365a365ed4836465df`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:e25312d64ec9cbd5dc73036c420e23be3cbebaabd5b6eb365a365ed4836465df",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-f3ecc3cc448e4c42874bdd665d63a7a3"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "267f364c-21db-5c2a-b284-8d1f93f12616",
+          "cursor": 430,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:17.435231Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:0dbd61f57af98a62920305095fac91dc6a57b5cb1668435051ce53921f871b9a",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "26ad1728-bf6c-550d-bb1c-42072f8b4ff7",
+          "cursor": 431,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": "308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db:api:1",
+          "parentInvocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:20.565513Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4746,
+              "output_tokens": 160
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e6ebc4a6-8a34-5edc-9967-e164ee5eb8e8",
+          "cursor": 432,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-f3ecc3cc448e4c42874bdd665d63a7a3",
+          "parentInvocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:20.607115Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:c1d7a825d5a51bdc4ec87bf4df19da1377d1677007b60bdaef884e87b0f87f6c",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "bf87eff9-3c23-589c-a49c-932adcfe148d",
+          "cursor": 433,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": "308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-f3ecc3cc448e4c42874bdd665d63a7a3",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:e25312d64ec9cbd5dc73036c420e23be3cbebaabd5b6eb365a365ed4836465df"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:23.887813Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 3279,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:e25312d64ec9cbd5dc73036c420e23be3cbebaabd5b6eb365a365ed4836465df",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f7082010-c715-5fd6-93c2-c9073a3cd85e",
+          "cursor": 434,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-f3ecc3cc448e4c42874bdd665d63a7a3",
+          "parentInvocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:23.918572Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 3.3
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e21f206cfbdc3334598d1b86ee943dfac21282771dd4f7db5ecae00323eec81a",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ea2e5a47-6a31-5993-85ef-6f5d4993cbdf",
+          "cursor": 435,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": "308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db:api:2",
+          "parentInvocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:27.460005Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 8786,
+              "output_tokens": 1059
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4fbd5e29-fb73-5337-80ae-6c5aa756b43b",
+          "cursor": 436,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:27.479425Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:39f7e20487bc09975db8f894a21b4e5e997f463cceebd89244d25623b0ec102f",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ea8db454-ba82-57fc-a3b8-f19a9abdf918",
+          "cursor": 437,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:27.498455Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 13532,
+              "output_tokens": 1219,
+              "total_tokens": 14751,
+              "output_characters": 1401
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:3a1ee73c1bea7de3755db101dd2d6bc5b8e98c630619f6fbaeaaf6975fae298f",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3a12a8ac-feed-5852-8582-a52b71dcc4a9",
+          "cursor": 438,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:27.516561Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:308e271e-543f-4894-a548-5c17bb48bca4:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "08238546-6d3b-5fa1-a80e-8828eb89955a",
+          "cursor": 439,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:27.516609Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:308e271e-543f-4894-a548-5c17bb48bca4:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "19753fe2-75ba-512c-a646-f3966c1a271d",
+          "cursor": 440,
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "runId": "run_e56a3b49be00480ba08333ad695ca069",
+          "sessionId": "record-eadbd026-a016-453a-aa3e-27019cd2cd19",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:69af3c8f1cc4e379b0bfaa35:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:21:27.516641Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 10106,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 3300,
+              "input_tokens": 13532,
+              "output_tokens": 1219,
+              "total_tokens": 14751
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:308e271e-543f-4894-a548-5c17bb48bca4:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:e25312d64ec9cbd5dc73036c420e23be3cbebaabd5b6eb365a365ed4836465df",
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "invocationId": "hermes-tool:chatcmpl-tool-f3ecc3cc448e4c42874bdd665d63a7a3",
+          "turnId": "308e271e-543f-4894-a548-5c17bb48bca4:308e271e-543f-4894-a548-5c17bb48bca4:bac3e5db",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 3279,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:21:23.887813Z",
+          "content": {
+            "query": "loan modification request scanned signed paper form borrower asking to modify payment relief",
+            "sourceIds": [
+              "financial-services.policies"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.5825328826904297,
+                "vectorScore": 0.5825328826904297,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0013",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n6. Hardship and loan modification\n6.2 How to ask\nThe request must be made in writing on Form LS-114, Request for Loan Modification, signed and dated by every borrower, with documentation of the hardship attached. Branch staff scan the signed form and send it to Loan Servicing, which logs the received date. A verbal request starts the hardship screening in Table 4 but is not a modification request until the signed form arrives.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Consumer Credit Policy › 6. Hardship and loan modification › 6.2 How to ask",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.5243254899978638,
+                "vectorScore": 0.5243254899978638,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-de88eb1db7ca7853",
+                "chunkId": "financial-services.policies:f-de88eb1db7ca7853:0005",
+                "title": "loan_modification_request_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "REQUEST FOR LOAN MODIFICATION\nDESCRIBE YOUR SITUATION\n3. MODIFICATION REQUESTED\n- Temporary payment reduction: new monthly payment of $255 for 6 months, beginning 10/01/2026\n- Term extension of months (no more than 12)\n- Waiver of late fees assessed in the last 60 days",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-de88eb1db7ca7853",
+                  "file_name": "loan_modification_request_scan.png",
+                  "citation": "loan_modification_request_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "REQUEST FOR LOAN MODIFICATION › DESCRIBE YOUR SITUATION › 3. MODIFICATION REQUESTED",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.49817803502082825,
+                "vectorScore": 0.49817803502082825,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-de88eb1db7ca7853",
+                "chunkId": "financial-services.policies:f-de88eb1db7ca7853:0006",
+                "title": "loan_modification_request_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "REQUEST FOR LOAN MODIFICATION\nDESCRIBE YOUR SITUATION\n4. BORROWER CERTIFICATION\nI certify that the information in this request is true and complete. I understand that the Bank may verify it, that approval is not guaranteed, that any payment I do not make during the plan is added back to my loan balance, and that my loan stays in effect under its original terms except as the Bank agrees in writing.\nBORROWER SIGNATURE\n09/14/2026\nDATE SIGNED\nMarisol H. Lindqvist\nPRINTED NAME",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-de88eb1db7ca7853",
+                  "file_name": "loan_modification_request_scan.png",
+                  "citation": "loan_modification_request_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "REQUEST FOR LOAN MODIFICATION › DESCRIBE YOUR SITUATION › 4. BORROWER CERTIFICATION",
+                  "labels": [
+                    "caption",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.4922039806842804,
+                "vectorScore": 0.4922039806842804,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-de88eb1db7ca7853",
+                "chunkId": "financial-services.policies:f-de88eb1db7ca7853:0002",
+                "title": "loan_modification_request_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "REQUEST FOR LOAN MODIFICATION\nFinancial hardship | Complete every section, sign and attach documentation of the hardship\nLOAN TYPE Personal loan (unsecured), CUSTOMER ID C00828 = ORIGINAL PRINCIPAL $11,500.00. LOAN TYPE Personal loan (unsecured), LOAN NUMBER L00168 = CURRENT MONTHLY PAYMENT $425.10. TELEPHONE (555) 010-5466, CUSTOMER ID C00828 = DATE OF REQUEST 09/14/2026. TELEPHONE (555) 010-5466, LOAN NUMBER L00168 = BEST TIME TO CALL Evenings after 6 PM",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-de88eb1db7ca7853",
+                  "file_name": "loan_modification_request_scan.png",
+                  "citation": "loan_modification_request_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "REQUEST FOR LOAN MODIFICATION",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.4739965498447418,
+                "vectorScore": 0.4739965498447418,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-de88eb1db7ca7853",
+                "chunkId": "financial-services.policies:f-de88eb1db7ca7853:0004",
+                "title": "loan_modification_request_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "REQUEST FOR LOAN MODIFICATION\nDESCRIBE YOUR SITUATION\nBeginning in July my employer cut my hours from 40 a week to 22 and my take-home pay dropped by about 40 percent. I have not been able to keep up with the full payment since then and I am now behind on the loan. I am asking the Bank to lower my payment for six months while my hours are restored. My work schedule letter is attached.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-de88eb1db7ca7853",
+                  "file_name": "loan_modification_request_scan.png",
+                  "citation": "loan_modification_request_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "REQUEST FOR LOAN MODIFICATION › DESCRIBE YOUR SITUATION",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.43307170271873474,
+                "vectorScore": 0.43307170271873474,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-de88eb1db7ca7853",
+                "chunkId": "financial-services.policies:f-de88eb1db7ca7853:0003",
+                "title": "loan_modification_request_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "REQUEST FOR LOAN MODIFICATION\n2. REASON FOR HARDSHIP (check all that apply)\n- Job loss Reduced income or work hours Medical expense Death of co-borrower Disaster Other",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-de88eb1db7ca7853",
+                  "file_name": "loan_modification_request_scan.png",
+                  "citation": "loan_modification_request_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "REQUEST FOR LOAN MODIFICATION › 2. REASON FOR HARDSHIP (check all that apply)",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.405825674533844,
+                "vectorScore": 0.405825674533844,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0012",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n6. Hardship and loan modification\n6.1 Eligibility\nA borrower may request a modification when a documented hardship (job loss, reduction in work hours, serious illness, the death of a co-borrower or a declared disaster) makes the contractual payment unaffordable. To be eligible the borrower must have made at least three payments on the loan, must not be more than 119 days past due on a personal or auto loan, and must not be in bankruptcy.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Consumer Credit Policy › 6. Hardship and loan modification › 6.1 Eligibility",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.3862731158733368,
+                "vectorScore": 0.3862731158733368,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-de88eb1db7ca7853",
+                "chunkId": "financial-services.policies:f-de88eb1db7ca7853:0007",
+                "title": "loan_modification_request_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "REQUEST FOR LOAN MODIFICATION\nFOR BANK USE ONLY\n- Date received: 09/16/2026\nRECEIVED SEP 16 2026 LOAN SERVICING\n- Case number: HM-2026-0412\n- Decision due (10 business days): 09/30/2026\nForm LS-114 Rev. 03/2026 | Specimen: Synthetic document for a software demonstration. Harborview Community Bank is fictional.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-de88eb1db7ca7853",
+                  "file_name": "loan_modification_request_scan.png",
+                  "citation": "loan_modification_request_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "REQUEST FOR LOAN MODIFICATION › FOR BANK USE ONLY",
+                  "labels": [
+                    "caption",
+                    "list_item",
+                    "page_footer"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "financial-services.policies": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 3259.5,
+              "searchMs": 9.0,
+              "rerankMs": 0.0,
+              "totalMs": 3268.5
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "financial-services.policies"
+      ]
+    }
+  ]
+}

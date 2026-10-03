@@ -1,0 +1,140 @@
+{
+  "id": "financial-services",
+  "kind": "industry",
+  "title": "Financial Services",
+  "description": "Harborview Community Bank, a fictional regional bank with 18 branches: a sample of its retail customers, accounts, monthly balances, loans, loan payments and card disputes from April 2025 to September 2026, a credit risk report workbook, and its credit policy, KYC and AML procedure, complaint procedure, fee schedule, a Q3 2026 risk committee deck and a scanned loan modification request.",
+  "icon": "Bank",
+  "status": "ready",
+  "version": "1.0.0",
+  "as_of": "2026-09-30",
+  "disclaimer": "Synthetic data for a software demonstration: Harborview Community Bank, its customers, loans and documents are fictional and describe no real institution or person. Not financial, credit or legal advice.",
+  "questions": [
+    {
+      "id": "underwriting-limits",
+      "label": "Mortgage limits at a 700 score",
+      "tag": "DOCUMENTS",
+      "description": "Reads the underwriting table in the consumer credit policy PDF.",
+      "question": "Under the consumer credit policy, what is the maximum debt-to-income ratio and the maximum loan-to-value for a mortgage applicant with a 700 credit score?",
+      "sources": [
+        "financial-services.policies"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "modification-request-scan",
+      "label": "Scanned loan modification request",
+      "tag": "DOCUMENTS",
+      "description": "Needs Nemotron Parse to read a scanned, signed form.",
+      "question": "In the scanned loan modification request, which loan is the borrower asking to modify, and what payment relief are they requesting?",
+      "sources": [
+        "financial-services.policies"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "complaint-deadlines",
+      "label": "Complaint handling deadlines",
+      "tag": "DOCUMENTS",
+      "description": "Reads the service-level table in the complaint handling procedure (DOCX).",
+      "question": "A customer complains that their loan modification request was denied. How soon must the bank acknowledge and resolve the complaint, and when does it escalate to the Complaint Resolution Team?",
+      "sources": [
+        "financial-services.policies"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": false
+    },
+    {
+      "id": "deposits-by-branch",
+      "label": "Top branches by deposits",
+      "tag": "SQL",
+      "description": "Joins accounts to monthly balances for September 2026.",
+      "question": "Which five branches held the most deposits (checking and savings balances) at the end of September 2026, and how much did each hold?",
+      "sources": [
+        "financial-services.banking"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "delinquency-by-product",
+      "label": "Delinquency by loan product",
+      "tag": "SQL",
+      "description": "Reads the delinquency sheet of the credit risk report workbook.",
+      "question": "Which loan product had the highest 30-day delinquency rate in September 2026, and how does each product compare with September 2025?",
+      "sources": [
+        "financial-services.banking"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "card-disputes-q3",
+      "label": "Card disputes in Q3 2026",
+      "tag": "SQL",
+      "description": "Counts and sums card disputes filed in the third quarter.",
+      "question": "How many card disputes were filed in the third quarter of 2026, how much money was disputed in total, and which reason was the most common?",
+      "sources": [
+        "financial-services.banking"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "dti-over-policy",
+      "label": "Loans above the policy DTI limit",
+      "tag": "HYBRID",
+      "description": "Reads the DTI limits from the policy and applies them to this year's personal loans.",
+      "question": "Which personal loans originated this year would no longer meet the credit policy's maximum DTI for their credit band at origination?",
+      "sources": [
+        "financial-services.policies",
+        "financial-services.banking"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "deck-vs-loan-data",
+      "label": "Risk deck against the loan data",
+      "tag": "HYBRID",
+      "description": "Checks the delinquency figures in the Q3 deck against the loan payment tables.",
+      "question": "The Q3 2026 risk committee deck reports a 30-day delinquency rate for each loan product. Do those figures match what the loan and payment tables show at 30 September 2026?",
+      "sources": [
+        "financial-services.disclosures",
+        "financial-services.banking"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    }
+  ],
+  "examples": [
+    "underwriting-limits",
+    "modification-request-scan",
+    "deposits-by-branch",
+    "dti-over-policy",
+    "deck-vs-loan-data",
+    "complaint-deadlines",
+    "delinquency-by-product",
+    "card-disputes-q3"
+  ],
+  "conversations": []
+}

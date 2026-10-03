@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "pack": {
+    "id": "financial-services",
+    "version": "1.0.0"
+  },
+  "recordedAt": "2026-10-03T04:21:35.498595Z",
+  "sessions": [
+    {
+      "id": "underwriting-limits",
+      "title": "Mortgage limits at a 700 score",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "question": "Under the consumer credit policy, what is the maximum debt-to-income ratio and the maximum loan-to-value for a mortgage applicant with a 700 credit score?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "modification-request-scan",
+      "title": "Scanned loan modification request",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "308e271e-543f-4894-a548-5c17bb48bca4",
+          "question": "In the scanned loan modification request, which loan is the borrower asking to modify, and what payment relief are they requesting?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deposits-by-branch",
+      "title": "Top branches by deposits",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "decf35ba-279a-4524-a7aa-54ef7923b920",
+          "question": "Which five branches held the most deposits (checking and savings balances) at the end of September 2026, and how much did each hold?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dti-over-policy",
+      "title": "Loans above the policy DTI limit",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "question": "Which personal loans originated this year would no longer meet the credit policy's maximum DTI for their credit band at origination?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deck-vs-loan-data",
+      "title": "Risk deck against the loan data",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "5324e765-db94-4ed0-bc93-fb6e27211537",
+          "question": "The Q3 2026 risk committee deck reports a 30-day delinquency rate for each loan product. Do those figures match what the loan and payment tables show at 30 September 2026?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    }
+  ]
+}

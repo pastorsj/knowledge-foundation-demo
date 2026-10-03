@@ -1,0 +1,5515 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "financial-services.banking",
+      "name": "Customers, Accounts & Loans",
+      "databaseName": "financial_services_banking",
+      "schema": {
+        "source_id": "financial-services.banking",
+        "database_name": "financial_services_banking",
+        "tables": [
+          {
+            "name": "accounts",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "account_id"
+            ],
+            "columns": [
+              {
+                "name": "account_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "customer_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "branch_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "account_type",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "product_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "opened_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "closed_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "credit_limit",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "branches",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "branch_id"
+            ],
+            "columns": [
+              {
+                "name": "branch_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "branch_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "city",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "region",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "branch_type",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "opened_year",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "staff_count",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "card_disputes",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "dispute_id"
+            ],
+            "columns": [
+              {
+                "name": "dispute_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "account_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "customer_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "dispute_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "reason",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "channel",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "credit_risk_report_delinquency",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [],
+            "columns": [
+              {
+                "name": "month_end",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "product",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "active_loans",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "loans_30plus",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "loans_90plus",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "delinquency_rate_30plus",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "delinquency_rate_90plus",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "credit_risk_report_provisions",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [],
+            "columns": [
+              {
+                "name": "quarter_end",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "segment",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "active_loans",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "outstanding_balance",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "allowance",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "provision_expense",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "gross_charge_offs",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "recoveries",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "net_charge_offs",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "coverage_ratio",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "customers",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "customer_id"
+            ],
+            "columns": [
+              {
+                "name": "customer_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "home_branch_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "segment",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "region",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "customer_since",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "tenure_years",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "credit_score",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "credit_score_band",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "annual_income",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "online_banking_enrolled",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "loan_payments",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "payment_id"
+            ],
+            "columns": [
+              {
+                "name": "payment_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "loan_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "installment_number",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "due_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "scheduled_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "paid_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "paid_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "days_past_due",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "payment_status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "loans",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "loan_id"
+            ],
+            "columns": [
+              {
+                "name": "loan_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "customer_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "branch_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "product",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "principal",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "interest_rate",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "term_months",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "monthly_payment",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "origination_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "maturity_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "credit_score_at_origination",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "credit_band",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "dti_at_origination",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "ltv_at_origination",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "closed_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "monthly_balances",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "balance_id"
+            ],
+            "columns": [
+              {
+                "name": "balance_id",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "account_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "month_end",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "ending_balance",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "average_daily_balance",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "total_inflows",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "total_outflows",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "transaction_count",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "overdraft_count",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "utilization_ratio",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          }
+        ],
+        "relationships": [
+          {
+            "from_table": "accounts",
+            "from_column": "customer_id",
+            "to_table": "customers",
+            "to_column": "customer_id"
+          },
+          {
+            "from_table": "accounts",
+            "from_column": "branch_id",
+            "to_table": "branches",
+            "to_column": "branch_id"
+          },
+          {
+            "from_table": "card_disputes",
+            "from_column": "account_id",
+            "to_table": "accounts",
+            "to_column": "account_id"
+          },
+          {
+            "from_table": "card_disputes",
+            "from_column": "customer_id",
+            "to_table": "customers",
+            "to_column": "customer_id"
+          },
+          {
+            "from_table": "customers",
+            "from_column": "home_branch_id",
+            "to_table": "branches",
+            "to_column": "branch_id"
+          },
+          {
+            "from_table": "loan_payments",
+            "from_column": "loan_id",
+            "to_table": "loans",
+            "to_column": "loan_id"
+          },
+          {
+            "from_table": "loans",
+            "from_column": "customer_id",
+            "to_table": "customers",
+            "to_column": "customer_id"
+          },
+          {
+            "from_table": "loans",
+            "from_column": "branch_id",
+            "to_table": "branches",
+            "to_column": "branch_id"
+          },
+          {
+            "from_table": "monthly_balances",
+            "from_column": "account_id",
+            "to_table": "accounts",
+            "to_column": "account_id"
+          }
+        ]
+      },
+      "previews": {
+        "accounts": {
+          "table": "accounts",
+          "columns": [
+            "account_id",
+            "customer_id",
+            "branch_id",
+            "account_type",
+            "product_name",
+            "opened_date",
+            "closed_date",
+            "status",
+            "credit_limit"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DATE",
+            "VARCHAR",
+            "BIGINT"
+          ],
+          "rows": [
+            [
+              "A000001",
+              "C00003",
+              "BR03",
+              "checking",
+              "Everyday Checking",
+              "1991-10-01",
+              "2025-07-28",
+              "closed",
+              null
+            ],
+            [
+              "A000002",
+              "C00001",
+              "BR08",
+              "checking",
+              "Everyday Checking",
+              "1991-10-03",
+              "2026-06-26",
+              "closed",
+              null
+            ],
+            [
+              "A000003",
+              "C00004",
+              "BR02",
+              "checking",
+              "Everyday Checking",
+              "1991-10-10",
+              null,
+              "open",
+              null
+            ],
+            [
+              "A000004",
+              "C00006",
+              "BR16",
+              "checking",
+              "Everyday Checking",
+              "1991-10-11",
+              null,
+              "open",
+              null
+            ],
+            [
+              "A000005",
+              "C00005",
+              "BR05",
+              "checking",
+              "Everyday Checking",
+              "1991-10-12",
+              null,
+              "open",
+              null
+            ],
+            [
+              "A000006",
+              "C00007",
+              "BR06",
+              "checking",
+              "Everyday Checking",
+              "1992-11-06",
+              null,
+              "open",
+              null
+            ],
+            [
+              "A000007",
+              "C00005",
+              "BR03",
+              "savings",
+              "Basic Savings",
+              "1993-02-10",
+              null,
+              "open",
+              null
+            ],
+            [
+              "A000008",
+              "C00008",
+              "BR05",
+              "checking",
+              "Everyday Checking",
+              "1993-08-28",
+              null,
+              "open",
+              null
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 257
+        },
+        "branches": {
+          "table": "branches",
+          "columns": [
+            "branch_id",
+            "branch_name",
+            "city",
+            "region",
+            "branch_type",
+            "opened_year",
+            "staff_count"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT",
+            "BIGINT"
+          ],
+          "rows": [
+            [
+              "BR01",
+              "Harborview Main Street",
+              "Harborview",
+              "Harbor Coast",
+              "full_service",
+              1962,
+              31
+            ],
+            [
+              "BR02",
+              "Marina District",
+              "Harborview",
+              "Harbor Coast",
+              "full_service",
+              1988,
+              19
+            ],
+            [
+              "BR03",
+              "Lighthouse Point",
+              "Port Alder",
+              "Harbor Coast",
+              "full_service",
+              1995,
+              14
+            ],
+            [
+              "BR04",
+              "Seaport Plaza",
+              "Port Alder",
+              "Harbor Coast",
+              "limited_service",
+              2011,
+              6
+            ],
+            [
+              "BR05",
+              "Union Square",
+              "Cedar Falls",
+              "Metro",
+              "full_service",
+              1974,
+              24
+            ],
+            [
+              "BR06",
+              "Riverside",
+              "Cedar Falls",
+              "Metro",
+              "full_service",
+              1999,
+              17
+            ],
+            [
+              "BR07",
+              "Eastgate",
+              "Cedar Falls",
+              "Metro",
+              "full_service",
+              2004,
+              15
+            ],
+            [
+              "BR08",
+              "Westfield Mall",
+              "Cedar Falls",
+              "Metro",
+              "limited_service",
+              2013,
+              6
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 263
+        },
+        "card_disputes": {
+          "table": "card_disputes",
+          "columns": [
+            "dispute_id",
+            "account_id",
+            "customer_id",
+            "dispute_date",
+            "amount",
+            "reason",
+            "channel",
+            "status"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DOUBLE",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "D00001",
+              "A001397",
+              "C00814",
+              "2025-04-03",
+              293.46,
+              "duplicate_charge",
+              "credit_card",
+              "customer_credited"
+            ],
+            [
+              "D00002",
+              "A000498",
+              "C00332",
+              "2025-04-07",
+              112.49,
+              "service_not_received",
+              "debit_card",
+              "customer_credited"
+            ],
+            [
+              "D00003",
+              "A000082",
+              "C00064",
+              "2025-04-08",
+              74.64,
+              "unauthorized_transaction",
+              "debit_card",
+              "customer_credited"
+            ],
+            [
+              "D00004",
+              "A000265",
+              "C00097",
+              "2025-04-08",
+              60.62,
+              "unauthorized_transaction",
+              "credit_card",
+              "customer_credited"
+            ],
+            [
+              "D00005",
+              "A000261",
+              "C00190",
+              "2025-04-10",
+              138.09,
+              "unauthorized_transaction",
+              "debit_card",
+              "customer_credited"
+            ],
+            [
+              "D00006",
+              "A000191",
+              "C00035",
+              "2025-04-15",
+              74.37,
+              "duplicate_charge",
+              "credit_card",
+              "denied"
+            ],
+            [
+              "D00007",
+              "A001542",
+              "C00941",
+              "2025-04-23",
+              177.16,
+              "duplicate_charge",
+              "debit_card",
+              "denied"
+            ],
+            [
+              "D00008",
+              "A000440",
+              "C00299",
+              "2025-04-26",
+              46.54,
+              "service_not_received",
+              "debit_card",
+              "customer_credited"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 261
+        },
+        "credit_risk_report_delinquency": {
+          "table": "credit_risk_report_delinquency",
+          "columns": [
+            "month_end",
+            "product",
+            "active_loans",
+            "loans_30plus",
+            "loans_90plus",
+            "delinquency_rate_30plus",
+            "delinquency_rate_90plus"
+          ],
+          "types": [
+            "DATE",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "2025-04-30",
+              "personal",
+              98.0,
+              2.0,
+              0.0,
+              0.0204,
+              0.0
+            ],
+            [
+              "2025-04-30",
+              "auto",
+              104.0,
+              2.0,
+              0.0,
+              0.0192,
+              0.0
+            ],
+            [
+              "2025-04-30",
+              "mortgage",
+              130.0,
+              1.0,
+              1.0,
+              0.0077,
+              0.0077
+            ],
+            [
+              "2025-05-31",
+              "personal",
+              104.0,
+              2.0,
+              0.0,
+              0.0192,
+              0.0
+            ],
+            [
+              "2025-05-31",
+              "auto",
+              119.0,
+              2.0,
+              0.0,
+              0.0168,
+              0.0
+            ],
+            [
+              "2025-05-31",
+              "mortgage",
+              128.0,
+              1.0,
+              0.0,
+              0.0078,
+              0.0
+            ],
+            [
+              "2025-06-30",
+              "personal",
+              111.0,
+              5.0,
+              2.0,
+              0.045,
+              0.018
+            ],
+            [
+              "2025-06-30",
+              "auto",
+              122.0,
+              1.0,
+              0.0,
+              0.0082,
+              0.0
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 259
+        },
+        "credit_risk_report_provisions": {
+          "table": "credit_risk_report_provisions",
+          "columns": [
+            "quarter_end",
+            "segment",
+            "active_loans",
+            "outstanding_balance",
+            "allowance",
+            "provision_expense",
+            "gross_charge_offs",
+            "recoveries",
+            "net_charge_offs",
+            "coverage_ratio"
+          ],
+          "types": [
+            "DATE",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "2025-06-30",
+              "Mass Market",
+              165.0,
+              8237955.0,
+              131065.0,
+              87343.0,
+              91648.0,
+              13747.0,
+              77901.0,
+              0.0159
+            ],
+            [
+              "2025-06-30",
+              "Mass Affluent",
+              98.0,
+              17466931.0,
+              60196.0,
+              -281.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0034
+            ],
+            [
+              "2025-06-30",
+              "Young Adult",
+              35.0,
+              651780.0,
+              24853.0,
+              7665.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0381
+            ],
+            [
+              "2025-06-30",
+              "Retiree",
+              31.0,
+              1691846.0,
+              8150.0,
+              2434.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0048
+            ],
+            [
+              "2025-06-30",
+              "Private Client",
+              32.0,
+              15159948.0,
+              31240.0,
+              1265.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0021
+            ],
+            [
+              "2025-09-30",
+              "Mass Market",
+              189.0,
+              8897345.0,
+              165733.0,
+              90183.0,
+              65312.0,
+              9797.0,
+              55515.0,
+              0.0186
+            ],
+            [
+              "2025-09-30",
+              "Mass Affluent",
+              107.0,
+              18703405.0,
+              63984.0,
+              3788.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0034
+            ],
+            [
+              "2025-09-30",
+              "Young Adult",
+              46.0,
+              827962.0,
+              32913.0,
+              8060.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0398
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 284
+        },
+        "customers": {
+          "table": "customers",
+          "columns": [
+            "customer_id",
+            "home_branch_id",
+            "segment",
+            "region",
+            "customer_since",
+            "tenure_years",
+            "credit_score",
+            "credit_score_band",
+            "annual_income",
+            "online_banking_enrolled"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DOUBLE",
+            "BIGINT",
+            "VARCHAR",
+            "BIGINT",
+            "BIGINT"
+          ],
+          "rows": [
+            [
+              "C00001",
+              "BR08",
+              "Retiree",
+              "Metro",
+              "1991-10-01",
+              35.0,
+              659,
+              "Fair",
+              65500,
+              0
+            ],
+            [
+              "C00002",
+              "BR02",
+              "Retiree",
+              "Harbor Coast",
+              "1991-10-01",
+              35.0,
+              690,
+              "Good",
+              34500,
+              0
+            ],
+            [
+              "C00003",
+              "BR03",
+              "Retiree",
+              "Harbor Coast",
+              "1991-10-01",
+              35.0,
+              712,
+              "Good",
+              29500,
+              1
+            ],
+            [
+              "C00004",
+              "BR02",
+              "Retiree",
+              "Harbor Coast",
+              "1991-10-01",
+              35.0,
+              769,
+              "Very Good",
+              67500,
+              1
+            ],
+            [
+              "C00005",
+              "BR03",
+              "Retiree",
+              "Harbor Coast",
+              "1991-10-01",
+              35.0,
+              772,
+              "Very Good",
+              32500,
+              1
+            ],
+            [
+              "C00006",
+              "BR16",
+              "Retiree",
+              "Highlands",
+              "1991-10-01",
+              35.0,
+              810,
+              "Exceptional",
+              60500,
+              1
+            ],
+            [
+              "C00007",
+              "BR06",
+              "Retiree",
+              "Metro",
+              "1992-10-27",
+              33.9,
+              710,
+              "Good",
+              39500,
+              1
+            ],
+            [
+              "C00008",
+              "BR05",
+              "Retiree",
+              "Metro",
+              "1993-08-17",
+              33.1,
+              740,
+              "Very Good",
+              34000,
+              1
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 272
+        },
+        "loan_payments": {
+          "table": "loan_payments",
+          "columns": [
+            "payment_id",
+            "loan_id",
+            "installment_number",
+            "due_date",
+            "scheduled_amount",
+            "paid_amount",
+            "paid_date",
+            "days_past_due",
+            "payment_status"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT",
+            "DATE",
+            "DOUBLE",
+            "DOUBLE",
+            "DATE",
+            "BIGINT",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "P000001",
+              "L00166",
+              15,
+              "2024-11-25",
+              633.61,
+              0.0,
+              null,
+              181,
+              "unpaid"
+            ],
+            [
+              "P000002",
+              "L00118",
+              22,
+              "2024-12-04",
+              114.98,
+              0.0,
+              null,
+              121,
+              "unpaid"
+            ],
+            [
+              "P000003",
+              "L00166",
+              16,
+              "2024-12-25",
+              633.61,
+              0.0,
+              null,
+              151,
+              "unpaid"
+            ],
+            [
+              "P000004",
+              "L00118",
+              23,
+              "2025-01-04",
+              114.98,
+              0.0,
+              null,
+              90,
+              "unpaid"
+            ],
+            [
+              "P000005",
+              "L00166",
+              17,
+              "2025-01-25",
+              633.61,
+              0.0,
+              null,
+              120,
+              "unpaid"
+            ],
+            [
+              "P000006",
+              "L00118",
+              24,
+              "2025-02-04",
+              114.98,
+              0.0,
+              null,
+              59,
+              "unpaid"
+            ],
+            [
+              "P000007",
+              "L00092",
+              30,
+              "2025-02-05",
+              1072.0,
+              1072.0,
+              "2025-05-26",
+              110,
+              "paid_late"
+            ],
+            [
+              "P000008",
+              "L00166",
+              18,
+              "2025-02-25",
+              633.61,
+              0.0,
+              null,
+              89,
+              "unpaid"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 250
+        },
+        "loans": {
+          "table": "loans",
+          "columns": [
+            "loan_id",
+            "customer_id",
+            "branch_id",
+            "product",
+            "principal",
+            "interest_rate",
+            "term_months",
+            "monthly_payment",
+            "origination_date",
+            "maturity_date",
+            "credit_score_at_origination",
+            "credit_band",
+            "dti_at_origination",
+            "ltv_at_origination",
+            "status",
+            "closed_date"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT",
+            "DOUBLE",
+            "BIGINT",
+            "DOUBLE",
+            "DATE",
+            "DATE",
+            "BIGINT",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE",
+            "VARCHAR",
+            "DATE"
+          ],
+          "rows": [
+            [
+              "L00001",
+              "C00223",
+              "BR07",
+              "mortgage",
+              180000,
+              4.13,
+              360,
+              872.89,
+              "2013-02-19",
+              "2043-02-19",
+              776,
+              "Very Good",
+              0.42,
+              0.83,
+              "active",
+              null
+            ],
+            [
+              "L00002",
+              "C00087",
+              "BR02",
+              "mortgage",
+              169000,
+              3.46,
+              360,
+              755.12,
+              "2013-05-13",
+              "2043-05-13",
+              795,
+              "Exceptional",
+              0.43,
+              0.97,
+              "paid_off",
+              "2025-10-03"
+            ],
+            [
+              "L00003",
+              "C00265",
+              "BR08",
+              "mortgage",
+              300000,
+              4.3,
+              360,
+              1484.61,
+              "2013-08-04",
+              "2043-08-04",
+              751,
+              "Very Good",
+              0.33,
+              0.94,
+              "paid_off",
+              "2025-12-13"
+            ],
+            [
+              "L00004",
+              "C00108",
+              "BR15",
+              "mortgage",
+              750000,
+              3.8,
+              240,
+              4466.2,
+              "2013-09-06",
+              "2033-09-06",
+              729,
+              "Very Good",
+              0.25,
+              0.61,
+              "active",
+              null
+            ],
+            [
+              "L00005",
+              "C00100",
+              "BR15",
+              "mortgage",
+              747000,
+              4.34,
+              360,
+              3714.26,
+              "2013-09-09",
+              "2043-09-09",
+              736,
+              "Very Good",
+              0.42,
+              0.71,
+              "active",
+              null
+            ],
+            [
+              "L00006",
+              "C00266",
+              "BR16",
+              "mortgage",
+              214000,
+              4.01,
+              240,
+              1297.93,
+              "2013-11-17",
+              "2033-11-17",
+              771,
+              "Very Good",
+              0.31,
+              0.95,
+              "active",
+              null
+            ],
+            [
+              "L00007",
+              "C00194",
+              "BR03",
+              "mortgage",
+              249000,
+              3.95,
+              360,
+              1181.6,
+              "2014-01-27",
+              "2044-01-27",
+              770,
+              "Very Good",
+              0.4,
+              0.85,
+              "active",
+              null
+            ],
+            [
+              "L00008",
+              "C00071",
+              "BR17",
+              "mortgage",
+              217000,
+              4.06,
+              360,
+              1043.51,
+              "2014-02-22",
+              "2044-02-22",
+              705,
+              "Good",
+              0.43,
+              0.9,
+              "active",
+              null
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 289
+        },
+        "monthly_balances": {
+          "table": "monthly_balances",
+          "columns": [
+            "balance_id",
+            "account_id",
+            "month_end",
+            "ending_balance",
+            "average_daily_balance",
+            "total_inflows",
+            "total_outflows",
+            "transaction_count",
+            "overdraft_count",
+            "utilization_ratio"
+          ],
+          "types": [
+            "BIGINT",
+            "VARCHAR",
+            "DATE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "BIGINT",
+            "BIGINT",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              1,
+              "A000001",
+              "2025-04-30",
+              2621.55,
+              3122.76,
+              1387.7,
+              2571.06,
+              26,
+              0,
+              null
+            ],
+            [
+              2,
+              "A000002",
+              "2025-04-30",
+              2445.83,
+              2373.78,
+              4187.75,
+              3975.19,
+              31,
+              0,
+              null
+            ],
+            [
+              3,
+              "A000003",
+              "2025-04-30",
+              2340.65,
+              2734.24,
+              4836.98,
+              5607.23,
+              26,
+              0,
+              null
+            ],
+            [
+              4,
+              "A000004",
+              "2025-04-30",
+              2477.25,
+              2547.63,
+              3433.92,
+              3270.72,
+              29,
+              0,
+              null
+            ],
+            [
+              5,
+              "A000005",
+              "2025-04-30",
+              2051.02,
+              2158.06,
+              2197.38,
+              2313.05,
+              23,
+              0,
+              null
+            ],
+            [
+              6,
+              "A000006",
+              "2025-04-30",
+              4322.66,
+              4466.88,
+              2270.37,
+              2515.9,
+              25,
+              0,
+              null
+            ],
+            [
+              7,
+              "A000007",
+              "2025-04-30",
+              13431.03,
+              14486.31,
+              681.71,
+              2773.38,
+              2,
+              0,
+              null
+            ],
+            [
+              8,
+              "A000008",
+              "2025-04-30",
+              3719.93,
+              3936.09,
+              2111.86,
+              2110.06,
+              28,
+              0,
+              null
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 261
+        }
+      },
+      "queries": [
+        {
+          "sql": "SELECT \n    loan_id,\n    customer_id,\n    product,\n    origination_date,\n    credit_band,\n    dti_at_origination,\n    credit_score_at_origination\nFROM financial_services_banking.loans\nWHERE product = 'personal'\n  AND origination_date >= '2026-01-01'\n  AND origination_date <= '2026-12-31'\nORDER BY origination_date;",
+          "result": {
+            "columns": [
+              "loan_id",
+              "customer_id",
+              "product",
+              "origination_date",
+              "credit_band",
+              "dti_at_origination",
+              "credit_score_at_origination"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "VARCHAR",
+              "DOUBLE",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "L00516",
+                "C00393",
+                "personal",
+                "2026-01-07",
+                "Poor",
+                0.35,
+                612
+              ],
+              [
+                "L00517",
+                "C00039",
+                "personal",
+                "2026-01-11",
+                "Good",
+                0.37,
+                671
+              ],
+              [
+                "L00519",
+                "C00543",
+                "personal",
+                "2026-01-15",
+                "Very Good",
+                0.36,
+                758
+              ],
+              [
+                "L00521",
+                "C00408",
+                "personal",
+                "2026-01-19",
+                "Poor",
+                0.22,
+                576
+              ],
+              [
+                "L00522",
+                "C00627",
+                "personal",
+                "2026-01-20",
+                "Good",
+                0.43,
+                673
+              ],
+              [
+                "L00523",
+                "C01024",
+                "personal",
+                "2026-01-24",
+                "Poor",
+                0.26,
+                576
+              ],
+              [
+                "L00525",
+                "C00314",
+                "personal",
+                "2026-01-26",
+                "Very Good",
+                0.44,
+                733
+              ],
+              [
+                "L00526",
+                "C00270",
+                "personal",
+                "2026-01-31",
+                "Good",
+                0.31,
+                712
+              ],
+              [
+                "L00527",
+                "C00873",
+                "personal",
+                "2026-02-03",
+                "Fair",
+                0.3,
+                624
+              ],
+              [
+                "L00530",
+                "C00735",
+                "personal",
+                "2026-02-09",
+                "Poor",
+                0.27,
+                566
+              ],
+              [
+                "L00531",
+                "C00264",
+                "personal",
+                "2026-02-10",
+                "Very Good",
+                0.49,
+                774
+              ],
+              [
+                "L00533",
+                "C00648",
+                "personal",
+                "2026-02-14",
+                "Good",
+                0.37,
+                694
+              ],
+              [
+                "L00534",
+                "C00127",
+                "personal",
+                "2026-02-15",
+                "Very Good",
+                0.3,
+                757
+              ],
+              [
+                "L00538",
+                "C00395",
+                "personal",
+                "2026-02-26",
+                "Good",
+                0.45,
+                688
+              ],
+              [
+                "L00540",
+                "C00310",
+                "personal",
+                "2026-03-02",
+                "Very Good",
+                0.49,
+                776
+              ],
+              [
+                "L00541",
+                "C00781",
+                "personal",
+                "2026-03-05",
+                "Exceptional",
+                0.47,
+                780
+              ],
+              [
+                "L00544",
+                "C01006",
+                "personal",
+                "2026-03-06",
+                "Fair",
+                0.37,
+                639
+              ],
+              [
+                "L00545",
+                "C00037",
+                "personal",
+                "2026-03-07",
+                "Very Good",
+                0.32,
+                755
+              ],
+              [
+                "L00552",
+                "C00839",
+                "personal",
+                "2026-03-16",
+                "Very Good",
+                0.42,
+                748
+              ],
+              [
+                "L00553",
+                "C00858",
+                "personal",
+                "2026-03-16",
+                "Good",
+                0.34,
+                684
+              ],
+              [
+                "L00556",
+                "C00816",
+                "personal",
+                "2026-03-17",
+                "Fair",
+                0.35,
+                621
+              ],
+              [
+                "L00554",
+                "C00202",
+                "personal",
+                "2026-03-17",
+                "Fair",
+                0.24,
+                658
+              ],
+              [
+                "L00555",
+                "C00410",
+                "personal",
+                "2026-03-17",
+                "Good",
+                0.42,
+                671
+              ],
+              [
+                "L00557",
+                "C01029",
+                "personal",
+                "2026-03-17",
+                "Poor",
+                0.3,
+                586
+              ],
+              [
+                "L00560",
+                "C01011",
+                "personal",
+                "2026-03-23",
+                "Fair",
+                0.28,
+                650
+              ],
+              [
+                "L00563",
+                "C00981",
+                "personal",
+                "2026-03-30",
+                "Poor",
+                0.31,
+                604
+              ],
+              [
+                "L00565",
+                "C00700",
+                "personal",
+                "2026-03-31",
+                "Poor",
+                0.28,
+                613
+              ],
+              [
+                "L00566",
+                "C00965",
+                "personal",
+                "2026-04-03",
+                "Good",
+                0.32,
+                691
+              ],
+              [
+                "L00567",
+                "C00462",
+                "personal",
+                "2026-04-06",
+                "Exceptional",
+                0.25,
+                802
+              ],
+              [
+                "L00571",
+                "C00926",
+                "personal",
+                "2026-04-12",
+                "Fair",
+                0.34,
+                623
+              ],
+              [
+                "L00572",
+                "C01023",
+                "personal",
+                "2026-04-12",
+                "Poor",
+                0.31,
+                578
+              ],
+              [
+                "L00573",
+                "C01042",
+                "personal",
+                "2026-04-13",
+                "Poor",
+                0.23,
+                514
+              ],
+              [
+                "L00577",
+                "C00917",
+                "personal",
+                "2026-04-25",
+                "Very Good",
+                0.38,
+                760
+              ],
+              [
+                "L00579",
+                "C00785",
+                "personal",
+                "2026-04-28",
+                "Very Good",
+                0.39,
+                747
+              ],
+              [
+                "L00581",
+                "C00288",
+                "personal",
+                "2026-05-04",
+                "Fair",
+                0.37,
+                664
+              ],
+              [
+                "L00586",
+                "C00624",
+                "personal",
+                "2026-05-08",
+                "Good",
+                0.37,
+                680
+              ],
+              [
+                "L00587",
+                "C00575",
+                "personal",
+                "2026-05-14",
+                "Good",
+                0.42,
+                697
+              ],
+              [
+                "L00591",
+                "C01028",
+                "personal",
+                "2026-05-18",
+                "Poor",
+                0.28,
+                558
+              ],
+              [
+                "L00594",
+                "C00884",
+                "personal",
+                "2026-05-27",
+                "Poor",
+                0.18,
+                522
+              ],
+              [
+                "L00595",
+                "C00042",
+                "personal",
+                "2026-05-28",
+                "Good",
+                0.41,
+                676
+              ],
+              [
+                "L00598",
+                "C01018",
+                "personal",
+                "2026-06-05",
+                "Good",
+                0.29,
+                671
+              ],
+              [
+                "L00600",
+                "C00230",
+                "personal",
+                "2026-06-06",
+                "Poor",
+                0.14,
+                589
+              ],
+              [
+                "L00603",
+                "C01048",
+                "personal",
+                "2026-06-08",
+                "Good",
+                0.43,
+                715
+              ],
+              [
+                "L00606",
+                "C00476",
+                "personal",
+                "2026-06-15",
+                "Fair",
+                0.35,
+                624
+              ],
+              [
+                "L00610",
+                "C00707",
+                "personal",
+                "2026-06-20",
+                "Good",
+                0.22,
+                672
+              ],
+              [
+                "L00613",
+                "C00276",
+                "personal",
+                "2026-06-24",
+                "Poor",
+                0.31,
+                531
+              ],
+              [
+                "L00616",
+                "C00804",
+                "personal",
+                "2026-06-27",
+                "Poor",
+                0.27,
+                618
+              ],
+              [
+                "L00619",
+                "C00243",
+                "personal",
+                "2026-06-30",
+                "Very Good",
+                0.36,
+                727
+              ],
+              [
+                "L00621",
+                "C00744",
+                "personal",
+                "2026-06-30",
+                "Good",
+                0.4,
+                686
+              ],
+              [
+                "L00618",
+                "C00194",
+                "personal",
+                "2026-06-30",
+                "Very Good",
+                0.42,
+                725
+              ],
+              [
+                "L00624",
+                "C00016",
+                "personal",
+                "2026-07-07",
+                "Good",
+                0.32,
+                694
+              ],
+              [
+                "L00626",
+                "C00398",
+                "personal",
+                "2026-07-08",
+                "Good",
+                0.4,
+                716
+              ],
+              [
+                "L00628",
+                "C00678",
+                "personal",
+                "2026-07-08",
+                "Good",
+                0.23,
+                690
+              ],
+              [
+                "L00629",
+                "C00900",
+                "personal",
+                "2026-07-08",
+                "Good",
+                0.37,
+                698
+              ],
+              [
+                "L00631",
+                "C00041",
+                "personal",
+                "2026-07-12",
+                "Fair",
+                0.28,
+                625
+              ],
+              [
+                "L00632",
+                "C00328",
+                "personal",
+                "2026-07-13",
+                "Fair",
+                0.21,
+                664
+              ],
+              [
+                "L00634",
+                "C00807",
+                "personal",
+                "2026-07-16",
+                "Fair",
+                0.35,
+                647
+              ],
+              [
+                "L00638",
+                "C01039",
+                "personal",
+                "2026-07-20",
+                "Fair",
+                0.25,
+                661
+              ],
+              [
+                "L00639",
+                "C01026",
+                "personal",
+                "2026-07-21",
+                "Very Good",
+                0.31,
+                728
+              ],
+              [
+                "L00640",
+                "C00808",
+                "personal",
+                "2026-07-23",
+                "Good",
+                0.31,
+                713
+              ],
+              [
+                "L00644",
+                "C00761",
+                "personal",
+                "2026-07-27",
+                "Good",
+                0.35,
+                711
+              ],
+              [
+                "L00646",
+                "C00742",
+                "personal",
+                "2026-07-29",
+                "Fair",
+                0.18,
+                633
+              ],
+              [
+                "L00647",
+                "C00855",
+                "personal",
+                "2026-07-30",
+                "Good",
+                0.25,
+                697
+              ],
+              [
+                "L00649",
+                "C01017",
+                "personal",
+                "2026-08-02",
+                "Very Good",
+                0.39,
+                767
+              ],
+              [
+                "L00650",
+                "C00481",
+                "personal",
+                "2026-08-04",
+                "Good",
+                0.27,
+                692
+              ],
+              [
+                "L00651",
+                "C00509",
+                "personal",
+                "2026-08-04",
+                "Good",
+                0.36,
+                718
+              ],
+              [
+                "L00654",
+                "C01054",
+                "personal",
+                "2026-08-04",
+                "Poor",
+                0.27,
+                525
+              ],
+              [
+                "L00655",
+                "C00777",
+                "personal",
+                "2026-08-07",
+                "Very Good",
+                0.36,
+                745
+              ],
+              [
+                "L00659",
+                "C00716",
+                "personal",
+                "2026-08-16",
+                "Good",
+                0.39,
+                677
+              ],
+              [
+                "L00661",
+                "C01059",
+                "personal",
+                "2026-08-20",
+                "Poor",
+                0.27,
+                585
+              ],
+              [
+                "L00663",
+                "C00990",
+                "personal",
+                "2026-08-22",
+                "Fair",
+                0.32,
+                629
+              ],
+              [
+                "L00665",
+                "C01057",
+                "personal",
+                "2026-08-25",
+                "Fair",
+                0.16,
+                634
+              ],
+              [
+                "L00666",
+                "C00428",
+                "personal",
+                "2026-08-27",
+                "Very Good",
+                0.39,
+                772
+              ],
+              [
+                "L00668",
+                "C00772",
+                "personal",
+                "2026-08-29",
+                "Poor",
+                0.21,
+                583
+              ],
+              [
+                "L00669",
+                "C00878",
+                "personal",
+                "2026-08-30",
+                "Very Good",
+                0.31,
+                771
+              ],
+              [
+                "L00670",
+                "C00262",
+                "personal",
+                "2026-08-31",
+                "Fair",
+                0.23,
+                665
+              ],
+              [
+                "L00673",
+                "C00952",
+                "personal",
+                "2026-09-02",
+                "Poor",
+                0.17,
+                578
+              ],
+              [
+                "L00674",
+                "C00748",
+                "personal",
+                "2026-09-03",
+                "Very Good",
+                0.4,
+                771
+              ],
+              [
+                "L00677",
+                "C00317",
+                "personal",
+                "2026-09-05",
+                "Good",
+                0.4,
+                700
+              ],
+              [
+                "L00681",
+                "C00381",
+                "personal",
+                "2026-09-07",
+                "Fair",
+                0.23,
+                645
+              ],
+              [
+                "L00682",
+                "C00450",
+                "personal",
+                "2026-09-08",
+                "Poor",
+                0.25,
+                619
+              ],
+              [
+                "L00683",
+                "C00526",
+                "personal",
+                "2026-09-08",
+                "Exceptional",
+                0.36,
+                787
+              ],
+              [
+                "L00684",
+                "C00510",
+                "personal",
+                "2026-09-09",
+                "Very Good",
+                0.37,
+                762
+              ],
+              [
+                "L00685",
+                "C00354",
+                "personal",
+                "2026-09-11",
+                "Fair",
+                0.33,
+                627
+              ],
+              [
+                "L00688",
+                "C00436",
+                "personal",
+                "2026-09-14",
+                "Fair",
+                0.32,
+                668
+              ],
+              [
+                "L00689",
+                "C00958",
+                "personal",
+                "2026-09-14",
+                "Very Good",
+                0.32,
+                746
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 270
+          }
+        },
+        {
+          "sql": "SELECT \n    month_end,\n    product,\n    active_loans,\n    loans_30plus,\n    delinquency_rate_30plus,\n    ROUND(delinquency_rate_30plus * 100, 2) AS delinquency_rate_pct\nFROM financial_services_banking.credit_risk_report_delinquency\nWHERE month_end = '2026-09-30'\nORDER BY product;",
+          "result": {
+            "columns": [
+              "month_end",
+              "product",
+              "active_loans",
+              "loans_30plus",
+              "delinquency_rate_30plus",
+              "delinquency_rate_pct"
+            ],
+            "types": [
+              "DATE",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "2026-09-30",
+                "auto",
+                251.0,
+                12.0,
+                0.0478,
+                4.78
+              ],
+              [
+                "2026-09-30",
+                "mortgage",
+                133.0,
+                4.0,
+                0.0301,
+                3.01
+              ],
+              [
+                "2026-09-30",
+                "personal",
+                209.0,
+                7.0,
+                0.0335,
+                3.35
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 265
+          }
+        },
+        {
+          "sql": "WITH sept_balances AS (\n    SELECT \n        a.branch_id,\n        mb.ending_balance\n    FROM financial_services_banking.monthly_balances AS mb\n    JOIN financial_services_banking.accounts AS a\n        ON mb.account_id = a.account_id\n    WHERE mb.month_end = DATE '2026-09-30'\n      AND a.account_type IN ('checking', 'savings')\n)\nSELECT \n    b.branch_id,\n    b.branch_name,\n    b.city,\n    b.region,\n    ROUND(SUM(sb.ending_balance), 2) AS total_deposits_usd\nFROM sept_balances AS sb\nJOIN financial_services_banking.branches AS b\n    ON sb.branch_id = b.branch_id\nGROUP BY b.branch_id, b.branch_name, b.city, b.region\nORDER BY total_deposits_usd DESC\nLIMIT 5",
+          "result": {
+            "columns": [
+              "branch_id",
+              "branch_name",
+              "city",
+              "region",
+              "total_deposits_usd"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "BR01",
+                "Harborview Main Street",
+                "Harborview",
+                "Harbor Coast",
+                2696292.11
+              ],
+              [
+                "BR07",
+                "Eastgate",
+                "Cedar Falls",
+                "Metro",
+                2161310.28
+              ],
+              [
+                "BR02",
+                "Marina District",
+                "Harborview",
+                "Harbor Coast",
+                1982872.79
+              ],
+              [
+                "BR18",
+                "Granite Falls",
+                "Granite Falls",
+                "Highlands",
+                1579240.79
+              ],
+              [
+                "BR05",
+                "Union Square",
+                "Cedar Falls",
+                "Metro",
+                1486017.1
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 272
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"accounts\" LIMIT 25",
+          "result": {
+            "columns": [
+              "account_id",
+              "customer_id",
+              "branch_id",
+              "account_type",
+              "product_name",
+              "opened_date",
+              "closed_date",
+              "status",
+              "credit_limit"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DATE",
+              "VARCHAR",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "A000001",
+                "C00003",
+                "BR03",
+                "checking",
+                "Everyday Checking",
+                "1991-10-01",
+                "2025-07-28",
+                "closed",
+                null
+              ],
+              [
+                "A000002",
+                "C00001",
+                "BR08",
+                "checking",
+                "Everyday Checking",
+                "1991-10-03",
+                "2026-06-26",
+                "closed",
+                null
+              ],
+              [
+                "A000003",
+                "C00004",
+                "BR02",
+                "checking",
+                "Everyday Checking",
+                "1991-10-10",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000004",
+                "C00006",
+                "BR16",
+                "checking",
+                "Everyday Checking",
+                "1991-10-11",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000005",
+                "C00005",
+                "BR05",
+                "checking",
+                "Everyday Checking",
+                "1991-10-12",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000006",
+                "C00007",
+                "BR06",
+                "checking",
+                "Everyday Checking",
+                "1992-11-06",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000007",
+                "C00005",
+                "BR03",
+                "savings",
+                "Basic Savings",
+                "1993-02-10",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000008",
+                "C00008",
+                "BR05",
+                "checking",
+                "Everyday Checking",
+                "1993-08-28",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000009",
+                "C00009",
+                "BR16",
+                "checking",
+                "Everyday Checking",
+                "1994-08-08",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000010",
+                "C00003",
+                "BR14",
+                "credit_card",
+                "Harbor Rewards Card",
+                "1995-02-05",
+                "2025-07-07",
+                "closed",
+                5000
+              ],
+              [
+                "A000011",
+                "C00011",
+                "BR08",
+                "checking",
+                "Everyday Checking",
+                "1995-07-02",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000012",
+                "C00010",
+                "BR03",
+                "checking",
+                "Everyday Checking",
+                "1995-07-05",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000013",
+                "C00003",
+                "BR03",
+                "savings",
+                "High-Yield Savings",
+                "1995-08-11",
+                "2025-07-10",
+                "closed",
+                null
+              ],
+              [
+                "A000014",
+                "C00012",
+                "BR10",
+                "checking",
+                "Everyday Checking",
+                "1996-06-15",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000015",
+                "C00027",
+                "BR03",
+                "checking",
+                "Premier Checking",
+                "1996-09-30",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000016",
+                "C00015",
+                "BR17",
+                "checking",
+                "Everyday Checking",
+                "1996-10-01",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000017",
+                "C00025",
+                "BR01",
+                "checking",
+                "Premier Checking",
+                "1996-10-01",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000018",
+                "C00029",
+                "BR04",
+                "checking",
+                "Premier Checking",
+                "1996-10-01",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000019",
+                "C00028",
+                "BR01",
+                "checking",
+                "Premier Checking",
+                "1996-10-02",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000020",
+                "C00018",
+                "BR05",
+                "checking",
+                "Everyday Checking",
+                "1996-10-05",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000021",
+                "C00016",
+                "BR07",
+                "checking",
+                "Everyday Checking",
+                "1996-10-06",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000022",
+                "C00023",
+                "BR18",
+                "checking",
+                "Premier Checking",
+                "1996-10-06",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000023",
+                "C00022",
+                "BR12",
+                "checking",
+                "Premier Checking",
+                "1996-10-07",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000024",
+                "C00014",
+                "BR04",
+                "checking",
+                "Everyday Checking",
+                "1996-10-08",
+                null,
+                "open",
+                null
+              ],
+              [
+                "A000025",
+                "C00020",
+                "BR18",
+                "checking",
+                "Premier Checking",
+                "1996-10-10",
+                null,
+                "open",
+                null
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 272
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"branches\" LIMIT 25",
+          "result": {
+            "columns": [
+              "branch_id",
+              "branch_name",
+              "city",
+              "region",
+              "branch_type",
+              "opened_year",
+              "staff_count"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "BR01",
+                "Harborview Main Street",
+                "Harborview",
+                "Harbor Coast",
+                "full_service",
+                1962,
+                31
+              ],
+              [
+                "BR02",
+                "Marina District",
+                "Harborview",
+                "Harbor Coast",
+                "full_service",
+                1988,
+                19
+              ],
+              [
+                "BR03",
+                "Lighthouse Point",
+                "Port Alder",
+                "Harbor Coast",
+                "full_service",
+                1995,
+                14
+              ],
+              [
+                "BR04",
+                "Seaport Plaza",
+                "Port Alder",
+                "Harbor Coast",
+                "limited_service",
+                2011,
+                6
+              ],
+              [
+                "BR05",
+                "Union Square",
+                "Cedar Falls",
+                "Metro",
+                "full_service",
+                1974,
+                24
+              ],
+              [
+                "BR06",
+                "Riverside",
+                "Cedar Falls",
+                "Metro",
+                "full_service",
+                1999,
+                17
+              ],
+              [
+                "BR07",
+                "Eastgate",
+                "Cedar Falls",
+                "Metro",
+                "full_service",
+                2004,
+                15
+              ],
+              [
+                "BR08",
+                "Westfield Mall",
+                "Cedar Falls",
+                "Metro",
+                "limited_service",
+                2013,
+                6
+              ],
+              [
+                "BR09",
+                "Northgate",
+                "Cedar Falls",
+                "Metro",
+                "full_service",
+                2008,
+                13
+              ],
+              [
+                "BR10",
+                "Millbrook",
+                "Millbrook",
+                "Valley",
+                "full_service",
+                1968,
+                16
+              ],
+              [
+                "BR11",
+                "Oakridge",
+                "Oakridge",
+                "Valley",
+                "full_service",
+                1991,
+                13
+              ],
+              [
+                "BR12",
+                "Fairview",
+                "Fairview",
+                "Valley",
+                "full_service",
+                2001,
+                12
+              ],
+              [
+                "BR13",
+                "Stony Creek",
+                "Stony Creek",
+                "Valley",
+                "limited_service",
+                2016,
+                5
+              ],
+              [
+                "BR14",
+                "Lakeside",
+                "Lakeside",
+                "Valley",
+                "full_service",
+                2006,
+                11
+              ],
+              [
+                "BR15",
+                "Pinecrest",
+                "Pinecrest",
+                "Highlands",
+                "full_service",
+                1979,
+                12
+              ],
+              [
+                "BR16",
+                "Summit Ridge",
+                "Summit Ridge",
+                "Highlands",
+                "full_service",
+                2009,
+                10
+              ],
+              [
+                "BR17",
+                "Hollow Springs",
+                "Hollow Springs",
+                "Highlands",
+                "limited_service",
+                2018,
+                5
+              ],
+              [
+                "BR18",
+                "Granite Falls",
+                "Granite Falls",
+                "Highlands",
+                "full_service",
+                1985,
+                11
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 242
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"card_disputes\" LIMIT 25",
+          "result": {
+            "columns": [
+              "dispute_id",
+              "account_id",
+              "customer_id",
+              "dispute_date",
+              "amount",
+              "reason",
+              "channel",
+              "status"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DOUBLE",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "D00001",
+                "A001397",
+                "C00814",
+                "2025-04-03",
+                293.46,
+                "duplicate_charge",
+                "credit_card",
+                "customer_credited"
+              ],
+              [
+                "D00002",
+                "A000498",
+                "C00332",
+                "2025-04-07",
+                112.49,
+                "service_not_received",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00003",
+                "A000082",
+                "C00064",
+                "2025-04-08",
+                74.64,
+                "unauthorized_transaction",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00004",
+                "A000265",
+                "C00097",
+                "2025-04-08",
+                60.62,
+                "unauthorized_transaction",
+                "credit_card",
+                "customer_credited"
+              ],
+              [
+                "D00005",
+                "A000261",
+                "C00190",
+                "2025-04-10",
+                138.09,
+                "unauthorized_transaction",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00006",
+                "A000191",
+                "C00035",
+                "2025-04-15",
+                74.37,
+                "duplicate_charge",
+                "credit_card",
+                "denied"
+              ],
+              [
+                "D00007",
+                "A001542",
+                "C00941",
+                "2025-04-23",
+                177.16,
+                "duplicate_charge",
+                "debit_card",
+                "denied"
+              ],
+              [
+                "D00008",
+                "A000440",
+                "C00299",
+                "2025-04-26",
+                46.54,
+                "service_not_received",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00009",
+                "A001517",
+                "C00929",
+                "2025-04-26",
+                130.73,
+                "service_not_received",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00010",
+                "A000261",
+                "C00190",
+                "2025-04-29",
+                128.66,
+                "merchant_dispute",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00011",
+                "A001489",
+                "C00914",
+                "2025-05-01",
+                37.14,
+                "unauthorized_transaction",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00012",
+                "A000951",
+                "C00582",
+                "2025-05-04",
+                199.04,
+                "duplicate_charge",
+                "credit_card",
+                "customer_credited"
+              ],
+              [
+                "D00013",
+                "A001394",
+                "C00821",
+                "2025-05-05",
+                19.5,
+                "unauthorized_transaction",
+                "credit_card",
+                "denied"
+              ],
+              [
+                "D00014",
+                "A000134",
+                "C00100",
+                "2025-05-06",
+                118.68,
+                "duplicate_charge",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00015",
+                "A000871",
+                "C00571",
+                "2025-05-07",
+                86.47,
+                "service_not_received",
+                "debit_card",
+                "denied"
+              ],
+              [
+                "D00016",
+                "A001256",
+                "C00780",
+                "2025-05-07",
+                183.15,
+                "merchant_dispute",
+                "debit_card",
+                "denied"
+              ],
+              [
+                "D00017",
+                "A000035",
+                "C00028",
+                "2025-05-08",
+                176.97,
+                "merchant_dispute",
+                "credit_card",
+                "denied"
+              ],
+              [
+                "D00018",
+                "A000397",
+                "C00271",
+                "2025-05-09",
+                239.65,
+                "unauthorized_transaction",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00019",
+                "A000265",
+                "C00097",
+                "2025-05-12",
+                59.44,
+                "service_not_received",
+                "credit_card",
+                "denied"
+              ],
+              [
+                "D00020",
+                "A000635",
+                "C00424",
+                "2025-05-12",
+                62.61,
+                "unauthorized_transaction",
+                "debit_card",
+                "customer_credited"
+              ],
+              [
+                "D00021",
+                "A000817",
+                "C00268",
+                "2025-05-13",
+                56.08,
+                "duplicate_charge",
+                "credit_card",
+                "customer_credited"
+              ],
+              [
+                "D00022",
+                "A000167",
+                "C00124",
+                "2025-05-14",
+                44.58,
+                "merchant_dispute",
+                "debit_card",
+                "denied"
+              ],
+              [
+                "D00023",
+                "A001489",
+                "C00914",
+                "2025-05-14",
+                8.0,
+                "unauthorized_transaction",
+                "debit_card",
+                "denied"
+              ],
+              [
+                "D00024",
+                "A000650",
+                "C00358",
+                "2025-05-15",
+                70.07,
+                "unauthorized_transaction",
+                "credit_card",
+                "customer_credited"
+              ],
+              [
+                "D00025",
+                "A000753",
+                "C00497",
+                "2025-05-15",
+                175.33,
+                "merchant_dispute",
+                "debit_card",
+                "customer_credited"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 244
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"credit_risk_report_delinquency\" LIMIT 25",
+          "result": {
+            "columns": [
+              "month_end",
+              "product",
+              "active_loans",
+              "loans_30plus",
+              "loans_90plus",
+              "delinquency_rate_30plus",
+              "delinquency_rate_90plus"
+            ],
+            "types": [
+              "DATE",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "2025-04-30",
+                "personal",
+                98.0,
+                2.0,
+                0.0,
+                0.0204,
+                0.0
+              ],
+              [
+                "2025-04-30",
+                "auto",
+                104.0,
+                2.0,
+                0.0,
+                0.0192,
+                0.0
+              ],
+              [
+                "2025-04-30",
+                "mortgage",
+                130.0,
+                1.0,
+                1.0,
+                0.0077,
+                0.0077
+              ],
+              [
+                "2025-05-31",
+                "personal",
+                104.0,
+                2.0,
+                0.0,
+                0.0192,
+                0.0
+              ],
+              [
+                "2025-05-31",
+                "auto",
+                119.0,
+                2.0,
+                0.0,
+                0.0168,
+                0.0
+              ],
+              [
+                "2025-05-31",
+                "mortgage",
+                128.0,
+                1.0,
+                0.0,
+                0.0078,
+                0.0
+              ],
+              [
+                "2025-06-30",
+                "personal",
+                111.0,
+                5.0,
+                2.0,
+                0.045,
+                0.018
+              ],
+              [
+                "2025-06-30",
+                "auto",
+                122.0,
+                1.0,
+                0.0,
+                0.0082,
+                0.0
+              ],
+              [
+                "2025-06-30",
+                "mortgage",
+                128.0,
+                1.0,
+                0.0,
+                0.0078,
+                0.0
+              ],
+              [
+                "2025-07-31",
+                "personal",
+                117.0,
+                3.0,
+                0.0,
+                0.0256,
+                0.0
+              ],
+              [
+                "2025-07-31",
+                "auto",
+                129.0,
+                2.0,
+                0.0,
+                0.0155,
+                0.0
+              ],
+              [
+                "2025-07-31",
+                "mortgage",
+                128.0,
+                2.0,
+                1.0,
+                0.0156,
+                0.0078
+              ],
+              [
+                "2025-08-31",
+                "personal",
+                124.0,
+                1.0,
+                0.0,
+                0.0081,
+                0.0
+              ],
+              [
+                "2025-08-31",
+                "auto",
+                136.0,
+                3.0,
+                1.0,
+                0.0221,
+                0.0074
+              ],
+              [
+                "2025-08-31",
+                "mortgage",
+                132.0,
+                2.0,
+                0.0,
+                0.0152,
+                0.0
+              ],
+              [
+                "2025-09-30",
+                "personal",
+                134.0,
+                4.0,
+                0.0,
+                0.0299,
+                0.0
+              ],
+              [
+                "2025-09-30",
+                "auto",
+                146.0,
+                2.0,
+                0.0,
+                0.0137,
+                0.0
+              ],
+              [
+                "2025-09-30",
+                "mortgage",
+                133.0,
+                1.0,
+                0.0,
+                0.0075,
+                0.0
+              ],
+              [
+                "2025-10-31",
+                "personal",
+                140.0,
+                5.0,
+                0.0,
+                0.0357,
+                0.0
+              ],
+              [
+                "2025-10-31",
+                "auto",
+                159.0,
+                2.0,
+                0.0,
+                0.0126,
+                0.0
+              ],
+              [
+                "2025-10-31",
+                "mortgage",
+                133.0,
+                1.0,
+                1.0,
+                0.0075,
+                0.0075
+              ],
+              [
+                "2025-11-30",
+                "personal",
+                149.0,
+                4.0,
+                1.0,
+                0.0268,
+                0.0067
+              ],
+              [
+                "2025-11-30",
+                "auto",
+                173.0,
+                4.0,
+                1.0,
+                0.0231,
+                0.0058
+              ],
+              [
+                "2025-11-30",
+                "mortgage",
+                134.0,
+                2.0,
+                1.0,
+                0.0149,
+                0.0075
+              ],
+              [
+                "2025-12-31",
+                "personal",
+                158.0,
+                9.0,
+                1.0,
+                0.057,
+                0.0063
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 264
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"credit_risk_report_provisions\" LIMIT 25",
+          "result": {
+            "columns": [
+              "quarter_end",
+              "segment",
+              "active_loans",
+              "outstanding_balance",
+              "allowance",
+              "provision_expense",
+              "gross_charge_offs",
+              "recoveries",
+              "net_charge_offs",
+              "coverage_ratio"
+            ],
+            "types": [
+              "DATE",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "2025-06-30",
+                "Mass Market",
+                165.0,
+                8237955.0,
+                131065.0,
+                87343.0,
+                91648.0,
+                13747.0,
+                77901.0,
+                0.0159
+              ],
+              [
+                "2025-06-30",
+                "Mass Affluent",
+                98.0,
+                17466931.0,
+                60196.0,
+                -281.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0034
+              ],
+              [
+                "2025-06-30",
+                "Young Adult",
+                35.0,
+                651780.0,
+                24853.0,
+                7665.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0381
+              ],
+              [
+                "2025-06-30",
+                "Retiree",
+                31.0,
+                1691846.0,
+                8150.0,
+                2434.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0048
+              ],
+              [
+                "2025-06-30",
+                "Private Client",
+                32.0,
+                15159948.0,
+                31240.0,
+                1265.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0021
+              ],
+              [
+                "2025-09-30",
+                "Mass Market",
+                189.0,
+                8897345.0,
+                165733.0,
+                90183.0,
+                65312.0,
+                9797.0,
+                55515.0,
+                0.0186
+              ],
+              [
+                "2025-09-30",
+                "Mass Affluent",
+                107.0,
+                18703405.0,
+                63984.0,
+                3788.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0034
+              ],
+              [
+                "2025-09-30",
+                "Young Adult",
+                46.0,
+                827962.0,
+                32913.0,
+                8060.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0398
+              ],
+              [
+                "2025-09-30",
+                "Retiree",
+                39.0,
+                1766193.0,
+                9619.0,
+                1469.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0054
+              ],
+              [
+                "2025-09-30",
+                "Private Client",
+                32.0,
+                15032152.0,
+                28906.0,
+                -2334.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0019
+              ],
+              [
+                "2025-12-31",
+                "Mass Market",
+                223.0,
+                9423103.0,
+                229431.0,
+                109456.0,
+                53833.0,
+                8075.0,
+                45758.0,
+                0.0243
+              ],
+              [
+                "2025-12-31",
+                "Mass Affluent",
+                115.0,
+                18761247.0,
+                129869.0,
+                65885.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0069
+              ],
+              [
+                "2025-12-31",
+                "Young Adult",
+                60.0,
+                1205708.0,
+                60473.0,
+                37440.0,
+                11623.0,
+                1743.0,
+                9880.0,
+                0.0502
+              ],
+              [
+                "2025-12-31",
+                "Retiree",
+                44.0,
+                1809000.0,
+                10824.0,
+                1205.0,
+                0.0,
+                0.0,
+                0.0,
+                0.006
+              ],
+              [
+                "2025-12-31",
+                "Private Client",
+                34.0,
+                14938996.0,
+                28828.0,
+                -78.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0019
+              ],
+              [
+                "2026-03-31",
+                "Mass Market",
+                238.0,
+                9410909.0,
+                175557.0,
+                237658.0,
+                342979.0,
+                51447.0,
+                291532.0,
+                0.0187
+              ],
+              [
+                "2026-03-31",
+                "Mass Affluent",
+                121.0,
+                18717667.0,
+                67244.0,
+                -62625.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0036
+              ],
+              [
+                "2026-03-31",
+                "Young Adult",
+                73.0,
+                1513630.0,
+                71414.0,
+                19659.0,
+                10256.0,
+                1538.0,
+                8718.0,
+                0.0472
+              ],
+              [
+                "2026-03-31",
+                "Retiree",
+                46.0,
+                1845142.0,
+                11735.0,
+                911.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0064
+              ],
+              [
+                "2026-03-31",
+                "Private Client",
+                36.0,
+                15276817.0,
+                99598.0,
+                70770.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0065
+              ],
+              [
+                "2026-06-30",
+                "Mass Market",
+                247.0,
+                9492873.0,
+                185942.0,
+                83567.0,
+                86097.0,
+                12915.0,
+                73182.0,
+                0.0196
+              ],
+              [
+                "2026-06-30",
+                "Mass Affluent",
+                130.0,
+                19240572.0,
+                160534.0,
+                93290.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0083
+              ],
+              [
+                "2026-06-30",
+                "Young Adult",
+                88.0,
+                1658255.0,
+                91915.0,
+                74856.0,
+                63947.0,
+                9592.0,
+                54355.0,
+                0.0554
+              ],
+              [
+                "2026-06-30",
+                "Retiree",
+                45.0,
+                1827272.0,
+                13385.0,
+                1650.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0073
+              ],
+              [
+                "2026-06-30",
+                "Private Client",
+                38.0,
+                15192389.0,
+                30783.0,
+                -68815.0,
+                0.0,
+                0.0,
+                0.0,
+                0.002
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 279
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"customers\" LIMIT 25",
+          "result": {
+            "columns": [
+              "customer_id",
+              "home_branch_id",
+              "segment",
+              "region",
+              "customer_since",
+              "tenure_years",
+              "credit_score",
+              "credit_score_band",
+              "annual_income",
+              "online_banking_enrolled"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DOUBLE",
+              "BIGINT",
+              "VARCHAR",
+              "BIGINT",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "C00001",
+                "BR08",
+                "Retiree",
+                "Metro",
+                "1991-10-01",
+                35.0,
+                659,
+                "Fair",
+                65500,
+                0
+              ],
+              [
+                "C00002",
+                "BR02",
+                "Retiree",
+                "Harbor Coast",
+                "1991-10-01",
+                35.0,
+                690,
+                "Good",
+                34500,
+                0
+              ],
+              [
+                "C00003",
+                "BR03",
+                "Retiree",
+                "Harbor Coast",
+                "1991-10-01",
+                35.0,
+                712,
+                "Good",
+                29500,
+                1
+              ],
+              [
+                "C00004",
+                "BR02",
+                "Retiree",
+                "Harbor Coast",
+                "1991-10-01",
+                35.0,
+                769,
+                "Very Good",
+                67500,
+                1
+              ],
+              [
+                "C00005",
+                "BR03",
+                "Retiree",
+                "Harbor Coast",
+                "1991-10-01",
+                35.0,
+                772,
+                "Very Good",
+                32500,
+                1
+              ],
+              [
+                "C00006",
+                "BR16",
+                "Retiree",
+                "Highlands",
+                "1991-10-01",
+                35.0,
+                810,
+                "Exceptional",
+                60500,
+                1
+              ],
+              [
+                "C00007",
+                "BR06",
+                "Retiree",
+                "Metro",
+                "1992-10-27",
+                33.9,
+                710,
+                "Good",
+                39500,
+                1
+              ],
+              [
+                "C00008",
+                "BR05",
+                "Retiree",
+                "Metro",
+                "1993-08-17",
+                33.1,
+                740,
+                "Very Good",
+                34000,
+                1
+              ],
+              [
+                "C00009",
+                "BR16",
+                "Retiree",
+                "Highlands",
+                "1994-08-08",
+                32.1,
+                788,
+                "Exceptional",
+                80000,
+                0
+              ],
+              [
+                "C00010",
+                "BR03",
+                "Retiree",
+                "Harbor Coast",
+                "1995-07-01",
+                31.2,
+                740,
+                "Very Good",
+                37500,
+                1
+              ],
+              [
+                "C00011",
+                "BR08",
+                "Retiree",
+                "Metro",
+                "1995-07-02",
+                31.2,
+                745,
+                "Very Good",
+                28000,
+                1
+              ],
+              [
+                "C00012",
+                "BR10",
+                "Retiree",
+                "Valley",
+                "1996-06-12",
+                30.3,
+                800,
+                "Exceptional",
+                62500,
+                0
+              ],
+              [
+                "C00013",
+                "BR15",
+                "Mass Market",
+                "Highlands",
+                "1996-09-30",
+                30.0,
+                653,
+                "Fair",
+                39000,
+                1
+              ],
+              [
+                "C00014",
+                "BR04",
+                "Mass Market",
+                "Harbor Coast",
+                "1996-09-30",
+                30.0,
+                673,
+                "Good",
+                59000,
+                1
+              ],
+              [
+                "C00015",
+                "BR17",
+                "Mass Market",
+                "Highlands",
+                "1996-09-30",
+                30.0,
+                678,
+                "Good",
+                89500,
+                0
+              ],
+              [
+                "C00016",
+                "BR07",
+                "Mass Market",
+                "Metro",
+                "1996-09-30",
+                30.0,
+                705,
+                "Good",
+                53000,
+                1
+              ],
+              [
+                "C00017",
+                "BR03",
+                "Mass Market",
+                "Harbor Coast",
+                "1996-09-30",
+                30.0,
+                719,
+                "Good",
+                51000,
+                0
+              ],
+              [
+                "C00018",
+                "BR05",
+                "Mass Affluent",
+                "Metro",
+                "1996-09-30",
+                30.0,
+                631,
+                "Fair",
+                170000,
+                1
+              ],
+              [
+                "C00019",
+                "BR06",
+                "Mass Affluent",
+                "Metro",
+                "1996-09-30",
+                30.0,
+                701,
+                "Good",
+                169000,
+                1
+              ],
+              [
+                "C00020",
+                "BR18",
+                "Mass Affluent",
+                "Highlands",
+                "1996-09-30",
+                30.0,
+                704,
+                "Good",
+                98500,
+                1
+              ],
+              [
+                "C00021",
+                "BR09",
+                "Mass Affluent",
+                "Metro",
+                "1996-09-30",
+                30.0,
+                730,
+                "Very Good",
+                81000,
+                0
+              ],
+              [
+                "C00022",
+                "BR12",
+                "Mass Affluent",
+                "Valley",
+                "1996-09-30",
+                30.0,
+                737,
+                "Very Good",
+                112500,
+                1
+              ],
+              [
+                "C00023",
+                "BR18",
+                "Mass Affluent",
+                "Highlands",
+                "1996-09-30",
+                30.0,
+                754,
+                "Very Good",
+                126500,
+                1
+              ],
+              [
+                "C00024",
+                "BR01",
+                "Mass Affluent",
+                "Harbor Coast",
+                "1996-09-30",
+                30.0,
+                767,
+                "Very Good",
+                152500,
+                1
+              ],
+              [
+                "C00025",
+                "BR01",
+                "Mass Affluent",
+                "Harbor Coast",
+                "1996-09-30",
+                30.0,
+                796,
+                "Exceptional",
+                77500,
+                1
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 276
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"loan_payments\" LIMIT 25",
+          "result": {
+            "columns": [
+              "payment_id",
+              "loan_id",
+              "installment_number",
+              "due_date",
+              "scheduled_amount",
+              "paid_amount",
+              "paid_date",
+              "days_past_due",
+              "payment_status"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "DATE",
+              "DOUBLE",
+              "DOUBLE",
+              "DATE",
+              "BIGINT",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "P000001",
+                "L00166",
+                15,
+                "2024-11-25",
+                633.61,
+                0.0,
+                null,
+                181,
+                "unpaid"
+              ],
+              [
+                "P000002",
+                "L00118",
+                22,
+                "2024-12-04",
+                114.98,
+                0.0,
+                null,
+                121,
+                "unpaid"
+              ],
+              [
+                "P000003",
+                "L00166",
+                16,
+                "2024-12-25",
+                633.61,
+                0.0,
+                null,
+                151,
+                "unpaid"
+              ],
+              [
+                "P000004",
+                "L00118",
+                23,
+                "2025-01-04",
+                114.98,
+                0.0,
+                null,
+                90,
+                "unpaid"
+              ],
+              [
+                "P000005",
+                "L00166",
+                17,
+                "2025-01-25",
+                633.61,
+                0.0,
+                null,
+                120,
+                "unpaid"
+              ],
+              [
+                "P000006",
+                "L00118",
+                24,
+                "2025-02-04",
+                114.98,
+                0.0,
+                null,
+                59,
+                "unpaid"
+              ],
+              [
+                "P000007",
+                "L00092",
+                30,
+                "2025-02-05",
+                1072.0,
+                1072.0,
+                "2025-05-26",
+                110,
+                "paid_late"
+              ],
+              [
+                "P000008",
+                "L00166",
+                18,
+                "2025-02-25",
+                633.61,
+                0.0,
+                null,
+                89,
+                "unpaid"
+              ],
+              [
+                "P000009",
+                "L00139",
+                22,
+                "2025-02-28",
+                301.45,
+                301.45,
+                "2025-04-12",
+                43,
+                "paid_late"
+              ],
+              [
+                "P000010",
+                "L00118",
+                25,
+                "2025-03-04",
+                114.98,
+                0.0,
+                null,
+                31,
+                "unpaid"
+              ],
+              [
+                "P000011",
+                "L00092",
+                31,
+                "2025-03-05",
+                1072.0,
+                1072.0,
+                "2025-05-26",
+                82,
+                "paid_late"
+              ],
+              [
+                "P000012",
+                "L00038",
+                61,
+                "2025-03-13",
+                1052.17,
+                1052.17,
+                "2025-04-02",
+                20,
+                "paid_late"
+              ],
+              [
+                "P000013",
+                "L00249",
+                7,
+                "2025-03-23",
+                648.22,
+                648.22,
+                "2025-06-16",
+                85,
+                "paid_late"
+              ],
+              [
+                "P000014",
+                "L00305",
+                1,
+                "2025-03-23",
+                322.19,
+                0.0,
+                null,
+                122,
+                "unpaid"
+              ],
+              [
+                "P000015",
+                "L00072",
+                38,
+                "2025-03-24",
+                1714.68,
+                1714.68,
+                "2025-04-04",
+                11,
+                "paid_late"
+              ],
+              [
+                "P000016",
+                "L00166",
+                19,
+                "2025-03-25",
+                633.61,
+                0.0,
+                null,
+                61,
+                "unpaid"
+              ],
+              [
+                "P000017",
+                "L00244",
+                8,
+                "2025-03-25",
+                797.65,
+                797.65,
+                "2025-04-03",
+                9,
+                "paid_late"
+              ],
+              [
+                "P000018",
+                "L00079",
+                36,
+                "2025-03-28",
+                553.36,
+                553.36,
+                "2025-04-03",
+                6,
+                "paid_late"
+              ],
+              [
+                "P000019",
+                "L00139",
+                23,
+                "2025-03-28",
+                301.45,
+                301.45,
+                "2025-04-12",
+                15,
+                "paid_late"
+              ],
+              [
+                "P000020",
+                "L00267",
+                5,
+                "2025-03-28",
+                353.61,
+                0.0,
+                null,
+                122,
+                "unpaid"
+              ],
+              [
+                "P000021",
+                "L00066",
+                39,
+                "2025-04-01",
+                856.43,
+                856.43,
+                "2025-03-30",
+                0,
+                "paid_on_time"
+              ],
+              [
+                "P000022",
+                "L00067",
+                39,
+                "2025-04-01",
+                5150.69,
+                5150.69,
+                "2025-03-29",
+                0,
+                "paid_on_time"
+              ],
+              [
+                "P000023",
+                "L00099",
+                29,
+                "2025-04-01",
+                1471.68,
+                1471.68,
+                "2025-03-31",
+                0,
+                "paid_on_time"
+              ],
+              [
+                "P000024",
+                "L00100",
+                29,
+                "2025-04-01",
+                1187.24,
+                1187.24,
+                "2025-03-30",
+                0,
+                "paid_on_time"
+              ],
+              [
+                "P000025",
+                "L00109",
+                27,
+                "2025-04-01",
+                2101.11,
+                2101.11,
+                "2025-03-30",
+                0,
+                "paid_on_time"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 263
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"loans\" LIMIT 25",
+          "result": {
+            "columns": [
+              "loan_id",
+              "customer_id",
+              "branch_id",
+              "product",
+              "principal",
+              "interest_rate",
+              "term_months",
+              "monthly_payment",
+              "origination_date",
+              "maturity_date",
+              "credit_score_at_origination",
+              "credit_band",
+              "dti_at_origination",
+              "ltv_at_origination",
+              "status",
+              "closed_date"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE",
+              "BIGINT",
+              "DOUBLE",
+              "DATE",
+              "DATE",
+              "BIGINT",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "VARCHAR",
+              "DATE"
+            ],
+            "rows": [
+              [
+                "L00001",
+                "C00223",
+                "BR07",
+                "mortgage",
+                180000,
+                4.13,
+                360,
+                872.89,
+                "2013-02-19",
+                "2043-02-19",
+                776,
+                "Very Good",
+                0.42,
+                0.83,
+                "active",
+                null
+              ],
+              [
+                "L00002",
+                "C00087",
+                "BR02",
+                "mortgage",
+                169000,
+                3.46,
+                360,
+                755.12,
+                "2013-05-13",
+                "2043-05-13",
+                795,
+                "Exceptional",
+                0.43,
+                0.97,
+                "paid_off",
+                "2025-10-03"
+              ],
+              [
+                "L00003",
+                "C00265",
+                "BR08",
+                "mortgage",
+                300000,
+                4.3,
+                360,
+                1484.61,
+                "2013-08-04",
+                "2043-08-04",
+                751,
+                "Very Good",
+                0.33,
+                0.94,
+                "paid_off",
+                "2025-12-13"
+              ],
+              [
+                "L00004",
+                "C00108",
+                "BR15",
+                "mortgage",
+                750000,
+                3.8,
+                240,
+                4466.2,
+                "2013-09-06",
+                "2033-09-06",
+                729,
+                "Very Good",
+                0.25,
+                0.61,
+                "active",
+                null
+              ],
+              [
+                "L00005",
+                "C00100",
+                "BR15",
+                "mortgage",
+                747000,
+                4.34,
+                360,
+                3714.26,
+                "2013-09-09",
+                "2043-09-09",
+                736,
+                "Very Good",
+                0.42,
+                0.71,
+                "active",
+                null
+              ],
+              [
+                "L00006",
+                "C00266",
+                "BR16",
+                "mortgage",
+                214000,
+                4.01,
+                240,
+                1297.93,
+                "2013-11-17",
+                "2033-11-17",
+                771,
+                "Very Good",
+                0.31,
+                0.95,
+                "active",
+                null
+              ],
+              [
+                "L00007",
+                "C00194",
+                "BR03",
+                "mortgage",
+                249000,
+                3.95,
+                360,
+                1181.6,
+                "2014-01-27",
+                "2044-01-27",
+                770,
+                "Very Good",
+                0.4,
+                0.85,
+                "active",
+                null
+              ],
+              [
+                "L00008",
+                "C00071",
+                "BR17",
+                "mortgage",
+                217000,
+                4.06,
+                360,
+                1043.51,
+                "2014-02-22",
+                "2044-02-22",
+                705,
+                "Good",
+                0.43,
+                0.9,
+                "active",
+                null
+              ],
+              [
+                "L00009",
+                "C00128",
+                "BR02",
+                "mortgage",
+                209000,
+                4.14,
+                360,
+                1014.74,
+                "2014-03-27",
+                "2044-03-27",
+                686,
+                "Good",
+                0.36,
+                0.9,
+                "active",
+                null
+              ],
+              [
+                "L00010",
+                "C00199",
+                "BR01",
+                "mortgage",
+                90000,
+                4.42,
+                360,
+                451.75,
+                "2014-05-10",
+                "2044-05-10",
+                665,
+                "Fair",
+                0.26,
+                0.7,
+                "active",
+                null
+              ],
+              [
+                "L00011",
+                "C00109",
+                "BR09",
+                "mortgage",
+                750000,
+                4.24,
+                360,
+                3685.16,
+                "2014-08-02",
+                "2044-08-02",
+                702,
+                "Good",
+                0.43,
+                0.56,
+                "active",
+                null
+              ],
+              [
+                "L00012",
+                "C00228",
+                "BR10",
+                "mortgage",
+                468000,
+                4.29,
+                360,
+                2313.25,
+                "2014-12-23",
+                "2044-12-23",
+                850,
+                "Exceptional",
+                0.34,
+                0.78,
+                "active",
+                null
+              ],
+              [
+                "L00013",
+                "C00275",
+                "BR03",
+                "mortgage",
+                195000,
+                4.15,
+                360,
+                947.9,
+                "2015-08-19",
+                "2045-08-19",
+                732,
+                "Very Good",
+                0.36,
+                0.74,
+                "active",
+                null
+              ],
+              [
+                "L00014",
+                "C00138",
+                "BR01",
+                "mortgage",
+                737000,
+                4.06,
+                360,
+                3544.09,
+                "2015-10-19",
+                "2045-10-19",
+                771,
+                "Very Good",
+                0.36,
+                0.8,
+                "active",
+                null
+              ],
+              [
+                "L00015",
+                "C00361",
+                "BR08",
+                "mortgage",
+                571000,
+                3.99,
+                360,
+                2722.75,
+                "2016-02-13",
+                "2046-02-13",
+                732,
+                "Very Good",
+                0.4,
+                0.95,
+                "active",
+                null
+              ],
+              [
+                "L00016",
+                "C00035",
+                "BR12",
+                "mortgage",
+                434000,
+                4.06,
+                360,
+                2087.02,
+                "2016-04-18",
+                "2046-04-18",
+                721,
+                "Very Good",
+                0.41,
+                0.92,
+                "active",
+                null
+              ],
+              [
+                "L00017",
+                "C00084",
+                "BR11",
+                "mortgage",
+                272000,
+                4.63,
+                360,
+                1399.27,
+                "2016-06-16",
+                "2046-06-16",
+                635,
+                "Fair",
+                0.32,
+                0.83,
+                "active",
+                null
+              ],
+              [
+                "L00018",
+                "C00224",
+                "BR03",
+                "mortgage",
+                750000,
+                4.02,
+                180,
+                5555.18,
+                "2016-07-14",
+                "2031-07-14",
+                806,
+                "Exceptional",
+                0.39,
+                0.97,
+                "active",
+                null
+              ],
+              [
+                "L00019",
+                "C00245",
+                "BR05",
+                "mortgage",
+                397000,
+                5.23,
+                360,
+                2187.33,
+                "2016-08-06",
+                "2046-08-06",
+                627,
+                "Fair",
+                0.32,
+                0.68,
+                "active",
+                null
+              ],
+              [
+                "L00020",
+                "C00249",
+                "BR02",
+                "mortgage",
+                127000,
+                3.9,
+                360,
+                599.02,
+                "2016-12-19",
+                "2046-12-19",
+                800,
+                "Exceptional",
+                0.44,
+                0.9,
+                "active",
+                null
+              ],
+              [
+                "L00021",
+                "C00284",
+                "BR05",
+                "mortgage",
+                232000,
+                4.89,
+                360,
+                1229.88,
+                "2017-03-03",
+                "2047-03-03",
+                687,
+                "Good",
+                0.46,
+                0.54,
+                "active",
+                null
+              ],
+              [
+                "L00022",
+                "C00034",
+                "BR05",
+                "mortgage",
+                138000,
+                4.26,
+                180,
+                1038.84,
+                "2017-07-31",
+                "2032-07-28",
+                704,
+                "Good",
+                0.27,
+                0.9,
+                "active",
+                null
+              ],
+              [
+                "L00023",
+                "C00115",
+                "BR15",
+                "mortgage",
+                335000,
+                4.36,
+                360,
+                1669.64,
+                "2017-08-11",
+                "2047-08-11",
+                726,
+                "Very Good",
+                0.36,
+                0.94,
+                "active",
+                null
+              ],
+              [
+                "L00024",
+                "C00350",
+                "BR01",
+                "mortgage",
+                236000,
+                4.5,
+                360,
+                1195.78,
+                "2017-12-08",
+                "2047-12-08",
+                796,
+                "Exceptional",
+                0.35,
+                0.91,
+                "active",
+                null
+              ],
+              [
+                "L00025",
+                "C00282",
+                "BR01",
+                "mortgage",
+                161000,
+                5.09,
+                360,
+                873.16,
+                "2018-01-02",
+                "2048-01-02",
+                670,
+                "Good",
+                0.41,
+                0.57,
+                "active",
+                null
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 262
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"monthly_balances\" LIMIT 25",
+          "result": {
+            "columns": [
+              "balance_id",
+              "account_id",
+              "month_end",
+              "ending_balance",
+              "average_daily_balance",
+              "total_inflows",
+              "total_outflows",
+              "transaction_count",
+              "overdraft_count",
+              "utilization_ratio"
+            ],
+            "types": [
+              "BIGINT",
+              "VARCHAR",
+              "DATE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "BIGINT",
+              "BIGINT",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                1,
+                "A000001",
+                "2025-04-30",
+                2621.55,
+                3122.76,
+                1387.7,
+                2571.06,
+                26,
+                0,
+                null
+              ],
+              [
+                2,
+                "A000002",
+                "2025-04-30",
+                2445.83,
+                2373.78,
+                4187.75,
+                3975.19,
+                31,
+                0,
+                null
+              ],
+              [
+                3,
+                "A000003",
+                "2025-04-30",
+                2340.65,
+                2734.24,
+                4836.98,
+                5607.23,
+                26,
+                0,
+                null
+              ],
+              [
+                4,
+                "A000004",
+                "2025-04-30",
+                2477.25,
+                2547.63,
+                3433.92,
+                3270.72,
+                29,
+                0,
+                null
+              ],
+              [
+                5,
+                "A000005",
+                "2025-04-30",
+                2051.02,
+                2158.06,
+                2197.38,
+                2313.05,
+                23,
+                0,
+                null
+              ],
+              [
+                6,
+                "A000006",
+                "2025-04-30",
+                4322.66,
+                4466.88,
+                2270.37,
+                2515.9,
+                25,
+                0,
+                null
+              ],
+              [
+                7,
+                "A000007",
+                "2025-04-30",
+                13431.03,
+                14486.31,
+                681.71,
+                2773.38,
+                2,
+                0,
+                null
+              ],
+              [
+                8,
+                "A000008",
+                "2025-04-30",
+                3719.93,
+                3936.09,
+                2111.86,
+                2110.06,
+                28,
+                0,
+                null
+              ],
+              [
+                9,
+                "A000009",
+                "2025-04-30",
+                3246.18,
+                2506.84,
+                4968.91,
+                3853.35,
+                26,
+                0,
+                null
+              ],
+              [
+                10,
+                "A000010",
+                "2025-04-30",
+                784.41,
+                933.87,
+                840.63,
+                643.52,
+                24,
+                0,
+                0.1569
+              ],
+              [
+                11,
+                "A000011",
+                "2025-04-30",
+                1513.58,
+                1404.33,
+                1742.59,
+                1554.43,
+                23,
+                0,
+                null
+              ],
+              [
+                12,
+                "A000012",
+                "2025-04-30",
+                878.64,
+                790.35,
+                2344.4,
+                2254.1,
+                19,
+                0,
+                null
+              ],
+              [
+                13,
+                "A000013",
+                "2025-04-30",
+                2677.45,
+                3071.41,
+                72.59,
+                1137.1,
+                2,
+                0,
+                null
+              ],
+              [
+                14,
+                "A000014",
+                "2025-04-30",
+                2817.32,
+                2416.61,
+                3613.71,
+                2798.9,
+                24,
+                0,
+                null
+              ],
+              [
+                15,
+                "A000015",
+                "2025-04-30",
+                33939.67,
+                31639.81,
+                20687.46,
+                13029.87,
+                48,
+                0,
+                null
+              ],
+              [
+                16,
+                "A000016",
+                "2025-04-30",
+                2458.65,
+                2639.83,
+                6549.44,
+                6587.35,
+                33,
+                0,
+                null
+              ],
+              [
+                17,
+                "A000017",
+                "2025-04-30",
+                35433.41,
+                37194.55,
+                5511.98,
+                7113.87,
+                31,
+                0,
+                null
+              ],
+              [
+                18,
+                "A000018",
+                "2025-04-30",
+                44461.97,
+                38476.48,
+                15755.29,
+                4847.53,
+                34,
+                0,
+                null
+              ],
+              [
+                19,
+                "A000019",
+                "2025-04-30",
+                67827.14,
+                71312.42,
+                27953.7,
+                28914.35,
+                41,
+                0,
+                null
+              ],
+              [
+                20,
+                "A000020",
+                "2025-04-30",
+                8123.2,
+                7137.38,
+                11477.33,
+                9807.79,
+                59,
+                0,
+                null
+              ],
+              [
+                21,
+                "A000021",
+                "2025-04-30",
+                3390.65,
+                3772.17,
+                3121.11,
+                4041.43,
+                25,
+                0,
+                null
+              ],
+              [
+                22,
+                "A000022",
+                "2025-04-30",
+                7628.91,
+                7353.45,
+                9061.38,
+                9266.21,
+                22,
+                0,
+                null
+              ],
+              [
+                23,
+                "A000023",
+                "2025-04-30",
+                17702.0,
+                17428.81,
+                6702.7,
+                5676.22,
+                25,
+                0,
+                null
+              ],
+              [
+                24,
+                "A000024",
+                "2025-04-30",
+                11965.69,
+                11071.91,
+                3597.88,
+                2272.55,
+                27,
+                0,
+                null
+              ],
+              [
+                25,
+                "A000025",
+                "2025-04-30",
+                6010.62,
+                6464.21,
+                6767.8,
+                6855.37,
+                24,
+                0,
+                null
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 261
+          }
+        }
+      ]
+    }
+  ]
+}

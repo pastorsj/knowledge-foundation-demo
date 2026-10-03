@@ -1,0 +1,807 @@
+{
+  "schemaVersion": 2,
+  "id": "underwriting-limits",
+  "title": "Mortgage limits at a 700 score",
+  "turns": [
+    {
+      "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+      "question": "Under the consumer credit policy, what is the maximum debt-to-income ratio and the maximum loan-to-value for a mortgage applicant with a 700 credit score?",
+      "submittedAt": "2026-10-03T04:19:28.337495Z",
+      "completedAt": "2026-10-03T04:19:35.711062Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the Consumer Credit Policy (version 5.1, effective 1 July 2026), a credit score of 700 falls in the **Good** band (670–719). For that band, the underwriting table specifies:\n\n| Measure | Maximum |\n|---------|---------|\n| Debt-to-Income (DTI) | 40% |\n| Loan-to-Value (mortgage) | 90% |\n\n[1]\n\nThe policy notes that the maximum DTI applies to all three products (personal, auto, mortgage), while the 90% LTV is the mortgage-specific limit (auto LTV is 110% for the same band).\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — consumer_credit_policy.pdf — evidence `hermes-receipt:2b05504270a846bbe36c82cd540f02f9e052f5e21f55f2296f034378841ccb82`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:2b05504270a846bbe36c82cd540f02f9e052f5e21f55f2296f034378841ccb82",
+            "label": "Unstructured Retrieval evidence — consumer_credit_policy.pdf",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-58700617df85454aab6d5613eca74913"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "178db236-e93e-5644-8552-bbb4d0d24746",
+          "cursor": 339,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:28.454320Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:5be6ce98fcb4656b3b5525888b0c5c6c2433c3987e34c2a6e258d86b60728528",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "31e39182-0e6c-5723-9dd2-0b93859758d6",
+          "cursor": 340,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44:api:1",
+          "parentInvocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:29.348148Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4754,
+              "output_tokens": 107
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3da95ee4-7701-5136-9514-173aadfd1ee8",
+          "cursor": 341,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:chatcmpl-tool-8fa2873c4b554fa599850b49a4eff273",
+          "parentInvocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:29.391796Z",
+          "display": {
+            "label": "skill_view started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4d3754b00d4780d7cef0ffb946eae8925e19f00527c7426215cca38cdedbccbb",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "84c17abf-1a89-5ad4-9f86-aaa69e0f1802",
+          "cursor": 342,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:chatcmpl-tool-8fa2873c4b554fa599850b49a4eff273",
+          "parentInvocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:29.417352Z",
+          "display": {
+            "label": "skill_view completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.02
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:dce2b17ff63eaaed6432bc704cc8713edcee7b72b087863ad191b1975aa7df00",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "21c13235-9d44-5ddc-93d6-cc674bcebab9",
+          "cursor": 343,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44:api:2",
+          "parentInvocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:32.398765Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 6374,
+              "output_tokens": 111
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4d65de4e-7f76-5fdd-999c-88097268b397",
+          "cursor": 344,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-58700617df85454aab6d5613eca74913",
+          "parentInvocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:32.437162Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:97a995398594cb881d8f0da813ac4b5d577bd2a511212f645809552eaac7369d",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "04151ce4-02ea-5382-939d-e96809911155",
+          "cursor": 345,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-58700617df85454aab6d5613eca74913",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:2b05504270a846bbe36c82cd540f02f9e052f5e21f55f2296f034378841ccb82"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:33.407326Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 968,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:2b05504270a846bbe36c82cd540f02f9e052f5e21f55f2296f034378841ccb82",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3835c471-8b79-5b2a-a234-6247c853ee8c",
+          "cursor": 346,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-58700617df85454aab6d5613eca74913",
+          "parentInvocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:33.448816Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.994
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:77b9e20cf973e192d3268be8b3656a6d21958bb52397b10e3f926c02aeb2f8f6",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "236836eb-1cfe-5f17-bba3-b07f60ec5def",
+          "cursor": 347,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44:api:3",
+          "parentInvocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:35.635839Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 11586,
+              "output_tokens": 354
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "409ce6f8-b823-5cea-a9d4-760998cf5a47",
+          "cursor": 348,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:35.670464Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:f1e134a8f98edd8630f42187a61604a3a2ca03fcb6e7647f94b2fb102ccc134c",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9c66b01b-6eeb-53be-87a1-6b3c51978dc1",
+          "cursor": 349,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:35.689356Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 22714,
+              "output_tokens": 572,
+              "total_tokens": 23286,
+              "output_characters": 569
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:fdb381f48e7fe7d584a7298c0283a967760330668889fcff8d570ac2248b1a10",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "fcea9b22-cbd7-5bcf-8368-e2ad1bc608c0",
+          "cursor": 350,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:35.710692Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:965b255e-307a-4b9f-afb5-ed0523cfaa8e:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "5db0ab98-e4e6-5a62-a64d-cba350f1fed1",
+          "cursor": 351,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:35.710742Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:965b255e-307a-4b9f-afb5-ed0523cfaa8e:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "bea09c6d-5be5-5499-af93-ac490e2f9b8d",
+          "cursor": 352,
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "runId": "run_e0b398b1a04747ffaa53b83d172bfec8",
+          "sessionId": "record-3acf54aa-0e50-4822-b80a-44ed1eb0ffd7",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:9198ffea5cce5270f1575aa5:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:35.710775Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 7305,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 1014,
+              "input_tokens": 22714,
+              "output_tokens": 572,
+              "total_tokens": 23286
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:965b255e-307a-4b9f-afb5-ed0523cfaa8e:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:2b05504270a846bbe36c82cd540f02f9e052f5e21f55f2296f034378841ccb82",
+          "jobId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e",
+          "invocationId": "hermes-tool:chatcmpl-tool-58700617df85454aab6d5613eca74913",
+          "turnId": "965b255e-307a-4b9f-afb5-ed0523cfaa8e:965b255e-307a-4b9f-afb5-ed0523cfaa8e:8733fc44",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 968,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:19:33.407326Z",
+          "content": {
+            "query": "consumer credit policy underwriting table credit score 700 maximum DTI LTV mortgage applicant",
+            "sourceIds": [
+              "financial-services.policies"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.5348163843154907,
+                "vectorScore": 0.5348163843154907,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0006",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3.2 Credit score bands, debt-to-income and loan-to-value limits\nEvery applicant is placed in a credit band using the middle of the three bureau scores, or the single score when only one is available. The band sets the maximum debt-to-income ratio (DTI) and the maximum loan-to-value ratio (LTV) the Bank will accept. Table 3 shows the limits that apply to applications taken on or after 1 July 2026.\nExceptional, Credit score = 780 and above. Exceptional, Maximum DTI = 45%. Exceptional, Maximum auto LTV = 120%. Exceptional, Maximum mortgage LTV = 97%. Exceptional, Pricing tier = A. Very Good, Credit score = 720 to 779. Very Good, Maximum DTI = 43%. Very Good, Maximum auto LTV = 115%. Very Good, Maximum mortgage LTV = 95%. Very Good, Pricing tier = B. Good, Credit score = 670 to 719. Good, Maximum DTI = 40%. Good, Maximum auto LTV = 110%. Good, Maximum mortgage LTV = 90%. Good, Pricing tier = C. Fair, Credit score = 620 to 669. Fair, Maximum DTI = 36%. Fair, Maximum auto LTV = 100%. Fair, Maximum mortgage LTV = 85%. Fair, Pricing tier = D. Poor, Credit score = 619 and below. Poor, Maximum DTI = 30%. Poor, Maximum auto LTV = 90%. Poor, Maximum mortgage LTV = 80%. Poor, Pricing tier = E\nTable 3. Underwriting limits by credit band (version 5.1, effective 1 July 2026)",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Consumer Credit Policy › 3.2 Credit score bands, debt-to-income and loan-to-value limits",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.4959331154823303,
+                "vectorScore": 0.4959331154823303,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0007",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3.2 Credit score bands, debt-to-income and loan-to-value limits\nDebt-to-income is the borrower’s total monthly debt payments, including the payment on the proposed loan, divided by gross monthly income. The maximum DTI in Table 3 applies to all three products. Loan-to-value is the loan amount divided by the lesser of the purchase price and the appraised value (mortgage) or the retail value in the Bank’s valuation guide (auto). A personal loan has no LTV limit. DTI and the credit band are recorded once, at origination, and are not refreshed during the life of the loan.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Consumer Credit Policy › 3.2 Credit score bands, debt-to-income and loan-to-value limits",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.429111510515213,
+                "vectorScore": 0.429111510515213,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0009",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3.2 Credit score bands, debt-to-income and loan-to-value limits\n3.4 Exceptions\nA loan above the maximum DTI or LTV in Table 3 may be approved only by the regional credit officer, and only when at least two compensating factors are documented: twelve months of liquid reserves, a customer relationship of five years or more, a co-borrower with a credit score in a higher band, or a down payment of at least 20 percent. Approved exceptions may not exceed 5 percent of originations by count in any quarter. Every exception is reported to the Credit Risk Committee with the borrower’s band, the ratio approved and the factors relied on.\nSynthetic document for a software demonstration. Harborview Community Bank is fictional. Page 2\nHARBORVIEW COMMUNITY BANK HCB-CRE-001 | Version 5.1",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Consumer Credit Policy › 3.2 Credit score bands, debt-to-income and loan-to-value limits › 3.4 Exceptions",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.4169064462184906,
+                "vectorScore": 0.4169064462184906,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0017",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n8. Revision history\nVersion 5.1 lowered the maximum DTI for every credit band by between 2 and 6 percentage points. Table 5 compares the new limits with those of version 5.0, which applied to applications taken from 1 July 2025 through 30 June 2026.\nExceptional, Maximum DTI, version 5.0 = 48%. Exceptional, Maximum DTI, version 5.1 (current) = 45%. Exceptional, Change = -3 points. Very Good, Maximum DTI, version 5.0 = 45%. Very Good, Maximum DTI, version 5.1 (current) = 43%. Very Good, Change = -2 points. Good, Maximum DTI, version 5.0 = 43%. Good, Maximum DTI, version 5.1 (current) = 40%. Good, Change = -3 points. Fair, Maximum DTI, version 5.0 = 40%. Fair, Maximum DTI, version 5.1 (current) = 36%. Fair, Change = -4 points. Poor, Maximum DTI, version 5.0 = 36%. Poor, Maximum DTI, version 5.1 (current) = 30%. Poor, Change = -6 points\nTable 5. Maximum DTI, version 5.1 against the version 5.0 limits it replaced\n4.8, Effective = 1 January 2024. 4.8, Summary of change = Annual review; no limit changes. 5.0, Effective = 1 July 2025. 5.0, Summary of change = Added the hardship and loan modification section; raised the Exceptional-band mortgage LTV. 5.1, Effective = 1 July 2026. 5.1, Summary of change = Lowered maximum DTI in every band (Table 5); added the monitoring of recent originations in section 7\nTable 6. Policy versions\nSynthetic document for a software demonstration. Harborview Community Bank is fictional. Page 4",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Consumer Credit Policy › 8. Revision history",
+                  "labels": [
+                    "caption",
+                    "page_footer",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.4082593321800232,
+                "vectorScore": 0.4082593321800232,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0005",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3. Underwriting standards\n3.1 Products and limits\nSynthetic document for a software demonstration. Harborview Community Bank is fictional. Page 1\nHARBORVIEW COMMUNITY BANK HCB-CRE-001 | Version 5.1\nPersonal loan, Amount = $2,500 to $50,000. Personal loan, Maximum term = 60 months. Personal loan, Collateral = Unsecured. Personal loan,  = . Auto loan, Amount = $8,000 to $75,000. Auto loan, Maximum term = 72 months. Auto loan, Collateral = First lien on the vehicle. Auto loan,  = . Mortgage, Amount = $90,000 to $750,000. Mortgage, Maximum term = 360 months. Mortgage, Collateral = First lien on an owner-occupied principal residence. Mortgage,  = \nTable 2. Product limits",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Consumer Credit Policy › 3. Underwriting standards › 3.1 Products and limits",
+                  "labels": [
+                    "caption",
+                    "page_footer",
+                    "page_header",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.37367430329322815,
+                "vectorScore": 0.37367430329322815,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0004",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n2. Governance and approval authority\nThe Board Credit Committee approves this policy once a year and whenever a limit in section 3 changes. The Chief Credit Officer owns the policy and reports exceptions, delinquency and charge-offs to the Credit Risk Committee every quarter.\nCredit decisions are made within the authority shown in Table 1. Authority is set by the total of the loan being approved plus all other credit the borrower already has with the Bank. A lender may never approve a loan for a relative, an employee reporting to the lender or a business the lender owns.\nBranch lender, Personal loans (unsecured) = Up to $15,000. Branch lender, Auto loans = Up to $40,000. Branch lender, Mortgages = Not authorized. Regional credit officer, Personal loans (unsecured) = Up to $35,000. Regional credit officer, Auto loans = Up to $75,000. Regional credit officer, Mortgages = Up to $400,000. Credit Committee, Personal loans (unsecured) = $35,001 to $50,000. Credit Committee, Auto loans = Not applicable. Credit Committee, Mortgages = $400,001 to $750,000\nTable 1. Lending authority by approver",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Consumer Credit Policy › 2. Governance and approval authority",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.34531596302986145,
+                "vectorScore": 0.34531596302986145,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0008",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3.2 Credit score bands, debt-to-income and loan-to-value limits\n3.3 Income and identity verification\nIncome must be verified before approval with the two most recent pay stubs, the last two years of tax returns for self-employed borrowers, or benefit award letters for retirees. Identity is verified under the Bank’s Customer Identification Program described in the KYC and AML procedure. A loan may not fund until both are complete.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Consumer Credit Policy › 3.2 Credit score bands, debt-to-income and loan-to-value limits › 3.3 Income and identity verification",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.33627545833587646,
+                "vectorScore": 0.33627545833587646,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0010",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n4. Pricing\nRates follow a five-tier risk-based pricing grid that maps one-to-one to the credit bands: Tier A for Exceptional through Tier E for Poor. The Asset and Liability Committee reviews the grid each month and publishes it to branch lenders. A lender may not discount a rate by more than 25 basis points without regional credit officer approval, and no loan may be priced to a customer on the basis of a protected characteristic.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Consumer Credit Policy › 4. Pricing",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "financial-services.policies": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 950.1,
+              "searchMs": 7.3,
+              "rerankMs": 0.0,
+              "totalMs": 957.4
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "financial-services.policies"
+      ]
+    }
+  ]
+}

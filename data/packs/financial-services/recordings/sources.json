@@ -1,0 +1,44 @@
+[
+  {
+    "id": "financial-services.banking",
+    "pack_id": "financial-services",
+    "name": "Customers, Accounts & Loans",
+    "description": "Harborview's branches, customers, accounts, monthly balances, loans, loan payments and card disputes, with a credit risk workbook of delinquency and provisions.",
+    "default_enabled": true,
+    "kind": "structured",
+    "capabilities": [
+      "structured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": "financial_services_banking"
+  },
+  {
+    "id": "financial-services.policies",
+    "pack_id": "financial-services",
+    "name": "Credit & Compliance Policies",
+    "description": "Consumer credit policy, KYC and AML customer due diligence procedure, complaint handling procedure and a scanned loan modification request.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  },
+  {
+    "id": "financial-services.disclosures",
+    "pack_id": "financial-services",
+    "name": "Product Disclosures & Reports",
+    "description": "The overdraft and fee schedule and the Q3 2026 credit risk committee deck.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  }
+]

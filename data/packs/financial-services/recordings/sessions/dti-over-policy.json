@@ -1,0 +1,1140 @@
+{
+  "schemaVersion": 2,
+  "id": "dti-over-policy",
+  "title": "Loans above the policy DTI limit",
+  "turns": [
+    {
+      "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+      "question": "Which personal loans originated this year would no longer meet the credit policy's maximum DTI for their credit band at origination?",
+      "submittedAt": "2026-10-03T04:19:48.451070Z",
+      "completedAt": "2026-10-03T04:20:18.272385Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the Consumer Credit Policy (version 5.1, effective 1 July 2026) and the loan data, I can identify personal loans originated in 2026 that exceed the current maximum DTI limits for their credit band.\n\n**Current policy maximum DTI limits (v5.1):**\n- Exceptional (780+): 45%\n- Very Good (720–779): 43%\n- Good (670–719): 40%\n- Fair (620–669): 36%\n- Poor (≤619): 30%\n\n**Previous policy (v5.0, effective 1 Jul 2025 – 30 Jun 2026) had higher limits**, so loans originated before 1 July 2026 were underwritten to looser standards. The policy explicitly states that the quarterly report identifies \"originations from the previous 12 months that would no longer meet the new maximum DTI\" [1].\n\n**Loans originated in 2026 that exceed the current (v5.1) limits for their credit band:**\n\n| Loan ID | Origination Date | Credit Band | DTI at Origination | Current Max DTI | Exceeds By |\n|---------|------------------|-------------|-------------------|-----------------|------------|\n| L00516 | 2026-01-07 | Poor | 35% | 30% | 5 pp |\n| L00522 | 2026-01-19 | Good | 43% | 40% | 3 pp |\n| L00525 | 2026-01-26 | Very Good | 44% | 43% | 1 pp |\n| L00531 | 2026-02-10 | Very Good | 49% | 43% | 6 pp |\n| L00538 | 2026-02-26 | Good | 45% | 40% | 5 pp |\n| L00540 | 2026-03-02 | Very Good | 49% | 43% | 6 pp |\n| L00541 | 2026-03-05 | Exceptional | 47% | 45% | 2 pp |\n| L00544 | 2026-03-06 | Fair | 37% | 36% | 1 pp |\n| L00555 | 2026-03-17 | Good | 42% | 40% | 2 pp |\n| L00563 | 2026-03-30 | Poor | 31% | 30% | 1 pp |\n| L00572 | 2026-04-12 | Poor | 31% | 30% | 1 pp |\n| L00581 | 2026-05-04 | Fair | 37% | 36% | 1 pp |\n| L00587 | 2026-05-14 | Good | 42% | 40% | 2 pp |\n| L00595 | 2026-05-28 | Good | 41% | 40% | 1 pp |\n| L00603 | 2026-06-08 | Good | 43% | 40% | 3 pp |\n| L00613 | 2026-06-24 | Poor | 31% | 30% | 1 pp |\n\n**Total: 16 personal loans** originated in 2026 (all before 1 July 2026) would no longer meet the current credit policy's maximum DTI for their credit band at origination. No loans originated on or after 1 July 2026 exceed the v5.1 limits.\n\n[1][2]\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — consumer_credit_policy.pdf — evidence `hermes-receipt:930fdce4ce5b3efa5c8dda65285524702e7c390b58b691df67fe11a2244ebb3c`\n- [2] Structured retrieval result — financial_services_banking — evidence `hermes-receipt:845553217caedda8eb8327744efb54882872a8631f0ac4850e33126412b3b7b5`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:930fdce4ce5b3efa5c8dda65285524702e7c390b58b691df67fe11a2244ebb3c",
+            "label": "Unstructured Retrieval evidence — consumer_credit_policy.pdf",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-51fa0fdbd01e4ca8ba3045321a40abd9"
+          },
+          {
+            "number": 2,
+            "evidenceId": "hermes-receipt:845553217caedda8eb8327744efb54882872a8631f0ac4850e33126412b3b7b5",
+            "label": "Structured retrieval result — financial_services_banking",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-0d508a5d12ad4a3c96ffef2d9ffa3e03"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "fde6600a-3123-5d80-b179-d901388aa28c",
+          "cursor": 381,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c739ace0b172597844376959:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:48.545992Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:330da321fea1177e89f1611a796f1b007b2ca49e6954d418c3144567447fdcb3",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "18a211a1-6f59-59a1-8063-adb2d7f971e4",
+          "cursor": 382,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580:api:1",
+          "parentInvocationId": "hermes-run:c739ace0b172597844376959:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:50.184213Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 8914,
+              "output_tokens": 186
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ce909abe-2c3c-5773-8537-e4505a116de1",
+          "cursor": 383,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-51fa0fdbd01e4ca8ba3045321a40abd9",
+          "parentInvocationId": "hermes-run:c739ace0b172597844376959:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:50.224426Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:cb39d51c9717c7fc9246a7af49b5ae2c9828660032d245ee18b9f912fd580f03",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c3410c64-44ba-5196-a325-301631adebed",
+          "cursor": 384,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-51fa0fdbd01e4ca8ba3045321a40abd9",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:930fdce4ce5b3efa5c8dda65285524702e7c390b58b691df67fe11a2244ebb3c"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:50.926207Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 700,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:930fdce4ce5b3efa5c8dda65285524702e7c390b58b691df67fe11a2244ebb3c",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a30fb060-37fe-51e8-bf6d-82ad507626d2",
+          "cursor": 385,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-51fa0fdbd01e4ca8ba3045321a40abd9",
+          "parentInvocationId": "hermes-run:c739ace0b172597844376959:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:50.976048Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.731
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:dc4690a023dda4e837117570b8264d5a1dc97ea15ea09ce74a9c50eb28424fec",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "41a679ba-404e-5a78-9a89-87b9d73f3b99",
+          "cursor": 386,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580:api:2",
+          "parentInvocationId": "hermes-run:c739ace0b172597844376959:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:00.221141Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14114,
+              "output_tokens": 385
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8fa70be9-3761-5987-83c2-3e9672c0e227",
+          "cursor": 387,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-0d508a5d12ad4a3c96ffef2d9ffa3e03",
+          "parentInvocationId": "hermes-run:c739ace0b172597844376959:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:00.260403Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:fcde44f61203e490719ccedca72584dc4277abd0db1917ef43b876a37a42acb0",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "56454ab4-e76e-56bd-bef7-289a8cf4301f",
+          "cursor": 388,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-0d508a5d12ad4a3c96ffef2d9ffa3e03",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:845553217caedda8eb8327744efb54882872a8631f0ac4850e33126412b3b7b5"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:00.543242Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 281,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:845553217caedda8eb8327744efb54882872a8631f0ac4850e33126412b3b7b5",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "cab319b9-d714-5a8c-a381-ef0267861ff8",
+          "cursor": 389,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-0d508a5d12ad4a3c96ffef2d9ffa3e03",
+          "parentInvocationId": "hermes-run:c739ace0b172597844376959:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:00.584474Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.304
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:dc990cdec2a54c7ca79ba134efd755812382f8008a42d57d6919c52524f3f3f1",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "61b50a1f-32fd-5454-ad48-84baeb7ed0b0",
+          "cursor": 390,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c739ace0b172597844376959:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:03.559957Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:a36191dd248ff18c6c7de30d0a7d0fefbd7727cad01b75dbefb0f9f362012d62",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "7634502c-3560-5462-91d4-d9fe91d31c75",
+          "cursor": 391,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580:api:3",
+          "parentInvocationId": "hermes-run:c739ace0b172597844376959:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:18.202488Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 24046,
+              "output_tokens": 4410
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "66382ef5-0818-54e7-9b6b-632211e861df",
+          "cursor": 392,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c739ace0b172597844376959:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:18.236801Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8570e064c02754b220986d229341b0a6cd41690023a09e7a5573b797a98c9356",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b7e7cb6c-b9fd-5b63-9090-9f78d0c95ea0",
+          "cursor": 393,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c739ace0b172597844376959:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:18.254530Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 47074,
+              "output_tokens": 4981,
+              "total_tokens": 52055,
+              "output_characters": 2300
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:acbbd9e85a75102c6bebbd6636a631c5818563fb1a6ca8cfa01e214da7fe9a15",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "54c41958-b2d3-5505-9425-e3ffa3bffdc0",
+          "cursor": 394,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c739ace0b172597844376959:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:18.272093Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e7a6f88d-9bd3-50ef-bca0-a51a4716a23d",
+          "cursor": 395,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c739ace0b172597844376959:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:18.272136Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 2,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "aa88cb64-8f2d-5f28-b5bb-339d522366d2",
+          "cursor": 396,
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "runId": "run_7c272d791a2e464fa4c80007f46f736b",
+          "sessionId": "record-6de4840d-524e-4023-8736-53248cf11cb9",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c739ace0b172597844376959:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:20:18.272167Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 29759,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 1035,
+              "input_tokens": 47074,
+              "output_tokens": 4981,
+              "total_tokens": 52055
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:930fdce4ce5b3efa5c8dda65285524702e7c390b58b691df67fe11a2244ebb3c",
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "invocationId": "hermes-tool:chatcmpl-tool-51fa0fdbd01e4ca8ba3045321a40abd9",
+          "turnId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 700,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:19:50.926207Z",
+          "content": {
+            "query": "maximum DTI by credit score band underwriting table credit policy",
+            "sourceIds": [
+              "financial-services.policies"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.5777789354324341,
+                "vectorScore": 0.5777789354324341,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0006",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3.2 Credit score bands, debt-to-income and loan-to-value limits\nEvery applicant is placed in a credit band using the middle of the three bureau scores, or the single score when only one is available. The band sets the maximum debt-to-income ratio (DTI) and the maximum loan-to-value ratio (LTV) the Bank will accept. Table 3 shows the limits that apply to applications taken on or after 1 July 2026.\nExceptional, Credit score = 780 and above. Exceptional, Maximum DTI = 45%. Exceptional, Maximum auto LTV = 120%. Exceptional, Maximum mortgage LTV = 97%. Exceptional, Pricing tier = A. Very Good, Credit score = 720 to 779. Very Good, Maximum DTI = 43%. Very Good, Maximum auto LTV = 115%. Very Good, Maximum mortgage LTV = 95%. Very Good, Pricing tier = B. Good, Credit score = 670 to 719. Good, Maximum DTI = 40%. Good, Maximum auto LTV = 110%. Good, Maximum mortgage LTV = 90%. Good, Pricing tier = C. Fair, Credit score = 620 to 669. Fair, Maximum DTI = 36%. Fair, Maximum auto LTV = 100%. Fair, Maximum mortgage LTV = 85%. Fair, Pricing tier = D. Poor, Credit score = 619 and below. Poor, Maximum DTI = 30%. Poor, Maximum auto LTV = 90%. Poor, Maximum mortgage LTV = 80%. Poor, Pricing tier = E\nTable 3. Underwriting limits by credit band (version 5.1, effective 1 July 2026)",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Consumer Credit Policy › 3.2 Credit score bands, debt-to-income and loan-to-value limits",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.5151104927062988,
+                "vectorScore": 0.5151104927062988,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0007",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3.2 Credit score bands, debt-to-income and loan-to-value limits\nDebt-to-income is the borrower’s total monthly debt payments, including the payment on the proposed loan, divided by gross monthly income. The maximum DTI in Table 3 applies to all three products. Loan-to-value is the loan amount divided by the lesser of the purchase price and the appraised value (mortgage) or the retail value in the Bank’s valuation guide (auto). A personal loan has no LTV limit. DTI and the credit band are recorded once, at origination, and are not refreshed during the life of the loan.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Consumer Credit Policy › 3.2 Credit score bands, debt-to-income and loan-to-value limits",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.4958120286464691,
+                "vectorScore": 0.4958120286464691,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0017",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n8. Revision history\nVersion 5.1 lowered the maximum DTI for every credit band by between 2 and 6 percentage points. Table 5 compares the new limits with those of version 5.0, which applied to applications taken from 1 July 2025 through 30 June 2026.\nExceptional, Maximum DTI, version 5.0 = 48%. Exceptional, Maximum DTI, version 5.1 (current) = 45%. Exceptional, Change = -3 points. Very Good, Maximum DTI, version 5.0 = 45%. Very Good, Maximum DTI, version 5.1 (current) = 43%. Very Good, Change = -2 points. Good, Maximum DTI, version 5.0 = 43%. Good, Maximum DTI, version 5.1 (current) = 40%. Good, Change = -3 points. Fair, Maximum DTI, version 5.0 = 40%. Fair, Maximum DTI, version 5.1 (current) = 36%. Fair, Change = -4 points. Poor, Maximum DTI, version 5.0 = 36%. Poor, Maximum DTI, version 5.1 (current) = 30%. Poor, Change = -6 points\nTable 5. Maximum DTI, version 5.1 against the version 5.0 limits it replaced\n4.8, Effective = 1 January 2024. 4.8, Summary of change = Annual review; no limit changes. 5.0, Effective = 1 July 2025. 5.0, Summary of change = Added the hardship and loan modification section; raised the Exceptional-band mortgage LTV. 5.1, Effective = 1 July 2026. 5.1, Summary of change = Lowered maximum DTI in every band (Table 5); added the monitoring of recent originations in section 7\nTable 6. Policy versions\nSynthetic document for a software demonstration. Harborview Community Bank is fictional. Page 4",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Consumer Credit Policy › 8. Revision history",
+                  "labels": [
+                    "caption",
+                    "page_footer",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.42937618494033813,
+                "vectorScore": 0.42937618494033813,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0009",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3.2 Credit score bands, debt-to-income and loan-to-value limits\n3.4 Exceptions\nA loan above the maximum DTI or LTV in Table 3 may be approved only by the regional credit officer, and only when at least two compensating factors are documented: twelve months of liquid reserves, a customer relationship of five years or more, a co-borrower with a credit score in a higher band, or a down payment of at least 20 percent. Approved exceptions may not exceed 5 percent of originations by count in any quarter. Every exception is reported to the Credit Risk Committee with the borrower’s band, the ratio approved and the factors relied on.\nSynthetic document for a software demonstration. Harborview Community Bank is fictional. Page 2\nHARBORVIEW COMMUNITY BANK HCB-CRE-001 | Version 5.1",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Consumer Credit Policy › 3.2 Credit score bands, debt-to-income and loan-to-value limits › 3.4 Exceptions",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.34777048230171204,
+                "vectorScore": 0.34777048230171204,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0016",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n7. Monitoring and reporting\nEach quarter the Credit Risk team reports to the Credit Risk Committee on delinquency by product, the allowance for loan losses, charge-offs and recoveries, exceptions granted, and the share of recent originations that exceed the limits currently in force. Loans originated before a change in this policy are not re-underwritten, but the quarterly report identifies originations from the previous 12 months that would no longer meet the new maximum DTI so that the Committee can decide whether portfolio action is needed.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Consumer Credit Policy › 7. Monitoring and reporting",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.3302670121192932,
+                "vectorScore": 0.3302670121192932,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0010",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n4. Pricing\nRates follow a five-tier risk-based pricing grid that maps one-to-one to the credit bands: Tier A for Exceptional through Tier E for Poor. The Asset and Liability Committee reviews the grid each month and publishes it to branch lenders. A lender may not discount a rate by more than 25 basis points without regional credit officer approval, and no loan may be priced to a customer on the basis of a protected characteristic.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Consumer Credit Policy › 4. Pricing",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.31950023770332336,
+                "vectorScore": 0.31950023770332336,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0004",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n2. Governance and approval authority\nThe Board Credit Committee approves this policy once a year and whenever a limit in section 3 changes. The Chief Credit Officer owns the policy and reports exceptions, delinquency and charge-offs to the Credit Risk Committee every quarter.\nCredit decisions are made within the authority shown in Table 1. Authority is set by the total of the loan being approved plus all other credit the borrower already has with the Bank. A lender may never approve a loan for a relative, an employee reporting to the lender or a business the lender owns.\nBranch lender, Personal loans (unsecured) = Up to $15,000. Branch lender, Auto loans = Up to $40,000. Branch lender, Mortgages = Not authorized. Regional credit officer, Personal loans (unsecured) = Up to $35,000. Regional credit officer, Auto loans = Up to $75,000. Regional credit officer, Mortgages = Up to $400,000. Credit Committee, Personal loans (unsecured) = $35,001 to $50,000. Credit Committee, Auto loans = Not applicable. Credit Committee, Mortgages = $400,001 to $750,000\nTable 1. Lending authority by approver",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Consumer Credit Policy › 2. Governance and approval authority",
+                  "labels": [
+                    "caption",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.31877729296684265,
+                "vectorScore": 0.31877729296684265,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-58d4bd18248ae4e3",
+                "chunkId": "financial-services.policies:f-58d4bd18248ae4e3:0005",
+                "title": "consumer_credit_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Consumer Credit Policy\n3. Underwriting standards\n3.1 Products and limits\nSynthetic document for a software demonstration. Harborview Community Bank is fictional. Page 1\nHARBORVIEW COMMUNITY BANK HCB-CRE-001 | Version 5.1\nPersonal loan, Amount = $2,500 to $50,000. Personal loan, Maximum term = 60 months. Personal loan, Collateral = Unsecured. Personal loan,  = . Auto loan, Amount = $8,000 to $75,000. Auto loan, Maximum term = 72 months. Auto loan, Collateral = First lien on the vehicle. Auto loan,  = . Mortgage, Amount = $90,000 to $750,000. Mortgage, Maximum term = 360 months. Mortgage, Collateral = First lien on an owner-occupied principal residence. Mortgage,  = \nTable 2. Product limits",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-58d4bd18248ae4e3",
+                  "file_name": "consumer_credit_policy.pdf",
+                  "citation": "consumer_credit_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Consumer Credit Policy › 3. Underwriting standards › 3.1 Products and limits",
+                  "labels": [
+                    "caption",
+                    "page_footer",
+                    "page_header",
+                    "table"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "financial-services.policies": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 682.3,
+              "searchMs": 6.1,
+              "rerankMs": 0.0,
+              "totalMs": 688.4
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:845553217caedda8eb8327744efb54882872a8631f0ac4850e33126412b3b7b5",
+          "jobId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1",
+          "invocationId": "hermes-tool:chatcmpl-tool-0d508a5d12ad4a3c96ffef2d9ffa3e03",
+          "turnId": "2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:2d9fe69e-f9e8-4ca3-88a2-869d91b6e0a1:cfb83580",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 281,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:20:00.543242Z",
+          "content": {
+            "query": "Find personal loans originated in 2026 with their DTI at origination and credit band, to compare against current policy maximum DTI limits",
+            "databaseName": "financial_services_banking",
+            "answer": null,
+            "sql": "SELECT \n    loan_id,\n    customer_id,\n    product,\n    origination_date,\n    credit_band,\n    dti_at_origination,\n    credit_score_at_origination\nFROM financial_services_banking.loans\nWHERE product = 'personal'\n  AND origination_date >= '2026-01-01'\n  AND origination_date <= '2026-12-31'\nORDER BY origination_date;",
+            "rows": [
+              {
+                "loan_id": "L00516",
+                "customer_id": "C00393",
+                "product": "personal",
+                "origination_date": "2026-01-07",
+                "credit_band": "Poor",
+                "dti_at_origination": 0.35,
+                "credit_score_at_origination": 612
+              },
+              {
+                "loan_id": "L00517",
+                "customer_id": "C00039",
+                "product": "personal",
+                "origination_date": "2026-01-11",
+                "credit_band": "Good",
+                "dti_at_origination": 0.37,
+                "credit_score_at_origination": 671
+              },
+              {
+                "loan_id": "L00519",
+                "customer_id": "C00543",
+                "product": "personal",
+                "origination_date": "2026-01-15",
+                "credit_band": "Very Good",
+                "dti_at_origination": 0.36,
+                "credit_score_at_origination": 758
+              },
+              {
+                "loan_id": "L00521",
+                "customer_id": "C00408",
+                "product": "personal",
+                "origination_date": "2026-01-19",
+                "credit_band": "Poor",
+                "dti_at_origination": 0.22,
+                "credit_score_at_origination": 576
+              },
+              {
+                "loan_id": "L00522",
+                "customer_id": "C00627",
+                "product": "personal",
+                "origination_date": "2026-01-20",
+                "credit_band": "Good",
+                "dti_at_origination": 0.43,
+                "credit_score_at_origination": 673
+              },
+              {
+                "loan_id": "L00523",
+                "customer_id": "C01024",
+                "product": "personal",
+                "origination_date": "2026-01-24",
+                "credit_band": "Poor",
+                "dti_at_origination": 0.26,
+                "credit_score_at_origination": 576
+              },
+              {
+                "loan_id": "L00525",
+                "customer_id": "C00314",
+                "product": "personal",
+                "origination_date": "2026-01-26",
+                "credit_band": "Very Good",
+                "dti_at_origination": 0.44,
+                "credit_score_at_origination": 733
+              },
+              {
+                "loan_id": "L00526",
+                "customer_id": "C00270",
+                "product": "personal",
+                "origination_date": "2026-01-31",
+                "credit_band": "Good",
+                "dti_at_origination": 0.31,
+                "credit_score_at_origination": 712
+              },
+              {
+                "loan_id": "L00527",
+                "customer_id": "C00873",
+                "product": "personal",
+                "origination_date": "2026-02-03",
+                "credit_band": "Fair",
+                "dti_at_origination": 0.3,
+                "credit_score_at_origination": 624
+              },
+              {
+                "loan_id": "L00530",
+                "customer_id": "C00735",
+                "product": "personal",
+                "origination_date": "2026-02-09",
+                "credit_band": "Poor",
+                "dti_at_origination": 0.27,
+                "credit_score_at_origination": 566
+              },
+              {
+                "loan_id": "L00531",
+                "customer_id": "C00264",
+                "product": "personal",
+                "origination_date": "2026-02-10",
+                "credit_band": "Very Good",
+                "dti_at_origination": 0.49,
+                "credit_score_at_origination": 774
+              },
+              {
+                "loan_id": "L00533",
+                "customer_id": "C00648",
+                "product": "personal",
+                "origination_date": "2026-02-14",
+                "credit_band": "Good",
+                "dti_at_origination": 0.37,
+                "credit_score_at_origination": 694
+              },
+              {
+                "loan_id": "L00534",
+                "customer_id": "C00127",
+                "product": "personal",
+                "origination_date": "2026-02-15",
+                "credit_band": "Very Good",
+                "dti_at_origination": 0.3,
+                "credit_score_at_origination": 757
+              },
+              {
+                "loan_id": "L00538",
+                "customer_id": "C00395",
+                "product": "personal",
+                "origination_date": "2026-02-26",
+                "credit_band": "Good",
+                "dti_at_origination": 0.45,
+                "credit_score_at_origination": 688
+              },
+              {
+                "loan_id": "L00540",
+                "customer_id": "C00310",
+                "product": "personal",
+                "origination_date": "2026-03-02",
+                "credit_band": "Very Good",
+                "dti_at_origination": 0.49,
+                "credit_score_at_origination": 776
+              },
+              {
+                "loan_id": "L00541",
+                "customer_id": "C00781",
+                "product": "personal",
+                "origination_date": "2026-03-05",
+                "credit_band": "Exceptional",
+                "dti_at_origination": 0.47,
+                "credit_score_at_origination": 780
+              },
+              {
+                "loan_id": "L00544",
+                "customer_id": "C01006",
+                "product": "personal",
+                "origination_date": "2026-03-06",
+                "credit_band": "Fair",
+                "dti_at_origination": 0.37,
+                "credit_score_at_origination": 639
+              },
+              {
+                "loan_id": "L00545",
+                "customer_id": "C00037",
+                "product": "personal",
+                "origination_date": "2026-03-07",
+                "credit_band": "Very Good",
+                "dti_at_origination": 0.32,
+                "credit_score_at_origination": 755
+              },
+              {
+                "loan_id": "L00552",
+                "customer_id": "C00839",
+                "product": "personal",
+                "origination_date": "2026-03-16",
+                "credit_band": "Very Good",
+                "dti_at_origination": 0.42,
+                "credit_score_at_origination": 748
+              },
+              {
+                "loan_id": "L00553",
+                "customer_id": "C00858",
+                "product": "personal",
+                "origination_date": "2026-03-16",
+                "credit_band": "Good",
+                "dti_at_origination": 0.34,
+                "credit_score_at_origination": 684
+              },
+              {
+                "loan_id": "L00554",
+                "customer_id": "C00202",
+                "product": "personal",
+                "origination_date": "2026-03-17",
+                "credit_band": "Fair",
+                "dti_at_origination": 0.24,
+                "credit_score_at_origination": 658
+              },
+              {
+                "loan_id": "L00555",
+                "customer_id": "C00410",
+                "product": "personal",
+                "origination_date": "2026-03-17",
+                "credit_band": "Good",
+                "dti_at_origination": 0.42,
+                "credit_score_at_origination": 671
+              },
+              {
+                "loan_id": "L00556",
+                "customer_id": "C00816",
+                "product": "personal",
+                "origination_date": "2026-03-17",
+                "credit_band": "Fair",
+                "dti_at_origination": 0.35,
+                "credit_score_at_origination": 621
+              },
+              {
+                "loan_id": "L00557",
+                "customer_id": "C01029",
+                "product": "personal",
+                "origination_date": "2026-03-17",
+                "credit_band": "Poor",
+                "dti_at_origination": 0.3,
+                "credit_score_at_origination": 586
+              },
+              {
+                "loan_id": "L00560",
+                "customer_id": "C01011",
+                "product": "personal",
+                "origination_date": "2026-03-23",
+                "credit_band": "Fair",
+                "dti_at_origination": 0.28,
+                "credit_score_at_origination": 650
+              }
+            ],
+            "sourceRowCount": 86,
+            "truncated": true,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "financial-services.policies",
+        "financial-services.banking"
+      ]
+    }
+  ]
+}
