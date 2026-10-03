@@ -35,7 +35,7 @@ async def test_execution_scope_names_the_jobs_sources_database_and_collection(se
         "source_ids": ["market_news", "market_analysis_structured"],
         "sources": [
             {"id": "market_news", "capabilities": ["unstructured_retrieval"]},
-            {"id": "market_analysis_structured", "capabilities": ["market_analytics"]},
+            {"id": "market_analysis_structured", "capabilities": ["structured_retrieval"]},
         ],
         "database_name": "market_analysis",
         "collection": "aiq_market_intelligence_current",
@@ -75,7 +75,8 @@ async def test_a_receipt_before_the_run_is_recorded_asks_the_plugin_to_retry(api
 async def test_invalid_receipts_are_refused(api, app, fake_hermes, post_receipt):
     await start_job(api, app)
     wrong_job = receipt_for("job-1") | {"jobId": "job-2"}
-    wrong_kind = receipt_for("job-1") | {"toolName": "mcp__market_analytics__market_scan"}
+    wrong_kind = receipt_for("job-1") | {"toolName": "mcp__tables__query_tables"}
+    retired = receipt_for("job-1") | {"toolName": "mcp__market_analytics__market_scan"}
     unregistered = receipt_for("job-1") | {"toolName": "mcp__retrieval__other_tool"}
     completed_without_content = receipt_for("job-1") | {"content": None}
 
@@ -83,7 +84,7 @@ async def test_invalid_receipts_are_refused(api, app, fake_hermes, post_receipt)
         "/internal/hermes/jobs/job-1/tool-receipts", json=wrong_job, headers={"X-Receipt-Key": RECEIPT_KEY}
     )
     assert response.status_code == 409
-    for receipt in (wrong_kind, unregistered, completed_without_content):
+    for receipt in (wrong_kind, retired, unregistered, completed_without_content):
         assert (await post_receipt(receipt)).status_code == 422
     assert await app.state.services.store.receipts("job-1") == []
 
@@ -103,6 +104,22 @@ async def test_a_failed_receipt_is_a_tool_observation(api, app, fake_hermes, pos
     assert observed["display"]["summary"] == "Kumo is not running"
     assert observed["componentId"] == "nvidia.kumo"
     assert (await app.state.services.store.get("job-1")).status == JobStatus.RUNNING
+
+
+async def test_a_table_query_receipt_is_structured_evidence(api, app, fake_hermes, post_receipt):
+    await start_job(api, app)
+    receipt = receipt_for("job-1", kind="structured_query")
+    assert receipt["toolName"] == "mcp__tables__query_tables"
+
+    assert (await post_receipt(receipt)).status_code == 200
+    available = (await app.state.services.store.events("job-1"))[-1]
+    assert (available["eventKind"], available["toolServer"], available["toolName"]) == (
+        "artifact.available",
+        "tables",
+        "query_tables",
+    )
+    assert (available["capabilityId"], available["componentId"]) == ("structured_retrieval", "nvidia.ontology")
+    assert available["display"]["label"] == "Structured query result available"
 
 
 async def test_a_model_call_becomes_an_llm_call_event_with_its_tier(api, app, fake_hermes):

@@ -11,7 +11,8 @@ running stack can serve it:
   ``collection-manifest.json``.
 
 ``GET /v1/pack`` (``PackView``, a contract: ``contracts/schemas/pack.schema.json``) offers the questions of those
-sources, and among them the examples of the composer's picker.
+sources, and among them the examples of the composer's picker. ``PackList`` (``contracts/schemas/packs.schema.json``)
+is the contract of ``GET /v1/packs``, the packs a user can pick.
 
 Files are read on every call, because ``/data/active`` is a symlink that a rebuild can switch.
 """
@@ -22,6 +23,7 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from typing import Literal
 
 from pydantic import BaseModel
 from pydantic import ConfigDict
@@ -106,13 +108,33 @@ class PackConversationView(_View):
     turns: list[str]
 
 
-class PackView(_View):
-    """``GET /v1/pack``: the active pack's title, disclaimer, questions, examples and conversations."""
+PackKind = Literal["industry", "workspace"]
+PackStatus = Literal["ready", "ingesting", "failed", "empty"]
+
+
+class PackSummary(_View):
+    """One pack a user can pick: an industry, or the workspace of their own uploads (``kind: workspace``)."""
 
     id: str
-    version: str | None = None
+    kind: PackKind
     title: str
     description: str | None = None
+    icon: str | None = Field(default=None, description="An icon name from ui/src/adapters/ui/icons.tsx.")
+    status: PackStatus = Field(
+        description="ingesting while some of its files are in the pipeline; empty before it has any source."
+    )
+
+
+class PackList(_View):
+    """``GET /v1/packs``: the packs a user can pick, the industries by title, then the workspace."""
+
+    packs: list[PackSummary]
+
+
+class PackView(PackSummary):
+    """``GET /v1/pack``: a pack's summary, version, disclaimer, questions, examples and conversations."""
+
+    version: str | None = None
     as_of: str | None = None
     disclaimer: str | None = None
     questions: list[PackQuestionView]
@@ -195,6 +217,9 @@ class ActivePack:
         ]
         return PackView(
             **{key: manifest.get(key) for key in ("id", "version", "title", "description", "as_of", "disclaimer")},
+            kind=manifest.get("kind", "industry"),
+            icon=manifest.get("icon"),
+            status=manifest.get("status", "ready"),
             questions=[
                 PackQuestionView(
                     **{key: question.get(key) for key in ("id", "label", "tag", "description", "question", "sources")},

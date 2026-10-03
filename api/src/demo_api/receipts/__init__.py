@@ -3,9 +3,8 @@
 
 """Typed tool receipts, discriminated by ``artifactKind``."""
 
-from .models import AnalyticsResult
-from .models import AnalyticsResultReceipt
 from .models import ArtifactKind
+from .models import EntityPrediction
 from .models import ReceiptV2
 from .models import RetrievalEvidence
 from .models import RetrievalEvidenceReceipt
@@ -15,9 +14,8 @@ from .models import StructuredQuery
 from .models import StructuredQueryReceipt
 
 __all__ = [
-    "AnalyticsResult",
-    "AnalyticsResultReceipt",
     "ArtifactKind",
+    "EntityPrediction",
     "ReceiptV2",
     "RetrievalEvidence",
     "RetrievalEvidenceReceipt",

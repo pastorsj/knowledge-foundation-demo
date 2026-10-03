@@ -126,12 +126,22 @@
     }
   },
   "additionalProperties": false,
-  "description": "``GET /v1/pack``: the active pack's title, disclaimer, questions, examples and conversations.",
+  "description": "``GET /v1/pack``: a pack's summary, version, disclaimer, questions, examples and conversations.",
   "properties": {
     "id": {
       "type": "string"
     },
-    "version": {
+    "kind": {
+      "enum": [
+        "industry",
+        "workspace"
+      ],
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
       "anyOf": [
         {
           "type": "string"
@@ -142,10 +152,29 @@
       ],
       "default": null
     },
-    "title": {
+    "icon": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "An icon name from ui/src/adapters/ui/icons.tsx."
+    },
+    "status": {
+      "description": "ingesting while some of its files are in the pipeline; empty before it has any source.",
+      "enum": [
+        "ready",
+        "ingesting",
+        "failed",
+        "empty"
+      ],
       "type": "string"
     },
-    "description": {
+    "version": {
       "anyOf": [
         {
           "type": "string"
@@ -201,9 +230,12 @@
   },
   "required": [
     "id",
-    "version",
+    "kind",
     "title",
     "description",
+    "icon",
+    "status",
+    "version",
     "as_of",
     "disclaimer",
     "questions",

@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     tool_registry_file: Path = _REPO_REGISTRY
     # Tool groups baked into the agent image (the agent's AGENT_FEATURES build argument). A source
     # capability is offered only when a tool of that family is in one of these compose profiles.
-    agent_features: str = "retrieval,analytics"
+    agent_features: str = "retrieval,tables"
 
     # Job store and runner
     api_db_path: Path = Path("/var/lib/demo-api/jobs.db")
@@ -63,11 +63,6 @@ class Settings(BaseSettings):
     agent_efficient_model: str = ""
     agent_capable_model: str = ""
 
-    # Market analytics, for the Benchmark tab's matched CPU/GPU runs of a finished job's calls
-    market_analytics_url: str = "http://market-analytics:3010"
-    benchmark_pairs: int = Field(default=5, ge=1, le=20)
-    benchmark_budget_seconds: float = Field(default=20, gt=0, le=300)
-
     # Voice input (demo_api/speech): NVIDIA Nemotron ASR on build.nvidia.com. Off unless enabled and keyed.
     speech_input_enabled: bool = False
     speech_api_key: SecretStr = SecretStr("")  # an nvapi- key; demo.sh fills it from the retriever's
@@ -82,7 +77,7 @@ class Settings(BaseSettings):
 
     # Phoenix, for the job trace link
     aiq_phoenix_internal_url: str = "http://phoenix:6006"
-    phoenix_project: str = "market-analysis-agent"
+    phoenix_project: str = "knowledge-foundation"
 
     # Auto Ontology (ontology profile); an empty URL turns the ontology view off
     auto_ontology_url: str = ""

@@ -8,8 +8,8 @@ from typing import get_args
 from jsonschema import Draft202012Validator
 
 from demo_api.events import COMPONENT_BY_FAMILY
+from demo_api.pills import PILL_ORDER
 from demo_api.receipts import ArtifactKind
-from demo_api.receipts.models import MarketOperation
 
 
 def test_registry_matches_its_schema(registry, registry_schema):
@@ -33,10 +33,18 @@ def test_each_receipt_kind_is_one_union_variant(registry_schema, tools):
     assert {tool["receipt_kind"] for tool in tools} == kinds
 
 
-def test_analytics_tools_are_the_market_operations(tools):
-    analytics_tools = {tool["id"] for tool in tools if tool["receipt_kind"] == "analytics_result"}
-    assert analytics_tools == set(get_args(MarketOperation))
+def test_the_registry_holds_the_four_knowledge_tools(tools):
+    assert {tool["hermes_name"]: (tool["family"], tool["receipt_kind"], tool["pills"]) for tool in tools} == {
+        "mcp__retrieval__retrieve_evidence": ("unstructured_retrieval", "retrieval_evidence", ["retrieval"]),
+        "mcp__tables__query_tables": ("structured_retrieval", "structured_query", ["duckdb"]),
+        "mcp__prediction__predict": ("structured_prediction", "structured_prediction", ["kumo"]),
+        "mcp__auto_ontology__ask_question": ("structured_retrieval", "structured_query", ["ontology"]),
+    }
 
 
 def test_each_family_has_an_event_component(registry_schema):
     assert set(COMPONENT_BY_FAMILY) == set(registry_schema["$defs"]["Tool"]["properties"]["family"]["enum"])
+
+
+def test_pills_are_ordered_as_the_schema_lists_them(registry_schema):
+    assert PILL_ORDER == tuple(registry_schema["$defs"]["Pill"]["enum"])

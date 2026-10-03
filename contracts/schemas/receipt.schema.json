@@ -1,420 +1,60 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
-    "AnalyticsEngine": {
+    "EntityPrediction": {
       "additionalProperties": false,
-      "description": "The device and library that computed a market analytics result.\n\n`engine_id` names the engine by method and device (`cudf-gpu.v1`, its CPU twin `pandas-cpu.v1`); results\nrecorded before it was added have none.",
+      "description": "One entity's predicted outcome: `probability` for a binary task (or the score of a multiclass `label`),\n`value` for a regression.",
       "properties": {
-        "device": {
-          "enum": [
-            "cpu",
-            "gpu"
-          ],
-          "type": "string"
-        },
-        "library": {
-          "maxLength": 64,
-          "minLength": 1,
-          "type": "string"
-        },
-        "version": {
-          "maxLength": 64,
-          "minLength": 1,
-          "type": "string"
-        },
-        "engineId": {
-          "anyOf": [
-            {
-              "maxLength": 128,
-              "minLength": 1,
-              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        }
-      },
-      "required": [
-        "device",
-        "library",
-        "version",
-        "engineId"
-      ],
-      "title": "AnalyticsEngine",
-      "type": "object"
-    },
-    "AnalyticsError": {
-      "additionalProperties": false,
-      "properties": {
-        "code": {
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
-          "type": "string"
-        },
-        "message": {
-          "maxLength": 1000,
-          "minLength": 1,
-          "type": "string"
-        }
-      },
-      "required": [
-        "code",
-        "message"
-      ],
-      "title": "AnalyticsError",
-      "type": "object"
-    },
-    "AnalyticsResult": {
-      "additionalProperties": false,
-      "description": "One market analytics result; `payload` is operation-specific JSON.\n\nThe tool does not echo its arguments, so the plugin adds them, without the\nsource ids, as the public parameters. `engine` is null when the operation\nfailed before it ran. `asset_count` is the number of distinct assets in the\nrows scanned; results recorded before it was added have none.",
-      "properties": {
-        "operationId": {
-          "enum": [
-            "market_scan",
-            "market_anomaly_scan",
-            "price_context",
-            "sentiment_timeline",
-            "analyze_news_price_relationship",
-            "analyze_market_relationships",
-            "intraday_scan"
-          ],
-          "type": "string"
-        },
-        "status": {
-          "enum": [
-            "succeeded",
-            "empty",
-            "failed"
-          ],
-          "type": "string"
-        },
-        "sourceId": {
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
-          "type": "string"
-        },
-        "databaseName": {
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
-          "type": "string"
-        },
-        "publicParameters": {
-          "additionalProperties": {
-            "$ref": "#/$defs/JsonValue"
-          },
-          "type": "object"
-        },
-        "payload": {
-          "anyOf": [
-            {
-              "additionalProperties": {
-                "$ref": "#/$defs/JsonValue"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "error": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/AnalyticsError"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "engine": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/AnalyticsEngine"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "timing": {
-          "$ref": "#/$defs/AnalyticsTiming"
-        },
-        "rowsScanned": {
-          "default": 0,
-          "minimum": 0,
-          "type": "integer"
-        },
-        "assetCount": {
-          "anyOf": [
-            {
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "warnings": {
-          "default": [],
-          "items": {
-            "type": "string"
-          },
-          "maxItems": 20,
-          "type": "array"
-        },
-        "limitations": {
-          "default": [],
-          "items": {
-            "type": "string"
-          },
-          "maxItems": 20,
-          "type": "array"
-        }
-      },
-      "required": [
-        "operationId",
-        "status",
-        "sourceId",
-        "databaseName",
-        "publicParameters",
-        "payload",
-        "error",
-        "engine",
-        "timing",
-        "rowsScanned",
-        "assetCount",
-        "warnings",
-        "limitations"
-      ],
-      "title": "AnalyticsResult",
-      "type": "object"
-    },
-    "AnalyticsResultReceipt": {
-      "additionalProperties": false,
-      "properties": {
-        "schemaVersion": {
-          "const": "2",
-          "default": "2",
-          "type": "string"
-        },
-        "artifactKind": {
-          "const": "analytics_result",
-          "type": "string"
-        },
-        "receiptId": {
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$",
-          "type": "string"
-        },
-        "jobId": {
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$",
-          "type": "string"
-        },
-        "invocationId": {
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$",
-          "type": "string"
-        },
-        "turnId": {
-          "anyOf": [
-            {
-              "maxLength": 256,
-              "minLength": 1,
-              "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "toolName": {
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
-          "type": "string"
-        },
-        "status": {
-          "enum": [
-            "completed",
-            "failed"
-          ],
-          "type": "string"
-        },
-        "errorType": {
-          "anyOf": [
-            {
-              "maxLength": 128,
-              "minLength": 1,
-              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "errorSummary": {
-          "anyOf": [
-            {
-              "maxLength": 600,
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "durationMs": {
-          "maximum": 86400000,
-          "minimum": 0,
-          "type": "integer"
-        },
-        "traceId": {
-          "anyOf": [
-            {
-              "pattern": "^[0-9a-f]{32}$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "spanId": {
-          "anyOf": [
-            {
-              "pattern": "^[0-9a-f]{16}$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "occurredAt": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "content": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/AnalyticsResult"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        }
-      },
-      "required": [
-        "schemaVersion",
-        "artifactKind",
-        "receiptId",
-        "jobId",
-        "invocationId",
-        "turnId",
-        "toolName",
-        "status",
-        "errorType",
-        "errorSummary",
-        "durationMs",
-        "traceId",
-        "spanId",
-        "occurredAt",
-        "content"
-      ],
-      "title": "AnalyticsResultReceipt",
-      "type": "object"
-    },
-    "AnalyticsTiming": {
-      "additionalProperties": false,
-      "description": "Milliseconds, to the microsecond: the worker's calculation (`compute_ms`), its other work on the call\n(`setup_ms`: the arguments before, the result after), the two together (`engine_ms`), and the call end to end\nin the tool service, including the wait for the worker (`total_ms`). Results recorded before setup and engine\ntimes were added have neither.",
-      "properties": {
-        "computeMs": {
-          "minimum": 0,
-          "type": "number"
-        },
-        "setupMs": {
-          "anyOf": [
-            {
-              "minimum": 0,
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "engineMs": {
-          "anyOf": [
-            {
-              "minimum": 0,
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
-        "totalMs": {
-          "minimum": 0,
-          "type": "number"
-        }
-      },
-      "required": [
-        "computeMs",
-        "setupMs",
-        "engineMs",
-        "totalMs"
-      ],
-      "title": "AnalyticsTiming",
-      "type": "object"
-    },
-    "AssetProbability": {
-      "additionalProperties": false,
-      "properties": {
-        "assetId": {
+        "entityId": {
           "maxLength": 128,
           "minLength": 1,
           "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
           "type": "string"
         },
         "probability": {
-          "maximum": 1,
-          "minimum": 0,
-          "type": "number"
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "label": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
-        "assetId",
-        "probability"
+        "entityId",
+        "probability",
+        "value",
+        "label"
       ],
-      "title": "AssetProbability",
+      "title": "EntityPrediction",
       "type": "object"
     },
     "JsonValue": {},
@@ -454,7 +94,7 @@
     },
     "PredictionHorizon": {
       "additionalProperties": false,
-      "description": "How far past the anchor the outcome is counted, read from the PQL window.",
+      "description": "How far past the anchor time the outcome is counted, read from the PQL window.",
       "properties": {
         "value": {
           "type": "integer"
@@ -474,7 +114,7 @@
     },
     "RetrievalEvidence": {
       "additionalProperties": false,
-      "description": "A `retrieve_evidence` result: per-source vector search, one merged rerank, the best hits.\n\n`collection` is the alias the tool searched; the collection version is the index build behind it.",
+      "description": "A `retrieve_evidence` result: per-source vector search, one merged rerank (when a rerank model is\nconfigured), the best hits.\n\n`collection` is the alias the tool searched; the collection version is the index build behind it.",
       "properties": {
         "query": {
           "maxLength": 4000,
@@ -688,7 +328,7 @@
     },
     "RetrievalHit": {
       "additionalProperties": false,
-      "description": "One passage from `retrieve_evidence`, ordered by its rerank logit (`score`); the vector score is cosine.",
+      "description": "One passage from `retrieve_evidence`, ordered by `score`: its rerank logit, or its vector score (cosine)\nwhen the retrieval ran without a rerank model.",
       "properties": {
         "rank": {
           "minimum": 1,
@@ -809,6 +449,7 @@
     },
     "RetrievalModels": {
       "additionalProperties": false,
+      "description": "The models behind a retrieval; `rerank` is null when none is configured and the hits keep vector order.",
       "properties": {
         "embed": {
           "maxLength": 256,
@@ -816,9 +457,16 @@
           "type": "string"
         },
         "rerank": {
-          "maxLength": 256,
-          "minLength": 1,
-          "type": "string"
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -830,7 +478,7 @@
     },
     "RetrievalTimings": {
       "additionalProperties": false,
-      "description": "Wall-clock stages of one retrieval, in milliseconds.",
+      "description": "Wall-clock stages of one retrieval, in milliseconds; `rerank_ms` is 0 when it ran without a rerank model.",
       "properties": {
         "embedMs": {
           "minimum": 0,
@@ -860,7 +508,7 @@
     },
     "StructuredPrediction": {
       "additionalProperties": false,
-      "description": "A curated PQL template scored per asset by NVIDIA Kumo (`predict_asset_outcomes`).\n\n`available` is false, with a `reason`, when the prediction could not run.",
+      "description": "A PQL query scored per entity by NVIDIA Kumo (`predict`) over one structured source.\n\n`template_id` names the source's prediction template when the PQL came from one. `task_type` is the task Kumo\nran (binary, regression, multiclass), `anchor_time` the time predictions are made from, `horizon` the PQL\nwindow, and `entity_table` the table of the `FOR EACH` entities, when known. `available` is false, with a\n`reason`, when the prediction could not run.",
       "properties": {
         "available": {
           "type": "boolean"
@@ -877,28 +525,82 @@
           ],
           "default": null
         },
-        "templateId": {
+        "sourceId": {
           "maxLength": 128,
           "minLength": 1,
           "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
           "type": "string"
+        },
+        "templateId": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "pql": {
           "maxLength": 8000,
           "minLength": 1,
           "type": "string"
         },
-        "anchor": {
-          "format": "date-time",
-          "type": "string"
+        "taskType": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "anchorTime": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "horizon": {
-          "$ref": "#/$defs/PredictionHorizon"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PredictionHorizon"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "entityTable": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "rows": {
           "default": [],
           "items": {
-            "$ref": "#/$defs/AssetProbability"
+            "$ref": "#/$defs/EntityPrediction"
           },
           "maxItems": 100,
           "type": "array"
@@ -912,10 +614,13 @@
       "required": [
         "available",
         "reason",
+        "sourceId",
         "templateId",
         "pql",
-        "anchor",
+        "taskType",
+        "anchorTime",
         "horizon",
+        "entityTable",
         "rows",
         "model"
       ],
@@ -1072,7 +777,7 @@
     },
     "StructuredQuery": {
       "additionalProperties": false,
-      "description": "An ontology-grounded SQL answer from Auto Ontology `ask_question`.\n\n`sql` is null when Auto Ontology resolved the question's terms but could not\nconstruct a query.",
+      "description": "A SQL result over structured sources: `query_tables` (DuckDB) or Auto Ontology `ask_question`.\n\n`query` is the question the SQL answers, and `database_name` the database it ran on: the DuckDB alias of the\none structured source `query_tables` attached (`knowledge` when it attached several), or Auto Ontology's\ndatabase. `answer` and `resolution_lineage` come from Auto Ontology only. `sql` is null when Auto Ontology\nresolved the question's terms but could not construct a query.",
       "properties": {
         "query": {
           "maxLength": 1000,
@@ -1300,7 +1005,6 @@
   },
   "discriminator": {
     "mapping": {
-      "analytics_result": "#/$defs/AnalyticsResultReceipt",
       "retrieval_evidence": "#/$defs/RetrievalEvidenceReceipt",
       "structured_prediction": "#/$defs/StructuredPredictionReceipt",
       "structured_query": "#/$defs/StructuredQueryReceipt"
@@ -1310,9 +1014,6 @@
   "oneOf": [
     {
       "$ref": "#/$defs/RetrievalEvidenceReceipt"
-    },
-    {
-      "$ref": "#/$defs/AnalyticsResultReceipt"
     },
     {
       "$ref": "#/$defs/StructuredQueryReceipt"

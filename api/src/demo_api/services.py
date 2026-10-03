@@ -5,9 +5,7 @@
 
 from __future__ import annotations
 
-import asyncio
 from dataclasses import dataclass
-from dataclasses import field
 from typing import Annotated
 
 import httpx
@@ -29,11 +27,9 @@ class Services:
     pack: ActivePack
     store: JobStore
     runner: JobRunner
-    http: httpx.AsyncClient  # outgoing calls to Phoenix and market analytics
+    http: httpx.AsyncClient  # outgoing calls to Phoenix
     transport: httpx.AsyncBaseTransport | None  # for clients made per request (Auto Ontology); tests fake it
     speech: SpeechService  # voice input; off unless configured
-    # One CPU/GPU comparison at a time: the GPU worker also serves the agent's calls
-    benchmark_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
 
 
 def get_services(request: Request) -> Services:

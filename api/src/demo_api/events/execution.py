@@ -42,7 +42,6 @@ EVENT_STORE_TYPE = "execution.v2"
 # by the tool's `family` in contracts/tool-registry.json.
 COMPONENT_BY_FAMILY = {
     "unstructured_retrieval": "milvus.retrieval",
-    "market_analytics": "nvidia.market_analytics",
     "structured_retrieval": "nvidia.ontology",
     "structured_prediction": "nvidia.kumo",
 }

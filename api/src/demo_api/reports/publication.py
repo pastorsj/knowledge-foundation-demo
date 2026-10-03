@@ -76,7 +76,6 @@ _EVIDENCE_LIMITATION = (
 )
 _LABELS = {
     "retrieval_evidence": "Unstructured Retrieval evidence",
-    "analytics_result": "Market analytics result",
     "structured_query": "Structured retrieval result",
     "structured_prediction": "NVIDIA Kumo prediction result",
 }
@@ -229,12 +228,10 @@ def _label(kind: str, content: dict[str, Any]) -> str:
     """A short Sources-list label from the receipt content (camelCase, as stored)."""
     label = _LABELS.get(kind, "Tool evidence")
     detail: str | None = None
-    if kind == "analytics_result":
-        detail = str(content.get("operationId", "")).replace("_", " ")
-    elif kind == "structured_query":
+    if kind == "structured_query":
         detail = content.get("databaseName")
     elif kind == "structured_prediction":
-        detail = content.get("templateId")
+        detail = content.get("templateId") or content.get("sourceId")
     elif kind == "retrieval_evidence":
         titles = {hit.get("documentId"): hit.get("title") for hit in content.get("hits", []) if isinstance(hit, dict)}
         detail = f"{len(titles)} documents" if len(titles) > 1 else next(iter(titles.values()), None)

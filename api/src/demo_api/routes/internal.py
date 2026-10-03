@@ -54,8 +54,7 @@ MAX_RECEIPT_BYTES = 512 * 1024
 RECEIPTS: TypeAdapter[ReceiptV2] = TypeAdapter(ReceiptV2)
 _AVAILABLE_LABELS = {
     "retrieval_evidence": "Unstructured retrieval evidence available",
-    "analytics_result": "Market analytics result available",
-    "structured_query": "Auto Ontology result available",
+    "structured_query": "Structured query result available",
     "structured_prediction": "NVIDIA Kumo prediction available",
 }
 

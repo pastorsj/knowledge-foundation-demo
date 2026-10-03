@@ -65,3 +65,21 @@ def test_golden_tool_events_carry_their_family_and_component(events, tools):
 def test_golden_events_are_in_cursor_order(events):
     cursors = [event["cursor"] for event in events]
     assert cursors == sorted(set(cursors))
+
+
+def test_the_catalog_s_pack_manifests_summarize_as_the_packs_contract(contracts_dir):
+    """``GET /v1/packs`` summarizes pack manifests (contracts/catalog), so their kinds and statuses must agree."""
+    manifests = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted((contracts_dir / "fixtures/catalog/packs").glob("*.json"))
+    ]
+    fields = ("id", "kind", "title", "description", "icon", "status")
+    packs = {"packs": [{field: manifest.get(field) for field in fields} for manifest in manifests]}
+
+    schema = json.loads((contracts_dir / "schemas" / "packs.schema.json").read_text(encoding="utf-8"))
+    Draft202012Validator(schema).validate(packs)
+    assert {pack["kind"] for pack in packs["packs"]} == {"industry", "workspace"}
+    manifest_schema = json.loads((contracts_dir / "catalog" / "pack-manifest.schema.json").read_text(encoding="utf-8"))
+    for field in ("kind", "status"):
+        summary_enum = schema["$defs"]["PackSummary"]["properties"][field]["enum"]
+        assert summary_enum == manifest_schema["properties"][field]["enum"]

@@ -27,10 +27,10 @@ def test_citations_are_numbered_by_first_use_and_listed_once(tool_registry):
     assert report.markdown.splitlines()[0] == "Filings mention outages [1]. Anomalies spiked [2] and again [1]."
     assert report.markdown.endswith(
         f"## Sources\n\n- [1] Unstructured Retrieval evidence — 3 documents — evidence `{retrieval}`\n"
-        f"- [2] Market analytics result — market anomaly scan — evidence `{scan}`"
+        f"- [2] Structured retrieval result — retail_sales — evidence `{scan}`"
     )
     assert [c["number"] for c in report.citations] == [1, 2]
-    assert report.citations[1]["capabilityId"] == "market_analytics"
+    assert report.citations[1]["capabilityId"] == "structured_retrieval"
     assert report.invalid_evidence_ids == []
 
 
@@ -144,7 +144,7 @@ def test_the_evidence_limitation_comes_before_the_sources_list(tool_registry):
 
     body, _, sources = report.markdown.partition("\n\n## Sources\n\n")
     assert body.startswith("Valid [1], invalid.\n\n## Evidence limitation\n\n")
-    assert sources == f"- [1] Market analytics result — market anomaly scan — evidence `{scan}`"
+    assert sources == f"- [1] Structured retrieval result — retail_sales — evidence `{scan}`"
     assert report.invalid_evidence_ids == ["hermes-receipt:unknown"]
 
 
@@ -168,6 +168,23 @@ def test_the_resolution_counts_cited_uncited_and_unresolved_evidence(tool_regist
 def test_failed_receipts_cannot_be_cited(tool_registry):
     failed = [r for r in load_contract("receipts.json") if r["status"] == "failed"]
     assert citations_from_receipts(failed, tool_registry) == []
+
+
+def test_each_receipt_kind_has_a_sources_label(tool_registry):
+    receipts = [r for r in load_contract("receipts.json") if r["status"] == "completed"]
+    untemplated = next(r for r in receipts if r["artifactKind"] == "structured_prediction")
+    untemplated = untemplated | {"content": untemplated["content"] | {"templateId": None}}
+
+    labels = [citation.label for citation in citations_from_receipts([*receipts, untemplated], tool_registry)]
+
+    assert labels == [
+        "Structured retrieval result — retail_sales",
+        "Unstructured Retrieval evidence — 3 documents",
+        "Unstructured Retrieval evidence — Board update, third quarter",
+        "Structured retrieval result — retail_sales",
+        "NVIDIA Kumo prediction result — churn_90d",
+        "NVIDIA Kumo prediction result — retail.sales",
+    ]
 
 
 def test_credentials_in_a_draft_are_masked():
