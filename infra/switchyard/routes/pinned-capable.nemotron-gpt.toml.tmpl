@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # Every agent turn goes to the capable GPT model (Responses API), with no judge. Hermes still
-# sends "market-research", so switching to this template is an .env change. The GPT model can
+# sends "knowledge", so switching to this template is an .env change. The GPT model can
 # come from its own endpoint: CAPABLE_BASE_URL and CAPABLE_API_KEY, which default to the
 # inference endpoint and key (the key only on that same endpoint).
 # requires: INFERENCE_BASE_URL CAPABLE_BASE_URL AGENT_EFFICIENT_MODEL AGENT_CAPABLE_MODEL AGENT_AUX_MODEL
@@ -39,26 +39,26 @@ llm_client = "chat"
 extra_body = { chat_template_kwargs = { enable_thinking = false } }
 
 [routes.research]
-id = "market-research"
+id = "knowledge"
 type = "passthrough"
 target = "capable"
 
 [routes.efficient]
-id = "market-research-efficient"
+id = "knowledge-efficient"
 type = "passthrough"
 target = "efficient"
 
 [routes.capable]
-id = "market-research-capable"
+id = "knowledge-capable"
 type = "passthrough"
 target = "capable"
 
 [routes.aux]                          # Hermes auxiliary calls
-id = "market-research-aux"
+id = "knowledge-aux"
 type = "passthrough"
 target = "aux"
 
 [routes.fallback]                     # Hermes moves a run here when its model is overloaded
-id = "market-research-fallback"
+id = "knowledge-fallback"
 type = "passthrough"
 target = "aux"

@@ -49,3 +49,4 @@ playwright-report/
 
 # OS
 .DS_Store
+.claude/

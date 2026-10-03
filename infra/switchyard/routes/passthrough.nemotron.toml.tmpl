@@ -24,21 +24,21 @@ llm_client = "chat"
 extra_body = { chat_template_kwargs = { enable_thinking = false } }
 
 [routes.research]
-id = "market-research"
+id = "knowledge"
 type = "passthrough"
 target = "efficient"
 
 [routes.efficient]
-id = "market-research-efficient"
+id = "knowledge-efficient"
 type = "passthrough"
 target = "efficient"
 
 [routes.aux]                          # Hermes auxiliary calls
-id = "market-research-aux"
+id = "knowledge-aux"
 type = "passthrough"
 target = "aux"
 
 [routes.fallback]                     # Hermes moves a run here when its model is overloaded
-id = "market-research-fallback"
+id = "knowledge-fallback"
 type = "passthrough"
 target = "aux"

@@ -7,7 +7,7 @@
 # dummy key. Needs switchyard-server and envsubst on PATH, so run it in the image:
 #
 #   docker run --rm -v "$PWD/infra/switchyard/tests:/opt/switchyard/tests:ro" \
-#     --entrypoint /opt/switchyard/tests/render-all.sh market-demo/switchyard:local
+#     --entrypoint /opt/switchyard/tests/render-all.sh knowledge-foundation/switchyard:local
 #
 # or locally with a switchyard-server 0.3.0 binary:
 #
@@ -86,8 +86,8 @@ expect() {
 
 not() { ! "$@"; }
 
-all_routes=$(printf '%s\n' market-research market-research-aux market-research-capable market-research-efficient \
-  market-research-fallback)
+all_routes=$(printf '%s\n' knowledge knowledge-aux knowledge-capable knowledge-efficient \
+  knowledge-fallback)
 
 for path in "$root"/routes/*.toml.tmpl; do
   name=$(basename "$path" .toml.tmpl)
@@ -98,12 +98,12 @@ for path in "$root"/routes/*.toml.tmpl; do
   expect "$name: renders and passes --dry-run" exits 0 "$name"
   expect "$name: leaves no placeholder" not grep -q '\${' "$work/routes.toml"
   served=$(sed -n 's/^server OK: //p' "$work/out" | head -n 1 | tr -d ' ' | tr ',' '\n' | sort)
-  # passthrough has no capable model, so no market-research-capable route.
+  # passthrough has no capable model, so no knowledge-capable route.
   case $name in
-    passthrough.*) want_routes=$(echo "$all_routes" | grep -vx market-research-capable) ;;
+    passthrough.*) want_routes=$(echo "$all_routes" | grep -vx knowledge-capable) ;;
     *) want_routes=$all_routes ;;
   esac
-  expect "$name: serves its market-research routes" [ "$served" = "$want_routes" ]
+  expect "$name: serves its knowledge routes" [ "$served" = "$want_routes" ]
 done
 
 expect "the judge prompt is inlined without its comment block" exits 0 escalation.nemotron-gpt

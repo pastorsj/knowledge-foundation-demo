@@ -52,7 +52,7 @@ llm_client = "chat"
 extra_body = { chat_template_kwargs = { enable_thinking = false } }
 
 [routes.research]
-id = "market-research"
+id = "knowledge"
 type = "llm_classifier"
 mode = "escalation"
 weak_target = "efficient"
@@ -67,21 +67,21 @@ ${JUDGE_PROMPT}
 '''
 
 [routes.efficient]
-id = "market-research-efficient"
+id = "knowledge-efficient"
 type = "passthrough"
 target = "efficient"
 
 [routes.capable]
-id = "market-research-capable"
+id = "knowledge-capable"
 type = "passthrough"
 target = "capable"
 
 [routes.aux]                          # Hermes auxiliary calls, kept out of the judged route
-id = "market-research-aux"
+id = "knowledge-aux"
 type = "passthrough"
 target = "aux"
 
 [routes.fallback]                     # Hermes moves a run here when its model is overloaded
-id = "market-research-fallback"
+id = "knowledge-fallback"
 type = "passthrough"
 target = "aux"

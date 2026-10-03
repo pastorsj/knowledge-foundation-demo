@@ -4,7 +4,7 @@
 #
 # doctor: host, configuration and profile checks. Messages name variables, never their values.
 
-readonly KNOWN_PROFILES="core retrieval analytics analytics-gpu kumo ontology"
+readonly KNOWN_PROFILES="core parse kumo prediction ontology"
 readonly BUILD_NVIDIA_HOST=integrate.api.nvidia.com
 
 problems=0
@@ -62,14 +62,15 @@ check_host() {
   # OpenShell's sandbox needs Landlock ABI 3 (Linux 6.2+) on the Docker host; it fails closed.
   kernel=$(docker info --format '{{.KernelVersion}}')
   [ "$(version_number "$kernel")" -ge 6002 ] || problem "Docker host kernel $kernel: OpenShell needs Linux 6.2 or later"
-  if has_profile analytics-gpu || has_profile kumo; then
+  if has_profile parse || has_profile kumo; then
     docker info --format '{{json .Runtimes}}' | grep -q nvidia ||
-      problem "the analytics-gpu and kumo profiles need the NVIDIA Container Toolkit"
+      problem "the parse and kumo profiles need the NVIDIA Container Toolkit"
   fi
   if has_profile kumo && [ "$(docker info --format '{{.Architecture}}')" != x86_64 ]; then
-    problem "the kumo profile needs an x86_64 Docker host (the Kumo NIM is amd64 only)"
+    problem "the kumo profile needs an x86_64 Docker host (the Kumo NIM is amd64 only): on this host, run the NIM" \
+      "on an x86_64 machine (a Brev VM) and use the prediction profile with KUMO_RELATIONAL_URL pointing at it"
   fi
-  if has_profile retrieval && [ "$(docker info --format '{{.MemTotal}}')" -lt $((8 * 1024 * 1024 * 1024)) ]; then
+  if [ "$(docker info --format '{{.MemTotal}}')" -lt $((8 * 1024 * 1024 * 1024)) ]; then
     warn "Docker has less than 8 GiB of memory; Milvus needs at least 8 GiB"
   fi
 }
@@ -79,15 +80,15 @@ check_ports() {
   if [ -n "$(dc ps -q 2>/dev/null)" ]; then
     return 0
   fi
-  local ports="$UI_PORT 4000 6006 8000 18080 18081" port
-  if has_profile retrieval; then
-    ports="$ports 8120"
+  local ports="$UI_PORT 4300 6306 8300 8320 8321 8330 18380 18381" port
+  if has_profile parse; then
+    ports="$ports 8340"
   fi
-  if has_profile analytics || has_profile analytics-gpu; then
-    ports="$ports 3010"
+  if has_profile kumo || has_profile prediction; then
+    ports="$ports 8322"
   fi
   if has_profile ontology; then
-    ports="$ports 3003"
+    ports="$ports 3303"
   fi
   for port in $ports; do
     if (: </dev/tcp/127.0.0.1/"$port") 2>/dev/null; then
@@ -103,19 +104,9 @@ check_config() {
     warn "UI_BIND_HOST is not 127.0.0.1: the UI, and the agent behind it, is open to every network that reaches port $UI_PORT; keep it only behind a link that requires sign-in, such as a Brev link with sign-in set in the Brev console"
   check_profiles
   check_inference
-  if has_profile retrieval || has_profile ontology; then
-    check_retriever
-  fi
+  check_retriever
+  check_parse
   check_speech
-  # The default corpora (DATA_CORPORA empty) include the SEC EDGAR filings (sec_filings).
-  case ,${DATA_CORPORA:-sec_filings}, in
-    *,sec_filings,*)
-      if has_profile retrieval && [ -z "$SEC_USER_AGENT" ]; then
-        problem "SEC_USER_AGENT is empty: SEC EDGAR needs it for the filings corpus (or leave it out of DATA_CORPORA)"
-      fi
-      ;;
-  esac
-  check_external_data
   # Hermes refuses an API server key under 16 characters; init generates 64.
   local key value
   for key in $GENERATED_SECRETS; do
@@ -131,32 +122,6 @@ check_config() {
   fi
 }
 
-# A pack with external data (docs/data-platform.md) needs it fetched, room for it, and SEC company data.
-check_external_data() {
-  local pack=$ROOT/data/packs/$DATA_PACK/pack.yaml id bytes needed=0 free dir=$DATA_SOURCE_DIR
-  [ -f "$pack" ] || {
-    problem "DATA_PACK=$DATA_PACK has no data/packs/$DATA_PACK/pack.yaml"
-    return 0
-  }
-  if grep -q '^  companies: sec' "$pack" && [ -z "$SEC_USER_AGENT" ]; then
-    problem "SEC_USER_AGENT is empty: $DATA_PACK looks up its companies at SEC"
-  fi
-  while read -r id bytes; do
-    if [ ! -f "$DATA_SOURCE_DIR/$id/.verified.json" ]; then
-      problem "external dataset $id is not in $DATA_SOURCE_DIR yet: set" \
-        "DATA_SOURCE_$(printf '%s' "$id" | tr 'a-z-' 'A-Z_') in .env and run ./scripts/demo.sh data fetch"
-      needed=$((needed + bytes))
-    fi
-  done < <(pack_external)
-  if [ "$needed" -gt 0 ]; then
-    until [ -d "$dir" ]; do dir=$(dirname "$dir"); done
-    free=$(df -Pk "$dir" | awk 'NR == 2 { print $4 }') # KiB
-    [ "$free" -gt $(((needed + needed / 10) / 1024)) ] ||
-      problem "$DATA_SOURCE_DIR has $((free / 1048576)) GiB free; the external data needs" \
-        "$((needed / 1073741824 + 1)) GiB plus 10%"
-  fi
-}
-
 check_profiles() {
   local profile
   for profile in ${COMPOSE_PROFILES//,/ }; do
@@ -165,11 +130,9 @@ check_profiles() {
       *) problem "unknown profile '$profile' in COMPOSE_PROFILES (known: $KNOWN_PROFILES)" ;;
     esac
   done
-  if has_profile analytics && has_profile analytics-gpu; then
-    problem "use analytics or analytics-gpu, not both (they share a port and a DNS name)"
-  fi
-  if [ -n "$KUMO_RELATIONAL_URL" ] && ! has_profile analytics && ! has_profile analytics-gpu; then
-    problem "Kumo (the kumo profile or KUMO_RELATIONAL_URL) needs the analytics or analytics-gpu profile"
+  if has_profile prediction && ! has_profile kumo && [ -z "$KUMO_RELATIONAL_URL" ]; then
+    warn "the prediction profile without kumo needs KUMO_RELATIONAL_URL (a remote Kumo NIM); predictions report" \
+      "themselves unavailable until it is set"
   fi
   if has_profile ontology && [ ! -e "$ROOT/vendor/auto-ontology/.git" ]; then
     problem "the ontology profile needs the private submodule:" \
@@ -274,6 +237,15 @@ on_build_nvidia() {
   esac
 }
 
+# Without the parse profile, PDFs and images need a hosted Nemotron Parse endpoint (or PDFs fall back to their
+# text layer and images fail).
+check_parse() {
+  if ! has_profile parse && [ -z "$PARSE_BASE_URL" ]; then
+    warn "no Nemotron Parse: add the parse profile (an NVIDIA GPU) or set PARSE_BASE_URL; until then PDFs are read" \
+      "from their text layer and images are refused"
+  fi
+}
+
 check_retriever() {
   [ -n "$RETRIEVER_API_KEY" ] || problem "RETRIEVER_API_KEY and INFERENCE_API_KEY are empty (.env sections 1 and 2)"
   if on_build_nvidia "${RETRIEVER_BASE_URL:-$BUILD_NVIDIA_HOST}"; then
@@ -322,10 +294,8 @@ check_keys() {
       *) models_listed capable "$CAPABLE_BASE_URL" "$CAPABLE_API_KEY" $capable_models ;;
     esac
   fi
-  if has_profile retrieval || has_profile ontology; then
-    models_listed retriever "${RETRIEVER_BASE_URL:-https://$BUILD_NVIDIA_HOST/v1}" "$RETRIEVER_API_KEY" \
-      "${RETRIEVER_EMBED_MODEL:-nvidia/nemotron-3-embed-1b}"
-  fi
+  models_listed retriever "${RETRIEVER_BASE_URL:-https://$BUILD_NVIDIA_HOST/v1}" "$RETRIEVER_API_KEY" \
+    "${RETRIEVER_EMBED_MODEL:-nvidia/nemotron-3-embed-1b}"
 }
 
 # [MODELS_AUTH=anthropic] models_listed NAME BASE_URL KEY MODEL...

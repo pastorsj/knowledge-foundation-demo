@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 Hermes runs inside the OpenShell sandbox and sends every model call to
 [Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) at `host.openshell.internal:4000`, which is
-published on `127.0.0.1:4000`. Each call names a route, such as `market-research`, and Switchyard
+published on `127.0.0.1:4300`. Each call names a route, such as `knowledge`, and Switchyard
 maps it to real models on the inference endpoint (and, for the capable model, on an optional
 endpoint of its own).
 
@@ -31,18 +31,18 @@ endpoint of its own).
 ## Routes
 
 Every template serves the same route ids, so Hermes' configuration never changes. Hermes calls
-`market-research` and `market-research-aux`, and `market-research-fallback` when the agent's model is
+`knowledge` and `knowledge-aux`, and `knowledge-fallback` when the agent's model is
 overloaded.
 
 | Route id | Caller | Served by |
 |---|---|---|
-| `market-research` | every agent turn | depends on the template (below) |
-| `market-research-efficient` | bake-off baselines, debugging | the efficient model |
-| `market-research-capable` | bake-off baselines, debugging | the capable model (not in `passthrough.nemotron`) |
-| `market-research-aux` | Hermes auxiliary calls (compression and similar) | the aux model (`AGENT_AUX_MODEL`, Nemotron 3 Super by default) with thinking off. These calls are never judged. |
-| `market-research-fallback` | the rest of a run whose model is overloaded (below) | the aux model, as `market-research-aux` |
+| `knowledge` | every agent turn | depends on the template (below) |
+| `knowledge-efficient` | bake-off baselines, debugging | the efficient model |
+| `knowledge-capable` | bake-off baselines, debugging | the capable model (not in `passthrough.nemotron`) |
+| `knowledge-aux` | Hermes auxiliary calls (compression and similar) | the aux model (`AGENT_AUX_MODEL`, Nemotron 3 Super by default) with thinking off. These calls are never judged. |
+| `knowledge-fallback` | the rest of a run whose model is overloaded (below) | the aux model, as `knowledge-aux` |
 
-| `SWITCHYARD_ROUTES` | `market-research` | For |
+| `SWITCHYARD_ROUTES` | `knowledge` | For |
 |---|---|---|
 | `passthrough.nemotron` | efficient, every turn, no judge, no capable model | **default** on build.nvidia.com (Nemotron 3 Ultra) |
 | `pinned-capable.nemotron-gpt` | capable GPT, every turn, no judge | a provider that serves GPT-6 Sol; a reference ceiling (the 2026-09-30 bake-off's winner) |
@@ -106,8 +106,8 @@ latch, so a weak report is never rescued.
 **When a model is overloaded.** build.nvidia.com can answer "Service temporarily overloaded" inside
 an HTTP 200 stream. Switchyard 0.3.0 re-routes an in-stream error only when it is a context
 overflow, so it passes this one to Hermes. Hermes retries the call twice, then follows its
-`fallback_providers` chain (`agent/profile/config.yaml`) to `market-research-fallback`, which serves
-the rest of that run with the auxiliary model. The next job starts on `market-research` again. The
+`fallback_providers` chain (`agent/profile/config.yaml`) to `knowledge-fallback`, which serves
+the rest of that run with the auxiliary model. The next job starts on `knowledge` again. The
 switch shows in the execution graph: the router lists the fallback model's calls without a tier.
 Without the fallback, Hermes kept retrying for about 5 minutes and then failed the job.
 
@@ -139,7 +139,7 @@ The routing log lives in `/var/lib/switchyard`, the `switchyard-data` volume. It
 ## Switching templates and endpoints
 
 Edit `.env`, then run `./scripts/demo.sh restart switchyard`. The sandbox is not rebuilt, because
-Hermes always requests `market-research`. The startup log line names the template, the endpoints
+Hermes always requests `knowledge`. The startup log line names the template, the endpoints
 and whether the capable model has its own key.
 
 ```dotenv
@@ -176,20 +176,20 @@ AGENT_AUX_MODEL=nvidia/nemotron-3.5-lightning-30b-a3b
 `/var/lib/switchyard/routing.jsonl` gets one line per upstream call (abbreviated here):
 
 ```json
-{"ts":"2026-09-29T08:37:24.648Z","route_id":"market-research","algorithm":"llm_task_classifier","session_id":"<job id>","model":"nvidia/nemotron-3-ultra-550b-a55b","tier":"","prompt_tokens":1300,"completion_tokens":40,"total_tokens":1340}
+{"ts":"2026-09-29T08:37:24.648Z","route_id":"knowledge","algorithm":"llm_task_classifier","session_id":"<job id>","model":"nvidia/nemotron-3-ultra-550b-a55b","tier":"","prompt_tokens":1300,"completion_tokens":40,"total_tokens":1340}
 ```
 
-- `tier: ""` rows name the model that served the answer. On `market-research`, a session whose
+- `tier: ""` rows name the model that served the answer. On `knowledge`, a session whose
   served model changes from the efficient id to the capable id has escalated.
 - `tier: "classifier"` rows are routing overhead: a judge call, or the efficient reply that was
   discarded on the escalation turn.
-- `route_id: "market-research-aux"` rows are Hermes auxiliary calls.
+- `route_id: "knowledge-aux"` rows are Hermes auxiliary calls.
 
 ```sh
 ./scripts/demo.sh logs routing
 ./scripts/demo.sh logs routing -f | jq -c 'select(.tier == "") | {session_id, route_id, model}'
-curl -s "127.0.0.1:4000/v1/routing/session-stats?session_id=<job id>"   # calls and tokens per model, overhead included
-curl -s 127.0.0.1:4000/v1/stats                                          # per-model usage and routing overhead
+curl -s "127.0.0.1:4300/v1/routing/session-stats?session_id=<job id>"   # calls and tokens per model, overhead included
+curl -s 127.0.0.1:4300/v1/stats                                          # per-model usage and routing overhead
 ```
 
 The log records no verdicts. Phoenix does: each request's `libsy.run` span carries
@@ -217,12 +217,12 @@ Normally Compose runs this as the `switchyard` service (profile `core`) through
 `./scripts/demo.sh up`. To run it on its own, with the settings exported in your shell:
 
 ```sh
-docker build -t market-demo/switchyard:local infra/switchyard
-docker run --rm -p 127.0.0.1:4000:4000 -e SWITCHYARD_ROUTES -e SWITCHYARD_CONFIRMATIONS \
+docker build -t knowledge-foundation/switchyard:local infra/switchyard
+docker run --rm -p 127.0.0.1:4300:4000 -e SWITCHYARD_ROUTES -e SWITCHYARD_CONFIRMATIONS \
   -e INFERENCE_BASE_URL -e INFERENCE_API_KEY -e CAPABLE_BASE_URL -e CAPABLE_API_KEY \
   -e AGENT_EFFICIENT_MODEL -e AGENT_CAPABLE_MODEL -e AGENT_JUDGE_MODEL -e AGENT_AUX_MODEL \
-  market-demo/switchyard:local
-curl -s 127.0.0.1:4000/v1/models | jq -r '.data[].id'
+  knowledge-foundation/switchyard:local
+curl -s 127.0.0.1:4300/v1/models | jq -r '.data[].id'
 ```
 
 `tests/render-all.sh` needs no key and no network. It needs `switchyard-server` and `envsubst`,
@@ -230,7 +230,7 @@ so run it in the image:
 
 ```sh
 docker run --rm -v "$PWD/infra/switchyard/tests:/opt/switchyard/tests:ro" \
-  --entrypoint /opt/switchyard/tests/render-all.sh market-demo/switchyard:local
+  --entrypoint /opt/switchyard/tests/render-all.sh knowledge-foundation/switchyard:local
 ```
 
 Or run it locally with a `switchyard-server` 0.3.0 binary (`cargo install --locked

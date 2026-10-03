@@ -13,7 +13,7 @@ inference_capable: true
 credentials: []
 endpoints:
   - host: host.openshell.internal
-    port: 4000
+    port: 4300
     protocol: rest
     enforcement: enforce
     rules:

@@ -8,11 +8,11 @@
 # shellcheck disable=SC2016 # single-quoted scripts expand in the container's shell
 
 readonly SANDBOX=hermes
-readonly AGENT_IMAGE=market-demo/hermes-sandbox:local
+readonly AGENT_IMAGE=knowledge-foundation/hermes-sandbox:local
 # The MCP servers' images: Hermes lists their tools once, when the sandbox starts.
-readonly TOOL_IMAGES=(market-demo/retrieval:local market-demo/market-analytics:local market-demo/market-analytics:gpu
-  market-demo/auto-ontology-mcp:local)
-readonly NAMESPACE_LABEL=openshell.ai/sandbox-namespace=market-demo # gateway.toml sandbox_label
+readonly TOOL_IMAGES=(knowledge-foundation/retrieval:local knowledge-foundation/tables:local
+  knowledge-foundation/prediction:local knowledge-foundation/auto-ontology-mcp:local)
+readonly NAMESPACE_LABEL=openshell.ai/sandbox-namespace=knowledge-foundation # gateway.toml sandbox_label
 readonly SANDBOX_TIMEOUT=180
 readonly STATE_DIR=$ROOT/.demo
 readonly VOLUMES_STATE=$STATE_DIR/openshell-volumes
@@ -34,7 +34,7 @@ state_dir() {
 }
 
 gateway_ready() {
-  curl -fs -o /dev/null --max-time 3 http://127.0.0.1:18081/readyz
+  curl -fs -o /dev/null --max-time 3 http://127.0.0.1:18381/readyz
 }
 
 # "<fingerprint label> <phase>" of the sandbox, or nothing when there is none.
@@ -45,16 +45,13 @@ sandbox_state() {
 
 # Whatever the sandbox depends on. A change to any of it recreates the sandbox. Both Hermes keys
 # are in it: the server key is set at creation, and a new receipt key moves the provider revision.
-# Hermes lists each MCP server's tools once, when it starts, so the tool images, the data pack and
-# its profile are in it too: they shape the tool schemas (the universes, the relationship graph, the
-# minute bars). After a DATA_PACK or DATA_PACK_PROFILE switch the model would otherwise still see
-# the previous build's tools.
+# Hermes lists each MCP server's tools once, when it starts, so the tool images are in it too. The data is
+# not: every tool reads the knowledge catalog on each call and no tool schema depends on it, so switching
+# industry, syncing a pack or uploading files never recreates the sandbox.
 sandbox_fingerprint() {
   {
     docker image inspect -f '{{.Id}}' "$AGENT_IMAGE"
     docker image inspect -f '{{.Id}}' "${TOOL_IMAGES[@]}" 2>/dev/null || true # absent profiles
-    cat "$ROOT/data/packs/$DATA_PACK/pack.yaml"
-    echo "${DATA_PACK_PROFILE:-}"
     cat "$ROOT"/infra/openshell/providers/*.yaml "$ROOT/infra/openshell/gateway.toml" "$VERSIONS_FILE"
     echo "$AGENT_FEATURES"
     printf '%s' "$HERMES_API_SERVER_KEY" | sha256
@@ -131,7 +128,7 @@ sandbox_create() {
   # API_SERVER_KEY cannot be a provider placeholder: Hermes checks it on inbound requests.
   HERMES_API_SERVER_KEY=$HERMES_API_SERVER_KEY dc --progress quiet run --rm -T -e HERMES_API_SERVER_KEY \
     --entrypoint sh openshell-cli -c 'exec openshell sandbox create --name hermes \
-      --from market-demo/hermes-sandbox:local --provider switchyard --provider receipts --no-auto-providers \
+      --from knowledge-foundation/hermes-sandbox:local --provider switchyard --provider receipts --no-auto-providers \
       --label "demo.fingerprint=$1" --env "API_SERVER_KEY=$HERMES_API_SERVER_KEY" \
       --no-credential-warnings --detach --no-tty -- /opt/hermes/.venv/bin/hermes gateway run' sh "$1" >/dev/null
   if ! cli_sh 'for _ in $(seq "$1"); do
@@ -206,7 +203,7 @@ remove_leaked_volumes() {
     [ -n "$volume" ] || continue
     docker volume inspect "$volume" >/dev/null 2>&1 </dev/null || continue # `docker run -v` would create it
     if docker run --rm --pull never --network none -v "$volume:/v:ro" --entrypoint grep "$AGENT_IMAGE" \
-      -qsx 'name: market-analysis-agent' /v/distribution.yaml </dev/null; then
+      -qsx 'name: knowledge-foundation-agent' /v/distribution.yaml </dev/null; then
       docker volume rm "$volume" >/dev/null </dev/null
     fi
   done <"$VOLUMES_STATE"
@@ -264,15 +261,17 @@ TOOLS_LIST = b'{"jsonrpc": "2.0", "id": 1, "method": "tools/list"}'
 key = os.environ.get("HERMES_RECEIPT_API_KEY", "")
 check(key.startswith("openshell:resolve:env:"), "the receipt key in the sandbox is an OpenShell placeholder")
 check(denied("https://example.com/"), "egress to a host outside the policy is blocked")
-check(request(f"{HOST}:4000/v1/models")[0] == 200, "Switchyard GET /v1/models is allowed")
-check(denied(f"{HOST}:4000/v1/responses", "POST"), "Switchyard POST /v1/responses is denied by policy")
-check(denied(f"{HOST}:8000/v1/pack"), "the job API's public routes are denied by policy")
+check(request(f"{HOST}:4300/v1/models")[0] == 200, "Switchyard GET /v1/models is allowed")
+check(denied(f"{HOST}:4300/v1/responses", "POST"), "Switchyard POST /v1/responses is denied by policy")
+check(denied(f"{HOST}:8300/v1/packs"), "the job API's public routes are denied by policy")
+check(denied(f"{HOST}:8330/v1/collections"), "the ingest service is unreachable from the sandbox")
+check(denied(f"{HOST}:8340/v1/models"), "the Nemotron Parse server is unreachable from the sandbox")
 check(
-    denied(f"{HOST}:3010/benchmark", "POST", TOOLS_LIST, MCP),
-    "market analytics' POST /benchmark (the API's) is denied by policy",
+    denied(f"{HOST}:8321/health", "GET", b"", MCP),
+    "the tables server's non-MCP routes are denied by policy",
 )
 for method, route in (("GET", "execution-scope"), ("POST", "tool-receipts"), ("POST", "llm-calls")):
-    url = f"{HOST}:8000/internal/hermes/jobs/check/{route}"
+    url = f"{HOST}:8300/internal/hermes/jobs/check/{route}"
     check(not denied(url, method), f"the plugin's {method} .../{route} reaches the job API")
 raise SystemExit(1 if failures else 0)
 EOF

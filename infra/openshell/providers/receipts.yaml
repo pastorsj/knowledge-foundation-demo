@@ -18,7 +18,7 @@ credentials:
     header_name: x-receipt-key
 endpoints:
   - host: host.openshell.internal
-    port: 8000
+    port: 8300
     path: /internal/hermes/**
     protocol: rest
     enforcement: enforce
