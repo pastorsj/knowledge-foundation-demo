@@ -4,12 +4,11 @@
 
 Each oracle is a pack's `eval/oracles/<name>.sql`, run as `SELECT * FROM (<sql>) <order> LIMIT <limit>` through
 `POST /v1/data_sources/<structured source>/query` (at most 100 rows, read-only DuckDB). Nothing is computed here,
-so the reference values always come from the same build the agent's tools read.
+so the reference values always come from the same data the agent's tools read.
 """
 
 from __future__ import annotations
 
-import re
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
@@ -18,23 +17,27 @@ from .client import Deployment
 from .client import HttpError
 from .spec import Oracle
 from .spec import QuestionSpec
-
-ASSET_FIELDS = ("asset_id", "first_asset", "second_asset")
+from .spec import catalog_id
 
 
 class OracleError(ValueError):
-    """The deployment refused an oracle's query: the SQL does not fit its build."""
+    """The oracles cannot be computed: no source to query, or the deployment refused a query's SQL."""
 
 
-SAFE_ID = re.compile(r"^[A-Za-z0-9._:/-]{1,64}$")
+def structured_source(deployment: Deployment, pack_id: str, wanted: str = "") -> str:
+    """The catalog id of the pack's structured source (its DuckDB), which the oracles query.
 
-
-def structured_source(deployment: Deployment) -> str:
-    """The id of the pack's structured source (its DuckDB), which the oracles query."""
-    for source in deployment.data_sources():
-        if source.get("kind") == "structured":
-            return str(source["id"])
-    raise LookupError("the deployment offers no structured data source to compute the oracles from")
+    ``wanted`` is the pack-local id `answers.yaml` names; without it the pack must have exactly one.
+    """
+    structured = [str(s["id"]) for s in deployment.data_sources(pack_id) if s.get("kind") == "structured"]
+    if wanted:
+        if (chosen := catalog_id(pack_id, wanted)) not in structured:
+            raise OracleError(f"answers.yaml names source {wanted}, which is not a structured source of {pack_id}")
+        return chosen
+    if len(structured) != 1:
+        found = f"it has {', '.join(structured)}" if structured else "it has none"
+        raise OracleError(f"pack {pack_id} needs one structured source to compute the oracles from; {found}")
+    return structured[0]
 
 
 def oracle_sql(pack_dir: Path, oracle: Oracle) -> str:
@@ -58,33 +61,3 @@ def compute(
                         raise
                     raise OracleError(f"oracle {oracle.name} ({oracle.sql}.sql) failed: {error}") from None
     return results
-
-
-def asset_ids(oracles: dict[str, list[dict[str, Any]]], runs: Iterable[dict[str, Any]] = ()) -> list[str]:
-    """The asset ids the checks may look for: in the oracle rows, and the assets the runs' predictions ranked."""
-    found: dict[str, None] = {}
-    for rows in oracles.values():
-        for row in rows:
-            for field in ASSET_FIELDS:
-                if isinstance(row.get(field), str):
-                    found[row[field]] = None
-    for run in runs:
-        for receipt in (run.get("turn") or {}).get("receipts", []):
-            if receipt.get("artifactKind") == "structured_prediction":
-                for row in (receipt.get("content") or {}).get("rows", []):
-                    if isinstance(row.get("assetId"), str):
-                        found[row["assetId"]] = None
-    return [asset for asset in found if SAFE_ID.match(asset)]
-
-
-def company_names(deployment: Deployment, source_id: str, template: str, ids: list[str]) -> dict[str, str]:
-    """asset id -> company name, from the answers.yaml `names` query (its `{ids}` is a quoted id list)."""
-    names: dict[str, str] = {}
-    if not template or not ids:
-        return names
-    for start in range(0, len(ids), 90):
-        quoted = ", ".join("'" + asset.replace("'", "''") + "'" for asset in ids[start : start + 90])
-        for row in deployment.query(source_id, template.replace("{ids}", quoted)):
-            if row.get("asset_id") and row.get("company_name"):
-                names[str(row["asset_id"])] = str(row["company_name"])
-    return names

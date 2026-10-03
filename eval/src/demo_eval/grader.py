@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """The optional LLM grader: off unless GRADER_BASE_URL, GRADER_API_KEY and GRADER_MODEL are all set.
 
-It grades each report blind, as the bake-off's answer judge did (docs/models-and-routing.md): it sees whether the
-market data is synthetic or real, the question, the reference facts (answers.yaml, filled from the oracles), a
+It grades each report blind, as the bake-off's answer judge did (docs/models-and-routing.md): it sees what the
+data is (synthetic or not), the question, the reference facts (answers.yaml, filled from the oracles), a
 digest of the run's receipts and the report, never the model or the route. GRADER_SAMPLES (default 3) independent
 samples per run, majority vote. Any OpenAI-compatible chat completions endpoint works; use a frontier model, since a
 smaller one misses unsupported claims and wrong units (eval/README.md). The key is read from the environment only and
@@ -25,29 +25,29 @@ from .client import request_json
 EVIDENCE_CHARS, RECEIPT_CHARS = 400_000, 40_000
 CRITERIA = ("correctness", "grounding", "completeness", "honesty", "overall")
 
-SYSTEM = """You grade reports written by a financial market-research agent in a software demo. The agent answers \
-one analyst question by calling read-only tools (market analytics over a market dataset, a Kumo prediction model, \
-Auto Ontology over the same database, and retrieval over real documents such as SEC filings, eCFR Title 17 and news \
-headlines) and then writes a cited report. The DATASET line says whether the market dataset is synthetic (fictional \
-issuers) or real; the documents are always real.
+SYSTEM = """You grade reports written by an enterprise-knowledge assistant in a software demo. The agent answers \
+one user question by calling read-only tools (retrieval over parsed documents such as policies, reports and \
+slides; read-only SQL over tables in DuckDB; a Kumo prediction model that scores entities; and, optionally, Auto \
+Ontology over the same tables) and then writes a cited report. The DATASET line says what the data is, for \
+example that it is synthetic.
 
 You receive the question, reference facts written by the evaluator, a digest of the tool evidence the agent \
 actually received, and the agent's final report. Grade against the evidence and the reference facts, not your \
 own knowledge. Do not penalize the report for omitting something the evidence does not contain, but do penalize \
-any claim, number, date or entity that the evidence does not support. The tools return returns and volatilities \
-as fractions (0.22 is 22%) and anomaly deviations as robust z-scores: a fraction shown as a percentage without \
-scaling, or a z-score shown as a percentage, is a wrong number. The evidence is the receipt the agent's tools \
+any claim, number, date or entity that the evidence does not support. Kumo returns probabilities as fractions \
+(0.22 is 22%) and the tables hold whatever units their columns say: a fraction shown as a percentage without \
+scaling, or a number shown with the wrong unit, is a wrong number. The evidence is the receipt the agent's tools \
 recorded: retrieved passages are cut at 1,500 characters there, while the agent read them in full. A detail \
 attributed to a retrieved document whose snippet is cut off is unverifiable rather than fabricated: lower \
 grounding by at most one point for it. Fail a report for claims the evidence contradicts or that no evidence \
 could plausibly support.
 
 Score each criterion from 1 (very poor) to 5 (excellent):
-- correctness: agrees with the reference facts and the evidence; numbers, windows, units and rankings are right.
+- correctness: agrees with the reference facts and the evidence; numbers, dates, units and rankings are right.
 - grounding: every factual claim is traceable to the evidence; fabrication scores 1.
 - completeness: answers every part of the question that the evidence can support.
-- honesty: states real limits (missing data, truncated results, synthetic data, no causality or forecasting \
-where relevant) without refusing what the evidence supports.
+- honesty: states real limits (missing data, truncated results, synthetic data, an unavailable prediction, no \
+causality or forecasting where relevant) without refusing what the evidence supports.
 Then give overall (1-5) and pass: true only if you would show this report to a customer at a product demo \
 (no fabricated facts, the main parts of the question answered or honestly declared unavailable).
 

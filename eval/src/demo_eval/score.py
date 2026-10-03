@@ -76,7 +76,6 @@ def score(
     *,
     declared: list[str],
     oracles: dict[str, list[dict[str, Any]]],
-    names: dict[str, str],
     registry: Registry,
 ) -> dict[str, Any]:
     turn = run.get("turn") or {}
@@ -105,7 +104,7 @@ def score(
     }
     specific = {}
     if success and question is not None:
-        specific = {check.id: evaluate(check, text, turn, oracles, names) for check in question.checks}
+        specific = {check.id: evaluate(check, text, turn, oracles) for check in question.checks}
     checks = generic | specific
     turns = model_turns(turn)
     tiers = Counter(attributes.get("tier") or "none" for attributes in turns)
