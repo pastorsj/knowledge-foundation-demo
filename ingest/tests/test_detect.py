@@ -78,3 +78,32 @@ def test_a_parquet_file_needs_its_magic_bytes(tmp_path: Path):
 
     assert detect(tmp_path / "x", "x.parquet") == Detected(kind="table", format="parquet")
     assert code(tmp_path / "y", "y.parquet") == "type_mismatch"
+
+
+def write_zip(path: Path, size: int) -> Path:
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("[Content_Types].xml", "<Types/>")
+        archive.writestr("xl/worksheets/sheet1.xml", b"\0" * size)
+    return path
+
+
+def test_a_zip_bomb_is_refused_before_a_parser_opens_it(tmp_path: Path):
+    bomb = write_zip(tmp_path / "bomb", 8 * 2**20)  # 8 MB of zeros, a few KB compressed
+
+    error = code(bomb, "sales.xlsx")
+
+    assert error == "too_large"
+
+
+def test_an_archive_that_expands_past_the_limit_is_refused(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    import demo_ingest.detect
+
+    monkeypatch.setattr(demo_ingest.detect, "MAX_UNZIPPED_BYTES", 2**20)
+    monkeypatch.setattr(demo_ingest.detect, "MAX_COMPRESSION_RATIO", 10**9)
+
+    assert code(write_zip(tmp_path / "big", 2 * 2**20), "sales.xlsx") == "too_large"
+
+
+def test_a_real_workbook_passes_the_archive_limits(awkward_xlsx: Path, docx_file: Path):
+    assert detect(awkward_xlsx, "awkward.xlsx").format == "xlsx"
+    assert detect(docx_file, "operations.docx").format == "docx"

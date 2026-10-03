@@ -16,11 +16,12 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
+import shutil
 import threading
 from collections import defaultdict
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import nullcontext
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
@@ -30,11 +31,13 @@ from . import documents
 from . import tables
 from .catalog import Catalog
 from .detect import detect
+from .detect import stored_name
 from .documents import probe_parse
 from .embed import Embedder
 from .models import FileStatus
 from .models import IngestError
 from .models import Stage
+from .models import status_for
 from .models import utcnow
 from .settings import Settings
 from .store import JobStore
@@ -42,6 +45,8 @@ from .store import JobStore
 logger = logging.getLogger(__name__)
 
 WORKSPACE = "workspace"
+# A file whose ingestion was cut short this many times (the service died with it) fails instead of running again.
+MAX_ATTEMPTS = 2
 WORKSPACE_SOURCES: dict[str, dict[str, Any]] = {
     "document": {
         "id": "workspace.documents",
@@ -165,6 +170,7 @@ class Pipeline:
         self._workspace_lock = threading.RLock()
         self._pool = ThreadPoolExecutor(max_workers=max(1, settings.workers), thread_name_prefix="ingest")
         self._queue: asyncio.Queue[str] | None = None
+        self._loop: asyncio.AbstractEventLoop | None = None
         self._workers: list[asyncio.Task] = []
 
     # Lazily built clients: Milvus and the tokenizer are only needed for documents.
@@ -245,7 +251,10 @@ class Pipeline:
                 path, file_name, update, db_path or database_path(self.catalog, source_id), existing_tables or set()
             )
         except IngestError as error:
-            return Outcome(stage=Stage.FAILED, kind=kind, error_code=error.code, error_message=error.message)
+            fallback = getattr(error, "fallback", None)
+            return Outcome(
+                stage=Stage.FAILED, kind=kind, error_code=error.code, error_message=error.message, fallback=fallback
+            )
         except Exception as error:
             logger.exception("%s (%s) failed unexpectedly", file_name, file_id)
             message = f"Unexpected error: {type(error).__name__}: {error}"[:600]
@@ -260,6 +269,8 @@ class Pipeline:
             check()  # no embeddings key: fail before spending Parse time
 
         def probe(settings: Settings) -> str | None:
+            # Only a Parse that is off, or that does not answer at all, is recorded: HTTP errors, empty output and
+            # slowness fall back too, but another try would end the same way.
             reason = self.probe(settings)
             if reason is not None:
                 fallback["kind"] = "unavailable" if settings.parse_enabled else "disabled"
@@ -268,24 +279,26 @@ class Pipeline:
         def on_stage(stage: str, detail: str | None, percent: float) -> None:
             update(stage=stage, stage_detail=detail, progress_percent=round(percent, 1))
 
-        result = documents.ingest_document(
-            settings=self.settings,
-            catalog=self.catalog,
-            embedder=self.embedder,
-            index=self.index,
-            tokenizer=self.tokenizer,
-            source_id=source_id,
-            document_id=document_id,
-            file_id=file_id,
-            file_path=path,
-            file_name=file_name,
-            fmt=fmt,
-            on_stage=on_stage,
-            run_stage=self.run_stage,
-            probe=probe,
-        )
-        if result.parser == documents.TEXT_LAYER_PARSER and "kind" not in fallback:
-            fallback["kind"] = "unavailable"  # Parse answered the probe, then failed or was too slow
+        try:
+            result = documents.ingest_document(
+                settings=self.settings,
+                catalog=self.catalog,
+                embedder=self.embedder,
+                index=self.index,
+                tokenizer=self.tokenizer,
+                source_id=source_id,
+                document_id=document_id,
+                file_id=file_id,
+                file_path=path,
+                file_name=file_name,
+                fmt=fmt,
+                on_stage=on_stage,
+                run_stage=self.run_stage,
+                probe=probe,
+            )
+        except IngestError as error:
+            error.fallback = fallback.get("kind")  # an image that Parse could not read says why
+            raise
         return Outcome(
             stage=Stage.READY,
             kind="document",
@@ -316,6 +329,7 @@ class Pipeline:
     def start(self) -> None:
         """Start the workers and re-queue every file a restart interrupted."""
         assert self.store is not None
+        self._loop = asyncio.get_running_loop()
         self._queue = asyncio.Queue()
         self._workers = [
             asyncio.create_task(self._work(), name=f"ingest-worker-{i}") for i in range(self.settings.workers)
@@ -330,8 +344,19 @@ class Pipeline:
                     error_code="internal_error",
                     error_message="The upload was interrupted.",
                 )
+            elif row["attempts"] >= MAX_ATTEMPTS:  # a file that takes the service down must not do so forever
+                self.store.update_file(
+                    row["file_id"],
+                    stage=Stage.FAILED,
+                    claimed=0,
+                    error_code="interrupted",
+                    error_message="Ingestion was interrupted twice (the service stopped while it ran). "
+                    "Upload the file again to retry.",
+                )
             else:
-                self.store.update_file(row["file_id"], stage=Stage.RECEIVED, stage_detail=None, progress_percent=0)
+                self.store.update_file(
+                    row["file_id"], stage=Stage.RECEIVED, stage_detail=None, progress_percent=0, claimed=0
+                )
                 self._queue.put_nowait(row["file_id"])
             if row["source_id"]:
                 sources.add(row["source_id"])
@@ -346,9 +371,10 @@ class Pipeline:
         self._pool.shutdown(wait=False, cancel_futures=True)
 
     def enqueue(self, file_ids: list[str]) -> None:
-        assert self._queue is not None, "start() the pipeline first"
+        """Queue files; safe from any thread (uploads are accepted in a worker thread)."""
+        assert self._queue is not None and self._loop is not None, "start() the pipeline first"
         for file_id in file_ids:
-            self._queue.put_nowait(file_id)
+            self._loop.call_soon_threadsafe(self._queue.put_nowait, file_id)
 
     async def idle(self) -> None:
         """Wait until every queued file is done (tests)."""
@@ -368,14 +394,20 @@ class Pipeline:
                 self._queue.task_done()
 
     def stored_path(self, row: dict[str, Any]) -> Path | None:
+        """``sources/<source>/files/<file_id><ext>``; an original stored without its extension is renamed to it."""
         if not row.get("source_id"):
             return None
-        return self.catalog.source_dir(row["source_id"]) / "files" / row["file_id"]
+        directory = self.catalog.source_dir(row["source_id"]) / "files"
+        path = directory / stored_name(row["file_id"], row["file_name"])
+        legacy = directory / row["file_id"]
+        if path != legacy and not path.exists() and legacy.exists():
+            os.replace(legacy, path)
+        return path
 
     def process_upload(self, file_id: str) -> None:
         assert self.store is not None
-        row = self.store.get_file(file_id)
-        if row is None or row["status"] in (FileStatus.SUCCESS, FileStatus.FAILED):
+        row = self.store.claim(file_id)  # None: finished, deleted, or another worker has it
+        if row is None:
             return
         source_id = row["source_id"]
         path = self.stored_path(row)
@@ -384,37 +416,37 @@ class Pipeline:
         def update(**fields: Any) -> None:
             self.store.update_file(file_id, **fields)
 
-        with self.source_lock(source_id) if row["kind"] == "table" else nullcontext():
+        with self.source_lock(source_id):
+            # Tables: copy-on-write. Readers attach tables.duckdb read-only, so ingest loads into a private copy
+            # and swaps it in whole (os.replace) once the file has loaded and profiled.
+            building = self.begin_database(source_id) if row["kind"] == "table" else None
             existing: set[str] = set()
-            if row["kind"] == "table":
+            if building is not None:
                 # Names taken by the source's other files; this file's own earlier tables are replaced.
                 others = [r for r in self.store.source_files(source_id) if r["file_id"] != file_id]
                 existing = {name for r in others for name in r["tables"]}
-                tables.drop_tables(database_path(self.catalog, source_id), row["tables"])
+                tables.drop_tables(building, row["tables"])
             outcome = self.run_file(
                 source_id=source_id,
                 path=path,
                 file_name=row["file_name"],
                 file_id=file_id,
                 update=update,
+                db_path=building,
                 existing_tables=existing,
             )
             profile = None
-            if outcome.ready and outcome.kind == "table":
+            if building is not None and outcome.ready:
                 update(stage=Stage.PROFILING, stage_detail=None, progress_percent=85)
                 try:
-                    # This thread holds the source lock; the stage's own thread profiles under it.
-                    db_path = database_path(self.catalog, source_id)
-                    profile = self.run_stage(Stage.PROFILING, lambda: tables.profile_database(db_path, None))
+                    profile = self.run_stage(Stage.PROFILING, lambda: tables.profile_database(building, None))
                 except IngestError as error:
-                    tables.drop_tables(db_path, outcome.tables)
                     outcome = Outcome(
                         stage=Stage.FAILED, kind="table", error_code=error.code, error_message=error.message
                     )
+            if building is not None:
+                self.end_database(source_id, building, commit=outcome.ready)
             update(
-                stage=outcome.stage,
-                stage_detail=None,
-                progress_percent=100 if outcome.ready else row["progress_percent"],
                 parser=outcome.parser,
                 pages=outcome.pages,
                 chunks=outcome.chunks,
@@ -424,9 +456,17 @@ class Pipeline:
                 error_code=outcome.error_code,
                 error_message=outcome.error_message,
             )
+            # The catalog first, then the job store: a client that sees the file finished finds it in the manifest.
+            self.refresh_workspace_source(source_id, profile=profile, final={file_id: status_for(outcome.stage)})
+            update(
+                stage=outcome.stage,
+                stage_detail=None,
+                progress_percent=100 if outcome.ready else row["progress_percent"],
+                claimed=0,
+            )
             if self.store.get_file(file_id) is None:  # deleted while it ran: undo what it wrote
                 self.remove_outputs({**row, "tables": outcome.tables, "document_id": outcome.document_id})
-            self.refresh_workspace_source(source_id, profile=profile)
+                self.refresh_workspace_source(source_id)
 
     def profile_workspace_tables(self) -> list[dict[str, Any]]:
         source_id = WORKSPACE_SOURCES["table"]["id"]
@@ -461,16 +501,47 @@ class Pipeline:
             (directory / "chunks" / f"{row['document_id']}.jsonl").unlink(missing_ok=True)
         if row.get("tables"):
             with self.source_lock(source_id):
-                tables.drop_tables(database_path(self.catalog, source_id), row["tables"])
+                if database_path(self.catalog, source_id).exists():
+                    building = self.begin_database(source_id)
+                    tables.drop_tables(building, row["tables"])
+                    self.end_database(source_id, building, commit=True)
+
+    def begin_database(self, source_id: str) -> Path:
+        """A private copy of the source's DuckDB to write; the caller holds the source lock."""
+        target = database_path(self.catalog, source_id)
+        building = target.with_name(f"{target.name}.building")
+        for leftover in (building, building.with_name(f"{building.name}.wal")):
+            leftover.unlink(missing_ok=True)
+        if target.exists():
+            shutil.copyfile(target, building)
+        return building
+
+    def end_database(self, source_id: str, building: Path, *, commit: bool) -> None:
+        """Swap the copy in (readers keep the file they opened), or throw it away."""
+        if commit and building.exists():
+            building.chmod(0o644)
+            os.replace(building, database_path(self.catalog, source_id))
+        else:
+            building.unlink(missing_ok=True)
 
     # Workspace catalog entries
 
-    def refresh_workspace_source(self, source_id: str, *, profile: list[dict[str, Any]] | None = None) -> None:
-        """Rewrite the source manifest from the job store; remove it with its last file."""
+    def refresh_workspace_source(
+        self,
+        source_id: str,
+        *,
+        profile: list[dict[str, Any]] | None = None,
+        final: dict[str, str] | None = None,
+    ) -> None:
+        """Rewrite the source manifest from the job store (``final``: statuses about to be stored); remove it with
+        its last file."""
         assert self.store is not None
         spec = next(spec for spec in WORKSPACE_SOURCES.values() if spec["id"] == source_id)
         with self.source_lock(source_id):
-            rows = self.store.source_files(source_id)
+            rows = [
+                {**row, "status": (final or {}).get(row["file_id"], row["status"])}
+                for row in self.store.source_files(source_id)
+            ]
             if not rows:
                 self.catalog.delete_source(source_id)
             else:

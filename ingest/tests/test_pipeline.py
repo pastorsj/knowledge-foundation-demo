@@ -158,3 +158,13 @@ def test_manifest_entries_and_statuses():
     assert source_status([{"status": "ready"}, {"status": "failed"}]) == "ready"
     assert source_status([{"status": "failed"}]) == "failed"
     assert pipeline_module.database_alias("retail.sales") == "retail_sales"
+
+
+def test_a_document_without_text_fails(pipeline: Pipeline, tmp_path: Path):
+    blank = tmp_path / "blank.md"
+    blank.write_text("\n\n   \n")
+
+    outcome, _ = run(pipeline, blank, "blank.md", source_id="workspace.documents")
+
+    assert (outcome.stage, outcome.error_code) == ("failed", "empty_file")
+    assert "No text was found in blank.md" in outcome.error_message

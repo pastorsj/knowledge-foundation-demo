@@ -36,6 +36,7 @@ from . import packs
 from .catalog import Catalog
 from .detect import detect
 from .detect import kind_of
+from .detect import stored_name
 from .models import FileStatus
 from .models import IngestError
 from .models import Stage
@@ -48,6 +49,7 @@ from .store import JobStore
 logger = logging.getLogger(__name__)
 
 HEALTH_TIMEOUT = 3.0
+MULTIPART_OVERHEAD = 2**20  # boundaries and part headers
 
 
 class ApiError(Exception):
@@ -90,10 +92,19 @@ def _file_name(disposition: dict[bytes, bytes]) -> str | None:
 
 
 async def receive_uploads(request: Request, directory: Path, *, max_files: int, max_bytes: int) -> list[Received]:
-    """Stream every ``files`` part of a multipart body to ``directory``."""
+    """Stream every ``files`` part of a multipart body to ``directory``, off the event loop.
+
+    The whole body is bounded (every file at its limit, plus room for the multipart framing); the parser bounds each
+    part's headers.
+    """
     content_type, params = parse_options_header(request.headers.get("content-type", ""))
     if content_type != b"multipart/form-data" or b"boundary" not in params:
         raise ApiError(400, "bad_request", "Send the files as multipart/form-data, in a field named files.")
+    max_request = max_files * max_bytes + MULTIPART_OVERHEAD
+    too_big = ApiError(413, "request_too_large", f"An upload may total at most {max_request / 2**20:.0f} MB.")
+    declared = request.headers.get("content-length", "")
+    if declared.isdigit() and int(declared) > max_request:
+        raise too_big
     directory.mkdir(parents=True, exist_ok=True)
     received: list[Received] = []
     state: dict[str, Any] = {"headers": {}, "field": b"", "value": b"", "part": None, "count": 0}
@@ -161,10 +172,14 @@ async def receive_uploads(request: Request, directory: Path, *, max_files: int, 
             "on_part_end": on_part_end,
         },
     )
+    total = 0
     try:
         async for chunk in request.stream():
-            parser.write(chunk)
-        parser.finalize()
+            total += len(chunk)
+            if total > max_request:
+                raise too_big
+            await asyncio.to_thread(parser.write, chunk)
+        await asyncio.to_thread(parser.finalize)
     except Exception as error:
         _discard(received, state)
         if isinstance(error, ApiError):
@@ -348,7 +363,7 @@ def create_app(
         except IngestError as error:
             part.path.unlink(missing_ok=True)
             return {**entry, "stage": Stage.FAILED, "error_code": error.code, "error_message": error.message}
-        target = catalog.source_dir(entry["source_id"]) / "files" / file_id
+        target = catalog.source_dir(entry["source_id"]) / "files" / stored_name(file_id, part.file_name)
         target.parent.mkdir(parents=True, exist_ok=True)
         os.chmod(part.path, 0o644)
         os.replace(part.path, target)

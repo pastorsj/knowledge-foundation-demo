@@ -138,3 +138,36 @@ def test_update_file_refuses_unknown_columns(store: JobStore):
     store.create_job("workspace", [entry("f-aaaaaaaaaaaaaaaa", "a.csv")])
     with pytest.raises(ValueError, match="nonsense"):
         store.update_file("f-aaaaaaaaaaaaaaaa", nonsense=1)
+
+
+def test_a_file_is_claimed_once_and_its_attempts_counted(store: JobStore):
+    store.create_job("workspace", [entry("f-aaaaaaaaaaaaaaaa", "a.csv")])
+
+    first = store.claim("f-aaaaaaaaaaaaaaaa")
+
+    assert first is not None and first["attempts"] == 1
+    assert store.claim("f-aaaaaaaaaaaaaaaa") is None  # a duplicate queue entry does not run it twice
+    store.update_file("f-aaaaaaaaaaaaaaaa", claimed=0)
+    assert store.claim("f-aaaaaaaaaaaaaaaa")["attempts"] == 2
+    store.update_file("f-aaaaaaaaaaaaaaaa", stage="ready", claimed=0)
+    assert store.claim("f-aaaaaaaaaaaaaaaa") is None
+
+
+def test_a_store_from_before_the_attempts_column_is_migrated(tmp_path: Path):
+    path = tmp_path / "old.sqlite3"
+    connection = sqlite3.connect(path)
+    connection.execute(
+        "CREATE TABLE files (file_id TEXT PRIMARY KEY, job_id TEXT NOT NULL, collection TEXT NOT NULL, "
+        "source_id TEXT, file_name TEXT NOT NULL, sha256 TEXT NOT NULL, size_bytes INTEGER NOT NULL, kind TEXT, "
+        "status TEXT NOT NULL, stage TEXT, stage_detail TEXT, progress_percent REAL NOT NULL DEFAULT 0, parser TEXT, "
+        "chunks INTEGER NOT NULL DEFAULT 0, pages INTEGER, document_id TEXT, tables_json TEXT NOT NULL DEFAULT '[]', "
+        "warnings_json TEXT NOT NULL DEFAULT '[]', error_code TEXT, error_message TEXT, uploaded_at TEXT NOT NULL, "
+        "ingested_at TEXT)"
+    )
+    connection.commit()
+    connection.close()
+
+    store = JobStore(path)
+    store.create_job("workspace", [entry("f-aaaaaaaaaaaaaaaa", "a.csv")])
+
+    assert store.claim("f-aaaaaaaaaaaaaaaa")["attempts"] == 1

@@ -407,6 +407,8 @@ def ingest_document(
 
     notify(Stage.CHUNKING, None, 60)
     chunks: list[Chunk] = run_stage(Stage.CHUNKING, lambda: chunk(converted.document, tokenizer))
+    if not chunks:
+        raise IngestError("empty_file", f"No text was found in {file_name}, so there is nothing to search.")
     directory = catalog.source_dir(source_id)
     (directory / "documents").mkdir(parents=True, exist_ok=True)
     (directory / "chunks").mkdir(parents=True, exist_ok=True)

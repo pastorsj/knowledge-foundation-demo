@@ -22,7 +22,7 @@ Any stage can end in `failed` with an error code; a failed file never blocks the
 /knowledge/
   catalog/packs/<pack_id>.json                    PackManifest (contracts/catalog/pack-manifest.schema.json)
   catalog/sources/<source_id>.json                SourceManifest (contracts/catalog/source-manifest.schema.json)
-  sources/<source_id>/files/<file_id>             original bytes
+  sources/<source_id>/files/<file_id><ext>        original bytes, with the original's extension
   sources/<source_id>/documents/<document_id>.md  docling Markdown export
   sources/<source_id>/chunks/<document_id>.jsonl  chunks with metadata, for re-embedding without re-parsing
   sources/<source_id>/tables.duckdb               structured sources
