@@ -157,7 +157,7 @@
     "toolName": "query_tables",
     "capabilityId": "structured_retrieval",
     "artifactRefs": [
-      "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52"
+      "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba"
     ],
     "metricsRef": null,
     "occurredAt": "2026-09-28T05:00:21.762077Z",
@@ -174,7 +174,7 @@
     },
     "provenance": {
       "sourceSystem": "hermes.plugin",
-      "sourceEventId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+      "sourceEventId": "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba",
       "sourceEventKind": "post_tool_call",
       "normalizationVersion": "hermes-plugin-receipt.v1",
       "observation": "observed",

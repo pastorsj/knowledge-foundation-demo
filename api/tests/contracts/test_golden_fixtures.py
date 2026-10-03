@@ -3,8 +3,11 @@
 
 """Every golden fixture validates, against both the models and the exported schemas."""
 
+import hashlib
 import json
 from typing import get_args
+from uuid import NAMESPACE_URL
+from uuid import uuid5
 
 import pytest
 from jsonschema import Draft202012Validator
@@ -39,6 +42,25 @@ def test_fixture_validates_against_the_exported_schema(contracts_dir, name, stem
 
 def test_every_receipt_kind_has_a_golden_receipt(receipts):
     assert {receipt["artifactKind"] for receipt in receipts} == set(get_args(ArtifactKind))
+
+
+def test_golden_receipt_ids_are_derived_from_their_job_and_tool_call(receipts):
+    """The agent plugin names a receipt ``hermes-receipt:<sha256(job id NUL tool call id)>``, the tool call being the
+    one its ``invocationId`` names (agent/profile/plugins/execution_receipts: receipt_id, invocation_id)."""
+    for receipt in receipts:
+        call = receipt["invocationId"].removeprefix("hermes-tool:")
+        digest = hashlib.sha256(f"{receipt['jobId']}\0{call}".encode()).hexdigest()
+        assert receipt["receiptId"] == f"hermes-receipt:{digest}", receipt["artifactKind"]
+
+
+def test_golden_receipt_events_are_named_after_their_receipt(events):
+    """The API stores one event per receipt, its id derived from the receipt's (routes/internal.py)."""
+    receipt_events = [event for event in events if event["provenance"]["sourceEventKind"] == "post_tool_call"]
+    assert receipt_events
+    for event in receipt_events:
+        (receipt_id,) = event["artifactRefs"]
+        assert event["provenance"]["sourceEventId"] == receipt_id
+        assert event["eventId"] == str(uuid5(NAMESPACE_URL, f"urn:nvidia:hermes-receipt-event:{receipt_id}"))
 
 
 def test_golden_receipts_come_from_registered_tools(receipts, tools):
