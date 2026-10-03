@@ -4,14 +4,16 @@
 /**
  * DataSourcesPanel Component
  *
- * Right-side panel for choosing which data sources of the active data pack
- * the agent may use for the next question.
+ * Right-side panel for choosing which data sources of the selected pack
+ * the agent may use for the next question. In Your data (the workspace pack)
+ * it has upstream's two tabs, Connections and Files, and opens to Files: the
+ * upload zone and a card per uploaded file with its pipeline stage.
  */
 
 'use client'
 
 import { type FC, memo, useCallback, useEffect, useMemo, useRef } from 'react'
-import { Flex, Text, Switch, Button } from '@/adapters/ui'
+import { Flex, Text, Switch, Button, SegmentedControl } from '@/adapters/ui'
 import { useShallow } from 'zustand/react/shallow'
 import { Close, Globe, LoadingSpinner } from '@/adapters/ui/icons'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
@@ -19,6 +21,9 @@ import { useLayoutStore } from '../store'
 import { useIsCurrentSessionBusy, useChatStore } from '@/features/chat'
 import { cn } from '@/shared/lib/cn'
 import { DataConnectionCard } from './DataConnectionCard'
+import { FileSourcesTab } from './FileSourcesTab'
+import { UploadOrchestrator, WORKSPACE_COLLECTION } from '@/features/documents'
+import type { DataSourcesPanelTab } from '../types'
 
 /**
  * Panel for managing data sources.
@@ -41,6 +46,29 @@ export const DataSourcesPanel: FC = memo(function DataSourcesPanel() {
   const toggleDataSource = useLayoutStore((s) => s.toggleDataSource)
   const setEnabledDataSources = useLayoutStore((s) => s.setEnabledDataSources)
   const fetchDataSources = useLayoutStore((s) => s.fetchDataSources)
+  const packId = useLayoutStore((s) => s.packId)
+  const dataSourcesPanelTab = useLayoutStore((s) => s.dataSourcesPanelTab)
+  const setDataSourcesPanelTab = useLayoutStore((s) => s.setDataSourcesPanelTab)
+  // Your data is the workspace: its files are uploaded here
+  const isWorkspace = packId === WORKSPACE_COLLECTION
+  const activeTab: DataSourcesPanelTab = isWorkspace ? dataSourcesPanelTab : 'connections'
+
+  // Choosing Your data opens the panel to its files
+  useEffect(() => {
+    if (!isWorkspace) return
+    const { setDataSourcesPanelTab: showTab, openRightPanel } = useLayoutStore.getState()
+    showTab('files')
+    openRightPanel('data-sources')
+  }, [isWorkspace])
+
+  const handleTabChange = useCallback(
+    (value: string) => {
+      setDataSourcesPanelTab(value as DataSourcesPanelTab)
+      // Refresh files from the backend when switching to the files tab, to see removals
+      if (value === 'files') void UploadOrchestrator.refreshFilesForSession(WORKSPACE_COLLECTION)
+    },
+    [setDataSourcesPanelTab]
+  )
 
   const panelRef = useRef<HTMLDivElement>(null)
   const openerRef = useRef<HTMLElement | null>(null)
@@ -139,101 +167,129 @@ export const DataSourcesPanel: FC = memo(function DataSourcesPanel() {
           </Button>
         </Flex>
 
-        <Flex direction="col" className="flex-1 overflow-y-auto px-6 py-4">
-          {/* All Connections Toggle */}
-          <Text
-            kind="label/semibold/xs"
-            className="text-subtle mb-3 font-mono uppercase tracking-[0.08em]"
-          >
-            All Connections
-          </Text>
-          <Flex
-            align="center"
-            justify="between"
-            className={cn(
-              'surface-card mb-4 border p-3',
-              isBusy ? 'border-base opacity-50' : anyEnabled ? 'brand-tint border' : 'border-base'
-            )}
-            title={isBusy ? 'Data source changes disabled during active operations' : undefined}
-          >
-            <Text kind="label/semibold/sm" className="text-primary">
-              {anyEnabled ? 'Disable Selected' : 'Enable Compatible'}
-            </Text>
-            <Switch
+        {isWorkspace && (
+          <Flex className="shrink-0 px-6 pt-4">
+            <SegmentedControl
+              value={activeTab}
+              onValueChange={handleTabChange}
               size="small"
-              checked={anyEnabled}
-              onCheckedChange={handleToggleAll}
-              disabled={isBusy}
-              aria-label={
-                isBusy
-                  ? 'Toggle all connections (disabled)'
-                  : anyEnabled
-                    ? 'Disable selected connections'
-                    : 'Enable compatible connections'
-              }
+              className="w-full"
+              items={[
+                { value: 'connections', children: 'Connections' },
+                { value: 'files', children: 'Files' },
+              ]}
             />
           </Flex>
+        )}
 
-          {/* Individual Connections */}
-          <Text
-            kind="label/semibold/xs"
-            className="text-subtle mb-3 font-mono uppercase tracking-[0.08em]"
-          >
-            Individual Connections ({sources.length})
-          </Text>
-          <Text kind="body/regular/xs" className="text-subtle mb-3">
-            Each industry has its own documents and tables. Enable any combination; the agent uses
-            only the enabled ones.
-          </Text>
-
-          {dataSourcesLoading ? (
-            <Flex align="center" justify="center" className="py-8">
-              <LoadingSpinner size="medium" aria-label="Loading data sources" />
-            </Flex>
-          ) : dataSourcesError ? (
-            <Flex direction="col" align="center" className="py-4">
-              <Text kind="body/regular/sm" className="text-error mb-2">
-                Unable to load data sources
+        {activeTab === 'files' ? (
+          <Flex direction="col" className="flex-1 overflow-y-auto px-6 py-4">
+            <FileSourcesTab />
+          </Flex>
+        ) : (
+          <Flex direction="col" className="flex-1 overflow-y-auto px-6 py-4">
+            {/* All Connections Toggle */}
+            <Text
+              kind="label/semibold/xs"
+              className="text-subtle mb-3 font-mono uppercase tracking-[0.08em]"
+            >
+              All Connections
+            </Text>
+            <Flex
+              align="center"
+              justify="between"
+              className={cn(
+                'surface-card mb-4 border p-3',
+                isBusy ? 'border-base opacity-50' : anyEnabled ? 'brand-tint border' : 'border-base'
+              )}
+              title={isBusy ? 'Data source changes disabled during active operations' : undefined}
+            >
+              <Text kind="label/semibold/sm" className="text-primary">
+                {anyEnabled ? 'Disable Selected' : 'Enable Compatible'}
               </Text>
-              <Text kind="body/regular/xs" className="text-subtle mb-3">
-                {dataSourcesError}
-              </Text>
-              <Button
-                kind="secondary"
+              <Switch
                 size="small"
-                onClick={() => fetchDataSources()}
-                aria-label="Retry loading data sources"
-              >
-                Retry
-              </Button>
+                checked={anyEnabled}
+                onCheckedChange={handleToggleAll}
+                disabled={isBusy}
+                aria-label={
+                  isBusy
+                    ? 'Toggle all connections (disabled)'
+                    : anyEnabled
+                      ? 'Disable selected connections'
+                      : 'Enable compatible connections'
+                }
+              />
             </Flex>
-          ) : sources.length === 0 ? (
-            <Flex direction="col" align="center" className="py-4">
-              <Text kind="body/regular/sm" className="text-subtle">
-                No data sources available
-              </Text>
-            </Flex>
-          ) : (
-            <Flex direction="col" gap="2">
-              {sources.map((source) => (
-                <DataConnectionCard
-                  key={source.id}
-                  source={source}
-                  isEnabled={enabledSourcesSet.has(source.id)}
-                  isBusy={isBusy}
-                  onToggle={handleToggle}
-                />
-              ))}
-            </Flex>
-          )}
-        </Flex>
+
+            {/* Individual Connections */}
+            <Text
+              kind="label/semibold/xs"
+              className="text-subtle mb-3 font-mono uppercase tracking-[0.08em]"
+            >
+              Individual Connections ({sources.length})
+            </Text>
+            <Text kind="body/regular/xs" className="text-subtle mb-3">
+              Each industry has its own documents and tables. Enable any combination; the agent uses
+              only the enabled ones.
+            </Text>
+
+            {dataSourcesLoading ? (
+              <Flex align="center" justify="center" className="py-8">
+                <LoadingSpinner size="medium" aria-label="Loading data sources" />
+              </Flex>
+            ) : dataSourcesError ? (
+              <Flex direction="col" align="center" className="py-4">
+                <Text kind="body/regular/sm" className="text-error mb-2">
+                  Unable to load data sources
+                </Text>
+                <Text kind="body/regular/xs" className="text-subtle mb-3">
+                  {dataSourcesError}
+                </Text>
+                <Button
+                  kind="secondary"
+                  size="small"
+                  onClick={() => fetchDataSources()}
+                  aria-label="Retry loading data sources"
+                >
+                  Retry
+                </Button>
+              </Flex>
+            ) : sources.length === 0 ? (
+              <Flex direction="col" align="center" className="py-4">
+                <Text kind="body/regular/sm" className="text-subtle">
+                  No data sources available
+                </Text>
+              </Flex>
+            ) : (
+              <Flex direction="col" gap="2">
+                {sources.map((source) => (
+                  <DataConnectionCard
+                    key={source.id}
+                    source={source}
+                    isEnabled={enabledSourcesSet.has(source.id)}
+                    isBusy={isBusy}
+                    onToggle={handleToggle}
+                  />
+                ))}
+              </Flex>
+            )}
+          </Flex>
+        )}
 
         {/* Footer summary */}
         <Flex direction="col" className="border-base shrink-0 border-t px-6 py-3">
-          <Text kind="body/regular/xs" className="text-subtle">
-            {enabledCount} of {sources.length} available connections enabled. Enabled connections
-            will be available to the AI assistant.
-          </Text>
+          {activeTab === 'connections' ? (
+            <Text kind="body/regular/xs" className="text-subtle">
+              {enabledCount} of {sources.length} available connections enabled. Enabled connections
+              will be available to the AI assistant.
+            </Text>
+          ) : (
+            <Text kind="body/regular/xs" className="text-subtle">
+              Uploaded files stay in Your data until deleted. Each becomes Your documents or Your
+              tables once it is ready.
+            </Text>
+          )}
         </Flex>
       </Flex>
     </div>

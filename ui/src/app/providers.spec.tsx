@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { fetchDataSources, getJobStatus } from '@/adapters/api'
 import { useChatStore } from '@/features/chat/store'
 import type { Conversation } from '@/features/chat/types'
+import { getFileUploadConfigFromEnv } from '@/shared/config/file-upload'
 import { useLayoutStore } from '@/features/layout'
 import { Providers } from './providers'
 
@@ -16,6 +17,7 @@ vi.mock('@/adapters/api', () => ({
 
 const initialChat = useChatStore.getState()
 const SPEECH_OFF = { enabled: false, maxSeconds: 60 }
+const FILE_UPLOAD = getFileUploadConfigFromEnv({} as NodeJS.ProcessEnv)
 const initialLayout = useLayoutStore.getState()
 
 /** Saves a live session whose job was running when the page closed, then reloads the store. */
@@ -66,7 +68,13 @@ describe('Providers', () => {
     useLayoutStore.setState({ packId: 'retail' })
     render(
       <Providers
-        config={{ mode: 'live', defaultPack: 'retail', phoenixUrl: null, speechInput: SPEECH_OFF }}
+        config={{
+          mode: 'live',
+          defaultPack: 'retail',
+          phoenixUrl: null,
+          speechInput: SPEECH_OFF,
+          fileUpload: FILE_UPLOAD,
+        }}
       >
         content
       </Providers>
@@ -86,7 +94,13 @@ describe('Providers', () => {
 
     render(
       <Providers
-        config={{ mode: 'live', defaultPack: 'retail', phoenixUrl: null, speechInput: SPEECH_OFF }}
+        config={{
+          mode: 'live',
+          defaultPack: 'retail',
+          phoenixUrl: null,
+          speechInput: SPEECH_OFF,
+          fileUpload: FILE_UPLOAD,
+        }}
       >
         content
       </Providers>
@@ -106,6 +120,7 @@ describe('Providers', () => {
           defaultPack: 'retail',
           phoenixUrl: null,
           speechInput: SPEECH_OFF,
+          fileUpload: FILE_UPLOAD,
         }}
       >
         content

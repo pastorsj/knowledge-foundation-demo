@@ -27,7 +27,7 @@ chat, its deep-research panel and everything only they used are removed.
 | NAT WebSocket chat and HITL                                                       | `server.js`, `websocket-cookie.js`, `adapters/api/{websocket-client,chat-client,schemas}.ts`, `features/chat/hooks/{use-websocket-chat,use-chat,use-connection-recovery}.ts`, `features/chat/components/AgentPrompt.tsx`, `features/chat/lib/{intermediate-step-parser,transport-auth-signals}.ts`                                                                                        |
 | NAT deep-research panel (agents, LLM steps, tool calls, todos, files, report tab) | `features/chat/components/ChatThinking.tsx`, `features/chat/hooks/use-load-job-data.ts`, `features/chat/lib/{deep-research-correlation,deep-research-progress,deep-research-trace,deep-research-todos,prune-message-for-storage}.ts`, `shared/components/research/*`, `shared/components/CollapsibleBlock/*`                                                                              |
 | Layout components (21) and copy                                                   | `AgentCard`, `AgentsTab`, `CitationCard`, `DataConnectionsTab`, `DeleteFileConfirmationModal`, `ExportFooter`, `FileCard`, `FileSourceCard`, `FileSourcesTab`, `FilesTab`, `ReportCard`, `ReportTab`, `SettingsPanel`, `SourceCard`, `TaskCard`, `TasksTab`, `ThinkingTab`, `ThoughtCard`, `ThoughtTracesTab`, `ToolCallCard`, `ToolCallsTab`, `research-empty-state-copy.ts`             |
-| Documents and uploads                                                             | `features/documents/*`, `adapters/api/{documents-client,documents-schemas}.ts`, `shared/config/file-upload.ts`, `features/chat/components/FileUploadBanner.tsx`, `src/mocks/*` (MSW served only document mocks)                                                                                                                                                                           |
+| Documents mocks                                                                   | `src/mocks/*` (MSW served only document mocks); the documents feature itself is restored, below                                                                                                                                                                                                                                                                                         |
 | PDF and Markdown export                                                           | `pages/api/generate-pdf.ts`, `lib/pdf/*`, `hooks/use-download-pdf.ts`, `utils/*`, `shared/utils/artifact-url.ts` (with the `artifact://` image support in `MarkdownRenderer`)                                                                                                                                                                                                             |
 | App auth (NextAuth, MCP OAuth)                                                    | `adapters/auth/*`, `app/api/auth/*`, `app/auth/*`, `proxy.ts`, `adapters/api/{authenticated-fetch,mcp-auth-client}.ts`, `shared/utils/rum.ts`                                                                                                                                                                                                                                             |
 | Proxies                                                                           | `app/api/chat`, `app/api/generate`, `app/api/generate/respond` (they bypassed the API's allowlist); `app/api/jobs/async` (folded into the allowlisted `/api/v1` proxy)                                                                                                                                                                                                                    |
@@ -79,6 +79,36 @@ invocation `id` `` become inspectable evidence (`EvidenceDisclosure`).
   selected pack sit in a 3 × 2 grid of short cards (the full question is in the link and its
   tooltip), and the observability flow shares the footer row, so the page fits 1280×800, 1440×900
   and 1920×1080 without scrolling.
+
+### Restored: Your data (from `bf4e67d1`)
+
+The documents feature came back for "Your data", the workspace pack of the user's uploads,
+with upstream's SPDX headers: `features/documents/*` (store, types, utils, validation, constants,
+persistence, orchestrator, hooks, `FileUploadZone`), `adapters/api/documents-{client,schemas}.ts`,
+`shared/config/file-upload.ts`, `features/chat/components/FileUploadBanner.tsx` and
+`features/layout/components/{FileSourcesTab,FileSourceCard,DeleteFileConfirmationModal}.tsx`, with the
+composer's paperclip, drag-and-drop overlay, file counter and pending-files chip. Changes from
+upstream:
+
+- One collection, `workspace`, whatever the session; no app auth (no tokens); the documents
+  client always calls the same-origin `/api/v1` proxy, which forwards to the API (and the API to
+  the ingest service). Upload limits are per upload (`FILE_UPLOAD_MAX_SIZE_MB` per file, default
+  100, `FILE_UPLOAD_MAX_FILE_COUNT` files, default 20) and the accepted types are the ingest
+  service's (`FILE_UPLOAD_ACCEPTED_TYPES`). Polling runs every 1.5 s.
+- The zod schemas accept the ingest service's pipeline fields (`kind`, `stage`, `stage_detail`,
+  `parser`, `tables`, `warnings`) and default the fields it may omit. `FileSourceCard` shows the
+  stage stepper (document Parse → Chunk → Embed → Index, table Load → Profile), a progress bar, the
+  parser ("Nemotron Parse 2.0", "PDF text layer", "Docling DOCX", "DuckDB CSV"), warnings, and a
+  table file's tables, which open the data viewer (the execution feature's new `DataViewer` slot).
+  Each file that becomes ready refreshes the layout's data sources (Your documents, Your tables).
+- The Data Sources panel shows "Connections | Files" only in Your data, and opens to Files there;
+  the connections list stays inline (`DataConnectionsTab` is not restored). The upload banners
+  ("uploaded", "pending_warning") show under the composer rather than as chat messages, so the chat
+  store's upload actions stay removed; `discard-session-resources.ts` is not restored (uploads are
+  not per session).
+- The proxy allows the documents routes (`GET/POST collections`, `GET/DELETE collections/{name}`,
+  `GET/POST/DELETE collections/{name}/documents`, `GET documents/{job}/status`), streams an
+  upload's multipart body with its boundary, and answers 413 past `FILE_UPLOAD_MAX_REQUEST_MB`.
 
 ### Added
 

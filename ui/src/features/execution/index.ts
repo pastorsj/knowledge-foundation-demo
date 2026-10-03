@@ -11,6 +11,7 @@ import { ExecutionWorkspace } from './ExecutionWorkspace'
 import { recordings } from './replay/sources'
 import { useExecutionStore } from './store'
 import { ActivityPanel } from './activity/ActivityPanel'
+import { DataViewerDialog } from './data-viewer/DataViewerDialog'
 
 const asRecord = (value: unknown): Record<string, unknown> =>
   typeof value === 'object' && value !== null ? (value as Record<string, unknown>) : {}
@@ -34,4 +35,5 @@ export const executionFeature: ExecutionFeature = {
   Workspace: ExecutionWorkspace,
   ActivityPanel,
   recordings,
+  DataViewer: DataViewerDialog,
 }

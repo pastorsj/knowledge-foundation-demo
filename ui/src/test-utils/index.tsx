@@ -4,6 +4,7 @@
 import type { ReactElement, ReactNode } from 'react'
 import { ThemeProvider } from '@nvidia/foundations-react-core'
 import { render } from '@testing-library/react'
+import { getFileUploadConfigFromEnv } from '@/shared/config/file-upload'
 import {
   AppConfigProvider,
   ExecutionFeatureProvider,
@@ -27,6 +28,7 @@ const renderWithProviders = (ui: ReactElement, { config, feature }: ProviderOpti
         defaultPack: 'retail',
         phoenixUrl: null,
         speechInput: { enabled: false, maxSeconds: 60 },
+        fileUpload: getFileUploadConfigFromEnv({} as NodeJS.ProcessEnv),
         ...config,
       }}
     >

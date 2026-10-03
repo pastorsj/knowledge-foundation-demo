@@ -20,6 +20,7 @@
 
 import path from 'node:path'
 import type { AppConfig, UiMode } from '@/shared/context'
+import { getFileUploadConfigFromEnv } from './file-upload'
 
 type Env = Record<string, string | undefined>
 
@@ -67,7 +68,14 @@ export const readAppConfig = (env: Env = process.env): AppConfig => {
         ['true', '1', 'yes', 'on'].includes(env.SPEECH_INPUT_ENABLED?.trim().toLowerCase() ?? ''),
       maxSeconds: readMaxSeconds(env),
     },
+    fileUpload: getFileUploadConfigFromEnv(env as NodeJS.ProcessEnv),
   }
+}
+
+/** FILE_UPLOAD_MAX_REQUEST_MB: the largest upload request the proxy forwards (default 512 MB). */
+export const readMaxUploadRequestBytes = (env: Env = process.env): number => {
+  const raw = Number(env.FILE_UPLOAD_MAX_REQUEST_MB?.trim() || 512)
+  return (Number.isFinite(raw) && raw > 0 ? raw : 512) * 1024 * 1024
 }
 
 export const readUiMode = (env: Env = process.env): UiMode => readMode(env)
