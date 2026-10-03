@@ -46,8 +46,13 @@ def embedder(settings: Settings) -> NVIDIAEmbeddings:
     )
 
 
-def reranker(settings: Settings) -> NVIDIARerank:
-    """Posts to RETRIEVER_RERANK_URL if set, else the model's build.nvidia.com endpoint, else {base_url}/ranking."""
+def reranker(settings: Settings) -> NVIDIARerank | None:
+    """Posts to RETRIEVER_RERANK_URL if set, else the model's build.nvidia.com endpoint, else {base_url}/ranking.
+
+    None when no rerank model is configured (RETRIEVER_RERANK_MODEL set empty).
+    """
+    if not settings.rerank_model:
+        return None
     base_url = settings.base_url
     if settings.rerank_url:
         _register(settings.rerank_model, "ranking", "NVIDIARerank", settings.rerank_url)
@@ -94,8 +99,6 @@ def _retry(attempts: int, max_wait: float):
     )
 
 
-# The clients have no retries of their own; wrap each embed or rerank call with one of these.
+# The clients have no retries of their own; wrap each embed or rerank call with this.
 # A tool call has an agent waiting on it, so it gives up after a few seconds.
 retry_transient = _retry(attempts=3, max_wait=4)
-# Ingest sends hundreds of requests in a row; one that fails for good stops the build until the next run resumes it.
-retry_bulk = _retry(attempts=8, max_wait=8)
