@@ -15,10 +15,12 @@ after `TIMEOUT_SECONDS`. It returns at most `limit` ids, fetched with `fetchmany
 from __future__ import annotations
 
 import json
+import logging
 import re
 import subprocess
 import sys
 import tempfile
+import threading
 from collections.abc import Collection
 from pathlib import Path
 from typing import Any
@@ -29,6 +31,7 @@ from sqlglot.errors import ParseError
 from sqlglot.errors import TokenError
 
 TIMEOUT_SECONDS = 10.0
+MAX_CONCURRENT_WORKERS = 2
 ADDRESS_SPACE_BYTES = 2 * 1024**3
 MAX_OUTPUT_BYTES = 4 * 1024**2
 # As the tables guard: functions that read files, URLs, other databases, the environment or DuckDB's state.
@@ -57,6 +60,10 @@ FORBIDDEN_NODES = (
 )
 
 
+logger = logging.getLogger(__name__)
+_slots = threading.BoundedSemaphore(MAX_CONCURRENT_WORKERS)
+
+
 class FilterRejected(ValueError):
     """An entity filter this tool cannot apply. The message says why and is safe to show the agent."""
 
@@ -67,6 +74,12 @@ class SelectionFailed(Exception):
 
 def condition_sql(condition: str, table: str, columns: Collection[str]) -> str:
     """The entity filter as DuckDB SQL regenerated from its parse, or FilterRejected."""
+    # Escape strings (E'...') and dollar quoting ($$...$$) are where sqlglot's reading and DuckDB's can differ: a
+    # regenerated E-string loses its escapes. A plain filter needs neither, nor any backslash.
+    if "\\" in condition or "$" in condition:
+        raise FilterRejected(
+            "it uses a backslash or a dollar sign (escape strings and dollar quoting are not passed on)"
+        )
     try:
         parsed = sqlglot.parse_one(condition, read="duckdb", into=exp.Condition)
     except (ParseError, TokenError) as error:
@@ -86,7 +99,14 @@ def condition_sql(condition: str, table: str, columns: Collection[str]) -> str:
                 raise FilterRejected(f"{node.sql(dialect='duckdb')} is not a column of {table}")
             if node.name.casefold() not in known:
                 raise FilterRejected(f"{node.name} is not a column of {table}")
-    return parsed.sql(dialect="duckdb")
+    generated = parsed.sql(dialect="duckdb")
+    try:  # the SQL that runs must parse to the very tree that was checked
+        same = sqlglot.parse_one(generated, read="duckdb", into=exp.Condition) == parsed
+    except (ParseError, TokenError):
+        same = False
+    if not same:
+        raise FilterRejected("its SQL does not parse back to the same condition")
+    return generated
 
 
 def select(
@@ -96,20 +116,23 @@ def select(
     pass it in all."""
     payload = {"path": str(path), "table": table, "key": key, "condition": condition, "limit": limit}
     try:
-        finished = subprocess.run(
-            [sys.executable, "-I", "-m", __name__],
-            input=json.dumps(payload).encode(),
-            capture_output=True,
-            timeout=timeout,
-            env={"LANG": "C.UTF-8"},
-            check=False,
-        )
+        with _slots:  # at most MAX_CONCURRENT_WORKERS at once; the rest wait their turn
+            finished = subprocess.run(
+                [sys.executable, "-I", "-m", __name__],
+                input=json.dumps(payload).encode(),
+                capture_output=True,
+                timeout=timeout,
+                env={"LANG": "C.UTF-8"},
+                check=False,
+            )
     except subprocess.TimeoutExpired as error:  # run() kills the worker
         raise SelectionFailed(f"selecting the entities took longer than {timeout:g} seconds") from error
     if finished.returncode or not finished.stdout or len(finished.stdout) > MAX_OUTPUT_BYTES:
         raise SelectionFailed("selecting the entities ran out of memory or stopped its worker")
     result = json.loads(finished.stdout)
     if "error" in result:
+        # DuckDB's own message can quote data or paths: it goes to the log, the agent gets a written one.
+        logger.warning("the entity selection over %s failed: %s", table, result.get("detail", ""))
         raise SelectionFailed(result["error"])
     return result["ids"], result["population"]
 
@@ -162,7 +185,7 @@ def main() -> None:
     try:
         result = execute(json.load(sys.stdin))
     except duckdb.Error as error:
-        result = {"error": str(error).strip().splitlines()[0][:300]}
+        result = {"error": "DuckDB could not apply it", "detail": str(error).strip().splitlines()[0][:300]}
     except MemoryError:
         result = {"error": "selecting the entities ran out of memory"}
     sys.stdout.write(json.dumps(result, default=str))
