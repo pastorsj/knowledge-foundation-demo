@@ -38,12 +38,14 @@ from .models import validate_display_text
 
 EVENT_STORE_TYPE = "execution.v2"
 
-# The componentId of every tool.* and artifact.* event for a registered tool, keyed
-# by the tool's `family` in contracts/tool-registry.json.
-COMPONENT_BY_FAMILY = {
-    "unstructured_retrieval": "milvus.retrieval",
-    "structured_retrieval": "nvidia.ontology",
-    "structured_prediction": "nvidia.kumo",
+# The componentId of every tool.* and artifact.* event for a registered tool, keyed by the tool's
+# `server` in contracts/tool-registry.json. Two servers can share a family (query_tables and
+# ask_question are both structured_retrieval) and still be two components of the execution graph.
+COMPONENT_BY_SERVER = {
+    "retrieval": "milvus.retrieval",
+    "tables": "duckdb.tables",
+    "prediction": "nvidia.kumo",
+    "auto_ontology": "nvidia.ontology",
 }
 
 ExecutionState = Literal["started", "progress", "completed", "failed", "cancelled"]
@@ -193,7 +195,7 @@ class ExecutionEventV2(ContractModel):
 
 
 __all__ = [
-    "COMPONENT_BY_FAMILY",
+    "COMPONENT_BY_SERVER",
     "EVENT_STORE_TYPE",
     "DisplayAttributes",
     "DisplaySafeProjection",

@@ -38,7 +38,7 @@ def test_registered_tool_calls_carry_registry_identity_and_join_their_receipts(t
         "tables",
         "structured_retrieval",
     )
-    assert completed.component_id == "nvidia.ontology"
+    assert completed.component_id == "duckdb.tables"
     assert completed.display.label == "Table Query completed"
     assert completed.display.attributes == {"reported_error": False, "duration_seconds": 0.25}
     assert completed.parent_invocation_id == started.parent_invocation_id

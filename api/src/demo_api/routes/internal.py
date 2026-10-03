@@ -37,7 +37,7 @@ from pydantic import Field
 from pydantic import TypeAdapter
 from pydantic import ValidationError
 
-from demo_api.events import COMPONENT_BY_FAMILY
+from demo_api.events import COMPONENT_BY_SERVER
 from demo_api.events import DisplaySafeProjection
 from demo_api.events import EventProvenance
 from demo_api.events import ExecutionEventV2
@@ -195,7 +195,7 @@ def _receipt_event(receipt: dict[str, Any], tool: Tool, job: Job) -> ExecutionEv
         turn_id=receipt["turnId"],
         event_kind="artifact.available" if available else "tool.observed",
         state="failed" if receipt["status"] == "failed" else "completed",
-        component_id=COMPONENT_BY_FAMILY[tool.family],
+        component_id=COMPONENT_BY_SERVER[tool.server],
         invocation_id=receipt["invocationId"],
         tool_server=tool.server,
         tool_name=tool.id,

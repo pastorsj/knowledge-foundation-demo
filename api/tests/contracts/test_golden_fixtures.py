@@ -12,7 +12,7 @@ from jsonschema import Draft202012Validator
 from demo_api.contracts import FIXTURES
 from demo_api.contracts import SCHEMAS
 from demo_api.contracts import json_schema
-from demo_api.events import COMPONENT_BY_FAMILY
+from demo_api.events import COMPONENT_BY_SERVER
 from demo_api.receipts import ArtifactKind
 
 FIXTURE_SCHEMAS = {"execution-events.json": "execution-event", "receipts.json": "receipt"}
@@ -59,7 +59,7 @@ def test_golden_tool_events_carry_their_family_and_component(events, tools):
     assert tool_events
     for event in tool_events:
         family = family_by_tool[event["toolServer"], event["toolName"]]
-        assert (event["capabilityId"], event["componentId"]) == (family, COMPONENT_BY_FAMILY[family])
+        assert (event["capabilityId"], event["componentId"]) == (family, COMPONENT_BY_SERVER[event["toolServer"]])
 
 
 def test_golden_events_are_in_cursor_order(events):

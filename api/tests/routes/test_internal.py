@@ -118,7 +118,7 @@ async def test_a_table_query_receipt_is_structured_evidence(api, app, fake_herme
         "tables",
         "query_tables",
     )
-    assert (available["capabilityId"], available["componentId"]) == ("structured_retrieval", "nvidia.ontology")
+    assert (available["capabilityId"], available["componentId"]) == ("structured_retrieval", "duckdb.tables")
     assert available["display"]["label"] == "Structured query result available"
 
 
