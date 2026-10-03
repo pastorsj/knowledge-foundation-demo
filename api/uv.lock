@@ -77,6 +77,7 @@ dependencies = [
     { name = "duckdb" },
     { name = "fastapi" },
     { name = "httpx" },
+    { name = "jsonschema" },
     { name = "nvidia-riva-client" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -89,7 +90,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "jsonschema" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
 ]
@@ -99,6 +99,7 @@ requires-dist = [
     { name = "duckdb", specifier = "==1.5.5" },
     { name = "fastapi", specifier = ">=0.141,<1" },
     { name = "httpx", specifier = ">=0.28.1,<0.29" },
+    { name = "jsonschema", specifier = ">=4.26,<5" },
     { name = "nvidia-riva-client", specifier = ">=2.27.0,<3" },
     { name = "pydantic", specifier = ">=2.13,<3" },
     { name = "pydantic-settings", specifier = ">=2.15,<3" },
@@ -111,7 +112,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "jsonschema", specifier = ">=4.26,<5" },
     { name = "pytest", specifier = ">=9.1,<10" },
     { name = "pytest-asyncio", specifier = ">=1.4,<2" },
 ]

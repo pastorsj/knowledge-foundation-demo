@@ -7,12 +7,14 @@ from __future__ import annotations
 
 import json
 import shutil
+import threading
 
 import pytest
 from jsonschema import Draft202012Validator
 from support import REPO
 from support import read_manifest
 from support import update_manifest
+from support import write_manifest
 
 
 def schema(name: str) -> Draft202012Validator:
@@ -128,3 +130,103 @@ async def test_before_the_catalog_exists_the_pack_routes_are_503(api, knowledge_
         response = await api.get(path)
         assert response.status_code == 503, path
         assert "catalog" in response.json()["detail"]
+
+
+@pytest.mark.parametrize(
+    "request_",
+    [
+        ("GET", "/v1/packs", None),
+        ("GET", "/v1/pack?id=retail", None),
+        ("GET", "/v1/data_sources?pack=retail", None),
+        ("GET", "/v1/data_sources/retail.sales/schema", None),
+        ("POST", "/v1/jobs/async/submit", {"input": "Top stores?", "pack_id": "retail"}),
+    ],
+    ids=lambda request: request[1],
+)
+async def test_a_request_reads_the_catalog_once_off_the_event_loop(app, api, fake_hermes, request_):
+    method, path, body = request_
+    catalog = app.state.services.catalog
+    reads: list[bool] = []
+    read = catalog.read
+
+    def counted():
+        reads.append(threading.current_thread() is threading.main_thread())
+        return read()
+
+    catalog.read = counted
+    assert (await api.request(method, path, json=body)).status_code == 200
+    assert reads == [False]
+
+
+def _without(items: list[dict], key: str) -> list[dict]:
+    return [{k: v for k, v in item.items() if k != key} for item in items]
+
+
+def _source_changes(manifest: dict, shape: str) -> dict:
+    database = manifest["database"]
+    table, *others = database["tables"]
+    return {
+        "capabilities null": {"capabilities": None},
+        "database a string": {"database": "x"},
+        "example_questions null": {"example_questions": None},
+        "prediction templates null": {"prediction": {"templates": None}},
+        "prediction a string": {"prediction": "x"},
+        "table without a name": {"database": database | {"tables": [*_without([table], "name"), *others]}},
+        "column without a type": {
+            "database": database | {"tables": [table | {"columns": _without(table["columns"], "type")}, *others]}
+        },
+        # A well-formed path, but another source's directory
+        "database outside its source": {"database": database | {"path": "sources/retail.policies/tables.duckdb"}},
+    }[shape]
+
+
+SOURCE_SHAPES = [
+    "capabilities null",
+    "database a string",
+    "example_questions null",
+    "prediction templates null",
+    "prediction a string",
+    "table without a name",
+    "column without a type",
+    "database outside its source",
+]
+PACK_SHAPES = {
+    "sources null": {"sources": None},
+    "sources a number": {"sources": 5},
+    "questions null": {"questions": None},
+    "a question that is not an object": {"questions": ["x"]},
+    "a question without an id": None,  # built from the retail questions below
+    "conversations null": {"conversations": None},
+    "a conversation that is not an object": {"conversations": [5]},
+}
+
+
+async def assert_every_pack_route_answers(api, *, sources: list[str]) -> None:
+    """A malformed manifest costs only itself: the routes of every other pack still answer."""
+    assert [pack["id"] for pack in (await api.get("/v1/packs")).json()["packs"]] == ["retail", "workspace"]
+    for path in ("/v1/pack", "/v1/pack?id=retail", "/v1/pack?id=workspace"):
+        assert (await api.get(path)).status_code == 200, path
+    assert [source["id"] for source in (await api.get("/v1/data_sources")).json()] == sources
+    body = {"input": "How long is the electronics return window?", "data_sources": ["retail.policies"]}
+    assert (await api.post("/v1/jobs/async/submit", json=body)).status_code == 200
+
+
+@pytest.mark.parametrize("shape", SOURCE_SHAPES)
+async def test_a_malformed_source_manifest_is_skipped(api, knowledge_dir, fake_hermes, shape):
+    manifest = read_manifest(knowledge_dir, "sources", "retail.sales")
+    update_manifest(knowledge_dir, "sources", "retail.sales", **_source_changes(manifest, shape))
+
+    await assert_every_pack_route_answers(api, sources=["retail.policies"])
+    view = (await api.get("/v1/pack", params={"id": "retail"})).json()
+    assert [question["id"] for question in view["questions"]] == ["electronics-returns"]
+    assert (await api.get("/v1/data_sources/retail.sales/schema")).status_code == 404
+
+
+@pytest.mark.parametrize("shape", PACK_SHAPES)
+async def test_a_malformed_pack_manifest_is_skipped(api, knowledge_dir, fake_hermes, shape):
+    broken = read_manifest(knowledge_dir, "packs", "retail") | {"id": "manufacturing", "title": "Manufacturing"}
+    changes = PACK_SHAPES[shape] or {"questions": _without(broken["questions"], "id")}
+    write_manifest(knowledge_dir, "packs", broken | changes)
+
+    await assert_every_pack_route_answers(api, sources=["retail.policies", "retail.sales"])
+    assert (await api.get("/v1/pack", params={"id": "manufacturing"})).status_code == 404

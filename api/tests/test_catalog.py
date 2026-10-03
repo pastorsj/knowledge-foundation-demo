@@ -105,16 +105,21 @@ def test_sources_are_narrowed_to_the_running_tools(knowledge_dir, tool_registry)
 
 def test_sources_of_one_pack_or_of_all(knowledge_dir, tool_registry):
     knowledge = catalog(knowledge_dir, tool_registry)
-    workspace_tables = read_manifest(knowledge_dir, "sources", TABLES) | {
-        "id": "workspace.tables",
-        "pack_id": "workspace",
+    retail_sales = read_manifest(knowledge_dir, "sources", TABLES)
+    database = retail_sales["database"] | {
+        "path": "sources/workspace.tables/tables.duckdb",
+        "alias": "workspace_tables",
     }
+    workspace_tables = retail_sales | {"id": "workspace.tables", "pack_id": "workspace", "database": database}
     write_manifest(knowledge_dir, "sources", workspace_tables)
 
     assert [source.id for source in knowledge.sources("retail")] == [DOCUMENTS, TABLES]
     assert [source.id for source in knowledge.sources("workspace")] == ["workspace.tables"]
     assert [source.id for source in knowledge.sources()] == [DOCUMENTS, TABLES, "workspace.tables"]
     assert knowledge.source(TABLES).pack_id == "retail"
+    # A structured source's database is in its own directory, never another source's
+    update_manifest(knowledge_dir, "sources", "workspace.tables", database=retail_sales["database"])
+    assert [source.id for source in knowledge.sources("workspace")] == []
     with pytest.raises(PackNotFoundError):
         knowledge.sources("aerospace")
 

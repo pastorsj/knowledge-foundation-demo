@@ -75,7 +75,9 @@ def create_app(
             app.state.services = Services(
                 settings=settings,
                 registry=registry,
-                catalog=KnowledgeCatalog(settings.knowledge_dir, registry, settings.features),
+                catalog=KnowledgeCatalog(
+                    settings.knowledge_dir, registry, settings.features, schema_dir=settings.catalog_schema_dir
+                ),
                 store=store,
                 runner=runner,
                 http=http,

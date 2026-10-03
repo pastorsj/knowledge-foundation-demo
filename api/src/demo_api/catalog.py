@@ -3,17 +3,19 @@
 
 """The knowledge catalog: every industry pack and the user's workspace, side by side under ``/knowledge``.
 
-The ingest service is its only writer (atomically); the API reads it, read-only, on every call::
+The ingest service is its only writer (atomically); the API reads it, read-only, once per request
+(``KnowledgeCatalog.read``, in a thread)::
 
     /knowledge/catalog/packs/<pack_id>.json        PackManifest   (contracts/catalog/pack-manifest.schema.json)
     /knowledge/catalog/sources/<source_id>.json    SourceManifest (contracts/catalog/source-manifest.schema.json)
     /knowledge/sources/<source_id>/tables.duckdb   a structured source's tables
 
+A manifest that does not match its schema is logged and skipped, so it never takes the other packs down.
 A source is offered only while the running stack can serve it:
 
 - its capabilities are narrowed to the tool families in the agent image (``AGENT_FEATURES``);
 - its status is ``ready`` or ``ingesting`` (what is ready stays usable while more files ingest);
-- a structured source also needs at least one table in a DuckDB file inside the knowledge volume.
+- a structured source also needs at least one table, in its own ``sources/<id>/tables.duckdb``.
 
 A pack offers the questions whose sources are offered and whose tool pills the stack serves (``kumo`` needs the
 ``kumo`` feature, ``duckdb`` the ``tables`` one), and the conversations whose sources are offered.
@@ -23,12 +25,12 @@ from __future__ import annotations
 
 import json
 import logging
-import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from pydantic import ValidationError
+from jsonschema import Draft202012Validator
+from jsonschema.exceptions import best_match
 
 from .pack import PackConversationView
 from .pack import PackQuestionView
@@ -40,10 +42,10 @@ from .registry import ToolRegistry
 logger = logging.getLogger(__name__)
 
 PACK_ID = r"^[a-z][a-z0-9-]*$"
+# The manifests' JSON Schemas (contracts/catalog); the image copies them to /opt/demo-api/contracts/catalog
+SCHEMA_DIR = Path(__file__).resolve().parents[3] / "contracts" / "catalog"
 # Source statuses whose content a tool can use
 USABLE_STATUSES = frozenset({"ready", "ingesting"})
-# The DuckDB file of a structured source, relative to the knowledge root (the source manifest's pattern)
-_DATABASE_PATH = re.compile(r"^sources/[^/]+/tables\.duckdb$")
 # What the agent sees of a structured source in its run instructions
 MAX_AGENT_TABLES = 30
 MAX_AGENT_COLUMNS = 40
@@ -155,144 +157,44 @@ def _agent_template(template: dict[str, Any]) -> dict[str, Any]:
 
 
 class KnowledgeCatalog:
-    def __init__(self, root: Path, registry: ToolRegistry, features: frozenset[str]) -> None:
+    """The catalog under ``root``. Each call reads it anew; ``read()`` reads it once for a whole request."""
+
+    def __init__(
+        self, root: Path, registry: ToolRegistry, features: frozenset[str], *, schema_dir: Path = SCHEMA_DIR
+    ) -> None:
         self.root = root
-        self._families = registry.families(features)
-        self._pills = registry.pills(features)
+        self._families = frozenset(registry.families(features))
+        self._pills = frozenset(registry.pills(features))
+        self._validators = {
+            kind: Draft202012Validator(json.loads((schema_dir / f"{name}.schema.json").read_text(encoding="utf-8")))
+            for kind, name in (("packs", "pack-manifest"), ("sources", "source-manifest"))
+        }
 
-    # ------------------------------------------------------------------ packs
-
-    def packs(self) -> list[PackSummary]:
-        """``GET /v1/packs``: the industries by title, then the workspace."""
-        return [_summary(manifest) for manifest in self._pack_manifests()]
-
-    def pack_view(self, pack_id: str | None = None) -> PackView:
-        """``GET /v1/pack``: one pack (by default the first industry), with what this stack can answer of it."""
-        manifests = self._pack_manifests()
-        if not manifests:
-            raise CatalogUnavailableError("The knowledge catalog has no packs yet; ingest is still syncing them.")
-        manifest = manifests[0] if pack_id is None else next((m for m in manifests if m["id"] == pack_id), None)
-        if manifest is None:
-            raise PackNotFoundError(f"No pack named {pack_id} in the knowledge catalog.")
-        available = {source.id for source in self.sources()}
-        questions = [
-            question
-            for question in manifest.get("questions", [])
-            if set(question.get("sources", [])) <= available and set(question.get("tools", [])) <= self._pills
-        ]
-        return PackView(
-            **_summary(manifest).model_dump(),
-            **{key: manifest.get(key) for key in ("version", "as_of", "disclaimer")},
-            questions=[
-                PackQuestionView(
-                    **{key: question.get(key) for key in ("id", "label", "tag", "description", "question", "sources")},
-                    tools=question.get("tools", []),
-                    featured=bool(question.get("featured", False)),
-                )
-                for question in questions
-            ],
-            # An empty list in the manifest means questions.yaml declared none: the picker's default order
-            examples=picker_examples(questions, manifest.get("examples") or None),
-            conversations=[
-                PackConversationView(
-                    **{key: conversation.get(key) for key in ("id", "label", "tag", "description", "sources", "turns")}
-                )
-                for conversation in manifest.get("conversations", [])
-                if set(conversation.get("sources", [])) <= available
-            ],
-        )
-
-    def _pack_manifests(self) -> list[dict[str, Any]]:
-        """The readable pack manifests, in the order ``GET /v1/packs`` lists them."""
-        manifests = []
-        for manifest in self._manifests("packs"):
-            try:
-                _summary(manifest)
-            except ValidationError:
-                logger.warning("Skipping pack manifest %s: it does not match PackManifest", manifest.get("id"))
-                continue
-            manifests.append(manifest)
-        return sorted(
-            manifests,
-            key=lambda m: (m["kind"] != "industry", str(m.get("title", "")).casefold(), m["id"]),
-        )
-
-    # ---------------------------------------------------------------- sources
-
-    def sources(self, pack_id: str | None = None) -> list[Source]:
-        """The sources this stack can serve, of one pack or of every pack, in pack order."""
-        packs = self._pack_manifests()
-        if pack_id is not None and pack_id not in {pack["id"] for pack in packs}:
-            raise PackNotFoundError(f"No pack named {pack_id} in the knowledge catalog.")
-        pack_order = {pack["id"]: index for index, pack in enumerate(packs)}
-        source_order = {source_id: index for pack in packs for index, source_id in enumerate(pack.get("sources", []))}
-        sources = [
-            source
-            for manifest in self._manifests("sources")
-            if (source := self._source(manifest)) is not None and pack_id in (None, source.pack_id)
-        ]
-        return sorted(
-            sources,
-            key=lambda s: (pack_order.get(s.pack_id, len(packs)), source_order.get(s.id, len(source_order)), s.id),
-        )
-
-    def source(self, source_id: str) -> Source | None:
-        """An offered source, or None."""
-        return next((source for source in self.sources() if source.id == source_id), None)
-
-    def database_path(self, source_id: str) -> Path | None:
-        """The DuckDB file of an offered structured source, or None."""
-        source = self.source(source_id)
-        if source is None or source.database_file is None:
-            return None
-        return self.root / source.database_file
-
-    def _source(self, manifest: dict[str, Any]) -> Source | None:
-        """The source a manifest describes, or None when this stack cannot serve it."""
-        if manifest.get("status") not in USABLE_STATUSES:
-            return None
-        capabilities = tuple(family for family in manifest.get("capabilities", []) if family in self._families)
-        if not capabilities:
-            return None
-        kind = manifest.get("kind")
-        database = manifest.get("database") or {}
-        structured: dict[str, Any] = {}
-        if kind == "structured":
-            path, alias, tables = database.get("path"), database.get("alias"), database.get("tables") or []
-            if not (isinstance(path, str) and _DATABASE_PATH.fullmatch(path) and alias and tables):
-                return None
-            templates = (manifest.get("prediction") or {}).get("templates", [])
-            structured = {
-                "database_name": alias,
-                "database_file": path,
-                "tables": tuple(tables),
-                "prediction_templates": tuple(templates),
-            }
-        elif kind != "documents":
-            return None
-        return Source(
-            id=manifest["id"],
-            pack_id=str(manifest.get("pack_id") or "workspace"),
-            name=manifest.get("name") or manifest["id"],
-            description=manifest.get("description", ""),
-            agent_description=manifest.get("agent_description") or manifest.get("description", ""),
-            kind=kind,
-            capabilities=capabilities,
-            synthetic=bool(manifest.get("synthetic", False)),
-            default_enabled=bool(manifest.get("default_enabled", True)),
-            example_questions=tuple(manifest.get("example_questions", [])),
-            status=manifest["status"],
-            collection=(manifest.get("documents") or {}).get("collection") if kind == "documents" else None,
-            **structured,
-        )
-
-    # -------------------------------------------------------------- manifests
-
-    def _manifests(self, kind: str) -> list[dict[str, Any]]:
-        """Every readable manifest in ``catalog/<kind>``, read now; one that is unreadable is skipped."""
+    def read(self) -> CatalogSnapshot:
+        """Every valid manifest, read now. Blocking: a route runs it in a thread, once per request."""
         catalog = self.root / "catalog"
         if not catalog.is_dir():
             raise CatalogUnavailableError("The knowledge catalog is not built yet; ingest writes it on startup.")
+        packs, sources = self._manifests(catalog, "packs"), self._manifests(catalog, "sources")
+        return CatalogSnapshot(self.root, packs, sources, self._families, self._pills)
+
+    def packs(self) -> list[PackSummary]:
+        return self.read().packs()
+
+    def pack_view(self, pack_id: str | None = None) -> PackView:
+        return self.read().pack_view(pack_id)
+
+    def sources(self, pack_id: str | None = None) -> list[Source]:
+        return self.read().sources(pack_id)
+
+    def source(self, source_id: str) -> Source | None:
+        return self.read().source(source_id)
+
+    def database_path(self, source_id: str) -> Path | None:
+        return self.read().database_path(source_id)
+
+    def _manifests(self, catalog: Path, kind: str) -> list[dict[str, Any]]:
+        """Every manifest in ``catalog/<kind>`` that matches its schema; any other is logged and skipped."""
         manifests = []
         for path in sorted((catalog / kind).glob("*.json")):
             try:
@@ -300,10 +202,129 @@ class KnowledgeCatalog:
             except (OSError, ValueError):
                 logger.warning("Skipping unreadable catalog manifest %s/%s", kind, path.name)
                 continue
+            if error := best_match(self._validators[kind].iter_errors(manifest)):
+                where = "/".join(str(part) for part in error.absolute_path) or "the manifest"
+                logger.warning("Skipping catalog manifest %s/%s: %s: %s", kind, path.name, where, error.message)
+                continue
             # A manifest is named after its id; anything else (a temporary file, say) is not one
-            if isinstance(manifest, dict) and manifest.get("id") == path.stem:
+            if manifest["id"] == path.stem:
                 manifests.append(manifest)
         return manifests
+
+
+class CatalogSnapshot:
+    """The catalog as one read found it: its packs, and the sources this stack can serve."""
+
+    def __init__(
+        self,
+        root: Path,
+        packs: list[dict[str, Any]],
+        sources: list[dict[str, Any]],
+        families: frozenset[str],
+        pills: frozenset[str],
+    ) -> None:
+        self.root = root
+        self._pills = pills
+        # The industries by title, then the workspace
+        self._packs = sorted(packs, key=lambda m: (m["kind"] != "industry", m["title"].casefold(), m["id"]))
+        pack_order = {pack["id"]: index for index, pack in enumerate(self._packs)}
+        source_order = {id_: index for pack in self._packs for index, id_ in enumerate(pack["sources"])}
+        offered = [source for manifest in sources if (source := _source(manifest, families)) is not None]
+        self._sources = sorted(
+            offered,
+            key=lambda s: (pack_order.get(s.pack_id, len(pack_order)), source_order.get(s.id, len(source_order)), s.id),
+        )
+
+    def packs(self) -> list[PackSummary]:
+        """``GET /v1/packs``: the industries by title, then the workspace."""
+        return [_summary(manifest) for manifest in self._packs]
+
+    def pack_view(self, pack_id: str | None = None) -> PackView:
+        """``GET /v1/pack``: one pack (by default the first industry), with what this stack can answer of it."""
+        if not self._packs:
+            raise CatalogUnavailableError("The knowledge catalog has no packs yet; ingest is still syncing them.")
+        manifest = self._packs[0] if pack_id is None else next((m for m in self._packs if m["id"] == pack_id), None)
+        if manifest is None:
+            raise PackNotFoundError(f"No pack named {pack_id} in the knowledge catalog.")
+        available = {source.id for source in self._sources}
+        questions = [
+            question
+            for question in manifest["questions"]
+            if set(question["sources"]) <= available and set(question["tools"]) <= self._pills
+        ]
+        return PackView(
+            **_summary(manifest).model_dump(),
+            **{key: manifest.get(key) for key in ("version", "as_of", "disclaimer")},
+            questions=[
+                PackQuestionView(
+                    **{key: question.get(key) for key in ("id", "label", "tag", "description", "question", "sources")},
+                    tools=question["tools"],
+                    featured=bool(question.get("featured", False)),
+                )
+                for question in questions
+            ],
+            # An empty list in the manifest means questions.yaml declared none: the picker's default order
+            examples=picker_examples(questions, manifest["examples"] or None),
+            conversations=[
+                PackConversationView(
+                    **{key: conversation.get(key) for key in ("id", "label", "tag", "description", "sources", "turns")}
+                )
+                for conversation in manifest["conversations"]
+                if set(conversation["sources"]) <= available
+            ],
+        )
+
+    def sources(self, pack_id: str | None = None) -> list[Source]:
+        """The sources this stack can serve, of one pack or of every pack, in pack order."""
+        if pack_id is not None and pack_id not in {pack["id"] for pack in self._packs}:
+            raise PackNotFoundError(f"No pack named {pack_id} in the knowledge catalog.")
+        return [source for source in self._sources if pack_id in (None, source.pack_id)]
+
+    def source(self, source_id: str) -> Source | None:
+        """An offered source, or None."""
+        return next((source for source in self._sources if source.id == source_id), None)
+
+    def database_path(self, source_id: str) -> Path | None:
+        """The DuckDB file of an offered structured source, or None."""
+        source = self.source(source_id)
+        return self.root / source.database_file if source is not None and source.database_file else None
+
+
+def _source(manifest: dict[str, Any], families: frozenset[str]) -> Source | None:
+    """The source a valid manifest describes, or None when this stack cannot serve it."""
+    if manifest["status"] not in USABLE_STATUSES:
+        return None
+    capabilities = tuple(family for family in manifest["capabilities"] if family in families)
+    if not capabilities:
+        return None
+    kind = manifest["kind"]
+    structured: dict[str, Any] = {}
+    if kind == "structured":
+        database = manifest["database"]
+        # Its own directory only: sources/<id>/tables.duckdb, inside the knowledge volume
+        if database["path"] != f"sources/{manifest['id']}/tables.duckdb" or not database["tables"]:
+            return None
+        structured = {
+            "database_name": database["alias"],
+            "database_file": database["path"],
+            "tables": tuple(database["tables"]),
+            "prediction_templates": tuple((manifest.get("prediction") or {}).get("templates", [])),
+        }
+    return Source(
+        id=manifest["id"],
+        pack_id=manifest["pack_id"],
+        name=manifest["name"],
+        description=manifest["description"],
+        agent_description=manifest["agent_description"] or manifest["description"],
+        kind=kind,
+        capabilities=capabilities,
+        synthetic=manifest["synthetic"],
+        default_enabled=manifest["default_enabled"],
+        example_questions=tuple(manifest["example_questions"]),
+        status=manifest["status"],
+        collection=manifest["documents"]["collection"] if kind == "documents" else None,
+        **structured,
+    )
 
 
 def _summary(manifest: dict[str, Any]) -> PackSummary:
