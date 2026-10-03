@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 ---
 title: Customer Due Diligence Procedure
 subtitle: Know Your Customer and Anti-Money Laundering requirements for retail accounts and loans

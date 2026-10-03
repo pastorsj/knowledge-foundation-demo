@@ -247,27 +247,32 @@ sources:
           coverage_ratio: allowance divided by outstanding_balance, as a fraction.
     prediction:
       templates:
-        - id: loan_default_90d
+        - id: loan_delinquency_90d
           name: Loan 30+ days past due in 90 days
           description: >-
             Likelihood that a loan has an installment that ends up 30 or more days past due among those due in the next
             90 days.
-          pql: PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          pql: >-
+            PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id WHERE
+            loans.status = 'active'
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: account_closure_90d
           name: Checking account closure in 90 days
           description: >-
             Likelihood that a checking account is closed (customer attrition): no monthly balance row follows in the
-            next 90 days.
+            next 90 days. Kumo scores at most 1,000 entities per request, so the filter keeps the 887 open checking
+            accounts (the 1,002 checking accounts in all are over the limit).
           pql: >-
             PREDICT COUNT(monthly_balances.*, 0, 90, days) = 0 FOR EACH accounts.account_id WHERE
-            accounts.account_type = 'checking'
-          anchor_time: "2026-09-30T00:00:00Z"
+            accounts.account_type = 'checking' AND accounts.status = 'open'
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: card_dispute_30d
           name: Card dispute in 30 days
-          description: Likelihood that a customer files a card dispute in the next 30 days.
+          description: >-
+            Likelihood that a customer files a card dispute in the next 30 days. Kumo scores at most 1,000 entities per
+            request and there are 1,060 customers, so filter after FOR EACH, for example by customers.segment.
           pql: PREDICT COUNT(card_disputes.*, 0, 30, days) > 0 FOR EACH customers.customer_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
 
   - id: policies
     name: Credit & Compliance Policies

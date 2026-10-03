@@ -64,8 +64,8 @@ questions:
     tag: SQL
     description: Ranks denial reasons by billed dollars rather than by claim count.
     question: >-
-      Which three denial reasons account for the most billed dollars on claims denied in 2026, and what share of all
-      denied billed dollars do they make up?
+      Which three denial reasons account for the most billed dollars on claims whose denial notice is dated in 2026, and
+      what share of all billed dollars on those denied claims do they make up?
     sources: [clinical]
     tools: [duckdb]
 
@@ -74,8 +74,9 @@ questions:
     tag: SQL
     description: Joins inpatient encounters to their primary diagnosis.
     question: >-
-      Compare the 30-day readmission rate for heart failure discharges, COPD discharges and all other inpatient
-      discharges from April 2025 through August 2026. Leave out deaths and hospice discharges.
+      Compare the 30-day readmission rate for inpatient discharges with heart failure as the primary diagnosis, discharges
+      with COPD as the primary diagnosis and all other inpatient discharges from April 2025 through August 2026. Leave
+      out deaths and hospice discharges.
     sources: [clinical]
     tools: [duckdb]
 
@@ -104,9 +105,9 @@ questions:
   - id: hf-readmission-risk
     label: Heart failure readmission risk
     tag: PREDICTION
-    description: Kumo scores every heart failure patient for an inpatient admission in the next 30 days.
+    description: Kumo scores the heart failure patients (238, under its 1,000-entity limit) for an inpatient admission in the next 30 days.
     question: >-
-      Which heart failure patients are most likely to be admitted to the hospital again in the next 30 days?
+      Among our heart failure patients, which are most likely to be admitted to the hospital again in the next 30 days?
     sources: [clinical]
     tools: [kumo]
     featured: true
@@ -114,8 +115,8 @@ questions:
   - id: claim-denial-risk
     label: Claim denial risk
     tag: PREDICTION
-    description: Kumo scores every patient for a denied claim in the next 60 days.
+    description: Kumo scores the Northstar Advantage patients (226, under its 1,000-entity limit) for a denied claim in the next 60 days.
     question: >-
-      Which patients are most likely to have a claim denied in the next 60 days?
+      Which Northstar Advantage patients are most likely to have a claim denied in the next 60 days?
     sources: [clinical]
     tools: [kumo]

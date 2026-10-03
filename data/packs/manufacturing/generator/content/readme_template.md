@@ -63,7 +63,8 @@ computed from the tables by the generator.
 
 ## Prediction templates
 
-Valid Kumo PQL over the `operations` tables, anchored at 2026-09-30T00:00:00Z:
+Valid Kumo PQL over the `operations` tables, anchored at 2026-10-01T00:00:00Z (the day after the last data day, 2026-09-30). Kumo scores at most 1,000 entities
+per request and returns the top 25; the 56 machines are well under that, so none of these needs an entity filter:
 
 ```text
 PREDICT COUNT(maintenance_events.* WHERE maintenance_events.event_type = 'unplanned', 0, 30, days) > 0 FOR EACH machines.machine_id

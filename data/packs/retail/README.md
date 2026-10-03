@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # retail pack
 
 **Lumen Retail Group**, a fictional omnichannel home-and-lifestyle retailer: 24 stores in four US regions (Northeast,
@@ -25,7 +27,7 @@ demonstration dataset, not retail advice.
   history to learn from). The tables are a loyalty-member sample of Lumen's transactions, which is why absolute dollars
   are modest.
 - **Time.** Fiscal quarters are calendar quarters. Q3 2026 is July 1 to September 30, 2026. The Kumo anchor time is
-  `2026-09-30T00:00:00Z`.
+  `2026-10-01T00:00:00Z`, the day after the last data day.
 - **Planted stories** (so the questions have clear answers): the Chicago Loop flagship (S13) sold electronics that were
   returned at an unusual rate after late June 2026; three stores (S06, S16 and S22) have return rates more than twice the
   chain rate and are named in the scanned memo; three categories missed their Q3 plan; one region clearly led year-over-
@@ -65,7 +67,8 @@ workbook's tables `<file stem>_<sheet>`. Keys, time columns, foreign keys and co
 
 ### Prediction templates
 
-All three are binary Kumo PQL over `customers`, `orders` and `returns`, anchored at `2026-09-30T00:00:00Z`:
+All three are binary Kumo PQL over `customers`, `orders` and `returns`, anchored at `2026-10-01T00:00:00Z`. Kumo scores at most 1,000 entities per request (after the `FOR EACH ... WHERE` filter)
+and returns the top 25, so the questions name a tier; the 1,500 customers in all are over the limit:
 
 | Template | PQL |
 |---|---|
@@ -117,16 +120,22 @@ Computed by `build.py` from the generated files. Money is in US dollars.
    unopened or defective items.
 8. **`monitored-store-returns`** (hybrid: the memo names S06 Newark Gateway, S16 Indianapolis Fashion Mall and S22 Los Angeles Westside; SQL on `returns`, `returned_at` in Q3 2026).
    37 returns worth $3,592.49 (S06 12, S16 7, S22 18); that is 18.0% of the chain's $20,009.59 returned in Q3 2026. The memo's basis: S06 29.7% (3.0x the chain rate of 9.7%); S22 29.2% (3.0x the chain rate of 9.7%); S16 21.3% (2.2x the chain rate of 9.7%) (January to June 2026, returned value divided by net sales).
-9. **`gold-churn-risk`** (Kumo, template `churn_90d` with `WHERE customers.tier = 'gold'`). Kumo returns a probability per
+9. **`gold-churn-risk`** (Kumo, template `churn_90d` with `FOR EACH customers.customer_id WHERE customers.tier = 'gold'`,
+   154 customers; the run returns the top 25). Kumo returns a probability per
    customer, so there is no fixed answer; check the shape. There are 154 gold customers (bronze 931, gold 154, silver 415 in all
    tiers). As a backtest at anchor 2026-07-01, the share of customers with no order in the next 90 days was
    25.3% for gold, 50.6% for silver and 79.6% for bronze (65.5% overall),
-   so gold customers should score well below bronze on average. 39 gold customers have placed no order in
-   the 90 days before the anchor and should be expected near the top of the ranking.
-10. **`return-risk-30d`** (Kumo, template `return_risk_30d`). Probabilities per customer; the highest should be customers who
+   so gold customers should score well below bronze on average. 40 gold customers have placed no order in
+   the 90 days before the anchor; the top 25 should be drawn mostly from them.
+10. **`return-risk-30d`** (Kumo, template `return_risk_30d` with `FOR EACH customers.customer_id WHERE customers.tier = 'silver'`,
+    415 customers; the run returns the top 25). Probabilities per customer; the highest should be customers who
     ordered recently (returns follow orders by 2 to 5 weeks) and customers with earlier returns (100
     customers have three or more). Backtest at anchor 2026-08-30: 60 of 1,500 customers (4.0%) returned an item in the next 30
-    days. The `high_value_30d` template has a backtest base rate of 76 of 1,500 customers (5.1%) (more than $300 in 30 days).
+    days, and 20 of 415 silver customers (4.8%). Silver customers with an order in the 5 weeks before the anchor and two or more earlier returns
+    (27 of them) returned at 22.2% against 3.6% for the rest. At 2026-10-01 the
+    30 silver customers with an order since 2026-08-27 and two or more returns are C00030, C00033, C00055, C00098, C00110, C00120, C00175, C00186, C00378, C00404, C00464, C00479, C00573, C00610, C00615, C00798, C00871, C00893, C00904, C00931, C00958, C00975, C01008, C01070, C01108, C01162, C01210, C01289, C01317, C01365; the top 25 should
+    include several of them. Overlap with that list is the check, not the exact order. The `high_value_30d` template has a
+    backtest base rate of 76 of 1,500 customers (5.1%) (more than $300 in 30 days).
 
 ## Regenerating and checking
 

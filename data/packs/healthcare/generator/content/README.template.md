@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # healthcare pack
 
 Riverside Health Network is a **fictional** regional provider with 3 hospitals and 12 clinics. This pack gives the
@@ -139,7 +141,8 @@ GROUP BY facility_id ORDER BY facility_id;
 
 ### 5. `top-denial-reasons`
 
-Claims denied (adjudicated) from 2026-01-01 to 2026-09-30: [[ak.q5_n]] claims with [[ak.q5_total]] billed. The three
+Claims whose denial notice is dated in 2026 (`denied = 1` and `adjudicated_date` from 2026-01-01 to 2026-09-30; the
+submission date does not matter): [[ak.q5_n]] claims with [[ak.q5_total]] billed. The three
 reasons with the most billed dollars:
 
 [[ak.q5]]
@@ -149,7 +152,9 @@ Together they are [[ak.q5_top3_sum]], which is **[[ak.q5_share]]** of all denied
 ### 6. `readmission-by-condition`
 
 30-day readmission rate for index discharges from 2025-04-01 to 2026-08-31 (the last month with a full 30-day
-follow-up; deaths and hospice excluded):
+follow-up; deaths and hospice excluded), by the stay's **primary** diagnosis (`diagnoses.is_primary = 1`): heart
+failure is a primary I50.x code, COPD a primary J44.x code, and every other discharge is "other". A secondary
+I50.x code does not make a stay a heart failure discharge.
 
 [[ak.q6]]
 
@@ -184,34 +189,42 @@ The first deadline to close is claim [[ak.q8_next]].
 
 ### 9. `hf-readmission-risk` (Kumo)
 
-A Kumo answer varies with the model, so the key states what a correct run looks like. It must use the
-`readmission_30d` template: `PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'inpatient', 0, 30, days) > 0
-FOR EACH patients.patient_id`, restricted to heart failure patients (`WHERE patients.has_heart_failure = 1`, or by
-ranking those patients' scores), with `anchor_time` 2026-09-30T00:00:00Z, and return a ranked list of `patient_id`s with
-probabilities. Reference rates from the tables:
+A Kumo answer varies with the model, so the key states what a correct run looks like, not an exact ranking. Kumo scores
+at most 1,000 entities per request (after the entity filter) and returns the top 25, so the question names a
+subpopulation and the run must filter: the `readmission_30d` template with
+`FOR EACH patients.patient_id WHERE patients.has_heart_failure = 1` (the full PQL is
+`PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'inpatient', 0, 30, days) > 0 FOR EACH patients.patient_id
+WHERE patients.has_heart_failure = 1`), with `anchor_time` 2026-10-01T00:00:00Z. The population is
+[[ak.q9_hf_n]] heart failure patients (all 1,400 patients would be too many). The run returns the top 25 `patient_id`s
+with probabilities. Reference rates from the tables:
 
-- [[ak.q9_hf_n]] patients have heart failure. Averaged over [[ak.q9_windows]] consecutive 30-day windows from 2025-04-01,
-  [[ak.q9_hf]] of them were admitted in a window, against [[ak.q9_all]] of all patients.
+- Averaged over [[ak.q9_windows]] consecutive 30-day windows from 2025-04-01, [[ak.q9_hf]] of the heart failure
+  patients were admitted in a window, against [[ak.q9_all]] of all patients.
 - After an index discharge, the readmission rate within 30 days is [[ak.q9_hf_readmit]] for heart failure and
   [[ak.q9_all_readmit]] for all discharges (question 6), so recently discharged heart failure patients are the highest risk.
-- The top of a sensible ranking is made of older heart failure patients (75 and over) discharged recently, after a short
-  stay, with several earlier admissions. [[ak.q9_sep_hf_n]] heart failure patients were discharged in September 2026:
-  [[ak.q9_sep_hf_ids]].
+- The top 25 should include several of the [[ak.q9_sep_hf_n]] heart failure patients discharged in September 2026
+  ([[ak.q9_sep_hf_ids]]) and be weighted to older patients (75 and over) after a short stay with several earlier
+  admissions. Overlap with that list and those characteristics is the check; the exact order is not.
 
 ### 10. `claim-denial-risk` (Kumo)
 
-It must use the `claim_denial_60d` template: `PREDICT COUNT(claims.* WHERE claims.denied = 1, 0, 60, days) > 0 FOR EACH
-patients.patient_id`, with `anchor_time` 2026-09-30T00:00:00Z, and return the top-ranked `patient_id`s with probabilities.
-Reference rates from the claims table, averaged over [[ak.q10_windows]] consecutive 60-day windows of claim submission
-dates from [[ak.q10_first]] to 2026-07-30 (outcomes all known): [[ak.q10_all]] of all patients had a claim denied in a
-window, and by payer:
+Same limits: the question names Northstar Advantage patients ([[ak.q10_payer_n]] of the 1,400 patients, the payer with
+the highest denial rate), so the run must filter. It must use the `claim_denial_60d` template with
+`FOR EACH patients.patient_id WHERE patients.payer = 'Northstar Advantage'` (the full PQL is
+`PREDICT COUNT(claims.* WHERE claims.denied = 1, 0, 60, days) > 0 FOR EACH patients.patient_id WHERE patients.payer =
+'Northstar Advantage'`), with `anchor_time` 2026-10-01T00:00:00Z, and return the top 25 `patient_id`s with
+probabilities. Reference rates from the claims table, averaged over [[ak.q10_windows]] consecutive 60-day windows of
+claim submission dates from [[ak.q10_first]] to 2026-07-30 (outcomes all known): [[ak.q10_payer_rate]] of Northstar
+Advantage patients had a claim denied in a window, against [[ak.q10_all]] of all patients, and by payer:
 
 [[ak.q10]]
 
-Denials also repeat for the same patient: of the [[ak.q10_prior_n]] patients with a denied claim submitted on or before
-2026-05-31, [[ak.q10_prior_rate]] had another denied claim submitted from 2026-06-01 to 2026-07-30, against
-[[ak.q10_never_rate]] of patients never denied before. A sensible ranking puts patients denied before first, then
-patients on the higher-denial payers (Northstar Advantage, Cascade Mutual) with many recent claims.
+Denials also repeat for the same patient: of the [[ak.q10_prior_n]] Northstar Advantage patients with a denied claim
+submitted on or before 2026-05-31, [[ak.q10_prior_rate]] had another denied claim submitted from 2026-06-01 to
+2026-07-30, against [[ak.q10_never_rate]] of Northstar Advantage patients never denied before. The top 25 should
+include several of the [[ak.q10_recent_n]] Northstar Advantage patients with a denied claim submitted since 2026-07-01
+([[ak.q10_recent_ids]]), and favor patients denied before with many recent claims. Overlap with that list is the check;
+the exact order is not.
 
 ## Other facts the documents and tables share
 

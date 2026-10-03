@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # Financial Services: Harborview Community Bank
 
 Retail banking for NVIDIA Knowledge Foundation: a fictional community bank's customers, accounts and loans in DuckDB,
@@ -19,6 +21,7 @@ the tables and Kumo predictions.
 | As of | 2026-09-30; history from 2025-04 to 2026-09 (18 months) |
 | Seed | `20260930`, one seeded numpy generator per table; the same inputs give the same bytes |
 | Rebuild | `uv run data/packs/financial-services/generator/build.py` (a PEP 723 script; writes `files/` and this README) |
+| Rows | {{total_rows}} table rows in total, more than the other packs, because `monthly_balances` ({{balances_rows}} rows) has one row per account per month |
 | Size | {{total_mb}} MB in `files/`; no Parquet or DuckDB files; the tables are CSV and one XLSX |
 | License | Apache-2.0 for the generator and everything it generates |
 | Sources | `banking` (tables and prediction), `policies` and `disclosures` (documents) |
@@ -79,12 +82,14 @@ the credit bands, the five customer segments and the loan in the scanned request
 
 | Template | PQL |
 |---|---|
-| `loan_default_90d` | `PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id` |
-| `account_closure_90d` | `PREDICT COUNT(monthly_balances.*, 0, 90, days) = 0 FOR EACH accounts.account_id WHERE accounts.account_type = 'checking'` |
+| `loan_delinquency_90d` | `PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id WHERE loans.status = 'active'` |
+| `account_closure_90d` | `PREDICT COUNT(monthly_balances.*, 0, 90, days) = 0 FOR EACH accounts.account_id WHERE accounts.account_type = 'checking' AND accounts.status = 'open'` |
 | `card_dispute_30d` | `PREDICT COUNT(card_disputes.*, 0, 30, days) > 0 FOR EACH customers.customer_id` |
 
-All use the anchor time 2026-09-30T00:00:00Z. `loans.status` and `.closed_date` and `accounts.closed_date` are snapshots at
-that date: a backtest at an earlier anchor sees them already filled in.
+All use the anchor time 2026-10-01T00:00:00Z, the day after the last data day (2026-09-30). `loans.status` and `.closed_date`
+and `accounts.status` and `.closed_date` are snapshots at that date: a backtest at an earlier anchor sees them already filled in.
+Kumo scores at most 1,000 entities per request (after the entity filter) and returns the top 25, so the loan and account
+templates filter to active loans and open accounts (the checking accounts alone are over the limit).
 
 ## Questions
 

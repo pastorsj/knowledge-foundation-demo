@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # Financial Services: Harborview Community Bank
 
 Retail banking for NVIDIA Knowledge Foundation: a fictional community bank's customers, accounts and loans in DuckDB,
@@ -19,6 +21,7 @@ the tables and Kumo predictions.
 | As of | 2026-09-30; history from 2025-04 to 2026-09 (18 months) |
 | Seed | `20260930`, one seeded numpy generator per table; the same inputs give the same bytes |
 | Rebuild | `uv run data/packs/financial-services/generator/build.py` (a PEP 723 script; writes `files/` and this README) |
+| Rows | 41,514 table rows in total, more than the other packs, because `monthly_balances` (29,381 rows) has one row per account per month |
 | Size | 4.2 MB in `files/`; no Parquet or DuckDB files; the tables are CSV and one XLSX |
 | License | Apache-2.0 for the generator and everything it generates |
 | Sources | `banking` (tables and prediction), `policies` and `disclosures` (documents) |
@@ -89,12 +92,14 @@ the credit bands, the five customer segments and the loan in the scanned request
 
 | Template | PQL |
 |---|---|
-| `loan_default_90d` | `PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id` |
-| `account_closure_90d` | `PREDICT COUNT(monthly_balances.*, 0, 90, days) = 0 FOR EACH accounts.account_id WHERE accounts.account_type = 'checking'` |
+| `loan_delinquency_90d` | `PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id WHERE loans.status = 'active'` |
+| `account_closure_90d` | `PREDICT COUNT(monthly_balances.*, 0, 90, days) = 0 FOR EACH accounts.account_id WHERE accounts.account_type = 'checking' AND accounts.status = 'open'` |
 | `card_dispute_30d` | `PREDICT COUNT(card_disputes.*, 0, 30, days) > 0 FOR EACH customers.customer_id` |
 
-All use the anchor time 2026-09-30T00:00:00Z. `loans.status` and `.closed_date` and `accounts.closed_date` are snapshots at
-that date: a backtest at an earlier anchor sees them already filled in.
+All use the anchor time 2026-10-01T00:00:00Z, the day after the last data day (2026-09-30). `loans.status` and `.closed_date`
+and `accounts.status` and `.closed_date` are snapshots at that date: a backtest at an earlier anchor sees them already filled in.
+Kumo scores at most 1,000 entities per request (after the entity filter) and returns the top 25, so the loan and account
+templates filter to active loans and open accounts (the checking accounts alone are over the limit).
 
 ## Questions
 
@@ -201,10 +206,10 @@ The same rates are in `credit_risk_report_delinquency` for `month_end = 2026-09-
 
 ### loan-default-risk
 
-There is no single right list; Kumo returns a probability per loan for the `loan_default_90d` template. The base rate is 8.2% (at the earlier anchor 2026-06-30, 45 of 548 active loans had an installment due in the next 90 days that ended 30+ days past due). Signals a good model finds: loans with an unpaid installment at the anchor (54 loans) had a 40.7% rate against 4.7% for loans with none; Fair and Poor credit bands had 16.5% against 3.9%; borrowers with a credit card above 60 percent utilization at the anchor (11 loans) had 27.3% against 4.0% for borrowers with a card below that. At 2026-09-30, 12 active loans are 30 to 89 days past due and 11 are 90+; they should rank near the top. Predictions are produced by Kumo and are not reproducible from the files alone.
+Kumo scores at most 1,000 entities per request and returns the top 25, so the run must name the population: the `loan_delinquency_90d` template over active loans, `FOR EACH loans.loan_id WHERE loans.status = 'active'` (593 of the 689 loans), with `anchor_time` 2026-10-01T00:00:00Z. There is no single right list and the key is not an exact ranking; Kumo returns a probability per loan, and a good run's top 25 shows the signals below. The base rate is 8.2% (at the earlier anchor 2026-06-30, 45 of 548 active loans had an installment due in the next 90 days that ended 30+ days past due). Signals a good model finds: loans with an unpaid installment at the anchor (54 loans) had a 40.7% rate against 4.7% for loans with none; Fair and Poor credit bands had 16.5% against 3.9%; borrowers with a credit card above 60 percent utilization at the anchor (11 loans) had 27.3% against 4.0% for borrowers with a card below that. At 2026-09-30, 12 active loans are 30 to 89 days past due and 11 are 90+; the top 25 should include several of these 23 loans: L00036, L00054, L00070, L00076, L00081, L00124, L00154, L00168, L00220, L00307, L00336, L00383, L00403, L00444, L00458, L00486, L00487, L00516, L00580, L00583, L00596, L00616, L00645. Overlap with them and the signals is the check. Predictions are produced by Kumo and are not reproducible from the files alone.
 
 ### account-closure-risk
 
-Kumo returns a closure probability per checking account for `account_closure_90d` (an account is closed when no `monthly_balances` row follows in the next 90 days). Base rate at the earlier anchor 2026-06-30: 1.0% (9 of 909 checking accounts open at that date had no balance row for July and August). Signals: accounts whose balance fell by more than half in three months (58 accounts) closed at 13.8% against 0.1% for the rest; customers not enrolled in online banking closed at 1.4% against 0.9%; customers with a single product closed at 1.9% against 0.4%, and customers with under two years of tenure at 1.2% against 1.0%.
+Kumo scores at most 1,000 entities per request and returns the top 25, and the 1,002 checking accounts are over that, so the run must filter to open accounts: the `account_closure_90d` template, `FOR EACH accounts.account_id WHERE accounts.account_type = 'checking' AND accounts.status = 'open'` (887 accounts), with `anchor_time` 2026-10-01T00:00:00Z. An account is closed when no `monthly_balances` row follows in the next 90 days, and the key is not an exact ranking. Base rate at the earlier anchor 2026-06-30: 1.0% (9 of 909 checking accounts open at that date had no balance row for July and August). Signals: accounts whose balance fell by more than half in three months (58 accounts) closed at 13.8% against 0.1% for the rest; customers not enrolled in online banking closed at 1.4% against 0.9%; customers with a single product closed at 1.9% against 0.4%, and customers with under two years of tenure at 1.2% against 1.0%. At 2026-09-30, 55 open checking accounts have a balance under half of their 2026-06-30 balance: A000012, A000026, A000032, A000047, A000052, A000073, A000117, A000123, A000129, A000137, A000174, A000184, A000189, A000202, A000241, A000270, A000351, A000430, A000459, A000460, A000469, A000506, A000507, A000516, A000535, A000548, A000565, A000723, A000749, A000822, A000835, A000838, A000857, A000912, A000979, A000981, A000999, A001003, A001051, A001120, A001136, A001221, A001225, A001254, A001301, A001325, A001432, A001439, A001466, A001481, A001597, A001666, A001697, A001716, A001732. The top 25 should include several of them; overlap with that list and the signals is the check.
 
 The third template, `card_dispute_30d`, has no question of its own. For `card_dispute_30d`, the base rate at the anchor 2026-08-31 is 1.89% of customers with a dispute in the next 30 days; customers with a dispute in the prior six months had 3.28% against 1.71%, and card holders 4.52% against 0.80% for the rest.

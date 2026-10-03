@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 ---
 title: Customer Complaint Handling Procedure
 subtitle: Receiving, logging, resolving and reporting retail customer complaints

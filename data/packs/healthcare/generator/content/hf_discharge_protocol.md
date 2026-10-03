@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 ---
 title: Heart Failure Discharge and Transitional Care Protocol
 doc_id: RHN-CLN-HF-014

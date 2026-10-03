@@ -1235,6 +1235,7 @@ def write_xlsx(path: Path, sheets: dict[str, pd.DataFrame], widths: dict[str, in
 
 def parse_front(text: str) -> tuple[dict[str, str], str]:
     meta: dict[str, str] = {}
+    text = re.sub(r"\A(?:<!--.*?-->[ \t]*\n)+", "", text, flags=re.DOTALL)  # the SPDX header is not content
     if text.startswith("---\n"):
         head, _, body = text[4:].partition("\n---\n")
         for line in head.splitlines():
@@ -2349,6 +2350,9 @@ def signal_checks(w: World, m: Metrics) -> dict:
     S["now_30_89"] = int(((now.dpd >= 30) & (now.dpd < 90)).sum())
     S["now_1_29"] = int(((now.dpd >= 1) & (now.dpd < 30)).sum())
     S["now_90"] = int((now.dpd >= 90).sum())
+    S["loan_pop"] = len(now)  # the question's population: active loans at the data end (Kumo scores at most 1,000)
+    S["loan_total"] = len(w.loans)
+    S["now_30plus_ids"] = ", ".join(sorted(now[now.dpd >= 30].loan_id))
 
     mb = w.monthly_balances
     acct = w.accounts.set_index("account_id")
@@ -2374,6 +2378,15 @@ def signal_checks(w: World, m: Metrics) -> dict:
     at["short"] = [cust.tenure_years[c] < 2 for c in cu]
     S["acct_single"], S["acct_multi"] = at[at.single].y.mean(), at[~at.single].y.mean()
     S["acct_short"], S["acct_long"] = at[at.short].y.mean(), at[~at.short].y.mean()
+    # The question's population: checking accounts open at the data end (Kumo scores at most 1,000 per request)
+    open_chk = w.accounts[(w.accounts.account_type == "checking") & (w.accounts.status == "open")]
+    S["acct_pop"] = len(open_chk)
+    S["acct_total"] = int((w.accounts.account_type == "checking").sum())
+    now_bal = chk[chk.month_end == AS_OF].set_index("account_id").ending_balance
+    q2_bal = chk[chk.month_end == anchor].set_index("account_id").ending_balance
+    fell = now_bal[now_bal.index.isin(open_chk.account_id) & (now_bal < 0.5 * q2_bal.reindex(now_bal.index))]
+    S["acct_fell_n"] = len(fell)
+    S["acct_fell_ids"] = ", ".join(sorted(fell.index))
 
     d = w.card_disputes
     a2 = date(2026, 8, 31)
@@ -2517,23 +2530,32 @@ def answer_key(
         f"90+ days past due ({F['rate90_all_now']})."
     )
     A["ans_loan_pred"] = (
-        f"There is no single right list; Kumo returns a probability per loan for the `loan_default_90d` template. The base rate is "
+        f"Kumo scores at most 1,000 entities per request and returns the top 25, so the run must name the population: the "
+        f"`loan_delinquency_90d` template over active loans, `FOR EACH loans.loan_id WHERE loans.status = 'active'` "
+        f"({sig['loan_pop']} of the {sig['loan_total']} loans), with `anchor_time` 2026-10-01T00:00:00Z. There is no single right "
+        f"list and the key is not an exact ranking; Kumo returns a probability per loan, and a good run's top 25 shows the signals below. The base rate is "
         f"{pct(sig['loan_base'])} (at the earlier anchor {sig['loan_anchor']}, {sig['loan_positives']} of {sig['loan_n']} active loans had an "
         f"installment due in the next 90 days that ended 30+ days past due). Signals a good model finds: loans with an unpaid installment at the anchor "
         f"({sig['loan_unpaid_n']} loans) had a {pct(sig['loan_unpaid'])} rate against {pct(sig['loan_clean'])} for loans with none; Fair and "
         f"Poor credit bands had {pct(sig['loan_low'])} against {pct(sig['loan_high'])}; borrowers with a credit card above 60 percent utilization at the "
-        f"anchor ({sig['loan_hi_util_n']} loans) had {pct(sig['loan_hi_util'])} against {pct(sig['loan_lo_util'])} for borrowers with a card below that. At 2026-09-30, {sig['now_30_89']} active loans are "
-        f"30 to 89 days past due and {sig['now_90']} are 90+; they should rank near the top. Predictions are produced by Kumo and are not "
-        "reproducible from the files alone."
+        f"anchor ({sig['loan_hi_util_n']} loans) had {pct(sig['loan_hi_util'])} against {pct(sig['loan_lo_util'])} for borrowers with a card below that. "
+        f"At 2026-09-30, {sig['now_30_89']} active loans are 30 to 89 days past due and {sig['now_90']} are 90+; the top 25 should include "
+        f"several of these {sig['now_30_89'] + sig['now_90']} loans: {sig['now_30plus_ids']}. Overlap with them and the signals is the check. "
+        "Predictions are produced by Kumo and are not reproducible from the files alone."
     )
     A["ans_acct_pred"] = (
-        f"Kumo returns a closure probability per checking account for `account_closure_90d` (an account is closed when no `monthly_balances` row "
-        f"follows in the next 90 days). Base rate at the earlier anchor {sig['loan_anchor']}: {pct(sig['acct_base'])} "
+        f"Kumo scores at most 1,000 entities per request and returns the top 25, and the {sig['acct_total']:,} checking accounts are over "
+        f"that, so the run must filter to open accounts: the `account_closure_90d` template, `FOR EACH accounts.account_id WHERE "
+        f"accounts.account_type = 'checking' AND accounts.status = 'open'` ({sig['acct_pop']} accounts), with `anchor_time` "
+        f"2026-10-01T00:00:00Z. An account is closed when no `monthly_balances` row follows in the next 90 days, and the key is not an exact ranking. "
+        f"Base rate at the earlier anchor {sig['loan_anchor']}: {pct(sig['acct_base'])} "
         f"({sig['acct_closed']} of {sig['acct_n']} checking accounts open at that date had no balance row for July and August). Signals: accounts whose "
         f"balance fell by more than half in three months ({sig['acct_drop_n']} accounts) closed at {pct(sig['acct_drop'])} against "
         f"{pct(sig['acct_nodrop'])} for the rest; customers not enrolled in online banking closed at {pct(sig['acct_offline'])} against "
         f"{pct(sig['acct_online'])}; customers with a single product closed at {pct(sig['acct_single'])} against {pct(sig['acct_multi'])}, and "
-        f"customers with under two years of tenure at {pct(sig['acct_short'])} against {pct(sig['acct_long'])}."
+        f"customers with under two years of tenure at {pct(sig['acct_short'])} against {pct(sig['acct_long'])}. At 2026-09-30, "
+        f"{sig['acct_fell_n']} open checking accounts have a balance under half of their 2026-06-30 balance: {sig['acct_fell_ids']}. "
+        "The top 25 should include several of them; overlap with that list and the signals is the check."
     )
     A["sig_disputes"] = (
         f"For `card_dispute_30d`, the base rate at the anchor 2026-08-31 is {pct(sig['disp_base'], 2)} of customers with a dispute in the next 30 days; "
@@ -2556,6 +2578,7 @@ def render_readme(w: World, frames: dict, A: dict, F: dict, sig: dict) -> None:
             + [["`credit_risk_report_delinquency`", "54"], ["`credit_risk_report_provisions`", "30"]],
         ),
         total_rows=f"{sum(len(df) for df in frames.values()) + 84:,}",
+        balances_rows=f"{len(frames['monthly_balances']):,}",
         loans_active=F["active_loans"],
         borrowers=f"{w.loans.customer_id.nunique():,} ({pct(w.loans.customer_id.nunique() / len(w.customers), 0)})",
     )

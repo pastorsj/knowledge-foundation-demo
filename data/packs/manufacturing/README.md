@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # manufacturing pack: Atlas Precision Components
 
 A fictional machining manufacturer for NVIDIA Knowledge Foundation. Its plant-operations tables are in DuckDB and its
@@ -77,7 +79,8 @@ computed from the tables by the generator.
 
 ## Prediction templates
 
-Valid Kumo PQL over the `operations` tables, anchored at 2026-09-30T00:00:00Z:
+Valid Kumo PQL over the `operations` tables, anchored at 2026-10-01T00:00:00Z (the day after the last data day, 2026-09-30). Kumo scores at most 1,000 entities
+per request and returns the top 25; the 56 machines are well under that, so none of these needs an entity filter:
 
 ```text
 PREDICT COUNT(maintenance_events.* WHERE maintenance_events.event_type = 'unplanned', 0, 30, days) > 0 FOR EACH machines.machine_id
@@ -230,7 +233,7 @@ SELECT SUM(cost_usd) FROM quality_defects WHERE machine_id = 'MTY-LTH-04'
 
 > Which machines are most likely to have an unplanned failure in the next 30 days? Give the five with the highest probability.
 
-Kumo returns probabilities, so the check is overlap, not exact values. The generator simulates October 2026 beyond the data (the tables stop at 30 September). The machines below are in a degradation ramp at the anchor time and fail within 30 days; at least three of the five highest-probability machines should come from this list.
+Kumo returns probabilities, so the check is overlap, not exact values. The population is all 56 machines, well under Kumo's limit of 1,000 entities per request, so the run needs no entity filter; it returns the top 25 and the answer gives five. The generator simulates October 2026 beyond the data (the tables stop at 30 September). The machines below are in a degradation ramp at the anchor time (2026-10-01T00:00:00Z) and fail within 30 days; at least three of the five highest-probability machines should come from this list.
 
 | Machine | Plant | Type | Simulated failure (code) |
 |---|---|---|---|
@@ -249,7 +252,7 @@ Signals a model can see: rising `avg_vibration_mm_s` and `max_temperature_c`, mo
 
 > Which five machines are most likely to log more than 10 alarms over the next 30 days, and what plant and machine type is each?
 
-Kumo returns probabilities; the check is overlap with the simulated truth. The generator continues the simulation through 30 October 2026: 9 machines exceed 10 alarms in the 30 days after the anchor time: MTY-RBT-03 (44), MTY-MIL-05 (32), MTY-LTH-05 (26), DAY-MIL-01 (20), BRN-MIL-05 (20), DAY-LTH-01 (19), DAY-LTH-05 (17), DAY-MIL-06 (14), DAY-MIL-07 (11). At least three of the five highest-probability machines should come from this list. The plant and type of each come from `machines` (`SELECT machine_id, plant_id, machine_type FROM machines WHERE machine_id IN (...)`). For reference, the machines with the most alarms in September 2026 are BRN-LTH-03 (35), DAY-LTH-04 (30), DAY-MIL-03 (30), MTY-GRD-01 (26), MTY-MIL-05 (24).
+Kumo returns probabilities; the check is overlap with the simulated truth (all 56 machines are scored, under the limit of 1,000 entities per request, and the top 25 come back). The generator continues the simulation through 30 October 2026: 9 machines exceed 10 alarms in the 30 days after the anchor time (2026-10-01T00:00:00Z): MTY-RBT-03 (44), MTY-MIL-05 (32), MTY-LTH-05 (26), DAY-MIL-01 (20), BRN-MIL-05 (20), DAY-LTH-01 (19), DAY-LTH-05 (17), DAY-MIL-06 (14), DAY-MIL-07 (11). At least three of the five highest-probability machines should come from this list. The plant and type of each come from `machines` (`SELECT machine_id, plant_id, machine_type FROM machines WHERE machine_id IN (...)`). For reference, the machines with the most alarms in September 2026 are BRN-LTH-03 (35), DAY-LTH-04 (30), DAY-MIL-03 (30), MTY-GRD-01 (26), MTY-MIL-05 (24).
 
 ## Regenerating and checking
 
