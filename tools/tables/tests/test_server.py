@@ -298,6 +298,28 @@ async def test_a_manifest_must_carry_its_own_id(server: MCPServer, knowledge_dir
     assert "names another source" in result.content[0].text
 
 
+async def test_a_database_error_keeps_its_class_but_no_path(knowledge_dir: Path):
+    databases = [worker.Attachment(alias="retail_sales", path=knowledge_dir / "sources" / SALES / "tables.duckdb")]
+
+    with pytest.raises(worker.QueryFailed) as refused:
+        await worker.run(databases, "SELECT * FROM read_csv('/etc/passwd')", timeout=10)
+
+    message = str(refused.value)
+    assert message.startswith("Permission Error:") and "<path>" in message
+    assert "/etc/passwd" not in message
+
+
+def test_error_text_loses_database_files_and_absolute_paths():
+    message = worker.redact_error(
+        'IO Error: Could not read "/knowledge/sources/retail.sales/tables.duckdb": busy\n'
+        "Candidate bindings: tables.duckdb at /tmp/x\n\nLINE 1: SELECT 1"
+    )
+
+    assert message.startswith("IO Error: Could not read")
+    assert "/knowledge" not in message and "tables.duckdb" not in message and "/tmp/x" not in message
+    assert "LINE 1" not in message  # the first two lines only
+
+
 async def test_a_database_error_reaches_the_agent(server: MCPServer):
     result = await query(server, "SELECT nope FROM retail_sales.orders")
 
