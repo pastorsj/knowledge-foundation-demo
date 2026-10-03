@@ -1,0 +1,44 @@
+[
+  {
+    "id": "retail.policies",
+    "pack_id": "retail",
+    "name": "Policies & Procedures",
+    "description": "Return and refund policy, store operations SOP, supplier terms and a scanned loss-prevention memo.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  },
+  {
+    "id": "retail.reports",
+    "pack_id": "retail",
+    "name": "Merchandising & Performance Reports",
+    "description": "The Q3 2026 merchandising review deck and the Q3 2026 regional performance report.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  },
+  {
+    "id": "retail.sales",
+    "pack_id": "retail",
+    "name": "Sales & Customers",
+    "description": "Stores, products, customers, orders, order items and returns, plus the merchandising plan workbook.",
+    "default_enabled": true,
+    "kind": "structured",
+    "capabilities": [
+      "structured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": "retail_sales"
+  }
+]

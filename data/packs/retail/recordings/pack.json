@@ -1,0 +1,140 @@
+{
+  "id": "retail",
+  "kind": "industry",
+  "title": "Retail",
+  "description": "Lumen Retail Group, a fictional omnichannel home-and-lifestyle retailer with 24 stores in four US regions plus Lumen.com: stores, products, customers, orders and returns for April 2025 to September 2026 beside its return policy, store operations SOP, supplier terms, a scanned loss-prevention memo and its Q3 2026 performance reports.",
+  "icon": "Store",
+  "status": "ready",
+  "version": "1.0.0",
+  "as_of": "2026-09-30",
+  "disclaimer": "Synthetic data for a software demonstration: Lumen Retail Group and every store, product, customer, supplier, document and figure are fictional, and any resemblance to a real company or person is coincidental.",
+  "questions": [
+    {
+      "id": "return-window-fees",
+      "label": "Return windows and restocking fees",
+      "tag": "DOCUMENTS",
+      "description": "Read the restocking fee table in the return policy PDF.",
+      "question": "What return window and restocking fee apply to electronics and to furniture under Lumen's return policy, and are defective items charged the fee?",
+      "sources": [
+        "retail.policies"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "no-receipt-limits",
+      "label": "No-receipt return limits",
+      "tag": "DOCUMENTS",
+      "description": "The answer is in a scanned memo, which only a vision parser can read.",
+      "question": "What does the loss-prevention memo set as the maximum value of a no-receipt return, how many no-receipt returns can one customer make in 90 days, and what is the lower limit at stores on enhanced monitoring?",
+      "sources": [
+        "retail.policies"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "regional-growth-report",
+      "label": "Fastest-growing region in Q3",
+      "tag": "DOCUMENTS",
+      "description": "Find the regional table in the Q3 2026 performance report PDF.",
+      "question": "According to the Q3 2026 regional performance report, which region grew net sales fastest year over year, and what were its Q3 2026 net sales?",
+      "sources": [
+        "retail.reports"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": false
+    },
+    {
+      "id": "top-stores-q3",
+      "label": "Top stores by Q3 net sales",
+      "tag": "SQL",
+      "description": "Rank physical stores by net sales for the last full quarter.",
+      "question": "Which five physical stores (excluding the online store) had the highest net sales in Q3 2026, July 1 to September 30?",
+      "sources": [
+        "retail.sales"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "category-vs-plan",
+      "label": "Categories against plan",
+      "tag": "SQL",
+      "description": "Join the planning workbook's targets to order lines.",
+      "question": "Which product categories missed their Q3 2026 net sales target in the merchandising plan, and by what percentage?",
+      "sources": [
+        "retail.sales"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "category-return-rate",
+      "label": "Highest return rate by category",
+      "tag": "SQL",
+      "description": "Returned value as a share of net sales, by product category.",
+      "question": "Which product category had the highest return rate in Q3 2026, measured as the value of items returned in the quarter divided by net sales in the quarter?",
+      "sources": [
+        "retail.sales"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "electronics-returns-fee",
+      "label": "Electronics returns and restocking fee",
+      "tag": "HYBRID",
+      "description": "Count returns in the tables, then apply the policy's restocking fee.",
+      "question": "Which physical store processed the most electronics returns in Q3 2026, and under the return policy how much restocking fee would be due on that store's opened, non-defective electronics returns?",
+      "sources": [
+        "retail.policies",
+        "retail.sales"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "monitored-store-returns",
+      "label": "Stores on enhanced return monitoring",
+      "tag": "HYBRID",
+      "description": "Read the store list from the scanned memo, then total their returns in the tables.",
+      "question": "The loss-prevention memo puts three stores on enhanced return monitoring. How many returns did those stores process in Q3 2026, and what share of the chain's returned value is that?",
+      "sources": [
+        "retail.policies",
+        "retail.sales"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    }
+  ],
+  "examples": [
+    "return-window-fees",
+    "no-receipt-limits",
+    "top-stores-q3",
+    "electronics-returns-fee",
+    "monitored-store-returns",
+    "regional-growth-report",
+    "category-vs-plan",
+    "category-return-rate"
+  ],
+  "conversations": []
+}

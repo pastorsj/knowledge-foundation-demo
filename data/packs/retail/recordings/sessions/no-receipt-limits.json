@@ -1,0 +1,688 @@
+{
+  "schemaVersion": 2,
+  "id": "no-receipt-limits",
+  "title": "No-receipt return limits",
+  "turns": [
+    {
+      "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+      "question": "What does the loss-prevention memo set as the maximum value of a no-receipt return, how many no-receipt returns can one customer make in 90 days, and what is the lower limit at stores on enhanced monitoring?",
+      "submittedAt": "2026-10-03T04:15:45.062251Z",
+      "completedAt": "2026-10-03T04:15:50.991415Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the Asset Protection loss-prevention memo (AP-2026-031, effective August 15, 2026):\n\n| Rule | Value |\n|------|-------|\n| Maximum value of a no-receipt return (standard) | **$75.00 per transaction**, refunded as store credit only [1] |\n| Maximum no-receipt returns per customer in 90 days | **3 no-receipt returns** in any rolling 90-day period [1] |\n| Lowered no-receipt limit at enhanced-monitoring stores | **$50.00 per transaction** (applies to stores S06 Newark Gateway, S22 Los Angeles Westside, S16 Indianapolis Fashion Mall from Aug 15 – Dec 31, 2026) [1] |\n\nThe memo also requires the cashier to scan the customer’s photo ID for every no-receipt return.\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 3 documents — evidence `hermes-receipt:4e0f7247b758c35e68c352f0f41cec4d2b7e159d7feec6c03458bcdec29361d0`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:4e0f7247b758c35e68c352f0f41cec4d2b7e159d7feec6c03458bcdec29361d0",
+            "label": "Unstructured Retrieval evidence — 3 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-ce5dc2edacdf4c62b476a026cbd48853"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "49c904cc-3d65-5e20-81e6-9211e7739ed0",
+          "cursor": 192,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:45.379783Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:f0c57389eaf085bf5488d742f0eed944e543f1b4747a1f023a9ff8a4edc9c9e0",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0988afdc-025a-543a-b96e-0024f9da55f3",
+          "cursor": 193,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": "658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f:api:1",
+          "parentInvocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:46.634064Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4757,
+              "output_tokens": 152
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b4f2c3f6-07a5-59e8-ac7f-6279e3ce8a94",
+          "cursor": 194,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-ce5dc2edacdf4c62b476a026cbd48853",
+          "parentInvocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:46.724582Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:7d5a6ade940591f93367e2e043fd6fb23f3b7b7407a82c5d3bb1213787c86780",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "078dde86-2153-5c23-a8f8-131cfb3b1361",
+          "cursor": 195,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": "658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-ce5dc2edacdf4c62b476a026cbd48853",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:4e0f7247b758c35e68c352f0f41cec4d2b7e159d7feec6c03458bcdec29361d0"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:47.420748Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 683,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:4e0f7247b758c35e68c352f0f41cec4d2b7e159d7feec6c03458bcdec29361d0",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "5c7aeb4c-8963-53a7-bd60-fbd80db09115",
+          "cursor": 196,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-ce5dc2edacdf4c62b476a026cbd48853",
+          "parentInvocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:47.466144Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.74
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:6b06c333b3dba23b105fd4381a496deadad71214a6f540af64d166b014a0ed6d",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "bde675e3-b482-5481-b4a2-fe4f494c80c2",
+          "cursor": 197,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": "658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f:api:2",
+          "parentInvocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:50.920928Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 9237,
+              "output_tokens": 522
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "becd900e-cd5b-5970-bca6-77ed09ac730b",
+          "cursor": 198,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:50.951623Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:082e75267e34cfd543d936b5716a25e0a3506a6a098fbfe74f970605dadf6535",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c3e5fc7b-fedc-5076-97ee-1fc1734c956f",
+          "cursor": 199,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:50.973684Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 13994,
+              "output_tokens": 674,
+              "total_tokens": 14668,
+              "output_characters": 931
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4ad883b8daf070fa75c81ba2f7a7ff8bfff09eb947c098c50b343125b0eabd90",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "911d57ae-91b8-5e3b-87d1-f66ed3037449",
+          "cursor": 200,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:50.991112Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:658c3eff-e609-404a-8299-16a9b5babdf4:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "499daa7f-de19-5b4e-877c-bc2fc12e26f2",
+          "cursor": 201,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:50.991163Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:658c3eff-e609-404a-8299-16a9b5babdf4:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3f2a085b-6adc-5260-ba6e-d57157f7076c",
+          "cursor": 202,
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "runId": "run_fb05bd0fa6354ebc80bfac27e52f7d87",
+          "sessionId": "record-2f67d10b-dde2-4fa2-8cdb-70bcb24cc680",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:1a13894dffe14fb11b847a10:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:15:50.991195Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 5859,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 740,
+              "input_tokens": 13994,
+              "output_tokens": 674,
+              "total_tokens": 14668
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:658c3eff-e609-404a-8299-16a9b5babdf4:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:4e0f7247b758c35e68c352f0f41cec4d2b7e159d7feec6c03458bcdec29361d0",
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "invocationId": "hermes-tool:chatcmpl-tool-ce5dc2edacdf4c62b476a026cbd48853",
+          "turnId": "658c3eff-e609-404a-8299-16a9b5babdf4:658c3eff-e609-404a-8299-16a9b5babdf4:bf39740f",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 683,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:15:47.420748Z",
+          "content": {
+            "query": "no-receipt return maximum value limit customer 90 days enhanced monitoring stores",
+            "sourceIds": [
+              "retail.policies"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.5722275376319885,
+                "vectorScore": 0.5722275376319885,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-47d64c78b396828e",
+                "chunkId": "retail.policies:f-47d64c78b396828e:0003",
+                "title": "loss-prevention-memo.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "MEMORANDUM\n1. No-receipt returns\nA return with no receipt, order number or Rewards ID lookup is limited to $75.00 per transaction and is refunded as store credit only. A customer may make no more than 3 no-receipt returns in any rolling 90 days. The cashier scans the customer’s photo ID into the return screen for every no-receipt return.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-47d64c78b396828e",
+                  "file_name": "loss-prevention-memo.png",
+                  "citation": "loss-prevention-memo.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "MEMORANDUM › 1. No-receipt returns",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.5705705285072327,
+                "vectorScore": 0.5705705285072327,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-47d64c78b396828e",
+                "chunkId": "retail.policies:f-47d64c78b396828e:0005",
+                "title": "loss-prevention-memo.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "MEMORANDUM\n3. Enhanced monitoring stores\nThree stores had a return rate more than twice the chain average between January 1 and June 30, 2026 (returned value divided by net sales). They are on enhanced monitoring from August 15 through December 31, 2026:\nS06, Store = Newark Gateway. S06, Region = Northeast. S06, Jan-Jun 2026 return rate = 29.7%. S06, Multiple of chain rate = 3.0x. S22, Store = Los Angeles Westside. S22, Region = West. S22, Jan-Jun 2026 return rate = 29.2%. S22, Multiple of chain rate = 3.0x. S16, Store = Indianapolis Fashion Mall. S16, Region = Midwest. S16, Jan-Jun 2026 return rate = 21.3%. S16, Multiple of chain rate = 2.2x\nThese stores send a daily returns exception report to Asset Protection by 10:00 am, and their no-receipt limit is lowered to $50.00 per transaction. Regional Operations Directors will review the list at the end of the fourth quarter.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-47d64c78b396828e",
+                  "file_name": "loss-prevention-memo.png",
+                  "citation": "loss-prevention-memo.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "MEMORANDUM › 3. Enhanced monitoring stores",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.48176509141921997,
+                "vectorScore": 0.48176509141921997,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0010",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n7. Fraud controls\nColleagues must not refuse a legitimate return because of a suspicion they cannot support. Asset Protection monitors return patterns and issues store-specific rules. Stores placed on enhanced monitoring report daily return exceptions to Asset Protection. A customer who makes more than six returns in 90 days is flagged for review but is not refused at the till.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Return and Refund Policy › 7. Fraud controls",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.3784182667732239,
+                "vectorScore": 0.3784182667732239,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0009",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n6. Approvals and exceptions\nStandard return within the window, Who may approve = Cashier. Standard return within the window, Limit = Up to $250.00 per transaction. Return above $250.00, Who may approve = Store Manager. Return above $250.00, Limit = Up to $1,000.00. Return above $1,000.00, Who may approve = Regional Operations Director. Return above $1,000.00, Limit = No limit. Return up to 7 days outside the window, Who may approve = Store Manager. Return up to 7 days outside the window, Limit = Once per customer per year. Restocking fee waiver, Who may approve = Store Manager. Restocking fee waiver, Limit = Reason code RF-WAIVE; maximum 2 per store per month\nA restocking fee waiver must be recorded with the order number and a short reason. Regional Finance reviews waiver volumes each quarter, and a store that exceeds its limit twice in a row loses waiver authority for 90 days.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Return and Refund Policy › 6. Approvals and exceptions",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.35827985405921936,
+                "vectorScore": 0.35827985405921936,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-47d64c78b396828e",
+                "chunkId": "retail.policies:f-47d64c78b396828e:0002",
+                "title": "loss-prevention-memo.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "MEMORANDUM\n- TO: All Store Managers and Assistant Managers; Regional Operations Directors\n- FROM: Director, Asset Protection\n- DATE: August 12, 2026\n- RE: Return controls and enhanced return monitoring, effective August 15, 2026\n- MEMO NO.: AP-2026-031\nEffective August 15, 2026 the controls below apply in every store, and the stores named in section 3 move to enhanced return monitoring. This memo supplements the Return and Refund Policy (POL-RET-014) and replaces memo AP-2026-018.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-47d64c78b396828e",
+                  "file_name": "loss-prevention-memo.png",
+                  "citation": "loss-prevention-memo.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "MEMORANDUM",
+                  "labels": [
+                    "list_item",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.34758734703063965,
+                "vectorScore": 0.34758734703063965,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-47d64c78b396828e",
+                "chunkId": "retail.policies:f-47d64c78b396828e:0004",
+                "title": "loss-prevention-memo.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "MEMORANDUM\n2. Manager approval\nA Store Manager must approve, with an override code: any return over $250.00; any Electronics return where the serial number was not captured; and a third return by the same customer within 30 days.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-47d64c78b396828e",
+                  "file_name": "loss-prevention-memo.png",
+                  "citation": "loss-prevention-memo.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "MEMORANDUM › 2. Manager approval",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.34556716680526733,
+                "vectorScore": 0.34556716680526733,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0006",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n3. General conditions\n- (\\bullet) Proof of purchase. A return is matched to an order by receipt, order number, or the customer’s Lumen Rewards ID. A customer who has none of these is handled under the no-receipt rules in the Asset Protection memo in force.\n- (\\bullet) Return window. The window in section 2 runs from the purchase date in store, or the delivery date for online and delivered orders. Lumen Rewards Gold members receive 15 extra days on every window.\n- (\\bullet) Condition. An item is unopened or unused when its packaging is sealed and it shows no sign of use. It is opened or used when the packaging has been opened or the item has been assembled, worn, washed or plugged in. It is defective or damaged when it does not work as described or arrived damaged; the cashier records the condition code at the point of sale (see the Store Operations SOP).\n- (\\bullet) Original packaging. Electronics and small appliances must come back with all accessories and the original packaging. Missing accessories are deducted from the refund at replacement cost.\n- (\\bullet) Same item exchanges are never charged a restocking fee.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Return and Refund Policy › 3. General conditions",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.3341783583164215,
+                "vectorScore": 0.3341783583164215,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-17e1fb4d753ce9d2",
+                "chunkId": "retail.policies:f-17e1fb4d753ce9d2:0010",
+                "title": "store-operations-sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Store Operations Standard Operating\nProcedures\n6. Returns and exchanges at the point of sale\n6.3 Approvals\nCashiers approve standard returns up to $250.00 per transaction. A Store Manager approves returns from $250.01 to $1,000.00, any return up to 7 days outside the window, and any restocking fee waiver. Returns above $1,000.00 go to the Regional Operations Director. Approvals are entered with the manager’s override code and are never shared.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-17e1fb4d753ce9d2",
+                  "file_name": "store-operations-sop.pdf",
+                  "citation": "store-operations-sop.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Store Operations Standard Operating\nProcedures › 6. Returns and exchanges at the point of sale › 6.3 Approvals",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "retail.policies": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 639.8,
+              "searchMs": 7.0,
+              "rerankMs": 0.0,
+              "totalMs": 646.8
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "retail.policies"
+      ]
+    }
+  ]
+}

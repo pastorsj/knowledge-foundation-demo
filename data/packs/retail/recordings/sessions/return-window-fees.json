@@ -1,0 +1,692 @@
+{
+  "schemaVersion": 2,
+  "id": "return-window-fees",
+  "title": "Return windows and restocking fees",
+  "turns": [
+    {
+      "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+      "question": "What return window and restocking fee apply to electronics and to furniture under Lumen's return policy, and are defective items charged the fee?",
+      "submittedAt": "2026-10-03T04:13:53.963515Z",
+      "completedAt": "2026-10-03T04:13:59.370757Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on Lumen's Return and Refund Policy, here are the return windows and restocking fees for electronics and furniture:\n\n| Category | Return Window | Restocking Fee (Opened/Used, Not Defective) | Defective/Damaged Items |\n|----------|---------------|---------------------------------------------|-------------------------|\n| **Electronics** | 30 days | 15% | **No fee** |\n| **Furniture** | 45 days | 20% | **No fee; free pickup** |\n\n**Defective items are never charged a restocking fee** for either category. The policy explicitly states: \"Fees are charged only on items returned opened or used and never on defective or damaged items\" [1].\n\nAdditional notes:\n- The return window runs from the purchase date (in store) or delivery date (online/delivered orders)\n- Lumen Rewards Gold members receive 15 extra days on every window\n- Electronics also require serial number capture at return\n- For furniture returned by mail, defective items qualify for free pickup, while non-defective furniture incurs a $79 carrier pickup fee [1].\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 3 documents — evidence `hermes-receipt:6eb5551459aaa953894ab8b8c223f19d1875ef54d4fc0dbec58567cfa91fa3d0`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:6eb5551459aaa953894ab8b8c223f19d1875ef54d4fc0dbec58567cfa91fa3d0",
+            "label": "Unstructured Retrieval evidence — 3 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-c0b40f28ba9645bc8a3277248fe1de5d"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "e2a9b59f-0308-50eb-aa1f-5d7717d3531c",
+          "cursor": 75,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:54.051140Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8b1c8c70d593cf2bcb46f2529b1de7030fa8c992b0ecc134f8df9868622f4028",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a2a2d05f-f951-5c96-b7dd-c7aa1cce6137",
+          "cursor": 76,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937:api:1",
+          "parentInvocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:56.168223Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4739,
+              "output_tokens": 161
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "bb0016ef-4b5e-55a7-9a58-893940530f31",
+          "cursor": 77,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-c0b40f28ba9645bc8a3277248fe1de5d",
+          "parentInvocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:56.211602Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:ff43d9caf8061a35ebfe7e065c0190b3f248a7224a982a14208f22475b45bb11",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a4a459cf-21c5-5c1c-864a-2a5d8d6c220d",
+          "cursor": 78,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-c0b40f28ba9645bc8a3277248fe1de5d",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:6eb5551459aaa953894ab8b8c223f19d1875ef54d4fc0dbec58567cfa91fa3d0"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:56.932740Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 720,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:6eb5551459aaa953894ab8b8c223f19d1875ef54d4fc0dbec58567cfa91fa3d0",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3b61aafb-2195-5032-945c-5855d438f661",
+          "cursor": 79,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-c0b40f28ba9645bc8a3277248fe1de5d",
+          "parentInvocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:56.975475Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.752
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:f5c71b94f11fba4b91798c400e80cc18354a86f9a256951ccfb7debc09fa2e01",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "50253083-526e-53c3-a887-01cf3746245b",
+          "cursor": 80,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937:api:2",
+          "parentInvocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:59.293632Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 10281,
+              "output_tokens": 549
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f35967c5-3e15-5fa5-acd7-a335b035bb2f",
+          "cursor": 81,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:59.326074Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:0f990f08518654d63cf1ecc3efc9ec3b3b327e6a579c5fd3bd8dbaeb88062859",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a08a11bd-8930-55df-9a02-a3b62f5916b8",
+          "cursor": 82,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:59.349181Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 15020,
+              "output_tokens": 710,
+              "total_tokens": 15730,
+              "output_characters": 1205
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:180e6f6f915b32d421fdf616517bdf3c94b1c3b33fdae8d7ddda33db15d1634d",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9b559231-a1a5-5856-a3cb-36654133beb1",
+          "cursor": 83,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:59.370471Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "101bc5e4-cb1c-50f6-bacb-eace84e5daed",
+          "cursor": 84,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:59.370512Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b94f3bae-7f2b-58a3-99ca-0b86354ed0f1",
+          "cursor": 85,
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "runId": "run_c3ef8ed3bff94864aa7b19c3b081fdbb",
+          "sessionId": "record-5c7643ef-773e-4b19-bf18-5533087883a3",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:ec6af346cd306c64dec4dead:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:13:59.370542Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 5340,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 752,
+              "input_tokens": 15020,
+              "output_tokens": 710,
+              "total_tokens": 15730
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:6eb5551459aaa953894ab8b8c223f19d1875ef54d4fc0dbec58567cfa91fa3d0",
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "invocationId": "hermes-tool:chatcmpl-tool-c0b40f28ba9645bc8a3277248fe1de5d",
+          "turnId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de:2d9b9937",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 720,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:13:56.932740Z",
+          "content": {
+            "query": "return window restocking fee electronics furniture defective items",
+            "sourceIds": [
+              "retail.policies"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.7044810056686401,
+                "vectorScore": 0.7044810056686401,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0004",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n1. Purpose and scope\n2. Return windows and restocking fees\nThe table below applies to purchases made in stores and on Lumen.com. A restocking fee is a percentage of the price the customer paid for the item after discounts, and it is deducted from the refund. Fees are charged only on items returned opened or used and never on defective or damaged items.\nElectronics, Return window = 30 days. Electronics, Unopened or unused = No fee. Electronics, Opened or used (not defective) = 15% restocking fee. Electronics, Defective or damaged = No fee. Electronics,  = . Furniture, Return window = 45 days. Furniture, Unopened or unused = No fee. Furniture, Opened or used (not defective) = 20% restocking fee. Furniture, Defective or damaged = No fee; free pickup. Furniture,  = . Home Decor, Return window = 60 days. Home Decor, Unopened or unused = No fee. Home Decor, Opened or used (not defective) = No fee. Home Decor, Defective or damaged = No fee. Home Decor,  = . Kitchen, Return window = Dining. Kitchen, Unopened or unused = 60 days. Kitchen, Opened or used (not defective) = No fee. Kitchen, Defective or damaged = 10% restocking fee on small appliances; no fee on other items. Kitchen,  = No fee. Bedding, Return window = Bath. Bedding, Unopened or unused = 45 days. Bedding, Opened or used (not defective) = No fee. Bedding, Defective or damaged = 10% restocking fee. Bedding,  = No fee. Apparel, Return window = 90 days. Apparel, Unopened or unused = No fee. Apparel, ",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Return and Refund Policy › 1. Purpose and scope › 2. Return windows and restocking fees",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.512256383895874,
+                "vectorScore": 0.512256383895874,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0005",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n1. Purpose and scope\n2. Return windows and restocking fees\n- Small appliances in Kitchen & Dining are air fryers, stand mixers, coffee makers, electric kettles, countertop • blenders and toasters. Cookware, knives, dinnerware, glassware, storage and flatware carry no fee.\n- Electronics are the only category that also requires the serial number to be captured at the return. •\n- Items marked Final Sale (including clearance priced at 70 percent off or more), gift cards and personalized • items cannot be returned unless defective.\nPOL-RET-014 | Version 4.2 Internal use only. Synthetic document for a software demonstration. Page 1 of 3\nLUMEN RETAIL GROUP Return and Refund Policy",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Return and Refund Policy › 1. Purpose and scope › 2. Return windows and restocking fees",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.5097510814666748,
+                "vectorScore": 0.5097510814666748,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0008",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n5. Online orders and mail returns\nItems bought on Lumen.com can be returned in any Lumen store under the same window and fee rules (buy online, return in store), or by mail.\n- (\\bullet) Mail returns use the prepaid label in the order confirmation. A $7.95 label fee is deducted from the refund unless the item is defective, damaged in transit, or the wrong item was sent.\n- (\\bullet) Furniture pickup. Furniture that is not defective is collected by the carrier for a $79 pickup fee, deducted from the refund. Pickup is free for defective or damaged furniture.\n- (\\bullet) Holiday extension. Purchases made between November 1 and December 24 may be returned until January 31 of the following year. Electronics purchased in that period may be returned until January 15.\nPOL-RET-014 | Version 4.2 Internal use only. Synthetic document for a software demonstration. Page 2 of 3\nLUMEN RETAIL GROUP Return and Refund Policy",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Return and Refund Policy › 5. Online orders and mail returns",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.4978524446487427,
+                "vectorScore": 0.4978524446487427,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0006",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n3. General conditions\n- (\\bullet) Proof of purchase. A return is matched to an order by receipt, order number, or the customer’s Lumen Rewards ID. A customer who has none of these is handled under the no-receipt rules in the Asset Protection memo in force.\n- (\\bullet) Return window. The window in section 2 runs from the purchase date in store, or the delivery date for online and delivered orders. Lumen Rewards Gold members receive 15 extra days on every window.\n- (\\bullet) Condition. An item is unopened or unused when its packaging is sealed and it shows no sign of use. It is opened or used when the packaging has been opened or the item has been assembled, worn, washed or plugged in. It is defective or damaged when it does not work as described or arrived damaged; the cashier records the condition code at the point of sale (see the Store Operations SOP).\n- (\\bullet) Original packaging. Electronics and small appliances must come back with all accessories and the original packaging. Missing accessories are deducted from the refund at replacement cost.\n- (\\bullet) Same item exchanges are never charged a restocking fee.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Return and Refund Policy › 3. General conditions",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.4854672849178314,
+                "vectorScore": 0.4854672849178314,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-17e1fb4d753ce9d2",
+                "chunkId": "retail.policies:f-17e1fb4d753ce9d2:0009",
+                "title": "store-operations-sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Store Operations Standard Operating\nProcedures\n6. Returns and exchanges at the point of sale\n6.1 Processing steps\n- Greet the customer and ask for the receipt, the order number or the Lumen Rewards ID.\n- Look the order up in the point-of-sale system. If the item was bought online, scan the return barcode from the confirmation email or look up by order number.\n- Check the item against the category window in the policy. Gold members have 15 extra days.\n- Inspect the item and its packaging and record the condition code (table below).\n- For Electronics, scan the serial number into the return screen. A return of an Electronics item without a serial number needs Store Manager approval.\n- The system calculates the restocking fee from the category and condition. The cashier may not change it; only a Store Manager can apply the RF-WAIVE code.\n- Refund to the original payment method, or issue store credit where the rules require it. Print the receipt and have the customer sign for refunds above $100.00.\n- Place the item in the returns bin with its return tag. Returns are inspected and re-shelved or sent to the returns center within 24 hours.\nCND-U, Meaning = Unopened or unused. CND-U, Restocking fee = Never. CND-O, Meaning = Opened or used, not defective. CND-O, Restocking fee = Per policy category table. CND-D, Meaning = Defective or damaged. CND-D, Restocking fee = Never. RSN-01, Meaning = Changed mind or did not fit the space. RSN-01, Restocking fee = Per condition. RSN-02, Meaning ",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-17e1fb4d753ce9d2",
+                  "file_name": "store-operations-sop.pdf",
+                  "citation": "store-operations-sop.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Store Operations Standard Operating\nProcedures › 6. Returns and exchanges at the point of sale › 6.1 Processing steps",
+                  "labels": [
+                    "list_item",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.4484395980834961,
+                "vectorScore": 0.4484395980834961,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0011",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n7. Fraud controls\n8. Revision history\n4.2, Date = January 15, 2026. 4.2, What changed = Electronics restocking fee raised from 10% to 15%; furniture return window extended from 30 to 45 days; mail return label fee set at $7.95. 4.1, Date = March 1, 2025. 4.1, What changed = Added the 15-day Gold member window extension; holiday extension aligned to January 31. 4.0, Date = September 15, 2024. 4.0, What changed = Policy reissued with category-based restocking fees\nPOL-RET-014 | Version 4.2 Internal use only. Synthetic document for a software demonstration. Page 3 of 3",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Return and Refund Policy › 7. Fraud controls › 8. Revision history",
+                  "labels": [
+                    "page_footer",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.3765586018562317,
+                "vectorScore": 0.3765586018562317,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-fd6e16c25a1093d3",
+                "chunkId": "retail.policies:f-fd6e16c25a1093d3:0008",
+                "title": "supplier-terms.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Master Supplier Terms Summary, Fiscal 2026\n4. Returns to vendor and defect allowances\n- **Defect allowance.** Each supplier credits Lumen automatically, every quarter, a percentage of the net cost of units sold equal to its defect allowance in the table above. The allowance covers units returned by customers as defective or damaged.\n- **Returns to vendor (RTV).** Defective units above the allowance are returned to the supplier for full credit of the invoiced cost, plus freight. The supplier must issue a return authorization within 5 business days and credit within 30 days of receipt.\n- **Customer returns of opened items** that are not defective are Lumen's cost. They are recovered through the customer restocking fee in the Return and Refund Policy (POL-RET-014), not from the supplier.\n- **Clusters.** If defective returns of one item exceed 6 percent of units sold in a rolling 60 days, the supplier must open a quality investigation and may be asked to fund a stock withdrawal.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-fd6e16c25a1093d3",
+                  "file_name": "supplier-terms.docx",
+                  "citation": "supplier-terms.docx",
+                  "headings": "Master Supplier Terms Summary, Fiscal 2026 › 4. Returns to vendor and defect allowances",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.359731525182724,
+                "vectorScore": 0.359731525182724,
+                "sourceId": "retail.policies",
+                "documentId": "retail.policies:f-5f41a46b802af34a",
+                "chunkId": "retail.policies:f-5f41a46b802af34a:0009",
+                "title": "return-refund-policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Return and Refund Policy\n6. Approvals and exceptions\nStandard return within the window, Who may approve = Cashier. Standard return within the window, Limit = Up to $250.00 per transaction. Return above $250.00, Who may approve = Store Manager. Return above $250.00, Limit = Up to $1,000.00. Return above $1,000.00, Who may approve = Regional Operations Director. Return above $1,000.00, Limit = No limit. Return up to 7 days outside the window, Who may approve = Store Manager. Return up to 7 days outside the window, Limit = Once per customer per year. Restocking fee waiver, Who may approve = Store Manager. Restocking fee waiver, Limit = Reason code RF-WAIVE; maximum 2 per store per month\nA restocking fee waiver must be recorded with the order number and a short reason. Regional Finance reviews waiver volumes each quarter, and a store that exceeds its limit twice in a row loses waiver authority for 90 days.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-5f41a46b802af34a",
+                  "file_name": "return-refund-policy.pdf",
+                  "citation": "return-refund-policy.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Return and Refund Policy › 6. Approvals and exceptions",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "retail.policies": 32
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 702.5,
+              "searchMs": 7.3,
+              "rerankMs": 0.0,
+              "totalMs": 709.8
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "retail.policies"
+      ]
+    }
+  ]
+}

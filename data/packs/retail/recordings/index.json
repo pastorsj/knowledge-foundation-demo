@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "pack": {
+    "id": "retail",
+    "version": "1.0.0"
+  },
+  "recordedAt": "2026-10-03T04:15:56.385769Z",
+  "sessions": [
+    {
+      "id": "return-window-fees",
+      "title": "Return windows and restocking fees",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "9c8cc9ec-5f65-4f05-8c60-c6ed5c8e72de",
+          "question": "What return window and restocking fee apply to electronics and to furniture under Lumen's return policy, and are defective items charged the fee?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "no-receipt-limits",
+      "title": "No-receipt return limits",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "658c3eff-e609-404a-8299-16a9b5babdf4",
+          "question": "What does the loss-prevention memo set as the maximum value of a no-receipt return, how many no-receipt returns can one customer make in 90 days, and what is the lower limit at stores on enhanced monitoring?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top-stores-q3",
+      "title": "Top stores by Q3 net sales",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "3a570714-bb32-4263-baba-dad8ed56a6d5",
+          "question": "Which five physical stores (excluding the online store) had the highest net sales in Q3 2026, July 1 to September 30?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "electronics-returns-fee",
+      "title": "Electronics returns and restocking fee",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "268759a2-e144-46ae-a50e-5d3644deb1ea",
+          "question": "Which physical store processed the most electronics returns in Q3 2026, and under the return policy how much restocking fee would be due on that store's opened, non-defective electronics returns?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "monitored-store-returns",
+      "title": "Stores on enhanced return monitoring",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "3b5b8fcc-b7a7-45a8-8400-672f598643e6",
+          "question": "The loss-prevention memo puts three stores on enhanced return monitoring. How many returns did those stores process in Q3 2026, and what share of the chain's returned value is that?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3948 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "retail.sales",
+      "name": "Sales & Customers",
+      "databaseName": "retail_sales",
+      "schema": {
+        "source_id": "retail.sales",
+        "database_name": "retail_sales",
+        "tables": [
+          {
+            "name": "customers",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "customer_id"
+            ],
+            "columns": [
+              {
+                "name": "customer_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "tier",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "joined_at",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "home_store_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "age_band",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "email_opt_in",
+                "type": "BOOLEAN",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "merchandising_plan_category_targets",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "target_id"
+            ],
+            "columns": [
+              {
+                "name": "target_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "quarter",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "quarter_start",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "category",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "target_net_sales",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "target_gross_margin_pct",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "target_units",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "plan_status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "merchandising_plan_promo_calendar",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "promo_id"
+            ],
+            "columns": [
+              {
+                "name": "promo_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "promo_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "start_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "end_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "category",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "channel",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "discount_pct",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "budget_usd",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "order_items",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "order_item_id"
+            ],
+            "columns": [
+              {
+                "name": "order_item_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "order_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "product_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "quantity",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "unit_price",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "discount_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "line_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "orders",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "order_id"
+            ],
+            "columns": [
+              {
+                "name": "order_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "customer_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "store_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "ordered_at",
+                "type": "TIMESTAMP",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "channel",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "promo_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "item_count",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "gross_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "discount_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "net_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "products",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "product_id"
+            ],
+            "columns": [
+              {
+                "name": "product_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "sku",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "product_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "category",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "subcategory",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "brand",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "supplier",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "list_price",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "unit_cost",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "return_id"
+            ],
+            "columns": [
+              {
+                "name": "return_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "order_item_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "order_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "customer_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "product_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "store_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "returned_at",
+                "type": "TIMESTAMP",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "quantity",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "returned_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "condition",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "reason",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "stores",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "store_id"
+            ],
+            "columns": [
+              {
+                "name": "store_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "store_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "store_type",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "region",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "state",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "city",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "opened_on",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "square_feet",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          }
+        ],
+        "relationships": [
+          {
+            "from_table": "customers",
+            "from_column": "home_store_id",
+            "to_table": "stores",
+            "to_column": "store_id"
+          },
+          {
+            "from_table": "order_items",
+            "from_column": "order_id",
+            "to_table": "orders",
+            "to_column": "order_id"
+          },
+          {
+            "from_table": "order_items",
+            "from_column": "product_id",
+            "to_table": "products",
+            "to_column": "product_id"
+          },
+          {
+            "from_table": "orders",
+            "from_column": "customer_id",
+            "to_table": "customers",
+            "to_column": "customer_id"
+          },
+          {
+            "from_table": "orders",
+            "from_column": "store_id",
+            "to_table": "stores",
+            "to_column": "store_id"
+          },
+          {
+            "from_table": "orders",
+            "from_column": "promo_id",
+            "to_table": "merchandising_plan_promo_calendar",
+            "to_column": "promo_id"
+          },
+          {
+            "from_table": "returns",
+            "from_column": "order_item_id",
+            "to_table": "order_items",
+            "to_column": "order_item_id"
+          },
+          {
+            "from_table": "returns",
+            "from_column": "order_id",
+            "to_table": "orders",
+            "to_column": "order_id"
+          },
+          {
+            "from_table": "returns",
+            "from_column": "customer_id",
+            "to_table": "customers",
+            "to_column": "customer_id"
+          },
+          {
+            "from_table": "returns",
+            "from_column": "product_id",
+            "to_table": "products",
+            "to_column": "product_id"
+          },
+          {
+            "from_table": "returns",
+            "from_column": "store_id",
+            "to_table": "stores",
+            "to_column": "store_id"
+          }
+        ]
+      },
+      "previews": {
+        "customers": {
+          "table": "customers",
+          "columns": [
+            "customer_id",
+            "tier",
+            "joined_at",
+            "home_store_id",
+            "age_band",
+            "email_opt_in"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "VARCHAR",
+            "VARCHAR",
+            "BOOLEAN"
+          ],
+          "rows": [
+            [
+              "C00001",
+              "bronze",
+              "2021-01-01",
+              "WEB",
+              "55-64",
+              false
+            ],
+            [
+              "C00002",
+              "bronze",
+              "2021-01-02",
+              "WEB",
+              "45-54",
+              true
+            ],
+            [
+              "C00003",
+              "silver",
+              "2021-01-04",
+              "S08",
+              "25-34",
+              true
+            ],
+            [
+              "C00004",
+              "bronze",
+              "2021-01-04",
+              "WEB",
+              "65+",
+              true
+            ],
+            [
+              "C00005",
+              "silver",
+              "2021-01-06",
+              "S14",
+              "65+",
+              true
+            ],
+            [
+              "C00006",
+              "bronze",
+              "2021-01-06",
+              "S15",
+              "18-24",
+              true
+            ],
+            [
+              "C00007",
+              "bronze",
+              "2021-01-08",
+              "S13",
+              "55-64",
+              false
+            ],
+            [
+              "C00008",
+              "silver",
+              "2021-01-08",
+              "WEB",
+              "18-24",
+              false
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 263
+        },
+        "merchandising_plan_category_targets": {
+          "table": "merchandising_plan_category_targets",
+          "columns": [
+            "target_id",
+            "quarter",
+            "quarter_start",
+            "category",
+            "target_net_sales",
+            "target_gross_margin_pct",
+            "target_units",
+            "plan_status"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "CT-2025Q2-ELE",
+              "2025-Q2",
+              "2025-04-01",
+              "Electronics",
+              38300.0,
+              0.298,
+              225.0,
+              "Locked"
+            ],
+            [
+              "CT-2025Q2-FUR",
+              "2025-Q2",
+              "2025-04-01",
+              "Furniture",
+              36300.0,
+              0.477,
+              95.0,
+              "Locked"
+            ],
+            [
+              "CT-2025Q2-HOM",
+              "2025-Q2",
+              "2025-04-01",
+              "Home Decor",
+              22200.0,
+              0.518,
+              320.0,
+              "Locked"
+            ],
+            [
+              "CT-2025Q2-KIT",
+              "2025-Q2",
+              "2025-04-01",
+              "Kitchen & Dining",
+              34900.0,
+              0.459,
+              300.0,
+              "Locked"
+            ],
+            [
+              "CT-2025Q2-BED",
+              "2025-Q2",
+              "2025-04-01",
+              "Bedding & Bath",
+              17600.0,
+              0.509,
+              230.0,
+              "Locked"
+            ],
+            [
+              "CT-2025Q2-APP",
+              "2025-Q2",
+              "2025-04-01",
+              "Apparel",
+              10300.0,
+              0.543,
+              175.0,
+              "Locked"
+            ],
+            [
+              "CT-2025Q2-OUT",
+              "2025-Q2",
+              "2025-04-01",
+              "Outdoor & Garden",
+              41000.0,
+              0.446,
+              305.0,
+              "Locked"
+            ],
+            [
+              "CT-2025Q3-ELE",
+              "2025-Q3",
+              "2025-07-01",
+              "Electronics",
+              54500.0,
+              0.29,
+              315.0,
+              "Locked"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 258
+        },
+        "merchandising_plan_promo_calendar": {
+          "table": "merchandising_plan_promo_calendar",
+          "columns": [
+            "promo_id",
+            "promo_name",
+            "start_date",
+            "end_date",
+            "category",
+            "channel",
+            "discount_pct",
+            "budget_usd",
+            "status"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DATE",
+            "VARCHAR",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "PR-2025-01",
+              "Spring Home Refresh",
+              "2025-04-10",
+              "2025-04-27",
+              "Home Decor",
+              "All",
+              0.15,
+              18000.0,
+              "Completed"
+            ],
+            [
+              "PR-2025-02",
+              "Mother's Day Gifting",
+              "2025-05-01",
+              "2025-05-11",
+              "Kitchen & Dining",
+              "All",
+              0.12,
+              14000.0,
+              "Completed"
+            ],
+            [
+              "PR-2025-03",
+              "Memorial Day Sale",
+              "2025-05-22",
+              "2025-05-26",
+              "All categories",
+              "All",
+              0.2,
+              42000.0,
+              "Completed"
+            ],
+            [
+              "PR-2025-04",
+              "Outdoor Living Event",
+              "2025-06-05",
+              "2025-06-22",
+              "Outdoor & Garden",
+              "All",
+              0.2,
+              26000.0,
+              "Completed"
+            ],
+            [
+              "PR-2025-05",
+              "Summer Tech Savings",
+              "2025-07-07",
+              "2025-07-20",
+              "Electronics",
+              "All",
+              0.15,
+              30000.0,
+              "Completed"
+            ],
+            [
+              "PR-2025-06",
+              "Back to School",
+              "2025-08-01",
+              "2025-08-31",
+              "Bedding & Bath",
+              "All",
+              0.15,
+              24000.0,
+              "Completed"
+            ],
+            [
+              "PR-2025-07",
+              "Labor Day Sale",
+              "2025-08-29",
+              "2025-09-07",
+              "All categories",
+              "All",
+              0.2,
+              46000.0,
+              "Completed"
+            ],
+            [
+              "PR-2025-08",
+              "Fall Home Refresh",
+              "2025-10-02",
+              "2025-10-19",
+              "Home Decor",
+              "All",
+              0.15,
+              20000.0,
+              "Completed"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 244
+        },
+        "order_items": {
+          "table": "order_items",
+          "columns": [
+            "order_item_id",
+            "order_id",
+            "product_id",
+            "quantity",
+            "unit_price",
+            "discount_amount",
+            "line_amount"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "OI000001",
+              "O000001",
+              "P003",
+              1,
+              129.99,
+              0.0,
+              129.99
+            ],
+            [
+              "OI000002",
+              "O000001",
+              "P159",
+              1,
+              55.99,
+              0.0,
+              55.99
+            ],
+            [
+              "OI000003",
+              "O000002",
+              "P103",
+              1,
+              19.99,
+              0.0,
+              19.99
+            ],
+            [
+              "OI000004",
+              "O000003",
+              "P074",
+              1,
+              19.99,
+              0.0,
+              19.99
+            ],
+            [
+              "OI000005",
+              "O000004",
+              "P048",
+              1,
+              449.99,
+              0.0,
+              449.99
+            ],
+            [
+              "OI000006",
+              "O000005",
+              "P009",
+              1,
+              299.99,
+              0.0,
+              299.99
+            ],
+            [
+              "OI000007",
+              "O000005",
+              "P147",
+              1,
+              54.99,
+              0.0,
+              54.99
+            ],
+            [
+              "OI000008",
+              "O000005",
+              "P133",
+              1,
+              99.99,
+              0.0,
+              99.99
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 244
+        },
+        "orders": {
+          "table": "orders",
+          "columns": [
+            "order_id",
+            "customer_id",
+            "store_id",
+            "ordered_at",
+            "channel",
+            "promo_id",
+            "item_count",
+            "gross_amount",
+            "discount_amount",
+            "net_amount"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "TIMESTAMP",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "O000001",
+              "C00196",
+              "S03",
+              "2025-04-01 10:06:06",
+              "in_store",
+              null,
+              2,
+              185.98,
+              0.0,
+              185.98
+            ],
+            [
+              "O000002",
+              "C00656",
+              "WEB",
+              "2025-04-01 11:11:44",
+              "online",
+              null,
+              1,
+              19.99,
+              0.0,
+              19.99
+            ],
+            [
+              "O000003",
+              "C00376",
+              "S07",
+              "2025-04-01 12:36:27",
+              "in_store",
+              null,
+              1,
+              19.99,
+              0.0,
+              19.99
+            ],
+            [
+              "O000004",
+              "C00887",
+              "S13",
+              "2025-04-01 12:38:35",
+              "in_store",
+              null,
+              1,
+              449.99,
+              0.0,
+              449.99
+            ],
+            [
+              "O000005",
+              "C00495",
+              "S01",
+              "2025-04-01 14:18:59",
+              "in_store",
+              null,
+              5,
+              712.95,
+              0.0,
+              712.95
+            ],
+            [
+              "O000006",
+              "C00235",
+              "S21",
+              "2025-04-01 15:17:24",
+              "in_store",
+              null,
+              1,
+              79.99,
+              0.0,
+              79.99
+            ],
+            [
+              "O000007",
+              "C00074",
+              "S07",
+              "2025-04-01 15:39:48",
+              "in_store",
+              null,
+              3,
+              149.97,
+              0.0,
+              149.97
+            ],
+            [
+              "O000008",
+              "C00442",
+              "WEB",
+              "2025-04-01 15:43:18",
+              "online",
+              null,
+              1,
+              19.99,
+              0.0,
+              19.99
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 247
+        },
+        "products": {
+          "table": "products",
+          "columns": [
+            "product_id",
+            "sku",
+            "product_name",
+            "category",
+            "subcategory",
+            "brand",
+            "supplier",
+            "list_price",
+            "unit_cost"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "P001",
+              "LRG-ELE-1037",
+              "Voltara Smart Speaker Mini",
+              "Electronics",
+              "Smart Speaker",
+              "Voltara",
+              "Voltara Devices",
+              49.99,
+              35.37
+            ],
+            [
+              "P002",
+              "LRG-ELE-1074",
+              "Voltara Smart Speaker Standard",
+              "Electronics",
+              "Smart Speaker",
+              "Voltara",
+              "Voltara Devices",
+              89.99,
+              62.51
+            ],
+            [
+              "P003",
+              "LRG-ELE-1111",
+              "Voltara Smart Speaker Max",
+              "Electronics",
+              "Smart Speaker",
+              "Voltara",
+              "Voltara Devices",
+              129.99,
+              93.3
+            ],
+            [
+              "P004",
+              "LRG-ELE-1148",
+              "Auralis Soundbar 2.1",
+              "Electronics",
+              "Soundbar",
+              "Auralis",
+              "Auralis Audio Works",
+              129.99,
+              87.58
+            ],
+            [
+              "P005",
+              "LRG-ELE-1185",
+              "Lumen Living Soundbar 3.1 with Subwoofer",
+              "Electronics",
+              "Soundbar",
+              "Lumen Living",
+              "Auralis Audio Works",
+              349.99,
+              236.19
+            ],
+            [
+              "P006",
+              "LRG-ELE-1222",
+              "Lumen Living Wireless Earbuds Lite",
+              "Electronics",
+              "Wireless Earbuds",
+              "Lumen Living",
+              "Auralis Audio Works",
+              39.99,
+              28.38
+            ],
+            [
+              "P007",
+              "LRG-ELE-1259",
+              "Auralis Wireless Earbuds Pro",
+              "Electronics",
+              "Wireless Earbuds",
+              "Auralis",
+              "Auralis Audio Works",
+              149.99,
+              100.12
+            ],
+            [
+              "P008",
+              "LRG-ELE-1296",
+              "Auralis Over-Ear Headphones Studio",
+              "Electronics",
+              "Over-Ear Headphones",
+              "Auralis",
+              "Auralis Audio Works",
+              79.99,
+              59.22
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 261
+        },
+        "returns": {
+          "table": "returns",
+          "columns": [
+            "return_id",
+            "order_item_id",
+            "order_id",
+            "customer_id",
+            "product_id",
+            "store_id",
+            "returned_at",
+            "quantity",
+            "returned_amount",
+            "condition",
+            "reason"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "TIMESTAMP",
+            "BIGINT",
+            "DOUBLE",
+            "VARCHAR",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "R00001",
+              "OI000014",
+              "O000009",
+              "C00185",
+              "P103",
+              "S03",
+              "2025-04-06 16:09:07",
+              1,
+              19.99,
+              "opened",
+              "Changed mind"
+            ],
+            [
+              "R00002",
+              "OI000018",
+              "O000012",
+              "C00360",
+              "P083",
+              "S08",
+              "2025-04-06 19:48:16",
+              1,
+              99.99,
+              "opened",
+              "Found a better price"
+            ],
+            [
+              "R00003",
+              "OI000039",
+              "O000026",
+              "C00255",
+              "P153",
+              "S14",
+              "2025-04-08 12:04:06",
+              1,
+              129.99,
+              "opened",
+              "Not as described"
+            ],
+            [
+              "R00004",
+              "OI000013",
+              "O000008",
+              "C00442",
+              "P126",
+              "WEB",
+              "2025-04-09 10:02:20",
+              1,
+              19.99,
+              "defective",
+              "Missing parts"
+            ],
+            [
+              "R00005",
+              "OI000091",
+              "O000058",
+              "C00483",
+              "P079",
+              "WEB",
+              "2025-04-10 18:14:51",
+              1,
+              49.99,
+              "opened",
+              "Gift duplicate"
+            ],
+            [
+              "R00006",
+              "OI000083",
+              "O000053",
+              "C00411",
+              "P083",
+              "WEB",
+              "2025-04-10 18:33:46",
+              1,
+              99.99,
+              "opened",
+              "Changed mind"
+            ],
+            [
+              "R00007",
+              "OI000001",
+              "O000001",
+              "C00196",
+              "P003",
+              "S03",
+              "2025-04-12 14:26:43",
+              1,
+              129.99,
+              "defective",
+              "Stopped working"
+            ],
+            [
+              "R00008",
+              "OI000096",
+              "O000061",
+              "C00251",
+              "P103",
+              "S19",
+              "2025-04-14 11:01:31",
+              1,
+              19.99,
+              "opened",
+              "Did not fit the space"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 250
+        },
+        "stores": {
+          "table": "stores",
+          "columns": [
+            "store_id",
+            "store_name",
+            "store_type",
+            "region",
+            "state",
+            "city",
+            "opened_on",
+            "square_feet"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "BIGINT"
+          ],
+          "rows": [
+            [
+              "S01",
+              "Lumen Boston Seaport",
+              "flagship",
+              "Northeast",
+              "MA",
+              "Boston",
+              "2014-03-14",
+              41000
+            ],
+            [
+              "S02",
+              "Lumen Providence Place",
+              "mall",
+              "Northeast",
+              "RI",
+              "Providence",
+              "2016-09-22",
+              22000
+            ],
+            [
+              "S03",
+              "Lumen Hartford Crossing",
+              "standalone",
+              "Northeast",
+              "CT",
+              "Hartford",
+              "2012-05-05",
+              28000
+            ],
+            [
+              "S04",
+              "Lumen Albany Commons",
+              "outlet",
+              "Northeast",
+              "NY",
+              "Albany",
+              "2018-10-19",
+              19000
+            ],
+            [
+              "S05",
+              "Lumen Philadelphia Center City",
+              "mall",
+              "Northeast",
+              "PA",
+              "Philadelphia",
+              "2011-04-02",
+              26000
+            ],
+            [
+              "S06",
+              "Lumen Newark Gateway",
+              "standalone",
+              "Northeast",
+              "NJ",
+              "Newark",
+              "2019-08-30",
+              27000
+            ],
+            [
+              "S07",
+              "Lumen Atlanta Midtown",
+              "flagship",
+              "Southeast",
+              "GA",
+              "Atlanta",
+              "2015-11-06",
+              39000
+            ],
+            [
+              "S08",
+              "Lumen Charlotte South End",
+              "mall",
+              "Southeast",
+              "NC",
+              "Charlotte",
+              "2017-03-11",
+              23000
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 276
+        }
+      },
+      "queries": [
+        {
+          "sql": "SELECT \n    s.store_id,\n    s.store_name,\n    s.region,\n    s.store_type,\n    ROUND(SUM(o.net_amount), 2) AS net_sales_usd\nFROM retail_sales.orders AS o\nJOIN retail_sales.stores AS s USING (store_id)\nWHERE o.ordered_at >= TIMESTAMP '2026-07-01' \n  AND o.ordered_at < TIMESTAMP '2026-10-01'\n  AND s.store_id != 'WEB'\nGROUP BY s.store_id, s.store_name, s.region, s.store_type\nORDER BY net_sales_usd DESC\nLIMIT 5",
+          "result": {
+            "columns": [
+              "store_id",
+              "store_name",
+              "region",
+              "store_type",
+              "net_sales_usd"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "S21",
+                "Lumen San Francisco Union Square",
+                "West",
+                "flagship",
+                19982.26
+              ],
+              [
+                "S13",
+                "Lumen Chicago Loop",
+                "Midwest",
+                "flagship",
+                15651.28
+              ],
+              [
+                "S07",
+                "Lumen Atlanta Midtown",
+                "Southeast",
+                "flagship",
+                12373.93
+              ],
+              [
+                "S06",
+                "Lumen Newark Gateway",
+                "Northeast",
+                "standalone",
+                10910.95
+              ],
+              [
+                "S01",
+                "Lumen Boston Seaport",
+                "Northeast",
+                "flagship",
+                8412.91
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 250
+          }
+        },
+        {
+          "sql": "WITH electronics_returns AS (\n    SELECT \n        r.store_id,\n        s.store_name,\n        s.store_type,\n        COUNT(*) AS return_count,\n        SUM(r.returned_amount) AS total_returned_amount\n    FROM retail_sales.returns AS r\n    JOIN retail_sales.order_items AS oi ON r.order_item_id = oi.order_item_id\n    JOIN retail_sales.products AS p ON oi.product_id = p.product_id\n    JOIN retail_sales.stores AS s ON r.store_id = s.store_id\n    WHERE r.returned_at >= TIMESTAMP '2026-07-01' \n      AND r.returned_at < TIMESTAMP '2026-10-01'\n      AND p.category = 'Electronics'\n      AND r.condition = 'opened'\n      AND s.store_type != 'ecommerce'\n    GROUP BY r.store_id, s.store_name, s.store_type\n)\nSELECT store_id, store_name, store_type, return_count, total_returned_amount\nFROM electronics_returns\nORDER BY return_count DESC\nLIMIT 1",
+          "result": {
+            "columns": [
+              "store_id",
+              "store_name",
+              "store_type",
+              "return_count",
+              "total_returned_amount"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "S13",
+                "Lumen Chicago Loop",
+                "flagship",
+                6,
+                613.94
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 280
+          }
+        },
+        {
+          "sql": "WITH enhanced_stores AS (\n  SELECT 'S06' AS store_id UNION ALL\n  SELECT 'S22' UNION ALL\n  SELECT 'S16'\n),\nq3_returns AS (\n  SELECT \n    r.store_id,\n    COUNT(*) AS return_count,\n    SUM(r.returned_amount) AS returned_value\n  FROM retail_sales.returns r\n  WHERE r.returned_at >= '2026-07-01' \n    AND r.returned_at < '2026-10-01'\n  GROUP BY r.store_id\n),\nenhanced AS (\n  SELECT \n    qs.store_id,\n    qs.return_count,\n    qs.returned_value\n  FROM q3_returns qs\n  JOIN enhanced_stores es ON qs.store_id = es.store_id\n),\nchain_total AS (\n  SELECT \n    SUM(return_count) AS total_returns,\n    SUM(returned_value) AS total_returned_value\n  FROM q3_returns\n)\nSELECT \n  e.store_id,\n  s.store_name,\n  s.region,\n  e.return_count,\n  e.returned_value,\n  ct.total_returns,\n  ct.total_returned_value,\n  (e.returned_value / ct.total_returned_value) * 100 AS pct_of_chain_value\nFROM enhanced e\nJOIN retail_sales.stores s ON e.store_id = s.store_id\nCROSS JOIN chain_total ct\nORDER BY e.store_id;",
+          "result": {
+            "columns": [
+              "store_id",
+              "store_name",
+              "region",
+              "return_count",
+              "returned_value",
+              "total_returns",
+              "total_returned_value",
+              "pct_of_chain_value"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE",
+              "HUGEINT",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "S06",
+                "Lumen Newark Gateway",
+                "Northeast",
+                12,
+                1134.38,
+                174,
+                20009.589999999993,
+                5.66918162740966
+              ],
+              [
+                "S16",
+                "Lumen Indianapolis Fashion Mall",
+                "Midwest",
+                7,
+                591.1300000000001,
+                174,
+                20009.589999999993,
+                2.954233445063094
+              ],
+              [
+                "S22",
+                "Lumen Los Angeles Westside",
+                "West",
+                18,
+                1866.9800000000002,
+                174,
+                20009.589999999993,
+                9.330426060703898
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 250
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"customers\" LIMIT 25",
+          "result": {
+            "columns": [
+              "customer_id",
+              "tier",
+              "joined_at",
+              "home_store_id",
+              "age_band",
+              "email_opt_in"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "VARCHAR",
+              "VARCHAR",
+              "BOOLEAN"
+            ],
+            "rows": [
+              [
+                "C00001",
+                "bronze",
+                "2021-01-01",
+                "WEB",
+                "55-64",
+                false
+              ],
+              [
+                "C00002",
+                "bronze",
+                "2021-01-02",
+                "WEB",
+                "45-54",
+                true
+              ],
+              [
+                "C00003",
+                "silver",
+                "2021-01-04",
+                "S08",
+                "25-34",
+                true
+              ],
+              [
+                "C00004",
+                "bronze",
+                "2021-01-04",
+                "WEB",
+                "65+",
+                true
+              ],
+              [
+                "C00005",
+                "silver",
+                "2021-01-06",
+                "S14",
+                "65+",
+                true
+              ],
+              [
+                "C00006",
+                "bronze",
+                "2021-01-06",
+                "S15",
+                "18-24",
+                true
+              ],
+              [
+                "C00007",
+                "bronze",
+                "2021-01-08",
+                "S13",
+                "55-64",
+                false
+              ],
+              [
+                "C00008",
+                "silver",
+                "2021-01-08",
+                "WEB",
+                "18-24",
+                false
+              ],
+              [
+                "C00009",
+                "silver",
+                "2021-01-10",
+                "WEB",
+                "25-34",
+                true
+              ],
+              [
+                "C00010",
+                "silver",
+                "2021-01-11",
+                "S07",
+                "45-54",
+                true
+              ],
+              [
+                "C00011",
+                "bronze",
+                "2021-01-14",
+                "S07",
+                "25-34",
+                true
+              ],
+              [
+                "C00012",
+                "bronze",
+                "2021-01-14",
+                "S11",
+                "45-54",
+                false
+              ],
+              [
+                "C00013",
+                "gold",
+                "2021-01-15",
+                "WEB",
+                "55-64",
+                true
+              ],
+              [
+                "C00014",
+                "bronze",
+                "2021-01-18",
+                "S20",
+                "25-34",
+                true
+              ],
+              [
+                "C00015",
+                "bronze",
+                "2021-01-21",
+                "S21",
+                "35-44",
+                false
+              ],
+              [
+                "C00016",
+                "bronze",
+                "2021-01-21",
+                "WEB",
+                "18-24",
+                true
+              ],
+              [
+                "C00017",
+                "gold",
+                "2021-01-21",
+                "S06",
+                "25-34",
+                true
+              ],
+              [
+                "C00018",
+                "bronze",
+                "2021-01-22",
+                "WEB",
+                "55-64",
+                true
+              ],
+              [
+                "C00019",
+                "gold",
+                "2021-01-23",
+                "S20",
+                "25-34",
+                true
+              ],
+              [
+                "C00020",
+                "bronze",
+                "2021-01-27",
+                "S20",
+                "35-44",
+                true
+              ],
+              [
+                "C00021",
+                "bronze",
+                "2021-01-27",
+                "S12",
+                "35-44",
+                true
+              ],
+              [
+                "C00022",
+                "silver",
+                "2021-01-31",
+                "WEB",
+                "35-44",
+                false
+              ],
+              [
+                "C00023",
+                "bronze",
+                "2021-02-01",
+                "S01",
+                "45-54",
+                false
+              ],
+              [
+                "C00024",
+                "bronze",
+                "2021-02-02",
+                "S07",
+                "25-34",
+                true
+              ],
+              [
+                "C00025",
+                "bronze",
+                "2021-02-02",
+                "S13",
+                "65+",
+                true
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 246
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"merchandising_plan_category_targets\" LIMIT 25",
+          "result": {
+            "columns": [
+              "target_id",
+              "quarter",
+              "quarter_start",
+              "category",
+              "target_net_sales",
+              "target_gross_margin_pct",
+              "target_units",
+              "plan_status"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "CT-2025Q2-ELE",
+                "2025-Q2",
+                "2025-04-01",
+                "Electronics",
+                38300.0,
+                0.298,
+                225.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q2-FUR",
+                "2025-Q2",
+                "2025-04-01",
+                "Furniture",
+                36300.0,
+                0.477,
+                95.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q2-HOM",
+                "2025-Q2",
+                "2025-04-01",
+                "Home Decor",
+                22200.0,
+                0.518,
+                320.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q2-KIT",
+                "2025-Q2",
+                "2025-04-01",
+                "Kitchen & Dining",
+                34900.0,
+                0.459,
+                300.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q2-BED",
+                "2025-Q2",
+                "2025-04-01",
+                "Bedding & Bath",
+                17600.0,
+                0.509,
+                230.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q2-APP",
+                "2025-Q2",
+                "2025-04-01",
+                "Apparel",
+                10300.0,
+                0.543,
+                175.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q2-OUT",
+                "2025-Q2",
+                "2025-04-01",
+                "Outdoor & Garden",
+                41000.0,
+                0.446,
+                305.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q3-ELE",
+                "2025-Q3",
+                "2025-07-01",
+                "Electronics",
+                54500.0,
+                0.29,
+                315.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q3-FUR",
+                "2025-Q3",
+                "2025-07-01",
+                "Furniture",
+                37500.0,
+                0.467,
+                110.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q3-HOM",
+                "2025-Q3",
+                "2025-07-01",
+                "Home Decor",
+                24900.0,
+                0.504,
+                330.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q3-KIT",
+                "2025-Q3",
+                "2025-07-01",
+                "Kitchen & Dining",
+                34800.0,
+                0.44,
+                305.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q3-BED",
+                "2025-Q3",
+                "2025-07-01",
+                "Bedding & Bath",
+                19500.0,
+                0.497,
+                260.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q3-APP",
+                "2025-Q3",
+                "2025-07-01",
+                "Apparel",
+                12800.0,
+                0.528,
+                215.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q3-OUT",
+                "2025-Q3",
+                "2025-07-01",
+                "Outdoor & Garden",
+                32700.0,
+                0.448,
+                240.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q4-ELE",
+                "2025-Q4",
+                "2025-10-01",
+                "Electronics",
+                78000.0,
+                0.283,
+                485.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q4-FUR",
+                "2025-Q4",
+                "2025-10-01",
+                "Furniture",
+                44300.0,
+                0.477,
+                125.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q4-HOM",
+                "2025-Q4",
+                "2025-10-01",
+                "Home Decor",
+                29000.0,
+                0.503,
+                420.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q4-KIT",
+                "2025-Q4",
+                "2025-10-01",
+                "Kitchen & Dining",
+                40700.0,
+                0.45,
+                355.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q4-BED",
+                "2025-Q4",
+                "2025-10-01",
+                "Bedding & Bath",
+                26800.0,
+                0.51,
+                355.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q4-APP",
+                "2025-Q4",
+                "2025-10-01",
+                "Apparel",
+                14000.0,
+                0.542,
+                245.0,
+                "Locked"
+              ],
+              [
+                "CT-2025Q4-OUT",
+                "2025-Q4",
+                "2025-10-01",
+                "Outdoor & Garden",
+                8600.0,
+                0.445,
+                70.0,
+                "Locked"
+              ],
+              [
+                "CT-2026Q1-ELE",
+                "2026-Q1",
+                "2026-01-01",
+                "Electronics",
+                48300.0,
+                0.281,
+                290.0,
+                "Locked"
+              ],
+              [
+                "CT-2026Q1-FUR",
+                "2026-Q1",
+                "2026-01-01",
+                "Furniture",
+                35700.0,
+                0.485,
+                105.0,
+                "Locked"
+              ],
+              [
+                "CT-2026Q1-HOM",
+                "2026-Q1",
+                "2026-01-01",
+                "Home Decor",
+                20300.0,
+                0.515,
+                310.0,
+                "Locked"
+              ],
+              [
+                "CT-2026Q1-KIT",
+                "2026-Q1",
+                "2026-01-01",
+                "Kitchen & Dining",
+                40000.0,
+                0.449,
+                315.0,
+                "Locked"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 258
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"merchandising_plan_promo_calendar\" LIMIT 25",
+          "result": {
+            "columns": [
+              "promo_id",
+              "promo_name",
+              "start_date",
+              "end_date",
+              "category",
+              "channel",
+              "discount_pct",
+              "budget_usd",
+              "status"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DATE",
+              "VARCHAR",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "PR-2025-01",
+                "Spring Home Refresh",
+                "2025-04-10",
+                "2025-04-27",
+                "Home Decor",
+                "All",
+                0.15,
+                18000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-02",
+                "Mother's Day Gifting",
+                "2025-05-01",
+                "2025-05-11",
+                "Kitchen & Dining",
+                "All",
+                0.12,
+                14000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-03",
+                "Memorial Day Sale",
+                "2025-05-22",
+                "2025-05-26",
+                "All categories",
+                "All",
+                0.2,
+                42000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-04",
+                "Outdoor Living Event",
+                "2025-06-05",
+                "2025-06-22",
+                "Outdoor & Garden",
+                "All",
+                0.2,
+                26000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-05",
+                "Summer Tech Savings",
+                "2025-07-07",
+                "2025-07-20",
+                "Electronics",
+                "All",
+                0.15,
+                30000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-06",
+                "Back to School",
+                "2025-08-01",
+                "2025-08-31",
+                "Bedding & Bath",
+                "All",
+                0.15,
+                24000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-07",
+                "Labor Day Sale",
+                "2025-08-29",
+                "2025-09-07",
+                "All categories",
+                "All",
+                0.2,
+                46000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-08",
+                "Fall Home Refresh",
+                "2025-10-02",
+                "2025-10-19",
+                "Home Decor",
+                "All",
+                0.15,
+                20000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-09",
+                "Black Friday Weekend",
+                "2025-11-26",
+                "2025-12-01",
+                "All categories",
+                "All",
+                0.25,
+                78000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-10",
+                "Cyber Week Online",
+                "2025-12-01",
+                "2025-12-05",
+                "All categories",
+                "Online",
+                0.2,
+                34000.0,
+                "Completed"
+              ],
+              [
+                "PR-2025-11",
+                "Holiday Gift Guide",
+                "2025-12-06",
+                "2025-12-21",
+                "Electronics",
+                "All",
+                0.12,
+                40000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-01",
+                "Winter Clearance",
+                "2026-01-08",
+                "2026-01-31",
+                "All categories",
+                "All",
+                0.25,
+                52000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-02",
+                "Presidents' Day Furniture Event",
+                "2026-02-12",
+                "2026-02-16",
+                "Furniture",
+                "All",
+                0.2,
+                28000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-03",
+                "Spring Home Refresh",
+                "2026-04-09",
+                "2026-04-26",
+                "Home Decor",
+                "All",
+                0.15,
+                20000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-04",
+                "Mother's Day Gifting",
+                "2026-05-01",
+                "2026-05-10",
+                "Kitchen & Dining",
+                "All",
+                0.12,
+                15000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-05",
+                "Memorial Day Sale",
+                "2026-05-21",
+                "2026-05-25",
+                "All categories",
+                "All",
+                0.2,
+                45000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-06",
+                "Outdoor Living Event",
+                "2026-06-04",
+                "2026-06-21",
+                "Outdoor & Garden",
+                "All",
+                0.2,
+                28000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-07",
+                "Summer Tech Savings",
+                "2026-07-06",
+                "2026-07-19",
+                "Electronics",
+                "All",
+                0.15,
+                32000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-08",
+                "Back to School",
+                "2026-08-01",
+                "2026-08-31",
+                "Bedding & Bath",
+                "All",
+                0.15,
+                26000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-09",
+                "Labor Day Sale",
+                "2026-08-28",
+                "2026-09-07",
+                "All categories",
+                "All",
+                0.2,
+                50000.0,
+                "Completed"
+              ],
+              [
+                "PR-2026-10",
+                "Fall Home Refresh",
+                "2026-10-01",
+                "2026-10-18",
+                "Home Decor",
+                "All",
+                0.15,
+                22000.0,
+                "Planned"
+              ],
+              [
+                "PR-2026-11",
+                "Black Friday Weekend",
+                "2026-11-25",
+                "2026-11-30",
+                "All categories",
+                "All",
+                0.25,
+                82000.0,
+                "Planned"
+              ],
+              [
+                "PR-2026-12",
+                "Cyber Week Online",
+                "2026-11-30",
+                "2026-12-04",
+                "All categories",
+                "Online",
+                0.2,
+                36000.0,
+                "Planned"
+              ],
+              [
+                "PR-2026-13",
+                "Holiday Gift Guide",
+                "2026-12-05",
+                "2026-12-20",
+                "Electronics",
+                "All",
+                0.12,
+                42000.0,
+                "Planned"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 248
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"order_items\" LIMIT 25",
+          "result": {
+            "columns": [
+              "order_item_id",
+              "order_id",
+              "product_id",
+              "quantity",
+              "unit_price",
+              "discount_amount",
+              "line_amount"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "OI000001",
+                "O000001",
+                "P003",
+                1,
+                129.99,
+                0.0,
+                129.99
+              ],
+              [
+                "OI000002",
+                "O000001",
+                "P159",
+                1,
+                55.99,
+                0.0,
+                55.99
+              ],
+              [
+                "OI000003",
+                "O000002",
+                "P103",
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "OI000004",
+                "O000003",
+                "P074",
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "OI000005",
+                "O000004",
+                "P048",
+                1,
+                449.99,
+                0.0,
+                449.99
+              ],
+              [
+                "OI000006",
+                "O000005",
+                "P009",
+                1,
+                299.99,
+                0.0,
+                299.99
+              ],
+              [
+                "OI000007",
+                "O000005",
+                "P147",
+                1,
+                54.99,
+                0.0,
+                54.99
+              ],
+              [
+                "OI000008",
+                "O000005",
+                "P133",
+                1,
+                99.99,
+                0.0,
+                99.99
+              ],
+              [
+                "OI000009",
+                "O000005",
+                "P121",
+                2,
+                128.99,
+                0.0,
+                257.98
+              ],
+              [
+                "OI000010",
+                "O000006",
+                "P155",
+                1,
+                79.99,
+                0.0,
+                79.99
+              ],
+              [
+                "OI000011",
+                "O000007",
+                "P115",
+                1,
+                49.99,
+                0.0,
+                49.99
+              ],
+              [
+                "OI000012",
+                "O000007",
+                "P101",
+                2,
+                49.99,
+                0.0,
+                99.98
+              ],
+              [
+                "OI000013",
+                "O000008",
+                "P126",
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "OI000014",
+                "O000009",
+                "P103",
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "OI000015",
+                "O000010",
+                "P095",
+                1,
+                199.99,
+                0.0,
+                199.99
+              ],
+              [
+                "OI000016",
+                "O000010",
+                "P155",
+                1,
+                79.99,
+                0.0,
+                79.99
+              ],
+              [
+                "OI000017",
+                "O000011",
+                "P065",
+                1,
+                39.99,
+                0.0,
+                39.99
+              ],
+              [
+                "OI000018",
+                "O000012",
+                "P083",
+                1,
+                99.99,
+                0.0,
+                99.99
+              ],
+              [
+                "OI000019",
+                "O000012",
+                "P159",
+                1,
+                55.99,
+                0.0,
+                55.99
+              ],
+              [
+                "OI000020",
+                "O000013",
+                "P120",
+                1,
+                89.99,
+                0.0,
+                89.99
+              ],
+              [
+                "OI000021",
+                "O000014",
+                "P005",
+                1,
+                349.99,
+                0.0,
+                349.99
+              ],
+              [
+                "OI000022",
+                "O000015",
+                "P108",
+                1,
+                24.99,
+                0.0,
+                24.99
+              ],
+              [
+                "OI000023",
+                "O000016",
+                "P167",
+                1,
+                59.99,
+                0.0,
+                59.99
+              ],
+              [
+                "OI000024",
+                "O000016",
+                "P085",
+                2,
+                39.99,
+                0.0,
+                79.98
+              ],
+              [
+                "OI000025",
+                "O000017",
+                "P087",
+                1,
+                349.99,
+                0.0,
+                349.99
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 272
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"orders\" LIMIT 25",
+          "result": {
+            "columns": [
+              "order_id",
+              "customer_id",
+              "store_id",
+              "ordered_at",
+              "channel",
+              "promo_id",
+              "item_count",
+              "gross_amount",
+              "discount_amount",
+              "net_amount"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "TIMESTAMP",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "O000001",
+                "C00196",
+                "S03",
+                "2025-04-01 10:06:06",
+                "in_store",
+                null,
+                2,
+                185.98,
+                0.0,
+                185.98
+              ],
+              [
+                "O000002",
+                "C00656",
+                "WEB",
+                "2025-04-01 11:11:44",
+                "online",
+                null,
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "O000003",
+                "C00376",
+                "S07",
+                "2025-04-01 12:36:27",
+                "in_store",
+                null,
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "O000004",
+                "C00887",
+                "S13",
+                "2025-04-01 12:38:35",
+                "in_store",
+                null,
+                1,
+                449.99,
+                0.0,
+                449.99
+              ],
+              [
+                "O000005",
+                "C00495",
+                "S01",
+                "2025-04-01 14:18:59",
+                "in_store",
+                null,
+                5,
+                712.95,
+                0.0,
+                712.95
+              ],
+              [
+                "O000006",
+                "C00235",
+                "S21",
+                "2025-04-01 15:17:24",
+                "in_store",
+                null,
+                1,
+                79.99,
+                0.0,
+                79.99
+              ],
+              [
+                "O000007",
+                "C00074",
+                "S07",
+                "2025-04-01 15:39:48",
+                "in_store",
+                null,
+                3,
+                149.97,
+                0.0,
+                149.97
+              ],
+              [
+                "O000008",
+                "C00442",
+                "WEB",
+                "2025-04-01 15:43:18",
+                "online",
+                null,
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "O000009",
+                "C00185",
+                "S03",
+                "2025-04-01 16:34:04",
+                "in_store",
+                null,
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "O000010",
+                "C00997",
+                "S07",
+                "2025-04-01 17:11:27",
+                "in_store",
+                null,
+                2,
+                279.98,
+                0.0,
+                279.98
+              ],
+              [
+                "O000011",
+                "C00568",
+                "WEB",
+                "2025-04-01 18:49:27",
+                "online",
+                null,
+                1,
+                39.99,
+                0.0,
+                39.99
+              ],
+              [
+                "O000012",
+                "C00360",
+                "S08",
+                "2025-04-01 18:56:11",
+                "in_store",
+                null,
+                2,
+                155.98,
+                0.0,
+                155.98
+              ],
+              [
+                "O000013",
+                "C01021",
+                "S01",
+                "2025-04-01 19:13:59",
+                "in_store",
+                null,
+                1,
+                89.99,
+                0.0,
+                89.99
+              ],
+              [
+                "O000014",
+                "C00833",
+                "S01",
+                "2025-04-01 19:19:10",
+                "in_store",
+                null,
+                1,
+                349.99,
+                0.0,
+                349.99
+              ],
+              [
+                "O000015",
+                "C00236",
+                "WEB",
+                "2025-04-01 19:32:38",
+                "online",
+                null,
+                1,
+                24.99,
+                0.0,
+                24.99
+              ],
+              [
+                "O000016",
+                "C00995",
+                "WEB",
+                "2025-04-01 22:20:47",
+                "online",
+                null,
+                3,
+                139.97,
+                0.0,
+                139.97
+              ],
+              [
+                "O000017",
+                "C00542",
+                "WEB",
+                "2025-04-01 23:58:31",
+                "online",
+                null,
+                2,
+                439.98,
+                0.0,
+                439.98
+              ],
+              [
+                "O000018",
+                "C00905",
+                "S02",
+                "2025-04-02 09:41:09",
+                "in_store",
+                null,
+                1,
+                19.99,
+                0.0,
+                19.99
+              ],
+              [
+                "O000019",
+                "C00430",
+                "S01",
+                "2025-04-02 11:25:18",
+                "in_store",
+                null,
+                4,
+                919.96,
+                0.0,
+                919.96
+              ],
+              [
+                "O000020",
+                "C00744",
+                "S20",
+                "2025-04-02 12:57:54",
+                "in_store",
+                null,
+                1,
+                349.99,
+                0.0,
+                349.99
+              ],
+              [
+                "O000021",
+                "C00005",
+                "S14",
+                "2025-04-02 14:33:55",
+                "in_store",
+                null,
+                1,
+                349.99,
+                0.0,
+                349.99
+              ],
+              [
+                "O000022",
+                "C00958",
+                "S21",
+                "2025-04-02 14:37:15",
+                "in_store",
+                null,
+                3,
+                219.97,
+                0.0,
+                219.97
+              ],
+              [
+                "O000023",
+                "C00778",
+                "S23",
+                "2025-04-02 17:36:33",
+                "in_store",
+                null,
+                1,
+                79.99,
+                0.0,
+                79.99
+              ],
+              [
+                "O000024",
+                "C00656",
+                "WEB",
+                "2025-04-02 18:37:37",
+                "online",
+                null,
+                2,
+                109.98,
+                0.0,
+                109.98
+              ],
+              [
+                "O000025",
+                "C00030",
+                "S19",
+                "2025-04-02 19:04:15",
+                "in_store",
+                null,
+                1,
+                29.99,
+                0.0,
+                29.99
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 285
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"products\" LIMIT 25",
+          "result": {
+            "columns": [
+              "product_id",
+              "sku",
+              "product_name",
+              "category",
+              "subcategory",
+              "brand",
+              "supplier",
+              "list_price",
+              "unit_cost"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "P001",
+                "LRG-ELE-1037",
+                "Voltara Smart Speaker Mini",
+                "Electronics",
+                "Smart Speaker",
+                "Voltara",
+                "Voltara Devices",
+                49.99,
+                35.37
+              ],
+              [
+                "P002",
+                "LRG-ELE-1074",
+                "Voltara Smart Speaker Standard",
+                "Electronics",
+                "Smart Speaker",
+                "Voltara",
+                "Voltara Devices",
+                89.99,
+                62.51
+              ],
+              [
+                "P003",
+                "LRG-ELE-1111",
+                "Voltara Smart Speaker Max",
+                "Electronics",
+                "Smart Speaker",
+                "Voltara",
+                "Voltara Devices",
+                129.99,
+                93.3
+              ],
+              [
+                "P004",
+                "LRG-ELE-1148",
+                "Auralis Soundbar 2.1",
+                "Electronics",
+                "Soundbar",
+                "Auralis",
+                "Auralis Audio Works",
+                129.99,
+                87.58
+              ],
+              [
+                "P005",
+                "LRG-ELE-1185",
+                "Lumen Living Soundbar 3.1 with Subwoofer",
+                "Electronics",
+                "Soundbar",
+                "Lumen Living",
+                "Auralis Audio Works",
+                349.99,
+                236.19
+              ],
+              [
+                "P006",
+                "LRG-ELE-1222",
+                "Lumen Living Wireless Earbuds Lite",
+                "Electronics",
+                "Wireless Earbuds",
+                "Lumen Living",
+                "Auralis Audio Works",
+                39.99,
+                28.38
+              ],
+              [
+                "P007",
+                "LRG-ELE-1259",
+                "Auralis Wireless Earbuds Pro",
+                "Electronics",
+                "Wireless Earbuds",
+                "Auralis",
+                "Auralis Audio Works",
+                149.99,
+                100.12
+              ],
+              [
+                "P008",
+                "LRG-ELE-1296",
+                "Auralis Over-Ear Headphones Studio",
+                "Electronics",
+                "Over-Ear Headphones",
+                "Auralis",
+                "Auralis Audio Works",
+                79.99,
+                59.22
+              ],
+              [
+                "P009",
+                "LRG-ELE-1333",
+                "Lumen Living Over-Ear Headphones Travel",
+                "Electronics",
+                "Over-Ear Headphones",
+                "Lumen Living",
+                "Auralis Audio Works",
+                299.99,
+                213.1
+              ],
+              [
+                "P010",
+                "LRG-ELE-1370",
+                "Lumen Living Smart Display 8-inch",
+                "Electronics",
+                "Smart Display",
+                "Lumen Living",
+                "Voltara Devices",
+                89.99,
+                69.49
+              ],
+              [
+                "P011",
+                "LRG-ELE-1407",
+                "Voltara Smart Display 10-inch",
+                "Electronics",
+                "Smart Display",
+                "Voltara",
+                "Voltara Devices",
+                229.99,
+                157.79
+              ],
+              [
+                "P012",
+                "LRG-ELE-1444",
+                "Voltara 4K Streaming Stick Standard",
+                "Electronics",
+                "4K Streaming Stick",
+                "Voltara",
+                "Voltara Devices",
+                43.99,
+                27.74
+              ],
+              [
+                "P013",
+                "LRG-ELE-1481",
+                "Voltara Portable Projector HD",
+                "Electronics",
+                "Portable Projector",
+                "Voltara",
+                "Voltara Devices",
+                149.99,
+                94.81
+              ],
+              [
+                "P014",
+                "LRG-ELE-1518",
+                "Voltara Portable Projector Full HD",
+                "Electronics",
+                "Portable Projector",
+                "Voltara",
+                "Voltara Devices",
+                449.99,
+                289.99
+              ],
+              [
+                "P015",
+                "LRG-ELE-1555",
+                "Voltara Robot Vacuum Core",
+                "Electronics",
+                "Robot Vacuum",
+                "Voltara",
+                "Voltara Devices",
+                199.99,
+                139.55
+              ],
+              [
+                "P016",
+                "LRG-ELE-1592",
+                "Voltara Robot Vacuum Plus",
+                "Electronics",
+                "Robot Vacuum",
+                "Voltara",
+                "Voltara Devices",
+                399.99,
+                251.98
+              ],
+              [
+                "P017",
+                "LRG-ELE-1629",
+                "Voltara Robot Vacuum Max",
+                "Electronics",
+                "Robot Vacuum",
+                "Voltara",
+                "Voltara Devices",
+                599.99,
+                422.47
+              ],
+              [
+                "P018",
+                "LRG-ELE-1666",
+                "Lumen Living Air Purifier Small Room",
+                "Electronics",
+                "Air Purifier",
+                "Lumen Living",
+                "Voltara Devices",
+                89.99,
+                70.17
+              ],
+              [
+                "P019",
+                "LRG-ELE-1703",
+                "Voltara Air Purifier Large Room",
+                "Electronics",
+                "Air Purifier",
+                "Voltara",
+                "Voltara Devices",
+                299.99,
+                214.3
+              ],
+              [
+                "P020",
+                "LRG-ELE-1740",
+                "Voltara Smart Thermostat Standard",
+                "Electronics",
+                "Smart Thermostat",
+                "Voltara",
+                "Voltara Devices",
+                79.99,
+                52.71
+              ],
+              [
+                "P021",
+                "LRG-ELE-1777",
+                "Voltara Smart Thermostat Pro",
+                "Electronics",
+                "Smart Thermostat",
+                "Voltara",
+                "Voltara Devices",
+                179.99,
+                112.39
+              ],
+              [
+                "P022",
+                "LRG-ELE-1814",
+                "Voltara Video Doorbell Wired",
+                "Electronics",
+                "Video Doorbell",
+                "Voltara",
+                "Voltara Devices",
+                69.99,
+                45.68
+              ],
+              [
+                "P023",
+                "LRG-ELE-1851",
+                "Voltara Video Doorbell Battery",
+                "Electronics",
+                "Video Doorbell",
+                "Voltara",
+                "Voltara Devices",
+                199.99,
+                140.9
+              ],
+              [
+                "P024",
+                "LRG-ELE-1888",
+                "Auralis Bluetooth Speaker Pocket",
+                "Electronics",
+                "Bluetooth Speaker",
+                "Auralis",
+                "Auralis Audio Works",
+                29.99,
+                20.44
+              ],
+              [
+                "P025",
+                "LRG-ELE-1925",
+                "Auralis Bluetooth Speaker Party",
+                "Electronics",
+                "Bluetooth Speaker",
+                "Auralis",
+                "Auralis Audio Works",
+                119.99,
+                85.37
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 251
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"returns\" LIMIT 25",
+          "result": {
+            "columns": [
+              "return_id",
+              "order_item_id",
+              "order_id",
+              "customer_id",
+              "product_id",
+              "store_id",
+              "returned_at",
+              "quantity",
+              "returned_amount",
+              "condition",
+              "reason"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "TIMESTAMP",
+              "BIGINT",
+              "DOUBLE",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "R00001",
+                "OI000014",
+                "O000009",
+                "C00185",
+                "P103",
+                "S03",
+                "2025-04-06 16:09:07",
+                1,
+                19.99,
+                "opened",
+                "Changed mind"
+              ],
+              [
+                "R00002",
+                "OI000018",
+                "O000012",
+                "C00360",
+                "P083",
+                "S08",
+                "2025-04-06 19:48:16",
+                1,
+                99.99,
+                "opened",
+                "Found a better price"
+              ],
+              [
+                "R00003",
+                "OI000039",
+                "O000026",
+                "C00255",
+                "P153",
+                "S14",
+                "2025-04-08 12:04:06",
+                1,
+                129.99,
+                "opened",
+                "Not as described"
+              ],
+              [
+                "R00004",
+                "OI000013",
+                "O000008",
+                "C00442",
+                "P126",
+                "WEB",
+                "2025-04-09 10:02:20",
+                1,
+                19.99,
+                "defective",
+                "Missing parts"
+              ],
+              [
+                "R00005",
+                "OI000091",
+                "O000058",
+                "C00483",
+                "P079",
+                "WEB",
+                "2025-04-10 18:14:51",
+                1,
+                49.99,
+                "opened",
+                "Gift duplicate"
+              ],
+              [
+                "R00006",
+                "OI000083",
+                "O000053",
+                "C00411",
+                "P083",
+                "WEB",
+                "2025-04-10 18:33:46",
+                1,
+                99.99,
+                "opened",
+                "Changed mind"
+              ],
+              [
+                "R00007",
+                "OI000001",
+                "O000001",
+                "C00196",
+                "P003",
+                "S03",
+                "2025-04-12 14:26:43",
+                1,
+                129.99,
+                "defective",
+                "Stopped working"
+              ],
+              [
+                "R00008",
+                "OI000096",
+                "O000061",
+                "C00251",
+                "P103",
+                "S19",
+                "2025-04-14 11:01:31",
+                1,
+                19.99,
+                "opened",
+                "Did not fit the space"
+              ],
+              [
+                "R00009",
+                "OI000088",
+                "O000056",
+                "C00557",
+                "P082",
+                "S22",
+                "2025-04-14 17:55:04",
+                1,
+                29.99,
+                "opened",
+                "Found a better price"
+              ],
+              [
+                "R00010",
+                "OI000107",
+                "O000067",
+                "C00280",
+                "P148",
+                "S22",
+                "2025-04-15 09:48:13",
+                2,
+                119.98,
+                "opened",
+                "Changed mind"
+              ],
+              [
+                "R00011",
+                "OI000036",
+                "O000024",
+                "C00656",
+                "P127",
+                "WEB",
+                "2025-04-15 11:58:21",
+                1,
+                49.99,
+                "unopened",
+                "Gift duplicate"
+              ],
+              [
+                "R00012",
+                "OI000100",
+                "O000064",
+                "C00268",
+                "P092",
+                "WEB",
+                "2025-04-15 12:57:35",
+                1,
+                69.99,
+                "defective",
+                "Missing parts"
+              ],
+              [
+                "R00013",
+                "OI000179",
+                "O000113",
+                "C00444",
+                "P008",
+                "S16",
+                "2025-04-20 11:16:54",
+                1,
+                79.99,
+                "unopened",
+                "Gift duplicate"
+              ],
+              [
+                "R00014",
+                "OI000186",
+                "O000116",
+                "C00926",
+                "P155",
+                "S11",
+                "2025-04-20 14:52:56",
+                2,
+                159.98,
+                "unopened",
+                "Delivery arrived late"
+              ],
+              [
+                "R00015",
+                "OI000144",
+                "O000092",
+                "C00255",
+                "P087",
+                "S14",
+                "2025-04-20 16:18:31",
+                1,
+                349.99,
+                "opened",
+                "Gift duplicate"
+              ],
+              [
+                "R00016",
+                "OI000148",
+                "O000095",
+                "C00404",
+                "P121",
+                "S22",
+                "2025-04-20 19:00:55",
+                1,
+                128.99,
+                "unopened",
+                "Changed mind"
+              ],
+              [
+                "R00017",
+                "OI000047",
+                "O000030",
+                "C00729",
+                "P128",
+                "S02",
+                "2025-04-20 20:57:12",
+                1,
+                59.99,
+                "unopened",
+                "Changed mind"
+              ],
+              [
+                "R00018",
+                "OI000301",
+                "O000194",
+                "C00263",
+                "P112",
+                "S06",
+                "2025-04-21 13:12:27",
+                1,
+                39.99,
+                "unopened",
+                "Changed mind"
+              ],
+              [
+                "R00019",
+                "OI000248",
+                "O000158",
+                "C00087",
+                "P128",
+                "WEB",
+                "2025-04-23 10:18:07",
+                1,
+                59.99,
+                "opened",
+                "Not as described"
+              ],
+              [
+                "R00020",
+                "OI000142",
+                "O000090",
+                "C00250",
+                "P005",
+                "S21",
+                "2025-04-23 11:42:04",
+                1,
+                349.99,
+                "opened",
+                "Did not fit the space"
+              ],
+              [
+                "R00021",
+                "OI000027",
+                "O000018",
+                "C00905",
+                "P142",
+                "S02",
+                "2025-04-24 19:36:50",
+                1,
+                19.99,
+                "opened",
+                "Gift duplicate"
+              ],
+              [
+                "R00022",
+                "OI000267",
+                "O000170",
+                "C01015",
+                "P104",
+                "WEB",
+                "2025-04-25 14:01:42",
+                1,
+                59.99,
+                "opened",
+                "Found a better price"
+              ],
+              [
+                "R00023",
+                "OI000347",
+                "O000222",
+                "C00572",
+                "P167",
+                "S20",
+                "2025-04-27 17:58:49",
+                1,
+                59.99,
+                "unopened",
+                "Delivery arrived late"
+              ],
+              [
+                "R00024",
+                "OI000331",
+                "O000213",
+                "C00435",
+                "P101",
+                "WEB",
+                "2025-04-28 10:04:15",
+                1,
+                49.99,
+                "opened",
+                "Gift duplicate"
+              ],
+              [
+                "R00025",
+                "OI000383",
+                "O000249",
+                "C00377",
+                "P007",
+                "S21",
+                "2025-04-28 15:05:43",
+                1,
+                149.99,
+                "opened",
+                "Gift duplicate"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 274
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"stores\" LIMIT 25",
+          "result": {
+            "columns": [
+              "store_id",
+              "store_name",
+              "store_type",
+              "region",
+              "state",
+              "city",
+              "opened_on",
+              "square_feet"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "S01",
+                "Lumen Boston Seaport",
+                "flagship",
+                "Northeast",
+                "MA",
+                "Boston",
+                "2014-03-14",
+                41000
+              ],
+              [
+                "S02",
+                "Lumen Providence Place",
+                "mall",
+                "Northeast",
+                "RI",
+                "Providence",
+                "2016-09-22",
+                22000
+              ],
+              [
+                "S03",
+                "Lumen Hartford Crossing",
+                "standalone",
+                "Northeast",
+                "CT",
+                "Hartford",
+                "2012-05-05",
+                28000
+              ],
+              [
+                "S04",
+                "Lumen Albany Commons",
+                "outlet",
+                "Northeast",
+                "NY",
+                "Albany",
+                "2018-10-19",
+                19000
+              ],
+              [
+                "S05",
+                "Lumen Philadelphia Center City",
+                "mall",
+                "Northeast",
+                "PA",
+                "Philadelphia",
+                "2011-04-02",
+                26000
+              ],
+              [
+                "S06",
+                "Lumen Newark Gateway",
+                "standalone",
+                "Northeast",
+                "NJ",
+                "Newark",
+                "2019-08-30",
+                27000
+              ],
+              [
+                "S07",
+                "Lumen Atlanta Midtown",
+                "flagship",
+                "Southeast",
+                "GA",
+                "Atlanta",
+                "2015-11-06",
+                39000
+              ],
+              [
+                "S08",
+                "Lumen Charlotte South End",
+                "mall",
+                "Southeast",
+                "NC",
+                "Charlotte",
+                "2017-03-11",
+                23000
+              ],
+              [
+                "S09",
+                "Lumen Raleigh Triangle",
+                "standalone",
+                "Southeast",
+                "NC",
+                "Raleigh",
+                "2013-06-08",
+                27000
+              ],
+              [
+                "S10",
+                "Lumen Nashville Music Row",
+                "mall",
+                "Southeast",
+                "TN",
+                "Nashville",
+                "2020-02-21",
+                21000
+              ],
+              [
+                "S11",
+                "Lumen Tampa Bayshore",
+                "outlet",
+                "Southeast",
+                "FL",
+                "Tampa",
+                "2018-01-26",
+                20000
+              ],
+              [
+                "S12",
+                "Lumen Orlando Premium",
+                "outlet",
+                "Southeast",
+                "FL",
+                "Orlando",
+                "2016-12-03",
+                21000
+              ],
+              [
+                "S13",
+                "Lumen Chicago Loop",
+                "flagship",
+                "Midwest",
+                "IL",
+                "Chicago",
+                "2013-10-12",
+                44000
+              ],
+              [
+                "S14",
+                "Lumen Minneapolis North Loop",
+                "mall",
+                "Midwest",
+                "MN",
+                "Minneapolis",
+                "2017-08-25",
+                22000
+              ],
+              [
+                "S15",
+                "Lumen Columbus Easton",
+                "standalone",
+                "Midwest",
+                "OH",
+                "Columbus",
+                "2014-09-13",
+                26000
+              ],
+              [
+                "S16",
+                "Lumen Indianapolis Fashion Mall",
+                "mall",
+                "Midwest",
+                "IN",
+                "Indianapolis",
+                "2015-04-18",
+                22000
+              ],
+              [
+                "S17",
+                "Lumen Kansas City Plaza",
+                "standalone",
+                "Midwest",
+                "MO",
+                "Kansas City",
+                "2019-05-04",
+                25000
+              ],
+              [
+                "S18",
+                "Lumen Milwaukee Third Ward",
+                "outlet",
+                "Midwest",
+                "WI",
+                "Milwaukee",
+                "2021-03-27",
+                18000
+              ],
+              [
+                "S19",
+                "Lumen Seattle South Lake Union",
+                "mall",
+                "West",
+                "WA",
+                "Seattle",
+                "2016-06-11",
+                23000
+              ],
+              [
+                "S20",
+                "Lumen Portland Pearl",
+                "standalone",
+                "West",
+                "OR",
+                "Portland",
+                "2014-11-01",
+                24000
+              ],
+              [
+                "S21",
+                "Lumen San Francisco Union Square",
+                "flagship",
+                "West",
+                "CA",
+                "San Francisco",
+                "2012-09-07",
+                38000
+              ],
+              [
+                "S22",
+                "Lumen Los Angeles Westside",
+                "mall",
+                "West",
+                "CA",
+                "Los Angeles",
+                "2015-02-14",
+                30000
+              ],
+              [
+                "S23",
+                "Lumen Phoenix Biltmore",
+                "standalone",
+                "West",
+                "AZ",
+                "Phoenix",
+                "2018-07-14",
+                26000
+              ],
+              [
+                "S24",
+                "Lumen Denver Cherry Creek",
+                "mall",
+                "West",
+                "CO",
+                "Denver",
+                "2025-08-15",
+                21000
+              ],
+              [
+                "WEB",
+                "Lumen.com",
+                "ecommerce",
+                "E-commerce",
+                null,
+                null,
+                "2010-01-01",
+                null
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 247
+          }
+        }
+      ]
+    }
+  ]
+}
