@@ -62,8 +62,9 @@ when a prediction target or the set of entities cannot be inferred.
   dates and truncation notes.
 - Keep each value's unit as the tool or the column defines it. Convert
   probabilities and other fractions to percentages (0.25 is 25%), and never
-  present a score or z-score as a percentage.
-- Correlation, co-movement, and anomaly scores do not show cause.
+  present a score, rating, or index as a percentage.
+- A correlation, or two measures that rise and fall together, does not show
+  cause.
 
 ## Citations
 

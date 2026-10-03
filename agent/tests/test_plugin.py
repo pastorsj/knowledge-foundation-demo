@@ -315,6 +315,51 @@ def test_prediction_entity_ids_of_any_key_type_are_recorded_as_text(hooks, api):
     assert posted_receipt(api)["content"]["rows"][0]["entityId"] == "1042"
 
 
+@pytest.mark.parametrize(
+    ("key", "entity_id"),
+    [
+        ("SKU 12", "SKU_12"),
+        ("jane.doe@example.com", "jane.doe_example.com"),
+        ("_C12", "C12"),
+        ("Zoë Müller", "Zo__M_ller"),
+    ],
+    ids=["space", "email", "leading-underscore", "non-ascii"],
+)
+def test_an_entity_id_the_schema_refuses_is_recorded_with_its_key_as_label(hooks, api, key, entity_id):
+    """Without this the API refuses the receipt, and the prediction loses its evidence id."""
+    rows = [{"entity_id": key, "probability": 0.62, "value": None, "label": None}]
+    output = run_tool(hooks, "predict", {"pql": "template:churn_90d"}, {**PREDICTION, "rows": rows})
+
+    receipt = posted_receipt(api)  # valid against the receipt schema
+    assert receipt["content"]["rows"] == [{"entityId": entity_id, "probability": 0.62, "value": None, "label": key}]
+    assert json.loads(output)["evidence_id"] == receipt["receiptId"]
+
+
+def test_entity_ids_the_schema_accepts_and_existing_labels_are_kept(hooks, api):
+    rows = [
+        {"entity_id": "M-07/line:2.a_b", "probability": 0.9, "value": None, "label": None},
+        {"entity_id": "Café 3", "probability": 0.7, "value": None, "label": "gold"},  # a multiclass label stays
+        {"entity_id": "A" * 130, "probability": 0.5, "value": None, "label": None},
+        {"entity_id": "日本", "probability": 0.4, "value": None, "label": None},  # nothing is left: a hash names it
+    ]
+    run_tool(hooks, "predict", {"pql": "template:churn_90d"}, {**PREDICTION, "rows": rows})
+
+    kept, labelled, long, unnamed = posted_receipt(api)["content"]["rows"]
+    assert (kept["entityId"], kept["label"]) == ("M-07/line:2.a_b", None)
+    assert (labelled["entityId"], labelled["label"]) == ("Caf__3", "gold")
+    assert (long["entityId"], long["label"]) == ("A" * 128, "A" * 130)
+    assert re.fullmatch(r"entity-[0-9a-f]{16}", unnamed["entityId"]) and unnamed["label"] == "日本"
+
+
+def test_a_scope_without_a_database_name_still_records_table_queries():
+    api = FakeApi({key: value for key, value in SCOPE.items() if key != "database_name"})
+    output = run_tool(plugin.ExecutionReceipts(REGISTRY, api), "query_tables", QUERY_ARGS, QUERY)
+
+    receipt = posted_receipt(api)
+    assert receipt["content"]["databaseName"] == "knowledge"  # the tool names it
+    assert json.loads(output)["evidence_id"] == receipt["receiptId"]
+
+
 def test_an_unavailable_prediction_gives_a_failed_receipt_without_evidence_id(hooks, api):
     output = run_tool(hooks, "predict", {"question": "Spend next month?", "pql": PREDICTION["pql"]}, UNAVAILABLE)
 
