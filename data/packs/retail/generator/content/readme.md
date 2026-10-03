@@ -28,7 +28,7 @@ demonstration dataset, not retail advice.
   history to learn from). The tables are a loyalty-member sample of Lumen's transactions, which is why absolute dollars
   are modest.
 - **Time.** Fiscal quarters are calendar quarters. Q3 2026 is July 1 to September 30, 2026. The Kumo anchor time is
-  `2026-09-30T00:00:00Z`.
+  `2026-10-01T00:00:00Z`, the day after the last data day.
 - **Planted stories** (so the questions have clear answers): the Chicago Loop flagship (S13) sold electronics that were
   returned at an unusual rate after late June 2026; three stores ({{lp_store_ids}}) have return rates more than twice the
   chain rate and are named in the scanned memo; three categories missed their Q3 plan; one region clearly led year-over-
@@ -68,7 +68,8 @@ workbook's tables `<file stem>_<sheet>`. Keys, time columns, foreign keys and co
 
 ### Prediction templates
 
-All three are binary Kumo PQL over `customers`, `orders` and `returns`, anchored at `2026-09-30T00:00:00Z`:
+All three are binary Kumo PQL over `customers`, `orders` and `returns`, anchored at `2026-10-01T00:00:00Z`. Kumo scores at most 1,000 entities per request (after the `FOR EACH ... WHERE` filter)
+and returns the top 25, so the questions name a tier; the 1,500 customers in all are over the limit:
 
 | Template | PQL |
 |---|---|
@@ -120,16 +121,22 @@ Computed by `build.py` from the generated files. Money is in US dollars.
    unopened or defective items.
 8. **`monitored-store-returns`** (hybrid: the memo names {{lp_stores}}; SQL on `returns`, `returned_at` in Q3 2026).
    {{a_lp_q3}}. The memo's basis: {{a_lp_rates}} (January to June 2026, returned value divided by net sales).
-9. **`gold-churn-risk`** (Kumo, template `churn_90d` with `WHERE customers.tier = 'gold'`). Kumo returns a probability per
+9. **`gold-churn-risk`** (Kumo, template `churn_90d` with `FOR EACH customers.customer_id WHERE customers.tier = 'gold'`,
+   {{a_n_gold}} customers; the run returns the top 25). Kumo returns a probability per
    customer, so there is no fixed answer; check the shape. There are {{a_n_gold}} gold customers ({{a_n_tier}} in all
    tiers). As a backtest at anchor 2026-07-01, the share of customers with no order in the next 90 days was
    {{a_churn_gold}} for gold, {{a_churn_silver}} for silver and {{a_churn_bronze}} for bronze ({{a_churn_all}} overall),
    so gold customers should score well below bronze on average. {{a_gold_lapsed}} gold customers have placed no order in
-   the 90 days before the anchor and should be expected near the top of the ranking.
-10. **`return-risk-30d`** (Kumo, template `return_risk_30d`). Probabilities per customer; the highest should be customers who
+   the 90 days before the anchor; the top 25 should be drawn mostly from them.
+10. **`return-risk-30d`** (Kumo, template `return_risk_30d` with `FOR EACH customers.customer_id WHERE customers.tier = 'silver'`,
+    {{a_n_silver}} customers; the run returns the top 25). Probabilities per customer; the highest should be customers who
     ordered recently (returns follow orders by 2 to 5 weeks) and customers with earlier returns ({{a_return_repeat}}
     customers have three or more). Backtest at anchor 2026-08-30: {{a_return_backtest}} returned an item in the next 30
-    days. The `high_value_30d` template has a backtest base rate of {{a_hv_backtest}} (more than $300 in 30 days).
+    days, and {{a_silver_return_backtest}}. Silver customers with an order in the 5 weeks before the anchor and two or more earlier returns
+    ({{a_silver_hot_n}} of them) returned at {{a_silver_hot_rate}} against {{a_silver_rest_rate}} for the rest. At 2026-10-01 the
+    {{a_silver_hot_now_n}} silver customers with an order since 2026-08-27 and two or more returns are {{a_silver_hot_now_ids}}; the top 25 should
+    include several of them. Overlap with that list is the check, not the exact order. The `high_value_30d` template has a
+    backtest base rate of {{a_hv_backtest}} (more than $300 in 30 days).
 
 ## Regenerating and checking
 

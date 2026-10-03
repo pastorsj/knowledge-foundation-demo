@@ -238,18 +238,26 @@ sources:
       templates:
         - id: churn_90d
           name: Customer churn (no order in 90 days)
-          description: Likelihood that a loyalty customer places no order in the next 90 days.
+          description: >-
+            Likelihood that a loyalty customer places no order in the next 90 days. Kumo scores at most 1,000 entities per
+            request and there are 1,500 customers, so filter after FOR EACH, for example WHERE customers.tier = 'gold'.
           pql: PREDICT COUNT(orders.*, 0, 90, days) = 0 FOR EACH customers.customer_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: return_risk_30d
           name: Return risk (any return in 30 days)
-          description: Likelihood that a loyalty customer returns at least one item in the next 30 days.
+          description: >-
+            Likelihood that a loyalty customer returns at least one item in the next 30 days. Kumo scores at most 1,000
+            entities per request and there are 1,500 customers, so filter after FOR EACH, for example
+            WHERE customers.tier = 'silver'.
           pql: PREDICT COUNT(returns.*, 0, 30, days) > 0 FOR EACH customers.customer_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: high_value_30d
           name: High-value purchase (over $300 in 30 days)
-          description: Likelihood that a loyalty customer spends more than $300 in net order value in the next 30 days.
+          description: >-
+            Likelihood that a loyalty customer spends more than $300 in net order value in the next 30 days. Kumo scores at
+            most 1,000 entities per request and there are 1,500 customers, so filter after FOR EACH, for example
+            WHERE customers.tier = 'gold'.
           pql: PREDICT SUM(orders.net_amount, 0, 30, days) > 300 FOR EACH customers.customer_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
 
 questions: questions.yaml

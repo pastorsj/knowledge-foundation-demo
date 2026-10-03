@@ -543,7 +543,7 @@ def analyze(T: dict[str, pd.DataFrame]) -> tuple[dict[str, str], dict[str, dict]
     a["region_note"] = (
         f"among the four geographic regions the fastest is {max(datagen.REGIONS, key=lambda r: reg[r]['yoy'])}"
     )
-    anchor = pd.Timestamp("2026-09-30")
+    anchor = pd.Timestamp("2026-10-01")  # the Kumo anchor time: the day after the last data day
     gold = customers[customers["tier"] == "gold"]
     n_gold = len(gold)
     last_order = orders.groupby("customer_id")["ordered_at"].max()
@@ -573,6 +573,24 @@ def analyze(T: dict[str, pd.DataFrame]) -> tuple[dict[str, str], dict[str, dict]
     )
     ret_hist = returns.groupby("customer_id").size()
     a["return_repeat"] = str(int((ret_hist >= 3).sum()))
+
+    # return-risk-30d asks about one tier, so the population is under Kumo's limit of 1,000 entities per request
+    silver = customers[customers["tier"] == "silver"]
+    a["n_silver"] = str(len(silver))
+    sid = silver[silver["joined_at"] < r_anchor.date()]["customer_id"]
+    prior_ret = returns[returns["returned_at"] < r_anchor].groupby("customer_id").size()
+    last_before = orders[orders["ordered_at"] < r_anchor].groupby("customer_id")["ordered_at"].max()
+    ret_win = set(returns[between(returns["returned_at"], r_anchor, r_anchor + pd.Timedelta(days=30))]["customer_id"])
+    hit = sid.isin(ret_win)
+    hot_b = sid.map(prior_ret).fillna(0).ge(2) & (sid.map(last_before) >= r_anchor - pd.Timedelta(days=35))
+    a["silver_return_backtest"] = f"{int(hit.sum())} of {len(sid)} silver customers ({pct(hit.mean())})"
+    a["silver_hot_n"] = str(int(hot_b.sum()))
+    a["silver_hot_rate"] = pct(hit[hot_b].mean())
+    a["silver_rest_rate"] = pct(hit[~hot_b].mean())
+    sn = silver["customer_id"]
+    hot_now = sn.map(ret_hist).fillna(0).ge(2) & (sn.map(last_order) >= anchor - pd.Timedelta(days=35))
+    a["silver_hot_now_n"] = str(int(hot_now.sum()))
+    a["silver_hot_now_ids"] = ", ".join(sorted(sn[hot_now]))
 
     for name, df in T.items():
         f[f"rows_{name}"] = f"{len(df):,}"
@@ -621,7 +639,7 @@ def build_readme(facts: dict[str, str]) -> None:
     text = (CONTENT / "readme.md").read_text(encoding="utf-8")
     import re
 
-    text = re.sub(r"<!--.*?-->\n?", "", text, flags=re.DOTALL)
+    text = re.sub(r"<!--(?!\s*SPDX).*?-->\n?", "", text, flags=re.DOTALL)  # drop the authoring note, keep the SPDX header
     (PACK / "README.md").write_text(render.fill(text, facts), encoding="utf-8")
 
 
