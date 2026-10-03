@@ -1,0 +1,57 @@
+machine_id,plant_id,machine_type,manufacturer,model,cell,criticality,commissioned_date
+DAY-MIL-01,DAY,CNC Mill,Tauber Machine Works,VMC-1100,Cell A,medium,2016-06-03
+DAY-MIL-02,DAY,CNC Mill,Tauber Machine Works,VMC-850,Cell A,medium,2016-01-13
+DAY-MIL-03,DAY,CNC Mill,Tauber Machine Works,VMC-1100,Cell A,low,2014-04-06
+DAY-MIL-04,DAY,CNC Mill,Tauber Machine Works,VMC-1100,Cell B,high,2012-11-22
+DAY-MIL-05,DAY,CNC Mill,Tauber Machine Works,VMC-1100,Cell B,medium,2021-01-31
+DAY-MIL-06,DAY,CNC Mill,Tauber Machine Works,VMC-1100,Cell B,medium,2013-08-05
+DAY-MIL-07,DAY,CNC Mill,Tauber Machine Works,VMC-850,Cell C,medium,2022-03-28
+DAY-MIL-08,DAY,CNC Mill,Tauber Machine Works,VMC-1100,Cell C,low,2025-11-10
+DAY-LTH-01,DAY,CNC Lathe,Vantor Systems,TC-300,Cell C,medium,2022-10-13
+DAY-LTH-02,DAY,CNC Lathe,Vantor Systems,TC-300,Cell D,high,2014-03-25
+DAY-LTH-03,DAY,CNC Lathe,Vantor Systems,TC-450,Cell D,high,2020-04-16
+DAY-LTH-04,DAY,CNC Lathe,Vantor Systems,TC-450,Cell D,low,2012-03-20
+DAY-LTH-05,DAY,CNC Lathe,Vantor Systems,TC-450,Cell E,medium,2020-03-26
+DAY-PRS-01,DAY,Hydraulic Press,Helmsford Hydraulics,HP-400T,Cell E,medium,2013-12-15
+DAY-PRS-02,DAY,Hydraulic Press,Helmsford Hydraulics,HP-250T,Cell E,medium,2016-01-18
+DAY-PRS-03,DAY,Hydraulic Press,Helmsford Hydraulics,HP-400T,Cell F,low,2023-02-10
+DAY-PRS-04,DAY,Hydraulic Press,Helmsford Hydraulics,HP-250T,Cell F,medium,2021-12-16
+DAY-RBT-01,DAY,Robot Cell,Brenmark Robotics,RW-6 weld cell,Cell F,medium,2016-02-09
+DAY-RBT-02,DAY,Robot Cell,Brenmark Robotics,RH-12 handling cell,Cell G,medium,2021-07-06
+DAY-RBT-03,DAY,Robot Cell,Brenmark Robotics,RH-12 handling cell,Cell G,medium,2014-09-09
+DAY-GRD-01,DAY,Surface Grinder,Ostrander Grinding,SG-1200,Cell G,low,2023-06-06
+MTY-MIL-01,MTY,CNC Mill,Tauber Machine Works,VMC-850,Cell A,medium,2021-05-09
+MTY-MIL-02,MTY,CNC Mill,Tauber Machine Works,VMC-1100,Cell A,medium,2011-10-08
+MTY-MIL-03,MTY,CNC Mill,Tauber Machine Works,VMC-1100,Cell A,medium,2013-09-22
+MTY-MIL-04,MTY,CNC Mill,Tauber Machine Works,VMC-1100,Cell B,high,2015-01-22
+MTY-MIL-05,MTY,CNC Mill,Tauber Machine Works,VMC-1100,Cell B,medium,2015-10-23
+MTY-MIL-06,MTY,CNC Mill,Tauber Machine Works,VMC-1100,Cell B,high,2020-12-13
+MTY-LTH-01,MTY,CNC Lathe,Vantor Systems,TC-450,Cell C,high,2016-01-21
+MTY-LTH-02,MTY,CNC Lathe,Vantor Systems,TC-450,Cell C,low,2021-04-17
+MTY-LTH-03,MTY,CNC Lathe,Vantor Systems,TC-450,Cell C,high,2020-12-06
+MTY-LTH-04,MTY,CNC Lathe,Vantor Systems,TC-300,Cell D,high,2012-11-23
+MTY-LTH-05,MTY,CNC Lathe,Vantor Systems,TC-300,Cell D,high,2017-11-27
+MTY-PRS-01,MTY,Hydraulic Press,Helmsford Hydraulics,HP-400T,Cell D,low,2012-02-10
+MTY-PRS-02,MTY,Hydraulic Press,Helmsford Hydraulics,HP-400T,Cell E,medium,2023-10-01
+MTY-PRS-03,MTY,Hydraulic Press,Helmsford Hydraulics,HP-400T,Cell E,medium,2016-02-29
+MTY-RBT-01,MTY,Robot Cell,Brenmark Robotics,RH-12 handling cell,Cell E,high,2020-01-01
+MTY-RBT-02,MTY,Robot Cell,Brenmark Robotics,RW-6 weld cell,Cell F,medium,2023-01-24
+MTY-RBT-03,MTY,Robot Cell,Brenmark Robotics,RH-12 handling cell,Cell F,medium,2026-02-16
+MTY-GRD-01,MTY,Surface Grinder,Ostrander Grinding,SG-1200,Cell F,medium,2017-09-11
+MTY-GRD-02,MTY,Surface Grinder,Ostrander Grinding,SG-1200,Cell G,medium,2014-11-06
+BRN-MIL-01,BRN,CNC Mill,Tauber Machine Works,VMC-850,Cell A,medium,2017-12-17
+BRN-MIL-02,BRN,CNC Mill,Tauber Machine Works,VMC-1100,Cell A,low,2017-02-21
+BRN-MIL-03,BRN,CNC Mill,Tauber Machine Works,VMC-1100,Cell A,low,2019-10-12
+BRN-MIL-04,BRN,CNC Mill,Tauber Machine Works,VMC-850,Cell B,high,2014-09-07
+BRN-MIL-05,BRN,CNC Mill,Tauber Machine Works,VMC-850,Cell B,medium,2019-04-10
+BRN-MIL-06,BRN,CNC Mill,Tauber Machine Works,VMC-850,Cell B,low,2015-12-15
+BRN-LTH-01,BRN,CNC Lathe,Vantor Systems,TC-450,Cell C,low,2011-12-06
+BRN-LTH-02,BRN,CNC Lathe,Vantor Systems,TC-300,Cell C,low,2018-03-05
+BRN-LTH-03,BRN,CNC Lathe,Vantor Systems,TC-450,Cell C,medium,2021-05-28
+BRN-LTH-04,BRN,CNC Lathe,Vantor Systems,TC-450,Cell D,medium,2026-04-20
+BRN-PRS-01,BRN,Hydraulic Press,Helmsford Hydraulics,HP-250T,Cell D,high,2016-03-25
+BRN-PRS-02,BRN,Hydraulic Press,Helmsford Hydraulics,HP-400T,Cell D,medium,2017-12-18
+BRN-PRS-03,BRN,Hydraulic Press,Helmsford Hydraulics,HP-250T,Cell E,medium,2020-09-21
+BRN-RBT-01,BRN,Robot Cell,Brenmark Robotics,RW-6 weld cell,Cell E,medium,2018-03-21
+BRN-RBT-02,BRN,Robot Cell,Brenmark Robotics,RW-6 weld cell,Cell E,medium,2019-09-17
+BRN-GRD-01,BRN,Surface Grinder,Ostrander Grinding,SG-1200,Cell F,low,2012-04-06

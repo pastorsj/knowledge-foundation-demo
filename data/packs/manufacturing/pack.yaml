@@ -1,0 +1,263 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/pack.schema.json
+#
+# Atlas Precision Components: a fictional maker of machined aluminum and steel components with plants in Dayton,
+# Monterrey and Brno. Plant-operations tables (machines, daily sensor aggregates, maintenance events, work orders,
+# quality defects, a production plan workbook) plus maintenance and safety procedures and quality reports, one of
+# them a scanned handwritten sheet. Everything is synthetic and is rebuilt by generator/build.py (see README.md).
+schema_version: "3"
+id: manufacturing
+version: "1.0.0"
+title: Manufacturing
+description: >-
+  Atlas Precision Components, a fictional maker of machined aluminum and steel parts with plants in Dayton,
+  Monterrey and Brno: 56 CNC machines, presses, robot cells and grinders, 15 months of daily sensor readings,
+  maintenance events, work orders and quality defects, beside maintenance and safety procedures, an 8D report,
+  a supplier agreement, a plant review deck and a scanned handwritten round sheet.
+icon: Factory
+as_of: "2026-09-30"
+disclaimer: >-
+  Synthetic data for a software demonstration; Atlas Precision Components and every plant, machine, supplier,
+  customer and person in it are fictional.
+
+licenses:
+  - name: Apache-2.0
+    path: https://www.apache.org/licenses/LICENSE-2.0
+    redistribution: allowed
+    notes: The generated tables and documents are synthetic demonstration assets, produced by generator/build.py.
+
+provenance:
+  - id: operations-tables
+    title: Plant operations tables and production plan workbook
+    kind: generated
+    synthetic: true
+    license: Apache-2.0
+    as_of: "2026-09-30"
+    notes: >-
+      Seeded simulation (seed 20260930) of 56 machines at three plants from 2025-07-01 to 2026-09-30. Failures are
+      preceded by rising vibration, temperature and alarms, so the data carries signal for failure prediction.
+  - id: procedure-documents
+    title: Maintenance manual, lockout/tagout SOP and scanned PM-1 round sheet
+    kind: generated
+    synthetic: true
+    license: Apache-2.0
+    as_of: "2026-09-30"
+    notes: >-
+      Authored prose in generator/content rendered to PDF with reportlab; the round sheet is a drawn form with
+      handwriting-style text, rotated 1.3 degrees with scanner noise. Figures come from the generated tables.
+  - id: report-documents
+    title: 8D report, supplier quality agreement and Q3 2026 plant performance review
+    kind: generated
+    synthetic: true
+    license: Apache-2.0
+    as_of: "2026-09-30"
+    notes: >-
+      Authored prose in generator/content rendered to PDF, DOCX and PPTX. Every figure is computed from the
+      generated tables.
+
+sources:
+  - id: operations
+    name: Plant Operations
+    description: >-
+      Plants, machines, daily sensor readings, maintenance events, work orders, quality defects and the production
+      plan of Atlas Precision Components, July 2025 to September 2026.
+    agent_description: >-
+      Atlas Precision Components' plant-operations tables in DuckDB (all synthetic). plants: 3 plants (DAY Dayton,
+      MTY Monterrey, BRN Brno). machines: 56 machines with type (CNC Mill, CNC Lathe, Hydraulic Press, Robot Cell,
+      Surface Grinder). sensor_readings: one row per machine per operating day with average vibration, maximum
+      temperature, spindle hours and alarm count. maintenance_events: planned PM-2 services and unplanned repairs
+      with failure codes and downtime hours. work_orders: production runs with quantities started, good and
+      scrapped. quality_defects: defect records with type, severity, disposition and cost. production_plan_weekly_output
+      and production_plan_scrap_targets: the plan workbook's two sheets (weekly unit targets and actuals per plant;
+      scrap and unplanned downtime targets per plant and quarter). Data runs to 2026-09-30.
+    kind: structured
+    files:
+      - files/tables/*.csv
+      - files/tables/*.xlsx
+    capabilities: [structured_retrieval, structured_prediction]
+    synthetic: true
+    example_questions:
+      - Which plant had the most unplanned downtime hours in Q3 2026?
+      - Which machines are most likely to have an unplanned failure in the next 30 days?
+    tables:
+      plants:
+        description: One row per plant.
+        primary_key: plant_id
+        columns:
+          plant_id: Plant code, DAY, MTY or BRN.
+          plant_name: Plant name, for example Dayton Plant.
+          city: City and region.
+          country: Country.
+          timezone: IANA timezone of the plant.
+          opened_year: Year the plant opened.
+          headcount: Employees at the plant.
+          shifts_per_day: Production shifts per operating day (two 8-hour shifts).
+          main_products: Main product families made at the plant.
+      machines:
+        description: One row per production machine.
+        primary_key: machine_id
+        foreign_keys:
+          - { column: plant_id, references: plants.plant_id }
+        columns:
+          machine_id: "Machine code: plant, type and number, for example MTY-LTH-04 (MIL mill, LTH lathe, PRS press, RBT robot cell, GRD grinder)."
+          plant_id: Plant the machine is in.
+          machine_type: "CNC Mill, CNC Lathe, Hydraulic Press, Robot Cell or Surface Grinder; the names used in the maintenance manual's interval table."
+          manufacturer: Machine manufacturer (fictional).
+          model: Machine model.
+          cell: Production cell within the plant.
+          criticality: Business criticality of the machine, high, medium or low.
+          commissioned_date: Date the machine was commissioned.
+      sensor_readings:
+        description: Daily sensor aggregates, one row per machine for each day it ran (weekdays, not holidays, not repair days).
+        primary_key: reading_id
+        time_column: reading_date
+        foreign_keys:
+          - { column: machine_id, references: machines.machine_id }
+        columns:
+          reading_id: Sequential row number.
+          reading_date: Operating day of the aggregate.
+          machine_id: Machine the readings are from.
+          avg_vibration_mm_s: Daily average vibration velocity in mm/s RMS; rises as bearings, reducers and pumps wear.
+          max_temperature_c: Highest temperature of the day in degrees Celsius (spindle, drive or hydraulic oil).
+          spindle_hours: Hours the main spindle, drive, pump or robot servo ran that day; below 16 on short or interrupted days.
+          alarm_count: Machine alarms raised that day.
+      maintenance_events:
+        description: Planned PM-2 services and unplanned repairs, one row per event.
+        primary_key: event_id
+        time_column: started_at
+        foreign_keys:
+          - { column: machine_id, references: machines.machine_id }
+        columns:
+          event_id: Event id, ME-nnnnn.
+          started_at: When the work started.
+          machine_id: Machine serviced or repaired.
+          event_type: "planned (scheduled PM-2 service) or unplanned (repair after a failure)."
+          task_code: PM-2 for planned services, CM (corrective maintenance) for unplanned repairs.
+          failure_code: "Failure code of an unplanned event, empty for planned events: SPN-BRG, COOL-PMP, ATC-JAM, SRV-DRV, CHK-HYD, HYD-LEAK, PMP-WEAR, VLV-STK, RDC-WEAR, CBL-FLT, WHL-IMB."
+          downtime_hours: Hours the machine was out of production for the event.
+          parts_and_labor_cost_usd: Cost of parts and labor in US dollars.
+          notes: Free-text description of the work.
+      work_orders:
+        description: Production work orders; each runs on one machine for a few weeks.
+        primary_key: work_order_id
+        time_column: start_date
+        foreign_keys:
+          - { column: plant_id, references: plants.plant_id }
+          - { column: machine_id, references: machines.machine_id }
+        columns:
+          work_order_id: Work order id, WO-nnnnn.
+          plant_id: Plant that ran the work order.
+          machine_id: Machine that ran it.
+          part_number: Atlas part number, AP-nnnn.
+          product_family: Valve bodies, Transmission housings, Brackets & mounts or Pump components.
+          customer: Customer the parts are for (fictional).
+          start_date: First day on the machine.
+          due_date: Date the work order was due.
+          completed_date: Last day on the machine; empty while the work order is in progress.
+          status: completed or in_progress.
+          qty_started: Pieces started. Equals qty_good plus qty_scrap.
+          qty_good: Good pieces.
+          qty_scrap: Scrapped pieces, including those of scrapped defect records.
+      quality_defects:
+        description: Quality defect records found in process, at inspection or by customers.
+        primary_key: defect_id
+        time_column: detected_at
+        foreign_keys:
+          - { column: machine_id, references: machines.machine_id }
+          - { column: work_order_id, references: work_orders.work_order_id }
+        columns:
+          defect_id: Defect record id, QD-nnnnn.
+          detected_at: When the defect was found.
+          machine_id: Machine that produced the pieces.
+          work_order_id: Work order the pieces belong to.
+          defect_type: "dimension_oob, surface_finish, burr, thread_defect, crack, weld_defect, flatness_oob or material_flaw (supplier material)."
+          severity: minor, major or critical.
+          detection_stage: in_process, final_inspection, incoming or customer_return.
+          quantity_affected: Pieces affected.
+          disposition: scrap, rework, use_as_is or return_to_supplier.
+          cost_usd: "Cost in US dollars: scrap value, 30 percent of it for rework, 0 for use_as_is and return_to_supplier."
+      production_plan_weekly_output:
+        description: Weekly unit targets and actuals per plant (sheet weekly_output of production_plan.xlsx), full weeks from 2025-07-07 to 2026-09-21.
+        primary_key: plan_line_id
+        time_column: week_start
+        foreign_keys:
+          - { column: plant_id, references: plants.plant_id }
+        columns:
+          plan_line_id: "Plant, ISO year and week, for example DAY-2026-W27."
+          week_start: Monday of the week.
+          plant_id: Plant.
+          working_days: Operating days in the week after weekends and holidays.
+          target_units: Planned good units for the week.
+          actual_units: Good units produced in the week.
+      production_plan_scrap_targets:
+        description: Scrap-rate and unplanned-downtime targets per plant and quarter (sheet scrap_targets of production_plan.xlsx).
+        primary_key: target_id
+        foreign_keys:
+          - { column: plant_id, references: plants.plant_id }
+        columns:
+          target_id: Plant and quarter, for example MTY-2026Q3.
+          plant_id: Plant.
+          quarter: Quarter, for example 2026-Q3.
+          scrap_target_pct: Target scrap rate in percent of units started.
+          unplanned_downtime_target_hours: Target for the quarter's total unplanned downtime hours at the plant.
+    prediction:
+      templates:
+        - id: unplanned_failure_30d
+          name: Unplanned failure in 30 days
+          description: Likelihood that a machine has at least one unplanned maintenance event in the next 30 days.
+          pql: >-
+            PREDICT COUNT(maintenance_events.* WHERE maintenance_events.event_type = 'unplanned', 0, 30, days) > 0
+            FOR EACH machines.machine_id
+          anchor_time: "2026-09-30T00:00:00Z"
+        - id: quality_defect_14d
+          name: Quality defect in 14 days
+          description: Likelihood that a machine produces at least one quality defect in the next 14 days.
+          pql: PREDICT COUNT(quality_defects.*, 0, 14, days) > 0 FOR EACH machines.machine_id
+          anchor_time: "2026-09-30T00:00:00Z"
+        - id: high_alarm_count_30d
+          name: High alarm count in 30 days
+          description: Likelihood that a machine raises more than 10 alarms in total over the next 30 days.
+          pql: PREDICT SUM(sensor_readings.alarm_count, 0, 30, days) > 10 FOR EACH machines.machine_id
+          anchor_time: "2026-09-30T00:00:00Z"
+
+  - id: procedures
+    name: Maintenance & Safety Procedures
+    description: The preventive maintenance manual, the lockout/tagout procedure and a scanned handwritten PM-1 round sheet.
+    agent_description: >-
+      Atlas Precision Components' maintenance and safety procedures. preventive_maintenance_manual.pdf (PM-MAN-001)
+      has the PM-2 interval table by machine type, PM-2 task lists, condition-based vibration and temperature
+      thresholds, the overdue escalation rules and failure codes. lockout_tagout_sop.pdf (SAF-SOP-007) has the
+      lockout/tagout steps, lock removal rules and energy sources by machine type. pm1_round_sheet_scan.png is a
+      scanned, handwritten PM-1 operator round sheet for hydraulic press DAY-PRS-03 dated 14 September 2026.
+    kind: documents
+    files:
+      - files/procedures/*.pdf
+      - files/procedures/*.png
+    capabilities: [unstructured_retrieval]
+    synthetic: true
+    example_questions:
+      - What PM-2 interval does the manual set for a hydraulic press?
+      - Who may remove a lock applied by someone who is not on site?
+
+  - id: reports
+    name: Quality & Plant Reports
+    description: An 8D report on a bore-diameter escape, a supplier quality agreement and the Q3 2026 plant performance review.
+    agent_description: >-
+      Atlas Precision Components' quality and performance reports. 8d_report_valve_body_bore_oversize.pdf is report
+      8D-2026-014 on a bore-diameter escape on valve body AP-3312 from CNC lathe MTY-LTH-04 at the Monterrey Plant,
+      with its root cause and corrective actions. supplier_quality_agreement.docx is the agreement with Halvorsen Alloys
+      Ltd. for aluminum and steel bar stock. q3_2026_plant_performance_review.pptx is the Q3 2026 deck with plan
+      attainment, scrap rate, unplanned downtime and defect cost by plant.
+    kind: documents
+    files:
+      - files/reports/*.pdf
+      - files/reports/*.docx
+      - files/reports/*.pptx
+    capabilities: [unstructured_retrieval]
+    synthetic: true
+    example_questions:
+      - Which machine does the 8D report name as the source of the bore-diameter escape?
+
+questions: questions.yaml
