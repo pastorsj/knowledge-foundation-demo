@@ -36,6 +36,7 @@ from . import packs
 from .catalog import Catalog
 from .detect import detect
 from .detect import kind_of
+from .detect import stored_name
 from .models import FileStatus
 from .models import IngestError
 from .models import Stage
@@ -348,7 +349,7 @@ def create_app(
         except IngestError as error:
             part.path.unlink(missing_ok=True)
             return {**entry, "stage": Stage.FAILED, "error_code": error.code, "error_message": error.message}
-        target = catalog.source_dir(entry["source_id"]) / "files" / file_id
+        target = catalog.source_dir(entry["source_id"]) / "files" / stored_name(file_id, part.file_name)
         target.parent.mkdir(parents=True, exist_ok=True)
         os.chmod(part.path, 0o644)
         os.replace(part.path, target)

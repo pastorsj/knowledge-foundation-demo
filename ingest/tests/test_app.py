@@ -21,6 +21,7 @@ from conftest import CATALOG_FIXTURES
 from conftest import FIXTURES
 from conftest import FakeEmbedder
 from conftest import FakeParse
+from conftest import write_awkward_xlsx
 from jsonschema import Draft202012Validator
 
 from demo_ingest.app import create_app
@@ -256,6 +257,7 @@ async def test_a_restart_finishes_interrupted_files(parse_settings: Settings, em
     store = JobStore(parse_settings.db_path)
     data = (TABLES / "orders.csv").read_bytes()
     file_id = "f-00000000000000aa"
+    # Stored before originals kept their extension: recovery renames it, so openpyxl and DuckDB can read it.
     stored = parse_settings.knowledge_dir / "sources" / "workspace.tables" / "files" / file_id
     stored.parent.mkdir(parents=True)
     stored.write_bytes(data)
@@ -282,3 +284,43 @@ async def test_pack_sync_runs_at_startup_and_reports_progress(parse_settings: Se
 
         again = await client.post("/v1/packs/sync")
         assert again.status_code == 202
+
+
+async def test_a_multi_sheet_workbook_ingests_through_the_upload_api(
+    client: httpx.AsyncClient, parse_settings: Settings, tmp_path: Path
+):
+    workbook = write_awkward_xlsx(tmp_path / "Credit Risk Report.xlsx").read_bytes()
+
+    job = (
+        await client.post("/v1/collections/workspace/documents", files=upload(("Credit Risk Report.xlsx", workbook)))
+    ).json()
+
+    status = await wait(client, job["job_id"])
+    [details_] = status["file_details"]
+    assert (status["status"], details_["status"], details_["error_message"]) == ("completed", "success", None)
+    assert details_["tables"] == ["credit_risk_report_q1_sales", "credit_risk_report_q2_sales"]
+    assert details_["parser"] == "duckdb-xlsx"
+    files = parse_settings.knowledge_dir / "sources" / "workspace.tables" / "files"
+    assert [p.name for p in files.iterdir()] == [f"{details_['file_id']}.xlsx"]
+    manifest = Catalog(parse_settings.knowledge_dir).read_source("workspace.tables")
+    assert [t["name"] for t in manifest["database"]["tables"]] == details_["tables"]
+
+    await client.request("DELETE", "/v1/collections/workspace/documents", json={"file_ids": job["file_ids"]})
+    assert not files.exists()  # the last file took the whole source with it
+
+
+async def test_a_restart_recovers_a_file_stored_without_its_extension(parse_settings: Settings, embedder, tokenizer):
+    store = JobStore(parse_settings.db_path)
+    data = write_awkward_xlsx(parse_settings.knowledge_dir / "awkward.xlsx").read_bytes()
+    file_id = "f-00000000000000bb"
+    legacy = parse_settings.knowledge_dir / "sources" / "workspace.tables" / "files" / file_id
+    legacy.parent.mkdir(parents=True)
+    legacy.write_bytes(data)
+    entry = {"file_id": file_id, "file_name": "awkward.xlsx", "source_id": "workspace.tables", "sha256": "b" * 64}
+    job_id = store.create_job("workspace", [{**entry, "size_bytes": len(data), "kind": "table", "stage": "loading"}])
+
+    async with running(parse_settings, embedder, tokenizer) as client:
+        status = await wait(client, job_id)
+
+    assert details(status)["awkward.xlsx"]["tables"] == ["awkward_q1_sales", "awkward_q2_sales"]
+    assert [p.name for p in legacy.parent.iterdir()] == [f"{file_id}.xlsx"]

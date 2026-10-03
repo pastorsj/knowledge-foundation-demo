@@ -57,6 +57,15 @@ class Detected:
     format: str
 
 
+def stored_name(file_id: str, file_name: str) -> str:
+    """The name an original is stored under: its id plus its lowercased extension when the extension is accepted.
+
+    Readers need the extension: openpyxl refuses a workbook without one, and DuckDB and docling dispatch on it.
+    """
+    suffix = Path(file_name).suffix.lower()
+    return f"{file_id}{suffix}" if suffix in DOCUMENTS or suffix in TABLES else file_id
+
+
 def kind_of(file_name: str) -> Kind | None:
     """The kind an extension promises, before the content is checked; None when it is not supported."""
     suffix = Path(file_name).suffix.lower()

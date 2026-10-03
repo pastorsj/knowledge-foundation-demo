@@ -14,6 +14,7 @@ from conftest import FIXTURES
 from conftest import REPO
 from conftest import FakeEmbedder
 from conftest import closed_port_url
+from conftest import write_awkward_xlsx
 from conftest import write_policy_pdf
 from jsonschema import Draft202012Validator
 
@@ -89,7 +90,7 @@ def test_sync_writes_the_sources_and_the_pack(
     [document] = policies["files"]
     assert (document["parser"], document["status"]) == ("docling-md", "ready")
     assert index.count(source_id="mini.policies") == policies["documents"]["chunks"]
-    assert (catalog.source_dir("mini.policies") / "files" / document["file_id"]).exists()
+    assert (catalog.source_dir("mini.policies") / "files" / f"{document['file_id']}.md").exists()
 
     sales = catalog.read_source("mini.sales")
     assert sales["capabilities"] == ["structured_retrieval", "structured_prediction"]
@@ -140,7 +141,7 @@ def test_a_changed_file_is_ingested_again(
     assert new["file_id"] != old["file_id"]
     assert index.count(document_id=old["document_id"]) == 0
     assert index.count(source_id="mini.policies") == new["chunks"]
-    assert not (catalog.source_dir("mini.policies") / "files" / old["file_id"]).exists()
+    assert [p.name for p in (catalog.source_dir("mini.policies") / "files").iterdir()] == [f"{new['file_id']}.md"]
 
 
 def test_the_digest_covers_the_parser_and_embed_configuration(pack_settings: Settings, packs_dir: Path):
@@ -215,3 +216,22 @@ def test_an_invalid_pack_fails_alone(pack_settings: Settings, catalog: Catalog, 
 def test_sync_cli_succeeds_on_valid_packs(pack_settings: Settings, pipeline: Pipeline, catalog: Catalog):
     assert packs.sync_cli(pack_settings, pipeline=pipeline) == 0
     assert catalog.read_pack("mini")["status"] == "ready"
+
+
+def test_a_multi_sheet_workbook_in_a_pack_loads(
+    pack_settings: Settings, catalog: Catalog, pipeline: Pipeline, packs_dir: Path
+):
+    pack_yaml = packs_dir / "mini" / "pack.yaml"
+    pack = yaml.safe_load(pack_yaml.read_text())
+    pack["sources"][1]["files"] = ["files/sales/*"]
+    pack_yaml.write_text(yaml.safe_dump(pack, sort_keys=False))
+    write_awkward_xlsx(packs_dir / "mini" / "files" / "sales" / "credit_risk_report.xlsx")
+
+    statuses = sync(pack_settings, catalog, pipeline)
+
+    assert statuses["mini"]["status"] == "ready", statuses["mini"]["error"]
+    sales = catalog.read_source("mini.sales")
+    workbook = next(f for f in sales["files"] if f["file_name"] == "credit_risk_report.xlsx")
+    assert workbook["tables"] == ["credit_risk_report_q1_sales", "credit_risk_report_q2_sales"]
+    stored = sorted(p.name for p in (catalog.source_dir("mini.sales") / "files").iterdir())
+    assert stored == sorted(f"{f['file_id']}{Path(f['file_name']).suffix}" for f in sales["files"])

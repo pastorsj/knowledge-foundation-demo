@@ -30,6 +30,7 @@ from jsonschema import Draft202012Validator
 
 from . import tables
 from .catalog import Catalog
+from .detect import stored_name
 from .models import utcnow
 from .pipeline import Outcome
 from .pipeline import Pipeline
@@ -240,10 +241,10 @@ def _stored_copy(catalog: Catalog, source_id: str, path: Path) -> tuple[str, str
     """Copy a pack file into the source's files/ (content-addressed) and return (sha256, file_id, copy)."""
     sha = _sha256(path)
     file_id = f"f-{sha[:16]}"
-    copy = catalog.source_dir(source_id) / "files" / file_id
+    copy = catalog.source_dir(source_id) / "files" / stored_name(file_id, path.name)
     if not copy.exists():
         copy.parent.mkdir(parents=True, exist_ok=True)
-        temporary = copy.with_name(f".{file_id}.tmp")
+        temporary = copy.with_name(f".{copy.name}.tmp")
         shutil.copyfile(path, temporary)
         temporary.chmod(0o644)
         temporary.replace(copy)
@@ -293,7 +294,7 @@ def _sync_documents(
     for old in previous.get("files", []):
         if old.get("document_id") and old["document_id"] not in kept:
             pipeline.remove_outputs({"source_id": source_id, "document_id": old["document_id"]})
-    _remove_stale_copies(catalog, source_id, {row["file_id"] for row in rows})
+    _remove_stale_copies(catalog, source_id, {stored_name(row["file_id"], row["file_name"]) for row in rows})
     return [file_entry(row) for row in rows]
 
 
@@ -329,7 +330,7 @@ def _sync_structured(
             os.replace(building, target)
         else:
             target.unlink(missing_ok=True)
-    _remove_stale_copies(catalog, source_id, {row["file_id"] for row in rows})
+    _remove_stale_copies(catalog, source_id, {stored_name(row["file_id"], row["file_name"]) for row in rows})
     database = {"path": f"sources/{source_id}/tables.duckdb", "alias": database_alias(source_id), "tables": profile}
     return [file_entry(row) for row in rows], database
 

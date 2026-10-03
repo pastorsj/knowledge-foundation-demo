@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import threading
 from collections import defaultdict
 from collections.abc import Callable
@@ -30,11 +31,13 @@ from . import documents
 from . import tables
 from .catalog import Catalog
 from .detect import detect
+from .detect import stored_name
 from .documents import probe_parse
 from .embed import Embedder
 from .models import FileStatus
 from .models import IngestError
 from .models import Stage
+from .models import status_for
 from .models import utcnow
 from .settings import Settings
 from .store import JobStore
@@ -368,9 +371,15 @@ class Pipeline:
                 self._queue.task_done()
 
     def stored_path(self, row: dict[str, Any]) -> Path | None:
+        """``sources/<source>/files/<file_id><ext>``; an original stored without its extension is renamed to it."""
         if not row.get("source_id"):
             return None
-        return self.catalog.source_dir(row["source_id"]) / "files" / row["file_id"]
+        directory = self.catalog.source_dir(row["source_id"]) / "files"
+        path = directory / stored_name(row["file_id"], row["file_name"])
+        legacy = directory / row["file_id"]
+        if path != legacy and not path.exists() and legacy.exists():
+            os.replace(legacy, path)
+        return path
 
     def process_upload(self, file_id: str) -> None:
         assert self.store is not None
@@ -412,9 +421,6 @@ class Pipeline:
                         stage=Stage.FAILED, kind="table", error_code=error.code, error_message=error.message
                     )
             update(
-                stage=outcome.stage,
-                stage_detail=None,
-                progress_percent=100 if outcome.ready else row["progress_percent"],
                 parser=outcome.parser,
                 pages=outcome.pages,
                 chunks=outcome.chunks,
@@ -424,9 +430,16 @@ class Pipeline:
                 error_code=outcome.error_code,
                 error_message=outcome.error_message,
             )
+            # The catalog first, then the job store: a client that sees the file finished finds it in the manifest.
+            self.refresh_workspace_source(source_id, profile=profile, final={file_id: status_for(outcome.stage)})
+            update(
+                stage=outcome.stage,
+                stage_detail=None,
+                progress_percent=100 if outcome.ready else row["progress_percent"],
+            )
             if self.store.get_file(file_id) is None:  # deleted while it ran: undo what it wrote
                 self.remove_outputs({**row, "tables": outcome.tables, "document_id": outcome.document_id})
-            self.refresh_workspace_source(source_id, profile=profile)
+                self.refresh_workspace_source(source_id)
 
     def profile_workspace_tables(self) -> list[dict[str, Any]]:
         source_id = WORKSPACE_SOURCES["table"]["id"]
@@ -465,12 +478,22 @@ class Pipeline:
 
     # Workspace catalog entries
 
-    def refresh_workspace_source(self, source_id: str, *, profile: list[dict[str, Any]] | None = None) -> None:
-        """Rewrite the source manifest from the job store; remove it with its last file."""
+    def refresh_workspace_source(
+        self,
+        source_id: str,
+        *,
+        profile: list[dict[str, Any]] | None = None,
+        final: dict[str, str] | None = None,
+    ) -> None:
+        """Rewrite the source manifest from the job store (``final``: statuses about to be stored); remove it with
+        its last file."""
         assert self.store is not None
         spec = next(spec for spec in WORKSPACE_SOURCES.values() if spec["id"] == source_id)
         with self.source_lock(source_id):
-            rows = self.store.source_files(source_id)
+            rows = [
+                {**row, "status": (final or {}).get(row["file_id"], row["status"])}
+                for row in self.store.source_files(source_id)
+            ]
             if not rows:
                 self.catalog.delete_source(source_id)
             else:
