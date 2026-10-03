@@ -1,0 +1,40 @@
+{
+  "schema_version": "1",
+  "id": "retail.policies",
+  "pack_id": "retail",
+  "name": "Policies & Procedures",
+  "description": "Return policy, store operating procedures and supplier terms.",
+  "agent_description": "Northwind Retail's policies and procedures: returns and restocking fees, store operations, loss prevention and supplier terms.",
+  "kind": "documents",
+  "capabilities": [
+    "unstructured_retrieval"
+  ],
+  "synthetic": true,
+  "default_enabled": true,
+  "example_questions": [
+    "What restocking fee applies to returned furniture?"
+  ],
+  "status": "ready",
+  "updated_at": "2026-10-02T12:00:00Z",
+  "files": [
+    {
+      "file_id": "f-3b1c2d4e5f6a7b8c",
+      "file_name": "return-policy.pdf",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "size_bytes": 48213,
+      "status": "ready",
+      "parser": "nemotron-parse-2.0",
+      "document_id": "retail.policies:return-policy.pdf",
+      "pages": 2,
+      "chunks": 6,
+      "warnings": [],
+      "error_message": null
+    }
+  ],
+  "documents": {
+    "count": 1,
+    "chunks": 6,
+    "collection": "knowledge",
+    "embed_model": "nvidia/nemotron-3-embed-1b"
+  }
+}

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
-# The retrieve_evidence MCP server (:8320/mcp). The ingest service writes the Milvus collection it searches.
+# The query_tables MCP server (:8321/mcp): read-only DuckDB SQL over the knowledge catalog's structured sources.
 
 FROM python:3.12.15-slim-trixie@sha256:29113dcae7aad06daa8e95260fa09f27d62be33b9687ea3774f771d601a02256 AS build
 COPY --from=ghcr.io/astral-sh/uv:0.12.22@sha256:f513a91fc62fe7c17567eee97230dd198e43edb8a9fbecca843714a4358fe1bc /uv /usr/local/bin/uv
@@ -23,11 +23,10 @@ ENV PATH=/opt/venv/bin:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     HOME=/tmp \
-    NVIDIA_USAGE_TELEMETRY_ENABLED=false \
     KNOWLEDGE_DIR=/knowledge
 USER 10001:10001
-# Listens on :8320. No EXPOSE (AGENTS.md: images must build reproducibly).
-HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
-    CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8320/health', timeout=4)"]
-ENTRYPOINT ["demo-retrieval"]
+# Listens on :8321. No EXPOSE (AGENTS.md: images must build reproducibly).
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=3 \
+    CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8321/health', timeout=4)"]
+ENTRYPOINT ["demo-tables"]
 CMD ["serve"]
