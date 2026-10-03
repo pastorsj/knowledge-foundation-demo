@@ -208,7 +208,7 @@ def _stream(path: Path, name: str) -> DocumentStream:
 def convert(
     path: Path, fmt: str, settings: Settings, on_progress: Progress | None, *, probe: ParseProbe = probe_parse
 ) -> Converted:
-    """Convert one file (stored without its extension; ``fmt`` says what it is) into a DoclingDocument."""
+    """Convert one file into a DoclingDocument; ``fmt`` (from detection) says what it is, whatever its name."""
     report = on_progress or (lambda done, total: None)
     if fmt == "pdf" or fmt in IMAGE_FORMATS:
         started = time.monotonic()
@@ -275,28 +275,33 @@ def _parse(path: Path, fmt: str, settings: Settings, report: Progress, *, budget
 
 def _text_layer(path: Path, report: Progress, reason: str) -> Converted:
     import pypdfium2
+    from docling.utils.locks import pypdfium2_lock
 
-    try:
-        pdf = pypdfium2.PdfDocument(str(path))
-    except pypdfium2.PdfiumError as error:
-        raise IngestError("conversion_failed", f"The PDF could not be opened: {error}") from error
+    texts: list[str] = []
+    # PDFium is not thread-safe: two documents read at once crash the process. docling's own PDF backend takes
+    # this lock around every PDFium call, so ours does too (reading a text layer takes milliseconds per page).
+    with pypdfium2_lock:
+        try:
+            pdf = pypdfium2.PdfDocument(str(path))
+        except pypdfium2.PdfiumError as error:
+            raise IngestError("conversion_failed", f"The PDF could not be opened: {error}") from error
+        try:
+            for index in range(len(pdf)):
+                page = pdf[index]
+                textpage = page.get_textpage()
+                texts.append(textpage.get_text_range().replace("\r\n", "\n").replace("\r", "\n").strip())
+                textpage.close()
+                page.close()
+        finally:
+            pdf.close()
+    total = len(texts)
     sections: list[str] = []
-    has_text = False
-    try:
-        total = len(pdf)
-        for number in range(1, total + 1):
-            page = pdf[number - 1]
-            textpage = page.get_textpage()
-            text = textpage.get_text_range().replace("\r\n", "\n").replace("\r", "\n").strip()
-            textpage.close()
-            page.close()
-            has_text = has_text or bool(text)
-            # A line that starts with '#' would become a heading and break the one-section-per-page layout.
-            text = re.sub(r"(?m)^(\s*)#", r"\1\\#", text)
-            sections.append(f"## Page {number}\n\n{text}\n")
-            report(number, total)
-    finally:
-        pdf.close()
+    for number, text in enumerate(texts, start=1):
+        # A line that starts with '#' would become a heading and break the one-section-per-page layout.
+        escaped = re.sub(r"(?m)^(\s*)#", r"\1\\#", text)
+        sections.append(f"## Page {number}\n\n{escaped}\n")
+        report(number, total)
+    has_text = any(texts)
     if not has_text:
         raise IngestError(
             "parser_unavailable",
