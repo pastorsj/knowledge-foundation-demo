@@ -155,7 +155,9 @@ describe('MainLayout', () => {
 
   test('places a featured question and its data sources in a new session', async () => {
     render(
-      <MainLayout initialQuestion={{ question: 'Which assets led?', sourceIds: ['retail.policies'] }} />
+      <MainLayout
+        initialQuestion={{ question: 'Which assets led?', sourceIds: ['retail.policies'] }}
+      />
     )
 
     await waitFor(() =>
@@ -192,8 +194,6 @@ describe('MainLayout', () => {
     await screen.findByText('Asset A led.')
 
     useLayoutStore.getState().openExecution('job-1')
-    expect(
-      await screen.findByText('Which assets led? from retail.sales')
-    ).toBeInTheDocument()
+    expect(await screen.findByText('Which assets led? from retail.sales')).toBeInTheDocument()
   })
 })

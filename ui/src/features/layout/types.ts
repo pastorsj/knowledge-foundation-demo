@@ -16,6 +16,17 @@ export type ThemeMode = 'light' | 'dark' | 'system'
 /** Panels that can be opened on the right side */
 export type RightPanelType = 'research' | 'data-sources' | null
 
+/** Tabs of the Data Sources panel: the pack's connections, or the workspace's uploaded files */
+export type DataSourcesPanelTab = 'connections' | 'files'
+
+/** How a pack switch treats the conversation and the sources */
+export interface SwitchPackOptions {
+  /** Start a new session draft (true when the user picks a pack; false when a session restores its own) */
+  draft?: boolean
+  /** The sources to enable once the pack's sources load (a restored session's), else the defaults */
+  enabledIds?: string[]
+}
+
 /** Layout state for managing panels */
 export interface LayoutState {
   /** Whether the sessions sidebar is collapsed */
@@ -24,6 +35,10 @@ export interface LayoutState {
   sessionsAutoCollapsed: boolean
   /** Currently open right panel (null = closed) */
   rightPanel: RightPanelType
+  /** The Data Sources panel's tab */
+  dataSourcesPanelTab: DataSourcesPanelTab
+  /** The selected pack (an industry or the workspace); null until the page names it */
+  packId: string | null
   /** The run shown in the execution workspace (null = closed) */
   execution: { jobId: string; focus: ExecutionFocus | null } | null
   /** IDs of enabled data sources (array for zustand serialization) */
@@ -36,6 +51,8 @@ export interface LayoutState {
   dataSourcesLoading: boolean
   /** Error message if data sources fetch failed */
   dataSourcesError: string | null
+  /** Where the sources come from: the API (live) or the pack's recordings bundle (replay) */
+  dataSourcesFrom: 'api' | 'recordings'
   /** Text to place in the composer (e.g. a featured question), consumed once */
   promptDraft: string | null
 }
@@ -50,6 +67,15 @@ export interface LayoutActions {
   openRightPanel: (panel: RightPanelType) => void
   /** Close the right panel */
   closeRightPanel: () => void
+  /** Choose the Data Sources panel's tab */
+  setDataSourcesPanelTab: (tab: DataSourcesPanelTab) => void
+  /** Name the page's pack without resetting anything (the first render, or a URL already followed) */
+  setPackId: (packId: string) => void
+  /**
+   * Switch to another pack: its sources replace the current ones, the execution view closes and,
+   * unless a session is restoring its own pack, a new session draft starts
+   */
+  switchPack: (packId: string, options?: SwitchPackOptions) => Promise<void>
   /** Show a run in the execution workspace, optionally focused on cited evidence */
   openExecution: (jobId: string, focus?: ExecutionFocus) => void
   /** Return from the execution workspace to the conversation */
@@ -63,10 +89,12 @@ export interface LayoutActions {
   /** Set the composer draft (null clears it) */
   setPromptDraft: (value: string | null) => void
   /**
-   * Fetch data sources and enable the ones enabled by default: from the API,
-   * or in replay mode from the recordings bundle
+   * Fetch the selected pack's data sources and enable the ones enabled by default (or `enabledIds`):
+   * from the API, or in replay mode from the pack's recordings bundle
    */
-  fetchDataSources: (from?: 'api' | 'recordings') => Promise<void>
+  fetchDataSources: (from?: 'api' | 'recordings', enabledIds?: string[]) => Promise<void>
+  /** Fetch the sources again, keeping the selection (e.g. when an upload's tables land) */
+  refreshDataSources: () => Promise<void>
 }
 
 /** Combined layout store type */

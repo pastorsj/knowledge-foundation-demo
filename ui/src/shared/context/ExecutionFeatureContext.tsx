@@ -82,9 +82,10 @@ export interface RecordedSessionSummary extends Pick<
   tools: ToolPillUse[]
 }
 
+/** A pack's recorded sessions (its replay bundle). */
 export interface RecordingsSource {
-  list: () => Promise<RecordedSessionSummary[]>
-  load: (sessionId: string) => Promise<RecordedSession>
+  list: (packId: string) => Promise<RecordedSessionSummary[]>
+  load: (packId: string, sessionId: string) => Promise<RecordedSession>
 }
 
 export interface ExecutionFeature {

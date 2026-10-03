@@ -47,7 +47,12 @@ export const Logo: FC<LogoProps> = ({ kind = 'horizontal', size = 'medium', clas
   return (
     <span
       className={className}
-      style={{ display: 'inline-flex', alignItems: 'center', width: dims.width, height: dims.height }}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        width: dims.width,
+        height: dims.height,
+      }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

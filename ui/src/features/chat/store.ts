@@ -181,6 +181,7 @@ const initialState: ChatState = {
 const createNewConversation = (userId: string): Conversation => ({
   id: `s_${uuidv4().replace(/-/g, '_')}`,
   userId,
+  packId: useLayoutStore.getState().packId,
   title: '',
   messages: [],
   createdAt: new Date(),
@@ -267,6 +268,15 @@ const getDefaultEnabledDataSourceIds = (): string[] =>
 
 const restoreConversationDataSources = (conversation: Conversation): void => {
   const layoutStore = useLayoutStore.getState()
+
+  // A session asked in another pack brings its pack back, with its sources, rather than losing them
+  if (conversation.packId && layoutStore.packId && conversation.packId !== layoutStore.packId) {
+    void layoutStore.switchPack(conversation.packId, {
+      draft: false,
+      enabledIds: conversation.enabledDataSourceIds,
+    })
+    return
+  }
 
   if (conversation.enabledDataSourceIds) {
     // Only restore sources that are still available.

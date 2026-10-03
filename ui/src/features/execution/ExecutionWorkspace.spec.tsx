@@ -3,6 +3,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@/test-utils'
+import { useLayoutStore } from '@/features/layout/store'
 import { resetReplayDatabase } from './data-viewer/database-client'
 import { ExecutionWorkspace } from './ExecutionWorkspace'
 import { useExecutionStore } from './store'
@@ -43,6 +44,7 @@ const serveDatabase = (database: unknown = null) =>
 describe('ExecutionWorkspace', () => {
   beforeEach(() => {
     useExecutionStore.setState({ runs: {}, dropped: 0 })
+    useLayoutStore.setState({ packId: 'retail' })
     resetReplayDatabase()
   })
   afterEach(() => vi.restoreAllMocks())
@@ -265,7 +267,7 @@ describe('ExecutionWorkspace', () => {
     expect(
       await within(browser).findByText(/Replay can rerun only the queries its recorded answers ran/)
     ).toBeVisible()
-    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(['/api/recordings/database.json'])
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(['/api/recordings/retail/database.json'])
   })
 
   it('opens a DuckDB table query in the data viewer from its explorer', async () => {
@@ -329,7 +331,7 @@ describe('ExecutionWorkspace', () => {
     expect(within(workspace).getByText('Step 10 of 10')).toBeVisible()
     // Only the bundle's copy of the database is asked for; there is no live job to export
     await vi.waitFor(() =>
-      expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(['/api/recordings/database.json'])
+      expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(['/api/recordings/retail/database.json'])
     )
   })
 

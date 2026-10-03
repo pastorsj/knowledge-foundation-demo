@@ -162,6 +162,11 @@ export const Moon = createIcon('moon')
 
 export const Star = createIcon('star')
 export const Heart = createIcon('heart')
+
+// Pack icons (pack manifests name them; see packIcon)
+export const Store = createIcon('shopping-cart')
+export const Factory = createIcon('factory')
+export const Bank = createIcon('bank')
 export const Home = createIcon('home')
 export const Calendar = createIcon('calendar')
 export const Clock = createIcon('clock')
@@ -268,3 +273,21 @@ export const LoadingSpinner: FC<LoadingSpinnerProps> = ({
     />
   )
 }
+
+/**
+ * The icon a pack manifest names (`PackSummary.icon`): Store, Factory, Heart, Bank, Upload and
+ * their aliases. An unknown or missing name gets a generic document icon.
+ */
+const PACK_ICONS: Readonly<Record<string, FC<IconProps>>> = {
+  store: Store,
+  shop: Store,
+  factory: Factory,
+  heart: Heart,
+  hospital: Heart,
+  bank: Bank,
+  wallet: Bank,
+  upload: Upload,
+}
+
+export const packIcon = (name: string | null | undefined): FC<IconProps> =>
+  PACK_ICONS[(name ?? '').trim().toLowerCase()] ?? Document

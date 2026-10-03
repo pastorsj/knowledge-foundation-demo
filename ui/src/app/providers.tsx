@@ -84,19 +84,17 @@ const useThemeEffect = (theme: ThemeMode): void => {
  */
 const useDataSourcesInit = (isLive: boolean): void => {
   const fetchDataSources = useLayoutStore((state) => state.fetchDataSources)
-  const availableDataSources = useLayoutStore((state) => state.availableDataSources)
-  const replayRequested = useRef(false)
+  const packId = useLayoutStore((state) => state.packId)
+  const requested = useRef<string | null>(null)
 
   useEffect(() => {
-    if (availableDataSources !== null) return
-    if (isLive) {
-      fetchDataSources()
-    } else if (!replayRequested.current) {
-      // Once: a bundle without pack.json leaves replay without sources
-      replayRequested.current = true
-      fetchDataSources('recordings')
-    }
-  }, [isLive, fetchDataSources, availableDataSources])
+    // Once per pack the page names; a pack switch fetches its own sources
+    if (!packId || requested.current === packId) return
+    requested.current = packId
+    const { availableDataSources, dataSourcesLoading } = useLayoutStore.getState()
+    if (availableDataSources !== null || dataSourcesLoading) return
+    void fetchDataSources(isLive ? 'api' : 'recordings')
+  }, [isLive, fetchDataSources, packId])
 }
 
 /**
@@ -116,6 +114,17 @@ const useDataSourceSessionRestore = (): void => {
 
     const conversation = useChatStore.getState().currentConversation
     if (!conversation) return
+
+    // A session asked in another pack brings its pack back, with its sources
+    const { packId, switchPack } = useLayoutStore.getState()
+    if (conversation.packId && packId && conversation.packId !== packId) {
+      restoredRef.current = true
+      void switchPack(conversation.packId, {
+        draft: false,
+        enabledIds: conversation.enabledDataSourceIds,
+      })
+      return
+    }
 
     const savedIds = conversation.enabledDataSourceIds
     if (savedIds) {

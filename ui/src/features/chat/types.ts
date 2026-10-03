@@ -89,6 +89,8 @@ export interface Conversation {
   updatedAt: Date
   /** Per-session enabled data source IDs (persisted across refresh) */
   enabledDataSourceIds?: string[]
+  /** The pack the session was asked in; restoring the session switches to it */
+  packId?: string | null
   /** True for recorded sessions shown in replay mode: never persisted or continued */
   readOnly?: boolean
 }

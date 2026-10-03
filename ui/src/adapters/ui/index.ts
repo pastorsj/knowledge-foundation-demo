@@ -75,7 +75,16 @@ export {
 } from '@nvidia/foundations-react-core'
 
 // Data Display
-export { Card, Table, List, Avatar, Badge, Tag, Label, CodeSnippet } from '@nvidia/foundations-react-core'
+export {
+  Card,
+  Table,
+  List,
+  Avatar,
+  Badge,
+  Tag,
+  Label,
+  CodeSnippet,
+} from '@nvidia/foundations-react-core'
 
 // Utility Components
 export {

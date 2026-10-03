@@ -21,11 +21,13 @@
 'use client'
 
 import { type FC, useCallback, useEffect, useMemo, useRef } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useShallow } from 'zustand/react/shallow'
 import { Flex } from '@/adapters/ui'
 import { useAppConfig, useExecutionFeature } from '@/shared/context'
 import { cn } from '@/shared/lib/cn'
 import { AppBar } from './AppBar'
+import { IndustrySelect, rememberPack } from './IndustrySelect'
 import { SessionsPanel, type RecordedCollection } from './SessionsPanel'
 import { ChatArea } from './ChatArea'
 import { InputArea } from './InputArea'
@@ -49,9 +51,39 @@ export interface InitialQuestion {
 }
 
 interface MainLayoutProps {
+  /** The pack the page shows (`?pack=`, the `kf-pack` cookie or DEFAULT_PACK) */
+  packId?: string
   initialQuestion?: InitialQuestion | null
   /** The active data pack's questions, offered by the composer's demo scenario picker */
   demoScenarios?: DemoScenario[]
+}
+
+/**
+ * Keeps the layout store's pack and the URL in step. A pack the page names (on load, or after a
+ * navigation) becomes the store's; a pack the store switches to on its own (a restored session of
+ * another industry) goes into the URL and the cookie, so the server renders that pack's examples.
+ */
+const usePackFollowing = (packId: string): void => {
+  const storePack = useLayoutStore((state) => state.packId)
+  const named = useRef<string | null>(null)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    const store = useLayoutStore.getState()
+    if (named.current !== packId) {
+      named.current = packId
+      if (store.packId === null) store.setPackId(packId)
+      else if (store.packId !== packId) void store.switchPack(packId)
+      return
+    }
+    if (storePack && storePack !== packId) {
+      rememberPack(storePack)
+      const params = new URLSearchParams(searchParams?.toString())
+      params.set('pack', storePack)
+      router.replace(`${pathname}?${params}`)
+    }
+  }, [packId, pathname, router, searchParams, storePack])
 }
 
 /** The question, and its data sources, that started a job in this conversation. */
@@ -69,7 +101,12 @@ const turnOfJob = (
  * Main application layout with all panels and regions.
  * Chat state is managed via the useChatStore.
  */
-export const MainLayout: FC<MainLayoutProps> = ({ initialQuestion = null, demoScenarios }) => {
+export const MainLayout: FC<MainLayoutProps> = ({
+  packId = 'retail',
+  initialQuestion = null,
+  demoScenarios,
+}) => {
+  usePackFollowing(packId)
   const { mode } = useAppConfig()
   const isReplay = mode === 'replay'
   const { Workspace } = useExecutionFeature()
@@ -257,6 +294,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ initialQuestion = null, demoSc
         newSessionActionLabel={executionOpen ? 'Back to answer' : 'Create new session'}
         isNewSessionDisabled={executionOpen ? false : isReplay || isStreaming}
         isDataSourceSelectionDisabled={isRecordedSession}
+        industrySelect={<IndustrySelect packId={packId} />}
       />
 
       {/* Main content area: in-flow panels reflow the center column (push, not overlay) */}

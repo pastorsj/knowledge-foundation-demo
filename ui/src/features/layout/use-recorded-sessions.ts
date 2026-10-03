@@ -6,11 +6,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useChatStore } from '@/features/chat'
 import { useAppConfig, useExecutionFeature, type RecordedSessionSummary } from '@/shared/context'
+import { useLayoutStore } from './store'
 
 export type RecordedSessionsStatus = 'loading' | 'ready' | 'error'
 
 interface UseRecordedSessionsReturn {
-  /** Recorded sessions of the active data pack */
+  /** Recorded sessions of the selected pack */
   sessions: RecordedSessionSummary[]
   /** Whether the list has loaded */
   status: RecordedSessionsStatus
@@ -35,6 +36,7 @@ const messageOf = (error: unknown, fallback: string): string =>
 export const useRecordedSessions = (): UseRecordedSessionsReturn => {
   const { mode } = useAppConfig()
   const { recordings } = useExecutionFeature()
+  const packId = useLayoutStore((state) => state.packId)
   const [sessions, setSessions] = useState<RecordedSessionSummary[]>([])
   const [status, setStatus] = useState<RecordedSessionsStatus>('loading')
   const [error, setError] = useState<string | null>(null)
@@ -42,10 +44,11 @@ export const useRecordedSessions = (): UseRecordedSessionsReturn => {
   const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
-    if (!recordings) return
+    if (!recordings || !packId) return
     let cancelled = false
+    setStatus('loading')
     recordings
-      .list()
+      .list(packId)
       .then((list) => {
         if (cancelled) return
         setSessions(list)
@@ -53,6 +56,7 @@ export const useRecordedSessions = (): UseRecordedSessionsReturn => {
       })
       .catch((reason: unknown) => {
         if (cancelled) return
+        setSessions([])
         // Replay mode serves the recordings only, so a missing bundle is an error there
         if (mode === 'replay') console.error('Failed to list recorded sessions:', reason)
         setError(messageOf(reason, 'Unable to load recorded sessions.'))
@@ -61,14 +65,14 @@ export const useRecordedSessions = (): UseRecordedSessionsReturn => {
     return () => {
       cancelled = true
     }
-  }, [mode, recordings, attempt])
+  }, [mode, recordings, attempt, packId])
 
   const open = useCallback(
     async (sessionId: string) => {
-      if (!recordings) return
+      if (!recordings || !packId) return
       setLoadingId(sessionId)
       try {
-        useChatStore.getState().openRecordedSession(await recordings.load(sessionId))
+        useChatStore.getState().openRecordedSession(await recordings.load(packId, sessionId))
         setError(null)
       } catch (reason) {
         console.error('Failed to load recorded session:', reason)
@@ -77,7 +81,7 @@ export const useRecordedSessions = (): UseRecordedSessionsReturn => {
         setLoadingId(null)
       }
     },
-    [recordings]
+    [packId, recordings]
   )
 
   const retry = useCallback(() => {

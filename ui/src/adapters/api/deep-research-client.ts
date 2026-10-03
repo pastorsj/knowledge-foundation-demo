@@ -224,6 +224,8 @@ interface SubmitJobRequest {
   dataSources: string[]
   /** Caller-chosen job ID, persisted before submission so a reload can recover the run */
   jobId: string
+  /** The selected pack, which the API stores with the job */
+  packId?: string | null
 }
 
 interface SubmitJobResponse {
@@ -281,6 +283,7 @@ export const submitJob = ({
   conversationId,
   dataSources,
   jobId,
+  packId = null,
 }: SubmitJobRequest): Promise<SubmitJobResponse> =>
   request('/submit', 'Failed to start research', {
     method: 'POST',
@@ -288,7 +291,13 @@ export const submitJob = ({
     // Admission can outlive a navigation. The caller persists the job ID
     // first, so a reloaded page can recover the run without this response.
     keepalive: true,
-    body: JSON.stringify({ agent_type: 'hermes', input, data_sources: dataSources, job_id: jobId }),
+    body: JSON.stringify({
+      agent_type: 'hermes',
+      input,
+      data_sources: dataSources,
+      job_id: jobId,
+      ...(packId ? { pack_id: packId } : {}),
+    }),
   })
 
 /** Get job status */

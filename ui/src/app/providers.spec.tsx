@@ -61,9 +61,13 @@ describe('Providers', () => {
     useLayoutStore.setState(initialLayout, true)
   })
 
-  test('live mode selects the local user and loads the data sources', async () => {
+  test('live mode selects the local user and loads the data sources of the page’s pack', async () => {
+    // Nothing loads until a page names its pack
+    useLayoutStore.setState({ packId: 'retail' })
     render(
-      <Providers config={{ mode: 'live', phoenixUrl: null, speechInput: SPEECH_OFF }}>
+      <Providers
+        config={{ mode: 'live', defaultPack: 'retail', phoenixUrl: null, speechInput: SPEECH_OFF }}
+      >
         content
       </Providers>
     )
@@ -81,7 +85,9 @@ describe('Providers', () => {
     await loadSavedSessionWithRunningJob()
 
     render(
-      <Providers config={{ mode: 'live', phoenixUrl: null, speechInput: SPEECH_OFF }}>
+      <Providers
+        config={{ mode: 'live', defaultPack: 'retail', phoenixUrl: null, speechInput: SPEECH_OFF }}
+      >
         content
       </Providers>
     )
@@ -94,7 +100,14 @@ describe('Providers', () => {
     await loadSavedSessionWithRunningJob()
 
     render(
-      <Providers config={{ mode: 'replay', phoenixUrl: null, speechInput: SPEECH_OFF }}>
+      <Providers
+        config={{
+          mode: 'replay',
+          defaultPack: 'retail',
+          phoenixUrl: null,
+          speechInput: SPEECH_OFF,
+        }}
+      >
         content
       </Providers>
     )

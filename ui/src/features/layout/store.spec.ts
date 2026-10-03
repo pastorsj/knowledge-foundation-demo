@@ -6,12 +6,16 @@ import { fetchDataSources, fetchRecordedDataSources } from '@/adapters/api'
 import { useLayoutStore } from './store'
 
 vi.mock('@/adapters/api', () => ({ fetchDataSources: vi.fn(), fetchRecordedDataSources: vi.fn() }))
+const startNewSessionDraft = vi.fn()
+vi.mock('@/features/chat/store', () => ({
+  useChatStore: { getState: () => ({ startNewSessionDraft }) },
+}))
 
 const initialState = useLayoutStore.getState()
 
 describe('useLayoutStore', () => {
   beforeEach(() => {
-    useLayoutStore.setState(initialState, true)
+    useLayoutStore.setState({ ...initialState, packId: 'retail' }, true)
   })
 
   test('opens the data sources panel by default', () => {
@@ -88,6 +92,7 @@ describe('useLayoutStore', () => {
 
       await useLayoutStore.getState().fetchDataSources()
 
+      expect(fetchDataSources).toHaveBeenCalledWith('retail')
       expect(useLayoutStore.getState()).toMatchObject({
         availableDataSources: [{ id: 'retail.sales' }, { id: 'retail.policies' }],
         enabledDataSourceIds: ['retail.sales'],
@@ -97,15 +102,25 @@ describe('useLayoutStore', () => {
     })
 
     test('reads the replay bundle instead of the API when asked', async () => {
-      vi.mocked(fetchRecordedDataSources).mockResolvedValue([{ id: 'retail.policies', name: 'News' }])
+      vi.mocked(fetchRecordedDataSources).mockResolvedValue([
+        { id: 'retail.policies', name: 'News' },
+      ])
 
       await useLayoutStore.getState().fetchDataSources('recordings')
 
       expect(fetchDataSources).not.toHaveBeenCalled()
+      expect(fetchRecordedDataSources).toHaveBeenCalledWith('retail')
       expect(useLayoutStore.getState()).toMatchObject({
         availableDataSources: [{ id: 'retail.policies' }],
         enabledDataSourceIds: ['retail.policies'],
+        dataSourcesFrom: 'recordings',
       })
+    })
+
+    test('loads nothing until a page names its pack', async () => {
+      useLayoutStore.setState({ packId: null })
+      await useLayoutStore.getState().fetchDataSources()
+      expect(fetchDataSources).not.toHaveBeenCalled()
     })
 
     test('records the error message on failure', async () => {
@@ -117,6 +132,101 @@ describe('useLayoutStore', () => {
         dataSourcesLoading: false,
         dataSourcesError: 'API down',
       })
+    })
+  })
+
+  describe('switchPack', () => {
+    test('replaces the sources, closes the execution view and starts a new draft', async () => {
+      vi.mocked(fetchDataSources).mockResolvedValue([
+        { id: 'manufacturing.sops', name: 'Procedures' },
+        { id: 'manufacturing.plant', name: 'Plant', default_enabled: false },
+      ])
+      useLayoutStore.setState({
+        availableDataSources: [{ id: 'retail.sales', name: 'Sales' }],
+        enabledDataSourceIds: ['retail.sales'],
+        execution: { jobId: 'job-1', focus: null },
+        dataSourcesPanelTab: 'files',
+      })
+
+      const switching = useLayoutStore.getState().switchPack('manufacturing')
+      // Nothing of the pack left behind shows while the new one loads
+      expect(useLayoutStore.getState()).toMatchObject({
+        packId: 'manufacturing',
+        availableDataSources: null,
+        enabledDataSourceIds: [],
+        execution: null,
+        dataSourcesLoading: true,
+        dataSourcesPanelTab: 'connections',
+      })
+      await switching
+
+      expect(fetchDataSources).toHaveBeenCalledWith('manufacturing')
+      expect(startNewSessionDraft).toHaveBeenCalledOnce()
+      expect(useLayoutStore.getState()).toMatchObject({
+        availableDataSources: [{ id: 'manufacturing.sops' }, { id: 'manufacturing.plant' }],
+        enabledDataSourceIds: ['manufacturing.sops'],
+      })
+    })
+
+    test('restores a session’s own pack with its sources, keeping the session', async () => {
+      vi.mocked(fetchDataSources).mockResolvedValue([
+        { id: 'healthcare.records', name: 'Records' },
+        { id: 'healthcare.policies', name: 'Policies' },
+      ])
+
+      await useLayoutStore.getState().switchPack('healthcare', {
+        draft: false,
+        enabledIds: ['healthcare.policies', 'retail.sales'],
+      })
+
+      expect(startNewSessionDraft).not.toHaveBeenCalled()
+      expect(useLayoutStore.getState()).toMatchObject({
+        packId: 'healthcare',
+        enabledDataSourceIds: ['healthcare.policies'],
+      })
+    })
+
+    test('keeps the answer of the last pack chosen when two loads race', async () => {
+      let answerRetail: (value: { id: string; name: string }[]) => void = () => undefined
+      vi.mocked(fetchDataSources)
+        .mockImplementationOnce(() => new Promise((resolve) => (answerRetail = resolve)))
+        .mockResolvedValueOnce([{ id: 'manufacturing.sops', name: 'Procedures' }])
+
+      const slow = useLayoutStore.getState().switchPack('retail', { draft: false })
+      await useLayoutStore.getState().switchPack('manufacturing', { draft: false })
+      answerRetail([{ id: 'retail.sales', name: 'Sales' }])
+      await slow
+
+      expect(useLayoutStore.getState()).toMatchObject({
+        packId: 'manufacturing',
+        availableDataSources: [{ id: 'manufacturing.sops' }],
+      })
+    })
+  })
+
+  describe('refreshDataSources', () => {
+    test('keeps the selection and enables a source that just appeared', async () => {
+      useLayoutStore.setState({
+        packId: 'workspace',
+        availableDataSources: [
+          { id: 'workspace.documents', name: 'Your documents' },
+          { id: 'workspace.notes', name: 'Notes' },
+        ],
+        enabledDataSourceIds: ['workspace.documents'],
+      })
+      vi.mocked(fetchDataSources).mockResolvedValue([
+        { id: 'workspace.documents', name: 'Your documents' },
+        { id: 'workspace.notes', name: 'Notes' },
+        { id: 'workspace.tables', name: 'Your tables' },
+      ])
+
+      await useLayoutStore.getState().refreshDataSources()
+
+      expect(fetchDataSources).toHaveBeenCalledWith('workspace')
+      expect(useLayoutStore.getState().enabledDataSourceIds).toEqual([
+        'workspace.documents',
+        'workspace.tables',
+      ])
     })
   })
 })

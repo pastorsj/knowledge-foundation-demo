@@ -36,9 +36,7 @@ describe('DataSourcesPanel', () => {
     render(<DataSourcesPanel />)
 
     expect(screen.getByText('Individual Connections (2)')).toBeInTheDocument()
-    expect(
-      screen.getByText(/Each industry has its own documents and tables/)
-    ).toBeInTheDocument()
+    expect(screen.getByText(/Each industry has its own documents and tables/)).toBeInTheDocument()
     expect(screen.getByText('Store policies')).toBeInTheDocument()
     expect(screen.getByText(/1 of 2 available connections enabled/)).toBeInTheDocument()
   })

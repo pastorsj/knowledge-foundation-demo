@@ -10,12 +10,12 @@
       "completedAt": "2026-09-28T05:18:30.000000Z",
       "status": "success",
       "report": {
-        "markdown": "Gold-tier customers placed 4 orders with an average net order value of $128.88. [1]\n\n**References:**\n- [1] Structured query result — evidence `hermes-receipt:4146977422d50c18419c9d9e43d368422dfec5d10fd3587aee8bab5fef0fa469` — invocation `hermes-tool:call_bbG7Kuc3cdq0i8DLST8RrXwd`",
+        "markdown": "Gold-tier customers placed 4 orders with an average net order value of $128.88. [1]\n\n**References:**\n- [1] Structured query result — evidence `hermes-receipt:20ab500a2e61f9e583b3170724a0125136e0f118bc72e628eb9e61e1a833dfad` — invocation `hermes-tool:call_bbG7Kuc3cdq0i8DLST8RrXwd`",
         "citations": [
           {
             "number": 1,
             "label": "Structured query result",
-            "evidenceId": "hermes-receipt:4146977422d50c18419c9d9e43d368422dfec5d10fd3587aee8bab5fef0fa469",
+            "evidenceId": "hermes-receipt:20ab500a2e61f9e583b3170724a0125136e0f118bc72e628eb9e61e1a833dfad",
             "invocationId": "hermes-tool:call_bbG7Kuc3cdq0i8DLST8RrXwd"
           }
         ]
@@ -106,7 +106,7 @@
           "toolName": "ask_question",
           "capabilityId": "structured_retrieval",
           "artifactRefs": [
-            "hermes-receipt:4146977422d50c18419c9d9e43d368422dfec5d10fd3587aee8bab5fef0fa469"
+            "hermes-receipt:20ab500a2e61f9e583b3170724a0125136e0f118bc72e628eb9e61e1a833dfad"
           ],
           "metricsRef": null,
           "occurredAt": "2026-09-28T05:18:24.000000Z",
@@ -319,7 +319,7 @@
         {
           "schemaVersion": "2",
           "artifactKind": "structured_query",
-          "receiptId": "hermes-receipt:4146977422d50c18419c9d9e43d368422dfec5d10fd3587aee8bab5fef0fa469",
+          "receiptId": "hermes-receipt:20ab500a2e61f9e583b3170724a0125136e0f118bc72e628eb9e61e1a833dfad",
           "jobId": "0dcd9841-b68a-456b-9dc5-87403c34efcb",
           "invocationId": "hermes-tool:call_bbG7Kuc3cdq0i8DLST8RrXwd",
           "turnId": null,
@@ -378,12 +378,12 @@
       "completedAt": "2026-09-28T05:20:49.000000Z",
       "status": "success",
       "report": {
-        "markdown": "Customer C2 is the most likely to stop ordering in the next 90 days (81%), then C1 (34%). [1]\n\n**References:**\n- [1] Structured prediction result — evidence `hermes-receipt:7b73bfec19e43a552c6390b07cfb572528835c2ff0206eb6d21e8b95d2c695c6` — invocation `hermes-tool:call_qhoJqt3GMJfjreJf15M2C5U9`",
+        "markdown": "Customer C2 is the most likely to stop ordering in the next 90 days (81%), then C1 (34%). [1]\n\n**References:**\n- [1] Structured prediction result — evidence `hermes-receipt:a3deaea1c67bd182ce0af86784b536d9f2511b6fa8e987b2504a67aa0e1f9602` — invocation `hermes-tool:call_qhoJqt3GMJfjreJf15M2C5U9`",
         "citations": [
           {
             "number": 1,
             "label": "Structured prediction result",
-            "evidenceId": "hermes-receipt:7b73bfec19e43a552c6390b07cfb572528835c2ff0206eb6d21e8b95d2c695c6",
+            "evidenceId": "hermes-receipt:a3deaea1c67bd182ce0af86784b536d9f2511b6fa8e987b2504a67aa0e1f9602",
             "invocationId": "hermes-tool:call_qhoJqt3GMJfjreJf15M2C5U9"
           }
         ]
@@ -474,7 +474,7 @@
           "toolName": "predict",
           "capabilityId": "structured_prediction",
           "artifactRefs": [
-            "hermes-receipt:7b73bfec19e43a552c6390b07cfb572528835c2ff0206eb6d21e8b95d2c695c6"
+            "hermes-receipt:a3deaea1c67bd182ce0af86784b536d9f2511b6fa8e987b2504a67aa0e1f9602"
           ],
           "metricsRef": null,
           "occurredAt": "2026-09-28T05:20:43.000000Z",
@@ -687,7 +687,7 @@
         {
           "schemaVersion": "2",
           "artifactKind": "structured_prediction",
-          "receiptId": "hermes-receipt:7b73bfec19e43a552c6390b07cfb572528835c2ff0206eb6d21e8b95d2c695c6",
+          "receiptId": "hermes-receipt:a3deaea1c67bd182ce0af86784b536d9f2511b6fa8e987b2504a67aa0e1f9602",
           "jobId": "18d6824d-df8e-4d57-89eb-22a055226124",
           "invocationId": "hermes-tool:call_qhoJqt3GMJfjreJf15M2C5U9",
           "turnId": null,

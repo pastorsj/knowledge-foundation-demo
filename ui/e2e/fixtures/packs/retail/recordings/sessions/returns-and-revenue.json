@@ -10,7 +10,7 @@
       "completedAt": "2026-09-28T05:01:03.175123Z",
       "status": "success",
       "report": {
-        "markdown": "Opened electronics can be returned within 30 days with the original receipt, less a 15% restocking fee unless the item is defective [1]. Gold-tier members brought the most net revenue in the third quarter: $395.00 over 3 orders [2].\n\n**References:**\n- [1] Unstructured retrieval evidence — evidence `hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433` — invocation `hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H`\n- [2] Structured query result — evidence `hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52` — invocation `hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2`",
+        "markdown": "Opened electronics can be returned within 30 days with the original receipt, less a 15% restocking fee unless the item is defective [1]. Gold-tier members brought the most net revenue in the third quarter: $395.00 over 3 orders [2].\n\n**References:**\n- [1] Unstructured retrieval evidence — evidence `hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433` — invocation `hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H`\n- [2] Structured query result — evidence `hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba` — invocation `hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2`",
         "citations": [
           {
             "number": 1,
@@ -21,7 +21,7 @@
           {
             "number": 2,
             "label": "Structured query result",
-            "evidenceId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+            "evidenceId": "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba",
             "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2"
           }
         ]
@@ -185,7 +185,7 @@
           "toolName": "query_tables",
           "capabilityId": "structured_retrieval",
           "artifactRefs": [
-            "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52"
+            "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba"
           ],
           "metricsRef": null,
           "occurredAt": "2026-09-28T05:00:21.762077Z",
@@ -202,7 +202,7 @@
           },
           "provenance": {
             "sourceSystem": "hermes.plugin",
-            "sourceEventId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+            "sourceEventId": "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba",
             "sourceEventKind": "post_tool_call",
             "normalizationVersion": "hermes-plugin-receipt.v1",
             "observation": "observed",
@@ -518,7 +518,7 @@
         {
           "schemaVersion": "2",
           "artifactKind": "structured_query",
-          "receiptId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+          "receiptId": "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba",
           "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
           "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
           "turnId": null,

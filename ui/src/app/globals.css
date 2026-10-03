@@ -127,14 +127,14 @@ body {
   .nv-side-panel-content.nv-side-panel-content--side-left {
     transform: translate(-100%);
   }
-  .nv-side-panel-content.nv-side-panel-content--side-left[data-state="open"] {
+  .nv-side-panel-content.nv-side-panel-content--side-left[data-state='open'] {
     transform: translate(0);
   }
 
   .nv-side-panel-content.nv-side-panel-content--side-right {
     transform: translate(100%);
   }
-  .nv-side-panel-content.nv-side-panel-content--side-right[data-state="open"] {
+  .nv-side-panel-content.nv-side-panel-content--side-right[data-state='open'] {
     transform: translate(0);
   }
 
@@ -142,12 +142,12 @@ body {
     opacity: 0;
     pointer-events: none;
   }
-  .nv-side-panel-overlay[data-state="open"] {
+  .nv-side-panel-overlay[data-state='open'] {
     opacity: 1;
     pointer-events: auto;
   }
 
-  .nv-collapsible-content[data-state="closed"] {
+  .nv-collapsible-content[data-state='closed'] {
     height: 0;
   }
 }
@@ -280,7 +280,11 @@ body {
 /* Opaque variant for chat bubbles - ensures full opacity to prevent bleed-through in light theme */
 @utility bg-surface-sunken-opaque {
   /* Force 100% opacity using color-mix, preventing transparency bleed-through */
-  background-color: color-mix(in srgb, var(--background-color-surface-sunken) 100%, var(--background-color-surface-base));
+  background-color: color-mix(
+    in srgb,
+    var(--background-color-surface-sunken) 100%,
+    var(--background-color-surface-base)
+  );
 }
 
 /* Background utilities with opacity variants */
@@ -467,7 +471,9 @@ body.activity-panel-resizing * {
   font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
-  transition: color 120ms ease, border-color 120ms ease;
+  transition:
+    color 120ms ease,
+    border-color 120ms ease;
 }
 .result-chart-tool:hover {
   color: var(--text-color-primary);
@@ -835,7 +841,6 @@ body.activity-panel-resizing * {
   .agent-final-response {
     animation: none;
   }
-
 }
 
 /* =============================================================================

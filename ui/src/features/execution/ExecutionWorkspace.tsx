@@ -434,13 +434,13 @@ const ReplayScopedInspectorNotice = ({
 type AvailableSource = { id: string; name: string; database_name?: string | null }
 const NO_SOURCES: AvailableSource[] = []
 
-/** Replay: the structured sources the recordings bundle copied into `database.json`. */
-const useReplaySources = (enabled: boolean): AvailableSource[] => {
+/** Replay: the structured sources the pack's recordings bundle copied into `database.json`. */
+const useReplaySources = (enabled: boolean, packId: string | null): AvailableSource[] => {
   const [sources, setSources] = useState<AvailableSource[]>(NO_SOURCES)
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled || !packId) return
     let active = true
-    void loadReplayDatabase().then((database) => {
+    void loadReplayDatabase(packId).then((database) => {
       if (!active || !database) return
       setSources(
         database.sources.map((source) => ({
@@ -453,7 +453,7 @@ const useReplaySources = (enabled: boolean): AvailableSource[] => {
     return () => {
       active = false
     }
-  }, [enabled])
+  }, [enabled, packId])
   return sources
 }
 
@@ -471,7 +471,8 @@ export const ExecutionWorkspace = ({
   // As the original labeled them: a recorded run by its archive and job id, a live one by its job id
   const runKey = stored?.archive ? `recorded:${stored.archive}:${jobId}` : jobId
   const availableDataSources = useLayoutStore((state) => state.availableDataSources)
-  const replaySources = useReplaySources(!liveMode)
+  const packId = useLayoutStore((state) => state.packId)
+  const replaySources = useReplaySources(!liveMode, packId)
   const events = stored?.events ?? NO_EVENTS
   const receipts = stored?.receipts ?? NO_RECEIPTS
   const jobStatus = stored?.jobStatus ?? null

@@ -12,7 +12,7 @@ const session = readRecording('sessions/returns-and-revenue.json')
 /** Serves the committed e2e bundle the way /api/recordings does. */
 const serveBundle = () =>
   vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
-    const path = String(input).replace('/api/recordings/', '')
+    const path = String(input).replace('/api/recordings/retail/', '')
     return path.startsWith('/')
       ? new Response(null, { status: 404 })
       : Response.json(readRecording(path))
@@ -37,7 +37,7 @@ describe('recordings bundle (v2)', () => {
 
   it('lists the sessions and loads one into the chat and the execution store', async () => {
     serveBundle()
-    expect(await recordings.list()).toEqual([
+    expect(await recordings.list('retail')).toEqual([
       {
         id: 'returns-and-revenue',
         title: 'Returns policy and loyalty revenue',
@@ -63,7 +63,7 @@ describe('recordings bundle (v2)', () => {
       },
     ])
 
-    const loaded = await recordings.load('gold-tier-and-churn')
+    const loaded = await recordings.load('retail', 'gold-tier-and-churn')
     expect(loaded.turns.map((turn) => turn.jobId)).toEqual([
       '0dcd9841-b68a-456b-9dc5-87403c34efcb',
       '18d6824d-df8e-4d57-89eb-22a055226124',
@@ -102,7 +102,7 @@ describe('recordings bundle (v2)', () => {
         ? new Response(null, { status: 503 })
         : Response.json(readRecording('sessions/gold-tier-and-churn.json'))
     )
-    await recordings.load('gold-tier-and-churn')
+    await recordings.load('retail', 'gold-tier-and-churn')
     const run = useExecutionStore.getState().runs['0dcd9841-b68a-456b-9dc5-87403c34efcb']
     expect(run.recorded).toBe(true)
     expect(run.archive).toBeNull()

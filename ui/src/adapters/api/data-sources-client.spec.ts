@@ -4,7 +4,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { fetchDataSources, fetchRecordedDataSources } from './data-sources-client'
 
-const SOURCES = [{ id: 'retail.policies', name: 'Market news' }]
+const SOURCES = [{ id: 'retail.policies', name: 'Store policies', pack_id: 'retail' }]
 
 describe('fetchDataSources', () => {
   afterEach(() => {
@@ -17,7 +17,14 @@ describe('fetchDataSources', () => {
   ])('accepts %s', async (_shape, body) => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(body)))
 
-    await expect(fetchDataSources()).resolves.toEqual(SOURCES)
+    await expect(fetchDataSources('retail')).resolves.toEqual(SOURCES)
+    expect(fetch).toHaveBeenCalledWith('/api/v1/data_sources?pack=retail', { signal: undefined })
+  })
+
+  test('asks for every pack’s sources without a pack', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(SOURCES)))
+
+    await fetchDataSources()
     expect(fetch).toHaveBeenCalledWith('/api/v1/data_sources', { signal: undefined })
   })
 
@@ -31,7 +38,7 @@ describe('fetchDataSources', () => {
         )
     )
 
-    await expect(fetchDataSources()).rejects.toThrow('The API is unavailable')
+    await expect(fetchDataSources('retail')).rejects.toThrow('The API is unavailable')
   })
 })
 
@@ -40,39 +47,23 @@ describe('fetchRecordedDataSources', () => {
     vi.unstubAllGlobals()
   })
 
-  test('reads the sources of the replay bundle pack.json', async () => {
-    const pack = {
-      id: 'synthetic-market',
-      sources: [
-        { id: 'retail.sales', name: 'Market data', description: 'Prices', kind: 'structured' },
-        { id: 'retail.policies', name: 'Market news', description: 'Filings', kind: 'documents' },
-      ],
-      structured: { source: 'retail.sales', database_name: 'synthetic_market' },
-    }
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(pack)))
+  test('reads the sources of a pack’s replay bundle (sources.json), dropping malformed entries', async () => {
+    const sources = [
+      { id: 'retail.sales', name: 'Sales', kind: 'structured', database_name: 'retail_sales' },
+      { id: 'retail.policies', name: 'Policies', kind: 'documents', database_name: null },
+      { name: 'no id' },
+    ]
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(sources)))
 
-    await expect(fetchRecordedDataSources()).resolves.toEqual([
-      {
-        id: 'retail.sales',
-        name: 'Market data',
-        description: 'Prices',
-        kind: 'structured',
-        database_name: 'synthetic_market',
-      },
-      {
-        id: 'retail.policies',
-        name: 'Market news',
-        description: 'Filings',
-        kind: 'documents',
-        database_name: null,
-      },
-    ])
-    expect(fetch).toHaveBeenCalledWith('/api/recordings/pack.json', { signal: undefined })
+    await expect(fetchRecordedDataSources('retail')).resolves.toEqual(sources.slice(0, 2))
+    expect(fetch).toHaveBeenCalledWith('/api/recordings/retail/sources.json', {
+      signal: undefined,
+    })
   })
 
-  test('fails when the bundle has no pack.json', async () => {
+  test('fails when the bundle has no sources.json', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 404 })))
 
-    await expect(fetchRecordedDataSources()).rejects.toThrow('404')
+    await expect(fetchRecordedDataSources('retail')).rejects.toThrow('404')
   })
 })

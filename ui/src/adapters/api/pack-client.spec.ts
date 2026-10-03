@@ -4,7 +4,7 @@
 import { afterEach, beforeEach, describe, expect, expectTypeOf, test, vi } from 'vitest'
 import type { z } from 'zod'
 import type { PackView } from '@/generated/pack'
-import { fetchPack, type PackSchema } from './pack-client'
+import { fetchPack, fetchPacks, type PackSchema } from './pack-client'
 
 /** What the API sends, typed by the generated contract */
 const PACK: PackView = {
@@ -59,11 +59,44 @@ describe('fetchPack', () => {
     const pack = await fetchPack()
 
     expect(fetch).toHaveBeenCalledWith('http://api.test:8000/v1/pack', expect.anything())
+    expect(pack).toMatchObject({ kind: 'industry', icon: 'Store', status: 'ready' })
     expect(pack?.questions[0]).toMatchObject({
       id: 'top-customers',
       tools: ['duckdb'], // only the pills the UI knows
       featured: true,
     })
+  })
+
+  test('reads a chosen pack by id', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(PACK)))
+
+    await fetchPack('financial-services')
+    expect(fetch).toHaveBeenCalledWith(
+      'http://api.test:8000/v1/pack?id=financial-services',
+      expect.anything()
+    )
+  })
+
+  test('lists the packs a user can pick, and none when the API is down', async () => {
+    const packs = {
+      packs: [
+        {
+          id: 'retail',
+          kind: 'industry',
+          title: 'Retail',
+          description: null,
+          icon: 'Store',
+          status: 'ready',
+        },
+        { id: 'workspace', kind: 'workspace', title: 'Your data', icon: 'Upload', status: 'empty' },
+      ],
+    }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json(packs)))
+    expect(await fetchPacks()).toEqual([packs.packs[0], { ...packs.packs[1], description: null }])
+    expect(fetch).toHaveBeenCalledWith('http://api.test:8000/v1/packs', expect.anything())
+
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('fetch failed')))
+    expect(await fetchPacks()).toEqual([])
   })
 
   test("reads the example picker's questions in their order", async () => {

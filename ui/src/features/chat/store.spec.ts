@@ -61,9 +61,7 @@ describe('useChatStore', () => {
       chat().ensureSession()
 
       expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.sales'])
-      expect(chat().currentConversation?.enabledDataSourceIds).toEqual([
-        'retail.sales',
-      ])
+      expect(chat().currentConversation?.enabledDataSourceIds).toEqual(['retail.sales'])
     })
 
     test('the first question titles the conversation', () => {
@@ -84,6 +82,31 @@ describe('useChatStore', () => {
 
       expect(chat().currentConversation?.id).toBe(saved)
       expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.policies'])
+    })
+
+    test('a new conversation remembers the pack it was asked in', () => {
+      useLayoutStore.setState({ packId: 'healthcare' })
+      chat().ensureSession()
+      expect(chat().currentConversation?.packId).toBe('healthcare')
+    })
+
+    test('selecting a conversation of another industry switches to its pack, keeping its sources', () => {
+      useLayoutStore.setState({ packId: 'manufacturing' })
+      chat().ensureSession()
+      chat().saveDataSourcesToConversation(['manufacturing.sops'])
+      const saved = chat().currentConversation!.id
+      chat().startNewSessionDraft()
+      useLayoutStore.setState({ packId: 'retail' })
+      const switchPack = vi.spyOn(useLayoutStore.getState(), 'switchPack').mockResolvedValue()
+
+      chat().selectConversation(saved)
+
+      expect(chat().currentConversation?.id).toBe(saved)
+      // Its pack and its sources come back, rather than retail's sources minus the missing ones
+      expect(switchPack).toHaveBeenCalledWith('manufacturing', {
+        draft: false,
+        enabledIds: ['manufacturing.sops'],
+      })
     })
 
     test('reopening a conversation whose question was never submitted reports it', () => {
