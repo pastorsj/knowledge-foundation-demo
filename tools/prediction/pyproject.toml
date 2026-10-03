@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+[project]
+name = "demo-prediction"
+version = "0.1.0"
+description = "predict MCP server: NVIDIA Kumo Relational predictions over any structured source of the knowledge catalog."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "anyio>=4.15,<5",
+    # Same DuckDB as the ingest service that writes the sources' tables.duckdb files.
+    "duckdb==1.5.5",
+    # The SDK the Kumo Relational NIM serves; `relational` builds the graph, `duckdb` reads it from a DuckDB file.
+    # Its engine has aarch64 wheels. Never add the [explain] extra: it sends raw cell values to a third-party LLM.
+    "kumo-relational-client[relational,duckdb]==1.0.2",
+    "mcp>=2.2,<3",
+    "openinference-semantic-conventions>=0.1.39",
+    "opentelemetry-exporter-otlp-proto-http>=1.45",
+    "opentelemetry-sdk>=1.45",
+    "pandas>=2.3,<3",
+    "pydantic>=2.13,<3",
+]
+
+[project.scripts]
+demo-prediction = "demo_prediction.__main__:main"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28",
+    "pytest>=9.1",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not live'"
+markers = [
+    "live: calls a real Kumo Relational endpoint (needs KUMO_RELATIONAL_URL); never run in CI",
+]

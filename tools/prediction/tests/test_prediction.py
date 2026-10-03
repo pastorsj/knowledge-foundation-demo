@@ -1,0 +1,374 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+"""predict around a stubbed Kumo client (ported from tools/market-analytics), plus one live call when configured."""
+
+from __future__ import annotations
+
+import os
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+import pytest
+from conftest import ACCOUNTS
+from conftest import SALES
+from conftest import add_copy_of_sales
+from conftest import fixture_source
+from mcp.client import Client
+from mcp.server.mcpserver import MCPServer
+from mcp.types import CallToolResult
+
+from demo_prediction import catalog
+from demo_prediction import prediction
+from demo_prediction.prediction import Predictor
+from demo_prediction.prediction import build_graph
+from demo_prediction.server import create_server
+from demo_prediction.settings import Settings
+
+pytestmark = pytest.mark.anyio
+
+KUMO_URL = "http://kumo-relational:8000"
+CHURN = "PREDICT COUNT(orders.*, 0, 90, days) = 0 FOR EACH customers.customer_id"
+TEMPLATE = fixture_source(SALES)["prediction"]["templates"][0]
+
+
+class StubClient:
+    """Records what predict sends and answers like RelationalClient for a binary query, or with `answer`."""
+
+    calls: list[dict[str, Any]] = []
+    error: Exception | None = None
+    answer: Callable[[list[Any]], pd.DataFrame] | None = None
+
+    def __init__(self, url: str, api_key: str | None = None, **options: Any) -> None:
+        self.call = {"url": url, "api_key": api_key, **options}
+
+    def __enter__(self) -> StubClient:
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        pass
+
+    def relational(self, graph: Any) -> StubClient:
+        self.call["graph"] = graph
+        return self
+
+    def predict(self, query: str, indices: list[Any], **options: Any) -> pd.DataFrame:
+        self.calls.append({**self.call, "query": query, "indices": indices, **options})
+        if self.error is not None:
+            raise self.error
+        if (answer := type(self).answer) is not None:  # read from the class, so it is not bound as a method
+            return answer(indices)
+        probabilities = [0.25 + 0.25 * position for position in range(len(indices))]
+        return pd.DataFrame(
+            {
+                "ENTITY": indices,
+                "ANCHOR_TIMESTAMP": pd.Timestamp("2026-09-30"),
+                "PREDICTION": [p > 0.5 for p in probabilities],
+                "FALSE_PROB": [1 - p for p in probabilities],
+                "TRUE_PROB": probabilities,
+            }
+        )
+
+
+@pytest.fixture
+def stub(monkeypatch: pytest.MonkeyPatch) -> type[StubClient]:
+    monkeypatch.setattr(StubClient, "calls", [])
+    monkeypatch.setattr(StubClient, "error", None)
+    monkeypatch.setattr(StubClient, "answer", None)
+    monkeypatch.setattr(prediction, "RelationalClient", StubClient)
+    return StubClient
+
+
+def server(knowledge_dir: Path, url: str | None = KUMO_URL) -> MCPServer:
+    return create_server(Settings(knowledge_dir=knowledge_dir, kumo_url=url, kumo_api_key="dummy-key"))
+
+
+async def predict(
+    knowledge_dir: Path, pql: str, source_ids: list[str] | None = None, url: str | None = KUMO_URL, **arguments: Any
+) -> CallToolResult:
+    arguments = {
+        "question": "Which customers will stop ordering?",
+        "pql": pql,
+        "source_ids": [SALES] if source_ids is None else source_ids,
+        **arguments,
+    }
+    async with Client(server(knowledge_dir, url)) as client:
+        return await client.call_tool("predict", arguments)
+
+
+def without_timing(content: dict[str, Any]) -> dict[str, Any]:
+    assert content["elapsed_ms"] >= 0
+    return {key: value for key, value in content.items() if key != "elapsed_ms"}
+
+
+def row(entity_id: str, probability: float | None = None, value: float | None = None, label: str | None = None):
+    return {"entity_id": entity_id, "probability": probability, "value": value, "label": label}
+
+
+async def test_a_binary_prediction_returns_sorted_probabilities(knowledge_dir: Path, stub: type[StubClient]):
+    result = await predict(knowledge_dir, CHURN)
+
+    assert not result.is_error, result.content[0].text
+    assert without_timing(result.structured_content) == {
+        "available": True,
+        "reason": None,
+        "source_id": SALES,
+        "template_id": None,
+        "pql": CHURN,
+        "task_type": "binary_classification",
+        "anchor_time": None,
+        "horizon": {"value": 90, "unit": "days"},
+        "entity_table": "customers",
+        "rows": [row("C3", 0.75), row("C2", 0.5), row("C1", 0.25)],
+        "model": "kumo-relational",
+        "warnings": [],
+    }
+    (call,) = stub.calls
+    assert (call["url"], call["api_key"], call["timeout"]) == (KUMO_URL, "dummy-key", 60)
+    assert (call["max_retries"], call["num_retries"]) == (0, 0)  # one attempt, so the call ends within its timeout
+    assert (call["query"], call["indices"], call["run_mode"]) == (CHURN, ["C1", "C2", "C3"], "fast")
+    assert call["anchor_time"] is None  # the engine then anchors at the data's latest timestamp
+    graph = call["graph"]
+    assert sorted((edge.src_table, edge.fkey, edge.dst_table) for edge in graph.edges) == [
+        ("orders", "customer_id", "customers")
+    ]
+
+
+async def test_a_template_expands_to_its_pql_and_anchor(knowledge_dir: Path, stub: type[StubClient]):
+    result = await predict(knowledge_dir, "template:churn_90d")
+
+    content = result.structured_content
+    assert (content["template_id"], content["pql"]) == ("churn_90d", TEMPLATE["pql"])
+    assert content["anchor_time"] == "2026-09-30T00:00:00Z"
+    assert content["horizon"] == {"value": 90, "unit": "days"}
+    (call,) = stub.calls
+    assert call["query"] == TEMPLATE["pql"]
+    assert call["anchor_time"] == pd.Timestamp("2026-09-30 00:00:00")  # UTC, as the data's naive timestamps
+
+
+async def test_an_explicit_anchor_time_wins_over_the_template_anchor(knowledge_dir: Path, stub: type[StubClient]):
+    result = await predict(knowledge_dir, "template:churn_90d", anchor_time="2026-08-01T12:00:00+02:00")
+
+    assert result.structured_content["anchor_time"] == "2026-08-01T10:00:00Z"
+    assert stub.calls[0]["anchor_time"] == pd.Timestamp("2026-08-01 10:00:00")
+
+
+def test_the_graph_has_the_catalog_keys_time_columns_and_links(knowledge_dir: Path) -> None:
+    (source,) = catalog.structured_sources(knowledge_dir, [SALES])
+    graph, warnings = build_graph(source)
+
+    assert graph["customers"].primary_key.name == "customer_id"
+    assert graph["orders"].primary_key.name == "order_id"
+    assert graph["orders"].time_column.name == "ordered_at"
+    assert graph["customers"].time_column is None
+    assert [(edge.src_table, edge.fkey, edge.dst_table) for edge in graph.edges] == [
+        ("orders", "customer_id", "customers")
+    ]
+    assert warnings == []
+    graph.validate()
+
+
+@pytest.mark.parametrize(
+    ("pql", "source_ids", "message"),
+    [
+        ("PREDICT COUNT(returns.*, 0, 30, days) > 0 FOR EACH customers.customer_id", [SALES], "returns"),
+        (CHURN, [ACCOUNTS], "No selected source has every table"),
+        ("PREDICT accounts.segment = 'smb' FOR EACH accounts.account_id", [SALES], "accounts"),
+    ],
+    ids=["unknown-table", "other-source", "table-of-an-unselected-source"],
+)
+async def test_a_pql_naming_a_table_no_selected_source_has_is_refused(
+    knowledge_dir: Path, stub: type[StubClient], pql: str, source_ids: list[str], message: str
+):
+    result = await predict(knowledge_dir, pql, source_ids)
+
+    assert result.is_error
+    assert message in result.content[0].text
+    assert stub.calls == []
+
+
+async def test_the_source_is_the_one_whose_tables_the_pql_names(knowledge_dir: Path, stub: type[StubClient]):
+    result = await predict(knowledge_dir, CHURN, [ACCOUNTS, SALES])
+
+    assert result.structured_content["source_id"] == SALES
+
+
+async def test_two_selected_sources_with_the_tables_are_refused(knowledge_dir: Path, stub: type[StubClient]):
+    add_copy_of_sales(knowledge_dir, "retail.archive", "retail_archive")
+
+    result = await predict(knowledge_dir, CHURN, [SALES, "retail.archive"])
+
+    assert result.is_error
+    assert "Several selected sources" in result.content[0].text
+    assert stub.calls == []
+
+
+async def test_without_an_endpoint_the_prediction_is_unavailable(knowledge_dir: Path, stub: type[StubClient]):
+    async with Client(server(knowledge_dir, url=None)) as client:
+        names = [tool.name for tool in (await client.list_tools()).tools]
+    result = await predict(knowledge_dir, CHURN, url=None)
+
+    assert names == ["predict"]  # registered all the same
+    assert without_timing(result.structured_content) == {
+        "available": False,
+        "reason": "No Kumo endpoint is configured (KUMO_RELATIONAL_URL).",
+        "source_id": SALES,
+        "template_id": None,
+        "pql": CHURN,
+        "task_type": "binary_classification",
+        "anchor_time": None,
+        "horizon": {"value": 90, "unit": "days"},
+        "entity_table": "customers",
+        "rows": [],
+        "model": "kumo-relational",
+        "warnings": [],
+    }
+    assert stub.calls == []
+
+
+async def test_an_unreachable_endpoint_makes_the_prediction_unavailable(knowledge_dir: Path, stub: type[StubClient]):
+    stub.error = ConnectionError("connection refused")
+
+    result = await predict(knowledge_dir, "template:churn_90d")
+
+    content = result.structured_content
+    assert (content["available"], content["reason"], content["rows"]) == (
+        False,
+        "ConnectionError: connection refused",
+        [],
+    )
+    assert content["horizon"] == {"value": 90, "unit": "days"}
+    assert stub.calls[0]["indices"] == ["C1", "C2", "C3"]
+
+
+async def test_the_real_client_takes_this_call_and_reports_a_closed_port(knowledge_dir: Path):
+    """No stub: the graph is built and the request sent, so the client accepts every argument the tool passes."""
+    result = await predict(knowledge_dir, "template:churn_90d", url="http://127.0.0.1:9")
+
+    content = result.structured_content
+    assert content["available"] is False
+    assert content["reason"].startswith("RelationalError: [TRANSPORT_ERROR] Could not connect"), content["reason"]
+    assert content["anchor_time"] == "2026-09-30T00:00:00Z"
+
+
+async def test_a_regression_returns_values(knowledge_dir: Path, stub: type[StubClient]):
+    stub.answer = lambda ids: pd.DataFrame({"ENTITY": ids, "PREDICTION": [10.0, 300.5, 42.0]})
+
+    result = await predict(knowledge_dir, "PREDICT SUM(orders.net_amount, 0, 30, days) FOR EACH customers.customer_id")
+
+    content = result.structured_content
+    assert content["task_type"] == "regression"
+    assert content["rows"] == [row("C2", value=300.5), row("C3", value=42.0), row("C1", value=10.0)]
+    assert content["horizon"] == {"value": 30, "unit": "days"}
+
+
+async def test_a_multiclass_prediction_returns_each_entitys_class(knowledge_dir: Path, stub: type[StubClient]):
+    def answer(ids: list[str]) -> pd.DataFrame:
+        scores = {"C1": (0.7, 0.3), "C2": (0.4, 0.6), "C3": (0.9, 0.1)}
+        return pd.DataFrame(
+            [
+                {"ENTITY": entity, "CLASS": tier, "SCORE": score, "PREDICTED": score == max(scores[entity])}
+                for entity in ids
+                for tier, score in zip(("gold", "silver"), scores[entity], strict=True)
+            ]
+        )
+
+    stub.answer = answer
+    result = await predict(knowledge_dir, "PREDICT customers.tier FOR EACH customers.customer_id")
+
+    content = result.structured_content
+    assert content["task_type"] == "multiclass_classification"
+    assert content["horizon"] is None
+    assert content["rows"] == [
+        row("C3", 0.9, label="gold"),
+        row("C1", 0.7, label="gold"),
+        row("C2", 0.6, label="silver"),
+    ]
+
+
+async def test_a_static_entity_filter_selects_the_entities(knowledge_dir: Path, stub: type[StubClient]):
+    await predict(knowledge_dir, f"{CHURN} WHERE customers.tier = 'gold'")
+
+    assert stub.calls[0]["indices"] == ["C1", "C3"]
+
+
+async def test_a_temporal_entity_filter_is_left_to_a_warning(knowledge_dir: Path, stub: type[StubClient]):
+    result = await predict(knowledge_dir, f"{CHURN} WHERE COUNT(orders.*, -90, 0, days) > 0")
+
+    assert stub.calls[0]["indices"] == ["C1", "C2", "C3"]
+    (warning,) = result.structured_content["warnings"]
+    assert "could not be applied" in warning
+
+
+async def test_an_entity_filter_reads_no_file(knowledge_dir: Path, stub: type[StubClient]):
+    hostile = (
+        f"{CHURN} WHERE customers.tier = 'gold' AND CAST((SELECT content FROM read_text('/etc/hostname')) AS INT) > 0"
+    )
+
+    result = await predict(knowledge_dir, hostile)
+
+    (warning,) = result.structured_content["warnings"]
+    assert "could not be applied" in warning
+    assert "disabled by configuration" in warning
+    assert Path("/etc/hostname").read_text().strip() not in str(result.structured_content)
+
+
+async def test_at_most_100_entities_in_primary_key_order_and_the_25_best(knowledge_dir: Path, stub: type[StubClient]):
+    result = await predict(
+        knowledge_dir, "PREDICT accounts.segment = 'enterprise' FOR EACH accounts.account_id", [ACCOUNTS]
+    )
+
+    (call,) = stub.calls
+    assert call["indices"] == list(range(1, 101))
+    content = result.structured_content
+    assert [r["entity_id"] for r in content["rows"]] == [str(i) for i in range(100, 75, -1)]
+    assert len(content["warnings"]) == 2
+    assert "first 100 entities" in content["warnings"][0] and "25 highest of 100" in content["warnings"][1]
+
+
+@pytest.mark.parametrize(
+    ("arguments", "message"),
+    [
+        ({"pql": "template:no_such_template"}, "churn_90d"),
+        ({"pql": "template:churn_90d", "anchor_time": "next tuesday"}, "anchor_time"),
+        ({"pql": "SELECT * FROM customers"}, "PREDICT"),
+        ({"pql": "PREDICT COUNT(orders.*, 0, 30, days) > 0"}, "FOR EACH"),
+        ({"pql": "PREDICT COUNT(orders.*, 0, 30, days) > 0 FOR EACH orders.customer_id"}, "primary key"),
+        ({"pql": CHURN, "source_ids": []}, "select at least one structured source"),
+        ({"pql": CHURN, "source_ids": ["retail.policies"]}, "not a structured source"),
+        ({"pql": CHURN, "source_ids": ["retail.unknown"]}, "not in the knowledge catalog"),
+    ],
+    ids=[
+        "unknown-template",
+        "bad-anchor",
+        "not-pql",
+        "no-entity",
+        "not-a-primary-key",
+        "empty",
+        "documents",
+        "unknown",
+    ],
+)
+async def test_invalid_requests_are_refused(
+    knowledge_dir: Path, stub: type[StubClient], arguments: dict[str, Any], message: str
+):
+    result = await predict(knowledge_dir, **{"pql": CHURN, **arguments})
+
+    assert result.is_error
+    assert message in result.content[0].text
+    assert stub.calls == []
+
+
+@pytest.mark.live
+def test_live_prediction(knowledge_dir: Path) -> None:
+    """KUMO_RELATIONAL_URL (and KUMO_API_KEY for a hosted gateway): the fixture's churn template, for real."""
+    if not os.environ.get("KUMO_RELATIONAL_URL"):
+        pytest.skip("set KUMO_RELATIONAL_URL")
+    predictor = Predictor(Settings.from_env({**os.environ, "KNOWLEDGE_DIR": str(knowledge_dir)}))
+
+    result = predictor.predict("template:churn_90d", [SALES])
+
+    assert result.available, result.reason
+    assert {row.entity_id for row in result.rows} == {"C1", "C2", "C3"}
+    assert all(0 <= row.probability <= 1 for row in result.rows)
