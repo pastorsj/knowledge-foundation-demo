@@ -1,18 +1,15 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
-"""A pack's eval files: `eval/answers.yaml` (the answer checks) and `eval/perf.yaml` (the GPU guard's cases).
+"""A pack's answer checks: `data/packs/<id>/eval/answers.yaml`, with its oracle queries in `eval/oracles/*.sql`.
 
-Both live in the pack, beside `eval/oracles/` and `eval/retrieval.yaml` (the filings a retrieval answer should cite,
-which a `retrieved_filing` check reads), and are outside the pack's build digest: changing them never rebuilds the
-pack. The formats are described in the files' headers and in `eval/README.md`.
+The file is optional and sits outside the pack's ingested files: changing it never re-ingests the pack. A pack
+without one gets only the generic checks. The format is described in `eval/README.md`.
 """
 
 from __future__ import annotations
 
-import math
 import re
 from dataclasses import dataclass
-from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -20,27 +17,28 @@ import yaml
 
 CHECK_KINDS = frozenset(
     {
-        "named",  # the rows' assets are named (ticker or company name); all, `at_least: N`, or `any: true`
+        "mentions",  # the rows' values (names, ids) appear in the report; all, `at_least: N`, or `any: true`
+        "contains",  # every one of a list of substrings appears in the report, ignoring case
         "percent",  # the rows' fractions appear as percentages, within display rounding
         "pattern",  # the report, without markdown emphasis, matches a regular expression (or any of a list)
-        "item_105_deadline",  # Form 8-K Item 1.05's deadline is right or flagged as missing (deadline.py)
         "retrieved_source",  # a retrieval call searched this source and returned hits
-        "retrieved_filing",  # a retrieval call returned a passage of a filing that eval/retrieval.yaml lists
         "percent_grounding",  # at least this share of the report's percentages match a number in the evidence
-        "prediction_named",  # the Kumo prediction's top N assets are named
-        "prediction_first",  # the prediction's top asset is the first of them the report names
+        "prediction_available",  # the run's prediction receipt is available: Kumo scored the entities
     }
 )
 # <oracle>[<rows>].<field>: rows is an index (0, -1), a slice (:3, -3:, :) or max(<field>)
 ROW_REF = re.compile(r"^(?P<oracle>\w+)\[(?P<rows>[^\]]*)\]\.(?P<field>\w+)$")
 SLICE = re.compile(r"^(?P<start>-?\d*):(?P<stop>-?\d*)$")
 MAXIMUM = re.compile(r"^max\((?P<field>\w+)\)$")
-# Half the lowest recorded speedup, rounded down to 0.05: the guard's margin (eval/README.md#thresholds)
-FLOOR_SHARE = 0.5
 
 
 class SpecError(ValueError):
-    """An eval file does not follow its format; the message names the file and the entry."""
+    """An answers file does not follow its format; the message names the file and the entry."""
+
+
+def catalog_id(pack: str, source: str) -> str:
+    """The catalog id of a pack's source: `<pack>.<source>`; an id that already is one is kept."""
+    return source if "." in source else f"{pack}.{source}"
 
 
 @dataclass(frozen=True)
@@ -118,7 +116,7 @@ class QuestionSpec:
 class AnswerSpec:
     pack: str
     dataset: str = ""
-    names: str = ""  # SQL with {ids}: asset id -> company name, for `named`
+    source: str = ""  # the pack-local id of the structured source the oracles query; "" when the pack has one
     signed_percent: frozenset[str] = frozenset()
     percent: frozenset[str] = frozenset()
     questions: dict[str, QuestionSpec] | None = None
@@ -146,7 +144,7 @@ def load_answers(pack_dir: Path) -> AnswerSpec:
     if not path.is_file():
         return AnswerSpec(pack=pack_dir.name, questions={})
     raw = _mapping(yaml.safe_load(path.read_text()), str(path))
-    _only(raw, {"dataset", "names", "format", "questions"}, str(path))
+    _only(raw, {"dataset", "source", "format", "questions"}, str(path))
     formats = _mapping(raw.get("format"), f"{path}: format")
     _only(formats, {"signed_percent", "percent"}, f"{path}: format")
     questions = {}
@@ -159,7 +157,7 @@ def load_answers(pack_dir: Path) -> AnswerSpec:
     return AnswerSpec(
         pack=pack_dir.name,
         dataset=str(raw.get("dataset") or ""),
-        names=str(raw.get("names") or ""),
+        source=str(raw.get("source") or ""),
         signed_percent=frozenset(formats.get("signed_percent") or ()),
         percent=frozenset(formats.get("percent") or ()),
         questions=questions,
@@ -185,12 +183,9 @@ def _question(pack_dir: Path, qid: str, entry: dict[str, Any], where: str) -> Qu
         if not isinstance(group, list) or not group:
             raise SpecError(f"{where}: tools is a list of non-empty lists of tool ids")
         tools.append(frozenset(str(tool) for tool in group))
-    checks = []
-    for raw in entry.get("checks") or []:
-        check = _check(_mapping(raw, f"{where}: check"), names, where)
-        if check.kind == "retrieved_filing":
-            check = replace(check, value=_listed_filings(pack_dir, qid, f"{where}: check {check.id}"))
-        checks.append(check)
+    checks = [
+        _check(_mapping(raw, f"{where}: check"), names, pack_dir.name, where) for raw in entry.get("checks") or []
+    ]
     if len({check.id for check in checks}) != len(checks):
         raise SpecError(f"{where}: check ids repeat")
     facts = " ".join(str(entry.get("facts") or "").split())
@@ -200,106 +195,38 @@ def _question(pack_dir: Path, qid: str, entry: dict[str, Any], where: str) -> Qu
     return QuestionSpec(qid, tuple(oracles), tuple(tools), tuple(checks), facts)
 
 
-def _listed_filings(pack_dir: Path, qid: str, where: str) -> tuple[str, ...]:
-    """The filing ids (<cik>:<accession>) that `eval/retrieval.yaml` lists for the question."""
-    path = pack_dir / "eval" / "retrieval.yaml"
-    listed = _mapping(yaml.safe_load(path.read_text()) if path.is_file() else None, str(path)).get(qid) or {}
-    filings = tuple(str(filing) for filing in _mapping(listed, f"{path}: {qid}").get("filings") or ())
-    if not filings:
-        raise SpecError(f"{where}: eval/retrieval.yaml lists no filings for {qid}")
-    return filings
-
-
-def _check(entry: dict[str, Any], oracles: set[str], where: str) -> Check:
+def _check(entry: dict[str, Any], oracles: set[str], pack: str, where: str) -> Check:
     kinds = set(entry) & CHECK_KINDS
     if len(kinds) != 1 or "id" not in entry:
         raise SpecError(f"{where}: a check has an id and exactly one of {', '.join(sorted(CHECK_KINDS))}: {entry}")
     _only(entry, {"id", "at_least", "any", *CHECK_KINDS}, where)
     [kind] = kinds
     value = entry[kind]
-    if kind in ("named", "percent"):
+    if kind in ("mentions", "percent"):
         ref = RowRef.parse(value)
         if ref.oracle not in oracles:
             raise SpecError(f"{where}: check {entry['id']} names oracle {ref.oracle}, which the question lacks")
+    elif kind == "contains":
+        words = value if isinstance(value, list) else [value]
+        if not words or not all(isinstance(word, str) and word.strip() for word in words):
+            raise SpecError(f"{where}: check {entry['id']}: contains is a non-empty string or list of them")
+        value = tuple(words)
     elif kind == "pattern":
         for pattern in value if isinstance(value, list) else [value]:
             try:
                 re.compile(pattern)
             except re.error as error:
                 raise SpecError(f"{where}: check {entry['id']}: bad pattern {pattern!r}: {error}") from None
+    elif kind == "retrieved_source":
+        value = catalog_id(pack, str(value))  # the pack's own id works: its hits carry the catalog id
+    elif kind == "percent_grounding":
+        if isinstance(value, bool) or not isinstance(value, int | float) or not 0 < value <= 1:
+            raise SpecError(f"{where}: check {entry['id']}: percent_grounding is a share, above 0 up to 1")
+    elif kind == "prediction_available" and value is not True:
+        raise SpecError(f"{where}: check {entry['id']}: prediction_available is true")
     at_least = entry.get("at_least")
     return Check(str(entry["id"]), kind, value, int(at_least) if at_least is not None else None, bool(entry.get("any")))
 
 
 # {<oracle>[<rows>]: field, field} in a facts template: the rows as "field=value, ...; ..."
 FACT = re.compile(r"\{(?P<oracle>\w+)(?:\[(?P<rows>[^\]]*)\])?:\s*(?P<fields>\w+(?:\s*,\s*\w+)*)\s*\}")
-
-
-@dataclass(frozen=True)
-class MarketCase:
-    """One market tool call that market-analytics' POST /benchmark times on both engines."""
-
-    id: str
-    tool: str
-    arguments: dict[str, Any]
-    recorded: tuple[float, ...]
-    min_speedup: float | None  # None: reported, never failed
-
-
-@dataclass(frozen=True)
-class RetrievalCase:
-    """One workload profile of the Milvus CPU/GPU index comparison (retrieval-benchmark.json)."""
-
-    profile_id: str
-    recorded: tuple[float, ...]
-    min_speedup: float | None
-
-
-@dataclass(frozen=True)
-class PerfSpec:
-    pack: str
-    profile: str
-    market: tuple[MarketCase, ...]
-    retrieval: tuple[RetrievalCase, ...]
-
-
-def floor_for(recorded: tuple[float, ...]) -> float:
-    """Half the lowest recorded speedup, rounded down to 0.05."""
-    return math.floor(round(FLOOR_SHARE * min(recorded) * 20, 6)) / 20
-
-
-def load_perf(pack_dir: Path) -> PerfSpec | None:
-    """`eval/perf.yaml` of a pack, or None when the pack has no GPU guard cases."""
-    path = pack_dir / "eval" / "perf.yaml"
-    if not path.is_file():
-        return None
-    raw = _mapping(yaml.safe_load(path.read_text()), str(path))
-    _only(raw, {"profile", "market", "retrieval"}, str(path))
-    market = []
-    for raw_entry in raw.get("market") or []:
-        entry = _mapping(raw_entry, f"{path}: market")
-        _only(entry, {"id", "tool", "arguments", "recorded", "min_speedup"}, f"{path}: {entry.get('id')}")
-        market.append(
-            MarketCase(
-                id=str(entry["id"]),
-                tool=str(entry["tool"]),
-                arguments=_mapping(entry.get("arguments"), f"{path}: {entry['id']}: arguments"),
-                recorded=tuple(float(x) for x in entry.get("recorded") or ()),
-                min_speedup=None if entry.get("min_speedup") is None else float(entry["min_speedup"]),
-            )
-        )
-    retrieval = []
-    for profile_id, raw_entry in _mapping(raw.get("retrieval"), f"{path}: retrieval").items():
-        entry = _mapping(raw_entry, f"{path}: retrieval {profile_id}")
-        _only(entry, {"recorded", "min_speedup"}, f"{path}: retrieval {profile_id}")
-        retrieval.append(
-            RetrievalCase(
-                profile_id=str(profile_id),
-                recorded=tuple(float(x) for x in entry.get("recorded") or ()),
-                min_speedup=None if entry.get("min_speedup") is None else float(entry["min_speedup"]),
-            )
-        )
-    ids = [case.id for case in market]
-    if len(set(ids)) != len(ids):
-        raise SpecError(f"{path}: market case ids repeat")
-    return PerfSpec(pack_dir.name, str(raw.get("profile") or ""), tuple(market), tuple(retrieval))

@@ -6,7 +6,7 @@ import json
 from itertools import cycle
 
 import pytest
-from support import market_turn
+from support import answer_turn
 from support import serve
 
 from demo_eval.grader import Grader
@@ -16,7 +16,7 @@ from demo_eval.grader import prompt
 
 KEY = "fake-grader-key"
 VERDICT = {"correctness": 4, "grounding": 5, "completeness": 4, "honesty": 5, "overall": 4, "pass": True, "notes": "ok"}
-RUN = {"question": "Who led?", "status": {"status": "success"}, "turn": market_turn("PEAX led [1].")}
+RUN = {"question": "Who led?", "status": {"status": "success"}, "turn": answer_turn("Austin led [1].")}
 
 
 def completion(verdict) -> dict:
@@ -35,9 +35,9 @@ def test_the_grader_is_off_unless_configured_and_refuses_half_a_configuration():
 
 
 def test_the_prompt_is_blind_to_the_model_and_carries_the_evidence():
-    text = prompt(dataset="synthetic: test", question="Who led?", facts="PEAX led.", run=RUN)
-    assert "DATASET: synthetic: test" in text and "REFERENCE FACTS:\nPEAX led." in text
-    assert '"evidence_id": "r1"' in text and "REPORT:\nPEAX led [1]." in text
+    text = prompt(dataset="synthetic: test", question="Who led?", facts="Austin led.", run=RUN)
+    assert "DATASET: synthetic: test" in text and "REFERENCE FACTS:\nAustin led." in text
+    assert '"evidence_id": "r1"' in text and "REPORT:\nAustin led [1]." in text
     assert "model-a" not in text and "efficient" not in text
 
 

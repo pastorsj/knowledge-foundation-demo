@@ -4,7 +4,7 @@
 
 A deployment is reached the way a browser reaches it: through the UI, which serves `/api/health` and proxies
 `/api/v1/<path>` to the job API (`ui/src/app/api/v1/[...path]/route.ts` lists the routes). So the same URL works for
-`http://127.0.0.1:3100` on the host, an SSH tunnel to it, or a link to a remote host's UI.
+`http://127.0.0.1:3300` on the host, an SSH tunnel to it, or a link to a remote host's UI.
 """
 
 from __future__ import annotations
@@ -97,25 +97,33 @@ class Deployment:
     def health(self) -> dict[str, Any]:
         return self.get("health", attempts=2)
 
-    def pack(self) -> dict[str, Any]:
-        return self.get("v1/pack")
+    def packs(self) -> list[dict[str, Any]]:
+        """The packs a user can pick: the industries by title, then the workspace."""
+        return self.get("v1/packs")["packs"]
 
-    def data_sources(self) -> list[dict[str, Any]]:
-        return self.get("v1/data_sources")
+    def pack(self, pack_id: str) -> dict[str, Any]:
+        """One pack's view: its title, version and the questions this deployment serves."""
+        return self.get(f"v1/pack?{urllib.parse.urlencode({'id': pack_id})}")
+
+    def data_sources(self, pack_id: str) -> list[dict[str, Any]]:
+        """The pack's sources, by catalog id (`<pack>.<source>`)."""
+        return self.get(f"v1/data_sources?{urllib.parse.urlencode({'pack': pack_id})}")
 
     def query(self, source_id: str, sql: str) -> list[dict[str, Any]]:
         """Rows of a read-only query on a structured source (at most 100, the API's cap)."""
         result = self.post(f"v1/data_sources/{urllib.parse.quote(source_id)}/query", {"sql": sql}, timeout=300)
         return [dict(zip(result["columns"], row, strict=True)) for row in result["rows"]]
 
-    def submit(self, question: str, sources: list[str]) -> str:
+    def submit(self, question: str, sources: list[str], pack_id: str) -> str:
         """Submit one question as a fresh job (a new session) with its own sources, as the UI's cards do.
+
+        ``sources`` are catalog ids (`<pack>.<source>`) of the pack ``pack_id``.
 
         The job id is chosen here, so a retried submit cannot start a second job: if the first one was accepted
         (its answer lost to a proxy error or a timeout), the retry gets a 409 for the same id.
         """
         job_id = str(uuid.uuid4())
-        body = {"input": question, "data_sources": sources, "job_id": job_id}
+        body = {"input": question, "data_sources": sources, "pack_id": pack_id, "job_id": job_id}
         try:
             self.post("v1/jobs/async/submit", body, attempts=8)
         except HttpError as error:
