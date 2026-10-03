@@ -210,17 +210,17 @@ sources:
           pql: >-
             PREDICT COUNT(maintenance_events.* WHERE maintenance_events.event_type = 'unplanned', 0, 30, days) > 0
             FOR EACH machines.machine_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: quality_defect_14d
           name: Quality defect in 14 days
           description: Likelihood that a machine produces at least one quality defect in the next 14 days.
           pql: PREDICT COUNT(quality_defects.*, 0, 14, days) > 0 FOR EACH machines.machine_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: high_alarm_count_30d
           name: High alarm count in 30 days
           description: Likelihood that a machine raises more than 10 alarms in total over the next 30 days.
           pql: PREDICT SUM(sensor_readings.alarm_count, 0, 30, days) > 10 FOR EACH machines.machine_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
 
   - id: procedures
     name: Maintenance & Safety Procedures
