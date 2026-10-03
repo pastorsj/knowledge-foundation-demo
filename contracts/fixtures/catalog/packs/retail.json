@@ -1,0 +1,68 @@
+{
+  "schema_version": "1",
+  "id": "retail",
+  "kind": "industry",
+  "title": "Retail",
+  "description": "A fictional omnichannel retailer: stores, customers, orders and returns, beside its policies and merchandising reviews.",
+  "icon": "Store",
+  "version": "1.0.0",
+  "as_of": "2026-09-30",
+  "disclaimer": "Synthetic data for a software demonstration; every company, person and figure is fictional.",
+  "digest": "0000000000000000000000000000000000000000000000000000000000000000",
+  "status": "ready",
+  "updated_at": "2026-10-02T12:00:00Z",
+  "sources": [
+    "retail.policies",
+    "retail.sales"
+  ],
+  "questions": [
+    {
+      "id": "electronics-returns",
+      "label": "Electronics return window",
+      "tag": "DOCUMENTS",
+      "description": null,
+      "question": "How long do customers have to return electronics, and what restocking fee applies?",
+      "sources": [
+        "retail.policies"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "top-stores",
+      "label": "Top stores by revenue",
+      "tag": "SQL",
+      "description": null,
+      "question": "Which five stores had the highest net revenue in the last full quarter?",
+      "sources": [
+        "retail.sales"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "churn-risk",
+      "label": "Customers likely to churn",
+      "tag": "PREDICTION",
+      "description": null,
+      "question": "Which gold-tier customers are most likely to place no order in the next 90 days?",
+      "sources": [
+        "retail.sales"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": false
+    }
+  ],
+  "examples": [
+    "electronics-returns",
+    "top-stores",
+    "churn-risk"
+  ],
+  "conversations": []
+}

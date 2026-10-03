@@ -4,12 +4,16 @@
   "description": "Every MCP tool Hermes may call, with its identity, receipt kind and UI hints.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["tools"],
+  "required": [
+    "tools"
+  ],
   "properties": {
     "tools": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/Tool" }
+      "items": {
+        "$ref": "#/$defs/Tool"
+      }
     }
   },
   "$defs": {
@@ -37,7 +41,12 @@
         },
         "server": {
           "description": "The Hermes MCP server key.",
-          "enum": ["retrieval", "market_analytics", "auto_ontology"]
+          "enum": [
+            "retrieval",
+            "tables",
+            "prediction",
+            "auto_ontology"
+          ]
         },
         "hermes_name": {
           "description": "The name Hermes uses for the tool: mcp__<server>__<id>.",
@@ -46,7 +55,11 @@
         },
         "family": {
           "description": "The capability family a data source must grant for the tool to run.",
-          "enum": ["unstructured_retrieval", "market_analytics", "structured_retrieval", "structured_prediction"]
+          "enum": [
+            "unstructured_retrieval",
+            "structured_retrieval",
+            "structured_prediction"
+          ]
         },
         "label": {
           "description": "Short display name.",
@@ -62,29 +75,50 @@
         },
         "explorer": {
           "description": "The UI explorer that renders the tool's receipts.",
-          "enum": ["retrieval", "market", "sql", "pql", "ontology"]
+          "enum": [
+            "retrieval",
+            "sql",
+            "pql",
+            "ontology"
+          ]
         },
         "receipt_kind": {
           "description": "The artifactKind of the tool's receipts.",
-          "enum": ["retrieval_evidence", "analytics_result", "structured_query", "structured_prediction"]
+          "enum": [
+            "retrieval_evidence",
+            "structured_query",
+            "structured_prediction"
+          ]
         },
         "profile": {
-          "description": "The Compose profile that provides the tool.",
-          "enum": ["retrieval", "analytics", "kumo", "ontology"]
+          "description": "The agent feature that ships the tool: retrieval and tables run in the core profile, kumo with the kumo or prediction profile, ontology with the ontology profile.",
+          "enum": [
+            "retrieval",
+            "tables",
+            "kumo",
+            "ontology"
+          ]
         },
         "pills": {
           "description": "The technology pills the UI shows for a question or a recorded run that uses the tool.",
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": { "$ref": "#/$defs/Pill" }
+          "items": {
+            "$ref": "#/$defs/Pill"
+          }
         }
       }
     },
     "Pill": {
       "title": "Pill",
-      "description": "A technology pill, in display order. cudf, cuml and cugraph are the GPU libraries of the market tools (on the CPU: pandas, scikit-learn and NetworkX); questions.yaml `tools` names these too.",
-      "enum": ["cudf", "cuml", "cugraph", "kumo", "retrieval", "ontology"]
+      "description": "A technology pill, in display order: retrieval (Nemotron embed and rerank over Milvus), duckdb (SQL over DuckDB), kumo (NVIDIA Kumo), ontology (Auto Ontology); questions.yaml `tools` names these too.",
+      "enum": [
+        "retrieval",
+        "duckdb",
+        "kumo",
+        "ontology"
+      ]
     }
   }
 }

@@ -1,19 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:market-analysis-claw-demo:schemas:questions",
+  "$id": "urn:knowledge-foundation:schemas:questions",
   "title": "Pack demo questions (questions.yaml)",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "questions"],
+  "required": [
+    "schema_version",
+    "questions"
+  ],
   "properties": {
-    "schema_version": { "const": "1" },
+    "schema_version": {
+      "const": "3"
+    },
     "examples": {
       "description": "The composer's example picker: these questions, in this order. Every featured question is among them, and together they declare every tool the pack's questions declare. Without it, the picker offers the featured questions, then the others, up to 12.",
       "type": "array",
       "minItems": 1,
       "maxItems": 12,
       "uniqueItems": true,
-      "items": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" }
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+      }
     },
     "questions": {
       "type": "array",
@@ -22,34 +30,66 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "label", "tag", "question", "sources", "tools"],
+        "required": [
+          "id",
+          "label",
+          "tag",
+          "question",
+          "sources",
+          "tools"
+        ],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
-          "label": { "type": "string", "minLength": 1, "maxLength": 60 },
-          "tag": {
-            "description": "The kind of question, which the docs group questions by.",
-            "enum": ["ANALYTICS", "ANOMALY", "GRAPH", "HYBRID", "INTRADAY", "PQL", "PREDICTION", "RAG", "RETRIEVAL", "ROUTER", "SQL"]
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
           },
-          "description": { "type": "string", "maxLength": 300 },
-          "question": { "type": "string", "minLength": 10, "maxLength": 2000 },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "tag": {
+            "description": "The kind of question: DOCUMENTS (retrieval), SQL (tables), HYBRID (documents and tables), PREDICTION (Kumo), ONTOLOGY (Auto Ontology).",
+            "enum": [
+              "DOCUMENTS",
+              "SQL",
+              "HYBRID",
+              "PREDICTION",
+              "ONTOLOGY"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "question": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 2000
+          },
           "sources": {
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
-            "items": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$" }
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "description": "Pack-local source ids (pack.yaml sources[].id); the catalog prefixes them with the pack id."
           },
           "tools": {
-            "description": "The tools the question is expected to use, as the pills the demo scenario picker shows (Pill in contracts/tool-registry.schema.json): cudf for any market tool, also cuml for market_anomaly_scan and cugraph for analyze_market_relationships; kumo, retrieval, ontology. A recorded answer must use every one.",
+            "description": "The tools the question is expected to use, as pills (Pill in contracts/tool-registry.schema.json). A recorded answer must use every one.",
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
-            "items": { "enum": ["cudf", "cuml", "cugraph", "kumo", "retrieval", "ontology"] }
-          },
-          "profiles": {
-            "description": "Offer the question only in these generator profiles.",
-            "type": "array",
-            "minItems": 1,
-            "items": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" }
+            "items": {
+              "enum": [
+                "retrieval",
+                "duckdb",
+                "kumo",
+                "ontology"
+              ]
+            }
           },
           "featured": {
             "description": "Shown on the landing page and README quickstart; part of the replay recording set.",
@@ -66,38 +106,57 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "label", "tag", "sources", "turns"],
+        "required": [
+          "id",
+          "label",
+          "tag",
+          "sources",
+          "turns"
+        ],
         "properties": {
           "id": {
             "description": "Unique among the pack's questions and conversations.",
             "type": "string",
             "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
           },
-          "label": { "type": "string", "minLength": 1, "maxLength": 60 },
-          "tag": {
-            "description": "The kind of conversation, which the docs group them by.",
-            "enum": ["ANALYTICS", "ANOMALY", "GRAPH", "HYBRID", "INTRADAY", "PQL", "PREDICTION", "RAG", "RETRIEVAL", "ROUTER", "SQL"]
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
           },
-          "description": { "type": "string", "maxLength": 300 },
+          "tag": {
+            "enum": [
+              "DOCUMENTS",
+              "SQL",
+              "HYBRID",
+              "PREDICTION",
+              "ONTOLOGY"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300
+          },
           "sources": {
             "description": "The sources every turn uses.",
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
-            "items": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$" }
-          },
-          "profiles": {
-            "description": "Offer the conversation only in these generator profiles.",
-            "type": "array",
-            "minItems": 1,
-            "items": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" }
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            }
           },
           "turns": {
             "description": "The questions in order; a later turn may refer to an earlier answer.",
             "type": "array",
             "minItems": 2,
             "maxItems": 6,
-            "items": { "type": "string", "minLength": 10, "maxLength": 2000 }
+            "items": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 2000
+            }
           }
         }
       }

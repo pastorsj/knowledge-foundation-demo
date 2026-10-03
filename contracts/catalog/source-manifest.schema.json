@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:knowledge-foundation:catalog:source-manifest",
+  "title": "SourceManifest",
+  "description": "One knowledge source in /knowledge/catalog/sources/<id>.json. Written only by the ingest service (atomically); read on every request by the API and the MCP tools. A documents source is searched in the shared Milvus collection by its id; a structured source is one DuckDB file.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "pack_id",
+    "name",
+    "description",
+    "agent_description",
+    "kind",
+    "capabilities",
+    "synthetic",
+    "default_enabled",
+    "example_questions",
+    "status",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "1" },
+    "id": {
+      "description": "<pack_id>.<name> for a pack source; workspace.documents or workspace.tables for uploads.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*\\.[a-z][a-z0-9_]*$",
+      "maxLength": 128
+    },
+    "pack_id": {
+      "description": "The pack the source belongs to; workspace for uploads.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "description": { "type": "string", "maxLength": 600 },
+    "agent_description": {
+      "description": "How the agent sees the source in its run instructions.",
+      "type": "string",
+      "maxLength": 1200
+    },
+    "kind": { "enum": ["documents", "structured"] },
+    "capabilities": {
+      "description": "Tool families the source grants (family in contracts/tool-registry.schema.json).",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["unstructured_retrieval", "structured_retrieval", "structured_prediction"] }
+    },
+    "synthetic": { "type": "boolean" },
+    "default_enabled": { "type": "boolean" },
+    "example_questions": {
+      "type": "array",
+      "maxItems": 3,
+      "items": { "type": "string", "minLength": 1, "maxLength": 300 }
+    },
+    "status": {
+      "description": "ready: searchable or queryable; ingesting: a file is in the pipeline (what is ready stays usable); empty: nothing ingested yet; failed: the last sync failed and nothing usable remains.",
+      "enum": ["ready", "ingesting", "empty", "failed"]
+    },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "files": {
+      "description": "The files ingested into the source, newest last.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/FileEntry" }
+    },
+    "documents": { "$ref": "#/$defs/Documents" },
+    "database": { "$ref": "#/$defs/Database" },
+    "prediction": { "$ref": "#/$defs/Prediction" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "kind": { "const": "documents" } } },
+      "then": { "required": ["documents"], "not": { "required": ["database"] } }
+    },
+    {
+      "if": { "properties": { "kind": { "const": "structured" } } },
+      "then": { "required": ["database"], "not": { "required": ["documents"] } }
+    }
+  ],
+  "$defs": {
+    "FileEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file_id", "file_name", "sha256", "size_bytes", "status"],
+      "properties": {
+        "file_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{7,63}$" },
+        "file_name": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "size_bytes": { "type": "integer", "minimum": 0 },
+        "status": { "enum": ["ready", "ingesting", "failed"] },
+        "parser": {
+          "description": "nemotron-parse-2.0, docling-docx, docling-pptx, docling-html, docling-md, pdf-text-layer, duckdb-csv, duckdb-xlsx, duckdb-parquet, duckdb-json.",
+          "type": "string",
+          "maxLength": 64
+        },
+        "document_id": { "type": "string", "maxLength": 512 },
+        "pages": { "type": "integer", "minimum": 0 },
+        "chunks": { "type": "integer", "minimum": 0 },
+        "tables": { "type": "array", "items": { "type": "string" } },
+        "warnings": { "type": "array", "maxItems": 20, "items": { "type": "string", "maxLength": 500 } },
+        "error_message": { "type": ["string", "null"], "maxLength": 600 }
+      }
+    },
+    "Documents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "chunks", "collection", "embed_model"],
+      "properties": {
+        "count": { "type": "integer", "minimum": 0 },
+        "chunks": { "type": "integer", "minimum": 0 },
+        "collection": { "description": "The Milvus alias (knowledge).", "type": "string", "minLength": 1 },
+        "embed_model": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Database": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "alias", "tables"],
+      "properties": {
+        "path": {
+          "description": "The DuckDB file, relative to the knowledge root: sources/<id>/tables.duckdb.",
+          "type": "string",
+          "pattern": "^sources/[^/]+/tables\\.duckdb$"
+        },
+        "alias": {
+          "description": "The schema name the agent qualifies tables with: the source id in snake case (retail.sales -> retail_sales).",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "tables": { "type": "array", "items": { "$ref": "#/$defs/TableInfo" } }
+      }
+    },
+    "TableInfo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description", "row_count", "primary_key", "time_column", "columns", "foreign_keys"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z_][a-z0-9_]*$", "maxLength": 128 },
+        "description": { "type": "string", "maxLength": 600 },
+        "row_count": { "type": "integer", "minimum": 0 },
+        "primary_key": { "type": ["string", "null"] },
+        "time_column": { "type": ["string", "null"] },
+        "origin_file": { "description": "The file (and sheet) the table was loaded from.", "type": "string", "maxLength": 300 },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "type", "description", "nullable"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+              "type": { "description": "The DuckDB type.", "type": "string", "minLength": 1, "maxLength": 64 },
+              "description": { "type": "string", "maxLength": 300 },
+              "nullable": { "type": "boolean" }
+            }
+          }
+        },
+        "foreign_keys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["column", "references_table", "references_column"],
+            "properties": {
+              "column": { "type": "string" },
+              "references_table": { "type": "string" },
+              "references_column": { "type": "string" },
+              "inferred": { "description": "True when profiling found it, false when the pack declared it.", "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "Prediction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["templates"],
+      "properties": {
+        "templates": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "name", "description", "pql"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+              "description": { "type": "string", "maxLength": 400 },
+              "pql": { "type": "string", "minLength": 1, "maxLength": 2000 },
+              "anchor_time": { "description": "ISO 8601; the prediction's point in time when the data's 'now' is not today.", "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

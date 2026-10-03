@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "id": "workspace",
+  "kind": "workspace",
+  "title": "Your data",
+  "description": "Files you upload, parsed with NVIDIA Nemotron Parse and loaded into DuckDB.",
+  "icon": "Upload",
+  "status": "empty",
+  "updated_at": "2026-10-02T12:00:00Z",
+  "sources": [],
+  "questions": [],
+  "examples": [],
+  "conversations": []
+}

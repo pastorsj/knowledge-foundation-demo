@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:knowledge-foundation:catalog:pack-manifest",
+  "title": "PackManifest",
+  "description": "One pack in /knowledge/catalog/packs/<id>.json: an industry (from data/packs/<id>/) or the user's workspace. Written only by the ingest service; read by the API. Question and conversation sources are catalog source ids (<pack>.<name>).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "kind", "title", "description", "sources", "questions", "examples", "conversations", "status", "updated_at"],
+  "properties": {
+    "schema_version": { "const": "1" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+    "kind": { "enum": ["industry", "workspace"] },
+    "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "description": { "type": "string", "maxLength": 600 },
+    "icon": { "description": "An icon name from ui/src/adapters/ui/icons.tsx.", "type": "string", "maxLength": 64 },
+    "version": { "type": "string", "maxLength": 32 },
+    "as_of": { "type": "string", "maxLength": 32 },
+    "disclaimer": { "type": "string", "maxLength": 600 },
+    "digest": { "description": "sha256 of the pack directory's ingested inputs; a sync is a no-op when it is unchanged.", "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "status": { "enum": ["ready", "ingesting", "failed", "empty"] },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "sources": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*\\.[a-z][a-z0-9_]*$" }
+    },
+    "questions": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "question", "sources", "tools"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
+          "label": { "type": "string", "minLength": 1, "maxLength": 60 },
+          "tag": { "type": ["string", "null"] },
+          "description": { "type": ["string", "null"], "maxLength": 300 },
+          "question": { "type": "string", "minLength": 10, "maxLength": 2000 },
+          "sources": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "tools": { "type": "array", "items": { "enum": ["retrieval", "duckdb", "kumo", "ontology"] } },
+          "featured": { "type": "boolean" }
+        }
+      }
+    },
+    "examples": { "type": "array", "maxItems": 12, "items": { "type": "string" } },
+    "conversations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "sources", "turns"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "tag": { "type": ["string", "null"] },
+          "description": { "type": ["string", "null"] },
+          "sources": { "type": "array", "items": { "type": "string" } },
+          "turns": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
