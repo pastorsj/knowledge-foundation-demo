@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # OpenShell policy for the Hermes sandbox, baked at /etc/openshell/policy.yaml.
-# Anything not allowed here is denied. The model route (Switchyard, :4000) and
-# the receipt API (:8000) come from the provider profiles in
+# Anything not allowed here is denied. The model route (Switchyard, :4300) and
+# the receipt API (:8300) come from the provider profiles in
 # infra/openshell/providers/, which OpenShell adds to the effective policy when
 # the sandbox is created with --provider.
 version: 1
@@ -19,13 +19,15 @@ landlock:
 
 # Every rule applies only to the Hermes interpreter: the real path of
 # /opt/hermes/.venv/bin/python, which agent/Dockerfile asserts at build time.
-# Each MCP endpoint allows the handshake plus an explicit tool allowlist.
+# Each MCP endpoint allows the handshake plus an explicit tool allowlist. The
+# policy is the same for every feature set: a server that is not in the image's
+# config is never called.
 network_policies:
   retrieval_mcp:
     name: Document retrieval MCP
     endpoints:
       - host: host.openshell.internal
-        port: 8120
+        port: 8320
         path: /mcp
         protocol: mcp
         mcp: { versions: ["2025-11-25"] }
@@ -39,11 +41,11 @@ network_policies:
     binaries: &hermes
       - path: /usr/bin/python3.13
 
-  market_analytics_mcp:
-    name: Market analytics MCP
+  tables_mcp:
+    name: Table query MCP (DuckDB)
     endpoints:
       - host: host.openshell.internal
-        port: 3010
+        port: 8321
         path: /mcp
         protocol: mcp
         mcp: { versions: ["2025-11-25"] }
@@ -53,25 +55,31 @@ network_policies:
           - allow: { method: notifications/initialized }
           - allow: { method: tools/list }
           - allow: { method: ping }
-          - allow:
-              method: tools/call
-              tool:
-                any:
-                  - market_scan
-                  - market_anomaly_scan
-                  - price_context
-                  - sentiment_timeline
-                  - analyze_news_price_relationship
-                  - analyze_market_relationships
-                  - intraday_scan
-                  - predict_asset_outcomes
+          - allow: { method: tools/call, tool: query_tables }
+    binaries: *hermes
+
+  prediction_mcp:
+    name: Structured prediction MCP (NVIDIA Kumo)
+    endpoints:
+      - host: host.openshell.internal
+        port: 8322
+        path: /mcp
+        protocol: mcp
+        mcp: { versions: ["2025-11-25"] }
+        enforcement: enforce
+        rules:
+          - allow: { method: initialize }
+          - allow: { method: notifications/initialized }
+          - allow: { method: tools/list }
+          - allow: { method: ping }
+          - allow: { method: tools/call, tool: predict }
     binaries: *hermes
 
   auto_ontology_mcp:
     name: Auto Ontology MCP
     endpoints:
       - host: host.openshell.internal
-        port: 3003
+        port: 3303
         path: /mcp
         protocol: mcp
         mcp: { versions: ["2025-11-25"] }
@@ -88,7 +96,7 @@ network_policies:
     name: Relay traces to Phoenix
     endpoints:
       - host: host.openshell.internal
-        port: 6006
+        port: 6306
         protocol: rest
         enforcement: enforce
         rules:

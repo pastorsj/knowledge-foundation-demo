@@ -11,8 +11,8 @@
 # Build context: agent/. Named context `contracts`: the repo's contracts/ dir.
 FROM nousresearch/hermes-agent:v2026.9.24@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 
-# Comma-separated optional features: retrieval, analytics, kumo, ontology.
-ARG AGENT_FEATURES=retrieval,analytics
+# Comma-separated optional features: retrieval, tables, kumo, ontology.
+ARG AGENT_FEATURES=retrieval,tables
 
 USER root
 RUN --mount=type=bind,source=patches,target=/tmp/patches \
@@ -75,6 +75,6 @@ EOF
 ENV SWITCHYARD_CLIENT_API_KEY=not-a-secret \
     HERMES_STREAM_READ_TIMEOUT=900 \
     HERMES_STREAM_STALE_TIMEOUT=600 \
-    HERMES_RECEIPT_API_URL=http://host.openshell.internal:8000 \
+    HERMES_RECEIPT_API_URL=http://host.openshell.internal:8300 \
     HERMES_NEMO_RELAY_PLUGINS_TOML=/opt/data/relay-plugins.toml
 WORKDIR /sandbox

@@ -8,6 +8,8 @@ from urllib.parse import urlsplit
 
 import pytest
 from common import OPENSHELL
+from common import ROOT
+from common import load_yaml
 
 IMAGE_DIGEST = re.compile(r"^ghcr\.io/nvidia/openshell/[a-z]+:(?P<tag>[^@]+)@sha256:[0-9a-f]{64}$")
 
@@ -41,11 +43,14 @@ def test_supervisors_reach_the_gateway_on_host_loopback(gateway):
     # An IP-literal endpoint is what makes the driver map host.openshell.internal to 127.0.0.1.
     endpoint = urlsplit(gateway["drivers"]["docker"]["grpc_endpoint"])
     assert (endpoint.scheme, endpoint.hostname) == ("https", "127.0.0.1")
-    assert endpoint.port == int(gateway["gateway"]["bind_address"].rsplit(":", 1)[1])
+    # The host-networked supervisor dials the host port that compose.yaml publishes for the gateway's listener.
+    bind_port = gateway["gateway"]["bind_address"].rsplit(":", 1)[1]
+    ports = load_yaml(ROOT / "compose.yaml")["services"]["openshell"]["ports"]
+    assert f"127.0.0.1:{endpoint.port}:{bind_port}" in ports
 
 
 def test_sandboxes_get_their_own_namespace_and_no_host_mounts(gateway):
     # The driver only lists, reconciles and deletes containers carrying its own namespace label.
     docker = gateway["drivers"]["docker"]
-    assert docker["sandbox_label"] == "market-demo"
+    assert docker["sandbox_label"] == "knowledge-foundation"
     assert docker["enable_bind_mounts"] is False
