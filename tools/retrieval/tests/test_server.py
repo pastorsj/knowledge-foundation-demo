@@ -108,6 +108,18 @@ async def test_the_catalog_is_read_on_every_call(server: MCPServer, knowledge_di
     assert before.is_error and not after.is_error and failed.is_error
 
 
+async def test_a_manifest_must_carry_its_own_id(server: MCPServer, knowledge_dir: Path):
+    sources = knowledge_dir / "catalog" / "sources"
+    write_source(knowledge_dir, derived_source("retail.other"))
+    (sources / "retail.other.json").rename(sources / "retail.handbook.json")
+
+    async with Client(server) as client:
+        result = await client.call_tool("retrieve_evidence", {"query": "fee", "source_ids": ["retail.handbook"]})
+
+    assert result.is_error
+    assert "names another source" in result.content[0].text
+
+
 async def test_invalid_arguments_are_rejected(server: MCPServer):
     async with Client(server) as client:
         result = await client.call_tool("retrieve_evidence", {"query": "x", "source_ids": [POLICIES], "top_k": 99})
