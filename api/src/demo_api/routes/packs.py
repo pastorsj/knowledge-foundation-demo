@@ -23,16 +23,14 @@ from demo_api.catalog import PackNotFoundError
 from demo_api.pack import PackList
 from demo_api.pack import PackView
 from demo_api.services import ServicesDep
+from demo_api.services import read_catalog
 
 router = APIRouter(prefix="/v1", tags=["packs"])
 
 
 @router.get("/packs")
 async def packs(services: ServicesDep) -> PackList:
-    try:
-        return PackList(packs=services.catalog.packs())
-    except CatalogUnavailableError as error:
-        raise HTTPException(503, str(error)) from error
+    return PackList(packs=(await read_catalog(services)).packs())
 
 
 @router.get("/pack")
@@ -40,8 +38,9 @@ async def pack(
     services: ServicesDep,
     pack_id: Annotated[str | None, Query(alias="id", pattern=PACK_ID, max_length=64)] = None,
 ) -> PackView:
+    catalog = await read_catalog(services)
     try:
-        return services.catalog.pack_view(pack_id)
+        return catalog.pack_view(pack_id)
     except CatalogUnavailableError as error:
         raise HTTPException(503, str(error)) from error
     except PackNotFoundError as error:

@@ -29,7 +29,6 @@ from demo_api.auto_ontology.client import AutoOntologyClient
 from demo_api.auto_ontology.client import AutoOntologyError
 from demo_api.auto_ontology.models import OntologySnapshot
 from demo_api.catalog import PACK_ID
-from demo_api.catalog import CatalogUnavailableError
 from demo_api.catalog import PackNotFoundError
 from demo_api.catalog import Source
 from demo_api.database.query import QueryError
@@ -38,6 +37,7 @@ from demo_api.database.schema import governed_columns
 from demo_api.database.schema import read_schema
 from demo_api.services import Services
 from demo_api.services import ServicesDep
+from demo_api.services import read_catalog
 
 router = APIRouter(prefix="/v1", tags=["data sources"])
 
@@ -52,17 +52,16 @@ async def data_sources(
     pack: Annotated[str | None, Query(pattern=PACK_ID, max_length=64)] = None,
 ) -> list[dict[str, Any]]:
     """The sources a question can use: those of ``pack`` (every pack when omitted) the running tools can serve."""
+    catalog = await read_catalog(services)
     try:
-        return [source.public() for source in services.catalog.sources(pack)]
-    except CatalogUnavailableError as error:
-        raise HTTPException(503, str(error)) from error
+        return [source.public() for source in catalog.sources(pack)]
     except PackNotFoundError as error:
         raise HTTPException(404, str(error)) from error
 
 
 @router.get("/data_sources/{source_id}/schema")
 async def schema(source_id: str, services: ServicesDep) -> dict[str, Any]:
-    source, path = _structured(services, source_id)
+    source, path = await _structured(services, source_id)
     tables = await asyncio.to_thread(read_schema, path, source.tables)
     return {"source_id": source.id, "database_name": source.database_name, **tables}
 
@@ -72,7 +71,7 @@ async def preview(
     source_id: str, table: str, services: ServicesDep, limit: Annotated[int, Query(ge=1, le=100)] = 100
 ) -> dict[str, Any]:
     """The first ``limit`` rows of ``table`` (``name``, or ``schema.name`` outside ``main``)."""
-    source, path = _structured(services, source_id)
+    source, path = await _structured(services, source_id)
     tables = await asyncio.to_thread(read_schema, path, source.tables)
     match = next((item for item in tables["tables"] if item["name"] == table), None)
     if match is None:
@@ -83,14 +82,14 @@ async def preview(
 
 @router.post("/data_sources/{source_id}/query")
 async def query(source_id: str, body: QueryRequest, services: ServicesDep) -> dict[str, Any]:
-    source, path = _structured(services, source_id)
+    source, path = await _structured(services, source_id)
     tables = await asyncio.to_thread(read_schema, path, source.tables)
     return await _query(source, path, body.sql, tables)
 
 
 @router.get("/data_sources/{source_id}/ontology")
 async def ontology(source_id: str, services: ServicesDep) -> OntologySnapshot:
-    source, _ = _structured(services, source_id)
+    source, _ = await _structured(services, source_id)
     settings = services.settings
     if not settings.auto_ontology_url:
         raise HTTPException(404, "Auto Ontology is not running (ontology profile).")
@@ -108,13 +107,10 @@ async def ontology(source_id: str, services: ServicesDep) -> OntologySnapshot:
         raise HTTPException(error.status_code, str(error)) from error
 
 
-def _structured(services: Services, source_id: str) -> tuple[Source, Path]:
+async def _structured(services: Services, source_id: str) -> tuple[Source, Path]:
     """An offered structured source and its DuckDB file, or 404."""
-    try:
-        source = services.catalog.source(source_id)
-    except CatalogUnavailableError as error:
-        raise HTTPException(503, str(error)) from error
-    path = services.catalog.database_path(source_id) if source is not None else None
+    catalog = await read_catalog(services)
+    source, path = catalog.source(source_id), catalog.database_path(source_id)
     if source is None or source.database_name is None or path is None or not path.is_file():
         raise HTTPException(404, f"{source_id} is not an available structured data source.")
     return source, path

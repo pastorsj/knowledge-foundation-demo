@@ -23,11 +23,14 @@ RUN groupadd --system --gid 10001 app && useradd --system --uid 10001 --gid app 
     && install -d -o app -g app /var/lib/demo-api
 COPY --from=build /opt/demo-api/.venv /opt/demo-api/.venv
 COPY --from=contracts tool-registry.json /opt/demo-api/contracts/tool-registry.json
+COPY --from=contracts catalog/source-manifest.schema.json catalog/pack-manifest.schema.json \
+    /opt/demo-api/contracts/catalog/
 ENV PATH=/opt/demo-api/.venv/bin:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     HOME=/tmp \
-    TOOL_REGISTRY_FILE=/opt/demo-api/contracts/tool-registry.json
+    TOOL_REGISTRY_FILE=/opt/demo-api/contracts/tool-registry.json \
+    CATALOG_SCHEMA_DIR=/opt/demo-api/contracts/catalog
 USER 10001:10001
 # The job store (SQLite); mount the api-data volume here. A new volume inherits the app user as owner.
 VOLUME /var/lib/demo-api

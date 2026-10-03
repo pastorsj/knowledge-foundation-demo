@@ -24,7 +24,6 @@ from pydantic import BaseModel
 from pydantic import Field
 
 from demo_api.catalog import PACK_ID
-from demo_api.catalog import CatalogUnavailableError
 from demo_api.jobs.export import export_turn
 from demo_api.jobs.runner import QueueFullError
 from demo_api.jobs.runner import RunnerUnavailableError
@@ -36,6 +35,7 @@ from demo_api.phoenix import PhoenixUnavailableError
 from demo_api.phoenix import find_trace_id
 from demo_api.services import Services
 from demo_api.services import ServicesDep
+from demo_api.services import read_catalog
 
 router = APIRouter(prefix="/v1/jobs/async", tags=["jobs"])
 
@@ -75,12 +75,10 @@ async def submit(
         raise HTTPException(413, f"The question is longer than {MAX_INPUT_CHARS} characters.")
     if conversation_id is not None and not _CONVERSATION_ID.fullmatch(conversation_id):
         raise HTTPException(422, "The conversation-id header is not a valid id.")
-    try:
-        available = {source.id: source for source in services.catalog.sources()}
-        if body.pack_id is not None and body.pack_id not in {pack.id for pack in services.catalog.packs()}:
-            raise HTTPException(422, f"Unknown pack: {body.pack_id}")
-    except CatalogUnavailableError as error:
-        raise HTTPException(503, str(error)) from error
+    catalog = await read_catalog(services)
+    available = {source.id: source for source in catalog.sources()}
+    if body.pack_id is not None and body.pack_id not in {pack.id for pack in catalog.packs()}:
+        raise HTTPException(422, f"Unknown pack: {body.pack_id}")
     if body.data_sources is not None:
         source_ids = list(dict.fromkeys(body.data_sources))
     else:

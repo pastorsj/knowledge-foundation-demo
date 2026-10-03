@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     # Knowledge and contracts
     # The knowledge volume (read-only here): catalog/packs, catalog/sources and each structured source's DuckDB
     knowledge_dir: Path = Path("/knowledge")
+    # The catalog manifests' JSON Schemas (contracts/catalog); a manifest that does not match is skipped
+    catalog_schema_dir: Path = _REPO_REGISTRY.parent / "catalog"
     tool_registry_file: Path = _REPO_REGISTRY
     # Tool groups baked into the agent image (the agent's AGENT_FEATURES build argument). A source
     # capability is offered only when a tool of that family is in one of these compose profiles.
