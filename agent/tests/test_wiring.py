@@ -3,8 +3,9 @@
 """Everything the sandbox calls is wired the same way in every file that names it.
 
 A new tool or endpoint touches the Hermes config, the sandbox policy or a
-provider profile, contracts/tool-registry.json and compose.yaml. These checks
-fail when one of them is missed.
+provider profile, contracts/tool-registry.json, compose.yaml and the sandbox
+lifecycle in scripts/lib/openshell.sh. These checks fail when one of them is
+missed.
 """
 
 import json
@@ -18,12 +19,12 @@ from common import ROOT
 from common import exposed_tools
 from common import load_yaml
 from render_config import FEATURES
-from render_config import KUMO_TOOL
 
 SANDBOX_HOST = "host.openshell.internal"
 HERMES_PYTHON = "/usr/bin/python3.13"  # agent/Dockerfile asserts this is Hermes' real interpreter
 REGISTRY = ROOT / "contracts" / "tool-registry.json"
 COMPOSE = ROOT / "compose.yaml"
+OPENSHELL_SH = ROOT / "scripts" / "lib" / "openshell.sh"
 
 
 def sandbox_urls(config: dict) -> dict[str, SplitResult]:
@@ -56,6 +57,18 @@ def endpoint_for(url: SplitResult, policy: dict, providers: dict) -> dict:
 
 def allowed_calls(endpoint: dict) -> set[tuple[str, str]]:
     return {(rule["allow"]["method"], rule["allow"]["path"]) for rule in endpoint["rules"]}
+
+
+def loopback_ports() -> dict[int, str]:
+    """Each host port compose.yaml publishes on 127.0.0.1, and the service that publishes it."""
+    published = {}
+    for name, service in load_yaml(COMPOSE)["services"].items():
+        for port in service.get("ports", []):
+            if isinstance(port, dict) and port.get("host_ip") == "127.0.0.1":
+                published[int(port["published"])] = name
+            elif match := re.match(r"127\.0\.0\.1:(\d+):", str(port)):
+                published[int(match.group(1))] = name
+    return published
 
 
 def allowed_tools(endpoint: dict) -> set[str]:
@@ -121,7 +134,6 @@ def test_tool_registry_matches_the_config_and_policy(config, policy, providers):
     for tool in tools:
         assert tool["hermes_name"] == f"mcp__{tool['server']}__{tool['id']}"
         assert FEATURES[tool["profile"]][0] == tool["server"], tool["id"]
-        assert (tool["profile"] == "kumo") == (tool["id"] == KUMO_TOOL), tool["id"]
         endpoint = endpoint_for(urlsplit(config["mcp_servers"][tool["server"]]["url"]), policy, providers)
         assert tool["id"] in allowed_tools(endpoint)
 
@@ -134,32 +146,48 @@ def test_switchyard_serves_every_configured_model(config):
         text = template.read_text(encoding="utf-8")
         route_ids = set(re.findall(r'^id = "([^"]+)"', text, re.M))
         # A template without a capable model (passthrough) has no capable baseline route.
-        expected = models if "${AGENT_CAPABLE_MODEL}" in text else models - {"market-research-capable"}
+        expected = models if "${AGENT_CAPABLE_MODEL}" in text else models - {"knowledge-capable"}
         assert expected <= route_ids, template.name
 
 
 def test_compose_publishes_every_sandbox_port_on_loopback(config):
     # The supervisor maps host.openshell.internal to 127.0.0.1 on the Docker host.
-    published = set()
-    for service in load_yaml(COMPOSE)["services"].values():
-        for port in service.get("ports", []):
-            if isinstance(port, dict) and port.get("host_ip") == "127.0.0.1":
-                published.add(int(port["published"]))
-            elif match := re.match(r"127\.0\.0\.1:(\d+):", str(port)):
-                published.add(int(match.group(1)))
-    assert {url.port for url in sandbox_urls(config).values()} <= published
+    assert {url.port for url in sandbox_urls(config).values()} <= loopback_ports().keys()
 
 
-def test_no_service_waits_on_the_gpu_milvus_comparison():
-    """The Benchmark tab's GPU Milvus and its one-shot are optional: `demo.sh up` runs them after the stack, so a GPU
-    Milvus that never turns healthy cannot hold back the retrieval server, the API or `up --wait`."""
+def test_a_new_mcp_server_image_recreates_the_sandbox(config):
+    """Hermes lists a server's tools once, when the sandbox starts, so demo.sh fingerprints every MCP image."""
     services = load_yaml(COMPOSE)["services"]
-    optional = {"milvus-gpu", "retrieval-benchmark"}
+    images = re.search(r"^readonly TOOL_IMAGES=\(([^)]*)\)", OPENSHELL_SH.read_text(encoding="utf-8"), re.M)
+    ports = loopback_ports()
+    for name, spec in config["mcp_servers"].items():
+        service = services[ports[urlsplit(spec["url"]).port]]
+        assert service["image"] in images.group(1).split(), name
 
-    def needs(name: str, seen: frozenset[str] = frozenset()) -> set[str]:
-        direct = set(services[name].get("depends_on") or {})
-        return direct | {found for dep in direct - seen if dep in services for found in needs(dep, seen | {name})}
 
-    waiting = {name: needs(name) & optional for name in services.keys() - optional}
-    assert {name: deps for name, deps in waiting.items() if deps} == {}
-    assert needs("retrieval-benchmark") >= {"milvus-gpu"}  # the one-shot itself still waits for it
+def test_teardown_recognizes_the_agent_profile_volume():
+    """demo.sh removes a leaked /opt/data volume only when it holds this profile's distribution.yaml."""
+    name = load_yaml(AGENT / "profile" / "distribution.yaml")["name"]
+    assert f"'name: {name}'" in OPENSHELL_SH.read_text(encoding="utf-8")
+
+
+def test_the_job_api_asks_for_the_runs_api_model_name(config):
+    request = (ROOT / "api" / "src" / "demo_api" / "hermes" / "request.py").read_text(encoding="utf-8")
+    model = re.search(r'^MODEL = "([^"]+)"', request, re.M).group(1)
+    assert model == config["platforms"]["api_server"]["extra"]["model_name"]
+
+
+def test_agent_and_tool_traces_share_one_phoenix_project():
+    """Phoenix files a trace under the project of its first span, and Switchyard's and the tools' spans join the
+    agent's traces, so every service names the agent's project."""
+    relay = tomllib.loads((AGENT / "profile" / "relay-plugins.toml").read_text(encoding="utf-8"))
+    (endpoint,) = relay["components"][0]["config"]["opentelemetry"]["endpoints"]
+    project = endpoint["resource_attributes"]["openinference.project.name"]
+    assert project == "knowledge-foundation"
+    attributes = {
+        name: service["environment"]["OTEL_RESOURCE_ATTRIBUTES"]
+        for name, service in load_yaml(COMPOSE)["services"].items()
+        if "OTEL_RESOURCE_ATTRIBUTES" in (service.get("environment") or {})
+    }
+    assert {"switchyard", "retrieval", "tables", "prediction"} <= attributes.keys()
+    assert {name: value for name, value in attributes.items() if value != f"openinference.project.name={project}"} == {}

@@ -35,36 +35,71 @@ def test_named_tools_are_exposed_by_the_config(skill_dir: Path, config: dict):
     assert named <= exposed_tools(config)
 
 
-# A form name in a retrieval query matches every filing's cover page, which then crowds out what the filings say
-FORM_NAME = re.compile(r"\b(?:8-K|6-K|10-K|10-Q|20-F)\b|current report", re.IGNORECASE)
+def skill_text(name: str) -> str:
+    return next(path for path in SKILL_DIRS if path.name == name).joinpath("SKILL.md").read_text(encoding="utf-8")
+
+
+def section(text: str, heading: str) -> str:
+    """The body of one ``## <heading>`` section."""
+    return re.split(r"^## ", text.split(f"\n## {heading}\n", 1)[1], maxsplit=1, flags=re.M)[0]
+
+
 EXAMPLE_QUERY = re.compile(r'retrieve_evidence\(query="([^"]+)"')
 
 
-@pytest.mark.parametrize("skill_dir", SKILL_DIRS, ids=lambda path: path.name)
-def test_example_retrieval_queries_name_no_filing_form(skill_dir: Path):
-    queries = EXAMPLE_QUERY.findall((skill_dir / "SKILL.md").read_text(encoding="utf-8"))
-    assert not [query for query in queries if FORM_NAME.search(query)]
+def test_the_search_skill_never_claims_a_document_is_absent():
+    skill = skill_text("searching-documents")
+    procedure = " ".join(section(skill, "Procedure").split())
 
-
-def test_the_search_skill_keeps_form_names_out_of_queries():
-    skill = next(path for path in SKILL_DIRS if path.name == "searching-documents").joinpath("SKILL.md").read_text()
-    procedure = " ".join(skill.split("## Procedure")[1].split("## Pitfalls")[0].split())
-
-    assert 'When you search filings, leave form names (8-K, 6-K) and words such as "SEC filing"' in procedure
     assert "never claim that a source contains no such document" in procedure
-    assert len(EXAMPLE_QUERY.findall(skill)) >= 2  # a rule, and a kind of event in filings
+    assert "Pass only `query`" in skill  # the application sets source_ids
+    assert len(EXAMPLE_QUERY.findall(skill)) >= 2
 
 
-# Ultra left a leaders-and-laggards table uncited about one ask in three: the market skill's example shows the rows
-# themselves carrying the token of the call that produced them
-EVIDENCE_TOKEN = re.compile(r"\[evidence:<evidence_id of the (highest|lowest) call>\]")
+# Ultra left a leaders-and-laggards table uncited about one ask in three: an example answer table shows its rows
+# carrying the token of the call that produced them.
+EVIDENCE_TOKEN = re.compile(r"\[evidence:<evidence_id of the call>\]")
 
 
-def test_the_market_skill_example_cites_every_table_row():
-    skill = next(path for path in SKILL_DIRS if path.name == "analyzing-market-data").joinpath("SKILL.md").read_text()
-    example = skill.split("## Example")[1]
-    rows = [line for line in example.splitlines() if line.startswith("| ") and not line.startswith("| Rank")]
-    rows = [row for row in rows if not set(row) <= set("|- ")]
+@pytest.mark.parametrize("name", ["querying-tables", "predicting-with-kumo"])
+def test_example_answer_tables_cite_every_row(name):
+    example = section(skill_text(name), "Example")
+    rows = [line for line in example.splitlines() if line.startswith("| ") and not set(line) <= set("|- ")]
+    header, *body = rows
 
-    assert rows and all(EVIDENCE_TOKEN.search(row) for row in rows)
-    assert {EVIDENCE_TOKEN.search(row).group(1) for row in rows} == {"highest", "lowest"}
+    assert "Evidence" in header and body
+    assert all(EVIDENCE_TOKEN.search(row) for row in body)
+
+
+TABLE_REFERENCE = re.compile(r"\b(?:FROM|JOIN)\s+(\(|[A-Za-z_][\w.]*)", re.IGNORECASE)
+
+
+def test_example_sql_qualifies_every_table_with_its_source_alias():
+    sql = " ".join(re.findall(r'"([^"]*)"', section(skill_text("querying-tables"), "Example")))
+    references = [name for name in TABLE_REFERENCE.findall(sql) if name != "("]
+
+    assert references and all(re.fullmatch(r"[a-z_]+\.[a-z_]+", name) for name in references), references
+
+
+PQL = re.compile(
+    r"PREDICT (?:SUM|AVG|MIN|MAX|COUNT)\(\w+\.(?:\w+|\*), -?\d+, \d+, days\)(?: (?:=|!=|>=|<=|>|<) \S+)?"
+    r" FOR EACH \w+\.\w+(?: WHERE .+)?"
+)
+
+
+def test_example_pql_follows_the_taught_grammar():
+    skill = skill_text("predicting-with-kumo")
+    examples = re.findall(r"^PREDICT .+$", skill, re.M) + re.findall(r'pql="(PREDICT [^"]+)"', skill)
+    queries = [query for query in examples if "<target>" not in query]  # all but the grammar line
+
+    assert len(queries) >= 6
+    assert [query for query in queries if not PQL.fullmatch(query)] == []
+    assert all(" FOR EACH " in query and "retail_sales." not in query for query in queries)  # no DuckDB alias
+
+
+def test_the_kumo_skill_teaches_templates_and_an_unavailable_endpoint():
+    skill = " ".join(skill_text("predicting-with-kumo").split())
+
+    assert "`template:<id>`" in skill and 'pql="template:churn_90d"' in skill
+    assert "If `available` is `false`, do not retry and do not substitute anything." in skill
+    assert "say plainly that prediction is unavailable" in skill.lower()

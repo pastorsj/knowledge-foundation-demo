@@ -53,8 +53,18 @@ BANNED_KEY = re.compile(
     re.IGNORECASE,
 )
 # Receipt schema limits that a tool result can exceed. Other lists keep 100 items, other strings 32,000 characters.
-LIST_LIMITS = {"hits": 25, "source_ids": 32, "warnings": 20, "limitations": 20, "resolution_lineage": 40}
-STRING_LIMITS = {"snippet": 1500, "title": 1000, "url": 2048, "answer": 4000, "sql": 12000, "phrase": 500}
+LIST_LIMITS = {"hits": 25, "source_ids": 32, "resolution_lineage": 40}
+STRING_LIMITS = {
+    "snippet": 1500,
+    "title": 1000,
+    "url": 2048,
+    "answer": 4000,
+    "sql": 12000,
+    "phrase": 500,
+    "pql": 8000,
+    "reason": 500,
+    "label": 256,
+}
 # The receipt schema refuses control characters other than tab, line feed and carriage return in text.
 UNSAFE_CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 MAX_ITEMS = 100
@@ -62,14 +72,28 @@ MAX_TEXT = 32_000
 SQL_ROWS = 25
 SQL_COLUMNS = 40
 LINEAGE_KEYS = ("phrase", "ontology_object", "table", "column")
+# What a prediction receipt keeps of a `predict` result; its `elapsed_ms` and `warnings` are for the agent only.
+PREDICTION_KEYS = (
+    "available",
+    "reason",
+    "source_id",
+    "template_id",
+    "pql",
+    "task_type",
+    "anchor_time",
+    "horizon",
+    "entity_table",
+    "model",
+)
+ENTITY_KEYS = ("probability", "value", "label")
 # ask_question takes only the question here: a model-supplied thread, database, prediction, evidence or source
 # scope is dropped (Auto Ontology has no source_ids argument, but the other data tools do, so the model may send it).
 ASK_QUESTION_DROPPED = ("conversation_id", "target_db", "prediction", "evidence", "source_ids")
 
-# Receipt fields whose keys are data (payload fields, source ids, SQL columns), so they keep their names.
+# Receipt fields whose keys are data (document metadata, source ids, index parameters, SQL columns), so they keep
+# their names.
 OPEN_FIELDS = {
     "retrieval_evidence": {"metadata", "candidate_counts", "params", "search_params"},
-    "analytics_result": {"payload", "public_parameters"},
     "structured_prediction": set(),
     "structured_query": {"rows"},
 }
@@ -146,7 +170,7 @@ class ExecutionReceipts:
         if tool["server"] == "auto_ontology":
             if tool["id"] == "ask_question":
                 _drop_arguments(args, ASK_QUESTION_DROPPED, tool_name)
-            return None  # Auto Ontology serves only the pack's database, so it takes no scope argument.
+            return None  # Auto Ontology serves only the database it was set up for: it takes no scope argument.
         return {"action": "modify", "args": {"source_ids": source_ids}}
 
     def post_tool_call(self, **call: Any) -> None:
@@ -393,26 +417,32 @@ def structured_result(result: str) -> dict:
 
 def _retrieval_content(result: dict, args: dict, database_name: str | None) -> tuple[dict, None]:
     hits = [{**hit, "published_at": _aware_timestamp(hit.get("published_at"))} for hit in result["hits"]]
-    return {**result, "hits": hits}, None
-
-
-def _analytics_content(result: dict, args: dict, database_name: str | None) -> tuple[dict, tuple[str, str] | None]:
-    public_parameters = {name: value for name, value in args.items() if name != "source_ids"}
-    error = result["error"]
-    failure = (error["code"], error["message"]) if result["status"] == "failed" else None
-    return {**result, "public_parameters": public_parameters}, failure
+    # Without a rerank model the hits keep vector order and the result names no rerank model: null in the receipt.
+    models = {**result["models"], "rerank": result["models"].get("rerank") or None}
+    return {**result, "hits": hits, "models": models}, None
 
 
 def _prediction_content(result: dict, args: dict, database_name: str | None) -> tuple[dict, tuple[str, str] | None]:
-    return result, (None if result["available"] else ("evidence_unavailable", result["reason"]))
+    """The ``predict`` result's StructuredPrediction; an unavailable prediction (no Kumo endpoint, say) fails."""
+    content = {key: result.get(key) for key in PREDICTION_KEYS}
+    content["anchor_time"] = _aware_timestamp(content["anchor_time"])
+    content["rows"] = [
+        # Entity ids are keys of any column type; the receipt holds them as text.
+        {"entity_id": str(row["entity_id"]), **{key: row.get(key) for key in ENTITY_KEYS}}
+        for row in result.get("rows") or []
+    ]
+    return content, (None if result["available"] else ("evidence_unavailable", result["reason"]))
 
 
 def _query_content(result: dict, args: dict, database_name: str | None) -> tuple[dict, None]:
+    """A ``query_tables`` or ``ask_question`` result's StructuredQuery. ``query_tables`` names the database it ran
+    on (the source's alias, or ``knowledge`` for several sources); Auto Ontology's is the job's ``database_name``."""
     rows = result.get("rows") or []
     cut = len(rows) > SQL_ROWS or any(len(row) > SQL_COLUMNS for row in rows)
     return {
-        "query": args["question"][:1000],
-        "database_name": database_name,
+        # query_tables takes the question beside its SQL; a call without one is recorded by its SQL.
+        "query": (args.get("question") or args.get("sql"))[:1000],
+        "database_name": result.get("database_name") or database_name,
         "answer": result.get("answer"),
         "sql": result.get("sql"),
         "rows": [dict(list(row.items())[:SQL_COLUMNS]) for row in rows[:SQL_ROWS]],
@@ -429,15 +459,14 @@ def _query_content(result: dict, args: dict, database_name: str | None) -> tuple
 
 CONTENT = {
     "retrieval_evidence": _retrieval_content,
-    "analytics_result": _analytics_content,
     "structured_prediction": _prediction_content,
     "structured_query": _query_content,
 }
 
 
 def _fit(value: Any, key: str | None = None) -> Any:
-    """Drop banned keys, cut lists and strings to the schema's limits (flagging cut payload lists), and replace the
-    control characters the schema refuses with spaces."""
+    """Drop banned keys, cut lists and strings to the schema's limits (flagging a cut list that has a
+    ``<name>_truncated`` sibling), and replace the control characters the schema refuses with spaces."""
     if isinstance(value, dict):
         fitted = {name: _fit(item, name) for name, item in value.items() if not BANNED_KEY.search(name)}
         for name, item in value.items():
