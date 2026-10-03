@@ -1,0 +1,2566 @@
+{
+  "schemaVersion": 2,
+  "id": "executive-changes",
+  "title": "Executive Changes",
+  "turns": [
+    {
+      "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+      "question": "Which companies filed 8-Ks under Item 5.02 about executive or director changes in January and February 2026? Summarize three of them, and cite the filings.",
+      "submittedAt": "2026-10-02T16:55:13.912007Z",
+      "completedAt": "2026-10-02T16:56:14.454629Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the SEC 8-K filings in the selected source, multiple companies filed Item 5.02 reports (Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers) in January and February 2026. Here are three summarized examples:\n\n---\n\n### 1. **The Walt Disney Company (DIS)** — Filed February 3, 2026\n**Event date:** February 2, 2026\n**Action:** CEO succession plan announced. The Board appointed **Josh D’Amaro** (Chairman of Disney Experiences) as Chief Executive Officer effective March 18, 2026, and named current CEO **Robert A. Iger** as Senior Advisor through December 31, 2026. The Board also intends to elect D’Amaro as a director following the 2026 annual meeting.\n[1]\n\n---\n\n### 2. **DoorDash, Inc. (DASH)** — Filed January 20, 2026\n**Event date:** January 16, 2026\n**Action:** The Board increased its size to eleven members and elected **Milan Kovac** as a Class III director. Kovac, age 41, most recently served as VP of Optimus Robotics at Tesla and also serves on the board of Boston Dynamics. He was appointed to the Nominating and Corporate Governance Committee.\n[2]\n\n---\n\n### 3. **Amphenol Corporation (APH)** — Filed February 5, 2026\n**Event date:** February 4, 2026\n**Action:** **Martin H. Loeffler** (Chairman since 1997, CEO 1996–2008, President 1987–2006) notified the company of his intent to retire from the Board at the 2026 Annual Meeting (expected May 2026). The Board appointed **R. Adam Norwitt**, current President and CEO, as Chairman of the Board effective at the same meeting. David P. Falck continues as Lead Independent Director.\n[3]\n\n---\n\n**Other notable filings in the window** (not summarized above) include Charles Schwab (SCHW) appointing a new CTO/Operations Officer, AMD adding a director, QUALCOMM reporting a director resignation, Applied Digital Corp with a management update, and AST SpaceMobile noting a director departure. The source catalog covers 8-Ks from January 2, 2025 through March 12, 2026 for the 100 most liquid stocks plus all Item 1.05 filings, so this list reflects the coverage in the selected document source.\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:4777248ef8e46ddcaffcc8bc86259ba0a984bcc7365e323ee981c5c4527671cb`\n- [2] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:5a9a56f5bf3b49136e2268baa0513d33839f2607de920e5d2c28a94a6c4f35d0`\n- [3] Unstructured Retrieval evidence — 3 documents — evidence `hermes-receipt:263437779e237f053e319f293f5878e3900f1f9ba1351dd4cb2c2beb0a12f3f1`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:4777248ef8e46ddcaffcc8bc86259ba0a984bcc7365e323ee981c5c4527671cb",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-bc8a5e85af814ebfaffad3b7b04deb8b"
+          },
+          {
+            "number": 2,
+            "evidenceId": "hermes-receipt:5a9a56f5bf3b49136e2268baa0513d33839f2607de920e5d2c28a94a6c4f35d0",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-3b65a41f37f8497280cf5b4637354566"
+          },
+          {
+            "number": 3,
+            "evidenceId": "hermes-receipt:263437779e237f053e319f293f5878e3900f1f9ba1351dd4cb2c2beb0a12f3f1",
+            "label": "Unstructured Retrieval evidence — 3 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-35e186f8860543fbb5bc158402ce2ac4"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "2d2bc81f-3c97-56a8-8655-7aa57979f476",
+          "cursor": 16865,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:14.024225Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d9dac535f77d4195b8b7e6af43dc1b0ba6ca557b79815f72620426cecd9ce404",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d4c6b8f9-4b91-5bc1-8603-bd971f9f35ec",
+          "cursor": 16866,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:1",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:21.439812Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4861,
+              "output_tokens": 283
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "922d0eb9-392b-5a12-a3c4-49185be967f2",
+          "cursor": 16867,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e2d5458b07e04bb88e13b1396436c088",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:21.475211Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4dd770108cf70d09c866aa751029926880dbd418c44186ed2c5af4b872bcf08e",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c098b76e-4463-5939-bf82-a6484ead07ac",
+          "cursor": 16868,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e2d5458b07e04bb88e13b1396436c088",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:96fe1366d95ae93557a638dd0ba9130b5c55f0f312d25189fa4c710420998d35"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:22.520623Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1043,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:96fe1366d95ae93557a638dd0ba9130b5c55f0f312d25189fa4c710420998d35",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "70579717-1865-52da-96b4-d9ee571dbf1b",
+          "cursor": 16869,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e2d5458b07e04bb88e13b1396436c088",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:22.572993Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.068
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:7ef14da8febe83d6f0cc9143d2d9626e79d8ff435b10c2d280cfc0079b0a1386",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "35ba83ec-a194-5af4-8c73-154bedd86f13",
+          "cursor": 16870,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:29.030886Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:3d105febab4f55f65e2d48ccfa46f48706f6cfa4b6e78405f59b642ec3d4b92f",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d587fb53-eab6-56ca-a14b-0d10f7c67c42",
+          "cursor": 16871,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:2",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:30.153273Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14769,
+              "output_tokens": 350
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3ff78e07-704f-53d6-9053-021626af6e7e",
+          "cursor": 16872,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e109c945223f46c58e5c528517056be1",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:30.184698Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4158c0783e49b9fe7fd26458a9d5da2db993e66f378d1474ae8d0efd34a66c82",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "40112b8d-5cb5-57cc-90e1-42aac63d51ad",
+          "cursor": 16873,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e109c945223f46c58e5c528517056be1",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:2fbc8b50d41a930b20bcda0d760824bcdce9055fa4d4f4251023d373419dbc4d"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:31.362670Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1175,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:2fbc8b50d41a930b20bcda0d760824bcdce9055fa4d4f4251023d373419dbc4d",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8a070da5-106e-5e7b-af33-7d2016cdfa2b",
+          "cursor": 16874,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e109c945223f46c58e5c528517056be1",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:31.416297Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.2
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:9ec58abb466138f9c8b3bb3132ec1f04fffd0d6e488deb3390dc80fe91562f1c",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d9542e2c-49c0-5b67-b6c3-76168b708d96",
+          "cursor": 16875,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:3",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:43.203509Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 25019,
+              "output_tokens": 103
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "83d4d141-1a9c-51e8-bd1e-dbd4b560276c",
+          "cursor": 16876,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-a04efa7ee2f146f8b270a8e6ddb0517c",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:43.229097Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:0ede303d0ce2e69c115b4cbff0ee9fdd1c3926ffa7098e980b686632c58f9b88",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4e84b1df-2163-5d47-81a0-7ef90fd35bd4",
+          "cursor": 16877,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:44.040938Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:c02291427e550128823120a007072f440cb3e2f50b12b64fe698cb673ed67e5d",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "edf74f55-c483-5d20-aac0-30b5c55b25a4",
+          "cursor": 16878,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-a04efa7ee2f146f8b270a8e6ddb0517c",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:c95fde4d0f3a713af5cb93aeeeb5999e3eb7f1cde6a93108a770b4dadc7aeb9e"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:44.277156Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1045,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:c95fde4d0f3a713af5cb93aeeeb5999e3eb7f1cde6a93108a770b4dadc7aeb9e",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9b142d98-2728-572c-9d94-e7305e50495f",
+          "cursor": 16879,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-a04efa7ee2f146f8b270a8e6ddb0517c",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:44.332736Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.074
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e7ca7c785e76c8b9f629d451fbe2d5b6427e9348d4bc12d44414399e85eebc92",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a572ec4e-daba-5b68-89c8-e4170643739f",
+          "cursor": 16880,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:59.048251Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:08c2189c3b0af6ee18c9674cfc93d081fbf247301db671efa8cc5270dce3b11e",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a517808f-b373-5256-af0c-c5856399db27",
+          "cursor": 16881,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:4",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:59.123260Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 33679,
+              "output_tokens": 1010
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:4",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "981021bd-caea-5624-b2e9-a4e2c18e2409",
+          "cursor": 16882,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-bc8a5e85af814ebfaffad3b7b04deb8b",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:59.155435Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b0128f2fe63d3262b586d0eac91ebfb242fa71ee36a52ab6004b5a92f0df5ba7",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "31c54288-3127-5bc4-a13c-9df53d0c957a",
+          "cursor": 16883,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-3b65a41f37f8497280cf5b4637354566",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:59.162532Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:aa408c502f6f3ee28a5742fe6686d106126e28067a312fe5eeed4f18e2e42f61",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "51f34103-c20e-501b-a429-836145e96721",
+          "cursor": 16884,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-35e186f8860543fbb5bc158402ce2ac4",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:59.164013Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d078e6dff2e989824c5c947e894150e99e42ae38c632257f571d25366b508d79",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9ccf804e-b609-59f6-a989-26372788fcba",
+          "cursor": 16885,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-bc8a5e85af814ebfaffad3b7b04deb8b",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:4777248ef8e46ddcaffcc8bc86259ba0a984bcc7365e323ee981c5c4527671cb"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:55:59.945112Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 786,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:4777248ef8e46ddcaffcc8bc86259ba0a984bcc7365e323ee981c5c4527671cb",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c7cc7379-eef1-53c6-b8df-d6dd6fcb3143",
+          "cursor": 16886,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-3b65a41f37f8497280cf5b4637354566",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:5a9a56f5bf3b49136e2268baa0513d33839f2607de920e5d2c28a94a6c4f35d0"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:00.776060Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1610,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:5a9a56f5bf3b49136e2268baa0513d33839f2607de920e5d2c28a94a6c4f35d0",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f1e8b9c3-e60e-5991-9671-124a8ea76539",
+          "cursor": 16887,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-35e186f8860543fbb5bc158402ce2ac4",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:263437779e237f053e319f293f5878e3900f1f9ba1351dd4cb2c2beb0a12f3f1"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:01.550518Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 2384,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:263437779e237f053e319f293f5878e3900f1f9ba1351dd4cb2c2beb0a12f3f1",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "25e802fb-b954-59d3-b4ae-9df17a3bb6fd",
+          "cursor": 16888,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-bc8a5e85af814ebfaffad3b7b04deb8b",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:01.590758Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.815
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:9d85fb2e204c945a5d773c20d61657c2131545b1d8d794db7258c972f46b3c89",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "306e47b7-3f71-50db-882e-ffe1519ef14f",
+          "cursor": 16889,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-3b65a41f37f8497280cf5b4637354566",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:01.611203Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.644
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b1248300b08725f6147dceb667ce5621407215b88fd9bd30b694a8e38c75f8e4",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d8c805c7-959b-50ac-90bd-318586896e8c",
+          "cursor": 16890,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-35e186f8860543fbb5bc158402ce2ac4",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:01.630939Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 2.418
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:114694511ac4f169a64ff48b673aa6a43e5a6c46e44d6c44e94ff389b1f2986a",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "11050e05-64a7-5de8-ab99-8012b71ae32a",
+          "cursor": 16891,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:14.054080Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d4c60ac08795af9beced414d52c5cd761662b3fc0361f23a1e26fba048ca725f",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a5b69d20-71ba-5a80-8922-3f91a7b2a5a0",
+          "cursor": 16892,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:5",
+          "parentInvocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:14.393970Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 48764,
+              "output_tokens": 1192
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46:api:5",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "7a2ca844-6a6a-598e-9288-3d22f44bdb43",
+          "cursor": 16893,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:14.412977Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:f40067088ea001d604482ab71604b0830414e7fc10a1bbefb070caa94522aaef",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4ccfdeaa-ba2a-5ec0-87ef-55be425961ec",
+          "cursor": 16894,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:14.431070Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 127092,
+              "output_tokens": 2938,
+              "total_tokens": 130030,
+              "output_characters": 2426
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:dffc52ea52103c175f4616555171618e5d17bc0cae75115b3104d3c960f4ac8c",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "fb0d2dcb-b363-5734-801b-9ffca9357094",
+          "cursor": 16895,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:14.453882Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e613b4da-0973-5fdb-8167-96a2d9845931",
+          "cursor": 16896,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:14.453996Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 3,
+              "uncited_evidence_count": 3,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0e518b24-7d3c-50ab-ab25-9006244e3b60",
+          "cursor": 16897,
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "runId": "run_a2b7db4b03b84330b5a1345f02e11352",
+          "sessionId": "record-5d344eb8-2413-46e4-8e9f-682dfc17bd3f",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f806bebfbd6116ed5d8a40a9:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-02T16:56:14.454081Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 60500,
+              "tool_call_count": 6,
+              "known_tool_duration_ms": 8219,
+              "input_tokens": 127092,
+              "output_tokens": 2938,
+              "total_tokens": 130030
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:96fe1366d95ae93557a638dd0ba9130b5c55f0f312d25189fa4c710420998d35",
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "invocationId": "hermes-tool:chatcmpl-tool-e2d5458b07e04bb88e13b1396436c088",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1043,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-02T16:55:22.520623Z",
+          "content": {
+            "query": "Item 5.02 departure of directors or principal officers appointment of directors or principal officers",
+            "sourceIds": [
+              "sec_filings"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__70ef685d0560",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.421875,
+                "vectorScore": 0.3930414021015167,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000087347:0001193125-25-239491:d78968d8k.htm",
+                "chunkId": "edgar:0000087347:0001193125-25-239491:d78968d8k.htm:0002",
+                "title": "SLB LIMITED/NV 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/87347/0001193125-25-239491.txt",
+                "publishedAt": "2025-10-15T00:00:00Z",
+                "snippet": "provided pursuant to Section 13(a) of the Exchange Act. ☐ Item 5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers. On October 12, 2025, Ms. Mamatha Chamarthi resigned from the Board of Directors of SLB Limited (“SLB”). Ms. Chamarthi’s resignation is not a result of any disagreement with SLB. SIGNATURES Pursuant to the requirements of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned hereunto duly authorized. SLB LIMITED /s/ Dianne B. Ralston Dianne B. Ralston Chief Legal Officer and Secretary Date: October 15, 2025",
+                "metadata": {
+                  "citation": "SEC 8-K, SLB LIMITED/NV, filed 2025-10-15, accession 0001193125-25-239491",
+                  "cik": "0000087347",
+                  "company_name": "SLB LIMITED/NV",
+                  "form": "8-K",
+                  "filed_on": "2025-10-15",
+                  "accession": "0001193125-25-239491",
+                  "document_type": "8-K",
+                  "filename": "d78968d8k.htm",
+                  "ticker": "SLB",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 2,
+                "score": -0.5615234375,
+                "vectorScore": 0.38622981309890747,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm",
+                "chunkId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm:0001",
+                "title": "Walt Disney Co 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1744489/0001744489-26-000022.txt",
+                "publishedAt": "2026-02-03T00:00:00Z",
+                "snippet": "dis-20260202falseWALT DISNEY CO/000174448900017444892026-02-022026-02-02________________________________________________________________________UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549 FORM 8-K CURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934Date of Report (Date of Earliest Event Reported): February 2, 2026The Walt Disney Company(Exact name of registrant as specified in its charter)Delaware001-3884283-0940635(State or other jurisdiction (Commission File Number)(IRS Employer of incorporation)Identification No.) 500 South Buena Vista Street Burbank, California 91521 (Address of Principal Executive Offices and Zip Code)(818) 560-1000 (Registrant’s telephone number, including area code)Not applicable (Former name or address, if changed since last report)Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:Title of each classTrading Symbol(s)Name of each exchange on which",
+                "metadata": {
+                  "citation": "SEC 8-K, Walt Disney Co, filed 2026-02-03, accession 0001744489-26-000022",
+                  "cik": "0001744489",
+                  "company_name": "Walt Disney Co",
+                  "form": "8-K",
+                  "filed_on": "2026-02-03",
+                  "accession": "0001744489-26-000022",
+                  "document_type": "8-K",
+                  "filename": "dis-20260202.htm",
+                  "ticker": "DIS",
+                  "items": "5.02,8.01,9.01"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -0.580078125,
+                "vectorScore": 0.3900355398654938,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001868275:0001868275-25-000107:ceg-20251121.htm",
+                "chunkId": "edgar:0001868275:0001868275-25-000107:ceg-20251121.htm:0001",
+                "title": "Constellation Energy Corp 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1868275/0001868275-25-000107.txt",
+                "publishedAt": "2025-11-21T00:00:00Z",
+                "snippet": "ceg-20251121Pennsylvania1310 Point StreetBaltimoreMaryland21231-3380(833)883-0162☐0001868275False00018682752025-11-212025-11-21UNITED STATES SECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549FORM8-KCURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934November 21, 2025Date of Report (Date of earliest event reported)CommissionFile NumberName of Registrant; State or Other Jurisdiction of Incorporation; Address of Principal Executive Offices; and Telephone NumberIRS Employer Identification Number001-41137CONSTELLATION ENERGY CORPORATION87-1210716(a Pennsylvania corporation)1310 Point StreetBaltimore, Maryland 21231-3380(833) 883-0162Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:Title of each classTrading Symbol(s)Name of each exchange on which registeredCONSTELLATION ENERGY CORPORATION:Common Stock, without par valueCEGThe Nasdaq Stock Market LLCIndicate by check mark whether the registrant ",
+                "metadata": {
+                  "citation": "SEC 8-K, Constellation Energy Corp, filed 2025-11-21, accession 0001868275-25-000107",
+                  "cik": "0001868275",
+                  "company_name": "Constellation Energy Corp",
+                  "form": "8-K",
+                  "filed_on": "2025-11-21",
+                  "accession": "0001868275-25-000107",
+                  "document_type": "8-K",
+                  "filename": "ceg-20251121.htm",
+                  "ticker": "CEG",
+                  "items": "5.02,9.01"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -0.70947265625,
+                "vectorScore": 0.41723453998565674,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000858877:0000858877-25-000014:csco-20250512.htm",
+                "chunkId": "edgar:0000858877:0000858877-25-000014:csco-20250512.htm:0001",
+                "title": "CISCO SYSTEMS, INC. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/858877/0000858877-25-000014.txt",
+                "publishedAt": "2025-05-13T00:00:00Z",
+                "snippet": "csco-20250512false000085887700008588772025-05-122025-05-12UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549___________________________________FORM 8-K___________________________________CURRENT REPORTPursuant to Section 13 OR 15(d)of The Securities Exchange Act of 1934Date of Report (Date of earliest event reported): May 12, 2025___________________________________CISCO SYSTEMS, INC.(Exact name of registrant as specified in its charter)___________________________________Delaware(State or other jurisdiction of incorporation)001-39940(Commission File Number)77-0059951(IRS Employer Identification No.)170 West Tasman Drive, San Jose, California 95134-1706(Address of principal executive offices)(Zip Code)(408) 526-4000(Registrant's telephone number, including area code)Not Applicable(Former name or former address, if changed since last report)___________________________________Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions (see General Instruction A.2. below):☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities",
+                "metadata": {
+                  "citation": "SEC 8-K, CISCO SYSTEMS, INC., filed 2025-05-13, accession 0000858877-25-000014",
+                  "cik": "0000858877",
+                  "company_name": "CISCO SYSTEMS, INC.",
+                  "form": "8-K",
+                  "filed_on": "2025-05-13",
+                  "accession": "0000858877-25-000014",
+                  "document_type": "8-K",
+                  "filename": "csco-20250512.htm",
+                  "ticker": "CSCO",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 5,
+                "score": -0.76025390625,
+                "vectorScore": 0.3843756914138794,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001876042:0001876042-25-000004:cig-20250721.htm",
+                "chunkId": "edgar:0001876042:0001876042-25-000004:cig-20250721.htm:0001",
+                "title": "Circle Internet Group, Inc. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1876042/0001876042-25-000004.txt",
+                "publishedAt": "2025-07-22T00:00:00Z",
+                "snippet": "cig-202507210001876042false00018760422025-07-032025-07-03UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549FORM 8-KCURRENT REPORTPursuant to Section 13 or 15(d)of the Securities Exchange Act of 1934Date of Report (Date of earliest event reported): July 21, 2025CIRCLE INTERNET GROUP, INC.(Exact name of registrant as specified in its charter)Delaware 001-42671 99-2840247(State or other jurisdiction of incorporation or organization)(Commission File Number) (I.R.S. Employer Identification Number)One World Trade Center New York, NY 10007(332) 334-0660(Address, including zip code, and telephone number, including area code, of registrant’s principal executive offices)Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c)) Securities registered pursuant to Section 12(b) of the Act: Title of each classTrading SymbolName of each exchange on which registeredClass A common stock, par value $0.0001 per shareCRCLNew York Stock ExchangeIndicate by check mark whether the registrant is an",
+                "metadata": {
+                  "citation": "SEC 8-K, Circle Internet Group, Inc., filed 2025-07-22, accession 0001876042-25-000004",
+                  "cik": "0001876042",
+                  "company_name": "Circle Internet Group, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2025-07-22",
+                  "accession": "0001876042-25-000004",
+                  "document_type": "8-K",
+                  "filename": "cig-20250721.htm",
+                  "ticker": "CRCL",
+                  "items": "5.02,9.01"
+                }
+              },
+              {
+                "rank": 6,
+                "score": -0.79833984375,
+                "vectorScore": 0.39986419677734375,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000858877:0000858877-25-000021:csco-20250509.htm",
+                "chunkId": "edgar:0000858877:0000858877-25-000021:csco-20250509.htm:0001",
+                "title": "CISCO SYSTEMS, INC. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/858877/0000858877-25-000021.txt",
+                "publishedAt": "2025-05-14T00:00:00Z",
+                "snippet": "csco-20250509false000085887700008588772025-05-092025-05-09UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549___________________________________FORM 8-K___________________________________CURRENT REPORTPursuant to Section 13 OR 15(d)of The Securities Exchange Act of 1934Date of Report (Date of earliest event reported): May 9, 2025___________________________________CISCO SYSTEMS, INC.(Exact name of registrant as specified in its charter)___________________________________Delaware(State or other jurisdiction of incorporation)001-39940(Commission File Number)77-0059951(IRS Employer Identification No.)170 West Tasman Drive, San Jose, California 95134-1706(Address of principal executive offices)(Zip Code)(408) 526-4000(Registrant's telephone number, including area code)Not Applicable(Former name or former address, if changed since last report)___________________________________Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions (see General Instruction A.2. below):☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities ",
+                "metadata": {
+                  "citation": "SEC 8-K, CISCO SYSTEMS, INC., filed 2025-05-14, accession 0000858877-25-000021",
+                  "cik": "0000858877",
+                  "company_name": "CISCO SYSTEMS, INC.",
+                  "form": "8-K",
+                  "filed_on": "2025-05-14",
+                  "accession": "0000858877-25-000021",
+                  "document_type": "8-K",
+                  "filename": "csco-20250509.htm",
+                  "ticker": "CSCO",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 7,
+                "score": -0.82763671875,
+                "vectorScore": 0.39563173055648804,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm",
+                "chunkId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm:0001",
+                "title": "DoorDash, Inc. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1792789/0001792789-26-000003.txt",
+                "publishedAt": "2026-01-20T00:00:00Z",
+                "snippet": "dash-202601160001792789false00017927892026-01-162026-01-16UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549____________________________________FORM 8-K____________________________________CURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934Date of Report (Date of earliest event reported): January 16, 2026____________________________________DOORDASH, INC.(Exact name of registrant as specified in its charter)____________________________________Delaware001-3975946-2852392(State or other jurisdiction of incorporation)(Commission File Number)(I.R.S. Employer Identification No.)303 2nd Street, South Tower, 8th FloorSan Francisco, California 94107(Address of principal executive offices) (Zip Code)(650) 487-3970(Registrant’s telephone number, including area code)Not Applicable(Former name or former address, if changed since last report) ____________________________________Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registe",
+                "metadata": {
+                  "citation": "SEC 8-K, DoorDash, Inc., filed 2026-01-20, accession 0001792789-26-000003",
+                  "cik": "0001792789",
+                  "company_name": "DoorDash, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-20",
+                  "accession": "0001792789-26-000003",
+                  "document_type": "8-K",
+                  "filename": "dash-20260116.htm",
+                  "ticker": "DASH",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 8,
+                "score": -0.84228515625,
+                "vectorScore": 0.40498828887939453,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000858877:0000858877-25-000145:csco-20251015.htm",
+                "chunkId": "edgar:0000858877:0000858877-25-000145:csco-20251015.htm:0001",
+                "title": "CISCO SYSTEMS, INC. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/858877/0000858877-25-000145.txt",
+                "publishedAt": "2025-10-17T00:00:00Z",
+                "snippet": "csco-20251015false000085887700008588772025-10-152025-10-15UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549___________________________________FORM 8-K___________________________________CURRENT REPORTPursuant to Section 13 OR 15(d)of The Securities Exchange Act of 1934Date of Report (Date of earliest event reported): October 15, 2025___________________________________CISCO SYSTEMS, INC.(Exact name of registrant as specified in its charter)___________________________________Delaware(State or other jurisdiction of incorporation)001-39940(Commission File Number)77-0059951(IRS Employer Identification No.)170 West Tasman Drive, San Jose, California 95134-1706(Address of principal executive offices)(Zip Code)(408) 526-4000(Registrant's telephone number, including area code)Not Applicable(Former name or former address, if changed since last report)___________________________________Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions (see General Instruction A.2. below):☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securi",
+                "metadata": {
+                  "citation": "SEC 8-K, CISCO SYSTEMS, INC., filed 2025-10-17, accession 0000858877-25-000145",
+                  "cik": "0000858877",
+                  "company_name": "CISCO SYSTEMS, INC.",
+                  "form": "8-K",
+                  "filed_on": "2025-10-17",
+                  "accession": "0000858877-25-000145",
+                  "document_type": "8-K",
+                  "filename": "csco-20251015.htm",
+                  "ticker": "CSCO",
+                  "items": "5.02"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "sec_filings": 32
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 214.1,
+              "searchMs": 18.9,
+              "rerankMs": 788.1,
+              "totalMs": 1021.2
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:2fbc8b50d41a930b20bcda0d760824bcdce9055fa4d4f4251023d373419dbc4d",
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "invocationId": "hermes-tool:chatcmpl-tool-e109c945223f46c58e5c528517056be1",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1175,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-02T16:55:31.362670Z",
+          "content": {
+            "query": "Item 5.02 departure directors officers appointment January 2026",
+            "sourceIds": [
+              "sec_filings"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__70ef685d0560",
+            "hits": [
+              {
+                "rank": 1,
+                "score": -0.96484375,
+                "vectorScore": 0.5100367069244385,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm",
+                "chunkId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm:0001",
+                "title": "DoorDash, Inc. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1792789/0001792789-26-000003.txt",
+                "publishedAt": "2026-01-20T00:00:00Z",
+                "snippet": "dash-202601160001792789false00017927892026-01-162026-01-16UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549____________________________________FORM 8-K____________________________________CURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934Date of Report (Date of earliest event reported): January 16, 2026____________________________________DOORDASH, INC.(Exact name of registrant as specified in its charter)____________________________________Delaware001-3975946-2852392(State or other jurisdiction of incorporation)(Commission File Number)(I.R.S. Employer Identification No.)303 2nd Street, South Tower, 8th FloorSan Francisco, California 94107(Address of principal executive offices) (Zip Code)(650) 487-3970(Registrant’s telephone number, including area code)Not Applicable(Former name or former address, if changed since last report) ____________________________________Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registe",
+                "metadata": {
+                  "citation": "SEC 8-K, DoorDash, Inc., filed 2026-01-20, accession 0001792789-26-000003",
+                  "cik": "0001792789",
+                  "company_name": "DoorDash, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-20",
+                  "accession": "0001792789-26-000003",
+                  "document_type": "8-K",
+                  "filename": "dash-20260116.htm",
+                  "ticker": "DASH",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 2,
+                "score": -0.99755859375,
+                "vectorScore": 0.44358184933662415,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000316709:0001193125-26-029376:d57309d8k.htm",
+                "chunkId": "edgar:0000316709:0001193125-26-029376:d57309d8k.htm:0002",
+                "title": "SCHWAB CHARLES CORP 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/316709/0001193125-26-029376.txt",
+                "publishedAt": "2026-01-29T00:00:00Z",
+                "snippet": "of this chapter) or Rule 12b-2 of the Securities Exchange Act of 1934 (§240.12b-2 of this chapter). Emerging growth company ☐ If an emerging growth company, indicate by check mark if the registrant has elected not to use the extended transition period for complying with any new or revised financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. ☐ Item 5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers. On January 29, 2026, the Board of Directors of The Charles Schwab Corporation (the “Company”) appointed Dennis Howard as Managing Director, Chief Technology, Operations and Data Officer of the Company, effective immediately. Mr. Howard, age 57, has served as the Company’s Managing Director, Chief Information Officer since 2022 and previously served as the Company’s Executive Vice President, Chief Information Officer from 2016 to 2022. He joined the Company in 2014 as Senior Vice President, Core Technology Solutions. Before joining the Company, Mr. Howard was Senior Vice President and Chief Information Officer for Visa Inc. Mr. Howard was not appointed pursuant to any arrangement or understanding between him and any other person. Mr. Howard does not have any family relationships with any director or executive officer of the Company, and there are no transactions in which Mr. Howard has a direct or indirect material interest requiring disclosure under ",
+                "metadata": {
+                  "citation": "SEC 8-K, SCHWAB CHARLES CORP, filed 2026-01-29, accession 0001193125-26-029376",
+                  "cik": "0000316709",
+                  "company_name": "SCHWAB CHARLES CORP",
+                  "form": "8-K",
+                  "filed_on": "2026-01-29",
+                  "accession": "0001193125-26-029376",
+                  "document_type": "8-K",
+                  "filename": "d57309d8k.htm",
+                  "ticker": "SCHW",
+                  "items": "5.02,7.01,9.01"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -1.111328125,
+                "vectorScore": 0.44663089513778687,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000002488:0000002488-26-000002:amd-20260116.htm",
+                "chunkId": "edgar:0000002488:0000002488-26-000002:amd-20260116.htm:0001",
+                "title": "ADVANCED MICRO DEVICES INC 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/2488/0000002488-26-000002.txt",
+                "publishedAt": "2026-01-20T00:00:00Z",
+                "snippet": "amd-202601160000002488false00000024882026-01-162026-01-16UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549FORM 8-K CURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934January 16, 2026Date of Report (Date of earliest event reported)ADVANCED MICRO DEVICES, INC. (Exact name of registrant as specified in its charter)Delaware001-0788294-1692300(State or Other Jurisdiction ofIncorporation)(CommissionFile Number)(IRS EmployerIdentification Number)2485 Augustine Drive Santa Clara, California 95054 (Address of principal executive offices) (Zip Code)(408) 749-4000 (Registrant’s telephone number, including area code)N/A(Former Name or Former Address, if Changed Since Last Report)Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:Title of each classTrading Symbol(s) Name of each exchange on which registeredCommon Stock, $0.01 par valueAMDThe Nasdaq Global Select MarketIndicate by check mar",
+                "metadata": {
+                  "citation": "SEC 8-K, ADVANCED MICRO DEVICES INC, filed 2026-01-20, accession 0000002488-26-000002",
+                  "cik": "0000002488",
+                  "company_name": "ADVANCED MICRO DEVICES INC",
+                  "form": "8-K",
+                  "filed_on": "2026-01-20",
+                  "accession": "0000002488-26-000002",
+                  "document_type": "8-K",
+                  "filename": "amd-20260116.htm",
+                  "ticker": "AMD",
+                  "items": "5.02,9.01"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -1.205078125,
+                "vectorScore": 0.4525078535079956,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001829311:0001493152-26-003536:form8-k.htm",
+                "chunkId": "edgar:0001829311:0001493152-26-003536:form8-k.htm:0001",
+                "title": "BITMINE IMMERSION TECHNOLOGIES, INC. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1829311/0001493152-26-003536.txt",
+                "publishedAt": "2026-01-26T00:00:00Z",
+                "snippet": "false 0001829311 0001829311 2026-01-23 2026-01-23 iso4217:USD xbrli:shares iso4217:USD xbrli:shares UNITED STATES SECURITIES AND EXCHANGE COMMISSION Washington, D.C. 20549 FORM 8-K CURRENT REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 Date of Report (Date of earliest event reported): January 23, 2026 BITMINE IMMERSION TECHNOLOGIES, INC. (Exact name of registrant as specified in its charter) Delaware 001-42675 84-3986354 (State or other jurisdiction of incorporation or organization) (Commission File Number) (IRS Employer Identification No.) 10845 Griffith Peak Dr. #2 Las Vegas, NV 89135 (Address of principal executive office) (Zip Code) (404) 816-8240 (Registrants’ telephone number, including area code) Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions: ☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425) ☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12) ☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b)) ☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c)) Securities registered pursuant to Section 12(b) of the Act: Title of each class Trading Symbol(s) Name of each exchange on which registered Common Stock, par value $0.0001 BMNR NYSE American LLC In",
+                "metadata": {
+                  "citation": "SEC 8-K, BITMINE IMMERSION TECHNOLOGIES, INC., filed 2026-01-26, accession 0001493152-26-003536",
+                  "cik": "0001829311",
+                  "company_name": "BITMINE IMMERSION TECHNOLOGIES, INC.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-26",
+                  "accession": "0001493152-26-003536",
+                  "document_type": "8-K",
+                  "filename": "form8-k.htm",
+                  "ticker": "BMNR",
+                  "items": "5.02,7.01,9.01"
+                }
+              },
+              {
+                "rank": 5,
+                "score": -1.2373046875,
+                "vectorScore": 0.4791719913482666,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000804328:0000804328-26-000008:qcom-20260113.htm",
+                "chunkId": "edgar:0000804328:0000804328-26-000008:qcom-20260113.htm:0001",
+                "title": "QUALCOMM INC/DE 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/804328/0000804328-26-000008.txt",
+                "publishedAt": "2026-01-16T00:00:00Z",
+                "snippet": "qcom-20260113QUALCOMM INC/DE0000804328false00008043282026-01-132026-01-13UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549FORM 8-K CURRENT REPORTPursuant to Section 13 or 15(d) of The Securities Exchange Act of 1934January 13, 2026Date of Report (Date of earliest event reported)QUALCOMM Incorporated (Exact name of registrant as specified in its charter)Delaware (State or other jurisdiction of incorporation)000-1952895-3685934(Commission File Number)(IRS Employer Identification No.)5775 Morehouse Drive, San Diego, California92121(Address of principal executive offices)(Zip Code)858-587-1121 (Registrant’s telephone number, including area code)Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:Title of each class Trading Symbol(s)Name of each exchange on which registeredCommon Stock, $0.0001 par value QCOMThe Nasdaq Stock Market LLCIndicate by check mark whether the registrant is an emerging growth company a",
+                "metadata": {
+                  "citation": "SEC 8-K, QUALCOMM INC/DE, filed 2026-01-16, accession 0000804328-26-000008",
+                  "cik": "0000804328",
+                  "company_name": "QUALCOMM INC/DE",
+                  "form": "8-K",
+                  "filed_on": "2026-01-16",
+                  "accession": "0000804328-26-000008",
+                  "document_type": "8-K",
+                  "filename": "qcom-20260113.htm",
+                  "ticker": "QCOM",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 6,
+                "score": -1.275390625,
+                "vectorScore": 0.4873620271682739,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001144879:0001493152-26-002580:form8-k.htm",
+                "chunkId": "edgar:0001144879:0001493152-26-002580:form8-k.htm:0001",
+                "title": "Applied Digital Corp. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1144879/0001493152-26-002580.txt",
+                "publishedAt": "2026-01-16T00:00:00Z",
+                "snippet": "false 0001144879 0001144879 2026-01-14 2026-01-14 iso4217:USD xbrli:shares iso4217:USD xbrli:shares UNITED STATES SECURITIES AND EXCHANGE COMMISSION Washington, DC 20549 FORM 8-K CURRENT REPORT Pursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934 January 14, 2026 (Date of earliest event reported) APPLIED DIGITAL CORPORATION (Exact name of registrant as specified in its charter) Nevada 001-31968 95-4863690 (State or other jurisdiction (Commission (IRS Employer of incorporation) File Number) Identification No.) 3811 Turtle Creek Blvd., Suite 2100, Dallas, TX 75219 (Address of principal executive offices) (Zip Code) 214-427-1704 (Registrant’s telephone number, including area code) (Former name or former address, if changed since last report) Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions (see General Instruction A.2. below): ☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425) ☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12) ☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b)) ☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c)) Indicate by check mark whether the registrant is an emerging growth company as defined in Rule 405 of the Securities Act of 1933 (§230.40",
+                "metadata": {
+                  "citation": "SEC 8-K, Applied Digital Corp., filed 2026-01-16, accession 0001493152-26-002580",
+                  "cik": "0001144879",
+                  "company_name": "Applied Digital Corp.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-16",
+                  "accession": "0001493152-26-002580",
+                  "document_type": "8-K",
+                  "filename": "form8-k.htm",
+                  "ticker": "APLD",
+                  "items": "5.02,8.01,9.01"
+                }
+              },
+              {
+                "rank": 7,
+                "score": -1.314453125,
+                "vectorScore": 0.4698144197463989,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001144879:0001493152-26-000974:form8-k.htm",
+                "chunkId": "edgar:0001144879:0001493152-26-000974:form8-k.htm:0001",
+                "title": "Applied Digital Corp. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1144879/0001493152-26-000974.txt",
+                "publishedAt": "2026-01-08T00:00:00Z",
+                "snippet": "false 0001144879 0001144879 2026-01-06 2026-01-06 iso4217:USD xbrli:shares iso4217:USD xbrli:shares UNITED STATES SECURITIES AND EXCHANGE COMMISSION Washington, DC 20549 FORM 8-K CURRENT REPORT Pursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934 January 6, 2026 (Date of earliest event reported) APPLIED DIGITAL CORPORATION (Exact name of registrant as specified in its charter) Nevada 001-31968 95-4863690 (State or other jurisdiction (Commission (IRS Employer of incorporation) File Number) Identification No.) 3811 Turtle Creek Blvd., Suite 2100, Dallas, TX 75219 (Address of principal executive offices) (Zip Code) 214-427-1704 (Registrant’s telephone number, including area code) (Former name or former address, if changed since last report) Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions (see General Instruction A.2. below): ☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425) ☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12) ☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b)) ☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c)) Indicate by check mark whether the registrant is an emerging growth company as defined in Rule 405 of the Securities Act of 1933 (§230.405",
+                "metadata": {
+                  "citation": "SEC 8-K, Applied Digital Corp., filed 2026-01-08, accession 0001493152-26-000974",
+                  "cik": "0001144879",
+                  "company_name": "Applied Digital Corp.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-08",
+                  "accession": "0001493152-26-000974",
+                  "document_type": "8-K",
+                  "filename": "form8-k.htm",
+                  "ticker": "APLD",
+                  "items": "5.02,9.01"
+                }
+              },
+              {
+                "rank": 8,
+                "score": -1.326171875,
+                "vectorScore": 0.4527473747730255,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001780312:0001493152-26-002617:form8-k.htm",
+                "chunkId": "edgar:0001780312:0001493152-26-002617:form8-k.htm:0001",
+                "title": "AST SpaceMobile, Inc. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1780312/0001493152-26-002617.txt",
+                "publishedAt": "2026-01-16T00:00:00Z",
+                "snippet": "false 0001780312 0001780312 2026-01-13 2026-01-13 iso4217:USD xbrli:shares iso4217:USD xbrli:shares UNITED STATES SECURITIES AND EXCHANGE COMMISSION Washington, D.C. 20549 FORM 8-K CURRENT REPORT Pursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934 Date of Report (Date of earliest event reported): January 13, 2026 AST SpaceMobile, Inc. (Exact name of registrant as specified in its charter) Delaware 001-39040 84-2027232 (State or Other Jurisdiction of Incorporation) (Commission File Number) (I.R.S. Employer Identification No.) Midland International Air & Space Port 2901 Enterprise Lane Midland, Texas 79706 (Address of Principal Executive Offices) (Zip Code) (432) 276-3966 (Registrant’s telephone number, including area code) N/A (Former name or former address, if changed since last report) Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions: ☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425) ☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12) ☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b)) ☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c)) Securities registered pursuant to Section 12(b) of the Act: Title of each class Trading Symbol(s) Name of each exchange on w",
+                "metadata": {
+                  "citation": "SEC 8-K, AST SpaceMobile, Inc., filed 2026-01-16, accession 0001493152-26-002617",
+                  "cik": "0001780312",
+                  "company_name": "AST SpaceMobile, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-16",
+                  "accession": "0001493152-26-002617",
+                  "document_type": "8-K",
+                  "filename": "form8-k.htm",
+                  "ticker": "ASTS",
+                  "items": "5.02,9.01"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "sec_filings": 32
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 314.1,
+              "searchMs": 19.0,
+              "rerankMs": 820.6,
+              "totalMs": 1153.8
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:c95fde4d0f3a713af5cb93aeeeb5999e3eb7f1cde6a93108a770b4dadc7aeb9e",
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "invocationId": "hermes-tool:chatcmpl-tool-a04efa7ee2f146f8b270a8e6ddb0517c",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1045,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-02T16:55:44.277156Z",
+          "content": {
+            "query": "Item 5.02 departure directors officers appointment February 2026",
+            "sourceIds": [
+              "sec_filings"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__70ef685d0560",
+            "hits": [
+              {
+                "rank": 1,
+                "score": -0.03948974609375,
+                "vectorScore": 0.48756009340286255,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000820313:0001104659-26-010676:tm265098d1_8k.htm",
+                "chunkId": "edgar:0000820313:0001104659-26-010676:tm265098d1_8k.htm:0002",
+                "title": "AMPHENOL CORP /DE/ 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/820313/0001104659-26-010676.txt",
+                "publishedAt": "2026-02-05T00:00:00Z",
+                "snippet": "financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. ¨ Item 5.02. Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers. On February 4, 2026, after more than five decades with Amphenol Corporation (the “Company”), including serving as President from 1987 to 2006, Chief Executive Officer from 1996 to 2008 and as Chairman of the Board since 1997, Martin H. Loeffler notified the Company that he intends to retire from the Board of Directors of the Company (the “Board”), effective on the date of the Company’s 2026 Annual Meeting of Stockholders, which is expected to be in May 2026 (the “Meeting Date”). Mr. Loeffler’s retirement from the Board is not the result of a disagreement with the Company on any matter relating to the Company’s operations, policies or practices. Item 7.01. Regulation FD Disclosure. In addition, on February 4, 2026, the Board appointed R. Adam Norwitt, currently serving as President and Chief Executive Officer of the Company, to the additional role of Chairman of the Board, effective on the Meeting Date. A copy of the Company’s related press release announcing the retirement of Mr. Loeffler from the Board and the appointment of Mr. Norwitt to the role of Chairman of the Board, as described above, is attached hereto with this report as Exhibit 99.1 and incorporated by reference. The information set forth in this Item 7.01, including the",
+                "metadata": {
+                  "citation": "SEC 8-K, AMPHENOL CORP /DE/, filed 2026-02-05, accession 0001104659-26-010676",
+                  "cik": "0000820313",
+                  "company_name": "AMPHENOL CORP /DE/",
+                  "form": "8-K",
+                  "filed_on": "2026-02-05",
+                  "accession": "0001104659-26-010676",
+                  "document_type": "8-K",
+                  "filename": "tm265098d1_8k.htm",
+                  "ticker": "APH",
+                  "items": "5.02,7.01,9.01"
+                }
+              },
+              {
+                "rank": 2,
+                "score": -0.24560546875,
+                "vectorScore": 0.44305619597435,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001090727:0001628280-26-006089:ups-20260202.htm",
+                "chunkId": "edgar:0001090727:0001628280-26-006089:ups-20260202.htm:0002",
+                "title": "UNITED PARCEL SERVICE INC 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1090727/0001628280-26-006089.txt",
+                "publishedAt": "2026-02-06T00:00:00Z",
+                "snippet": "if the registrant has elected not to use the extended transition period for complying with any new or revised financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. ☐ Item 5.02 — Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers.On January 30, 2026, President Donald J. Trump announced his intent to nominate Kevin M. Warsh, a member of the Board of Directors (the “Board”) of United Parcel Service, Inc. (the “Company”), to serve as Chairman of the Board of Governors of the United States Federal Reserve System, subject to confirmation by the United States Senate. On February 2, 2026, Mr. Warsh informed the Company that if he is confirmed as Chairman of the Board of Governors of the United States Federal Reserve System by the United States Senate, he would resign as a director of the Company. Mr. Warsh’s decision was not due to any disagreement with the Company on any matter relating to the Company’s operations, policies or practices.SignaturesPursuant to the requirements of the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned hereunto duly authorized. UNITED PARCEL SERVICE, INC.Date: February 6, 2026By:/s/ NORMAN M. BROTHERS, JR.Name: Norman M. Brothers, Jr.Title: Executive Vice President and Chief Legal and Compliance Officer",
+                "metadata": {
+                  "citation": "SEC 8-K, UNITED PARCEL SERVICE INC, filed 2026-02-06, accession 0001628280-26-006089",
+                  "cik": "0001090727",
+                  "company_name": "UNITED PARCEL SERVICE INC",
+                  "form": "8-K",
+                  "filed_on": "2026-02-06",
+                  "accession": "0001628280-26-006089",
+                  "document_type": "8-K",
+                  "filename": "ups-20260202.htm",
+                  "ticker": "UPS",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -0.324951171875,
+                "vectorScore": 0.47444650530815125,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000885725:0000885725-26-000008:bsx-20260202.htm",
+                "chunkId": "edgar:0000885725:0000885725-26-000008:bsx-20260202.htm:0002",
+                "title": "BOSTON SCIENTIFIC CORP 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/885725/0000885725-26-000008.txt",
+                "publishedAt": "2026-02-05T00:00:00Z",
+                "snippet": "financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. ☐Item 5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers.On February 2, 2026, Yoshiaki Fujimori informed Boston Scientific Corporation (the “Company”) that he will not stand for re-election at the Company’s 2026 Annual Meeting of Stockholders (the “2026 Annual Meeting”). Mr. Fujimori has served as a member of the Board of Directors (the “Board”) of the Company since July 2016 and currently serves as the chair of the Risk, Science and Technology Committee. Mr. Fujimori will continue to serve as a director and in his committee roles until the 2026 Annual Meeting. Mr. Fujimori’s decision not to stand for re-election at the 2026 Annual Meeting is not the result of any disagreement with the Company.The Board and Nominating and Governance Committee regularly review the size and composition of the Board and will continue to evaluate whether adding directors to the Board following Mr. Fujimori’s departure is in the best interest of the Company.SIGNATUREPursuant to the requirements of the Securities Exchange Act of 1934, as amended, the registrant has duly caused this report to be signed on its behalf by the undersigned hereunto duly authorized. Date:February 5, 2026BOSTON SCIENTIFIC CORPORATIONBy:/s/ Susan ThompsonSusan ThompsonVice President, Chief Corporate Counsel and Assistant Secretary",
+                "metadata": {
+                  "citation": "SEC 8-K, BOSTON SCIENTIFIC CORP, filed 2026-02-05, accession 0000885725-26-000008",
+                  "cik": "0000885725",
+                  "company_name": "BOSTON SCIENTIFIC CORP",
+                  "form": "8-K",
+                  "filed_on": "2026-02-05",
+                  "accession": "0000885725-26-000008",
+                  "document_type": "8-K",
+                  "filename": "bsx-20260202.htm",
+                  "ticker": "BSX",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -0.3251953125,
+                "vectorScore": 0.44034186005592346,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001744489:0001744489-26-000025:dis-20260220.htm",
+                "chunkId": "edgar:0001744489:0001744489-26-000025:dis-20260220.htm:0002",
+                "title": "Walt Disney Co 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1744489/0001744489-26-000025.txt",
+                "publishedAt": "2026-02-24T00:00:00Z",
+                "snippet": "5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers. On February 20, 2026, The Walt Disney Company (the “Company”) exercised its right to terminate without cause the employment of Kristina K. Schake as Senior Executive Vice President and Chief Communications Officer, effective as of March 19, 2026. In connection with her termination, Ms. Schake will receive the separation benefits payable in accordance with the terms of her previously disclosed employment agreement.A copy of the press release is attached hereto as Exhibit 99.1 and incorporated herein by reference.Item 9.01 Financial Statements and Exhibits(d) ExhibitsExhibitNumberDescription99.1Press Release dated February 24, 2026.104Cover Page Interactive Data File (embedded within the Inline XBRL document)SignaturesPursuant to the requirements of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned hereunto duly authorized. The Walt Disney CompanyBy: /s/ Jolene E. Negre Jolene E. Negre Deputy General Counsel - Securities Regulation, Governance & SecretaryDated: February 24, 2026",
+                "metadata": {
+                  "citation": "SEC 8-K, Walt Disney Co, filed 2026-02-24, accession 0001744489-26-000025",
+                  "cik": "0001744489",
+                  "company_name": "Walt Disney Co",
+                  "form": "8-K",
+                  "filed_on": "2026-02-24",
+                  "accession": "0001744489-26-000025",
+                  "document_type": "8-K",
+                  "filename": "dis-20260220.htm",
+                  "ticker": "DIS",
+                  "items": "5.02,9.01"
+                }
+              },
+              {
+                "rank": 5,
+                "score": -0.77099609375,
+                "vectorScore": 0.49080848693847656,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000063908:0000063908-26-000028:mcd-20260204.htm",
+                "chunkId": "edgar:0000063908:0000063908-26-000028:mcd-20260204.htm:0001",
+                "title": "MCDONALDS CORP 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/63908/0000063908-26-000028.txt",
+                "publishedAt": "2026-02-10T00:00:00Z",
+                "snippet": "mcd-20260204falseMCDONALDS CORP000006390800000639082026-02-042026-02-04UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWASHINGTON, DC 20549FORM 8-K CURRENT REPORT PURSUANT TOSECTION 13 OR 15(d) OF THESECURITIES EXCHANGE ACT OF 1934Date of report (Date of earliest event reported): February 4, 2026 McDONALD’S CORPORATION (Exact Name of Registrant as Specified in Charter)Delaware 1-5231 36-2361282(State or Other Jurisdictionof Incorporation) (CommissionFile Number) (IRS EmployerIdentification No.)110 North Carpenter Street Chicago, Illinois (Address of Principal Executive Offices)60607 (Zip Code)(630) 623-3000 (Registrant’s telephone number, including area code) Not Applicable(Former Name or Former Address, if Changed Since Last Report)Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions (see General Instruction A.2. below):☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:Title of each classTrading Symbol(s)Name of each exchange on which registeredCommon Stock, $0.01 par valueMCDNew",
+                "metadata": {
+                  "citation": "SEC 8-K, MCDONALDS CORP, filed 2026-02-10, accession 0000063908-26-000028",
+                  "cik": "0000063908",
+                  "company_name": "MCDONALDS CORP",
+                  "form": "8-K",
+                  "filed_on": "2026-02-10",
+                  "accession": "0000063908-26-000028",
+                  "document_type": "8-K",
+                  "filename": "mcd-20260204.htm",
+                  "ticker": "MCD",
+                  "items": "5.02,9.01"
+                }
+              },
+              {
+                "rank": 6,
+                "score": -0.83251953125,
+                "vectorScore": 0.452859491109848,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000731766:0000731766-26-000064:unh-20260224.htm",
+                "chunkId": "edgar:0000731766:0000731766-26-000064:unh-20260224.htm:0001",
+                "title": "UNITEDHEALTH GROUP INC 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/731766/0000731766-26-000064.txt",
+                "publishedAt": "2026-03-02T00:00:00Z",
+                "snippet": "unh-202602240000731766false00007317662026-02-242026-02-24UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549—————————————FORM 8-K —————————————Current Report Pursuant to Section 13 or 15(d) of The Securities Exchange Act of 1934 Date of report (Date of earliest event reported): February 24, 2026—————————————UNITEDHEALTH GROUP INCORPORATED (Exact name of registrant as specified in its charter) —————————————Delaware1-1086441-1321939(State or other jurisdiction of incorporation)(Commission File Number)(I.R.S. Employer Identification No.)1 Health Drive655 New York Avenue NWEden Prairie,Minnesota55344Washington,DC20001(Address of principal executive offices)(Zip Code)(Address of principal executive offices)(Zip Code)Registrant’s telephone number, including area code: (800) 328-5979 N/A(Former name or former address, if changed since last report.) —————————————Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions: ☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:T",
+                "metadata": {
+                  "citation": "SEC 8-K, UNITEDHEALTH GROUP INC, filed 2026-03-02, accession 0000731766-26-000064",
+                  "cik": "0000731766",
+                  "company_name": "UNITEDHEALTH GROUP INC",
+                  "form": "8-K",
+                  "filed_on": "2026-03-02",
+                  "accession": "0000731766-26-000064",
+                  "document_type": "8-K",
+                  "filename": "unh-20260224.htm",
+                  "ticker": "UNH",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 7,
+                "score": -0.99560546875,
+                "vectorScore": 0.5164881348609924,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm",
+                "chunkId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm:0001",
+                "title": "Walt Disney Co 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1744489/0001744489-26-000022.txt",
+                "publishedAt": "2026-02-03T00:00:00Z",
+                "snippet": "dis-20260202falseWALT DISNEY CO/000174448900017444892026-02-022026-02-02________________________________________________________________________UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549 FORM 8-K CURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934Date of Report (Date of Earliest Event Reported): February 2, 2026The Walt Disney Company(Exact name of registrant as specified in its charter)Delaware001-3884283-0940635(State or other jurisdiction (Commission File Number)(IRS Employer of incorporation)Identification No.) 500 South Buena Vista Street Burbank, California 91521 (Address of Principal Executive Offices and Zip Code)(818) 560-1000 (Registrant’s telephone number, including area code)Not applicable (Former name or address, if changed since last report)Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:Title of each classTrading Symbol(s)Name of each exchange on which",
+                "metadata": {
+                  "citation": "SEC 8-K, Walt Disney Co, filed 2026-02-03, accession 0001744489-26-000022",
+                  "cik": "0001744489",
+                  "company_name": "Walt Disney Co",
+                  "form": "8-K",
+                  "filed_on": "2026-02-03",
+                  "accession": "0001744489-26-000022",
+                  "document_type": "8-K",
+                  "filename": "dis-20260202.htm",
+                  "ticker": "DIS",
+                  "items": "5.02,8.01,9.01"
+                }
+              },
+              {
+                "rank": 8,
+                "score": -1.0703125,
+                "vectorScore": 0.4542906880378723,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000858877:0000858877-25-000004:csco-20250210.htm",
+                "chunkId": "edgar:0000858877:0000858877-25-000004:csco-20250210.htm:0002",
+                "title": "CISCO SYSTEMS, INC. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/858877/0000858877-25-000004.txt",
+                "publishedAt": "2025-02-12T00:00:00Z",
+                "snippet": "provided pursuant to Section 13(a) of the Exchange Act. ☐Item 5.02. Departure of Directors or Certain Officers; Election of Directors; Appointmentof Certain Officers; Compensatory Arrangements of Certain Officers.Departure of OfficerOn February 10, 2025, Gary Steele, President, Go-to-Market of Cisco Systems, Inc. (“Cisco”), notified Cisco of his decision to resign from Cisco, effective April 25, 2025, for an external CEO opportunity.SIGNATURESPursuant to the requirements of the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned hereunto duly authorized.CISCO SYSTEMS, INC.Dated: February 12, 2025By:/s/ Evan SlovesName:Evan SlovesTitle:Secretary",
+                "metadata": {
+                  "citation": "SEC 8-K, CISCO SYSTEMS, INC., filed 2025-02-12, accession 0000858877-25-000004",
+                  "cik": "0000858877",
+                  "company_name": "CISCO SYSTEMS, INC.",
+                  "form": "8-K",
+                  "filed_on": "2025-02-12",
+                  "accession": "0000858877-25-000004",
+                  "document_type": "8-K",
+                  "filename": "csco-20250210.htm",
+                  "ticker": "CSCO",
+                  "items": "5.02"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "sec_filings": 32
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 357.0,
+              "searchMs": 15.0,
+              "rerankMs": 653.8,
+              "totalMs": 1025.8
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:4777248ef8e46ddcaffcc8bc86259ba0a984bcc7365e323ee981c5c4527671cb",
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "invocationId": "hermes-tool:chatcmpl-tool-bc8a5e85af814ebfaffad3b7b04deb8b",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 786,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-02T16:55:59.945112Z",
+          "content": {
+            "query": "Walt Disney Company appointment Chief Executive Officer Senior Advisor February 2 2026",
+            "sourceIds": [
+              "sec_filings"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__70ef685d0560",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 4.1171875,
+                "vectorScore": 0.6100032925605774,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm",
+                "chunkId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm:0002",
+                "title": "Walt Disney Co 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1744489/0001744489-26-000022.txt",
+                "publishedAt": "2026-02-03T00:00:00Z",
+                "snippet": "Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers. Appointment of Chief Executive Officer and Senior AdvisorOn February 2, 2026, the Board of Directors (the “Board”) of The Walt Disney Company (the “Company”) appointed Josh D’Amaro, currently the Chairman of Disney Experiences, as the Chief Executive Officer of the Company and appointed Robert A. Iger, currently the Company’s Chief Executive Officer, as Senior Advisor, in each case, effective as of March 18, 2026 (the “Effective Date”). As Senior Advisor, Mr. Iger will report exclusively to the Board. Mr. Iger will continue to serve as a member of the Board, subject to the shareholder vote at the Company’s 2026 annual meeting of shareholders (“2026 Annual Meeting”), through December 31, 2026 (the “Iger Transition Date”), though he will step down from the Executive Committee of the Board after the 2026 Annual Meeting. The Board expects to elect Mr. D’Amaro to serve as a director on the Board and a member of the Executive Committee following the 2026 Annual Meeting.In connection with his appointment as Senior Advisor, the Company and Mr. Iger entered into an amendment to Mr. Iger’s employment agreement with the Company (the “Iger Amendment”) to reflect Mr. Iger’s continuing employment in the position of Senior Advisor rather than as the Chief Executive Officer and to confirm that he will continue to be a member of the Board, in each ",
+                "metadata": {
+                  "citation": "SEC 8-K, Walt Disney Co, filed 2026-02-03, accession 0001744489-26-000022",
+                  "cik": "0001744489",
+                  "company_name": "Walt Disney Co",
+                  "form": "8-K",
+                  "filed_on": "2026-02-03",
+                  "accession": "0001744489-26-000022",
+                  "document_type": "8-K",
+                  "filename": "dis-20260202.htm",
+                  "ticker": "DIS",
+                  "items": "5.02,8.01,9.01"
+                }
+              },
+              {
+                "rank": 2,
+                "score": 1.7421875,
+                "vectorScore": 0.7026745080947876,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm",
+                "chunkId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm:0001",
+                "title": "Walt Disney Co 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1744489/0001744489-26-000022.txt",
+                "publishedAt": "2026-02-03T00:00:00Z",
+                "snippet": "dis-20260202falseWALT DISNEY CO/000174448900017444892026-02-022026-02-02________________________________________________________________________UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549 FORM 8-K CURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934Date of Report (Date of Earliest Event Reported): February 2, 2026The Walt Disney Company(Exact name of registrant as specified in its charter)Delaware001-3884283-0940635(State or other jurisdiction (Commission File Number)(IRS Employer of incorporation)Identification No.) 500 South Buena Vista Street Burbank, California 91521 (Address of Principal Executive Offices and Zip Code)(818) 560-1000 (Registrant’s telephone number, including area code)Not applicable (Former name or address, if changed since last report)Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registered pursuant to Section 12(b) of the Act:Title of each classTrading Symbol(s)Name of each exchange on which",
+                "metadata": {
+                  "citation": "SEC 8-K, Walt Disney Co, filed 2026-02-03, accession 0001744489-26-000022",
+                  "cik": "0001744489",
+                  "company_name": "Walt Disney Co",
+                  "form": "8-K",
+                  "filed_on": "2026-02-03",
+                  "accession": "0001744489-26-000022",
+                  "document_type": "8-K",
+                  "filename": "dis-20260202.htm",
+                  "ticker": "DIS",
+                  "items": "5.02,8.01,9.01"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -2.70703125,
+                "vectorScore": 0.47017621994018555,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm",
+                "chunkId": "edgar:0001744489:0001744489-26-000022:dis-20260202.htm:0004",
+                "title": "Walt Disney Co 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1744489/0001744489-26-000022.txt",
+                "publishedAt": "2026-02-03T00:00:00Z",
+                "snippet": "Officer, he receive an additional one-time long-term incentive award with a target value of $9,705,000. Long-term incentive awards will be in the form as determined by the Committee and shall be subject to substantially the same terms and conditions as those that apply to other executive officers of the Company. Mr. D’Amaro is also entitled to a relocation benefit.Under the CEO Offer Letter, Mr. D’Amaro is entitled to participate in employee benefits and perquisites generally made available to executive officers of the Company. Mr. D’Amaro has entered into the Company’s standard officer indemnification agreement.In addition, the CEO Offer Letter provides that Mr. D’Amaro is eligible to participate in the Disney Executive Severance Pay Plan, as such plan may be amended from time to time (the “Executive Severance Plan”), the material terms of which are described in this Current Report on Form 8-K. The benefits which Mr. D’Amaro would be entitled to receive, and the conditions to receipt of such benefits, under the Executive Severance Plan in the event that his employment is terminated by the Company without “cause” or by Mr. D’Amaro for “good reason” are described below.Other than as described above, Mr. D’Amaro is not a party to any arrangement or understanding pursuant to which he was selected to serve as Chief Executive Officer and a member of the Board, and neither he nor any of his immediate family members a party to any transaction requiring disclosure pursuant to Item 40",
+                "metadata": {
+                  "citation": "SEC 8-K, Walt Disney Co, filed 2026-02-03, accession 0001744489-26-000022",
+                  "cik": "0001744489",
+                  "company_name": "Walt Disney Co",
+                  "form": "8-K",
+                  "filed_on": "2026-02-03",
+                  "accession": "0001744489-26-000022",
+                  "document_type": "8-K",
+                  "filename": "dis-20260202.htm",
+                  "ticker": "DIS",
+                  "items": "5.02,8.01,9.01"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -3.123046875,
+                "vectorScore": 0.5336056351661682,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001744489:0001744489-26-000022:fy2026_q2x8kxneoxex991.htm",
+                "chunkId": "edgar:0001744489:0001744489-26-000022:fy2026_q2x8kxneoxex991.htm:0001",
+                "title": "Walt Disney Co 8-K: PRESS RELEASE",
+                "url": "https://www.sec.gov/Archives/edgar/data/1744489/0001744489-26-000022.txt",
+                "publishedAt": "2026-02-03T00:00:00Z",
+                "snippet": "DocumentExhibit 99.1Josh D’Amaro Named Next Chief Executive Officer of The Walt Disney CompanyDana Walden To Become President and Chief Creative Officer of The Walt Disney CompanyBURBANK, Calif., February 3, 2026—The Walt Disney Company (NYSE: DIS) Board of Directors announced today that, in a unanimous vote held on Monday, it elected Disney Experiences Chairman Josh D’Amaro to become Chief Executive Officer of The Walt Disney Company, effective at the upcoming Annual Meeting on March 18, 2026, when he will succeed longtime Disney CEO Robert A. Iger. The Board also intends to appoint D’Amaro as a director immediately following that meeting. As head of the company’s largest business segment with $36 billion in annual revenue in FY2025 and 185,000 Cast Members and employees worldwide, D’Amaro, a 28-year Disney veteran, is the architect of the largest global expansion in Disney Experiences history, and has led the segment to new heights financially, creatively, and in guest satisfaction. “Josh D’Amaro possesses that rare combination of inspiring leadership and innovation, a keen eye for strategic growth opportunities, and a deep passion for the Disney brand and its people – all of which make him the right person to take the helm as Disney’s next CEO,” said James Gorman, Chairman of The Walt Disney Company Board of Directors. “Throughout this search process, Josh has demonstrated a strong vision for the company’s future and a deep understanding of the creative spirit that makes D",
+                "metadata": {
+                  "citation": "SEC 8-K, Walt Disney Co, filed 2026-02-03, accession 0001744489-26-000022",
+                  "cik": "0001744489",
+                  "company_name": "Walt Disney Co",
+                  "form": "8-K",
+                  "filed_on": "2026-02-03",
+                  "accession": "0001744489-26-000022",
+                  "document_type": "EX-99.1",
+                  "filename": "fy2026_q2x8kxneoxex991.htm",
+                  "ticker": "DIS",
+                  "items": "5.02,8.01,9.01"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "sec_filings": 16
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 306.5,
+              "searchMs": 12.0,
+              "rerankMs": 443.9,
+              "totalMs": 762.4
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:5a9a56f5bf3b49136e2268baa0513d33839f2607de920e5d2c28a94a6c4f35d0",
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "invocationId": "hermes-tool:chatcmpl-tool-3b65a41f37f8497280cf5b4637354566",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1610,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-02T16:56:00.776060Z",
+          "content": {
+            "query": "DoorDash director appointment January 16 2026",
+            "sourceIds": [
+              "sec_filings"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__70ef685d0560",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 1.224609375,
+                "vectorScore": 0.5093100070953369,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm",
+                "chunkId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm:0002",
+                "title": "DoorDash, Inc. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1792789/0001792789-26-000003.txt",
+                "publishedAt": "2026-01-20T00:00:00Z",
+                "snippet": "to Section 13(a) of the Exchange Act. ☐Item 5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers.Director AppointmentOn January 16, 2026, the Board of Directors (the “Board”) of DoorDash, Inc. (the “Company”), upon the recommendation of its Nominating and Corporate Governance Committee, approved an increase in the size of the Board to eleven (11) members and elected Milan Kovac as a member of the Board. Mr. Kovac will serve as a Class III director with a term expiring at the Company’s 2026 annual meeting of stockholders. In addition, Mr. Kovac was appointed as a member of the Nominating and Corporate Governance Committee of the Board. Mr. Kovac, age 41, most recently served at Tesla, Inc., an electric vehicle and energy generation and storage company (“Tesla”), as Vice President, Optimus (Tesla Bot) from September 2024 to June 2025. Prior to that, Mr. Kovac served as Director, Optimus & Autopilot Engineering from January 2022 to September 2024, where he led engineering for Tesla’s Optimus humanoid robotics program and the foundational software and infrastructure shared across Tesla’s robotics and Autopilot initiatives. Earlier at Tesla, Mr. Kovac held a series of engineering leadership roles within the Autopilot Software organization from April 2016 to January 2022. Earlier in his career, Mr. Kovac held software engineering and project leadership roles focused on embedded platfor",
+                "metadata": {
+                  "citation": "SEC 8-K, DoorDash, Inc., filed 2026-01-20, accession 0001792789-26-000003",
+                  "cik": "0001792789",
+                  "company_name": "DoorDash, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-20",
+                  "accession": "0001792789-26-000003",
+                  "document_type": "8-K",
+                  "filename": "dash-20260116.htm",
+                  "ticker": "DASH",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.19970703125,
+                "vectorScore": 0.555494487285614,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001792789:0001792789-26-000003:ex991-pressrelease.htm",
+                "chunkId": "edgar:0001792789:0001792789-26-000003:ex991-pressrelease.htm:0001",
+                "title": "DoorDash, Inc. 8-K: EX-99.1",
+                "url": "https://www.sec.gov/Archives/edgar/data/1792789/0001792789-26-000003.txt",
+                "publishedAt": "2026-01-20T00:00:00Z",
+                "snippet": "DocumentExhibit 99.1Milan Kovac Joins DoorDash Board of DirectorsSAN FRANCISCO--(BUSINESS WIRE)-- DoorDash, Inc. (NASDAQ: DASH) announced today that Milan Kovac, former Vice President of Optimus Robotics and Autopilot at Tesla, has been appointed to the company’s Board of Directors, effective January 16, 2026.Tony Xu, co-founder and CEO of DoorDash, Inc., said, “Milan has spent his career building and scaling ambitious engineering programs at the intersection of AI, autonomy, and robotics. He brings a rare combination of technical depth and operational leadership. That experience will be invaluable as we continue to build products and infrastructure that help local businesses grow, give consumers access to more of their communities, and create new ways for people to earn. I’m excited to welcome Milan to the Board.”“I’m honored to join DoorDash’s Board of Directors,” said Kovac. “DoorDash has built an extraordinary platform that connects the digital and physical worlds of local commerce at global scale. I’m looking forward to working with Tony and the board as DoorDash continues to expand across geographies and categories, and as the company advances new technology that improves quality, reliability, and efficiency across local delivery.”Kovac most recently served at Tesla, where he led the company’s Optimus humanoid robot program and previously worked on Autopilot engineering initiatives. He joined Tesla in 2016 and was promoted to a vice president role in 2024.Kovac’s appoin",
+                "metadata": {
+                  "citation": "SEC 8-K, DoorDash, Inc., filed 2026-01-20, accession 0001792789-26-000003",
+                  "cik": "0001792789",
+                  "company_name": "DoorDash, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-20",
+                  "accession": "0001792789-26-000003",
+                  "document_type": "EX-99.1",
+                  "filename": "ex991-pressrelease.htm",
+                  "ticker": "DASH",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -0.485107421875,
+                "vectorScore": 0.6502770781517029,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm",
+                "chunkId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm:0001",
+                "title": "DoorDash, Inc. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1792789/0001792789-26-000003.txt",
+                "publishedAt": "2026-01-20T00:00:00Z",
+                "snippet": "dash-202601160001792789false00017927892026-01-162026-01-16UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549____________________________________FORM 8-K____________________________________CURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934Date of Report (Date of earliest event reported): January 16, 2026____________________________________DOORDASH, INC.(Exact name of registrant as specified in its charter)____________________________________Delaware001-3975946-2852392(State or other jurisdiction of incorporation)(Commission File Number)(I.R.S. Employer Identification No.)303 2nd Street, South Tower, 8th FloorSan Francisco, California 94107(Address of principal executive offices) (Zip Code)(650) 487-3970(Registrant’s telephone number, including area code)Not Applicable(Former name or former address, if changed since last report) ____________________________________Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:☐ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)☐ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)☐ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))☐ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))Securities registe",
+                "metadata": {
+                  "citation": "SEC 8-K, DoorDash, Inc., filed 2026-01-20, accession 0001792789-26-000003",
+                  "cik": "0001792789",
+                  "company_name": "DoorDash, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-20",
+                  "accession": "0001792789-26-000003",
+                  "document_type": "8-K",
+                  "filename": "dash-20260116.htm",
+                  "ticker": "DASH",
+                  "items": "5.02"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -2.650390625,
+                "vectorScore": 0.4296548068523407,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm",
+                "chunkId": "edgar:0001792789:0001792789-26-000003:dash-20260116.htm:0003",
+                "title": "DoorDash, Inc. 8-K: 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/1792789/0001792789-26-000003.txt",
+                "publishedAt": "2026-01-20T00:00:00Z",
+                "snippet": "Compensation Policy”). The terms of the Outside Director Compensation Policy are as described in the proxy statement relating to the Company’s 2025 annual meeting of stockholders, other than with respect to the aggregate value of the “New Hire Award,” “Pro-rated Annual Award” and “Annual Award” (each as defined in the Outside Director Compensation Policy), which have each been increased to $300,000 from $250,000. A copy of the amended Outside Director Compensation Policy will be filed as an exhibit to the Company’s Annual Report on Form 10-K for the fiscal year ended December 31, 2025.In accordance with the Company’s customary practice, the Company has entered into its standard form of indemnification agreement with Mr. Kovac. Mr. Kovac has no direct or indirect material interest in any transaction required to be disclosed pursuant to Item 404(a) of Regulation S-K promulgated under the Securities Exchange Act of 1934, as amended (the “Exchange Act”). There are no family relationships, as defined in Item 401 of Regulation S-K promulgated under the Exchange Act, between Mr. Kovac and any of the Company’s executive officers or directors or persons nominated or chosen to become a director or executive officer. There are also no arrangements or understandings between Mr. Kovac and any other persons pursuant to which Mr. Kovac was selected as a director.A copy of the press release announcing the appointment of Mr. Kovac is attached hereto as Exhibit 99.1. The information in Exhibit",
+                "metadata": {
+                  "citation": "SEC 8-K, DoorDash, Inc., filed 2026-01-20, accession 0001792789-26-000003",
+                  "cik": "0001792789",
+                  "company_name": "DoorDash, Inc.",
+                  "form": "8-K",
+                  "filed_on": "2026-01-20",
+                  "accession": "0001792789-26-000003",
+                  "document_type": "8-K",
+                  "filename": "dash-20260116.htm",
+                  "ticker": "DASH",
+                  "items": "5.02"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "sec_filings": 16
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 295.9,
+              "searchMs": 11.3,
+              "rerankMs": 511.2,
+              "totalMs": 818.3
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:263437779e237f053e319f293f5878e3900f1f9ba1351dd4cb2c2beb0a12f3f1",
+          "jobId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986",
+          "invocationId": "hermes-tool:chatcmpl-tool-35e186f8860543fbb5bc158402ce2ac4",
+          "turnId": "5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:5cf3b467-c0b8-4fcf-8b4a-5c9ad88e6986:f539ee46",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 2384,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-02T16:56:01.550518Z",
+          "content": {
+            "query": "Amphenol Martin Loeffler retirement R Adam Norwitt Chairman February 4 2026",
+            "sourceIds": [
+              "sec_filings"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__70ef685d0560",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 3.63671875,
+                "vectorScore": 0.6413752436637878,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000820313:0001104659-26-010676:tm265098d1_ex99-1.htm",
+                "chunkId": "edgar:0000820313:0001104659-26-010676:tm265098d1_ex99-1.htm:0001",
+                "title": "AMPHENOL CORP /DE/ 8-K: EXHIBIT 99.1",
+                "url": "https://www.sec.gov/Archives/edgar/data/820313/0001104659-26-010676.txt",
+                "publishedAt": "2026-02-05T00:00:00Z",
+                "snippet": "Exhibit 99.1 Amphenol News Release World Headquarters 358 Hall Avenue Wallingford, CT 06492 Telephone (203) 265-8900 AMPHENOL ANNOUNCES BOARD SUCCESSION PLAN Wallingford, Connecticut, February 4, 2026. Amphenol Corporation (NYSE: APH) today announced that the Board of Directors has appointed R. Adam Norwitt, currently serving as President and Chief Executive Officer, to the additional role of Chairman of the Board, effective on the date of the Company’s 2026 Annual Meeting of Stockholders, which is expected to be in May 2026. After more than five decades with Amphenol, including serving as President from 1987 to 2006, Chief Executive Officer from 1996 to 2008 and as Chairman of the Board since 1997, Martin H. Loeffler intends to retire from the Board also effective in May. As part of this leadership transition, David P. Falck, who has served as a Director since 2013 and Presiding Director since 2016, will continue to serve as Lead Independent Director. “On behalf of the Board of Directors, I want to thank Martin for his exceptional contributions to the Company over these many decades and express the Board’s deep appreciation for the outstanding results he has helped Amphenol to achieve,” said Mr. Falck. “The decision to appoint Adam as Amphenol’s Chairman reflects the Board’s confidence in his strong leadership as well as his deep industry experience and long-term strategic vision for the Company.” “I am extremely pleased to recognize Adam’s unique contributions to Amphenol w",
+                "metadata": {
+                  "citation": "SEC 8-K, AMPHENOL CORP /DE/, filed 2026-02-05, accession 0001104659-26-010676",
+                  "cik": "0000820313",
+                  "company_name": "AMPHENOL CORP /DE/",
+                  "form": "8-K",
+                  "filed_on": "2026-02-05",
+                  "accession": "0001104659-26-010676",
+                  "document_type": "EX-99.1",
+                  "filename": "tm265098d1_ex99-1.htm",
+                  "ticker": "APH",
+                  "items": "5.02,7.01,9.01"
+                }
+              },
+              {
+                "rank": 2,
+                "score": 2.525390625,
+                "vectorScore": 0.6281300783157349,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000820313:0001104659-26-010676:tm265098d1_8k.htm",
+                "chunkId": "edgar:0000820313:0001104659-26-010676:tm265098d1_8k.htm:0002",
+                "title": "AMPHENOL CORP /DE/ 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/820313/0001104659-26-010676.txt",
+                "publishedAt": "2026-02-05T00:00:00Z",
+                "snippet": "financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. ¨ Item 5.02. Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers. On February 4, 2026, after more than five decades with Amphenol Corporation (the “Company”), including serving as President from 1987 to 2006, Chief Executive Officer from 1996 to 2008 and as Chairman of the Board since 1997, Martin H. Loeffler notified the Company that he intends to retire from the Board of Directors of the Company (the “Board”), effective on the date of the Company’s 2026 Annual Meeting of Stockholders, which is expected to be in May 2026 (the “Meeting Date”). Mr. Loeffler’s retirement from the Board is not the result of a disagreement with the Company on any matter relating to the Company’s operations, policies or practices. Item 7.01. Regulation FD Disclosure. In addition, on February 4, 2026, the Board appointed R. Adam Norwitt, currently serving as President and Chief Executive Officer of the Company, to the additional role of Chairman of the Board, effective on the Meeting Date. A copy of the Company’s related press release announcing the retirement of Mr. Loeffler from the Board and the appointment of Mr. Norwitt to the role of Chairman of the Board, as described above, is attached hereto with this report as Exhibit 99.1 and incorporated by reference. The information set forth in this Item 7.01, including the",
+                "metadata": {
+                  "citation": "SEC 8-K, AMPHENOL CORP /DE/, filed 2026-02-05, accession 0001104659-26-010676",
+                  "cik": "0000820313",
+                  "company_name": "AMPHENOL CORP /DE/",
+                  "form": "8-K",
+                  "filed_on": "2026-02-05",
+                  "accession": "0001104659-26-010676",
+                  "document_type": "8-K",
+                  "filename": "tm265098d1_8k.htm",
+                  "ticker": "APH",
+                  "items": "5.02,7.01,9.01"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -4.0625,
+                "vectorScore": 0.37734633684158325,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000820313:0001104659-26-002183:tm262604d1_ex99-1.htm",
+                "chunkId": "edgar:0000820313:0001104659-26-002183:tm262604d1_ex99-1.htm:0001",
+                "title": "AMPHENOL CORP /DE/ 8-K: EXHIBIT 99.1",
+                "url": "https://www.sec.gov/Archives/edgar/data/820313/0001104659-26-002183.txt",
+                "publishedAt": "2026-01-08T00:00:00Z",
+                "snippet": "Exhibit 99.1 Amphenol News Release World Headquarters 358 Hall Avenue Wallingford, CT 06492 Telephone (203) 265-8900 AMPHENOL APPOINTS SANJIV LAMBA TO BOARD OF DIRECTORS Wallingford, Connecticut. January 8, 2026. Amphenol Corporation (NYSE: APH) today announced that Sanjiv Lamba has been appointed to Amphenol’s board of directors. With his appointment, the size of the Company’s board has increased to nine members. Mr. Lamba is currently the Chief Executive Officer of Linde plc (NASDAQ: LIN), a leading global industrial gases and engineering company. Mr. Lamba is based in Danbury, Connecticut and was promoted to the role of Chief Executive Officer of Linde in 2022 and has been named Chairman of Linde’s board effective January 31, 2026. He brings nearly thirty years of global leadership experience to Amphenol’s board. Prior to his current role as CEO, Mr. Lamba served as Chief Operating Officer of Linde, where he was responsible for the regional operating segments of the Americas, APAC and EMEA, as well as Linde Engineering, Lincare and certain other global functions. Prior to being named COO, Mr. Lamba led Linde’s operations in the Asia-Pacific region across a footprint of nearly 20 countries in the region. He joined Linde in 2006 when the company acquired BOC Group, where he served as Managing Director, Process Gas Solutions, South and Southeast Asia. Mr. Lamba has been with Linde/BOC for almost his entire career, having joined BOC India in 1989. He holds a Bachelor of Commer",
+                "metadata": {
+                  "citation": "SEC 8-K, AMPHENOL CORP /DE/, filed 2026-01-08, accession 0001104659-26-002183",
+                  "cik": "0000820313",
+                  "company_name": "AMPHENOL CORP /DE/",
+                  "form": "8-K",
+                  "filed_on": "2026-01-08",
+                  "accession": "0001104659-26-002183",
+                  "document_type": "EX-99.1",
+                  "filename": "tm262604d1_ex99-1.htm",
+                  "ticker": "APH",
+                  "items": "5.02,7.01,9.01"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -5.015625,
+                "vectorScore": 0.37804198265075684,
+                "sourceId": "sec_filings",
+                "documentId": "edgar:0000820313:0001104659-26-010676:tm265098d1_8k.htm",
+                "chunkId": "edgar:0000820313:0001104659-26-010676:tm265098d1_8k.htm:0001",
+                "title": "AMPHENOL CORP /DE/ 8-K: FORM 8-K",
+                "url": "https://www.sec.gov/Archives/edgar/data/820313/0001104659-26-010676.txt",
+                "publishedAt": "2026-02-05T00:00:00Z",
+                "snippet": "false 0000820313 0000820313 2026-02-04 2026-02-04 0000820313 us-gaap:CommonClassAMember 2026-02-04 2026-02-04 0000820313 us-gaap:CommonClassBMember 2026-02-04 2026-02-04 iso4217:USD xbrli:shares iso4217:USD xbrli:shares UNITED STATES SECURITIES AND EXCHANGE COMMISSION Washington, D.C. 20549 FORM 8-K CURRENT REPORT Pursuant to Section 13 or 15(d) of The Securities Exchange Act of 1934 Date of Report (Date of earliest event reported): February 4, 2026 AMPHENOL CORPORATION (Exact name of registrant as specified in its charter) Delaware 1-10879 22-2785165 (State or other jurisdiction of incorporation) (Commission File Number) (IRS Employer Identification No.) 358 Hall Avenue, Wallingford, Connecticut 06492 (Address of principal executive offices) (Zip Code) Registrant’s telephone number, including area code: (203) 265-8900 Not Applicable (Former name or former address, if changed since last report) Check the appropriate box below if the Form 8-K filing is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions: ¨ Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425) ¨ Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12) ¨ Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b)) ¨ Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c)) Securities registered pursuant to",
+                "metadata": {
+                  "citation": "SEC 8-K, AMPHENOL CORP /DE/, filed 2026-02-05, accession 0001104659-26-010676",
+                  "cik": "0000820313",
+                  "company_name": "AMPHENOL CORP /DE/",
+                  "form": "8-K",
+                  "filed_on": "2026-02-05",
+                  "accession": "0001104659-26-010676",
+                  "document_type": "8-K",
+                  "filename": "tm265098d1_8k.htm",
+                  "ticker": "APH",
+                  "items": "5.02,7.01,9.01"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "sec_filings": 16
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 304.7,
+              "searchMs": 10.6,
+              "rerankMs": 448.5,
+              "totalMs": 763.9
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "sec_filings"
+      ],
+      "benchmark": null,
+      "retrievalBenchmark": {
+        "schemaVersion": "1",
+        "collection": "us_equities_documents",
+        "collectionVersion": "us_equities_documents__70ef685d0560",
+        "embedModel": "nvidia/nemotron-3-embed-1b",
+        "sourceIds": [
+          "market_regulations",
+          "sec_filings",
+          "world_news"
+        ],
+        "queryCount": 15,
+        "measuredAt": "2026-10-02T16:16:43.398691Z",
+        "profiles": [
+          {
+            "profileId": "vector-single",
+            "executionMode": "single",
+            "batchSize": 1,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 4.676,
+              "p95Ms": 7.649,
+              "vectorSearchMs": 235.398,
+              "vectorQps": 191.17
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 3.809,
+              "p95Ms": 5.689,
+              "vectorSearchMs": 184.165,
+              "vectorQps": 244.35
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.98,
+              "cpuGpuOverlapAtK": 0.9879,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.2782,
+              "gpuSpeedupFactor": 1.2782
+            }
+          },
+          {
+            "profileId": "vector-batch",
+            "executionMode": "batch",
+            "batchSize": 5,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 6.607,
+              "p95Ms": 8.036,
+              "vectorSearchMs": 81.351,
+              "vectorQps": 553.16
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 4.953,
+              "p95Ms": 6.467,
+              "vectorSearchMs": 61.65,
+              "vectorQps": 729.93
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.98,
+              "cpuGpuOverlapAtK": 0.9879,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.3196,
+              "gpuSpeedupFactor": 1.3196
+            }
+          },
+          {
+            "profileId": "vector-concurrency",
+            "executionMode": "concurrency",
+            "batchSize": 1,
+            "concurrency": 5,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 6.156,
+              "p95Ms": 7.478,
+              "vectorSearchMs": 75.931,
+              "vectorQps": 592.65
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 5.679,
+              "p95Ms": 7.242,
+              "vectorSearchMs": 71.543,
+              "vectorQps": 628.99
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.98,
+              "cpuGpuOverlapAtK": 0.9879,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "cpu_faster_or_equal",
+              "observedCpuOverGpuRatio": 1.0613,
+              "gpuSpeedupFactor": null
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

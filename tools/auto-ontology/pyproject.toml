@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+[project]
+name = "demo-auto-ontology"
+version = "0.1.0"
+description = "Auto Ontology (the ontology profile): upstream patches, source preparation and the ontology seed."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+# The seed runs in the backend image, which has PyYAML 6.0.3; the tests need it too.
+dev = ["pytest>=9.1", "pyyaml==6.0.3"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "gpu: needs an NVIDIA GPU",
+    "slow: slow test",
+    "live: calls real endpoints; never run in CI",
+]

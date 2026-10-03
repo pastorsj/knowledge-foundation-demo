@@ -1,0 +1,21 @@
+{
+  "id": "e2e",
+  "version": "1.0.0",
+  "title": "E2E pack",
+  "disclaimer": "Synthetic data for tests.",
+  "sources": [
+    {
+      "id": "market_analysis_structured",
+      "name": "Market Prices & Events",
+      "description": "Synthetic prices, volumes and events of fictional assets.",
+      "kind": "structured"
+    },
+    {
+      "id": "market_news",
+      "name": "Market News",
+      "description": "Synthetic short-form news about the fictional assets.",
+      "kind": "documents"
+    }
+  ],
+  "questions": []
+}

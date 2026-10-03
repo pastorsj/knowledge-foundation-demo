@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "market_analysis_structured",
+      "name": "Market Prices & Events",
+      "databaseName": "market_analysis",
+      "schema": {
+        "source_id": "market_analysis_structured",
+        "database_name": "market_analysis",
+        "tables": [
+          {
+            "name": "assets",
+            "schema": "main",
+            "kind": "table",
+            "columns": [
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": true
+              },
+              {
+                "name": "ticker",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "company_name",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "corporate_actions",
+            "schema": "main",
+            "kind": "table",
+            "columns": [
+              {
+                "name": "action_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": true
+              },
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "effective_session_date",
+                "type": "DATE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "cash_amount_usd",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          }
+        ],
+        "relationships": [
+          {
+            "from_table": "corporate_actions",
+            "from_column": "asset_id",
+            "to_table": "assets",
+            "to_column": "asset_id"
+          }
+        ]
+      },
+      "previews": {
+        "assets": {
+          "table": "assets",
+          "columns": [
+            "asset_id",
+            "ticker",
+            "company_name"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "asset-aether",
+              "AETH",
+              "Aether Compute"
+            ],
+            [
+              "asset-meridian",
+              "MRDN",
+              "Meridian Digital Bank"
+            ]
+          ],
+          "truncated": false,
+          "duration_ms": 4
+        },
+        "corporate_actions": {
+          "table": "corporate_actions",
+          "columns": [
+            "action_id",
+            "asset_id",
+            "effective_session_date",
+            "cash_amount_usd"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "ca-001",
+              "asset-meridian",
+              "2026-03-20",
+              0.32
+            ],
+            [
+              "ca-002",
+              "asset-aether",
+              "2026-05-15",
+              0.18
+            ]
+          ],
+          "truncated": false,
+          "duration_ms": 4
+        }
+      },
+      "queries": [
+        {
+          "sql": "WITH price_history AS (\n    SELECT\n        price_record.asset_id,\n        price_record.trading_date,\n        price_record.adjusted_close,\n        price_record.total_return_1d,\n        LAG(price_record.adjusted_close) OVER (\n            PARTITION BY price_record.asset_id\n            ORDER BY price_record.trading_date\n        ) AS prior_adjusted_close\n    FROM daily_prices AS price_record\n    WHERE price_record.ingested_at <= TIMESTAMPTZ '2026-09-28 05:16:38+00:00'\n),\ndividend_actions AS (\n    SELECT\n        asset_record.asset_id AS asset_stable_identifier,\n        ticker_record.ticker,\n        asset_record.company_name,\n        action_record.effective_date AS effective_session_date,\n        action_record.cash_amount_usd AS cash_amount,\n        'USD' AS cash_currency,\n        (price_record.adjusted_close / NULLIF(price_record.prior_adjusted_close, 0.0)) - 1.0 AS price_return_1d,\n        price_record.total_return_1d,\n        (\n            price_record.total_return_1d\n            - ((price_record.adjusted_close / NULLIF(price_record.prior_adjusted_close, 0.0)) - 1.0)\n        ) * 100.0 AS total_minus_price_return_percentage_points\n    FROM corporate_actions AS action_record\n    INNER JOIN assets AS asset_record\n        ON asset_record.asset_id = action_record.asset_id\n    INNER JOIN price_history AS price_record\n        ON asset_record.asset_id = price_record.asset_id\n       AND action_record.effective_date = price_record.trading_date\n    LEFT JOIN ticker_history AS ticker_record\n        ON asset_record.asset_id = ticker_record.asset_id\n       AND action_record.effective_date >= ticker_record.effective_from\n       AND (\n            ticker_record.effective_to IS NULL\n            OR action_record.effective_date <= ticker_record.effective_to\n       )\n    WHERE action_record.action_type = 'cash_dividend'\n      AND action_record.effective_date >= DATE '2026-01-01'\n      AND action_record.effective_date < DATE '2027-01-01'\n      AND action_record.effective_date <= DATE '2026-09-28'\n)\nSELECT\n    dividend_record.asset_stable_identifier,\n    dividend_record.ticker,\n    dividend_record.company_name,\n    dividend_record.effective_session_date,\n    dividend_record.cash_amount,\n    dividend_record.cash_currency,\n    dividend_record.price_return_1d,\n    dividend_record.total_return_1d,\n    dividend_record.total_minus_price_return_percentage_points,\n    COUNT(*) OVER () AS row_count,\n    'complete for available observed records through 2026-09-28 05:16:38 UTC; not truncated' AS completeness_status\nFROM dividend_actions AS dividend_record\nORDER BY\n    dividend_record.effective_session_date,\n    dividend_record.asset_stable_identifier,\n    dividend_record.ticker",
+          "result": {
+            "columns": [
+              "asset_stable_identifier",
+              "cash_amount",
+              "cash_currency",
+              "company_name",
+              "completeness_status",
+              "effective_session_date",
+              "price_return_1d",
+              "row_count",
+              "ticker",
+              "total_minus_price_return_percentage_points",
+              "total_return_1d"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "asset-meridian",
+                0.32,
+                "USD",
+                "Meridian Digital Bank",
+                "complete for available observed records through 2026-09-28 05:16:38 UTC; not truncated",
+                "2026-03-20T00:00:00.000",
+                -0.0026469023,
+                2,
+                "MRDN",
+                0.4965782302,
+                0.00231888
+              ],
+              [
+                "asset-aether",
+                0.18,
+                "USD",
+                "Aether Compute",
+                "complete for available observed records through 2026-09-28 05:16:38 UTC; not truncated",
+                "2026-05-15T00:00:00.000",
+                -0.015080746,
+                2,
+                "AETH",
+                0.0930435958,
+                -0.01415031
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 4
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"assets\" LIMIT 25",
+          "result": {
+            "columns": [
+              "asset_id",
+              "ticker",
+              "company_name"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "asset-aether",
+                "AETH",
+                "Aether Compute"
+              ],
+              [
+                "asset-meridian",
+                "MRDN",
+                "Meridian Digital Bank"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 4
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"corporate_actions\" LIMIT 25",
+          "result": {
+            "columns": [
+              "action_id",
+              "asset_id",
+              "effective_session_date",
+              "cash_amount_usd"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "ca-001",
+                "asset-meridian",
+                "2026-03-20",
+                0.32
+              ],
+              [
+                "ca-002",
+                "asset-aether",
+                "2026-05-15",
+                0.18
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 4
+          }
+        }
+      ]
+    }
+  ]
+}

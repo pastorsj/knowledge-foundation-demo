@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Debug
+npm-debug.log*
+*.log
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp

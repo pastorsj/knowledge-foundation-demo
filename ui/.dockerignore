@@ -1,0 +1,14 @@
+# Keep the build context to what `npm ci` and `next build` need.
+node_modules/
+.next/
+out/
+coverage/
+test-results/
+playwright-report/
+e2e/
+.env
+.env.*
+!.env.example
+*.log
+*.tsbuildinfo
+.DS_Store

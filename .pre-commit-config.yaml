@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Install once with `pre-commit install`; check the whole tree with `pre-commit run --all-files`.
+exclude: ^(contracts/schemas|ui/src/generated)/|\.patch$
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.9
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        args: [-x] # follow sourced files, as CI does, so one changed script checks on its own
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: no-market-data
+        name: no data files outside the synthetic text and test fixtures (docs/data-platform.md)
+        language: fail
+        entry: Real market data is never committed; external datasets belong in DATA_SOURCE_DIR.
+        files: \.(parquet|arrow|feather|duckdb)$
+        exclude: ^(data/packs/[^/]+/text|(.+/)?tests/fixtures)/
+      - id: no-makefile
+        name: no Makefile (scripts/demo.sh is the entry point)
+        language: fail
+        entry: Use scripts/demo.sh, not a Makefile.
+        files: (^|/)(GNUm|M|m)akefile$
+      - id: no-git-lfs
+        name: no Git LFS
+        language: pygrep
+        entry: filter=lfs
+        files: (^|/)\.gitattributes$

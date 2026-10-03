@@ -1,0 +1,875 @@
+{
+  "schemaVersion": 2,
+  "id": "shareholder-proposals",
+  "title": "Shareholder Proposals",
+  "turns": [
+    {
+      "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+      "question": "Under Rule 14a-8 in Title 17, what ownership and holding-period requirements must a shareholder meet to have a proposal included in a company's proxy statement? Cite the section.",
+      "submittedAt": "2026-10-01T19:04:34.115896Z",
+      "completedAt": "2026-10-01T19:04:48.521201Z",
+      "status": "success",
+      "report": {
+        "markdown": "Under **17 CFR § 240.14a-8(b)(1)(i)**, a shareholder must meet one of three tiered ownership-and-holding-period thresholds, based on the **market value** of the company's voting securities they have **continuously held**:\n\n| Minimum Market Value | Minimum Continuous Holding Period |\n|----------------------|-----------------------------------|\n| **$2,000** | **3 years** |\n| **$15,000** | **2 years** |\n| **$25,000** | **1 year** |\n\nThe securities must be “entitled to vote on the proposal.” The shareholder must also provide a written statement of intent to continue holding the required amount through the date of the shareholders’ meeting [1].\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 4 documents — evidence `hermes-receipt:8ff963572b943b922506d9f49efe001d114fb8d456e700c60124afe8b311a1c7`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:8ff963572b943b922506d9f49efe001d114fb8d456e700c60124afe8b311a1c7",
+            "label": "Unstructured Retrieval evidence — 4 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-ea3164b173b9493580b6893acaf5ab20"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "c59780f8-104e-5556-a44e-5749657f3b3a",
+          "cursor": 13361,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:34.226101Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:72869baacdb687a1a43ecf8163c01826c458e7eea8561d7b3adb0af323ae9254",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ae9742fa-295a-51fd-90a3-8cee886d434c",
+          "cursor": 13362,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": "56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26:api:1",
+          "parentInvocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:40.033896Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4529,
+              "output_tokens": 159
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "41e57271-d057-5667-a4a7-855fad49976b",
+          "cursor": 13363,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-ea3164b173b9493580b6893acaf5ab20",
+          "parentInvocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:40.068560Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:208cfd5a24bcdae4da9c46bcdc49b7b8ab417f1d76f991551fa8e51ff18a08a7",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "74b68314-89b6-5327-bcd2-bd4c1fe20aa0",
+          "cursor": 13364,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": "56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-ea3164b173b9493580b6893acaf5ab20",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:8ff963572b943b922506d9f49efe001d114fb8d456e700c60124afe8b311a1c7"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:41.186886Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1115,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:8ff963572b943b922506d9f49efe001d114fb8d456e700c60124afe8b311a1c7",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "55cca92e-2784-5a82-a899-efae11e6bd78",
+          "cursor": 13365,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-ea3164b173b9493580b6893acaf5ab20",
+          "parentInvocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:41.249443Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.143
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:73392599b8b8815484d86775910bb007191df22751c94a58a5671813d1fb0daf",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b8a51858-6890-51da-8da8-5590499ff186",
+          "cursor": 13366,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": "56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26:api:2",
+          "parentInvocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:48.450142Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14982,
+              "output_tokens": 530
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9ea430c0-664e-5c74-89ac-fcc6d6f90aab",
+          "cursor": 13367,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:48.474734Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:74640547a8142b6ede123c4a894e5a693a7d9968cbfc17f6fcbbd991789183bb",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ffff513b-6dff-50af-be9b-783191612219",
+          "cursor": 13368,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:48.491252Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 19511,
+              "output_tokens": 689,
+              "total_tokens": 20200,
+              "output_characters": 734
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:c59b0281a65383fd461cbbd098f0cca6e8490092bf442ed492eeab597bdcf390",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "62541637-07a8-5f13-8598-e10cef0c7510",
+          "cursor": 13369,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:48.508073Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:56eaca90-b059-4c74-857b-c1b293eeb0eb:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "76f55b4a-69fc-57dc-8fee-c8b0feab53f1",
+          "cursor": 13370,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:48.508174Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:56eaca90-b059-4c74-857b-c1b293eeb0eb:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "47b2c9ab-ce5f-54bb-af46-7066f4f62e47",
+          "cursor": 13371,
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "runId": "run_a0f6cf8b2c7d46aca3cb1e844bd59a70",
+          "sessionId": "record-f461b61a-2c36-4154-9ae2-92af31e8308f",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:2934eb1e8eeec91d574210e0:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T19:04:48.508254Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 14356,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 1143,
+              "input_tokens": 19511,
+              "output_tokens": 689,
+              "total_tokens": 20200
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:56eaca90-b059-4c74-857b-c1b293eeb0eb:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:8ff963572b943b922506d9f49efe001d114fb8d456e700c60124afe8b311a1c7",
+          "jobId": "56eaca90-b059-4c74-857b-c1b293eeb0eb",
+          "invocationId": "hermes-tool:chatcmpl-tool-ea3164b173b9493580b6893acaf5ab20",
+          "turnId": "56eaca90-b059-4c74-857b-c1b293eeb0eb:56eaca90-b059-4c74-857b-c1b293eeb0eb:989faa26",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1115,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-01T19:04:41.186886Z",
+          "content": {
+            "query": "Rule 14a-8 ownership holding period requirements shareholder proposal proxy statement",
+            "sourceIds": [
+              "market_regulations"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__60b1ef32aa55",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.66357421875,
+                "vectorScore": 0.5574992299079895,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-8:3cf261ec6ebe",
+                "chunkId": "ecfr-title17:240.14a-8:3cf261ec6ebe:0002",
+                "title": "§ 240.14a-8 Shareholder proposals.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-8",
+                "publishedAt": null,
+                "snippet": "§ 240.14a-8 Shareholder proposals. This section addresses when a company must include a shareholder's proposal in its proxy statement and identify the proposal in its form of proxy when the company holds an annual or special meeting of shareholders. In summary, in order to have your shareholder proposal included on a company's proxy card, and included along with any supporting statement in its proxy statement, you must be eligible and follow certain procedures. Under a few specific circumstances, the company is permitted to exclude your proposal, but only after submitting its reasons to the Commission. We structured this section in a question-and-answer format so that it is easier to understand. The references to “you” are to a shareholder seeking to submit the proposal. (a) Question 1: What is a proposal? A shareholder proposal is your recommendation or requirement that the company and/or its board of directors take action, which you intend to present at a meeting of the company's shareholders. Your proposal should state as clearly as possible the course of action that you believe the company should follow. If your proposal is placed on the company's proxy card, the company must also provide in the form of proxy means for shareholders to specify by boxes a choice between approval or disapproval, or abstention. Unless otherwise indicated, the word “proposal” as used in this section refers both to your proposal, and to your corresponding statement in support of your proposal (",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-8",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-8",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 2,
+                "score": -1.7978515625,
+                "vectorScore": 0.49894076585769653,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-8:3cf261ec6ebe",
+                "chunkId": "ecfr-title17:240.14a-8:3cf261ec6ebe:0003",
+                "title": "§ 240.14a-8 Shareholder proposals.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-8",
+                "publishedAt": null,
+                "snippet": "with a written statement that you intend to continue to hold the requisite amount of securities, determined in accordance with paragraph (b)(1)(i)(A) through (C) of this section, through the date of the shareholders' meeting for which the proposal is submitted; and (iii) You must provide the company with a written statement that you are able to meet with the company in person or via teleconference no less than 10 calendar days, nor more than 30 calendar days, after submission of the shareholder proposal. You must include your contact information as well as business days and specific times that you are available to discuss the proposal with the company. You must identify times that are within the regular business hours of the company's principal executive offices. If these hours are not disclosed in the company's proxy statement for the prior year's annual meeting, you must identify times that are between 9 a.m. and 5:30 p.m. in the time zone of the company's principal executive offices. If you elect to co-file a proposal, all co-filers must either: (A) Agree to the same dates and times of availability, or (B) Identify a single lead filer who will provide dates and times of the lead filer's availability to engage on behalf of all co-filers; and (iv) If you use a representative to submit a shareholder proposal on your behalf, you must provide the company with written documentation that: (A) Identifies the company to which the proposal is directed; (B) Identifies the annual or s",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-8",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-8",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -2.0078125,
+                "vectorScore": 0.5182226896286011,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-8:3cf261ec6ebe",
+                "chunkId": "ecfr-title17:240.14a-8:3cf261ec6ebe:0005",
+                "title": "§ 240.14a-8 Shareholder proposals.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-8",
+                "publishedAt": null,
+                "snippet": "of this chapter), or amendments to those documents or updated forms, demonstrating that you meet at least one of the share ownership requirements under paragraph (b)(1)(i)(A) through (C) of this section. If you have filed one or more of these documents with the SEC, you may demonstrate your eligibility to submit a proposal by submitting to the company: ( 1 ) A copy of the schedule(s) and/or form(s), and any subsequent amendments reporting a change in your ownership level; ( 2 ) Your written statement that you continuously held at least $2,000, $15,000, or $25,000 in market value of the company's securities entitled to vote on the proposal for at least three years, two years, or one year, respectively; and ( 3 ) Your written statement that you intend to continue to hold the requisite amount of securities, determined in accordance with paragraph (b)(1)(i)(A) through (C) of this section, through the date of the company's annual or special meeting. (c) Question 3: How many proposals may I submit? Each person may submit no more than one proposal, directly or indirectly, to a company for a particular shareholders' meeting. A person may not rely on the securities holdings of another person for the purpose of meeting the eligibility requirements and submitting multiple proposals for a particular shareholders' meeting. (d) Question 4: How long can my proposal be? The proposal, including any accompanying supporting statement, may not exceed 500 words. (e) Question 5: What is the deadli",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-8",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-8",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -2.607421875,
+                "vectorScore": 0.5194471478462219,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-8:3cf261ec6ebe",
+                "chunkId": "ecfr-title17:240.14a-8:3cf261ec6ebe:0004",
+                "title": "§ 240.14a-8 Shareholder proposals.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-8",
+                "publishedAt": null,
+                "snippet": "such that a reasonable person would understand that the agent has authority to submit the proposal and otherwise act on the shareholder's behalf. (vi) For purposes of paragraph (b)(1)(i) of this section, you may not aggregate your holdings with those of another shareholder or group of shareholders to meet the requisite amount of securities necessary to be eligible to submit a proposal. (2) One of the following methods must be used to demonstrate your eligibility to submit a proposal: (i) If you are the registered holder of your securities, which means that your name appears in the company's records as a shareholder, the company can verify your eligibility on its own, although you will still have to provide the company with a written statement that you intend to continue to hold the requisite amount of securities, determined in accordance with paragraph (b)(1)(i)(A) through (C) of this section, through the date of the meeting of shareholders. (ii) If, like many shareholders, you are not a registered holder, the company likely does not know that you are a shareholder, or how many shares you own. In this case, at the time you submit your proposal, you must prove your eligibility to the company in one of two ways: (A) The first way is to submit to the company a written statement from the “record” holder of your securities (usually a broker or bank) verifying that, at the time you submitted your proposal, you continuously held at least $2,000, $15,000, or $25,000 in market value o",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-8",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-8",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 5,
+                "score": -2.763671875,
+                "vectorScore": 0.4171409010887146,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-8:3cf261ec6ebe",
+                "chunkId": "ecfr-title17:240.14a-8:3cf261ec6ebe:0006",
+                "title": "§ 240.14a-8 Shareholder proposals.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-8",
+                "publishedAt": null,
+                "snippet": "including electronic means, that permit them to prove the date of delivery. (2) The deadline is calculated in the following manner if the proposal is submitted for a regularly scheduled annual meeting. The proposal must be received at the company's principal executive offices not less than 120 calendar days before the date of the company's proxy statement released to shareholders in connection with the previous year's annual meeting. However, if the company did not hold an annual meeting the previous year, or if the date of this year's annual meeting has been changed by more than 30 days from the date of the previous year's meeting, then the deadline is a reasonable time before the company begins to print and send its proxy materials. (3) If you are submitting your proposal for a meeting of shareholders other than a regularly scheduled annual meeting, the deadline is a reasonable time before the company begins to print and send its proxy materials. (f) Question 6: What if I fail to follow one of the eligibility or procedural requirements explained in answers to Questions 1 through 4 of this section? (1) The company may exclude your proposal, but only after it has notified you of the problem, and you have failed adequately to correct it. Within 14 calendar days of receiving your proposal, the company must notify you in writing of any procedural or eligibility deficiencies, as well as of the time frame for your response. Your response must be postmarked, or transmitted electron",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-8",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-8",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 6,
+                "score": -2.9921875,
+                "vectorScore": 0.37047427892684937,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-8:3cf261ec6ebe",
+                "chunkId": "ecfr-title17:240.14a-8:3cf261ec6ebe:0010",
+                "title": "§ 240.14a-8 Shareholder proposals.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-8",
+                "publishedAt": null,
+                "snippet": "Commission. The company must simultaneously provide you with a copy of its submission. The Commission staff may permit the company to make its submission later than 80 days before the company files its definitive proxy statement and form of proxy, if the company demonstrates good cause for missing the deadline. (2) The company must file six paper copies of the following: (i) The proposal; (ii) An explanation of why the company believes that it may exclude the proposal, which should, if possible, refer to the most recent applicable authority, such as prior Division letters issued under the rule; and (iii) A supporting opinion of counsel when such reasons are based on matters of state or foreign law. (k) Question 11: May I submit my own statement to the Commission responding to the company's arguments? Yes, you may submit a response, but it is not required. You should try to submit any response to us, with a copy to the company, as soon as possible after the company makes its submission. This way, the Commission staff will have time to consider fully your submission before it issues its response. You should submit six paper copies of your response. (l) Question 12: If the company includes my shareholder proposal in its proxy materials, what information about me must it include along with the proposal itself? (1) The company's proxy statement must include your name and address, as well as the number of the company's voting securities that you hold. However, instead of providing ",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-8",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-8",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 7,
+                "score": -3.552734375,
+                "vectorScore": 0.392905592918396,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-5:89ef0558ff5e",
+                "chunkId": "ecfr-title17:240.14a-5:89ef0558ff5e:0003",
+                "title": "§ 240.14a-5 Presentation of information in proxy statement.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-5",
+                "publishedAt": null,
+                "snippet": "medium, issuers may satisfy legibility requirements applicable to printed documents, such as type size and font, by presenting all required information in a format readily communicated to investors. (e) All proxy statements shall disclose, under an appropriate caption, the following dates: (1) The deadline for submitting shareholder proposals for inclusion in the registrant's proxy statement and form of proxy for the registrant's next annual meeting, calculated in the manner provided in § 240.14a-8(e)(Question 5); (2) The date after which notice of a shareholder proposal submitted outside the processes of § 240.14a-8 is considered untimely, either calculated in the manner provided by § 240.14a-4(c)(1) or as established by the registrant's advance notice provision, if any, authorized by applicable state law; (3) The deadline for submitting nominees for inclusion in the registrant's proxy statement and form of proxy pursuant to an applicable state or foreign law provision or a registrant's governing documents as they relate to the inclusion of shareholder director nominees in the registrant's proxy materials for the registrant's next annual meeting of shareholders; and (4) The deadline for providing notice of a solicitation of proxies in support of director nominees other than the registrant's nominees pursuant to § 240.14a-19 for the registrant's next annual meeting unless the registrant is an investment company registered under the Investment Company Act of 1940 (15 U.S.C. 80",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-5",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-5",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 8,
+                "score": -3.8359375,
+                "vectorScore": 0.45368674397468567,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:229.407:a51757b5f93e",
+                "chunkId": "ecfr-title17:229.407:a51757b5f93e:0009",
+                "title": "§ 229.407 (Item 407) Corporate governance.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-229.407",
+                "publishedAt": null,
+                "snippet": "the obligation under that Item will arise where the registrant receives the security holder recommendation a reasonable time before the registrant begins to print and mail its proxy materials. 3. For purposes of paragraph (c)(2)(ix) of this Item, the percentage of securities held by a recommending security holder, as well as the holding period of those securities, may be determined by the registrant if the security holder is the registered holder of the securities. If the security holder is not the registered owner of the securities, he or she can submit one of the following to the registrant to evidence the required ownership percentage and holding period: a. A written statement from the “record” holder of the securities (usually a broker or bank) verifying that, at the time the security holder made the recommendation, he or she had held the required securities for at least one year; or b. If the security holder has filed a Schedule 13D (§ 240.13d-101 of this chapter), Schedule 13G (§ 240.13d-102 of this chapter), Form 3 (§ 249.103 of this chapter), Form 4 (§ 249.104 of this chapter), and/or Form 5 (§ 249.105 of this chapter), or amendments to those documents or updated forms, reflecting ownership of the securities as of or before the date of the recommendation, a copy of the schedule and/or form, and any subsequent amendments reporting a change in ownership level, as well as a written statement that the security holder continuously held the securities for the one-year perio",
+                "metadata": {
+                  "citation": "17 CFR § 229.407",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "229",
+                  "part_heading": "PART 229—STANDARD INSTRUCTIONS FOR FILING FORMS UNDER SECURITIES ACT OF 1933, SECURITIES EXCHANGE ACT OF 1934 AND ENERGY POLICY AND CONSERVATION ACT OF 1975—REGULATION S-K",
+                  "subpart_heading": "Subpart 229.400—Management and Certain Security Holders",
+                  "section": "229.407",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 9,
+                "score": -3.982421875,
+                "vectorScore": 0.36547693610191345,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-4:605961eba3f3",
+                "chunkId": "ecfr-title17:240.14a-4:605961eba3f3:0005",
+                "title": "§ 240.14a-4 Requirements as to proxy.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-4",
+                "publishedAt": null,
+                "snippet": "if the registrant includes, in the proxy statement, advice on the nature of the matter and how the registrant intends to exercise its discretion to vote on each matter. However, even if the registrant includes this information in its proxy statement, it may not exercise discretionary voting authority on a particular proposal if the proponent: (i) Provides the registrant with a written statement, within the time-frame determined under paragraph (c)(1) of this section, that the proponent intends to deliver a proxy statement and form of proxy to holders of at least the percentage of the company's voting shares required under applicable law to carry the proposal; (ii) Includes the same statement in its proxy materials filed under § 240.14a-6; and (iii) Immediately after soliciting the percentage of shareholders required to carry the proposal, provides the registrant with a statement from any solicitor or other person with knowledge that the necessary steps have been taken to deliver a proxy statement and form of proxy to holders of at least the percentage of the company's voting shares required under applicable law to carry the proposal. (3) For solicitations other than for annual meetings or for solicitations by persons other than the registrant, matters which the persons making the solicitation do not know, a reasonable time before the solicitation, are to be presented at the meeting, if a specific statement to that effect is made in the proxy statement or form of proxy. (4) Ap",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-4",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-4",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 10,
+                "score": -4.22265625,
+                "vectorScore": 0.34926921129226685,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.14a-8:3cf261ec6ebe",
+                "chunkId": "ecfr-title17:240.14a-8:3cf261ec6ebe:0009",
+                "title": "§ 240.14a-8 Shareholder proposals.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.14a-8",
+                "publishedAt": null,
+                "snippet": "under this section should specify the points of conflict with the company's proposal. (10) Substantially implemented: If the company has already substantially implemented the proposal; Note to paragraph ( i )(10): A company may exclude a shareholder proposal that would provide an advisory vote or seek future advisory votes to approve the compensation of executives as disclosed pursuant to Item 402 of Regulation S-K (§ 229.402 of this chapter) or any successor to Item 402 (a “say-on-pay vote”) or that relates to the frequency of say-on-pay votes, provided that in the most recent shareholder vote required by § 240.14a-21(b) of this chapter a single year ( i.e., one, two, or three years) received approval of a majority of votes cast on the matter and the company has adopted a policy on the frequency of say-on-pay votes that is consistent with the choice of the majority of votes cast in the most recent shareholder vote required by § 240.14a-21(b) of this chapter. (11) Duplication: If the proposal substantially duplicates another proposal previously submitted to the company by another proponent that will be included in the company's proxy materials for the same meeting; (12) Resubmissions. If the proposal addresses substantially the same subject matter as a proposal, or proposals, previously included in the company's proxy materials within the preceding five calendar years if the most recent vote occurred within the preceding three calendar years and the most recent vote was: (i) ",
+                "metadata": {
+                  "citation": "17 CFR § 240.14a-8",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Regulation 14A: Solicitation of Proxies",
+                  "section": "240.14a-8",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "market_regulations": 40
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 264.5,
+              "searchMs": 11.9,
+              "rerankMs": 820.1,
+              "totalMs": 1096.5
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "market_regulations"
+      ],
+      "benchmark": null,
+      "retrievalBenchmark": {
+        "schemaVersion": "1",
+        "collection": "us_equities_documents",
+        "collectionVersion": "us_equities_documents__60b1ef32aa55",
+        "embedModel": "nvidia/nemotron-3-embed-1b",
+        "sourceIds": [
+          "market_regulations",
+          "sec_filings",
+          "world_news"
+        ],
+        "queryCount": 15,
+        "measuredAt": "2026-10-01T18:28:48.280791Z",
+        "profiles": [
+          {
+            "profileId": "vector-single",
+            "executionMode": "single",
+            "batchSize": 1,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 4.932,
+              "p95Ms": 5.903,
+              "vectorSearchMs": 229.54,
+              "vectorQps": 196.04
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 4.346,
+              "p95Ms": 5.87,
+              "vectorSearchMs": 202.462,
+              "vectorQps": 222.26
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.98,
+              "gpuRecallAtK": 0.98,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.1337,
+              "gpuSpeedupFactor": 1.1337
+            }
+          },
+          {
+            "profileId": "vector-batch",
+            "executionMode": "batch",
+            "batchSize": 5,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 6.944,
+              "p95Ms": 8.542,
+              "vectorSearchMs": 84.989,
+              "vectorQps": 529.48
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 6.159,
+              "p95Ms": 7.831,
+              "vectorSearchMs": 76.585,
+              "vectorQps": 587.58
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.98,
+              "gpuRecallAtK": 0.98,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.1097,
+              "gpuSpeedupFactor": 1.1097
+            }
+          },
+          {
+            "profileId": "vector-concurrency",
+            "executionMode": "concurrency",
+            "batchSize": 1,
+            "concurrency": 5,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 6.478,
+              "p95Ms": 8.235,
+              "vectorSearchMs": 120.542,
+              "vectorQps": 373.31
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 5.323,
+              "p95Ms": 6.757,
+              "vectorSearchMs": 68.423,
+              "vectorQps": 657.67
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.98,
+              "gpuRecallAtK": 0.98,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.7617,
+              "gpuSpeedupFactor": 1.7617
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

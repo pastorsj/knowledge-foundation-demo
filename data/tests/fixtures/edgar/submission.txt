@@ -1,0 +1,44 @@
+<SEC-DOCUMENT>0000000001-26-000001.txt : 20260401
+<SEC-HEADER>0000000001-26-000001.hdr.sgml : 20260401
+ACCESSION NUMBER:		0000000001-26-000001
+CONFORMED SUBMISSION TYPE:	8-K
+</SEC-HEADER>
+<DOCUMENT>
+<TYPE>8-K
+<SEQUENCE>1
+<FILENAME>example 8k.htm
+<DESCRIPTION>CURRENT REPORT
+<TEXT>
+<html><head><style>p { color: red }</style><script>track()</script></head>
+<body><p>Item 1.05 Material Cybersecurity Incidents.&#160;On March 30, 2026 the company detected unauthorized access to part of its network.</p>
+<p>The company activated its incident response plan and notified law enforcement.</p></body></html>
+</TEXT>
+</DOCUMENT>
+<DOCUMENT>
+<TYPE>EX-99.1
+<SEQUENCE>2
+<FILENAME>ex99-1.txt
+<DESCRIPTION>PRESS RELEASE
+<TEXT>
+Example Corp announces that its operations were restored on April 1, 2026 after a brief disruption to its systems.
+</TEXT>
+</DOCUMENT>
+<DOCUMENT>
+<TYPE>EX-10.1
+<SEQUENCE>3
+<FILENAME>ex10-1.htm
+<DESCRIPTION>MATERIAL CONTRACT
+<TEXT>
+<html><body><p>This exhibit is a material contract and is not a disclosure document for this corpus, so it is skipped.</p></body></html>
+</TEXT>
+</DOCUMENT>
+<DOCUMENT>
+<TYPE>EX-99.2
+<SEQUENCE>4
+<FILENAME>ex99-2.htm
+<DESCRIPTION>SHORT EXHIBIT
+<TEXT>
+<html><body><p>Too short to keep.</p></body></html>
+</TEXT>
+</DOCUMENT>
+</SEC-DOCUMENT>

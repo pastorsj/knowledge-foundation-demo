@@ -1,0 +1,6 @@
+/* Applied to the page only while a baseline screenshot is taken (toHaveScreenshot's stylePath). */
+
+/* The empty chat's starfield is a canvas that turns every animation frame. */
+canvas {
+  visibility: hidden !important;
+}

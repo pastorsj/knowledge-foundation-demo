@@ -1,0 +1,16 @@
+{
+ "fields": [
+  "cik",
+  "seriesId",
+  "classId",
+  "symbol"
+ ],
+ "data": [
+  [
+   3,
+   "S1",
+   "C1",
+   "FUNDX"
+  ]
+ ]
+}

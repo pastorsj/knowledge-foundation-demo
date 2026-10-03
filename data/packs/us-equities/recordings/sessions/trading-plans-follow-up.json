@@ -1,0 +1,1910 @@
+{
+  "schemaVersion": 2,
+  "id": "trading-plans-follow-up",
+  "title": "Rule 10b5-1 Follow-up",
+  "turns": [
+    {
+      "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+      "question": "What conditions does Rule 10b5-1 in Title 17 place on trading plans used for the affirmative defense, including cooling-off periods? Cite the section.",
+      "submittedAt": "2026-10-01T22:00:06.077163Z",
+      "completedAt": "2026-10-01T22:00:23.178456Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the eCFR Title 17 (17 CFR § 240.10b5-1), Rule 10b5-1 sets the following conditions for trading plans to qualify for the affirmative defense, including specific cooling-off periods:\n\n## Affirmative Defense Conditions (Paragraph (c)(1))\n\n**Core Requirements:**\n1. **Pre-existing plan**: The binding contract, instruction, or written plan must be entered into *before* becoming aware of material nonpublic information [1].\n2. **Plan specificity**: The plan must either:\n   - Specify the amount, price, and date of trades; OR\n   - Include a written formula/algorithm/computer program for determining these; OR\n   - Not permit the person to exercise any subsequent influence over how, when, or whether to effect purchases or sales [1].\n3. **Good faith**: The plan must be adopted in good faith, not as part of a scheme to evade the rule's prohibitions [1].\n4. **Execution pursuant to plan**: The actual trade must occur pursuant to the plan without alteration or deviation [1].\n\n## Cooling-Off Periods (Paragraph (c)(1)(ii)(B))\n\n| Person Type | Cooling-Off Period |\n|-------------|-------------------|\n| **Director or officer of the issuer** (as defined in Rule 16a-1(f)) | The **later of**: (i) **90 days** after adoption of the plan, **or** (ii) **2 business days** following disclosure of the issuer's financial results in a Form 10-Q or Form 10-K for the completed fiscal quarter in which the plan was adopted (for foreign private issuers, Form 20-F or Form 6-K). In any event, this period is **capped at a maximum of 120 days** after adoption [1]. |\n| **All other persons** (not the issuer, not a director/officer) | **30 days** after adoption of the plan [1]. |\n\n## Additional Conditions for Directors/Officers\n\n- **Certification requirement**: Directors or officers must include a representation in the plan certifying that, on the adoption date, they are not aware of any material nonpublic information and are adopting the plan in good faith [1].\n- **No overlapping plans**: The person (other than the issuer) may not have any other outstanding Rule 10b5-1 plan for the same issuer's securities on the open market, with limited exceptions for successive non-overlapping plans and eligible sell-to-cover transactions [1].\n\n**Section Cited:** 17 CFR § 240.10b5-1(c)(1) (as of August 17, 2026 snapshot) [1].\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 5 documents — evidence `hermes-receipt:c1433fd7cea24a85c934807fbd6c9f5a6fc5a85570110b89a75e82829ee1f540`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:c1433fd7cea24a85c934807fbd6c9f5a6fc5a85570110b89a75e82829ee1f540",
+            "label": "Unstructured Retrieval evidence — 5 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-52e367dd44ff4b2883278f8aa257c4fc"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "462d767a-6d38-5c8f-a736-c7194b74a9ae",
+          "cursor": 15189,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:06.189961Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:bc15fba3efc06a623a3a5001a47a6c63d5e88bcd3c5b3d46467d17064ad55844",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "639ad151-9a36-5da0-8fb2-255cfc83bdfe",
+          "cursor": 15190,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": "f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd:api:1",
+          "parentInvocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:10.903842Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4523,
+              "output_tokens": 169
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b2a11616-516e-55e6-8a1b-7d2d8f215ea8",
+          "cursor": 15191,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-52e367dd44ff4b2883278f8aa257c4fc",
+          "parentInvocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:10.936853Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:54efd6e4154d1eaf42257e680024c6173069fbecf5c33ee1c0a48a44a607526b",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "382d5756-5fd9-550c-9e77-d5bdfd1f9389",
+          "cursor": 15192,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": "f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-52e367dd44ff4b2883278f8aa257c4fc",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:c1433fd7cea24a85c934807fbd6c9f5a6fc5a85570110b89a75e82829ee1f540"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:12.158593Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1218,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:c1433fd7cea24a85c934807fbd6c9f5a6fc5a85570110b89a75e82829ee1f540",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0332dfca-03d0-56a1-8f04-2f2a14d93a20",
+          "cursor": 15193,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-52e367dd44ff4b2883278f8aa257c4fc",
+          "parentInvocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:12.238955Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.249
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:f09554fc5df98181f53140f3a8c13a423efcdbc0e409c6510259450fa0cdb489",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "56b8d8b5-e88c-5f57-974e-71a63d1317b2",
+          "cursor": 15194,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:21.196474Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8264f06410f6026dab5a872c12448e2d50384c5bff6256e7adbf43720c9f115a",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "7a1c8e1d-a0b6-58ac-a44c-25a55de83993",
+          "cursor": 15195,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": "f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd:api:2",
+          "parentInvocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:23.108865Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14771,
+              "output_tokens": 1567
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d0707f03-e686-52de-b8fc-baa91ebca9a0",
+          "cursor": 15196,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:23.131345Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b32455117dee1f79b8bdf89f59b24706c99eb07d545198d618ca470b0afef626",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b33b7191-86ac-5272-8cfe-4da2ccb697ae",
+          "cursor": 15197,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:23.147875Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 19294,
+              "output_tokens": 1736,
+              "total_tokens": 21030,
+              "output_characters": 3100
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e92adf51ca4c612b10f59096ceaed6380e87d33241907530c638588c042c234d",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "2782472a-02fd-5395-8b5f-94cbf5b8a375",
+          "cursor": 15198,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:23.165814Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:f775cb0a-dfce-4982-a437-70206a04cb45:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ccd10691-0060-5c0b-9a63-af7ab7087676",
+          "cursor": 15199,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:23.165918Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:f775cb0a-dfce-4982-a437-70206a04cb45:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0e51e308-52cd-5bbb-b425-f06e59442e85",
+          "cursor": 15200,
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "runId": "run_188add579d9645ef8f0fc21ecb28c8a4",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:766830fc9fcaa12f6d21569c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:23.165997Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 17051,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 1249,
+              "input_tokens": 19294,
+              "output_tokens": 1736,
+              "total_tokens": 21030
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:f775cb0a-dfce-4982-a437-70206a04cb45:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:c1433fd7cea24a85c934807fbd6c9f5a6fc5a85570110b89a75e82829ee1f540",
+          "jobId": "f775cb0a-dfce-4982-a437-70206a04cb45",
+          "invocationId": "hermes-tool:chatcmpl-tool-52e367dd44ff4b2883278f8aa257c4fc",
+          "turnId": "f775cb0a-dfce-4982-a437-70206a04cb45:f775cb0a-dfce-4982-a437-70206a04cb45:6d5117fd",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1218,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-01T22:00:12.158593Z",
+          "content": {
+            "query": "Rule 10b5-1 trading plans affirmative defense cooling-off period conditions",
+            "sourceIds": [
+              "market_regulations"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__60b1ef32aa55",
+            "hits": [
+              {
+                "rank": 1,
+                "score": -0.755859375,
+                "vectorScore": 0.5679727792739868,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0004",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "of 120 days after adoption of the contract, instruction, or plan); or ( 2 ) Not the issuer and not a director or officer (as defined in § 240.16a-1(f) (Rule 16a-1(f)) of the issuer, no purchases or sales occur until the expiration of a cooling-off period that is 30 days after the adoption of the contract, instruction or plan; (C) If the person who entered into a plan as described in paragraph (c)(1)(i)(A)(3) of this section is a director or officer (as defined in Rule 16a-1(f) (§ 240.16a-1(f)) of the issuer of the securities, such director or officer included a representation in the plan certifying that, on the date of adoption of the plan: ( 1 ) The individual director or officer is not aware of any material nonpublic information about the security or issuer; and ( 2 ) The individual director or officer is adopting the plan in good faith and not as part of a plan or scheme to evade the prohibitions of this section; (D) The person (other than the issuer) who entered into the contract, instruction, or plan has no outstanding (and does not subsequently enter into any additional) contract, instruction, or plan that would qualify for the affirmative defense under paragraph (c)(1) of this section for purchases or sales of the issuer's securities on the open market; except that: ( 1 ) For purposes of this paragraph (c)(1)(ii)(D), a series of separate contracts with different broker-dealers or other agents acting on behalf of the person (other than the issuer) to execute trades ther",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 2,
+                "score": -2.734375,
+                "vectorScore": 0.40463459491729736,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0006",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "otherwise exercise control over the timing of such sales; and (E) With respect to persons (other than the issuer), if the contract, instruction, or plan does not provide for an eligible sell-to-cover transaction as described in paragraph (c)(1)(ii)(D)( 3 ) of this section and is designed to effect the open-market purchase or sale of the total amount of securities as a single transaction, the person who entered into the contract, instruction, or plan has not during the prior 12-month period adopted a contract, instruction, or plan that: ( 1 ) was designed to effect the open-market purchase or sale of all of the securities covered by such prior contract, instruction or plan, in a single transaction; and ( 2 ) Would otherwise qualify for the affirmative defense under paragraph (c)(1) of this section. (iii) This paragraph (c)(1)(iii) defines certain terms as used in paragraph (c) of this Section. (A) Amount. “Amount” means either a specified number of shares or other securities or a specified dollar value of securities. (B) Price. “Price” means the market price on a particular date or a limit price, or a particular dollar price. (C) Date. “Date” means, in the case of a market order, the specific day of the year on which the order is to be executed (or as soon thereafter as is practicable under ordinary principles of best execution). “Date” means, in the case of a limit order, a day of the year on which the limit order is in force. (iv) Any modification or change to the amount, pr",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -3.1171875,
+                "vectorScore": 0.3773372173309326,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:245.101:56b5900c08be",
+                "chunkId": "ecfr-title17:245.101:56b5900c08be:0003",
+                "title": "§ 245.101 Prohibition of insider trading during pension fund blackout periods.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-245.101",
+                "publishedAt": null,
+                "snippet": "the plan provides for broad-based participation, does not discriminate in favor of employees of the issuer and operates on substantially the same terms for all plan participants; (2) Any purchase or sale of equity securities of the issuer pursuant to a contract, instruction or written plan entered into by the director or executive officer that satisfies the affirmative defense conditions of § 240.10b5-1(c) of this chapter; provided that the director or executive officer did not enter into or modify the contract, instruction or written plan during the blackout period (as defined in § 245.100(b)) in question, or while aware of the actual or approximate beginning or ending dates of that blackout period (whether or not the director or executive officer received notice of the blackout period as required by Section 306(a)(6) of the Sarbanes-Oxley Act of 2002 (15 U.S.C. 7244(a)(6))); (3) Any purchase or sale of equity securities, other than a Discretionary Transaction (as defined in § 240.16b-3(b)(1) of this chapter), pursuant to a Qualified Plan (as defined in § 240.16b-3(b)(4) of this chapter), an Excess Benefit Plan (as defined in § 240.16b-3(b)(2) of this chapter) or a Stock Purchase Plan (as defined in § 240.16b-3(b)(5) of this chapter) (or, in the case of a foreign private issuer, pursuant to an employee benefit plan that either (i) has been approved by the taxing authority of a foreign jurisdiction, or (ii) is eligible for preferential treatment under the tax laws of a foreig",
+                "metadata": {
+                  "citation": "17 CFR § 245.101",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "245",
+                  "part_heading": "PART 245—REGULATION BLACKOUT TRADING RESTRICTION",
+                  "subpart_heading": "",
+                  "section": "245.101",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -3.814453125,
+                "vectorScore": 0.49505722522735596,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0003",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "the price at which and the date on which the securities were to be purchased or sold; or ( 3 ) Did not permit the person to exercise any subsequent influence over how, when, or whether to effect purchases or sales; provided, in addition, that any other person who, pursuant to the contract, instruction, or plan, did exercise such influence must not have been aware of the material nonpublic information when doing so; and (C) The purchase or sale that occurred was pursuant to the contract, instruction, or plan. A purchase or sale is not “pursuant to a contract, instruction, or plan” if, among other things, the person who entered into the contract, instruction, or plan altered or deviated from the contract, instruction, or plan to purchase or sell securities (whether by changing the amount, price, or timing of the purchase or sale), or entered into or altered a corresponding or hedging transaction or position with respect to those securities. (ii) Paragraph (c)(1)(i) of this section is applicable only when: (A) The contract, instruction, or plan to purchase or sell securities was given or entered into in good faith and not as part of a plan or scheme to evade the prohibitions of this section, and the person who entered into the contract, instruction, or plan has acted in good faith with respect to the contract, instruction or plan; (B) If the person who entered into the contract, instruction, or plan is: ( 1) A director or officer (as defined in § 240.16a-1(f) (Rule 16a-1(f)) of ",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 5,
+                "score": -4.08203125,
+                "vectorScore": 0.4347340762615204,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0002",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases. (a) Manipulative or deceptive devices. The “manipulative or deceptive device[s] or contrivance[s]” prohibited by Section 10(b) of the Act (15 U.S.C. 78j) and § 240.10b-5 (Rule 10b-5) thereunder include, among other things, the purchase or sale of a security of any issuer, on the basis of material nonpublic information about that security or issuer, in breach of a duty of trust or confidence that is owed directly, indirectly, or derivatively, to the issuer of that security or the shareholders of that issuer, or to any other person who is the source of the material nonpublic information. (b) Awareness of material nonpublic information. Subject to the affirmative defenses in paragraph (c) of this section, a purchase or sale of a security of an issuer is on the basis of material nonpublic information for purposes of Section 10(b) and Rule 10b-5 if the person making the purchase or sale was aware of the material nonpublic information when the person made the purchase or sale. The law of insider trading is otherwise defined by judicial opinions construing Rule 10b-5, and Rule 10b5-1 does not modify the scope of insider trading law in any other respect. (c) Affirmative defenses. (1)(i) Subject to paragraph (1)(ii) of this section, a person's purchase or sale is not on the basis of material nonpublic information if the person making the purchase or sale demonstrates that: (A) Before becomi",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 6,
+                "score": -4.1640625,
+                "vectorScore": 0.42374831438064575,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0005",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "a modification of the contract, instruction, or plan (as defined in paragraph (c)(1)(iv) of this section) as long as the purchase or sales instructions applicable to the substitute and substituted broker are identical with respect to the prices of securities to be purchased or sold, dates of the purchases or sales to be executed, and amount of securities to be purchased or sold; and ( 2 ) The person (other than the issuer) may have one later-commencing contract, instruction, or plan for purchases or sales of any securities of the issuer on the open market under which trading is not authorized to begin until after all trades under the earlier-commencing contract, instruction, or plan are completed or expired without execution; provided, however, that if the first trade under the later-commencing contract, instruction, or plan is scheduled during the Effective Cooling-Off Period, the later-commencing contract, instruction, or plan may not rely on this paragraph (c)(1)(ii)(D)( 2 ). For purposes of this paragraph (c)(1)(ii)(D)( 2 ), “Effective Cooling-Off Period” means the cooling-off period that would be applicable under paragraph (c)(1)(ii)(B) of this section with respect to the later-commencing contract, instruction, or plan if the date of adoption of the later-commencing contract, instruction, or plan were deemed to be the date of termination of the earlier-commencing contract, instruction, or plan; and ( 3 ) A contract, instruction, or plan providing for an eligible sell-to-",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 7,
+                "score": -4.96875,
+                "vectorScore": 0.37535229325294495,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:229.408:d5d7cb8c73d2",
+                "chunkId": "ecfr-title17:229.408:d5d7cb8c73d2:0002",
+                "title": "§ 229.408 (Item 408) Insider trading arrangements and policies.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-229.408",
+                "publishedAt": null,
+                "snippet": "§ 229.408 (Item 408) Insider trading arrangements and policies. (a)(1) Disclose whether, during the registrant's last fiscal quarter (the registrant's fourth fiscal quarter in the case of an annual report), any director or officer (as defined in § 240.16a-1(f) of this chapter) adopted or terminated: (i) Any contract, instruction or written plan for the purchase or sale of securities of the registrant intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) (§ 240.10b5-1(c) of this chapter) (a “Rule 10b5-1 trading arrangement”); and/or (ii) Any “non-Rule 10b5-1 trading arrangement” as defined in paragraph (c) of this section. (2) Identify whether the trading arrangement is intended to satisfy the affirmative defense of Rule 10b5-1(c), and provide a description of the material terms, other than terms with respect to the price at which the individual executing the Rule 10b5-1 trading arrangement or non-Rule 10b5-1 trading arrangement is authorized to trade, such as: (A) The name and title of the director or officer; (B) The date on which the director or officer adopted or terminated the trading arrangement; (C) The duration of the trading arrangement; and (D) The aggregate number of securities to be purchased or sold pursuant to the trading arrangement. (3) The disclosure provided pursuant to paragraphs (a)(1) and (2) of this section must be provided in an Interactive Data File as required by 17 CFR 232.405 (Rule 405 of Regulation S-T) in accordance with the EDGA",
+                "metadata": {
+                  "citation": "17 CFR § 229.408",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "229",
+                  "part_heading": "PART 229—STANDARD INSTRUCTIONS FOR FILING FORMS UNDER SECURITIES ACT OF 1933, SECURITIES EXCHANGE ACT OF 1934 AND ENERGY POLICY AND CONSERVATION ACT OF 1975—REGULATION S-K",
+                  "subpart_heading": "Subpart 229.400—Management and Certain Security Holders",
+                  "section": "229.408",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 8,
+                "score": -5.890625,
+                "vectorScore": 0.35343027114868164,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:245.102:3b58613ac831",
+                "chunkId": "ecfr-title17:245.102:3b58613ac831:0001",
+                "title": "§ 245.102 Exceptions to definition of blackout period.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-245.102",
+                "publishedAt": null,
+                "snippet": "Title 17—Commodity and Securities Exchanges\n\nCHAPTER II—SECURITIES AND EXCHANGE COMMISSION\n\nPART 245—REGULATION BLACKOUT TRADING RESTRICTION\n\n§ 245.102 Exceptions to definition of blackout period.\n\n§ 245.102 Exceptions to definition of blackout period. The term “blackout period,” as defined in § 245.100(b), does not include: (a) A regularly scheduled period in which participants and beneficiaries may not purchase, sell or otherwise acquire or transfer an interest in any equity security of an issuer, if a description of such period, including its frequency and duration and the plan transactions to be suspended or otherwise affected, is: (1) Incorporated into the individual account plan or included in the documents or instruments under which the plan operates; and (2) Disclosed to an employee before he or she formally enrolls, or within 30 days following formal enrollment, as a participant under the individual account plan or within 30 days after the adoption of an amendment to the plan. For purposes of this paragraph (a)(2), the disclosure may be provided in any graphic form that is reasonably accessible to the employee; or (b) Any trading suspension described in § 245.100(b) that is imposed in connection with a corporate merger, acquisition, divestiture or similar transaction involving the plan or plan sponsor, the principal purpose of which is to permit persons affiliated with the acquired or divested entity to become participants or beneficiaries, or to cease to be particip",
+                "metadata": {
+                  "citation": "17 CFR § 245.102",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "245",
+                  "part_heading": "PART 245—REGULATION BLACKOUT TRADING RESTRICTION",
+                  "subpart_heading": "",
+                  "section": "245.102",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 9,
+                "score": -5.9375,
+                "vectorScore": 0.31536436080932617,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0001",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "Title 17—Commodity and Securities Exchanges\n\nCHAPTER II—SECURITIES AND EXCHANGE COMMISSION\n\nPART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934\n\nSubpart A—Rules and Regulations Under the Securities Exchange Act of 1934\n\n§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 10,
+                "score": -6.0625,
+                "vectorScore": 0.2699348032474518,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b-10:08a0380da798",
+                "chunkId": "ecfr-title17:240.10b-10:08a0380da798:0007",
+                "title": "§ 240.10b-10 Confirmation of transactions.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b-10",
+                "publishedAt": null,
+                "snippet": "more than 30 days prior to receipt of the request, the information shall be given or sent to the customer within 15 business days. (d) Definitions. For the purposes of this section: (1) Customer shall not include a broker or dealer; (2) Completion of the transaction shall have the meaning provided in rule 15c1-1 under the Act; (3) Time of the transaction means the time of execution, to the extent feasible, of the customer's order; (4) Debt security as used in paragraphs (a)(3), (4), and (5) only, means any security, such as a bond, debenture, note, or any other similar instrument which evidences a liability of the issuer (including any such security that is convertible into stock or a similar security) and fractional or participation interests in one or more of any of the foregoing: Provided, however, That securities issued by an investment company registered under the Investment Company Act of 1940 shall not be included in this definition; (5) Periodic plan means any written authorization for a broker acting as agent to purchase or sell for a customer a specific security or securities (other than securities issued by an open end investment company or unit investment trust registered under the Investment Company Act of 1940), in specific amounts (calculated in security units or dollars), at specific time intervals and setting forth the commissions or charges to be paid by the customer in connection therewith (or the manner of calculating them); and (6) Investment company plan",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b-10",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b-10",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "market_regulations": 40
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 341.4,
+              "searchMs": 19.7,
+              "rerankMs": 836.5,
+              "totalMs": 1197.6
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "market_regulations"
+      ],
+      "benchmark": null,
+      "retrievalBenchmark": {
+        "schemaVersion": "1",
+        "collection": "us_equities_documents",
+        "collectionVersion": "us_equities_documents__60b1ef32aa55",
+        "embedModel": "nvidia/nemotron-3-embed-1b",
+        "sourceIds": [
+          "market_regulations",
+          "sec_filings",
+          "world_news"
+        ],
+        "queryCount": 15,
+        "measuredAt": "2026-10-01T21:37:55.056422Z",
+        "profiles": [
+          {
+            "profileId": "vector-single",
+            "executionMode": "single",
+            "batchSize": 1,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 4.746,
+              "p95Ms": 7.352,
+              "vectorSearchMs": 229.281,
+              "vectorQps": 196.27
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 4.065,
+              "p95Ms": 5.213,
+              "vectorSearchMs": 187.288,
+              "vectorQps": 240.27
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.9733,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.2242,
+              "gpuSpeedupFactor": 1.2242
+            }
+          },
+          {
+            "profileId": "vector-batch",
+            "executionMode": "batch",
+            "batchSize": 5,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 6.468,
+              "p95Ms": 7.988,
+              "vectorSearchMs": 81.301,
+              "vectorQps": 553.5
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 5.405,
+              "p95Ms": 7.488,
+              "vectorSearchMs": 67.692,
+              "vectorQps": 664.78
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.9733,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.201,
+              "gpuSpeedupFactor": 1.201
+            }
+          },
+          {
+            "profileId": "vector-concurrency",
+            "executionMode": "concurrency",
+            "batchSize": 1,
+            "concurrency": 5,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 6.01,
+              "p95Ms": 7.808,
+              "vectorSearchMs": 74.533,
+              "vectorQps": 603.76
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 5.521,
+              "p95Ms": 7.226,
+              "vectorSearchMs": 69.534,
+              "vectorQps": 647.17
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.9733,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "cpu_faster_or_equal",
+              "observedCpuOverGpuRatio": 1.0719,
+              "gpuSpeedupFactor": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+      "question": "Now contrast the conditions for directors and officers with those for other persons, keeping the section citations.",
+      "submittedAt": "2026-10-01T22:00:24.138031Z",
+      "completedAt": "2026-10-01T22:01:00.196897Z",
+      "status": "success",
+      "report": {
+        "markdown": "**Directors and officers face a longer cooling-off period and an additional written-plan certification. The overlapping-plan and single-trade restrictions apply to all non-issuer persons—not just directors and officers.** Under 17 CFR § 240.10b5-1(c)(1), the comparison is as follows. [1]\n\n| Person category | Cooling-off period | Written-plan certification | Section |\n|---|---|---|---|\n| Issuer’s directors and officers, with “officer” defined by Rule 16a-1(f) | Later of **90 days after adoption** or **two business days after disclosure of financial results** for the completed fiscal quarter in which the plan was adopted; capped at **120 days after adoption**. Disclosure is in Form 10-Q or 10-K, or for foreign private issuers, Form 20-F or 6-K. | Must represent that, at adoption, they are unaware of material nonpublic information about the security or issuer and are adopting the plan in good faith, not to evade the rule. | § 240.10b5-1(c)(1)(ii)(B)(1), (C). [1] |\n| Other persons, excluding the issuer | **30 days after adoption**. | Paragraph (C) does not impose the director/officer certification on this group. | § 240.10b5-1(c)(1)(ii)(B)(2), (C). [1] |\n| Issuer itself | Paragraph (B) specifies no cooling-off period for the issuer. | The director/officer certification does not apply to the issuer. | § 240.10b5-1(c)(1)(ii)(B)–(C). [1] |\n\n### Conditions shared by directors/officers and other non-issuer persons\n\n- **Core plan requirements:** Establish the contract, instruction, or written plan before awareness of material nonpublic information. It must specify amount, price, and date; provide a written formula, algorithm, or computer program determining them; or prohibit subsequent influence over trading, with any other decision-maker also unaware of the information. Trades must actually follow the arrangement, without disqualifying deviations or corresponding hedging transactions. **§ 240.10b5-1(c)(1)(i)(A)–(C).** [1]\n- **Good faith:** Both adoption and conduct concerning the arrangement must be in good faith; adoption cannot be part of an evasion scheme. **§ 240.10b5-1(c)(1)(ii)(A).** [1]\n- **Overlapping plans:** Both groups are generally prohibited from maintaining additional qualifying arrangements for open-market trades in the same issuer’s securities. Exceptions cover qualifying multi-broker arrangements, later-commencing plans subject to sequencing and cooling-off conditions, and eligible sell-to-cover transactions. The issuer is excluded from this restriction. **§ 240.10b5-1(c)(1)(ii)(D)(1)–(3).** [1]\n- **Single-trade plans:** Both groups generally may not adopt a qualifying single-trade plan if they adopted another otherwise qualifying single-trade plan during the preceding **12 months**. Eligible sell-to-cover plans are excepted; the issuer is excluded. **§ 240.10b5-1(c)(1)(ii)(E).** [1]\n- **Changes restart the applicable requirements:** Changing the amount, price, or timing constitutes termination and adoption of a new arrangement, triggering the applicable cooling-off period. **§ 240.10b5-1(c)(1)(iv), read with (c)(1)(ii)(B).** [1]\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 3 documents — evidence `hermes-receipt:e01bbbaf070d49a8259fd0f9f3d957b6d601e23615d9cbd6f3a83dcb80d6a8a8`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:e01bbbaf070d49a8259fd0f9f3d957b6d601e23615d9cbd6f3a83dcb80d6a8a8",
+            "label": "Unstructured Retrieval evidence — 3 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:call_jSTD0Wa74fLkAQCdUZ7YCCAC"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "691e4085-77e3-530a-9817-c7c0b241ef99",
+          "cursor": 15202,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:24.246432Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {
+              "prior_turn_count": 1,
+              "conversation_message_count": 2
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:ef6e287b9e4e80b1ba1b627f0b25dfcda0b17874fdc26c6fd83d354c8afb3942",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "44fc17ea-8e7c-5ecd-a7d0-2868ad8ac82c",
+          "cursor": 15203,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": "260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35:api:1",
+          "parentInvocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:35.780769Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "gpt-6.1-sol",
+              "tier": "capable",
+              "input_tokens": 4163,
+              "output_tokens": 28
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0cac424a-c581-5b98-956a-4ee62ced09e7",
+          "cursor": 15204,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:call_kivjeGlzaCUg9h9SsCFUbw04",
+          "parentInvocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:35.817333Z",
+          "display": {
+            "label": "skill_view started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:16aaed5f2e0ae601fde5d0aa1720679143a110bcc6b6aeedbd3e5aa088270504",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "6160e3f9-bc01-53cc-bdec-106e8396a9bf",
+          "cursor": 15205,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:call_kivjeGlzaCUg9h9SsCFUbw04",
+          "parentInvocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:35.837337Z",
+          "display": {
+            "label": "skill_view completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.016
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:3df208df41d7970ee31ea0664d174edeb863190c3172e58e79f6b176c012c704",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "62027fdf-85e8-5de2-9f24-ef4660849591",
+          "cursor": 15206,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:39.253225Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8c72f914ca2bd3f89d18b195ab8253f55a1391d541c9df3e98bbc7adff5e9f82",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "71da43f9-7cf6-5b09-b804-11ff1bd54e1b",
+          "cursor": 15207,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": "260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35:api:2",
+          "parentInvocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:40.135068Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "gpt-6.1-sol",
+              "tier": "capable",
+              "input_tokens": 5158,
+              "output_tokens": 73
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ab6fd290-ac62-552c-b13e-3c6b2319998e",
+          "cursor": 15208,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_jSTD0Wa74fLkAQCdUZ7YCCAC",
+          "parentInvocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:40.162359Z",
+          "display": {
+            "label": "Unstructured Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:6b5e3a63872a983c4badda64064309c08d49be2d753d455471263483ce334069",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ac3afffe-bf65-50fc-8063-e40fbd75174a",
+          "cursor": 15209,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": "260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_jSTD0Wa74fLkAQCdUZ7YCCAC",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:e01bbbaf070d49a8259fd0f9f3d957b6d601e23615d9cbd6f3a83dcb80d6a8a8"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:41.208880Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1043,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:e01bbbaf070d49a8259fd0f9f3d957b6d601e23615d9cbd6f3a83dcb80d6a8a8",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "925221b5-db23-5fd5-bc2a-60c6b86aaeac",
+          "cursor": 15210,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:call_jSTD0Wa74fLkAQCdUZ7YCCAC",
+          "parentInvocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:41.262044Z",
+          "display": {
+            "label": "Unstructured Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.069
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:03f812c1ed24732c4e27219de447c00dc91753fa8fba11bb7e4aa0167cf6e9f6",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ada48a28-838b-599c-8025-6de7aa7dc863",
+          "cursor": 15211,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:00:54.262135Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4815b45a06d44207ade08a9753b508b3f78af90205b1acd2776e1df633f5c9dc",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ff0eccd6-26d7-5384-8f6a-e688bcb9876c",
+          "cursor": 15212,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": "260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35:api:3",
+          "parentInvocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:01:00.118221Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "gpt-6.1-sol",
+              "tier": "capable",
+              "input_tokens": 12506,
+              "output_tokens": 1213
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f18b47b4-6d22-5658-9b32-c59bdd0bf30b",
+          "cursor": 15213,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:01:00.143651Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:ddc22b192949cf6ac45cd7e5b529a8a56510b98fcb5387a9b4c0986e357cd8b7",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "09b0f628-b0cb-585d-aca5-941fe2a090bc",
+          "cursor": 15214,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:01:00.161860Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 21827,
+              "output_tokens": 1314,
+              "total_tokens": 23141,
+              "output_characters": 3876
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d39f1e470fb49060bbefb929df6e56f52dd131ae0827679fc68fb95d4df8f280",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a2573898-fb94-5be6-b5e9-98903cd9fc89",
+          "cursor": 15215,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:01:00.183152Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:260be94d-beb5-420f-a05e-d3f184cf67ec:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "96aad5d8-7ebe-5515-9131-b7520f48bf0f",
+          "cursor": 15216,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:01:00.183298Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:260be94d-beb5-420f-a05e-d3f184cf67ec:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3cbe6c67-a9b0-5d54-bae9-d482def3e277",
+          "cursor": 15217,
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "runId": "run_f68e627b190f4533963d2b90aadb27ef",
+          "sessionId": "record-7b8ff483-3c6a-43d3-81c9-57e7b36eafef",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:d53d4005cef087758801c947:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-01T22:01:00.183428Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 36005,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 1085,
+              "input_tokens": 21827,
+              "output_tokens": 1314,
+              "total_tokens": 23141
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:260be94d-beb5-420f-a05e-d3f184cf67ec:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:e01bbbaf070d49a8259fd0f9f3d957b6d601e23615d9cbd6f3a83dcb80d6a8a8",
+          "jobId": "260be94d-beb5-420f-a05e-d3f184cf67ec",
+          "invocationId": "hermes-tool:call_jSTD0Wa74fLkAQCdUZ7YCCAC",
+          "turnId": "260be94d-beb5-420f-a05e-d3f184cf67ec:260be94d-beb5-420f-a05e-d3f184cf67ec:676cad35",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1043,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-01T22:00:41.208880Z",
+          "content": {
+            "query": "17 CFR 240.10b5-1(c)(1) affirmative defense trading plans conditions comparison directors officers other persons issuer cooling off periods representations overlapping plans single trade good faith modifications",
+            "sourceIds": [
+              "market_regulations"
+            ],
+            "collection": "us_equities_documents",
+            "collectionVersion": "us_equities_documents__60b1ef32aa55",
+            "hits": [
+              {
+                "rank": 1,
+                "score": -1.662109375,
+                "vectorScore": 0.6093869209289551,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0004",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "of 120 days after adoption of the contract, instruction, or plan); or ( 2 ) Not the issuer and not a director or officer (as defined in § 240.16a-1(f) (Rule 16a-1(f)) of the issuer, no purchases or sales occur until the expiration of a cooling-off period that is 30 days after the adoption of the contract, instruction or plan; (C) If the person who entered into a plan as described in paragraph (c)(1)(i)(A)(3) of this section is a director or officer (as defined in Rule 16a-1(f) (§ 240.16a-1(f)) of the issuer of the securities, such director or officer included a representation in the plan certifying that, on the date of adoption of the plan: ( 1 ) The individual director or officer is not aware of any material nonpublic information about the security or issuer; and ( 2 ) The individual director or officer is adopting the plan in good faith and not as part of a plan or scheme to evade the prohibitions of this section; (D) The person (other than the issuer) who entered into the contract, instruction, or plan has no outstanding (and does not subsequently enter into any additional) contract, instruction, or plan that would qualify for the affirmative defense under paragraph (c)(1) of this section for purchases or sales of the issuer's securities on the open market; except that: ( 1 ) For purposes of this paragraph (c)(1)(ii)(D), a series of separate contracts with different broker-dealers or other agents acting on behalf of the person (other than the issuer) to execute trades ther",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 2,
+                "score": -4.37890625,
+                "vectorScore": 0.451964795589447,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0006",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "otherwise exercise control over the timing of such sales; and (E) With respect to persons (other than the issuer), if the contract, instruction, or plan does not provide for an eligible sell-to-cover transaction as described in paragraph (c)(1)(ii)(D)( 3 ) of this section and is designed to effect the open-market purchase or sale of the total amount of securities as a single transaction, the person who entered into the contract, instruction, or plan has not during the prior 12-month period adopted a contract, instruction, or plan that: ( 1 ) was designed to effect the open-market purchase or sale of all of the securities covered by such prior contract, instruction or plan, in a single transaction; and ( 2 ) Would otherwise qualify for the affirmative defense under paragraph (c)(1) of this section. (iii) This paragraph (c)(1)(iii) defines certain terms as used in paragraph (c) of this Section. (A) Amount. “Amount” means either a specified number of shares or other securities or a specified dollar value of securities. (B) Price. “Price” means the market price on a particular date or a limit price, or a particular dollar price. (C) Date. “Date” means, in the case of a market order, the specific day of the year on which the order is to be executed (or as soon thereafter as is practicable under ordinary principles of best execution). “Date” means, in the case of a limit order, a day of the year on which the limit order is in force. (iv) Any modification or change to the amount, pr",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 3,
+                "score": -5.0859375,
+                "vectorScore": 0.4443121552467346,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:245.101:56b5900c08be",
+                "chunkId": "ecfr-title17:245.101:56b5900c08be:0003",
+                "title": "§ 245.101 Prohibition of insider trading during pension fund blackout periods.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-245.101",
+                "publishedAt": null,
+                "snippet": "the plan provides for broad-based participation, does not discriminate in favor of employees of the issuer and operates on substantially the same terms for all plan participants; (2) Any purchase or sale of equity securities of the issuer pursuant to a contract, instruction or written plan entered into by the director or executive officer that satisfies the affirmative defense conditions of § 240.10b5-1(c) of this chapter; provided that the director or executive officer did not enter into or modify the contract, instruction or written plan during the blackout period (as defined in § 245.100(b)) in question, or while aware of the actual or approximate beginning or ending dates of that blackout period (whether or not the director or executive officer received notice of the blackout period as required by Section 306(a)(6) of the Sarbanes-Oxley Act of 2002 (15 U.S.C. 7244(a)(6))); (3) Any purchase or sale of equity securities, other than a Discretionary Transaction (as defined in § 240.16b-3(b)(1) of this chapter), pursuant to a Qualified Plan (as defined in § 240.16b-3(b)(4) of this chapter), an Excess Benefit Plan (as defined in § 240.16b-3(b)(2) of this chapter) or a Stock Purchase Plan (as defined in § 240.16b-3(b)(5) of this chapter) (or, in the case of a foreign private issuer, pursuant to an employee benefit plan that either (i) has been approved by the taxing authority of a foreign jurisdiction, or (ii) is eligible for preferential treatment under the tax laws of a foreig",
+                "metadata": {
+                  "citation": "17 CFR § 245.101",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "245",
+                  "part_heading": "PART 245—REGULATION BLACKOUT TRADING RESTRICTION",
+                  "subpart_heading": "",
+                  "section": "245.101",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 4,
+                "score": -5.125,
+                "vectorScore": 0.42736855149269104,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0005",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "a modification of the contract, instruction, or plan (as defined in paragraph (c)(1)(iv) of this section) as long as the purchase or sales instructions applicable to the substitute and substituted broker are identical with respect to the prices of securities to be purchased or sold, dates of the purchases or sales to be executed, and amount of securities to be purchased or sold; and ( 2 ) The person (other than the issuer) may have one later-commencing contract, instruction, or plan for purchases or sales of any securities of the issuer on the open market under which trading is not authorized to begin until after all trades under the earlier-commencing contract, instruction, or plan are completed or expired without execution; provided, however, that if the first trade under the later-commencing contract, instruction, or plan is scheduled during the Effective Cooling-Off Period, the later-commencing contract, instruction, or plan may not rely on this paragraph (c)(1)(ii)(D)( 2 ). For purposes of this paragraph (c)(1)(ii)(D)( 2 ), “Effective Cooling-Off Period” means the cooling-off period that would be applicable under paragraph (c)(1)(ii)(B) of this section with respect to the later-commencing contract, instruction, or plan if the date of adoption of the later-commencing contract, instruction, or plan were deemed to be the date of termination of the earlier-commencing contract, instruction, or plan; and ( 3 ) A contract, instruction, or plan providing for an eligible sell-to-",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 5,
+                "score": -5.125,
+                "vectorScore": 0.5019498467445374,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0003",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "the price at which and the date on which the securities were to be purchased or sold; or ( 3 ) Did not permit the person to exercise any subsequent influence over how, when, or whether to effect purchases or sales; provided, in addition, that any other person who, pursuant to the contract, instruction, or plan, did exercise such influence must not have been aware of the material nonpublic information when doing so; and (C) The purchase or sale that occurred was pursuant to the contract, instruction, or plan. A purchase or sale is not “pursuant to a contract, instruction, or plan” if, among other things, the person who entered into the contract, instruction, or plan altered or deviated from the contract, instruction, or plan to purchase or sell securities (whether by changing the amount, price, or timing of the purchase or sale), or entered into or altered a corresponding or hedging transaction or position with respect to those securities. (ii) Paragraph (c)(1)(i) of this section is applicable only when: (A) The contract, instruction, or plan to purchase or sell securities was given or entered into in good faith and not as part of a plan or scheme to evade the prohibitions of this section, and the person who entered into the contract, instruction, or plan has acted in good faith with respect to the contract, instruction or plan; (B) If the person who entered into the contract, instruction, or plan is: ( 1) A director or officer (as defined in § 240.16a-1(f) (Rule 16a-1(f)) of ",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 6,
+                "score": -5.39453125,
+                "vectorScore": 0.4295545220375061,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0002",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases. (a) Manipulative or deceptive devices. The “manipulative or deceptive device[s] or contrivance[s]” prohibited by Section 10(b) of the Act (15 U.S.C. 78j) and § 240.10b-5 (Rule 10b-5) thereunder include, among other things, the purchase or sale of a security of any issuer, on the basis of material nonpublic information about that security or issuer, in breach of a duty of trust or confidence that is owed directly, indirectly, or derivatively, to the issuer of that security or the shareholders of that issuer, or to any other person who is the source of the material nonpublic information. (b) Awareness of material nonpublic information. Subject to the affirmative defenses in paragraph (c) of this section, a purchase or sale of a security of an issuer is on the basis of material nonpublic information for purposes of Section 10(b) and Rule 10b-5 if the person making the purchase or sale was aware of the material nonpublic information when the person made the purchase or sale. The law of insider trading is otherwise defined by judicial opinions construing Rule 10b-5, and Rule 10b5-1 does not modify the scope of insider trading law in any other respect. (c) Affirmative defenses. (1)(i) Subject to paragraph (1)(ii) of this section, a person's purchase or sale is not on the basis of material nonpublic information if the person making the purchase or sale demonstrates that: (A) Before becomi",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 7,
+                "score": -6.1953125,
+                "vectorScore": 0.4107212424278259,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:229.408:d5d7cb8c73d2",
+                "chunkId": "ecfr-title17:229.408:d5d7cb8c73d2:0002",
+                "title": "§ 229.408 (Item 408) Insider trading arrangements and policies.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-229.408",
+                "publishedAt": null,
+                "snippet": "§ 229.408 (Item 408) Insider trading arrangements and policies. (a)(1) Disclose whether, during the registrant's last fiscal quarter (the registrant's fourth fiscal quarter in the case of an annual report), any director or officer (as defined in § 240.16a-1(f) of this chapter) adopted or terminated: (i) Any contract, instruction or written plan for the purchase or sale of securities of the registrant intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) (§ 240.10b5-1(c) of this chapter) (a “Rule 10b5-1 trading arrangement”); and/or (ii) Any “non-Rule 10b5-1 trading arrangement” as defined in paragraph (c) of this section. (2) Identify whether the trading arrangement is intended to satisfy the affirmative defense of Rule 10b5-1(c), and provide a description of the material terms, other than terms with respect to the price at which the individual executing the Rule 10b5-1 trading arrangement or non-Rule 10b5-1 trading arrangement is authorized to trade, such as: (A) The name and title of the director or officer; (B) The date on which the director or officer adopted or terminated the trading arrangement; (C) The duration of the trading arrangement; and (D) The aggregate number of securities to be purchased or sold pursuant to the trading arrangement. (3) The disclosure provided pursuant to paragraphs (a)(1) and (2) of this section must be provided in an Interactive Data File as required by 17 CFR 232.405 (Rule 405 of Regulation S-T) in accordance with the EDGA",
+                "metadata": {
+                  "citation": "17 CFR § 229.408",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "229",
+                  "part_heading": "PART 229—STANDARD INSTRUCTIONS FOR FILING FORMS UNDER SECURITIES ACT OF 1933, SECURITIES EXCHANGE ACT OF 1934 AND ENERGY POLICY AND CONSERVATION ACT OF 1975—REGULATION S-K",
+                  "subpart_heading": "Subpart 229.400—Management and Certain Security Holders",
+                  "section": "229.408",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              },
+              {
+                "rank": 8,
+                "score": -6.44140625,
+                "vectorScore": 0.34308716654777527,
+                "sourceId": "market_regulations",
+                "documentId": "ecfr-title17:240.10b5-1:50b12d712d71",
+                "chunkId": "ecfr-title17:240.10b5-1:50b12d712d71:0001",
+                "title": "§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "url": "https://www.ecfr.gov/on/2026-08-17/title-17/section-240.10b5-1",
+                "publishedAt": null,
+                "snippet": "Title 17—Commodity and Securities Exchanges\n\nCHAPTER II—SECURITIES AND EXCHANGE COMMISSION\n\nPART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934\n\nSubpart A—Rules and Regulations Under the Securities Exchange Act of 1934\n\n§ 240.10b5-1 Trading “on the basis of” material nonpublic information in insider trading cases.",
+                "metadata": {
+                  "citation": "17 CFR § 240.10b5-1",
+                  "title_number": "17",
+                  "chapter": "II",
+                  "chapter_heading": "CHAPTER II—SECURITIES AND EXCHANGE COMMISSION",
+                  "part": "240",
+                  "part_heading": "PART 240—GENERAL RULES AND REGULATIONS, SECURITIES EXCHANGE ACT OF 1934",
+                  "subpart_heading": "Subpart A—Rules and Regulations Under the Securities Exchange Act of 1934",
+                  "section": "240.10b5-1",
+                  "as_of": "2026-08-17",
+                  "snapshot_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml"
+                }
+              }
+            ],
+            "candidateCounts": {
+              "market_regulations": 32
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 351.3,
+              "searchMs": 12.2,
+              "rerankMs": 660.3,
+              "totalMs": 1023.8
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "market_regulations"
+      ],
+      "benchmark": null,
+      "retrievalBenchmark": {
+        "schemaVersion": "1",
+        "collection": "us_equities_documents",
+        "collectionVersion": "us_equities_documents__60b1ef32aa55",
+        "embedModel": "nvidia/nemotron-3-embed-1b",
+        "sourceIds": [
+          "market_regulations",
+          "sec_filings",
+          "world_news"
+        ],
+        "queryCount": 15,
+        "measuredAt": "2026-10-01T21:37:55.056422Z",
+        "profiles": [
+          {
+            "profileId": "vector-single",
+            "executionMode": "single",
+            "batchSize": 1,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 4.746,
+              "p95Ms": 7.352,
+              "vectorSearchMs": 229.281,
+              "vectorQps": 196.27
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 4.065,
+              "p95Ms": 5.213,
+              "vectorSearchMs": 187.288,
+              "vectorQps": 240.27
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.9733,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.2242,
+              "gpuSpeedupFactor": 1.2242
+            }
+          },
+          {
+            "profileId": "vector-batch",
+            "executionMode": "batch",
+            "batchSize": 5,
+            "concurrency": 1,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 6.468,
+              "p95Ms": 7.988,
+              "vectorSearchMs": 81.301,
+              "vectorQps": 553.5
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 12,
+              "vectorCount": 45,
+              "p50Ms": 5.405,
+              "p95Ms": 7.488,
+              "vectorSearchMs": 67.692,
+              "vectorQps": 664.78
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.9733,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "gpu_speedup",
+              "observedCpuOverGpuRatio": 1.201,
+              "gpuSpeedupFactor": 1.201
+            }
+          },
+          {
+            "profileId": "vector-concurrency",
+            "executionMode": "concurrency",
+            "batchSize": 1,
+            "concurrency": 5,
+            "repetitions": 3,
+            "topK": 10,
+            "cpu": {
+              "role": "cpu",
+              "indexType": "HNSW",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 6.01,
+              "p95Ms": 7.808,
+              "vectorSearchMs": 74.533,
+              "vectorQps": 603.76
+            },
+            "gpu": {
+              "role": "gpu",
+              "indexType": "GPU_IVF_FLAT",
+              "status": "completed",
+              "requestCount": 45,
+              "vectorCount": 45,
+              "p50Ms": 5.521,
+              "p95Ms": 7.226,
+              "vectorSearchMs": 69.534,
+              "vectorQps": 647.17
+            },
+            "quality": {
+              "passed": true,
+              "cpuRecallAtK": 0.9733,
+              "gpuRecallAtK": 0.9733,
+              "cpuGpuOverlapAtK": 1.0,
+              "failureReasons": []
+            },
+            "claim": {
+              "decision": "cpu_faster_or_equal",
+              "observedCpuOverGpuRatio": 1.0719,
+              "gpuSpeedupFactor": null
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

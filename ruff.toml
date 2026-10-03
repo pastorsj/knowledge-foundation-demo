@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Shared lint and format settings for every Python project in the repo.
+line-length = 120
+target-version = "py312"
+# First-party packages, so isort groups them after third-party imports.
+src = ["api/src", "data/src", "data/generate/src", "eval/src", "tools/*/src"]
+
+[lint]
+select = ["E", "F", "W", "I", "UP", "PL"]
+ignore = [
+    "PLR0911", # too many return statements
+    "PLR0912", # too many branches
+    "PLR0913", # too many arguments
+    "PLR0915", # too many statements
+    "PLR2004", # magic values in comparisons: common, and clear, in validators and tests
+    "PLC0415", # import outside top level: used deliberately for optional or heavy dependencies
+    "UP040",   # `type X = ...` aliases become named $defs in Pydantic JSON Schema; keep `X: TypeAlias = ...`
+]
+
+[lint.isort]
+force-single-line = true
+
+[format]
+docstring-code-format = true

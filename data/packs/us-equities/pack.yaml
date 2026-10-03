@@ -1,0 +1,291 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/pack.schema.json
+#
+# Real US equities: daily prices rolled up from real split-adjusted minute bars, with SEC company data. The bars
+# are an external dataset: never committed, fetched into $DATA_SOURCE_DIR/minute-bars/ with
+# `./scripts/demo.sh data fetch` and pinned here by fingerprint. SEC EDGAR filings (8-Ks by this pack's issuers),
+# eCFR Title 17 and, opt-in, GDELT world headlines are separate document sources, searched by retrieval; filings
+# are never turned into news. The pack has no ticker-linked news, so the two news tools report that they are
+# unavailable. See README.md and docs/data-platform.md.
+schema_version: "2"
+id: us-equities
+version: "0.1.0"
+title: US Equities
+description: >-
+  Daily prices for about 1,600 US-listed stocks from January 2025 to March 2026, rolled up from real
+  split-adjusted one-minute bars that intraday analytics read in place, with SEC company names, CIKs and SIC
+  codes, plus the issuers' SEC EDGAR 8-K filings, eCFR Title 17 and optional GDELT world headlines as separate
+  document sources.
+as_of: "2026-03-12"
+disclaimer: Real market data for a software demonstration. Not investment advice.
+
+licenses:
+  - name: Private-dataset
+    title: A private dataset, used as provided
+    redistribution: restricted
+    notes: >-
+      The minute bars are provided by the dataset's owner for this non-commercial demo. This repository never
+      commits or redistributes them.
+  - name: US-Government-Public-Information
+    title: United States government public information
+    path: https://www.govinfo.gov/about/policies
+    redistribution: allowed
+    notes: The eCFR is authoritative current regulatory information but is not the official legal edition of the CFR.
+  - name: SEC-EDGAR-Reuse
+    title: SEC website information reuse terms
+    path: https://www.sec.gov/about/webmaster-frequently-asked-questions
+    redistribution: unknown
+    notes: >-
+      Filings are fetched from EDGAR at prepare time and never committed. Issuer-authored content may carry
+      separate rights.
+
+external:
+  minute-bars:
+    title: US equities, one-minute split-adjusted bars
+    manifest: benchmark-bundle-manifest.json
+    fingerprint: d8b405106b9cda1e691f6204a85219e45ab1b392008e982087e732964f713899
+    bytes: 1812697046
+    notes: >-
+      2,206 files: one Parquet file per symbol for 2,200 symbols (117 million bars, 2025-01-02 to 2026-03-12,
+      04:00 to 19:59 US/Eastern), plus 8,192 GDELT headlines (2025-01-01 to 2026-02-02) in gdelt/.
+
+provenance:
+  - id: minute-bars
+    title: US equities one-minute bars and GDELT world headlines, with SEC company metadata
+    kind: external
+    synthetic: false
+    license: Private-dataset
+    as_of: "2026-03-12"
+    notes: >-
+      The bars become the market tables; the GDELT headlines are the opt-in world_news corpus, read in place.
+      Company names, CIKs and exchanges come from SEC's company_tickers_exchange.json, and SIC codes from each
+      company's EDGAR submissions, fetched at prepare time with SEC_USER_AGENT and cached.
+  - id: ecfr-title-17
+    title: Electronic Code of Federal Regulations, Title 17 (versioned API snapshot)
+    kind: download
+    synthetic: false
+    license: US-Government-Public-Information
+    url: https://www.ecfr.gov/api/versioner/v1/full/2026-08-17/title-17.xml
+    as_of: "2026-08-17"
+    retrieved_on: "2026-09-22"
+  - id: federal-register-2023-16194
+    title: >-
+      SEC final rule, Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure (88 FR 51896),
+      Federal Register XML
+    kind: download
+    synthetic: false
+    license: US-Government-Public-Information
+    url: https://www.federalregister.gov/documents/full_text/xml/2023/08/04/2023-16194.xml
+    as_of: "2023-08-04"
+    retrieved_on: "2026-10-01"
+    notes: >-
+      The rule's summary and its appendices of amended form text: Form 8-K General Instruction B.1 and Item 1.05,
+      Form 10-K Item 1C, Form 20-F Item 16K and Form S-3. The preamble's discussion is left out.
+  - id: sec-edgar-issuers
+    title: SEC EDGAR 8-K filings by this pack's issuers, 2025-01-02 to 2026-03-12
+    kind: download
+    synthetic: false
+    license: SEC-EDGAR-Reuse
+    url: https://www.sec.gov/search-filings/edgar-application-programming-interfaces
+    as_of: "2026-03-12"
+    retrieved_on: "2026-09-30"
+    requires_env: [SEC_USER_AGENT]
+    notes: >-
+      Selected by corpus/select_filings.py from each issuer's EDGAR submissions: every 8-K reporting Item 1.05,
+      plus the latest 12 8-Ks of each issuer of the 100 most liquid stocks.
+
+market:
+  bars:
+    dataset: minute-bars
+    files: market/stocks_1min/*_full_1min_adjsplit.parquet
+    symbol_from_path: '([^/]+)_full_1min_adjsplit\.parquet$'
+    columns: { time: ts, open: open, high: high, low: low, close: close, volume: volume }
+    frequency: 1min
+    timezone: America/New_York # ts is naive US/Eastern wall-clock time
+    regular_session: ["09:30", "16:00"] # the 16:00 bar carries the closing auction
+  companies: sec
+  news: null # no ticker-linked news in this dataset
+  exclude: [warrants, units, rights, preferred]
+  min_sessions: 20
+  peers: 8
+
+structured:
+  source: market_data
+  database_name: us_equities
+  schema: schema.sql
+  views: [views/prediction.sql]
+  tables:
+    - { name: assets, origin: minute-bars }
+    - { name: ticker_history, origin: minute-bars }
+    - { name: trading_sessions, origin: minute-bars }
+    - { name: daily_prices, origin: minute-bars }
+    - { name: asset_relationships, origin: minute-bars }
+
+documents:
+  collection: us_equities_documents
+  corpora:
+    - source: sec_filings
+      origin: sec-edgar-issuers
+      format: edgar-filings
+      manifest: corpus/sec-edgar-issuers.manifest.json
+    - source: market_regulations
+      origin: ecfr-title-17
+      format: ecfr-xml
+      manifest: corpus/ecfr-title17-2026-08-17.manifest.json
+    # The CFR does not hold the SEC forms' text, so Form 8-K's Item 1.05 and its deadline come from the rule that
+    # adopted them.
+    - source: market_regulations
+      origin: federal-register-2023-16194
+      format: federal-register-xml
+      manifest: corpus/fr-2023-16194.manifest.json
+    # GDELT headlines, read in place from the external dataset. Opt-in: set DATA_CORPORA to include world_news.
+    - source: world_news
+      origin: minute-bars
+      format: gdelt-parquet
+      files: gdelt/*.parquet
+      opt_in: true
+  # Held-out queries for the Benchmark tab's CPU/GPU Milvus index comparison (analytics-gpu profile): never
+  # the demo questions. A build keeps those whose sources it indexed (docs/retrieval.md).
+  benchmark_queries:
+    - query: departure of a chief financial officer and the appointment of a successor
+      sources: [sec_filings]
+    - query: entry into a material definitive credit agreement with a syndicate of lenders
+      sources: [sec_filings]
+    - query: results of the annual meeting of shareholders and the votes on director elections
+      sources: [sec_filings]
+    - query: completion of an acquisition or disposition of a business
+      sources: [sec_filings]
+    - query: press release announcing quarterly financial results furnished as an exhibit
+      sources: [sec_filings]
+    - query: beneficial ownership report after acquiring more than five percent of a class of equity securities
+      sources: [market_regulations]
+    - query: management's assessment of internal control over financial reporting
+      sources: [market_regulations]
+    - query: net capital requirements for brokers and dealers
+      sources: [market_regulations]
+    - query: locating securities to borrow before effecting a short sale
+      sources: [market_regulations]
+    - query: conditions for resales of restricted securities under the safe harbor
+      sources: [market_regulations]
+    - query: central bank interest rate decision and the inflation outlook
+      sources: [world_news]
+    - query: new tariffs announced in a trade dispute between the United States and China
+      sources: [world_news]
+    - query: disclosure of a material cybersecurity incident and the timing of the report
+      sources: [sec_filings, market_regulations]
+    - query: share repurchase program authorizations and the rules for issuer repurchases
+      sources: [sec_filings, market_regulations]
+    - query: changes in a registrant's certifying accountant
+      sources: [sec_filings, market_regulations]
+
+sources:
+  - id: market_data
+    name: US Equities
+    description: >-
+      Daily prices for about 1,600 US-listed stocks, rolled up from real one-minute bars, with SEC company data.
+    agent_description: >-
+      Real daily prices (January 2, 2025 to March 12, 2026) of US-listed stocks, with SEC names, CIKs and SIC
+      codes, a liquidity rank and same-SIC peers. Analyze them with market analytics and SQL. There is no
+      ticker-linked news; filings are a separate source.
+    kind: structured
+    capabilities: [structured_retrieval, structured_prediction, market_analytics]
+    synthetic: false
+    example_questions:
+      - Which of the 50 most liquid stocks led returns over the latest 20 trading sessions?
+      - Which sessions in early 2026 were most unusual among the 50 most liquid stocks?
+  - id: sec_filings
+    name: SEC Filings
+    description: >-
+      8-K current reports and EX-99 exhibits filed by the companies in the pack, January 2025 to March 2026,
+      retrieved from Milvus with NVIDIA Nemotron Embed and Rerank.
+    agent_description: >-
+      Retrieve citation-ready 8-K filings and EX-99 exhibits by companies in market_data, filed from January 2,
+      2025 to March 12, 2026: every 8-K reporting Item 1.05, and the latest 8-Ks of the 100 most liquid stocks.
+      A separate document source: each passage names its company and ticker, but filings are not joined to the
+      price tables.
+    kind: documents
+    capabilities: [unstructured_retrieval]
+    synthetic: false
+    example_questions:
+      - Which companies in the pack reported a material cybersecurity incident under Item 1.05?
+  - id: market_regulations
+    name: Market Regulations
+    description: >-
+      Current public eCFR Title 17 sections and the SEC's 2023 cybersecurity disclosure rule, retrieved from
+      Milvus with NVIDIA Nemotron Embed and Rerank.
+    agent_description: >-
+      Retrieve citation-ready sections from the reviewed eCFR Title 17 snapshot for securities and commodities
+      regulation research, and the form text the SEC's 2023 cybersecurity disclosure rule adopted (Form 8-K Item
+      1.05 and its filing deadline, Form 10-K Item 1C), which the CFR does not hold.
+    kind: documents
+    capabilities: [unstructured_retrieval]
+    synthetic: false
+    example_questions:
+      - What current SEC disclosure requirements apply to a material cybersecurity incident?
+  - id: world_news
+    name: World Headlines
+    description: >-
+      8,192 GDELT world news headlines from January 2025 to February 2026 (opt-in), retrieved from Milvus with
+      NVIDIA Nemotron Embed and Rerank.
+    agent_description: >-
+      Retrieve short world news headlines sampled from GDELT, with their outlet and date. They are not linked to
+      any stock or filing, and many are topic summaries rather than article titles.
+    kind: documents
+    capabilities: [unstructured_retrieval]
+    synthetic: false
+    example_questions:
+      - Which headlines mention the Federal Reserve?
+
+analytics:
+  contract: market-analytics/v1
+  news_table: null
+  # The eastern-standard-time close: bar timestamps are an hour late while daylight saving time is in effect.
+  session_close_utc: "21:00"
+  universes:
+    top_50:
+      description: The 50 most liquid stocks, by median daily dollar volume through the prediction anchor.
+      where: liquidity_rank <= 50
+    liquid_500:
+      description: The 500 most liquid stocks.
+      where: liquidity_rank <= 500
+    all_assets:
+      description: Every stock in the pack.
+      where: "true"
+  relationship_graph:
+    window_start: "2025-12-01"
+    window_end: "2026-03-12"
+    mode_by_profile: { default: sparse_declared_peers }
+
+prediction:
+  schema: prediction
+  anchor: "2026-03-05T21:00:00+00:00"
+  horizon_sessions: 5
+  entity: { table: asset_entities, key: asset_id }
+  population: { view: top_50_population } # the build resolves the ids
+  tables:
+    asset_entities: { primary_key: asset_id }
+    price_events: { primary_key: price_id, time_column: observed_at, links_to_entity: asset_id }
+    return_outcomes: { primary_key: outcome_id, time_column: realized_at, links_to_entity: asset_id }
+  forbidden_tables: [daily_prices]
+  templates:
+    - id: positive_return
+      name: Positive five-session return
+      description: >-
+        Rank the 50 most liquid stocks by likelihood of a positive five-session adjusted-close return realized
+        within 5 calendar days after the anchor.
+      pql: >-
+        PREDICT COUNT(return_outcomes.* WHERE return_outcomes.positive_return = true, 0, 5, days) > 0
+        FOR EACH asset_entities.asset_id
+    - id: material_downside
+      name: Material five-session downside
+      description: >-
+        Rank the 50 most liquid stocks by likelihood of a five-session adjusted-close return below negative five
+        percent realized within 5 calendar days after the anchor.
+      pql: >-
+        PREDICT COUNT(return_outcomes.* WHERE return_outcomes.forward_return_5d < -0.05, 0, 5, days) > 0
+        FOR EACH asset_entities.asset_id
+
+ontology: ontology.yaml
+questions: questions.yaml

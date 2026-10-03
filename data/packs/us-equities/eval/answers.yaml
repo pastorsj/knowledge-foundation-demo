@@ -1,0 +1,142 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Answer checks for `./scripts/demo.sh eval` (eval/README.md), by question id; never read at runtime. For each
+# question: the oracles to compute on the deployment's build (eval/oracles/<sql>.sql, read-only through the API,
+# optionally reordered and cut), the tool groups a run must call one tool of, the deterministic checks of the
+# report, and the reference facts the optional grader reads. A check names oracle rows as <oracle>[<rows>].<field>,
+# where rows is an index (0, -1), a slice (:3, -3:, :) or max(<field>); facts write {<oracle>[<rows>]: field, ...}.
+# The oracles run on the deployment's build of the external dataset: no price is written here.
+dataset: "real: US stock prices from real one-minute bars, with SEC company names"
+names: SELECT asset_id, company_name FROM main.assets WHERE asset_id IN ({ids})
+format:
+  signed_percent: [total_return, open_to_close_return, february_return, median_return]
+  percent: [daily_volatility, intraday_range]
+
+questions:
+  market-leaders:
+    oracles:
+      market_leaders: {}
+    tools: [[market_scan]]
+    checks:
+      - {id: strongest_named, named: "market_leaders[0].asset_id"}
+      - {id: weakest_named, named: "market_leaders[-1].asset_id"}
+      - {id: strongest_return_exact, percent: "market_leaders[0].total_return"}
+    facts: >-
+      Universe: the 50 most liquid stocks (top_50). Adjusted-close return over the 20 sessions ending 2026-03-12,
+      from the close before the first of them to the last close (20 daily returns), and daily volatility: five
+      strongest {market_leaders[:5]: asset_id, total_return, daily_volatility}; five weakest {market_leaders[-5:]:
+      asset_id, total_return, daily_volatility}. A good answer names the strongest and the weakest with values that
+      match.
+
+  intraday-ranges:
+    oracles:
+      intraday: {sql: intraday_ranges, limit: 10}
+    tools: [[intraday_scan]]
+    checks:
+      - {id: widest_named, named: "intraday[0].asset_id"}
+    facts: >-
+      The 50 most liquid stocks, sessions 2026-03-02 to 2026-03-12, widest regular-session range (high over low,
+      minus 1), widest first: {intraday: asset_id, trading_date, intraday_range, open_to_close_return}. The share of
+      volume in the last 30 minutes comes only from the intraday_scan evidence.
+
+  unusual-sessions:
+    tools: [[market_anomaly_scan]]
+    checks:
+      - id: not_forecast
+        pattern: "(?i)not (a |an )?(forecast|prediction)|neither\\b.{0,40}forecast|no(t)? .{0,20}forecast"
+      - {id: not_explanation, pattern: "(?i)caus|explanation"}
+    facts: >-
+      Baseline 2025, scored sessions 2026-01-02 to 2026-03-12, the 50 most liquid stocks. The ranked sessions and
+      feature explanations must come from the market_anomaly_scan evidence. Its deviations are robust z-scores, not
+      percentages. The report must say anomaly scores are neither forecasts nor explanations.
+
+  peer-network:
+    oracles:
+      peer_pairs: {sql: peer_pair_correlations, limit: 10}
+    tools: [[analyze_market_relationships]]
+    checks:
+      - {id: top_pair_first_named, named: "peer_pairs[0].first_asset"}
+      - {id: top_pair_second_named, named: "peer_pairs[0].second_asset"}
+    facts: >-
+      The graph links declared same-industry peers over 2025-12-01 to 2026-03-12. Centrality and pairs must come
+      from the analyze_market_relationships evidence. For reference, the most correlated declared peer pairs:
+      {peer_pairs[:5]: first_asset, second_asset, correlation}. The tool description the agent read says the tool
+      ranks assets by PageRank centrality in a fixed graph of daily-return correlations over the window above, whose
+      links join declared same-industry peers, lists its strongest links by absolute correlation (a negative
+      correlation means the two moved in opposite directions), and cannot be limited to a universe or window. Those
+      method statements are supported.
+
+  cyber-disclosure-rules:
+    tools: [[retrieve_evidence]]
+    checks:
+      - {id: item_1_05, pattern: "1\\.05"}
+      - {id: deadline_or_flag, item_105_deadline: true}
+      # every 8-K in the corpus that reports Item 1.05 (eval/retrieval.yaml)
+      - {id: item_1_05_filing_named, pattern: ["Conduent|CNDT", "Coinbase|COIN", "Data I/O|DAIO", "BayFirst|BAFN",
+          "Coupang|CPNG"]}
+    facts: >-
+      Form 8-K Item 1.05 requires disclosing the material aspects of the nature, scope and timing of a material
+      cybersecurity incident and its material or reasonably likely material impact, within four business days after
+      the company determines the incident is material (a determination made without unreasonable delay); disclosure
+      may be delayed when the US Attorney General finds a substantial risk to national security or public safety.
+      The regulations corpus holds 17 CFR 249.308 (Form 8-K) and 17 CFR 229.106 (Regulation S-K Item 106) from the
+      eCFR, and the SEC's 2023 cybersecurity disclosure rule (88 FR 51896): its Appendix C holds Form 8-K's General
+      Instruction B.1 ("A report pursuant to Item 1.05 is to be filed within four business days after the registrant
+      determines that it has experienced a material cybersecurity incident") and Item 1.05's text. A deadline cited
+      to a passage of that appendix is supported; a deadline the evidence does not hold is not, but flagging that
+      the retrieved text does not contain it is acceptable. Credit only sections and filings that appear in the
+      evidence. The 8-Ks in the corpus that report Item 1.05: Conduent (CNDT,
+      2025-04-14), Coinbase (COIN, 2025-05-15), Data I/O (DAIO, 2025-08-21 and an update on 2025-09-10), BayFirst
+      (BAFN, 2025-10-30) and Coupang (CPNG, 2025-12-16).
+
+  moves-and-filings:
+    oracles:
+      february: {sql: february_moves}
+    tools: [[retrieve_evidence], [market_scan]]
+    checks:
+      - {id: three_strongest_named, named: "february[:3].asset_id"}
+      - {id: three_weakest_named, named: "february[-3:].asset_id"}
+      - {id: filings_retrieved, retrieved_source: sec_filings}
+    facts: >-
+      The 50 most liquid stocks' February 2026 returns (from the last January close to the last February close):
+      strongest {february[:3]: asset_id, february_return}; weakest {february[-3:]: asset_id, february_return}. Their
+      8-Ks from January to March 2026 include results releases (Item 2.02) and Regulation FD updates; filing contents
+      must come from the retrieved evidence. The report must keep the moves and the filings apart and not claim a
+      filing caused a move.
+
+  outcome-prediction:
+    tools: [[predict_asset_outcomes]]
+    checks:
+      - {id: model_top3_named, prediction_named: 3}
+      - {id: top_listed_first, prediction_first: true}
+    facts: >-
+      The Kumo prediction in the evidence is the answer: the report must rank the stocks by the model's
+      probabilities exactly as the evidence gives them, state the anchor and horizon, and not present model
+      probabilities as certainties. Anchor: the 2026-03-05 close; population: the 50 most liquid stocks; outcome: a
+      positive five-session return.
+
+  sector-sql:
+    oracles:
+      sectors: {sql: sector_breakdown}
+    tools: [[ask_question]]
+    checks:
+      - {id: median_returns_exact, percent: "sectors[:].median_return"}
+    facts: >-
+      Stocks per SIC division and each division's median return from 2026-01-02 to 2026-03-12 (from the close before
+      the window to the last close in it): {sectors: sector, stocks, median_return}. The SQL and its result must
+      come from the ask_question evidence. A median of daily returns is a different measure and is wrong here.
+
+  large-universe-scan:
+    oracles:
+      universe_top: {sql: large_universe_scan, limit: 20}
+      universe_bottom: {sql: large_universe_scan, order: ORDER BY total_return ASC, limit: 20}
+    tools: [[market_scan]]
+    checks:
+      - {id: strongest_named, named: "universe_top[0].asset_id"}
+      - {id: weakest_named, named: "universe_bottom[0].asset_id"}
+    facts: >-
+      The 500 most liquid stocks (liquid_500). Return over the sessions from 2026-01-02 to 2026-03-12, from the close
+      before the first session to the last close, with the z-score of the stock's total volume in the window among
+      the 500 (market_scan's volume z-score). 20 strongest: {universe_top: asset_id, total_return, volume_zscore}. 20 weakest: {universe_bottom:
+      asset_id, total_return, volume_zscore}.

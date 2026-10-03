@@ -1,0 +1,3836 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "market_data",
+      "name": "US Equities",
+      "databaseName": "us_equities",
+      "schema": {
+        "source_id": "market_data",
+        "database_name": "us_equities",
+        "tables": [
+          {
+            "name": "asset_relationships",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "relationship_id"
+            ],
+            "columns": [
+              {
+                "name": "relationship_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": true
+              },
+              {
+                "name": "source_asset_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "target_asset_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "relationship_type",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "peer_rank",
+                "type": "INTEGER",
+                "nullable": false,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "assets",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "asset_id"
+            ],
+            "columns": [
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": true
+              },
+              {
+                "name": "company_name",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "cik",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "sic_code",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "sector",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "industry",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "exchange",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "profile",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "first_session",
+                "type": "DATE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "last_session",
+                "type": "DATE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "sessions",
+                "type": "INTEGER",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "median_dollar_volume",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "liquidity_rank",
+                "type": "INTEGER",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "is_synthetic",
+                "type": "BOOLEAN",
+                "nullable": false,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "daily_prices",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "price_id"
+            ],
+            "columns": [
+              {
+                "name": "price_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": true
+              },
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "trading_date",
+                "type": "DATE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "open",
+                "type": "DOUBLE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "high",
+                "type": "DOUBLE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "low",
+                "type": "DOUBLE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "close",
+                "type": "DOUBLE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "adjusted_close",
+                "type": "DOUBLE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "volume",
+                "type": "BIGINT",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "dollar_volume",
+                "type": "DOUBLE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "bar_count",
+                "type": "INTEGER",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "total_return_1d",
+                "type": "DOUBLE",
+                "nullable": false,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "ticker_history",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "ticker_history_id"
+            ],
+            "columns": [
+              {
+                "name": "ticker_history_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": true
+              },
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "ticker",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "effective_from",
+                "type": "DATE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "effective_to",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "trading_sessions",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "session_id"
+            ],
+            "columns": [
+              {
+                "name": "session_id",
+                "type": "VARCHAR",
+                "nullable": false,
+                "primary_key": true
+              },
+              {
+                "name": "trading_date",
+                "type": "DATE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "close_at",
+                "type": "TIMESTAMP WITH TIME ZONE",
+                "nullable": false,
+                "primary_key": false
+              },
+              {
+                "name": "symbols",
+                "type": "INTEGER",
+                "nullable": false,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "prediction.asset_entities",
+            "schema": "prediction",
+            "kind": "view",
+            "primary_key": [],
+            "columns": [
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "company_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "sector",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "industry",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "exchange",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "prediction.price_events",
+            "schema": "prediction",
+            "kind": "view",
+            "primary_key": [],
+            "columns": [
+              {
+                "name": "price_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "observed_at",
+                "type": "TIMESTAMP WITH TIME ZONE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "adjusted_close",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "volume",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "total_return_1d",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "prediction.return_outcomes",
+            "schema": "prediction",
+            "kind": "view",
+            "primary_key": [],
+            "columns": [
+              {
+                "name": "outcome_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "observed_at",
+                "type": "TIMESTAMP WITH TIME ZONE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "realized_at",
+                "type": "TIMESTAMP WITH TIME ZONE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "forward_return_5d",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "positive_return",
+                "type": "BOOLEAN",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "prediction.top_50_population",
+            "schema": "prediction",
+            "kind": "view",
+            "primary_key": [],
+            "columns": [
+              {
+                "name": "asset_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          }
+        ],
+        "relationships": [
+          {
+            "from_table": "asset_relationships",
+            "from_column": "source_asset_id",
+            "to_table": "assets",
+            "to_column": "asset_id"
+          },
+          {
+            "from_table": "asset_relationships",
+            "from_column": "target_asset_id",
+            "to_table": "assets",
+            "to_column": "asset_id"
+          },
+          {
+            "from_table": "daily_prices",
+            "from_column": "asset_id",
+            "to_table": "assets",
+            "to_column": "asset_id"
+          },
+          {
+            "from_table": "ticker_history",
+            "from_column": "asset_id",
+            "to_table": "assets",
+            "to_column": "asset_id"
+          }
+        ]
+      },
+      "previews": {
+        "asset_relationships": {
+          "table": "asset_relationships",
+          "columns": [
+            "relationship_id",
+            "source_asset_id",
+            "target_asset_id",
+            "relationship_type",
+            "peer_rank"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "INTEGER"
+          ],
+          "rows": [
+            [
+              "A>AVTR",
+              "A",
+              "AVTR",
+              "same_sic_code",
+              1
+            ],
+            [
+              "A>BRKR",
+              "A",
+              "BRKR",
+              "same_sic_code",
+              2
+            ],
+            [
+              "A>BIO",
+              "A",
+              "BIO",
+              "same_sic_code",
+              3
+            ],
+            [
+              "A>CTKB",
+              "A",
+              "CTKB",
+              "same_sic_code",
+              4
+            ],
+            [
+              "A>BNGO",
+              "A",
+              "BNGO",
+              "same_sic_code",
+              5
+            ],
+            [
+              "A>BIO.B",
+              "A",
+              "BIO.B",
+              "same_sic_code",
+              6
+            ],
+            [
+              "A>ASTC",
+              "A",
+              "ASTC",
+              "same_sic_code",
+              7
+            ],
+            [
+              "AA>CENX",
+              "AA",
+              "CENX",
+              "same_sic_code",
+              1
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 696
+        },
+        "assets": {
+          "table": "assets",
+          "columns": [
+            "asset_id",
+            "company_name",
+            "cik",
+            "sic_code",
+            "sector",
+            "industry",
+            "exchange",
+            "profile",
+            "first_session",
+            "last_session",
+            "sessions",
+            "median_dollar_volume",
+            "liquidity_rank",
+            "is_synthetic"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DATE",
+            "INTEGER",
+            "DOUBLE",
+            "INTEGER",
+            "BOOLEAN"
+          ],
+          "rows": [
+            [
+              "A",
+              "AGILENT TECHNOLOGIES, INC.",
+              "0001090872",
+              "3826",
+              "Manufacturing",
+              "Laboratory Analytical Instruments",
+              "NYSE",
+              null,
+              "2025-01-02",
+              "2026-03-12",
+              298,
+              149973095.62532806,
+              194,
+              false
+            ],
+            [
+              "AA",
+              "Alcoa Corp",
+              "0001675149",
+              "3334",
+              "Manufacturing",
+              "Primary Production Of  Aluminum",
+              "NYSE",
+              null,
+              "2025-01-02",
+              "2026-03-12",
+              298,
+              154069909.32884407,
+              191,
+              false
+            ],
+            [
+              "AACG",
+              "ATA Creativity Global",
+              "0001420529",
+              "8200",
+              "Services",
+              "Services-Educational Services",
+              "Nasdaq",
+              null,
+              "2025-01-02",
+              "2026-03-12",
+              298,
+              15466.398488461971,
+              1566,
+              false
+            ],
+            [
+              "AACI",
+              "Armada Acquisition Corp. III",
+              "0002092897",
+              "6770",
+              "Finance, Insurance and Real Estate",
+              "Blank Checks",
+              "Nasdaq",
+              null,
+              "2025-06-24",
+              "2025-10-29",
+              84,
+              404457.25911712646,
+              1168,
+              false
+            ],
+            [
+              "AAL",
+              "American Airlines Group Inc.",
+              "0000006201",
+              "4512",
+              "Transportation, Communications and Utilities",
+              "Air Transportation, Scheduled",
+              "Nasdaq",
+              null,
+              "2025-01-02",
+              "2026-03-12",
+              298,
+              672984454.545682,
+              56,
+              false
+            ],
+            [
+              "AAME",
+              "ATLANTIC AMERICAN CORP",
+              "0000008177",
+              "6311",
+              "Finance, Insurance and Real Estate",
+              "Life Insurance",
+              "Nasdaq",
+              null,
+              "2025-01-02",
+              "2026-03-12",
+              297,
+              19441.93429505825,
+              1555,
+              false
+            ],
+            [
+              "AAMI",
+              "Acadian Asset Management Inc.",
+              "0001748824",
+              "6282",
+              "Finance, Insurance and Real Estate",
+              "Investment Advice",
+              "NYSE",
+              null,
+              "2025-01-02",
+              "2026-03-12",
+              297,
+              5240446.682899475,
+              734,
+              false
+            ],
+            [
+              "AAOI",
+              "APPLIED OPTOELECTRONICS, INC.",
+              "0001158114",
+              "3674",
+              "Manufacturing",
+              "Semiconductors & Related Devices",
+              "Nasdaq",
+              null,
+              "2025-01-02",
+              "2026-03-12",
+              298,
+              88335215.78641891,
+              270,
+              false
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 705
+        },
+        "daily_prices": {
+          "table": "daily_prices",
+          "columns": [
+            "price_id",
+            "asset_id",
+            "trading_date",
+            "open",
+            "high",
+            "low",
+            "close",
+            "adjusted_close",
+            "volume",
+            "dollar_volume",
+            "bar_count",
+            "total_return_1d"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "BIGINT",
+            "DOUBLE",
+            "INTEGER",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "A:2025-01-02",
+              "A",
+              "2025-01-02",
+              135.21,
+              135.73,
+              132.87,
+              133.43,
+              133.43,
+              617127,
+              82471444.0974884,
+              351,
+              0.0
+            ],
+            [
+              "A:2025-01-03",
+              "A",
+              "2025-01-03",
+              133.45,
+              136.05,
+              132.755,
+              135.69,
+              135.69,
+              624608,
+              84555263.51635742,
+              331,
+              0.01693772015288908
+            ],
+            [
+              "A:2025-01-06",
+              "A",
+              "2025-01-06",
+              135.6,
+              138.34,
+              135.34,
+              136.43,
+              136.43,
+              715230,
+              97809627.49833679,
+              363,
+              0.005453607487655665
+            ],
+            [
+              "A:2025-01-07",
+              "A",
+              "2025-01-07",
+              136.83,
+              140.28,
+              135.98,
+              137.41,
+              137.41,
+              750042,
+              103204651.8251648,
+              351,
+              0.007183170856849497
+            ],
+            [
+              "A:2025-01-08",
+              "A",
+              "2025-01-08",
+              137.68,
+              137.68,
+              135.63,
+              136.94,
+              136.94,
+              549781,
+              75379389.06759644,
+              335,
+              -0.0034204206389636393
+            ],
+            [
+              "A:2025-01-10",
+              "A",
+              "2025-01-10",
+              134.75,
+              140.14,
+              134.709,
+              137.47,
+              137.47,
+              892552,
+              122819164.02537537,
+              354,
+              0.003870308164159564
+            ],
+            [
+              "A:2025-01-13",
+              "A",
+              "2025-01-13",
+              137.22,
+              142.82,
+              137.0,
+              141.95,
+              141.95,
+              1018085,
+              144346746.27374268,
+              384,
+              0.03258892849348949
+            ],
+            [
+              "A:2025-01-14",
+              "A",
+              "2025-01-14",
+              142.0,
+              145.38,
+              140.15,
+              143.43,
+              143.43,
+              1544196,
+              221384664.59729004,
+              380,
+              0.010426206410708128
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 687
+        },
+        "ticker_history": {
+          "table": "ticker_history",
+          "columns": [
+            "ticker_history_id",
+            "asset_id",
+            "ticker",
+            "effective_from",
+            "effective_to"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DATE"
+          ],
+          "rows": [
+            [
+              "A",
+              "A",
+              "A",
+              "2025-01-02",
+              null
+            ],
+            [
+              "AA",
+              "AA",
+              "AA",
+              "2025-01-02",
+              null
+            ],
+            [
+              "AACG",
+              "AACG",
+              "AACG",
+              "2025-01-02",
+              null
+            ],
+            [
+              "AACI",
+              "AACI",
+              "AACI",
+              "2025-06-24",
+              null
+            ],
+            [
+              "AAL",
+              "AAL",
+              "AAL",
+              "2025-01-02",
+              null
+            ],
+            [
+              "AAME",
+              "AAME",
+              "AAME",
+              "2025-01-02",
+              null
+            ],
+            [
+              "AAMI",
+              "AAMI",
+              "AAMI",
+              "2025-01-02",
+              null
+            ],
+            [
+              "AAOI",
+              "AAOI",
+              "AAOI",
+              "2025-01-02",
+              null
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 715
+        },
+        "trading_sessions": {
+          "table": "trading_sessions",
+          "columns": [
+            "session_id",
+            "trading_date",
+            "close_at",
+            "symbols"
+          ],
+          "types": [
+            "VARCHAR",
+            "DATE",
+            "TIMESTAMP WITH TIME ZONE",
+            "INTEGER"
+          ],
+          "rows": [
+            [
+              "2025-01-02",
+              "2025-01-02",
+              "2025-01-02 21:00:00+00:00",
+              1891
+            ],
+            [
+              "2025-01-03",
+              "2025-01-03",
+              "2025-01-03 21:00:00+00:00",
+              1895
+            ],
+            [
+              "2025-01-06",
+              "2025-01-06",
+              "2025-01-06 21:00:00+00:00",
+              1902
+            ],
+            [
+              "2025-01-07",
+              "2025-01-07",
+              "2025-01-07 21:00:00+00:00",
+              1902
+            ],
+            [
+              "2025-01-08",
+              "2025-01-08",
+              "2025-01-08 21:00:00+00:00",
+              1891
+            ],
+            [
+              "2025-01-10",
+              "2025-01-10",
+              "2025-01-10 21:00:00+00:00",
+              1900
+            ],
+            [
+              "2025-01-13",
+              "2025-01-13",
+              "2025-01-13 21:00:00+00:00",
+              1893
+            ],
+            [
+              "2025-01-14",
+              "2025-01-14",
+              "2025-01-14 21:00:00+00:00",
+              1897
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 724
+        },
+        "prediction.asset_entities": {
+          "table": "prediction.asset_entities",
+          "columns": [
+            "asset_id",
+            "company_name",
+            "sector",
+            "industry",
+            "exchange"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "AAPL",
+              "Apple Inc.",
+              "Manufacturing",
+              "Electronic Computers",
+              "Nasdaq"
+            ],
+            [
+              "ADBE",
+              "ADOBE INC.",
+              "Services",
+              "Services-Prepackaged Software",
+              "Nasdaq"
+            ],
+            [
+              "AMAT",
+              "APPLIED MATERIALS INC /DE",
+              "Manufacturing",
+              "Semiconductors & Related Devices",
+              "Nasdaq"
+            ],
+            [
+              "AMD",
+              "ADVANCED MICRO DEVICES INC",
+              "Manufacturing",
+              "Semiconductors & Related Devices",
+              "Nasdaq"
+            ],
+            [
+              "AMZN",
+              "AMAZON COM INC",
+              "Retail Trade",
+              "Retail-Catalog & Mail-Order Houses",
+              "Nasdaq"
+            ],
+            [
+              "APP",
+              "AppLovin Corp",
+              "Services",
+              "Services-Computer Programming, Data Processing, Etc.",
+              "Nasdaq"
+            ],
+            [
+              "AVGO",
+              "Broadcom Inc.",
+              "Manufacturing",
+              "Semiconductors & Related Devices",
+              "Nasdaq"
+            ],
+            [
+              "BA",
+              "BOEING CO",
+              "Manufacturing",
+              "Aircraft",
+              "NYSE"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 706
+        },
+        "prediction.price_events": {
+          "table": "prediction.price_events",
+          "columns": [
+            "price_id",
+            "asset_id",
+            "observed_at",
+            "adjusted_close",
+            "volume",
+            "total_return_1d"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "TIMESTAMP WITH TIME ZONE",
+            "DOUBLE",
+            "BIGINT",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "AAPL:2025-01-02",
+              "AAPL",
+              "2025-01-02 21:00:00+00:00",
+              243.77,
+              40559735,
+              0.0
+            ],
+            [
+              "AAPL:2025-01-03",
+              "AAPL",
+              "2025-01-03 21:00:00+00:00",
+              243.36,
+              28457257,
+              -0.0016819132789104296
+            ],
+            [
+              "AAPL:2025-01-06",
+              "AAPL",
+              "2025-01-06 21:00:00+00:00",
+              244.82,
+              30460408,
+              0.005999342537803987
+            ],
+            [
+              "AAPL:2025-01-07",
+              "AAPL",
+              "2025-01-07 21:00:00+00:00",
+              242.24,
+              28435211,
+              -0.010538354709582531
+            ],
+            [
+              "AAPL:2025-01-08",
+              "AAPL",
+              "2025-01-08 21:00:00+00:00",
+              242.75,
+              25711434,
+              0.002105350066050171
+            ],
+            [
+              "AAPL:2025-01-10",
+              "AAPL",
+              "2025-01-10 21:00:00+00:00",
+              237.0,
+              45003966,
+              -0.023686920700308978
+            ],
+            [
+              "AAPL:2025-01-13",
+              "AAPL",
+              "2025-01-13 21:00:00+00:00",
+              234.42,
+              34908500,
+              -0.010886075949367191
+            ],
+            [
+              "AAPL:2025-01-14",
+              "AAPL",
+              "2025-01-14 21:00:00+00:00",
+              233.24,
+              26223053,
+              -0.005033700196228952
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 722
+        },
+        "prediction.return_outcomes": {
+          "table": "prediction.return_outcomes",
+          "columns": [
+            "outcome_id",
+            "asset_id",
+            "observed_at",
+            "realized_at",
+            "forward_return_5d",
+            "positive_return"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "TIMESTAMP WITH TIME ZONE",
+            "TIMESTAMP WITH TIME ZONE",
+            "DOUBLE",
+            "BOOLEAN"
+          ],
+          "rows": [
+            [
+              "outcome-AMZN:2025-01-02",
+              "AMZN",
+              "2025-01-02 21:00:00+00:00",
+              "2025-01-10 21:00:00+00:00",
+              -0.0043177892918826455,
+              false
+            ],
+            [
+              "outcome-AMZN:2025-01-03",
+              "AMZN",
+              "2025-01-03 21:00:00+00:00",
+              "2025-01-13 21:00:00+00:00",
+              -0.025320098148561176,
+              false
+            ],
+            [
+              "outcome-AMZN:2025-01-06",
+              "AMZN",
+              "2025-01-06 21:00:00+00:00",
+              "2025-01-14 21:00:00+00:00",
+              -0.04352786309784995,
+              false
+            ],
+            [
+              "outcome-AMZN:2025-01-07",
+              "AMZN",
+              "2025-01-07 21:00:00+00:00",
+              "2025-01-15 21:00:00+00:00",
+              0.004667986323555917,
+              true
+            ],
+            [
+              "outcome-AMZN:2025-01-08",
+              "AMZN",
+              "2025-01-08 21:00:00+00:00",
+              "2025-01-16 21:00:00+00:00",
+              -0.006617746364741328,
+              false
+            ],
+            [
+              "outcome-AMZN:2025-01-10",
+              "AMZN",
+              "2025-01-10 21:00:00+00:00",
+              "2025-01-17 21:00:00+00:00",
+              0.03104030675126679,
+              true
+            ],
+            [
+              "outcome-AMZN:2025-01-13",
+              "AMZN",
+              "2025-01-13 21:00:00+00:00",
+              "2025-01-21 21:00:00+00:00",
+              0.05962023027859087,
+              true
+            ],
+            [
+              "outcome-AMZN:2025-01-14",
+              "AMZN",
+              "2025-01-14 21:00:00+00:00",
+              "2025-01-22 21:00:00+00:00",
+              0.07702541517570438,
+              true
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 747
+        },
+        "prediction.top_50_population": {
+          "table": "prediction.top_50_population",
+          "columns": [
+            "asset_id"
+          ],
+          "types": [
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "AAPL"
+            ],
+            [
+              "ADBE"
+            ],
+            [
+              "AMAT"
+            ],
+            [
+              "AMD"
+            ],
+            [
+              "AMZN"
+            ],
+            [
+              "APP"
+            ],
+            [
+              "AVGO"
+            ],
+            [
+              "BA"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 693
+        }
+      },
+      "queries": [
+        {
+          "sql": "SELECT a.exchange, COUNT(*) AS total_stocks, SUM(CASE WHEN a.liquidity_rank <= 500 THEN 1 ELSE 0 END) AS top_500_count, SUM(CASE WHEN a.liquidity_rank <= 50 THEN 1 ELSE 0 END) AS top_50_count FROM us_equities.main.assets AS a GROUP BY a.exchange ORDER BY a.exchange;",
+          "result": {
+            "columns": [
+              "exchange",
+              "total_stocks",
+              "top_500_count",
+              "top_50_count"
+            ],
+            "types": [
+              "VARCHAR",
+              "BIGINT",
+              "HUGEINT",
+              "HUGEINT"
+            ],
+            "rows": [
+              [
+                "CBOE",
+                1,
+                1,
+                0
+              ],
+              [
+                "NYSE",
+                715,
+                327,
+                26
+              ],
+              [
+                "Nasdaq",
+                862,
+                172,
+                24
+              ],
+              [
+                "OTC",
+                23,
+                0,
+                0
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 690
+          }
+        },
+        {
+          "sql": "SELECT a.industry, COUNT(DISTINCT a.asset_id) AS stock_count FROM us_equities.main.assets AS a WHERE a.sector = 'Manufacturing' AND a.liquidity_rank <= 500 GROUP BY a.industry ORDER BY stock_count DESC LIMIT 5;",
+          "result": {
+            "columns": [
+              "industry",
+              "stock_count"
+            ],
+            "types": [
+              "VARCHAR",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "Pharmaceutical Preparations",
+                21
+              ],
+              [
+                "Semiconductors & Related Devices",
+                18
+              ],
+              [
+                "Biological Products, (No Diagnostic Substances)",
+                9
+              ],
+              [
+                "Petroleum Refining",
+                9
+              ],
+              [
+                "Motor Vehicle Parts & Accessories",
+                6
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 698
+          }
+        },
+        {
+          "sql": "SELECT a.sector, COUNT(*) AS total_stocks, SUM(CASE WHEN a.liquidity_rank <= 500 THEN 1 ELSE 0 END) AS top_500_stocks FROM us_equities.main.assets a GROUP BY a.sector ORDER BY total_stocks DESC;",
+          "result": {
+            "columns": [
+              "sector",
+              "total_stocks",
+              "top_500_stocks"
+            ],
+            "types": [
+              "VARCHAR",
+              "BIGINT",
+              "HUGEINT"
+            ],
+            "rows": [
+              [
+                "Manufacturing",
+                579,
+                181
+              ],
+              [
+                "Finance, Insurance and Real Estate",
+                363,
+                110
+              ],
+              [
+                "Services",
+                264,
+                86
+              ],
+              [
+                "Transportation, Communications and Utilities",
+                99,
+                38
+              ],
+              [
+                "Nonclassifiable",
+                89,
+                2
+              ],
+              [
+                "Retail Trade",
+                83,
+                42
+              ],
+              [
+                "Mining",
+                64,
+                29
+              ],
+              [
+                "Wholesale Trade",
+                40,
+                8
+              ],
+              [
+                "Agriculture, Forestry and Fishing",
+                10,
+                2
+              ],
+              [
+                "Construction",
+                10,
+                2
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 717
+          }
+        },
+        {
+          "sql": "SELECT asset_id AS ticker, sic_code, industry FROM us_equities.main.assets WHERE asset_id IN ('BMY','ABBV','PFE','LLY','MRK','JNJ','AZN','ABT','COLB','CRWD') ORDER BY CASE asset_id WHEN 'BMY' THEN 1 WHEN 'ABBV' THEN 2 WHEN 'PFE' THEN 3 WHEN 'LLY' THEN 4 WHEN 'MRK' THEN 5 WHEN 'JNJ' THEN 6 WHEN 'AZN' THEN 7 WHEN 'ABT' THEN 8 WHEN 'COLB' THEN 9 WHEN 'CRWD' THEN 10 ELSE 11 END;",
+          "result": {
+            "columns": [
+              "ticker",
+              "sic_code",
+              "industry"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "BMY",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "ABBV",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "PFE",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "LLY",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "MRK",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "JNJ",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "AZN",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "ABT",
+                "2834",
+                "Pharmaceutical Preparations"
+              ],
+              [
+                "COLB",
+                "6022",
+                "State Commercial Banks"
+              ],
+              [
+                "CRWD",
+                "7372",
+                "Services-Prepackaged Software"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 705
+          }
+        },
+        {
+          "sql": "WITH filtered AS ( SELECT a.asset_id, p.total_return_1d, p.trading_date FROM us_equities.main.assets AS a JOIN us_equities.main.daily_prices AS p ON a.asset_id = p.asset_id WHERE a.liquidity_rank <= 500 AND p.trading_date >= DATE '2025-01-01' AND p.trading_date < DATE '2026-01-01' ) SELECT asset_id, COUNT(CASE WHEN ABS(total_return_1d) > 0.10 THEN 1 END) AS sessions_over_10pct, MAX(total_return_1d) AS largest_rise, MIN(total_return_1d) AS largest_fall FROM filtered GROUP BY asset_id ORDER BY sessions_over_10pct DESC, asset_id LIMIT 10;",
+          "result": {
+            "columns": [
+              "asset_id",
+              "sessions_over_10pct",
+              "largest_rise",
+              "largest_fall"
+            ],
+            "types": [
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "ASST",
+                72,
+                4.268261150614093,
+                -0.3184713375796179
+              ],
+              [
+                "CRML",
+                66,
+                0.5583109919571045,
+                -0.3405963302752294
+              ],
+              [
+                "AAOI",
+                38,
+                0.39886578449905485,
+                -0.20927012056044325
+              ],
+              [
+                "ASPI",
+                38,
+                0.31490621915103656,
+                -0.23235294117647065
+              ],
+              [
+                "AEVA",
+                37,
+                0.3536977491961415,
+                -0.24159830643027258
+              ],
+              [
+                "BBAI",
+                36,
+                0.45194274028629855,
+                -0.20584272849748286
+              ],
+              [
+                "AMPX",
+                32,
+                0.35064935064935066,
+                -0.15826318859904998
+              ],
+              [
+                "APLD",
+                32,
+                0.47291361639824303,
+                -0.3772893772893773
+              ],
+              [
+                "CIFR",
+                32,
+                0.22918238993710682,
+                -0.23168654173764913
+              ],
+              [
+                "CAN",
+                31,
+                0.4036697247706422,
+                -0.1724137931034483
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 736
+          }
+        },
+        {
+          "sql": "WITH returns AS ( SELECT a.asset_id, a.sector, ( SELECT dp.adjusted_close FROM us_equities.main.daily_prices dp WHERE dp.asset_id = a.asset_id AND dp.trading_date BETWEEN DATE '2026-01-02' AND DATE '2026-03-12' ORDER BY dp.trading_date DESC LIMIT 1 ) AS end_price, COALESCE( ( SELECT dp.adjusted_close FROM us_equities.main.daily_prices dp WHERE dp.asset_id = a.asset_id AND dp.trading_date < DATE '2026-01-02' ORDER BY dp.trading_date DESC LIMIT 1 ), ( SELECT dp.adjusted_close FROM us_equities.main.daily_prices dp WHERE dp.asset_id = a.asset_id AND dp.trading_date BETWEEN DATE '2026-01-02' AND DATE '2026-03-12' ORDER BY dp.trading_date ASC LIMIT 1 ) ) AS start_price FROM us_equities.main.assets a ) SELECT r.sector, COUNT(r.asset_id) AS stock_count, percentile_cont(0.5) WITHIN GROUP (ORDER BY CASE WHEN r.end_price IS NOT NULL AND r.start_price IS NOT NULL THEN (r.end_price / r.start_price) - 1 END) AS median_return FROM returns r GROUP BY r.sector ORDER BY stock_count DESC;",
+          "result": {
+            "columns": [
+              "sector",
+              "stock_count",
+              "median_return"
+            ],
+            "types": [
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "Manufacturing",
+                579,
+                -0.012151536812008534
+              ],
+              [
+                "Finance, Insurance and Real Estate",
+                363,
+                -0.014989190487629145
+              ],
+              [
+                "Services",
+                264,
+                -0.12499463123255433
+              ],
+              [
+                "Transportation, Communications and Utilities",
+                99,
+                0.03809523809523818
+              ],
+              [
+                "Nonclassifiable",
+                89,
+                -0.033700137551581744
+              ],
+              [
+                "Retail Trade",
+                83,
+                -0.04048940464177608
+              ],
+              [
+                "Mining",
+                64,
+                0.2070408150319084
+              ],
+              [
+                "Wholesale Trade",
+                40,
+                0.020697064637743234
+              ],
+              [
+                "Agriculture, Forestry and Fishing",
+                10,
+                0.09092187578050603
+              ],
+              [
+                "Construction",
+                10,
+                -0.034889245452566164
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 787
+          }
+        },
+        {
+          "sql": "WITH wp AS (SELECT asset_id, trading_date, adjusted_close, total_return_1d FROM us_equities.main.daily_prices WHERE asset_id IN ('BMY','ABBV','PFE') AND trading_date BETWEEN DATE '2025-12-01' AND DATE '2026-03-12'), endc AS (SELECT asset_id, adjusted_close AS end_close FROM (SELECT asset_id, adjusted_close, ROW_NUMBER() OVER (PARTITION BY asset_id ORDER BY trading_date DESC) AS rn FROM wp) sub WHERE rn = 1), basec AS (SELECT asset_id, COALESCE((SELECT dp.adjusted_close FROM us_equities.main.daily_prices dp WHERE dp.asset_id = wp.asset_id AND dp.trading_date < DATE '2025-12-01' ORDER BY dp.trading_date DESC LIMIT 1), (SELECT dp.adjusted_close FROM us_equities.main.daily_prices dp WHERE dp.asset_id = wp.asset_id AND dp.trading_date BETWEEN DATE '2025-12-01' AND DATE '2026-03-12' ORDER BY dp.trading_date ASC LIMIT 1)) AS base_close FROM wp GROUP BY asset_id), stats AS (SELECT asset_id, stddev_samp(total_return_1d) AS daily_volatility FROM wp GROUP BY asset_id) SELECT e.asset_id AS ticker, (e.end_close / b.base_close) - 1 AS total_return, s.daily_volatility FROM endc e JOIN basec b ON e.asset_id = b.asset_id JOIN stats s ON e.asset_id = s.asset_id;",
+          "result": {
+            "columns": [
+              "ticker",
+              "total_return",
+              "daily_volatility"
+            ],
+            "types": [
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "ABBV",
+                -0.004163275333808669,
+                0.01539786146647154
+              ],
+              [
+                "BMY",
+                0.19817073170731714,
+                0.016568434057748625
+              ],
+              [
+                "PFE",
+                0.04231366459627339,
+                0.013988271521856617
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 746
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"asset_relationships\" LIMIT 25",
+          "result": {
+            "columns": [
+              "relationship_id",
+              "source_asset_id",
+              "target_asset_id",
+              "relationship_type",
+              "peer_rank"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "INTEGER"
+            ],
+            "rows": [
+              [
+                "A>AVTR",
+                "A",
+                "AVTR",
+                "same_sic_code",
+                1
+              ],
+              [
+                "A>BRKR",
+                "A",
+                "BRKR",
+                "same_sic_code",
+                2
+              ],
+              [
+                "A>BIO",
+                "A",
+                "BIO",
+                "same_sic_code",
+                3
+              ],
+              [
+                "A>CTKB",
+                "A",
+                "CTKB",
+                "same_sic_code",
+                4
+              ],
+              [
+                "A>BNGO",
+                "A",
+                "BNGO",
+                "same_sic_code",
+                5
+              ],
+              [
+                "A>BIO.B",
+                "A",
+                "BIO.B",
+                "same_sic_code",
+                6
+              ],
+              [
+                "A>ASTC",
+                "A",
+                "ASTC",
+                "same_sic_code",
+                7
+              ],
+              [
+                "AA>CENX",
+                "AA",
+                "CENX",
+                "same_sic_code",
+                1
+              ],
+              [
+                "AACG>APEI",
+                "AACG",
+                "APEI",
+                "same_sic_code",
+                1
+              ],
+              [
+                "AACG>CHGG",
+                "AACG",
+                "CHGG",
+                "same_sic_code",
+                2
+              ],
+              [
+                "AACG>AFYA",
+                "AACG",
+                "AFYA",
+                "same_sic_code",
+                3
+              ],
+              [
+                "AACG>DAO",
+                "AACG",
+                "DAO",
+                "same_sic_code",
+                4
+              ],
+              [
+                "AACG>COE",
+                "AACG",
+                "COE",
+                "same_sic_code",
+                5
+              ],
+              [
+                "AACG>BOXL",
+                "AACG",
+                "BOXL",
+                "same_sic_code",
+                6
+              ],
+              [
+                "AACG>BSAA",
+                "AACG",
+                "BSAA",
+                "same_sic_code",
+                7
+              ],
+              [
+                "AACG>AMBO",
+                "AACG",
+                "AMBO",
+                "same_sic_code",
+                8
+              ],
+              [
+                "AACI>CLBR",
+                "AACI",
+                "CLBR",
+                "same_sic_code",
+                1
+              ],
+              [
+                "AACI>AEXA",
+                "AACI",
+                "AEXA",
+                "same_sic_code",
+                2
+              ],
+              [
+                "AACI>CEPO",
+                "AACI",
+                "CEPO",
+                "same_sic_code",
+                3
+              ],
+              [
+                "AACI>CEPF",
+                "AACI",
+                "CEPF",
+                "same_sic_code",
+                4
+              ],
+              [
+                "AACI>APXT",
+                "AACI",
+                "APXT",
+                "same_sic_code",
+                5
+              ],
+              [
+                "AACI>BEAG",
+                "AACI",
+                "BEAG",
+                "same_sic_code",
+                6
+              ],
+              [
+                "AACI>BPAC",
+                "AACI",
+                "BPAC",
+                "same_sic_code",
+                7
+              ],
+              [
+                "AACI>CCII",
+                "AACI",
+                "CCII",
+                "same_sic_code",
+                8
+              ],
+              [
+                "AAL>DAL",
+                "AAL",
+                "DAL",
+                "same_sic_code",
+                1
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 702
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"assets\" LIMIT 25",
+          "result": {
+            "columns": [
+              "asset_id",
+              "company_name",
+              "cik",
+              "sic_code",
+              "sector",
+              "industry",
+              "exchange",
+              "profile",
+              "first_session",
+              "last_session",
+              "sessions",
+              "median_dollar_volume",
+              "liquidity_rank",
+              "is_synthetic"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DATE",
+              "INTEGER",
+              "DOUBLE",
+              "INTEGER",
+              "BOOLEAN"
+            ],
+            "rows": [
+              [
+                "A",
+                "AGILENT TECHNOLOGIES, INC.",
+                "0001090872",
+                "3826",
+                "Manufacturing",
+                "Laboratory Analytical Instruments",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                149973095.62532806,
+                194,
+                false
+              ],
+              [
+                "AA",
+                "Alcoa Corp",
+                "0001675149",
+                "3334",
+                "Manufacturing",
+                "Primary Production Of  Aluminum",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                154069909.32884407,
+                191,
+                false
+              ],
+              [
+                "AACG",
+                "ATA Creativity Global",
+                "0001420529",
+                "8200",
+                "Services",
+                "Services-Educational Services",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                15466.398488461971,
+                1566,
+                false
+              ],
+              [
+                "AACI",
+                "Armada Acquisition Corp. III",
+                "0002092897",
+                "6770",
+                "Finance, Insurance and Real Estate",
+                "Blank Checks",
+                "Nasdaq",
+                null,
+                "2025-06-24",
+                "2025-10-29",
+                84,
+                404457.25911712646,
+                1168,
+                false
+              ],
+              [
+                "AAL",
+                "American Airlines Group Inc.",
+                "0000006201",
+                "4512",
+                "Transportation, Communications and Utilities",
+                "Air Transportation, Scheduled",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                672984454.545682,
+                56,
+                false
+              ],
+              [
+                "AAME",
+                "ATLANTIC AMERICAN CORP",
+                "0000008177",
+                "6311",
+                "Finance, Insurance and Real Estate",
+                "Life Insurance",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                297,
+                19441.93429505825,
+                1555,
+                false
+              ],
+              [
+                "AAMI",
+                "Acadian Asset Management Inc.",
+                "0001748824",
+                "6282",
+                "Finance, Insurance and Real Estate",
+                "Investment Advice",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                297,
+                5240446.682899475,
+                734,
+                false
+              ],
+              [
+                "AAOI",
+                "APPLIED OPTOELECTRONICS, INC.",
+                "0001158114",
+                "3674",
+                "Manufacturing",
+                "Semiconductors & Related Devices",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                88335215.78641891,
+                270,
+                false
+              ],
+              [
+                "AAON",
+                "AAON, INC.",
+                "0000824142",
+                "3585",
+                "Manufacturing",
+                "Air-Cond & Warm Air Heatg Equip & Comm & Indl Refrig Equip",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                52133517.85196686,
+                340,
+                false
+              ],
+              [
+                "AAP",
+                "ADVANCE AUTO PARTS INC",
+                "0001158449",
+                "5531",
+                "Retail Trade",
+                "Retail-Auto & Home Supply Stores",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                60338300.198093414,
+                322,
+                false
+              ],
+              [
+                "AAPG",
+                "ASCENTAGE PHARMA GROUP INTERNATIONAL",
+                "0002023311",
+                "2834",
+                "Manufacturing",
+                "Pharmaceutical Preparations",
+                "Nasdaq",
+                null,
+                "2025-01-24",
+                "2026-03-12",
+                278,
+                184948.82450294495,
+                1289,
+                false
+              ],
+              [
+                "AAPL",
+                "Apple Inc.",
+                "0000320193",
+                "3571",
+                "Manufacturing",
+                "Electronic Computers",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                7864280075.53511,
+                3,
+                false
+              ],
+              [
+                "AARD",
+                "Aardvark Therapeutics, Inc.",
+                "0001774857",
+                "2834",
+                "Manufacturing",
+                "Pharmaceutical Preparations",
+                "Nasdaq",
+                null,
+                "2025-02-13",
+                "2026-03-12",
+                269,
+                956789.2691483498,
+                1025,
+                false
+              ],
+              [
+                "AAT",
+                "American Assets Trust, Inc.",
+                "0001500217",
+                "6798",
+                "Finance, Insurance and Real Estate",
+                "Real Estate Investment Trusts",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                4760271.498285294,
+                747,
+                false
+              ],
+              [
+                "AATC",
+                "AUTOSCOPE TECHNOLOGIES CORP",
+                "0000943034",
+                "3829",
+                "Manufacturing",
+                "Measuring & Controlling Devices, Nec",
+                "OTC",
+                null,
+                "2025-01-02",
+                "2026-03-11",
+                289,
+                33916.69476222992,
+                1512,
+                false
+              ],
+              [
+                "AAUC",
+                "Allied Gold Corp",
+                "0001993344",
+                "1040",
+                "Mining",
+                "Gold And Silver Ores",
+                "NYSE",
+                null,
+                "2025-06-09",
+                "2026-03-12",
+                191,
+                3780142.274289131,
+                790,
+                false
+              ],
+              [
+                "AB",
+                "ALLIANCEBERNSTEIN HOLDING L.P.",
+                "0000825313",
+                "6282",
+                "Finance, Insurance and Real Estate",
+                "Investment Advice",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                7057471.63615036,
+                686,
+                false
+              ],
+              [
+                "ABAT",
+                "AMERICAN BATTERY TECHNOLOGY Co",
+                "0001576873",
+                "1400",
+                "Mining",
+                "Mining & Quarrying Of  Nonmetallic Minerals (No Fuels)",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                8691197.468775988,
+                644,
+                false
+              ],
+              [
+                "ABBV",
+                "AbbVie Inc.",
+                "0001551152",
+                "2834",
+                "Manufacturing",
+                "Pharmaceutical Preparations",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                720751933.6353607,
+                51,
+                false
+              ],
+              [
+                "ABCB",
+                "Ameris Bancorp",
+                "0000351569",
+                "6022",
+                "Finance, Insurance and Real Estate",
+                "State Commercial Banks",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                16733285.88483429,
+                521,
+                false
+              ],
+              [
+                "ABCL",
+                "AbCellera Biologics Inc.",
+                "0001703057",
+                "2834",
+                "Manufacturing",
+                "Pharmaceutical Preparations",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                13147253.75987053,
+                566,
+                false
+              ],
+              [
+                "ABEO",
+                "ABEONA THERAPEUTICS INC.",
+                "0000318306",
+                "2834",
+                "Manufacturing",
+                "Pharmaceutical Preparations",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                4031904.5113043785,
+                775,
+                false
+              ],
+              [
+                "ABEV",
+                "AMBEV S.A.",
+                "0001565025",
+                "2080",
+                "Manufacturing",
+                "Beverages",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                67449643.88848662,
+                310,
+                false
+              ],
+              [
+                "ABG",
+                "ASBURY AUTOMOTIVE GROUP INC",
+                "0001144980",
+                "5500",
+                "Retail Trade",
+                "Retail-Auto Dealers & Gasoline Stations",
+                "NYSE",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                298,
+                20049838.772583008,
+                484,
+                false
+              ],
+              [
+                "ABLV",
+                "Able View Global Inc.",
+                "0001957489",
+                "5960",
+                "Retail Trade",
+                "Retail-Nonstore Retailers",
+                "Nasdaq",
+                null,
+                "2025-01-02",
+                "2026-03-12",
+                293,
+                6713.499941468239,
+                1593,
+                false
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 692
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"daily_prices\" LIMIT 25",
+          "result": {
+            "columns": [
+              "price_id",
+              "asset_id",
+              "trading_date",
+              "open",
+              "high",
+              "low",
+              "close",
+              "adjusted_close",
+              "volume",
+              "dollar_volume",
+              "bar_count",
+              "total_return_1d"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "BIGINT",
+              "DOUBLE",
+              "INTEGER",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "A:2025-01-02",
+                "A",
+                "2025-01-02",
+                135.21,
+                135.73,
+                132.87,
+                133.43,
+                133.43,
+                617127,
+                82471444.0974884,
+                351,
+                0.0
+              ],
+              [
+                "A:2025-01-03",
+                "A",
+                "2025-01-03",
+                133.45,
+                136.05,
+                132.755,
+                135.69,
+                135.69,
+                624608,
+                84555263.51635742,
+                331,
+                0.01693772015288908
+              ],
+              [
+                "A:2025-01-06",
+                "A",
+                "2025-01-06",
+                135.6,
+                138.34,
+                135.34,
+                136.43,
+                136.43,
+                715230,
+                97809627.49833679,
+                363,
+                0.005453607487655665
+              ],
+              [
+                "A:2025-01-07",
+                "A",
+                "2025-01-07",
+                136.83,
+                140.28,
+                135.98,
+                137.41,
+                137.41,
+                750042,
+                103204651.8251648,
+                351,
+                0.007183170856849497
+              ],
+              [
+                "A:2025-01-08",
+                "A",
+                "2025-01-08",
+                137.68,
+                137.68,
+                135.63,
+                136.94,
+                136.94,
+                549781,
+                75379389.06759644,
+                335,
+                -0.0034204206389636393
+              ],
+              [
+                "A:2025-01-10",
+                "A",
+                "2025-01-10",
+                134.75,
+                140.14,
+                134.709,
+                137.47,
+                137.47,
+                892552,
+                122819164.02537537,
+                354,
+                0.003870308164159564
+              ],
+              [
+                "A:2025-01-13",
+                "A",
+                "2025-01-13",
+                137.22,
+                142.82,
+                137.0,
+                141.95,
+                141.95,
+                1018085,
+                144346746.27374268,
+                384,
+                0.03258892849348949
+              ],
+              [
+                "A:2025-01-14",
+                "A",
+                "2025-01-14",
+                142.0,
+                145.38,
+                140.15,
+                143.43,
+                143.43,
+                1544196,
+                221384664.59729004,
+                380,
+                0.010426206410708128
+              ],
+              [
+                "A:2025-01-15",
+                "A",
+                "2025-01-15",
+                144.14,
+                146.5,
+                138.68,
+                142.23,
+                142.23,
+                1580311,
+                225660173.32092285,
+                375,
+                -0.00836645053336138
+              ],
+              [
+                "A:2025-01-16",
+                "A",
+                "2025-01-16",
+                142.78,
+                145.11,
+                140.43,
+                144.72,
+                144.72,
+                1020365,
+                146939988.22795105,
+                363,
+                0.017506855093862184
+              ],
+              [
+                "A:2025-01-17",
+                "A",
+                "2025-01-17",
+                145.88,
+                148.46,
+                145.195,
+                147.36,
+                147.36,
+                2390388,
+                351934996.1506653,
+                382,
+                0.018242122719734688
+              ],
+              [
+                "A:2025-01-21",
+                "A",
+                "2025-01-21",
+                148.67,
+                153.18,
+                148.01,
+                152.57,
+                152.57,
+                1992634,
+                303197906.1587677,
+                389,
+                0.03535559174809966
+              ],
+              [
+                "A:2025-01-22",
+                "A",
+                "2025-01-22",
+                152.83,
+                153.76,
+                151.72,
+                152.6,
+                152.6,
+                1266145,
+                193224899.55773926,
+                386,
+                0.00019663105459799546
+              ],
+              [
+                "A:2025-01-23",
+                "A",
+                "2025-01-23",
+                152.83,
+                152.955,
+                148.18,
+                152.45,
+                152.45,
+                832320,
+                126345904.13117981,
+                359,
+                -0.000982961992136322
+              ],
+              [
+                "A:2025-01-24",
+                "A",
+                "2025-01-24",
+                152.1,
+                152.77,
+                150.78,
+                151.44,
+                151.44,
+                1328375,
+                201512320.016037,
+                353,
+                -0.006625122991144594
+              ],
+              [
+                "A:2025-01-27",
+                "A",
+                "2025-01-27",
+                151.56,
+                152.22,
+                148.7301,
+                150.96,
+                150.96,
+                1621560,
+                244487822.7940216,
+                373,
+                -0.0031695721077653616
+              ],
+              [
+                "A:2025-01-28",
+                "A",
+                "2025-01-28",
+                152.61,
+                153.24,
+                150.21,
+                150.34,
+                150.34,
+                1265971,
+                191439542.5861206,
+                363,
+                -0.00410704822469532
+              ],
+              [
+                "A:2025-01-29",
+                "A",
+                "2025-01-29",
+                148.99,
+                149.9,
+                146.55,
+                147.09,
+                147.09,
+                1060593,
+                156556447.76034546,
+                359,
+                -0.021617666622322784
+              ],
+              [
+                "A:2025-01-30",
+                "A",
+                "2025-01-30",
+                148.95,
+                152.48,
+                147.65,
+                151.38,
+                151.38,
+                1034724,
+                156580657.95074463,
+                376,
+                0.029165816846828507
+              ],
+              [
+                "A:2025-01-31",
+                "A",
+                "2025-01-31",
+                150.96,
+                153.84,
+                150.5,
+                151.52,
+                151.52,
+                1249763,
+                190080292.88539124,
+                383,
+                0.0009248249438500444
+              ],
+              [
+                "A:2025-02-03",
+                "A",
+                "2025-02-03",
+                149.76,
+                150.315,
+                147.88,
+                148.63,
+                148.63,
+                866581,
+                129131813.43664551,
+                373,
+                -0.01907338965153127
+              ],
+              [
+                "A:2025-02-04",
+                "A",
+                "2025-02-04",
+                148.02,
+                148.65,
+                146.27,
+                147.04,
+                147.04,
+                850570,
+                125137693.18167114,
+                351,
+                -0.010697705712171213
+              ],
+              [
+                "A:2025-02-05",
+                "A",
+                "2025-02-05",
+                147.89,
+                148.71,
+                146.31,
+                147.99,
+                147.99,
+                963998,
+                142670732.19223022,
+                377,
+                0.006460826985854373
+              ],
+              [
+                "A:2025-02-06",
+                "A",
+                "2025-02-06",
+                147.02,
+                148.61,
+                146.2,
+                147.64,
+                147.64,
+                787086,
+                116229595.74325562,
+                351,
+                -0.0023650246638288186
+              ],
+              [
+                "A:2025-02-07",
+                "A",
+                "2025-02-07",
+                148.21,
+                149.3875,
+                144.41,
+                145.21,
+                145.21,
+                1014482,
+                148075517.68281555,
+                372,
+                -0.016458954212950294
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 705
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"ticker_history\" LIMIT 25",
+          "result": {
+            "columns": [
+              "ticker_history_id",
+              "asset_id",
+              "ticker",
+              "effective_from",
+              "effective_to"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DATE"
+            ],
+            "rows": [
+              [
+                "A",
+                "A",
+                "A",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AA",
+                "AA",
+                "AA",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AACG",
+                "AACG",
+                "AACG",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AACI",
+                "AACI",
+                "AACI",
+                "2025-06-24",
+                null
+              ],
+              [
+                "AAL",
+                "AAL",
+                "AAL",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AAME",
+                "AAME",
+                "AAME",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AAMI",
+                "AAMI",
+                "AAMI",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AAOI",
+                "AAOI",
+                "AAOI",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AAON",
+                "AAON",
+                "AAON",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AAP",
+                "AAP",
+                "AAP",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AAPG",
+                "AAPG",
+                "AAPG",
+                "2025-01-24",
+                null
+              ],
+              [
+                "AAPL",
+                "AAPL",
+                "AAPL",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AARD",
+                "AARD",
+                "AARD",
+                "2025-02-13",
+                null
+              ],
+              [
+                "AAT",
+                "AAT",
+                "AAT",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AATC",
+                "AATC",
+                "AATC",
+                "2025-01-02",
+                null
+              ],
+              [
+                "AAUC",
+                "AAUC",
+                "AAUC",
+                "2025-06-09",
+                null
+              ],
+              [
+                "AB",
+                "AB",
+                "AB",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABAT",
+                "ABAT",
+                "ABAT",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABBV",
+                "ABBV",
+                "ABBV",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABCB",
+                "ABCB",
+                "ABCB",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABCL",
+                "ABCL",
+                "ABCL",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABEO",
+                "ABEO",
+                "ABEO",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABEV",
+                "ABEV",
+                "ABEV",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABG",
+                "ABG",
+                "ABG",
+                "2025-01-02",
+                null
+              ],
+              [
+                "ABLV",
+                "ABLV",
+                "ABLV",
+                "2025-01-02",
+                null
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 691
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"trading_sessions\" LIMIT 25",
+          "result": {
+            "columns": [
+              "session_id",
+              "trading_date",
+              "close_at",
+              "symbols"
+            ],
+            "types": [
+              "VARCHAR",
+              "DATE",
+              "TIMESTAMP WITH TIME ZONE",
+              "INTEGER"
+            ],
+            "rows": [
+              [
+                "2025-01-02",
+                "2025-01-02",
+                "2025-01-02 21:00:00+00:00",
+                1891
+              ],
+              [
+                "2025-01-03",
+                "2025-01-03",
+                "2025-01-03 21:00:00+00:00",
+                1895
+              ],
+              [
+                "2025-01-06",
+                "2025-01-06",
+                "2025-01-06 21:00:00+00:00",
+                1902
+              ],
+              [
+                "2025-01-07",
+                "2025-01-07",
+                "2025-01-07 21:00:00+00:00",
+                1902
+              ],
+              [
+                "2025-01-08",
+                "2025-01-08",
+                "2025-01-08 21:00:00+00:00",
+                1891
+              ],
+              [
+                "2025-01-10",
+                "2025-01-10",
+                "2025-01-10 21:00:00+00:00",
+                1900
+              ],
+              [
+                "2025-01-13",
+                "2025-01-13",
+                "2025-01-13 21:00:00+00:00",
+                1893
+              ],
+              [
+                "2025-01-14",
+                "2025-01-14",
+                "2025-01-14 21:00:00+00:00",
+                1897
+              ],
+              [
+                "2025-01-15",
+                "2025-01-15",
+                "2025-01-15 21:00:00+00:00",
+                1888
+              ],
+              [
+                "2025-01-16",
+                "2025-01-16",
+                "2025-01-16 21:00:00+00:00",
+                1896
+              ],
+              [
+                "2025-01-17",
+                "2025-01-17",
+                "2025-01-17 21:00:00+00:00",
+                1875
+              ],
+              [
+                "2025-01-21",
+                "2025-01-21",
+                "2025-01-21 21:00:00+00:00",
+                1904
+              ],
+              [
+                "2025-01-22",
+                "2025-01-22",
+                "2025-01-22 21:00:00+00:00",
+                1901
+              ],
+              [
+                "2025-01-23",
+                "2025-01-23",
+                "2025-01-23 21:00:00+00:00",
+                1899
+              ],
+              [
+                "2025-01-24",
+                "2025-01-24",
+                "2025-01-24 21:00:00+00:00",
+                1901
+              ],
+              [
+                "2025-01-27",
+                "2025-01-27",
+                "2025-01-27 21:00:00+00:00",
+                1911
+              ],
+              [
+                "2025-01-28",
+                "2025-01-28",
+                "2025-01-28 21:00:00+00:00",
+                1912
+              ],
+              [
+                "2025-01-29",
+                "2025-01-29",
+                "2025-01-29 21:00:00+00:00",
+                1894
+              ],
+              [
+                "2025-01-30",
+                "2025-01-30",
+                "2025-01-30 21:00:00+00:00",
+                1905
+              ],
+              [
+                "2025-01-31",
+                "2025-01-31",
+                "2025-01-31 21:00:00+00:00",
+                1911
+              ],
+              [
+                "2025-02-03",
+                "2025-02-03",
+                "2025-02-03 21:00:00+00:00",
+                1909
+              ],
+              [
+                "2025-02-04",
+                "2025-02-04",
+                "2025-02-04 21:00:00+00:00",
+                1894
+              ],
+              [
+                "2025-02-05",
+                "2025-02-05",
+                "2025-02-05 21:00:00+00:00",
+                1908
+              ],
+              [
+                "2025-02-06",
+                "2025-02-06",
+                "2025-02-06 21:00:00+00:00",
+                1901
+              ],
+              [
+                "2025-02-07",
+                "2025-02-07",
+                "2025-02-07 21:00:00+00:00",
+                1902
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 709
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"prediction\".\"asset_entities\" LIMIT 25",
+          "result": {
+            "columns": [
+              "asset_id",
+              "company_name",
+              "sector",
+              "industry",
+              "exchange"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "AAPL",
+                "Apple Inc.",
+                "Manufacturing",
+                "Electronic Computers",
+                "Nasdaq"
+              ],
+              [
+                "ADBE",
+                "ADOBE INC.",
+                "Services",
+                "Services-Prepackaged Software",
+                "Nasdaq"
+              ],
+              [
+                "AMAT",
+                "APPLIED MATERIALS INC /DE",
+                "Manufacturing",
+                "Semiconductors & Related Devices",
+                "Nasdaq"
+              ],
+              [
+                "AMD",
+                "ADVANCED MICRO DEVICES INC",
+                "Manufacturing",
+                "Semiconductors & Related Devices",
+                "Nasdaq"
+              ],
+              [
+                "AMZN",
+                "AMAZON COM INC",
+                "Retail Trade",
+                "Retail-Catalog & Mail-Order Houses",
+                "Nasdaq"
+              ],
+              [
+                "APP",
+                "AppLovin Corp",
+                "Services",
+                "Services-Computer Programming, Data Processing, Etc.",
+                "Nasdaq"
+              ],
+              [
+                "AVGO",
+                "Broadcom Inc.",
+                "Manufacturing",
+                "Semiconductors & Related Devices",
+                "Nasdaq"
+              ],
+              [
+                "BA",
+                "BOEING CO",
+                "Manufacturing",
+                "Aircraft",
+                "NYSE"
+              ],
+              [
+                "BABA",
+                "Alibaba Group Holding Ltd",
+                "Services",
+                "Services-Business Services, Nec",
+                "NYSE"
+              ],
+              [
+                "BAC",
+                "BANK OF AMERICA CORP /DE/",
+                "Finance, Insurance and Real Estate",
+                "National Commercial Banks",
+                "NYSE"
+              ],
+              [
+                "BMNR",
+                "BITMINE IMMERSION TECHNOLOGIES, INC.",
+                "Finance, Insurance and Real Estate",
+                "Finance Services",
+                "NYSE"
+              ],
+              [
+                "BRK.B",
+                "BERKSHIRE HATHAWAY INC",
+                "Finance, Insurance and Real Estate",
+                "Fire, Marine & Casualty Insurance",
+                "NYSE"
+              ],
+              [
+                "C",
+                "CITIGROUP INC",
+                "Finance, Insurance and Real Estate",
+                "National Commercial Banks",
+                "NYSE"
+              ],
+              [
+                "COIN",
+                "Coinbase Global, Inc.",
+                "Finance, Insurance and Real Estate",
+                "Finance Services",
+                "Nasdaq"
+              ],
+              [
+                "COST",
+                "COSTCO WHOLESALE CORP /NEW",
+                "Retail Trade",
+                "Retail-Variety Stores",
+                "Nasdaq"
+              ],
+              [
+                "CRCL",
+                "Circle Internet Group, Inc.",
+                "Finance, Insurance and Real Estate",
+                "Finance Services",
+                "NYSE"
+              ],
+              [
+                "CRM",
+                "Salesforce, Inc.",
+                "Services",
+                "Services-Prepackaged Software",
+                "NYSE"
+              ],
+              [
+                "CRWD",
+                "CrowdStrike Holdings, Inc.",
+                "Services",
+                "Services-Prepackaged Software",
+                "Nasdaq"
+              ],
+              [
+                "CRWV",
+                "CoreWeave, Inc.",
+                "Services",
+                "Services-Prepackaged Software",
+                "Nasdaq"
+              ],
+              [
+                "CSCO",
+                "CISCO SYSTEMS, INC.",
+                "Manufacturing",
+                "Computer Communications Equipment",
+                "Nasdaq"
+              ],
+              [
+                "CVX",
+                "CHEVRON CORP",
+                "Manufacturing",
+                "Petroleum Refining",
+                "NYSE"
+              ],
+              [
+                "GE",
+                "GENERAL ELECTRIC CO",
+                "Manufacturing",
+                "Electronic & Other Electrical Equipment (No Computer Equip)",
+                "NYSE"
+              ],
+              [
+                "GOOG",
+                "Alphabet Inc.",
+                "Services",
+                "Services-Computer Programming, Data Processing, Etc.",
+                "Nasdaq"
+              ],
+              [
+                "GOOGL",
+                "Alphabet Inc.",
+                "Services",
+                "Services-Computer Programming, Data Processing, Etc.",
+                "Nasdaq"
+              ],
+              [
+                "GS",
+                "GOLDMAN SACHS GROUP INC",
+                "Finance, Insurance and Real Estate",
+                "Security Brokers, Dealers & Flotation Companies",
+                "NYSE"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 700
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"prediction\".\"price_events\" LIMIT 25",
+          "result": {
+            "columns": [
+              "price_id",
+              "asset_id",
+              "observed_at",
+              "adjusted_close",
+              "volume",
+              "total_return_1d"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "TIMESTAMP WITH TIME ZONE",
+              "DOUBLE",
+              "BIGINT",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "AAPL:2025-01-02",
+                "AAPL",
+                "2025-01-02 21:00:00+00:00",
+                243.77,
+                40559735,
+                0.0
+              ],
+              [
+                "AAPL:2025-01-03",
+                "AAPL",
+                "2025-01-03 21:00:00+00:00",
+                243.36,
+                28457257,
+                -0.0016819132789104296
+              ],
+              [
+                "AAPL:2025-01-06",
+                "AAPL",
+                "2025-01-06 21:00:00+00:00",
+                244.82,
+                30460408,
+                0.005999342537803987
+              ],
+              [
+                "AAPL:2025-01-07",
+                "AAPL",
+                "2025-01-07 21:00:00+00:00",
+                242.24,
+                28435211,
+                -0.010538354709582531
+              ],
+              [
+                "AAPL:2025-01-08",
+                "AAPL",
+                "2025-01-08 21:00:00+00:00",
+                242.75,
+                25711434,
+                0.002105350066050171
+              ],
+              [
+                "AAPL:2025-01-10",
+                "AAPL",
+                "2025-01-10 21:00:00+00:00",
+                237.0,
+                45003966,
+                -0.023686920700308978
+              ],
+              [
+                "AAPL:2025-01-13",
+                "AAPL",
+                "2025-01-13 21:00:00+00:00",
+                234.42,
+                34908500,
+                -0.010886075949367191
+              ],
+              [
+                "AAPL:2025-01-14",
+                "AAPL",
+                "2025-01-14 21:00:00+00:00",
+                233.24,
+                26223053,
+                -0.005033700196228952
+              ],
+              [
+                "AAPL:2025-01-15",
+                "AAPL",
+                "2025-01-15 21:00:00+00:00",
+                237.87,
+                29910036,
+                0.019850797461841818
+              ],
+              [
+                "AAPL:2025-01-16",
+                "AAPL",
+                "2025-01-16 21:00:00+00:00",
+                228.19,
+                52022663,
+                -0.040694496994156504
+              ],
+              [
+                "AAPL:2025-01-17",
+                "AAPL",
+                "2025-01-17 21:00:00+00:00",
+                230.0,
+                48449569,
+                0.007931986502476063
+              ],
+              [
+                "AAPL:2025-01-21",
+                "AAPL",
+                "2025-01-21 21:00:00+00:00",
+                222.69,
+                70343629,
+                -0.03178260869565219
+              ],
+              [
+                "AAPL:2025-01-22",
+                "AAPL",
+                "2025-01-22 21:00:00+00:00",
+                223.7488,
+                43886001,
+                0.00475459158471403
+              ],
+              [
+                "AAPL:2025-01-23",
+                "AAPL",
+                "2025-01-23 21:00:00+00:00",
+                223.49,
+                42182142,
+                -0.0011566542479779507
+              ],
+              [
+                "AAPL:2025-01-24",
+                "AAPL",
+                "2025-01-24 21:00:00+00:00",
+                222.7299,
+                40739044,
+                -0.0034010470267127335
+              ],
+              [
+                "AAPL:2025-01-27",
+                "AAPL",
+                "2025-01-27 21:00:00+00:00",
+                229.6,
+                69217639,
+                0.030844983093872846
+              ],
+              [
+                "AAPL:2025-01-28",
+                "AAPL",
+                "2025-01-28 21:00:00+00:00",
+                238.49,
+                55791571,
+                0.03871951219512204
+              ],
+              [
+                "AAPL:2025-01-29",
+                "AAPL",
+                "2025-01-29 21:00:00+00:00",
+                239.4201,
+                32864736,
+                0.003899953876472795
+              ],
+              [
+                "AAPL:2025-01-30",
+                "AAPL",
+                "2025-01-30 21:00:00+00:00",
+                237.5,
+                29911904,
+                -0.008019794495115473
+              ],
+              [
+                "AAPL:2025-01-31",
+                "AAPL",
+                "2025-01-31 21:00:00+00:00",
+                236.0019,
+                67220455,
+                -0.0063077894736841555
+              ],
+              [
+                "AAPL:2025-02-03",
+                "AAPL",
+                "2025-02-03 21:00:00+00:00",
+                228.01,
+                50942837,
+                -0.0338637104192806
+              ],
+              [
+                "AAPL:2025-02-04",
+                "AAPL",
+                "2025-02-04 21:00:00+00:00",
+                232.8,
+                31229455,
+                0.021007850532871464
+              ],
+              [
+                "AAPL:2025-02-05",
+                "AAPL",
+                "2025-02-05 21:00:00+00:00",
+                232.47,
+                29529195,
+                -0.0014175257731959823
+              ],
+              [
+                "AAPL:2025-02-06",
+                "AAPL",
+                "2025-02-06 21:00:00+00:00",
+                233.22,
+                21644024,
+                0.003226222738417883
+              ],
+              [
+                "AAPL:2025-02-07",
+                "AAPL",
+                "2025-02-07 21:00:00+00:00",
+                227.74,
+                27574060,
+                -0.023497127176056898
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 726
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"prediction\".\"return_outcomes\" LIMIT 25",
+          "result": {
+            "columns": [
+              "outcome_id",
+              "asset_id",
+              "observed_at",
+              "realized_at",
+              "forward_return_5d",
+              "positive_return"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "TIMESTAMP WITH TIME ZONE",
+              "TIMESTAMP WITH TIME ZONE",
+              "DOUBLE",
+              "BOOLEAN"
+            ],
+            "rows": [
+              [
+                "outcome-AMZN:2025-01-02",
+                "AMZN",
+                "2025-01-02 21:00:00+00:00",
+                "2025-01-10 21:00:00+00:00",
+                -0.0043177892918826455,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-01-03",
+                "AMZN",
+                "2025-01-03 21:00:00+00:00",
+                "2025-01-13 21:00:00+00:00",
+                -0.025320098148561176,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-01-06",
+                "AMZN",
+                "2025-01-06 21:00:00+00:00",
+                "2025-01-14 21:00:00+00:00",
+                -0.04352786309784995,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-01-07",
+                "AMZN",
+                "2025-01-07 21:00:00+00:00",
+                "2025-01-15 21:00:00+00:00",
+                0.004667986323555917,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-08",
+                "AMZN",
+                "2025-01-08 21:00:00+00:00",
+                "2025-01-16 21:00:00+00:00",
+                -0.006617746364741328,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-01-10",
+                "AMZN",
+                "2025-01-10 21:00:00+00:00",
+                "2025-01-17 21:00:00+00:00",
+                0.03104030675126679,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-13",
+                "AMZN",
+                "2025-01-13 21:00:00+00:00",
+                "2025-01-21 21:00:00+00:00",
+                0.05962023027859087,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-14",
+                "AMZN",
+                "2025-01-14 21:00:00+00:00",
+                "2025-01-22 21:00:00+00:00",
+                0.07702541517570438,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-15",
+                "AMZN",
+                "2025-01-15 21:00:00+00:00",
+                "2025-01-23 21:00:00+00:00",
+                0.054193668568890185,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-16",
+                "AMZN",
+                "2025-01-16 21:00:00+00:00",
+                "2025-01-24 21:00:00+00:00",
+                0.06435239735339437,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-17",
+                "AMZN",
+                "2025-01-17 21:00:00+00:00",
+                "2025-01-27 21:00:00+00:00",
+                0.04263514410944347,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-21",
+                "AMZN",
+                "2025-01-21 21:00:00+00:00",
+                "2025-01-28 21:00:00+00:00",
+                0.02937365010799131,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-22",
+                "AMZN",
+                "2025-01-22 21:00:00+00:00",
+                "2025-01-29 21:00:00+00:00",
+                0.0018315798441026487,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-23",
+                "AMZN",
+                "2025-01-23 21:00:00+00:00",
+                "2025-01-30 21:00:00+00:00",
+                -0.003313227423328513,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-01-24",
+                "AMZN",
+                "2025-01-24 21:00:00+00:00",
+                "2025-01-31 21:00:00+00:00",
+                0.012773567231542104,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-27",
+                "AMZN",
+                "2025-01-27 21:00:00+00:00",
+                "2025-02-03 21:00:00+00:00",
+                0.008619957537155054,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-28",
+                "AMZN",
+                "2025-01-28 21:00:00+00:00",
+                "2025-02-04 21:00:00+00:00",
+                0.015778430549727274,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-29",
+                "AMZN",
+                "2025-01-29 21:00:00+00:00",
+                "2025-02-05 21:00:00+00:00",
+                0.004719387755102167,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-30",
+                "AMZN",
+                "2025-01-30 21:00:00+00:00",
+                "2025-02-06 21:00:00+00:00",
+                0.018027616774633604,
+                true
+              ],
+              [
+                "outcome-AMZN:2025-01-31",
+                "AMZN",
+                "2025-01-31 21:00:00+00:00",
+                "2025-02-07 21:00:00+00:00",
+                -0.03632388800134534,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-02-03",
+                "AMZN",
+                "2025-02-03 21:00:00+00:00",
+                "2025-02-10 21:00:00+00:00",
+                -0.018608175809371352,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-02-04",
+                "AMZN",
+                "2025-02-04 21:00:00+00:00",
+                "2025-02-11 21:00:00+00:00",
+                -0.03903990746096009,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-02-05",
+                "AMZN",
+                "2025-02-05 21:00:00+00:00",
+                "2025-02-12 21:00:00+00:00",
+                -0.031230163767931973,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-02-06",
+                "AMZN",
+                "2025-02-06 21:00:00+00:00",
+                "2025-02-13 21:00:00+00:00",
+                -0.035751664085067136,
+                false
+              ],
+              [
+                "outcome-AMZN:2025-02-07",
+                "AMZN",
+                "2025-02-07 21:00:00+00:00",
+                "2025-02-14 21:00:00+00:00",
+                -0.0020068056888579155,
+                false
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 755
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"prediction\".\"top_50_population\" LIMIT 25",
+          "result": {
+            "columns": [
+              "asset_id"
+            ],
+            "types": [
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "AAPL"
+              ],
+              [
+                "ADBE"
+              ],
+              [
+                "AMAT"
+              ],
+              [
+                "AMD"
+              ],
+              [
+                "AMZN"
+              ],
+              [
+                "APP"
+              ],
+              [
+                "AVGO"
+              ],
+              [
+                "BA"
+              ],
+              [
+                "BABA"
+              ],
+              [
+                "BAC"
+              ],
+              [
+                "BMNR"
+              ],
+              [
+                "BRK.B"
+              ],
+              [
+                "C"
+              ],
+              [
+                "COIN"
+              ],
+              [
+                "COST"
+              ],
+              [
+                "CRCL"
+              ],
+              [
+                "CRM"
+              ],
+              [
+                "CRWD"
+              ],
+              [
+                "CRWV"
+              ],
+              [
+                "CSCO"
+              ],
+              [
+                "CVX"
+              ],
+              [
+                "GE"
+              ],
+              [
+                "GOOG"
+              ],
+              [
+                "GOOGL"
+              ],
+              [
+                "GS"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 704
+          }
+        }
+      ]
+    }
+  ]
+}

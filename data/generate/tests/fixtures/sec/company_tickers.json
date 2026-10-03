@@ -1,0 +1,12 @@
+{
+ "0": {
+  "cik_str": 1,
+  "ticker": "ACME",
+  "title": "Acme Widgets Corp"
+ },
+ "1": {
+  "cik_str": 2,
+  "ticker": "BRK-B",
+  "title": "Berkshire Example Inc"
+ }
+}

@@ -1,0 +1,444 @@
+[
+  {
+    "schemaVersion": "2",
+    "artifactKind": "analytics_result",
+    "receiptId": "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba",
+    "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+    "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
+    "turnId": null,
+    "toolName": "mcp__market_analytics__market_anomaly_scan",
+    "status": "completed",
+    "errorType": null,
+    "errorSummary": null,
+    "durationMs": 173,
+    "traceId": "01a0e6627c447b83a27dc6ec13c18349",
+    "spanId": "bcf375c672770770",
+    "occurredAt": "2026-09-28T05:00:21.762077Z",
+    "content": {
+      "operationId": "market_anomaly_scan",
+      "status": "succeeded",
+      "sourceId": "market_analysis_structured",
+      "databaseName": "market_analysis",
+      "publicParameters": {
+        "universe_id": "reviewed_assets",
+        "training_start": "2026-01-02T00:00:00Z",
+        "training_end": "2026-06-30T23:59:59Z",
+        "scoring_start": "2026-07-01T00:00:00Z",
+        "scoring_end": "2026-08-31T23:59:59Z",
+        "limit": 5,
+        "minimum_percentile": null
+      },
+      "payload": {
+        "policy_id": "pca-reconstruction-market-v1",
+        "universe_id": "reviewed_assets",
+        "feature_names": [
+          "adjusted_return_1d",
+          "adjusted_return_5d",
+          "realized_volatility_20d",
+          "log_volume_deviation_20d"
+        ],
+        "training_observations": 1476,
+        "scoring_observations": 516,
+        "flagged_observations": 31,
+        "observations": [
+          {
+            "anomaly_score": 1.2816038131713867,
+            "asset_id": "asset-delta",
+            "cohort_percentile": 100,
+            "decision_score": -0.8222506642341614,
+            "is_anomaly": true,
+            "observed_deviations": {
+              "adjusted_return_1d": 2.3754045963287354,
+              "adjusted_return_5d": -0.5697458982467651,
+              "log_volume_deviation_20d": 0.2959314286708832,
+              "realized_volatility_20d": 0.5618448853492737
+            },
+            "rank": 1,
+            "timestamp": "2026-08-24T21:00:00Z"
+          },
+          {
+            "anomaly_score": 1.1750255823135376,
+            "asset_id": "asset-kestrel",
+            "cohort_percentile": 99.8062015503876,
+            "decision_score": -0.7156724333763123,
+            "is_anomaly": true,
+            "observed_deviations": {
+              "adjusted_return_1d": 0.9958844780921936,
+              "adjusted_return_5d": -1.9308624267578125,
+              "log_volume_deviation_20d": -0.3541160523891449,
+              "realized_volatility_20d": 1.198216199874878
+            },
+            "rank": 2,
+            "timestamp": "2026-08-06T21:00:00Z"
+          },
+          {
+            "anomaly_score": 0.9305300116539001,
+            "asset_id": "asset-galena",
+            "cohort_percentile": 99.6124031007752,
+            "decision_score": -0.4711768627166748,
+            "is_anomaly": true,
+            "observed_deviations": {
+              "adjusted_return_1d": -0.08835739642381668,
+              "adjusted_return_5d": -2.9177768230438232,
+              "log_volume_deviation_20d": 0.6184261441230774,
+              "realized_volatility_20d": 2.1258230209350586
+            },
+            "rank": 3,
+            "timestamp": "2026-08-31T21:00:00Z"
+          },
+          {
+            "anomaly_score": 0.9062730669975281,
+            "asset_id": "asset-fathom",
+            "cohort_percentile": 99.4186046511628,
+            "decision_score": -0.44691991806030273,
+            "is_anomaly": true,
+            "observed_deviations": {
+              "adjusted_return_1d": -1.2256468534469604,
+              "adjusted_return_5d": 1.1279382705688477,
+              "log_volume_deviation_20d": 1.1349908113479614,
+              "realized_volatility_20d": 0.6523571610450745
+            },
+            "rank": 4,
+            "timestamp": "2026-07-14T21:00:00Z"
+          },
+          {
+            "anomaly_score": 0.8613079786300659,
+            "asset_id": "asset-juniper",
+            "cohort_percentile": 99.2248062015504,
+            "decision_score": -0.4019548296928406,
+            "is_anomaly": true,
+            "observed_deviations": {
+              "adjusted_return_1d": 0.5486966967582703,
+              "adjusted_return_5d": -1.9547497034072876,
+              "log_volume_deviation_20d": -0.8632276654243469,
+              "realized_volatility_20d": 1.4641493558883667
+            },
+            "rank": 5,
+            "timestamp": "2026-08-20T21:00:00Z"
+          }
+        ]
+      },
+      "error": null,
+      "engine": {
+        "device": "gpu",
+        "library": "cuml.accel",
+        "version": "26.6.0",
+        "engineId": "cuml-pca-anomaly-gpu.v1"
+      },
+      "timing": {
+        "computeMs": 7.4897,
+        "setupMs": 1.2584,
+        "engineMs": 8.7481,
+        "totalMs": 9.8312
+      },
+      "rowsScanned": 1992,
+      "assetCount": 12,
+      "warnings": [],
+      "limitations": [
+        "Anomaly scores describe unusual observed feature combinations; they are not forecasts or probabilities.",
+        "Observed deviations are descriptive reason codes and do not establish a cause or adverse event."
+      ]
+    }
+  },
+  {
+    "schemaVersion": "2",
+    "artifactKind": "retrieval_evidence",
+    "receiptId": "hermes-receipt:6f6369003e7c34b6d766a3fea488d8113f41dcb6d9a1ecf0833ce2b5566d8433",
+    "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
+    "invocationId": "hermes-tool:call_WBlikJMlxKUnq3VgeaEUYi0H",
+    "turnId": null,
+    "toolName": "mcp__retrieval__retrieve_evidence",
+    "status": "completed",
+    "errorType": null,
+    "errorSummary": null,
+    "durationMs": 2241,
+    "traceId": "01a0e6627c447b83a27dc6ec13c18349",
+    "spanId": "81569081e47c3353",
+    "occurredAt": "2026-09-28T05:00:23.867804Z",
+    "content": {
+      "query": "Retrieve second-quarter 2026 public-company filings (filed or reporting events during April 1 through June 30, 2026) that document material cybersecurity incidents, information-technology outages, operational disruptions, production shutdowns, supply-chain interruptions, or business-continuity impacts. Return citation-ready passages identifying issuer, filing date/form, disruption type, timing, and described operational or financial impact. Focus on concrete documented incidents rather than generic risk factors.",
+      "sourceIds": [
+        "market_news"
+      ],
+      "collection": "aiq_market_intelligence_current",
+      "collectionVersion": "aiq_market_intelligence_current__bae73a4335ce",
+      "hits": [
+        {
+          "rank": 1,
+          "score": -6.265625,
+          "vectorScore": 0.4305180311203003,
+          "sourceId": "market_news",
+          "documentId": "edgar:0001605301:0001605301-26-000021:cbfv-20260507.htm",
+          "chunkId": "edgar:0001605301:0001605301-26-000021:cbfv-20260507.htm:0001",
+          "title": "CB Financial Services, Inc. 8-K: 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/1605301/0001605301-26-000021.txt",
+          "publishedAt": "2026-05-11T00:00:00Z",
+          "snippet": "cbfv-202605070001605301FALSEMay 7, 2026May 7, 2026May 7, 2026May 7, 2026May 7, 2026May 7, 202600016053012026-05-072026-05-07UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549FORM 8-KCURRENT REPORTPursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934Date of Report (Date of earliest event reported): May 7, 2026CB FINANCIAL SERVICES, INC.(Exact name of registrant as specified in its charter)Commission file number: 001-36706Pennsylvania51-0534721(State or other jurisdiction of incorporation or organization)(I.R.S. Employer Identification No.)100 N. Market Street",
+          "metadata": {
+            "accession": "0001605301-26-000021",
+            "cik": "0001605301",
+            "citation": "SEC 8-K, CB Financial Services, Inc., filed 2026-05-11, accession 0001605301-26-000021",
+            "company_name": "CB Financial Services, Inc.",
+            "document_type": "8-K",
+            "filed_on": "2026-05-11",
+            "filename": "cbfv-20260507.htm",
+            "form": "8-K"
+          }
+        },
+        {
+          "rank": 2,
+          "score": -6.5390625,
+          "vectorScore": 0.3711106777191162,
+          "sourceId": "market_news",
+          "documentId": "edgar:0000866706:0001104659-26-057162:tm2613615d1_8k.htm",
+          "chunkId": "edgar:0000866706:0001104659-26-057162:tm2613615d1_8k.htm:0001",
+          "title": "ESCO TECHNOLOGIES INC 8-K: FORM 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/866706/0001104659-26-057162.txt",
+          "publishedAt": "2026-05-07T00:00:00Z",
+          "snippet": "false 0000866706 0000866706 2026-05-07 2026-05-07 iso4217:USD xbrli:shares iso4217:USD xbrli:shares UNITED STATES SECURITIES AND EXCHANGE COMMISSION WASHINGTON, D.C. 20549 FORM 8-K CURRENT REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 Date of Report (Date of earliest event reported): May 7, 2026 ESCO TECHNOLOGIES INC. (Exact Name of Registrant as Specified in Charter) Missouri 1-10596 43-1554045 (State or Other (Commission (I.R.S. Employer Jurisdiction of Incorporation) File Number) Identification No.) 645 Maryville Centre Drive, Suite 300, St. Louis, Missouri 6",
+          "metadata": {
+            "accession": "0001104659-26-057162",
+            "cik": "0000866706",
+            "citation": "SEC 8-K, ESCO TECHNOLOGIES INC, filed 2026-05-07, accession 0001104659-26-057162",
+            "company_name": "ESCO TECHNOLOGIES INC",
+            "document_type": "8-K",
+            "filed_on": "2026-05-07",
+            "filename": "tm2613615d1_8k.htm",
+            "form": "8-K"
+          }
+        },
+        {
+          "rank": 3,
+          "score": -6.59765625,
+          "vectorScore": 0.37042585015296936,
+          "sourceId": "market_news",
+          "documentId": "edgar:0001803599:0001803599-26-000133:cnxc-20260629.htm",
+          "chunkId": "edgar:0001803599:0001803599-26-000133:cnxc-20260629.htm:0001",
+          "title": "Concentrix Corp 8-K: 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/1803599/0001803599-26-000133.txt",
+          "publishedAt": "2026-06-29T00:00:00Z",
+          "snippet": "cnxc-202606290001803599FALSE00018035992026-06-292026-06-29UNITED STATESSECURITIES AND EXCHANGE COMMISSIONWashington, D.C. 20549FORM 8-KCURRENT REPORTPursuant to Section 13 or 15(d) of theSecurities Exchange Act of 1934Date of Report (Date of Earliest Event Reported): June 29, 2026CONCENTRIX CORPORATION(Exact name of registrant as specified in its charter)Delaware001-3949427-1605762(State or Other Jurisdiction of Incorporation)(Commission File Number)(I.R.S. Employer Identification Number)39899 Balentine Drive, Suite 235, Newark, California94560(Address of principal executive offices)(Zip Code)",
+          "metadata": {
+            "accession": "0001803599-26-000133",
+            "cik": "0001803599",
+            "citation": "SEC 8-K, Concentrix Corp, filed 2026-06-29, accession 0001803599-26-000133",
+            "company_name": "Concentrix Corp",
+            "document_type": "8-K",
+            "filed_on": "2026-06-29",
+            "filename": "cnxc-20260629.htm",
+            "form": "8-K"
+          }
+        }
+      ],
+      "candidateCounts": {
+        "market_news": 48
+      },
+      "models": {
+        "embed": "nvidia/nemotron-3-embed-1b",
+        "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+      },
+      "index": {
+        "type": "HNSW",
+        "metric": "COSINE",
+        "params": {
+          "M": 16,
+          "efConstruction": 200
+        },
+        "searchParams": {
+          "ef": 128
+        }
+      },
+      "timings": {
+        "embedMs": 471.5,
+        "searchMs": 15.4,
+        "rerankMs": 1714.9,
+        "totalMs": 2202.3
+      }
+    }
+  },
+  {
+    "schemaVersion": "2",
+    "artifactKind": "structured_query",
+    "receiptId": "hermes-receipt:20ab500a2e61f9e583b3170724a0125136e0f118bc72e628eb9e61e1a833dfad",
+    "jobId": "0dcd9841-b68a-456b-9dc5-87403c34efcb",
+    "invocationId": "hermes-tool:call_bbG7Kuc3cdq0i8DLST8RrXwd",
+    "turnId": null,
+    "toolName": "mcp__auto_ontology__ask_question",
+    "status": "completed",
+    "errorType": null,
+    "errorSummary": null,
+    "durationMs": 121296,
+    "traceId": "01a0e67166f07293a759a86afc4229cf",
+    "spanId": "9b77cdba93c88b4f",
+    "occurredAt": "2026-09-28T05:18:39.665701Z",
+    "content": {
+      "query": "For every asset with a modeled cash-dividend corporate action whose effective session falls in calendar year 2026, return one row per corporate action with the asset's stable identifier, ticker, company name, effective session date, corporate-action cash amount (including its unit/currency if available), the asset's price return for that effective session, and the asset's total return for that same effective session. Also return the arithmetic difference total return minus price return in percentage points if supported. Use observed historical records only, preserve all matching actions without ranking, and state the row count and whether results are complete or truncated.",
+      "databaseName": "market_analysis",
+      "answer": "This returns one row per modeled cash-dividend action with an observed effective-session price from January 1 through September 28, 2026, using only price records ingested by September 28, 2026 at 05:16:38 UTC. It combines corporate actions with asset names, date-effective tickers, USD cash amounts, adjusted-close price returns, and provided one-session total returns, then calculates the return difference in percentage points. Results are ordered by effective session date, stable asset identifier, and ticker, with the total row count and an untruncated completeness status repeated on every row.",
+      "sql": "WITH price_history AS (\n    SELECT\n        price_record.asset_id,\n        price_record.trading_date,\n        price_record.adjusted_close,\n        price_record.total_return_1d,\n        LAG(price_record.adjusted_close) OVER (\n            PARTITION BY price_record.asset_id\n            ORDER BY price_record.trading_date\n        ) AS prior_adjusted_close\n    FROM daily_prices AS price_record\n    WHERE price_record.ingested_at <= TIMESTAMPTZ '2026-09-28 05:16:38+00:00'\n),\ndividend_actions AS (\n    SELECT\n        asset_record.asset_id AS asset_stable_identifier,\n        ticker_record.ticker,\n        asset_record.company_name,\n        action_record.effective_date AS effective_session_date,\n        action_record.cash_amount_usd AS cash_amount,\n        'USD' AS cash_currency,\n        (price_record.adjusted_close / NULLIF(price_record.prior_adjusted_close, 0.0)) - 1.0 AS price_return_1d,\n        price_record.total_return_1d,\n        (\n            price_record.total_return_1d\n            - ((price_record.adjusted_close / NULLIF(price_record.prior_adjusted_close, 0.0)) - 1.0)\n        ) * 100.0 AS total_minus_price_return_percentage_points\n    FROM corporate_actions AS action_record\n    INNER JOIN assets AS asset_record\n        ON asset_record.asset_id = action_record.asset_id\n    INNER JOIN price_history AS price_record\n        ON asset_record.asset_id = price_record.asset_id\n       AND action_record.effective_date = price_record.trading_date\n    LEFT JOIN ticker_history AS ticker_record\n        ON asset_record.asset_id = ticker_record.asset_id\n       AND action_record.effective_date >= ticker_record.effective_from\n       AND (\n            ticker_record.effective_to IS NULL\n            OR action_record.effective_date <= ticker_record.effective_to\n       )\n    WHERE action_record.action_type = 'cash_dividend'\n      AND action_record.effective_date >= DATE '2026-01-01'\n      AND action_record.effective_date < DATE '2027-01-01'\n      AND action_record.effective_date <= DATE '2026-09-28'\n)\nSELECT\n    dividend_record.asset_stable_identifier,\n    dividend_record.ticker,\n    dividend_record.company_name,\n    dividend_record.effective_session_date,\n    dividend_record.cash_amount,\n    dividend_record.cash_currency,\n    dividend_record.price_return_1d,\n    dividend_record.total_return_1d,\n    dividend_record.total_minus_price_return_percentage_points,\n    COUNT(*) OVER () AS row_count,\n    'complete for available observed records through 2026-09-28 05:16:38 UTC; not truncated' AS completeness_status\nFROM dividend_actions AS dividend_record\nORDER BY\n    dividend_record.effective_session_date,\n    dividend_record.asset_stable_identifier,\n    dividend_record.ticker",
+      "rows": [
+        {
+          "asset_stable_identifier": "asset-meridian",
+          "cash_amount": 0.32,
+          "cash_currency": "USD",
+          "company_name": "Meridian Digital Bank",
+          "completeness_status": "complete for available observed records through 2026-09-28 05:16:38 UTC; not truncated",
+          "effective_session_date": "2026-03-20T00:00:00.000",
+          "price_return_1d": -0.0026469023,
+          "row_count": 2,
+          "ticker": "MRDN",
+          "total_minus_price_return_percentage_points": 0.4965782302,
+          "total_return_1d": 0.00231888
+        },
+        {
+          "asset_stable_identifier": "asset-aether",
+          "cash_amount": 0.18,
+          "cash_currency": "USD",
+          "company_name": "Aether Compute",
+          "completeness_status": "complete for available observed records through 2026-09-28 05:16:38 UTC; not truncated",
+          "effective_session_date": "2026-05-15T00:00:00.000",
+          "price_return_1d": -0.015080746,
+          "row_count": 2,
+          "ticker": "AETH",
+          "total_minus_price_return_percentage_points": 0.0930435958,
+          "total_return_1d": -0.01415031
+        }
+      ],
+      "sourceRowCount": 2,
+      "truncated": false,
+      "resolutionLineage": [
+        {
+          "phrase": "corporate-action cash amount",
+          "ontologyObject": "Cash Amount Usd",
+          "table": "main.corporate_actions",
+          "column": "cash_amount_usd"
+        },
+        {
+          "phrase": "modeled cash-dividend corporate action",
+          "ontologyObject": "Cash Amount Usd",
+          "table": "main.corporate_actions",
+          "column": "cash_amount_usd"
+        },
+        {
+          "phrase": "corporate-action effective session date",
+          "ontologyObject": "Effective Date",
+          "table": "main.corporate_actions",
+          "column": "effective_date"
+        },
+        {
+          "phrase": "corporate-action cash amount",
+          "ontologyObject": "Action Type",
+          "table": "main.corporate_actions",
+          "column": "action_type"
+        }
+      ]
+    }
+  },
+  {
+    "schemaVersion": "2",
+    "artifactKind": "structured_prediction",
+    "receiptId": "hermes-receipt:a3deaea1c67bd182ce0af86784b536d9f2511b6fa8e987b2504a67aa0e1f9602",
+    "jobId": "18d6824d-df8e-4d57-89eb-22a055226124",
+    "invocationId": "hermes-tool:call_qhoJqt3GMJfjreJf15M2C5U9",
+    "turnId": null,
+    "toolName": "mcp__market_analytics__predict_asset_outcomes",
+    "status": "completed",
+    "errorType": null,
+    "errorSummary": null,
+    "durationMs": 40136,
+    "traceId": "01a0e68a943272b1b7296889da0cdd43",
+    "spanId": "8821f18f61ac9821",
+    "occurredAt": "2026-09-28T05:44:59.353599Z",
+    "content": {
+      "available": true,
+      "reason": null,
+      "templateId": "news_event",
+      "pql": "PREDICT COUNT(news_events.*, 0, 5, days) > 0 FOR EACH asset_entities.asset_id",
+      "anchor": "2026-08-24T21:00:00Z",
+      "horizon": {
+        "value": 5,
+        "unit": "days"
+      },
+      "rows": [
+        {
+          "assetId": "asset-delta",
+          "probability": 0.8469578623771667
+        },
+        {
+          "assetId": "asset-borealis",
+          "probability": 0.7766229510307312
+        },
+        {
+          "assetId": "asset-cascade",
+          "probability": 0.7209580540657043
+        },
+        {
+          "assetId": "asset-kestrel",
+          "probability": 0.10521053522825241
+        },
+        {
+          "assetId": "asset-ion",
+          "probability": 0.10230470448732376
+        },
+        {
+          "assetId": "asset-harbor",
+          "probability": 0.08240150660276413
+        },
+        {
+          "assetId": "asset-aether",
+          "probability": 0.05665242671966553
+        },
+        {
+          "assetId": "asset-galena",
+          "probability": 0.05644402652978897
+        },
+        {
+          "assetId": "asset-juniper",
+          "probability": 0.050517670810222626
+        },
+        {
+          "assetId": "asset-ember",
+          "probability": 0.045183755457401276
+        },
+        {
+          "assetId": "asset-meridian",
+          "probability": 0.04115288704633713
+        },
+        {
+          "assetId": "asset-fathom",
+          "probability": 0.039787810295820236
+        }
+      ],
+      "model": "kumo-relational"
+    }
+  },
+  {
+    "schemaVersion": "2",
+    "artifactKind": "structured_prediction",
+    "receiptId": "hermes-receipt:65245c1f6edb49fa020b78df3a7105eefce8853cd0e4129dc05feb9bf3fcdb56",
+    "jobId": "821ffdc2-5ecc-47f6-9198-99ccb45b00af",
+    "invocationId": "hermes-tool:call_uumTAP1PA8GjUZLh8k49XXQs",
+    "turnId": null,
+    "toolName": "mcp__market_analytics__predict_asset_outcomes",
+    "status": "failed",
+    "errorType": "evidence_unavailable",
+    "errorSummary": "ConnectError: [Errno 111] Connection refused",
+    "durationMs": 41,
+    "traceId": "01a0e686e8547eb3bf64e9cee2f60d63",
+    "spanId": "a770158ad0a3ee15",
+    "occurredAt": "2026-09-28T05:42:23.540503Z",
+    "content": {
+      "available": false,
+      "reason": "ConnectError: [Errno 111] Connection refused",
+      "templateId": "positive_return",
+      "pql": "PREDICT COUNT(return_outcomes.* WHERE return_outcomes.positive_return = true, 0, 5, days) > 0 FOR EACH asset_entities.asset_id",
+      "anchor": "2026-08-24T21:00:00Z",
+      "horizon": {
+        "value": 5,
+        "unit": "days"
+      },
+      "rows": [],
+      "model": "kumo-relational"
+    }
+  }
+]

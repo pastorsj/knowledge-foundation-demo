@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# Not a package: the agent ships as the sandbox image built from Dockerfile.
+# This project locks what render_config.py and the offline checks in tests/ need.
+[project]
+name = "demo-agent"
+version = "0.1.0"
+description = "Hermes agent profile, sandbox policy and OpenShell packaging checks."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["pyyaml>=6.0.3,<7"]
+
+[dependency-groups]
+dev = [
+    # Validates the plugin's receipts against contracts/schemas/receipt.schema.json (tests/test_plugin.py).
+    "jsonschema>=4.26,<5",
+    # jsonschema checks `format: date-time` only when this is installed; otherwise it silently skips the format.
+    "rfc3339-validator>=0.1.4,<0.2",
+    "pytest>=9.1",
+    # The Agent Skills reference validator (`agentskills validate`), used in-process by tests/test_skills.py.
+    "skills-ref==0.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

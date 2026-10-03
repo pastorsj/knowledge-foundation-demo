@@ -1,0 +1,165 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Answer checks for `./scripts/demo.sh eval` (eval/README.md), by question id; never read at runtime. For each
+# question: the oracles to compute on the deployment's build (eval/oracles/<sql>.sql, read-only through the API,
+# optionally reordered and cut), the tool groups a run must call one tool of, the deterministic checks of the
+# report, and the reference facts the optional grader reads. A check names oracle rows as <oracle>[<rows>].<field>,
+# where rows is an index (0, -1), a slice (:3, -3:, :) or max(<field>); facts write {<oracle>[<rows>]: field, ...}.
+dataset: "synthetic: fictional issuers, prices and company news made for the demo"
+names: SELECT asset_id, company_name FROM main.assets WHERE asset_id IN ({ids})
+format:
+  signed_percent: [total_return, mean_forward_return_5, publication_session_return, following_two_session_return,
+    open_to_close_return, median_return]
+  percent: [daily_volatility, intraday_range]
+
+questions:
+  market-leaders:
+    oracles:
+      market_leaders: {}
+    tools: [[market_scan]]
+    checks:
+      - {id: strongest_named, named: "market_leaders[0].asset_id"}
+      - {id: weakest_named, named: "market_leaders[-1].asset_id"}
+      - {id: strongest_return_exact, percent: "market_leaders[0].total_return"}
+    facts: >-
+      Universe: the 12 most liquid issuers (top_12). Adjusted-close return over the 20 sessions ending 2026-08-31,
+      from the close before the first of them to the last close, and daily volatility (std of daily returns),
+      strongest first: {market_leaders: asset_id, total_return, daily_volatility}. A good answer names the strongest
+      and the weakest with values that match.
+
+  news-sentiment-reaction:
+    oracles:
+      news_sentiment: {sql: news_sentiment_reaction}
+    tools: [[analyze_news_price_relationship, sentiment_timeline]]
+    checks:
+      - {id: causation_addressed, pattern: "(?i)caus"}
+      - {id: mean_returns_exact, percent: "news_sentiment[:].mean_forward_return_5"}
+    facts: >-
+      Company news about the 12 most liquid issuers published 2026-08-17 through 2026-08-24, aligned to the first
+      session closing (21:00 UTC) at or after publication, mean return over the next five sessions by sentiment:
+      {news_sentiment: sentiment_label, items, mean_forward_return_5}. Positive news was followed by higher returns
+      and negative news by lower ones; the sample is small. The report must describe the relationship without
+      claiming causation.
+
+  unusual-sessions:
+    tools: [[market_anomaly_scan]]
+    checks:
+      - id: not_forecast
+        pattern: "(?i)not (a |an )?(forecast|prediction)|neither\\b.{0,40}forecast|no(t)? .{0,20}forecast"
+      - {id: not_explanation, pattern: "(?i)caus|explanation"}
+    facts: >-
+      Baseline 2026-01-02 to 2026-06-30, scored sessions 2026-07-01 to 2026-08-31, every issuer in the pack. The
+      ranked sessions and feature explanations must come from the market_anomaly_scan evidence. Its deviations are
+      robust z-scores, not percentages. The report must say anomaly scores are neither forecasts nor explanations.
+
+  peer-network:
+    oracles:
+      peer_pairs: {sql: peer_pair_correlations, limit: 10}
+    tools: [[analyze_market_relationships]]
+    checks:
+      - {id: top_pair_first_named, named: "peer_pairs[0].first_asset"}
+      - {id: top_pair_second_named, named: "peer_pairs[0].second_asset"}
+    facts: >-
+      The graph links declared same-industry peers (sparse_declared_peers mode at this scale) over June to August
+      2026. Centrality and pairs must come from the analyze_market_relationships evidence. For reference, the most
+      correlated declared peer pairs by daily-return correlation over 2026-06-01 to 2026-08-31:
+      {peer_pairs[:5]: first_asset, second_asset, correlation}. The tool description the agent read says the tool
+      ranks assets by PageRank centrality in a fixed graph of daily-return correlations over the window above,
+      whose links join declared same-industry peers, lists its strongest links by absolute correlation (a negative
+      correlation means the two moved in opposite directions), and cannot be limited to a universe or window. Those
+      method statements are supported.
+
+  cyber-disclosure-rules:
+    tools: [[retrieve_evidence]]
+    checks:
+      - {id: item_1_05, pattern: "1\\.05"}
+      - {id: deadline_or_flag, item_105_deadline: true}
+      - {id: item_1_05_filing_named, pattern: ["CB Financial"]}
+    facts: >-
+      Form 8-K Item 1.05 requires disclosing the material aspects of the nature, scope and timing of a material
+      cybersecurity incident and its material or reasonably likely material impact, within four business days after
+      the company determines the incident is material (a determination made without unreasonable delay); disclosure
+      may be delayed when the US Attorney General finds a substantial risk to national security or public safety.
+      The regulations corpus holds 17 CFR 249.308 (Form 8-K) and 17 CFR 229.106 (Regulation S-K Item 106) from the
+      eCFR, and the SEC's 2023 cybersecurity disclosure rule (88 FR 51896): its Appendix C holds Form 8-K's General
+      Instruction B.1 ("A report pursuant to Item 1.05 is to be filed within four business days after the registrant
+      determines that it has experienced a material cybersecurity incident") and Item 1.05's text. A deadline cited
+      to a passage of that appendix is supported; a deadline the evidence does not hold is not, but flagging that
+      the retrieved text does not contain it is acceptable. Credit only sections and filings that appear in the
+      evidence. In the 2026 Q2 filing sample the only 8-K that reports Item 1.05 is CB
+      Financial Services' filing of 2026-05-11 (accession 0001605301-26-000021).
+
+  news-and-filings:
+    oracles:
+      negative_news: {}
+    tools: [[retrieve_evidence], [market_scan, price_context, sentiment_timeline, analyze_news_price_relationship,
+      market_anomaly_scan, analyze_market_relationships, intraday_scan, ask_question]]
+    checks:
+      - {id: most_negative_named, named: "negative_news[max(negative_items)].asset_id", any: true}
+      # eval/retrieval.yaml lists the filings that report a disruption of the filer's own operations
+      - {id: disruption_filing_retrieved, retrieved_filing: true}
+      - {id: disruption_filer_named, pattern: ["(?i)TotalEnergies", "(?i)B2Gold", "(?i)Centerra", "(?i)Cactus"]}
+    facts: >-
+      Market half: company news about the 12 most liquid issuers (top_12) in July and August 2026, negative items per
+      issuer with the issuer's return over the two months: {negative_news: asset_id, negative_items, items,
+      total_return}. Price reaction may be given over the window or after the news; numbers must match the evidence.
+      Filing half: real Q2 2026 SEC filings that describe operational disruptions, whose companies, dates and
+      descriptions must come from the retrieved evidence. The sample has such filings, among them TotalEnergies (6-K,
+      2026-04-29: production shut down in Qatar, Iraq and UAE offshore), B2Gold (6-K, 2026-05-07: a fire at the Goose
+      Mine crushing circuit cut second-quarter output), Centerra Gold (6-K, 2026-04-29: Langeloth Facility operations
+      suspended after an explosion) and Cactus (8-K, 2026-05-07: Middle East logistics disruptions); an answer that
+      says no filing describes one is wrong. The fictional issuers are not the filers: the report must keep the two
+      apart.
+
+  story-event-context:
+    oracles:
+      story_events: {sql: story_event_context}
+    tools: [[price_context, analyze_news_price_relationship, ask_question]]
+    checks:
+      - {id: stories_named_10_of_12, named: "story_events[:].asset_id", at_least: 10}
+      - {id: percent_grounding_90, percent_grounding: 0.9}
+    facts: >-
+      The 12 most liquid issuers had 23 company news items between 2026-08-17 and 2026-08-28, among them each
+      issuer's one planted story (is_story). Each item's return on the session it aligns to (the first closing, at
+      21:00 UTC, at or after publication) and over the two sessions after it: {story_events: news_id, asset_id,
+      is_story, published_at, publication_session_return, following_two_session_return}. The data ends on
+      2026-08-31, so the five items of 2026-08-28 have no two-session return; a good answer still lists them with
+      their publication-session return and says the later return is unavailable. It covers every item (or says how
+      many it found) with returns that match.
+
+  outcome-prediction:
+    tools: [[predict_asset_outcomes]]
+    checks:
+      - {id: model_top3_named, prediction_named: 3}
+      - {id: top_listed_first, prediction_first: true}
+    facts: >-
+      The Kumo prediction in the evidence is the answer: the report must rank the issuers by the model's
+      probabilities exactly as the evidence gives them, state the anchor and horizon, and not present model
+      probabilities as certainties. Anchor: the 2026-08-24 close; population: the 12 most liquid issuers; outcome: a
+      positive five-session return.
+
+  sector-sql:
+    oracles:
+      sectors: {sql: sector_breakdown}
+    tools: [[ask_question]]
+    checks:
+      - {id: median_returns_exact, percent: "sectors[:].median_return"}
+    facts: >-
+      Issuers per SIC division and each division's median return over the 20 sessions ending 2026-08-31 (from the
+      close before the window to its last close): {sectors: sector, issuers, median_return}. The SQL and its result
+      must come from the ask_question evidence. A median of daily returns is a different measure and is wrong here.
+
+  large-universe-scan:
+    oracles:
+      universe_top: {sql: large_universe_scan, limit: 20}
+      universe_bottom: {sql: large_universe_scan, order: ORDER BY total_return ASC, limit: 20}
+    tools: [[market_scan]]
+    checks:
+      - {id: strongest_named, named: "universe_top[0].asset_id"}
+      - {id: weakest_named, named: "universe_bottom[0].asset_id"}
+    facts: >-
+      Every issuer in the pack (2,000). Adjusted-close return from the close before the first session on or after
+      2024-01-02 (its first close, with no earlier session) to the last on or before 2026-08-31 (fractions: 5.87 is
+      +587%), with daily volatility. 20 strongest: {universe_top: asset_id, total_return, daily_volatility}. 20
+      weakest: {universe_bottom: asset_id, total_return, daily_volatility}.

@@ -1,0 +1,142 @@
+[
+  {
+    "schemaVersion": "1",
+    "collection": "aiq_market_intelligence_current",
+    "collectionVersion": "aiq_market_intelligence_current__bae73a4335ce",
+    "embedModel": "nvidia/nemotron-3-embed-1b",
+    "sourceIds": [
+      "market_news",
+      "market_regulations"
+    ],
+    "queryCount": 15,
+    "measuredAt": "2026-09-30T21:00:00Z",
+    "profiles": [
+      {
+        "profileId": "vector-single",
+        "executionMode": "single",
+        "batchSize": 1,
+        "concurrency": 1,
+        "repetitions": 3,
+        "topK": 10,
+        "cpu": {
+          "role": "cpu",
+          "indexType": "HNSW",
+          "status": "completed",
+          "requestCount": 45,
+          "vectorCount": 45,
+          "p50Ms": 2.1,
+          "p95Ms": 3.4,
+          "vectorSearchMs": 98.4,
+          "vectorQps": 457.32
+        },
+        "gpu": {
+          "role": "gpu",
+          "indexType": "GPU_IVF_FLAT",
+          "status": "completed",
+          "requestCount": 45,
+          "vectorCount": 45,
+          "p50Ms": 2.3,
+          "p95Ms": 3.1,
+          "vectorSearchMs": 104.9,
+          "vectorQps": 428.98
+        },
+        "quality": {
+          "passed": true,
+          "cpuRecallAtK": 0.993,
+          "gpuRecallAtK": 0.987,
+          "cpuGpuOverlapAtK": 0.978,
+          "failureReasons": []
+        },
+        "claim": {
+          "decision": "cpu_faster_or_equal",
+          "observedCpuOverGpuRatio": 0.938,
+          "gpuSpeedupFactor": null
+        }
+      },
+      {
+        "profileId": "vector-batch",
+        "executionMode": "batch",
+        "batchSize": 5,
+        "concurrency": 1,
+        "repetitions": 3,
+        "topK": 10,
+        "cpu": {
+          "role": "cpu",
+          "indexType": "HNSW",
+          "status": "completed",
+          "requestCount": 9,
+          "vectorCount": 45,
+          "p50Ms": 6.6,
+          "p95Ms": 8.0,
+          "vectorSearchMs": 61.2,
+          "vectorQps": 735.29
+        },
+        "gpu": {
+          "role": "gpu",
+          "indexType": "GPU_IVF_FLAT",
+          "status": "completed",
+          "requestCount": 9,
+          "vectorCount": 45,
+          "p50Ms": 3.0,
+          "p95Ms": 3.5,
+          "vectorSearchMs": 27.8,
+          "vectorQps": 1618.71
+        },
+        "quality": {
+          "passed": true,
+          "cpuRecallAtK": 0.993,
+          "gpuRecallAtK": 0.987,
+          "cpuGpuOverlapAtK": 0.978,
+          "failureReasons": []
+        },
+        "claim": {
+          "decision": "gpu_speedup",
+          "observedCpuOverGpuRatio": 2.201,
+          "gpuSpeedupFactor": 2.201
+        }
+      },
+      {
+        "profileId": "vector-concurrency",
+        "executionMode": "concurrency",
+        "batchSize": 1,
+        "concurrency": 5,
+        "repetitions": 3,
+        "topK": 10,
+        "cpu": {
+          "role": "cpu",
+          "indexType": "HNSW",
+          "status": "completed",
+          "requestCount": 45,
+          "vectorCount": 45,
+          "p50Ms": 4.2,
+          "p95Ms": 5.9,
+          "vectorSearchMs": 40.5,
+          "vectorQps": 1111.11
+        },
+        "gpu": {
+          "role": "gpu",
+          "indexType": "GPU_IVF_FLAT",
+          "status": "completed",
+          "requestCount": 45,
+          "vectorCount": 45,
+          "p50Ms": 3.4,
+          "p95Ms": 4.4,
+          "vectorSearchMs": 33.1,
+          "vectorQps": 1359.52
+        },
+        "quality": {
+          "passed": true,
+          "cpuRecallAtK": 0.993,
+          "gpuRecallAtK": 0.987,
+          "cpuGpuOverlapAtK": 0.978,
+          "failureReasons": []
+        },
+        "claim": {
+          "decision": "gpu_speedup",
+          "observedCpuOverGpuRatio": 1.224,
+          "gpuSpeedupFactor": 1.224
+        }
+      }
+    ]
+  }
+]

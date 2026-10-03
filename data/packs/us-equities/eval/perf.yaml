@@ -1,0 +1,71 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The GPU performance guard's cases (`./scripts/demo.sh test gpu --perf`, eval/README.md); never read at runtime.
+# `market` cases go to market-analytics' POST /benchmark, which times each call on its CPU and GPU engines in
+# alternating pairs; `retrieval` names the profiles of the Milvus CPU/GPU index comparison (retrieval-benchmark.json).
+# `recorded` lists the CPU/GPU speedups measured on a 40 GB A100 (12 vCPUs):
+#   - 2026-09-30: the isolated method of tools/market-analytics/README.md (`intraday_scan` on real minute bars);
+#   - 2026-10-01: POST /benchmark on the running stack, for the recorded sessions' calls (each session's Benchmark);
+#   - 2026-10-02: POST /benchmark, four times, for `market_scan` and `market_anomaly_scan` once their per-asset
+#     ranking ran on the host (tools/market-analytics/README.md#daily-tools-on-us-equities).
+# A case fails below `min_speedup`, half its lowest recorded speedup rounded down to 0.05; a case recorded slower on
+# the GPU has none and is only reported. This pack's daily table is small (1,601 stocks, 452,837 daily rows): over 50
+# stocks the daily tools run faster on the CPU, and the GPU wins over every stock and on the minute bars.
+profile: default
+
+market:
+  - id: intraday-top-50-widest-ranges
+    tool: intraday_scan
+    arguments: {universe_id: top_50, start: "2026-03-02T00:00:00Z", end: "2026-03-12T23:59:59Z",
+      rank_by: intraday_range, direction: highest, limit: 10}
+    recorded: [4.1, 4.11]
+    min_speedup: 2.05
+  - id: intraday-top-50-drawdowns
+    tool: intraday_scan
+    arguments: {universe_id: top_50, start: "2026-02-02T00:00:00Z", end: "2026-02-27T23:59:59Z",
+      rank_by: max_drawdown, direction: lowest, limit: 10}
+    recorded: [4.23]
+    min_speedup: 2.1
+  - id: intraday-top-50-volume
+    tool: intraday_scan
+    arguments: {universe_id: top_50, start: "2026-03-09T00:00:00Z", end: "2026-03-12T23:59:59Z", rank_by: volume,
+      direction: highest, limit: 10}
+    recorded: [3.87]
+    min_speedup: 1.9
+  - id: scan-top-50-20-sessions
+    tool: market_scan
+    arguments: {universe_id: top_50, sessions: 20, end: "2026-03-12T23:59:59Z", metrics: [return, volatility],
+      limit: 3}
+    recorded: [0.89, 0.83, 0.8, 0.78]
+    min_speedup: null
+  - id: anomalies-top-50
+    tool: market_anomaly_scan
+    arguments: {universe_id: top_50, training_start: "2025-01-02T00:00:00Z", training_end: "2025-12-31T23:59:59Z",
+      scoring_start: "2026-01-02T00:00:00Z", scoring_end: "2026-03-12T23:59:59Z", limit: 10}
+    recorded: [0.69, 0.73, 0.7, 0.73]
+    min_speedup: null
+  - id: scan-all-stocks-full-history
+    tool: market_scan
+    arguments: {universe_id: all_assets, start: "2025-01-02T00:00:00Z", end: "2026-03-12T23:59:59Z",
+      metrics: [return, volatility], limit: 20}
+    recorded: [2.69, 2.65, 2.66, 2.49]
+    min_speedup: 1.2
+  - id: scan-all-stocks-20-sessions
+    tool: market_scan
+    arguments: {universe_id: all_assets, sessions: 20, end: "2026-03-12T23:59:59Z", metrics: [return, volatility],
+      limit: 10}
+    recorded: [1.58, 1.57, 1.57, 1.53]
+    min_speedup: 0.75
+  - id: anomalies-all-stocks
+    tool: market_anomaly_scan
+    arguments: {universe_id: all_assets, training_start: "2025-01-02T00:00:00Z", training_end: "2025-12-31T23:59:59Z",
+      scoring_start: "2026-01-02T00:00:00Z", scoring_end: "2026-03-12T23:59:59Z", limit: 10}
+    recorded: [1.81, 1.65, 1.9, 1.79]
+    min_speedup: 0.8
+
+# GPU_IVF_FLAT against the CPU HNSW index, 2026-10-01, twice (the pack's 15 held-out queries)
+retrieval:
+  vector-single: {recorded: [1.13, 1.22], min_speedup: 0.55}
+  vector-batch: {recorded: [1.11, 1.2], min_speedup: 0.55}
+  vector-concurrency: {recorded: [1.76, 1.07], min_speedup: 0.5}
