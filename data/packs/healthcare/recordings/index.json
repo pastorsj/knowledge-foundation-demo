@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "pack": {
+    "id": "healthcare",
+    "version": "1.0.0"
+  },
+  "recordedAt": "2026-10-03T04:19:13.433223Z",
+  "sessions": [
+    {
+      "id": "scanned-checklist",
+      "title": "Scanned discharge checklist",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "question": "On the scanned heart failure discharge checklist, what discharge weight was recorded and which checklist items were left unchecked?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "prior-auth-mri",
+      "title": "MRI prior authorization turnaround",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "question": "Does a cardiac MRI need prior authorization, and how many business days does the payer have to decide? What is the expedited turnaround?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "readmissions-by-hospital",
+      "title": "Q2 readmission rate by hospital",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "question": "What was the 30-day readmission rate at each of our three hospitals for patients discharged in Q2 2026 (April to June)? Leave out discharges that ended in death or hospice."
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "missed-hf-followup",
+      "title": "Missed 7-day heart failure follow-up",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "question": "Which heart failure patients discharged in August 2026 missed the follow-up visit our discharge protocol requires within 7 days? List patient id, hospital and discharge date."
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "appealable-denials",
+      "title": "Denials still open for appeal",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "question": "As of 2026-09-30, how many denied claims that have not been appealed are still inside their payer's first-level appeal window, and what is the billed amount by payer?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        },
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    }
+  ]
+}

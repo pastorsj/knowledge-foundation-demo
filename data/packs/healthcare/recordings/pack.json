@@ -1,0 +1,140 @@
+{
+  "id": "healthcare",
+  "kind": "industry",
+  "title": "Healthcare",
+  "description": "Riverside Health Network, a fictional regional provider with 3 hospitals and 12 clinics: encounters, diagnoses and claims tables with a quality scorecard workbook, beside heart failure and infection-control protocols, prior authorization and payer contract documents, a quality committee deck and a scanned discharge checklist.",
+  "icon": "Heart",
+  "status": "ready",
+  "version": "1.0.0",
+  "as_of": "2026-09-30",
+  "disclaimer": "Synthetic data for a software demonstration: every patient, provider, payer, claim, document and figure is fictional. There is no real PHI. Not clinical, legal or billing guidance.",
+  "questions": [
+    {
+      "id": "scanned-checklist",
+      "label": "Scanned discharge checklist",
+      "tag": "DOCUMENTS",
+      "description": "Reads a scanned, slightly rotated form with typed fields, check marks and handwriting.",
+      "question": "On the scanned heart failure discharge checklist, what discharge weight was recorded and which checklist items were left unchecked?",
+      "sources": [
+        "healthcare.guidelines"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "prior-auth-mri",
+      "label": "MRI prior authorization turnaround",
+      "tag": "DOCUMENTS",
+      "description": "Answered from the table of services in the prior authorization policy.",
+      "question": "Does a cardiac MRI need prior authorization, and how many business days does the payer have to decide? What is the expedited turnaround?",
+      "sources": [
+        "healthcare.operations"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": true
+    },
+    {
+      "id": "hf-followup-schedule",
+      "label": "Heart failure follow-up schedule",
+      "tag": "DOCUMENTS",
+      "description": "Answered from the follow-up schedule table in the heart failure discharge protocol.",
+      "question": "What follow-up steps does the heart failure discharge protocol require after a patient goes home, and by when?",
+      "sources": [
+        "healthcare.guidelines"
+      ],
+      "tools": [
+        "retrieval"
+      ],
+      "featured": false
+    },
+    {
+      "id": "readmissions-by-hospital",
+      "label": "Q2 readmission rate by hospital",
+      "tag": "SQL",
+      "description": "A window function over inpatient encounters, matching the quality committee deck.",
+      "question": "What was the 30-day readmission rate at each of our three hospitals for patients discharged in Q2 2026 (April to June)? Leave out discharges that ended in death or hospice.",
+      "sources": [
+        "healthcare.clinical"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "top-denial-reasons",
+      "label": "Costliest denial reasons",
+      "tag": "SQL",
+      "description": "Ranks denial reasons by billed dollars rather than by claim count.",
+      "question": "Which three denial reasons account for the most billed dollars on claims whose denial notice is dated in 2026, and what share of all billed dollars on those denied claims do they make up?",
+      "sources": [
+        "healthcare.clinical"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "readmission-by-condition",
+      "label": "Readmissions by condition",
+      "tag": "SQL",
+      "description": "Joins inpatient encounters to their primary diagnosis.",
+      "question": "Compare the 30-day readmission rate for inpatient discharges with heart failure as the primary diagnosis, discharges with COPD as the primary diagnosis and all other inpatient discharges from April 2025 through August 2026. Leave out deaths and hospice discharges.",
+      "sources": [
+        "healthcare.clinical"
+      ],
+      "tools": [
+        "duckdb"
+      ],
+      "featured": false
+    },
+    {
+      "id": "missed-hf-followup",
+      "label": "Missed 7-day heart failure follow-up",
+      "tag": "HYBRID",
+      "description": "The protocol sets the rule (7 days, which discharges count); the encounters table shows who missed it.",
+      "question": "Which heart failure patients discharged in August 2026 missed the follow-up visit our discharge protocol requires within 7 days? List patient id, hospital and discharge date.",
+      "sources": [
+        "healthcare.guidelines",
+        "healthcare.clinical"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    },
+    {
+      "id": "appealable-denials",
+      "label": "Denials still open for appeal",
+      "tag": "HYBRID",
+      "description": "Appeal windows come from the payer contract summary; the denied claims come from the claims table.",
+      "question": "As of 2026-09-30, how many denied claims that have not been appealed are still inside their payer's first-level appeal window, and what is the billed amount by payer?",
+      "sources": [
+        "healthcare.operations",
+        "healthcare.clinical"
+      ],
+      "tools": [
+        "retrieval",
+        "duckdb"
+      ],
+      "featured": true
+    }
+  ],
+  "examples": [
+    "scanned-checklist",
+    "prior-auth-mri",
+    "readmissions-by-hospital",
+    "missed-hf-followup",
+    "appealable-denials",
+    "hf-followup-schedule",
+    "top-denial-reasons",
+    "readmission-by-condition"
+  ],
+  "conversations": []
+}

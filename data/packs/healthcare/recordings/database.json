@@ -1,0 +1,4256 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "healthcare.clinical",
+      "name": "Encounters & Claims",
+      "databaseName": "healthcare_clinical",
+      "schema": {
+        "source_id": "healthcare.clinical",
+        "database_name": "healthcare_clinical",
+        "tables": [
+          {
+            "name": "claims",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "claim_id"
+            ],
+            "columns": [
+              {
+                "name": "claim_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "encounter_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "patient_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "facility_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "payer",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "submitted_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "adjudicated_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "billed_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "paid_amount",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "claim_status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "denied",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "denial_reason",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "appeal_status",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "diagnoses",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "diagnosis_id"
+            ],
+            "columns": [
+              {
+                "name": "diagnosis_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "encounter_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "patient_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "icd10_code",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "icd10_description",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "is_primary",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "diagnosed_date",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "encounters",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "encounter_id"
+            ],
+            "columns": [
+              {
+                "name": "encounter_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "patient_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "facility_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "provider_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "encounter_type",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "visit_reason",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "admit_ts",
+                "type": "TIMESTAMP",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "discharge_ts",
+                "type": "TIMESTAMP",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "length_of_stay_days",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "discharge_disposition",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "facilities",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "facility_id"
+            ],
+            "columns": [
+              {
+                "name": "facility_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "facility_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "facility_type",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "service_focus",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "city",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "region",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "licensed_beds",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "patients",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "patient_id"
+            ],
+            "columns": [
+              {
+                "name": "patient_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "age_band",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "sex",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "payer",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "primary_clinic_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "has_heart_failure",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "has_copd",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "has_diabetes",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "has_ckd",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "has_hypertension",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "providers",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "provider_id"
+            ],
+            "columns": [
+              {
+                "name": "provider_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "specialty",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "credential",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "primary_facility_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "years_in_practice",
+                "type": "BIGINT",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "quality_scorecard_hcahps",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "record_id"
+            ],
+            "columns": [
+              {
+                "name": "record_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "quarter_start",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "quarter",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "facility_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "facility_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "domain",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "top_box_pct",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "survey_responses",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          },
+          {
+            "name": "quality_scorecard_readmissions",
+            "schema": "main",
+            "kind": "table",
+            "primary_key": [
+              "record_id"
+            ],
+            "columns": [
+              {
+                "name": "record_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": true
+              },
+              {
+                "name": "month",
+                "type": "DATE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "facility_id",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "facility_name",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "cohort",
+                "type": "VARCHAR",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "index_discharges",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "readmissions_30d",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "readmission_rate_pct",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "target_rate_pct",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              },
+              {
+                "name": "follow_up_complete",
+                "type": "DOUBLE",
+                "nullable": true,
+                "primary_key": false
+              }
+            ]
+          }
+        ],
+        "relationships": [
+          {
+            "from_table": "claims",
+            "from_column": "encounter_id",
+            "to_table": "encounters",
+            "to_column": "encounter_id"
+          },
+          {
+            "from_table": "claims",
+            "from_column": "patient_id",
+            "to_table": "patients",
+            "to_column": "patient_id"
+          },
+          {
+            "from_table": "claims",
+            "from_column": "facility_id",
+            "to_table": "facilities",
+            "to_column": "facility_id"
+          },
+          {
+            "from_table": "diagnoses",
+            "from_column": "encounter_id",
+            "to_table": "encounters",
+            "to_column": "encounter_id"
+          },
+          {
+            "from_table": "diagnoses",
+            "from_column": "patient_id",
+            "to_table": "patients",
+            "to_column": "patient_id"
+          },
+          {
+            "from_table": "encounters",
+            "from_column": "patient_id",
+            "to_table": "patients",
+            "to_column": "patient_id"
+          },
+          {
+            "from_table": "encounters",
+            "from_column": "facility_id",
+            "to_table": "facilities",
+            "to_column": "facility_id"
+          },
+          {
+            "from_table": "encounters",
+            "from_column": "provider_id",
+            "to_table": "providers",
+            "to_column": "provider_id"
+          },
+          {
+            "from_table": "patients",
+            "from_column": "primary_clinic_id",
+            "to_table": "facilities",
+            "to_column": "facility_id"
+          },
+          {
+            "from_table": "providers",
+            "from_column": "primary_facility_id",
+            "to_table": "facilities",
+            "to_column": "facility_id"
+          },
+          {
+            "from_table": "quality_scorecard_hcahps",
+            "from_column": "facility_id",
+            "to_table": "facilities",
+            "to_column": "facility_id"
+          },
+          {
+            "from_table": "quality_scorecard_readmissions",
+            "from_column": "facility_id",
+            "to_table": "facilities",
+            "to_column": "facility_id"
+          }
+        ]
+      },
+      "previews": {
+        "claims": {
+          "table": "claims",
+          "columns": [
+            "claim_id",
+            "encounter_id",
+            "patient_id",
+            "facility_id",
+            "payer",
+            "submitted_date",
+            "adjudicated_date",
+            "billed_amount",
+            "paid_amount",
+            "claim_status",
+            "denied",
+            "denial_reason",
+            "appeal_status"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DATE",
+            "DATE",
+            "DOUBLE",
+            "DOUBLE",
+            "VARCHAR",
+            "BIGINT",
+            "VARCHAR",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "CL0000001",
+              "E0000001",
+              "P000920",
+              "F12",
+              "Medicare",
+              "2025-04-04",
+              "2025-04-16",
+              99.58,
+              33.9,
+              "paid",
+              0,
+              null,
+              null
+            ],
+            [
+              "CL0000002",
+              "E0000002",
+              "P000162",
+              "F06",
+              "Medicare",
+              "2025-04-05",
+              "2025-04-27",
+              279.35,
+              97.34,
+              "paid",
+              0,
+              null,
+              null
+            ],
+            [
+              "CL0000003",
+              "E0000003",
+              "P001011",
+              "F15",
+              "Medicare",
+              "2025-04-03",
+              "2025-04-14",
+              423.22,
+              143.21,
+              "paid",
+              0,
+              null,
+              null
+            ],
+            [
+              "CL0000004",
+              "E0000004",
+              "P000782",
+              "F03",
+              "Medicare",
+              "2025-04-05",
+              "2025-04-16",
+              1283.97,
+              451.23,
+              "paid",
+              0,
+              null,
+              null
+            ],
+            [
+              "CL0000005",
+              "E0000005",
+              "P001298",
+              "F08",
+              "Northstar Advantage",
+              "2025-04-02",
+              "2025-04-28",
+              249.39,
+              89.9,
+              "paid",
+              0,
+              null,
+              null
+            ],
+            [
+              "CL0000006",
+              "E0000006",
+              "P000886",
+              "F09",
+              "Northstar Advantage",
+              "2025-04-05",
+              "2025-04-16",
+              88.03,
+              32.35,
+              "paid",
+              0,
+              null,
+              null
+            ],
+            [
+              "CL0000007",
+              "E0000007",
+              "P000752",
+              "F09",
+              "Northstar Advantage",
+              "2025-04-03",
+              "2025-04-17",
+              186.73,
+              72.5,
+              "paid",
+              0,
+              null,
+              null
+            ],
+            [
+              "CL0000008",
+              "E0000008",
+              "P000297",
+              "F08",
+              "Northstar Advantage",
+              "2025-04-03",
+              "2025-04-17",
+              72.71,
+              26.69,
+              "paid",
+              0,
+              null,
+              null
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 264
+        },
+        "diagnoses": {
+          "table": "diagnoses",
+          "columns": [
+            "diagnosis_id",
+            "encounter_id",
+            "patient_id",
+            "icd10_code",
+            "icd10_description",
+            "is_primary",
+            "diagnosed_date"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT",
+            "DATE"
+          ],
+          "rows": [
+            [
+              "D0000001",
+              "E0000001",
+              "P000920",
+              "R10.9",
+              "Unspecified abdominal pain",
+              1,
+              "2025-04-01"
+            ],
+            [
+              "D0000002",
+              "E0000002",
+              "P000162",
+              "E11.9",
+              "Type 2 diabetes mellitus without complications",
+              1,
+              "2025-04-01"
+            ],
+            [
+              "D0000003",
+              "E0000003",
+              "P001011",
+              "I10",
+              "Essential (primary) hypertension",
+              1,
+              "2025-04-01"
+            ],
+            [
+              "D0000004",
+              "E0000003",
+              "P001011",
+              "I50.9",
+              "Heart failure, unspecified",
+              0,
+              "2025-04-01"
+            ],
+            [
+              "D0000005",
+              "E0000004",
+              "P000782",
+              "J44.1",
+              "Chronic obstructive pulmonary disease with (acute) exacerbation",
+              1,
+              "2025-04-01"
+            ],
+            [
+              "D0000006",
+              "E0000005",
+              "P001298",
+              "I10",
+              "Essential (primary) hypertension",
+              1,
+              "2025-04-01"
+            ],
+            [
+              "D0000007",
+              "E0000006",
+              "P000886",
+              "J06.9",
+              "Acute upper respiratory infection, unspecified",
+              1,
+              "2025-04-01"
+            ],
+            [
+              "D0000008",
+              "E0000007",
+              "P000752",
+              "J44.9",
+              "Chronic obstructive pulmonary disease, unspecified",
+              1,
+              "2025-04-01"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 261
+        },
+        "encounters": {
+          "table": "encounters",
+          "columns": [
+            "encounter_id",
+            "patient_id",
+            "facility_id",
+            "provider_id",
+            "encounter_type",
+            "visit_reason",
+            "admit_ts",
+            "discharge_ts",
+            "length_of_stay_days",
+            "discharge_disposition"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "TIMESTAMP",
+            "TIMESTAMP",
+            "BIGINT",
+            "VARCHAR"
+          ],
+          "rows": [
+            [
+              "E0000001",
+              "P000920",
+              "F12",
+              "PR0088",
+              "outpatient",
+              "acute_episode",
+              "2025-04-01 08:15:00",
+              "2025-04-01 08:58:00",
+              0,
+              "home"
+            ],
+            [
+              "E0000002",
+              "P000162",
+              "F06",
+              "PR0065",
+              "outpatient",
+              "chronic_management",
+              "2025-04-01 08:30:00",
+              "2025-04-01 08:59:00",
+              0,
+              "home"
+            ],
+            [
+              "E0000003",
+              "P001011",
+              "F15",
+              "PR0097",
+              "outpatient",
+              "chronic_management",
+              "2025-04-01 10:15:00",
+              "2025-04-01 10:41:00",
+              0,
+              "home"
+            ],
+            [
+              "E0000004",
+              "P000782",
+              "F03",
+              "PR0051",
+              "ED",
+              "emergency",
+              "2025-04-01 11:22:00",
+              "2025-04-01 15:16:00",
+              0,
+              "home"
+            ],
+            [
+              "E0000005",
+              "P001298",
+              "F08",
+              "PR0071",
+              "outpatient",
+              "chronic_management",
+              "2025-04-01 12:00:00",
+              "2025-04-01 12:55:00",
+              0,
+              "home"
+            ],
+            [
+              "E0000006",
+              "P000886",
+              "F09",
+              "PR0076",
+              "outpatient",
+              "acute_episode",
+              "2025-04-01 12:30:00",
+              "2025-04-01 12:50:00",
+              0,
+              "home"
+            ],
+            [
+              "E0000007",
+              "P000752",
+              "F09",
+              "PR0075",
+              "outpatient",
+              "chronic_management",
+              "2025-04-01 13:15:00",
+              "2025-04-01 13:38:00",
+              0,
+              "home"
+            ],
+            [
+              "E0000008",
+              "P000297",
+              "F08",
+              "PR0074",
+              "outpatient",
+              "chronic_management",
+              "2025-04-01 14:15:00",
+              "2025-04-01 15:24:00",
+              0,
+              "home"
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 282
+        },
+        "facilities": {
+          "table": "facilities",
+          "columns": [
+            "facility_id",
+            "facility_name",
+            "facility_type",
+            "service_focus",
+            "city",
+            "region",
+            "licensed_beds"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT"
+          ],
+          "rows": [
+            [
+              "F01",
+              "Riverside Memorial Hospital",
+              "hospital",
+              "Tertiary care, cardiac surgery",
+              "Riverton",
+              "Central",
+              412
+            ],
+            [
+              "F02",
+              "Lakeview Community Hospital",
+              "hospital",
+              "Community acute care",
+              "Lakeview",
+              "North",
+              248
+            ],
+            [
+              "F03",
+              "Eastgate Regional Hospital",
+              "hospital",
+              "Regional acute care, emergency",
+              "Eastgate",
+              "East",
+              186
+            ],
+            [
+              "F04",
+              "Riverton Primary Care Clinic",
+              "clinic",
+              "Primary care",
+              "Riverton",
+              "Central",
+              null
+            ],
+            [
+              "F05",
+              "Northgate Family Medicine",
+              "clinic",
+              "Primary care",
+              "Lakeview",
+              "North",
+              null
+            ],
+            [
+              "F06",
+              "Southpark Internal Medicine",
+              "clinic",
+              "Primary care",
+              "Riverton",
+              "Central",
+              null
+            ],
+            [
+              "F07",
+              "Elm Street Primary Care",
+              "clinic",
+              "Primary care",
+              "Eastgate",
+              "East",
+              null
+            ],
+            [
+              "F08",
+              "Harbor View Family Clinic",
+              "clinic",
+              "Primary care",
+              "Harbor View",
+              "East",
+              null
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 244
+        },
+        "patients": {
+          "table": "patients",
+          "columns": [
+            "patient_id",
+            "age_band",
+            "sex",
+            "payer",
+            "primary_clinic_id",
+            "has_heart_failure",
+            "has_copd",
+            "has_diabetes",
+            "has_ckd",
+            "has_hypertension"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT",
+            "BIGINT",
+            "BIGINT",
+            "BIGINT",
+            "BIGINT"
+          ],
+          "rows": [
+            [
+              "P000001",
+              "18-34",
+              "male",
+              "Evergreen Health Plan",
+              "F04",
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              "P000002",
+              "18-34",
+              "male",
+              "Self-pay",
+              "F07",
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              "P000003",
+              "65-74",
+              "male",
+              "Self-pay",
+              "F04",
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              "P000004",
+              "50-64",
+              "female",
+              "Medicaid",
+              "F04",
+              0,
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              "P000005",
+              "18-34",
+              "male",
+              "Cascade Mutual",
+              "F07",
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              "P000006",
+              "75-84",
+              "female",
+              "Northstar Advantage",
+              "F06",
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              "P000007",
+              "65-74",
+              "female",
+              "Northstar Advantage",
+              "F11",
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              "P000008",
+              "50-64",
+              "female",
+              "Cascade Mutual",
+              "F09",
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 271
+        },
+        "providers": {
+          "table": "providers",
+          "columns": [
+            "provider_id",
+            "specialty",
+            "credential",
+            "primary_facility_id",
+            "years_in_practice"
+          ],
+          "types": [
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "BIGINT"
+          ],
+          "rows": [
+            [
+              "PR0001",
+              "Hospital Medicine",
+              "MD",
+              "F01",
+              7
+            ],
+            [
+              "PR0002",
+              "Hospital Medicine",
+              "MD",
+              "F01",
+              13
+            ],
+            [
+              "PR0003",
+              "Hospital Medicine",
+              "DO",
+              "F01",
+              22
+            ],
+            [
+              "PR0004",
+              "Hospital Medicine",
+              "MD",
+              "F01",
+              24
+            ],
+            [
+              "PR0005",
+              "Hospital Medicine",
+              "MD",
+              "F01",
+              24
+            ],
+            [
+              "PR0006",
+              "Hospital Medicine",
+              "DO",
+              "F01",
+              3
+            ],
+            [
+              "PR0007",
+              "Hospital Medicine",
+              "MD",
+              "F01",
+              13
+            ],
+            [
+              "PR0008",
+              "Cardiology",
+              "MD",
+              "F01",
+              16
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 242
+        },
+        "quality_scorecard_hcahps": {
+          "table": "quality_scorecard_hcahps",
+          "columns": [
+            "record_id",
+            "quarter_start",
+            "quarter",
+            "facility_id",
+            "facility_name",
+            "domain",
+            "top_box_pct",
+            "survey_responses"
+          ],
+          "types": [
+            "VARCHAR",
+            "DATE",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "HC-2025Q2-F01-01",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Communication with nurses",
+              80.9,
+              509.0
+            ],
+            [
+              "HC-2025Q2-F01-02",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Communication with doctors",
+              83.4,
+              506.0
+            ],
+            [
+              "HC-2025Q2-F01-03",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Responsiveness of hospital staff",
+              70.0,
+              496.0
+            ],
+            [
+              "HC-2025Q2-F01-04",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Communication about medicines",
+              69.9,
+              499.0
+            ],
+            [
+              "HC-2025Q2-F01-05",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Discharge information",
+              90.1,
+              509.0
+            ],
+            [
+              "HC-2025Q2-F01-06",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Care transition",
+              53.7,
+              479.0
+            ],
+            [
+              "HC-2025Q2-F01-07",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Cleanliness and quietness",
+              64.1,
+              484.0
+            ],
+            [
+              "HC-2025Q2-F01-08",
+              "2025-04-01",
+              "2025Q2",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Overall hospital rating (9-10)",
+              73.2,
+              476.0
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 266
+        },
+        "quality_scorecard_readmissions": {
+          "table": "quality_scorecard_readmissions",
+          "columns": [
+            "record_id",
+            "month",
+            "facility_id",
+            "facility_name",
+            "cohort",
+            "index_discharges",
+            "readmissions_30d",
+            "readmission_rate_pct",
+            "target_rate_pct",
+            "follow_up_complete"
+          ],
+          "types": [
+            "VARCHAR",
+            "DATE",
+            "VARCHAR",
+            "VARCHAR",
+            "VARCHAR",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE",
+            "DOUBLE"
+          ],
+          "rows": [
+            [
+              "RA-202504-F01-ALL",
+              "2025-04-01",
+              "F01",
+              "Riverside Memorial Hospital",
+              "All-cause",
+              22.0,
+              2.0,
+              9.1,
+              15.0,
+              1.0
+            ],
+            [
+              "RA-202504-F01-HF",
+              "2025-04-01",
+              "F01",
+              "Riverside Memorial Hospital",
+              "Heart failure",
+              6.0,
+              0.0,
+              0.0,
+              20.0,
+              1.0
+            ],
+            [
+              "RA-202504-F01-COPD",
+              "2025-04-01",
+              "F01",
+              "Riverside Memorial Hospital",
+              "COPD",
+              2.0,
+              0.0,
+              0.0,
+              18.0,
+              1.0
+            ],
+            [
+              "RA-202504-F02-ALL",
+              "2025-04-01",
+              "F02",
+              "Lakeview Community Hospital",
+              "All-cause",
+              8.0,
+              1.0,
+              12.5,
+              15.0,
+              1.0
+            ],
+            [
+              "RA-202504-F02-HF",
+              "2025-04-01",
+              "F02",
+              "Lakeview Community Hospital",
+              "Heart failure",
+              2.0,
+              0.0,
+              0.0,
+              20.0,
+              1.0
+            ],
+            [
+              "RA-202504-F02-COPD",
+              "2025-04-01",
+              "F02",
+              "Lakeview Community Hospital",
+              "COPD",
+              0.0,
+              0.0,
+              null,
+              18.0,
+              1.0
+            ],
+            [
+              "RA-202504-F03-ALL",
+              "2025-04-01",
+              "F03",
+              "Eastgate Regional Hospital",
+              "All-cause",
+              9.0,
+              0.0,
+              0.0,
+              15.0,
+              1.0
+            ],
+            [
+              "RA-202504-F03-HF",
+              "2025-04-01",
+              "F03",
+              "Eastgate Regional Hospital",
+              "Heart failure",
+              1.0,
+              0.0,
+              0.0,
+              20.0,
+              1.0
+            ]
+          ],
+          "truncated": true,
+          "duration_ms": 280
+        }
+      },
+      "queries": [
+        {
+          "sql": "WITH appeal_windows AS (\n  SELECT 'Medicare' AS payer, 120 AS window_days\n  UNION ALL SELECT 'Northstar Advantage', 60\n  UNION ALL SELECT 'Medicaid', 90\n  UNION ALL SELECT 'Evergreen Health Plan', 180\n  UNION ALL SELECT 'Cascade Mutual', 60\n  -- Self-pay has no appeal window\n),\ndenied_claims AS (\n  SELECT\n    c.claim_id,\n    c.payer,\n    c.adjudicated_date,\n    c.billed_amount,\n    c.appeal_status,\n    aw.window_days\n  FROM healthcare_clinical.claims c\n  JOIN appeal_windows aw ON c.payer = aw.payer\n  WHERE c.denied = 1\n    AND c.appeal_status = 'none'\n    AND c.adjudicated_date IS NOT NULL\n)\nSELECT\n  dc.payer,\n  COUNT(*) AS denied_not_appealed_count,\n  SUM(dc.billed_amount) AS total_billed_amount_usd\nFROM denied_claims dc\nWHERE dc.adjudicated_date + INTERVAL (dc.window_days) DAY >= DATE '2026-09-30'\nGROUP BY dc.payer\nORDER BY dc.payer;",
+          "result": {
+            "columns": [
+              "payer",
+              "denied_not_appealed_count",
+              "total_billed_amount_usd"
+            ],
+            "types": [
+              "VARCHAR",
+              "BIGINT",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "Cascade Mutual",
+                1,
+                315.25
+              ],
+              [
+                "Evergreen Health Plan",
+                2,
+                252.54000000000002
+              ],
+              [
+                "Medicaid",
+                7,
+                30795.35
+              ],
+              [
+                "Medicare",
+                11,
+                73882.29
+              ],
+              [
+                "Northstar Advantage",
+                4,
+                1412.6999999999998
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 253
+          }
+        },
+        {
+          "sql": "WITH hf_discharges AS (\n    SELECT \n        e.encounter_id,\n        e.patient_id,\n        e.facility_id,\n        f.facility_name,\n        e.discharge_ts::date AS discharge_date,\n        e.discharge_disposition\n    FROM healthcare_clinical.encounters e\n    JOIN healthcare_clinical.facilities f ON e.facility_id = f.facility_id\n    JOIN healthcare_clinical.diagnoses d ON e.encounter_id = d.encounter_id\n    WHERE e.encounter_type = 'inpatient'\n      AND e.discharge_ts >= '2026-08-01' \n      AND e.discharge_ts < '2026-09-01'\n      AND d.is_primary = 1\n      AND d.icd10_code LIKE 'I50.%'\n      AND e.discharge_disposition IN ('home', 'home_health')\n),\nfollowup_visits AS (\n    SELECT \n        e.patient_id,\n        e.admit_ts::date AS followup_date,\n        e.encounter_id AS followup_encounter_id\n    FROM healthcare_clinical.encounters e\n    WHERE e.encounter_type = 'outpatient'\n      AND e.visit_reason = 'post_discharge_followup'\n      AND e.admit_ts >= '2026-08-01'\n      AND e.admit_ts < '2026-10-01'\n)\nSELECT \n    hfd.patient_id,\n    hfd.facility_name AS hospital,\n    hfd.discharge_date,\n    hfd.discharge_disposition,\n    fv.followup_date,\n    CASE \n        WHEN fv.followup_date IS NOT NULL \n             AND fv.followup_date <= hfd.discharge_date + INTERVAL '7 days'\n        THEN 'Completed within 7 days'\n        WHEN fv.followup_date IS NOT NULL\n        THEN 'Completed after 7 days'\n        ELSE 'No follow-up found'\n    END AS followup_status\nFROM hf_discharges hfd\nLEFT JOIN followup_visits fv ON hfd.patient_id = fv.patient_id\n    AND fv.followup_date > hfd.discharge_date\n    AND fv.followup_date <= hfd.discharge_date + INTERVAL '30 days'\nQUALIFY ROW_NUMBER() OVER (PARTITION BY hfd.encounter_id ORDER BY fv.followup_date) = 1\nORDER BY hfd.discharge_date, hfd.patient_id;",
+          "result": {
+            "columns": [
+              "patient_id",
+              "hospital",
+              "discharge_date",
+              "discharge_disposition",
+              "followup_date",
+              "followup_status"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "VARCHAR",
+              "DATE",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "P000299",
+                "Riverside Memorial Hospital",
+                "2026-08-07",
+                "home",
+                "2026-08-13",
+                "Completed within 7 days"
+              ],
+              [
+                "P000741",
+                "Riverside Memorial Hospital",
+                "2026-08-07",
+                "home",
+                "2026-08-13",
+                "Completed within 7 days"
+              ],
+              [
+                "P000759",
+                "Eastgate Regional Hospital",
+                "2026-08-11",
+                "home",
+                null,
+                "No follow-up found"
+              ],
+              [
+                "P001218",
+                "Lakeview Community Hospital",
+                "2026-08-11",
+                "home",
+                "2026-08-17",
+                "Completed within 7 days"
+              ],
+              [
+                "P000694",
+                "Eastgate Regional Hospital",
+                "2026-08-12",
+                "home",
+                "2026-08-28",
+                "Completed after 7 days"
+              ],
+              [
+                "P000126",
+                "Lakeview Community Hospital",
+                "2026-08-17",
+                "home",
+                null,
+                "No follow-up found"
+              ],
+              [
+                "P001013",
+                "Riverside Memorial Hospital",
+                "2026-08-20",
+                "home",
+                "2026-08-25",
+                "Completed within 7 days"
+              ],
+              [
+                "P001149",
+                "Riverside Memorial Hospital",
+                "2026-08-22",
+                "home",
+                "2026-08-25",
+                "Completed within 7 days"
+              ],
+              [
+                "P001047",
+                "Lakeview Community Hospital",
+                "2026-08-23",
+                "home",
+                "2026-08-28",
+                "Completed within 7 days"
+              ],
+              [
+                "P000759",
+                "Eastgate Regional Hospital",
+                "2026-08-25",
+                "home_health",
+                null,
+                "No follow-up found"
+              ],
+              [
+                "P000658",
+                "Lakeview Community Hospital",
+                "2026-08-26",
+                "home_health",
+                "2026-09-14",
+                "Completed after 7 days"
+              ],
+              [
+                "P001221",
+                "Lakeview Community Hospital",
+                "2026-08-30",
+                "home_health",
+                null,
+                "No follow-up found"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 255
+          }
+        },
+        {
+          "sql": "WITH hf_discharges AS (\n    SELECT \n        e.encounter_id,\n        e.patient_id,\n        e.facility_id,\n        f.facility_name,\n        e.discharge_ts::date AS discharge_date,\n        e.discharge_disposition\n    FROM healthcare_clinical.encounters e\n    JOIN healthcare_clinical.facilities f ON e.facility_id = f.facility_id\n    JOIN healthcare_clinical.diagnoses d ON e.encounter_id = d.encounter_id\n    WHERE e.encounter_type = 'inpatient'\n      AND e.discharge_ts >= '2026-08-01' \n      AND e.discharge_ts < '2026-09-01'\n      AND d.is_primary = 1\n      AND d.icd10_code LIKE 'I50.%'\n      AND e.discharge_disposition NOT IN ('expired', 'hospice')\n),\nfollowup_visits AS (\n    SELECT \n        e.patient_id,\n        e.admit_ts::date AS followup_date,\n        e.encounter_id AS followup_encounter_id\n    FROM healthcare_clinical.encounters e\n    WHERE e.encounter_type = 'outpatient'\n      AND e.visit_reason = 'post_discharge_followup'\n      AND e.admit_ts >= '2026-08-01'\n      AND e.admit_ts < '2026-09-30'\n)\nSELECT \n    hfd.patient_id,\n    hfd.facility_name AS hospital,\n    hfd.discharge_date,\n    fv.followup_date,\n    CASE \n        WHEN fv.followup_date IS NOT NULL \n             AND fv.followup_date <= hfd.discharge_date + INTERVAL '7 days'\n        THEN 'Completed within 7 days'\n        WHEN fv.followup_date IS NOT NULL\n        THEN 'Completed after 7 days'\n        ELSE 'No follow-up found'\n    END AS followup_status\nFROM hf_discharges hfd\nLEFT JOIN followup_visits fv ON hfd.patient_id = fv.patient_id\n    AND fv.followup_date > hfd.discharge_date\n    AND fv.followup_date <= hfd.discharge_date + INTERVAL '30 days'\nQUALIFY ROW_NUMBER() OVER (PARTITION BY hfd.encounter_id ORDER BY fv.followup_date) = 1\nORDER BY hfd.discharge_date, hfd.patient_id;",
+          "result": {
+            "columns": [
+              "patient_id",
+              "hospital",
+              "discharge_date",
+              "followup_date",
+              "followup_status"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DATE",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "P000299",
+                "Riverside Memorial Hospital",
+                "2026-08-07",
+                "2026-08-13",
+                "Completed within 7 days"
+              ],
+              [
+                "P000741",
+                "Riverside Memorial Hospital",
+                "2026-08-07",
+                "2026-08-13",
+                "Completed within 7 days"
+              ],
+              [
+                "P000759",
+                "Eastgate Regional Hospital",
+                "2026-08-11",
+                null,
+                "No follow-up found"
+              ],
+              [
+                "P001218",
+                "Lakeview Community Hospital",
+                "2026-08-11",
+                "2026-08-17",
+                "Completed within 7 days"
+              ],
+              [
+                "P000694",
+                "Eastgate Regional Hospital",
+                "2026-08-12",
+                "2026-08-28",
+                "Completed after 7 days"
+              ],
+              [
+                "P000371",
+                "Riverside Memorial Hospital",
+                "2026-08-16",
+                null,
+                "No follow-up found"
+              ],
+              [
+                "P000126",
+                "Lakeview Community Hospital",
+                "2026-08-17",
+                null,
+                "No follow-up found"
+              ],
+              [
+                "P001013",
+                "Riverside Memorial Hospital",
+                "2026-08-20",
+                "2026-08-25",
+                "Completed within 7 days"
+              ],
+              [
+                "P001149",
+                "Riverside Memorial Hospital",
+                "2026-08-22",
+                "2026-08-25",
+                "Completed within 7 days"
+              ],
+              [
+                "P001047",
+                "Lakeview Community Hospital",
+                "2026-08-23",
+                "2026-08-28",
+                "Completed within 7 days"
+              ],
+              [
+                "P000759",
+                "Eastgate Regional Hospital",
+                "2026-08-25",
+                null,
+                "No follow-up found"
+              ],
+              [
+                "P000658",
+                "Lakeview Community Hospital",
+                "2026-08-26",
+                "2026-09-14",
+                "Completed after 7 days"
+              ],
+              [
+                "P001221",
+                "Lakeview Community Hospital",
+                "2026-08-30",
+                null,
+                "No follow-up found"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 250
+          }
+        },
+        {
+          "sql": "WITH hospitals AS (\n  SELECT facility_id, facility_name\n  FROM healthcare_clinical.facilities\n  WHERE facility_type = 'hospital'\n)\nSELECT\n  r.facility_id,\n  h.facility_name,\n  SUM(r.index_discharges) AS total_index_discharges,\n  SUM(r.readmissions_30d) AS total_readmissions,\n  ROUND(SUM(r.readmissions_30d) / SUM(r.index_discharges) * 100, 1) AS quarterly_readmission_rate_pct\nFROM healthcare_clinical.quality_scorecard_readmissions r\nJOIN hospitals h ON r.facility_id = h.facility_id\nWHERE r.month >= '2026-04-01' AND r.month <= '2026-06-30'\n  AND r.cohort = 'All-cause'\nGROUP BY r.facility_id, h.facility_name\nORDER BY r.facility_id;",
+          "result": {
+            "columns": [
+              "facility_id",
+              "facility_name",
+              "total_index_discharges",
+              "total_readmissions",
+              "quarterly_readmission_rate_pct"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "F01",
+                "Riverside Memorial Hospital",
+                42.0,
+                4.0,
+                9.5
+              ],
+              [
+                "F02",
+                "Lakeview Community Hospital",
+                40.0,
+                8.0,
+                20.0
+              ],
+              [
+                "F03",
+                "Eastgate Regional Hospital",
+                27.0,
+                7.0,
+                25.9
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 263
+          }
+        },
+        {
+          "sql": "WITH hospitals AS (\n  SELECT facility_id, facility_name\n  FROM healthcare_clinical.facilities\n  WHERE facility_type = 'hospital'\n)\nSELECT\n  r.facility_id,\n  h.facility_name,\n  r.month,\n  r.cohort,\n  r.index_discharges,\n  r.readmissions_30d,\n  r.readmission_rate_pct,\n  r.target_rate_pct\nFROM healthcare_clinical.quality_scorecard_readmissions r\nJOIN hospitals h ON r.facility_id = h.facility_id\nWHERE r.month >= '2026-04-01' AND r.month <= '2026-06-30'\n  AND r.cohort = 'All-cause'\nORDER BY r.facility_id, r.month;",
+          "result": {
+            "columns": [
+              "facility_id",
+              "facility_name",
+              "month",
+              "cohort",
+              "index_discharges",
+              "readmissions_30d",
+              "readmission_rate_pct",
+              "target_rate_pct"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "F01",
+                "Riverside Memorial Hospital",
+                "2026-04-01",
+                "All-cause",
+                16.0,
+                1.0,
+                6.2,
+                15.0
+              ],
+              [
+                "F01",
+                "Riverside Memorial Hospital",
+                "2026-05-01",
+                "All-cause",
+                13.0,
+                1.0,
+                7.7,
+                15.0
+              ],
+              [
+                "F01",
+                "Riverside Memorial Hospital",
+                "2026-06-01",
+                "All-cause",
+                13.0,
+                2.0,
+                15.4,
+                15.0
+              ],
+              [
+                "F02",
+                "Lakeview Community Hospital",
+                "2026-04-01",
+                "All-cause",
+                13.0,
+                4.0,
+                30.8,
+                15.0
+              ],
+              [
+                "F02",
+                "Lakeview Community Hospital",
+                "2026-05-01",
+                "All-cause",
+                15.0,
+                2.0,
+                13.3,
+                15.0
+              ],
+              [
+                "F02",
+                "Lakeview Community Hospital",
+                "2026-06-01",
+                "All-cause",
+                12.0,
+                2.0,
+                16.7,
+                15.0
+              ],
+              [
+                "F03",
+                "Eastgate Regional Hospital",
+                "2026-04-01",
+                "All-cause",
+                9.0,
+                2.0,
+                22.2,
+                15.0
+              ],
+              [
+                "F03",
+                "Eastgate Regional Hospital",
+                "2026-05-01",
+                "All-cause",
+                5.0,
+                1.0,
+                20.0,
+                15.0
+              ],
+              [
+                "F03",
+                "Eastgate Regional Hospital",
+                "2026-06-01",
+                "All-cause",
+                13.0,
+                4.0,
+                30.8,
+                15.0
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 248
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"claims\" LIMIT 25",
+          "result": {
+            "columns": [
+              "claim_id",
+              "encounter_id",
+              "patient_id",
+              "facility_id",
+              "payer",
+              "submitted_date",
+              "adjudicated_date",
+              "billed_amount",
+              "paid_amount",
+              "claim_status",
+              "denied",
+              "denial_reason",
+              "appeal_status"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DATE",
+              "DATE",
+              "DOUBLE",
+              "DOUBLE",
+              "VARCHAR",
+              "BIGINT",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "CL0000001",
+                "E0000001",
+                "P000920",
+                "F12",
+                "Medicare",
+                "2025-04-04",
+                "2025-04-16",
+                99.58,
+                33.9,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000002",
+                "E0000002",
+                "P000162",
+                "F06",
+                "Medicare",
+                "2025-04-05",
+                "2025-04-27",
+                279.35,
+                97.34,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000003",
+                "E0000003",
+                "P001011",
+                "F15",
+                "Medicare",
+                "2025-04-03",
+                "2025-04-14",
+                423.22,
+                143.21,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000004",
+                "E0000004",
+                "P000782",
+                "F03",
+                "Medicare",
+                "2025-04-05",
+                "2025-04-16",
+                1283.97,
+                451.23,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000005",
+                "E0000005",
+                "P001298",
+                "F08",
+                "Northstar Advantage",
+                "2025-04-02",
+                "2025-04-28",
+                249.39,
+                89.9,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000006",
+                "E0000006",
+                "P000886",
+                "F09",
+                "Northstar Advantage",
+                "2025-04-05",
+                "2025-04-16",
+                88.03,
+                32.35,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000007",
+                "E0000007",
+                "P000752",
+                "F09",
+                "Northstar Advantage",
+                "2025-04-03",
+                "2025-04-17",
+                186.73,
+                72.5,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000008",
+                "E0000008",
+                "P000297",
+                "F08",
+                "Northstar Advantage",
+                "2025-04-03",
+                "2025-04-17",
+                72.71,
+                26.69,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000009",
+                "E0000009",
+                "P000013",
+                "F09",
+                "Northstar Advantage",
+                "2025-04-03",
+                "2025-04-30",
+                614.43,
+                236.33,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000010",
+                "E0000011",
+                "P000634",
+                "F04",
+                "Evergreen Health Plan",
+                "2025-04-03",
+                "2025-05-02",
+                84.52,
+                47.44,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000011",
+                "E0000012",
+                "P000957",
+                "F11",
+                "Northstar Advantage",
+                "2025-04-03",
+                "2025-04-25",
+                92.26,
+                0.0,
+                "denied",
+                1,
+                "Eligibility or coverage lapse",
+                "overturned"
+              ],
+              [
+                "CL0000012",
+                "E0000013",
+                "P000319",
+                "F06",
+                "Medicare",
+                "2025-04-03",
+                "2025-05-04",
+                297.56,
+                105.6,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000013",
+                "E0000014",
+                "P000326",
+                "F07",
+                "Medicare",
+                "2025-04-05",
+                "2025-04-29",
+                308.79,
+                107.63,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000014",
+                "E0000015",
+                "P000223",
+                "F03",
+                "Medicare",
+                "2025-04-09",
+                "2025-05-01",
+                15458.61,
+                5642.54,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000015",
+                "E0000016",
+                "P000434",
+                "F08",
+                "Medicare",
+                "2025-04-04",
+                "2025-04-22",
+                510.15,
+                173.01,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000016",
+                "E0000017",
+                "P000684",
+                "F08",
+                "Northstar Advantage",
+                "2025-04-05",
+                "2025-05-03",
+                244.86,
+                90.25,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000017",
+                "E0000018",
+                "P000855",
+                "F03",
+                "Medicare",
+                "2025-04-10",
+                "2025-05-10",
+                14610.16,
+                5078.97,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000018",
+                "E0000019",
+                "P000462",
+                "F01",
+                "Self-pay",
+                "2025-04-05",
+                "2025-05-01",
+                1726.32,
+                234.56,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000019",
+                "E0000020",
+                "P000097",
+                "F03",
+                "Northstar Advantage",
+                "2025-04-06",
+                "2025-04-28",
+                165.66,
+                66.86,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000020",
+                "E0000021",
+                "P001292",
+                "F09",
+                "Self-pay",
+                "2025-04-04",
+                "2025-04-17",
+                205.25,
+                27.19,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000021",
+                "E0000022",
+                "P000109",
+                "F10",
+                "Medicare",
+                "2025-04-07",
+                "2025-04-24",
+                204.82,
+                70.55,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000022",
+                "E0000023",
+                "P001322",
+                "F02",
+                "Cascade Mutual",
+                "2025-04-14",
+                "2025-05-08",
+                37382.36,
+                0.0,
+                "denied",
+                1,
+                "Coding error",
+                "upheld"
+              ],
+              [
+                "CL0000023",
+                "E0000024",
+                "P000896",
+                "F03",
+                "Medicare",
+                "2025-04-05",
+                "2025-04-23",
+                2735.4,
+                907.62,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000024",
+                "E0000025",
+                "P000558",
+                "F01",
+                "Northstar Advantage",
+                "2025-04-13",
+                "2025-05-04",
+                25231.74,
+                10096.41,
+                "paid",
+                0,
+                null,
+                null
+              ],
+              [
+                "CL0000025",
+                "E0000026",
+                "P000211",
+                "F05",
+                "Cascade Mutual",
+                "2025-04-06",
+                "2025-04-21",
+                477.91,
+                249.85,
+                "paid",
+                0,
+                null,
+                null
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 260
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"diagnoses\" LIMIT 25",
+          "result": {
+            "columns": [
+              "diagnosis_id",
+              "encounter_id",
+              "patient_id",
+              "icd10_code",
+              "icd10_description",
+              "is_primary",
+              "diagnosed_date"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "DATE"
+            ],
+            "rows": [
+              [
+                "D0000001",
+                "E0000001",
+                "P000920",
+                "R10.9",
+                "Unspecified abdominal pain",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000002",
+                "E0000002",
+                "P000162",
+                "E11.9",
+                "Type 2 diabetes mellitus without complications",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000003",
+                "E0000003",
+                "P001011",
+                "I10",
+                "Essential (primary) hypertension",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000004",
+                "E0000003",
+                "P001011",
+                "I50.9",
+                "Heart failure, unspecified",
+                0,
+                "2025-04-01"
+              ],
+              [
+                "D0000005",
+                "E0000004",
+                "P000782",
+                "J44.1",
+                "Chronic obstructive pulmonary disease with (acute) exacerbation",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000006",
+                "E0000005",
+                "P001298",
+                "I10",
+                "Essential (primary) hypertension",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000007",
+                "E0000006",
+                "P000886",
+                "J06.9",
+                "Acute upper respiratory infection, unspecified",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000008",
+                "E0000007",
+                "P000752",
+                "J44.9",
+                "Chronic obstructive pulmonary disease, unspecified",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000009",
+                "E0000008",
+                "P000297",
+                "I10",
+                "Essential (primary) hypertension",
+                1,
+                "2025-04-01"
+              ],
+              [
+                "D0000010",
+                "E0000009",
+                "P000013",
+                "R10.9",
+                "Unspecified abdominal pain",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000011",
+                "E0000010",
+                "P000223",
+                "N39.0",
+                "Urinary tract infection, site not specified",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000012",
+                "E0000011",
+                "P000634",
+                "Z00.00",
+                "Encounter for general adult medical examination without abnormal findings",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000013",
+                "E0000012",
+                "P000957",
+                "Z00.00",
+                "Encounter for general adult medical examination without abnormal findings",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000014",
+                "E0000013",
+                "P000319",
+                "I10",
+                "Essential (primary) hypertension",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000015",
+                "E0000014",
+                "P000326",
+                "J06.9",
+                "Acute upper respiratory infection, unspecified",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000016",
+                "E0000015",
+                "P000223",
+                "N39.0",
+                "Urinary tract infection, site not specified",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000017",
+                "E0000015",
+                "P000223",
+                "I50.9",
+                "Heart failure, unspecified",
+                0,
+                "2025-04-02"
+              ],
+              [
+                "D0000018",
+                "E0000015",
+                "P000223",
+                "N18.9",
+                "Chronic kidney disease, unspecified",
+                0,
+                "2025-04-02"
+              ],
+              [
+                "D0000019",
+                "E0000016",
+                "P000434",
+                "E78.5",
+                "Hyperlipidemia, unspecified",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000020",
+                "E0000017",
+                "P000684",
+                "E11.9",
+                "Type 2 diabetes mellitus without complications",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000021",
+                "E0000018",
+                "P000855",
+                "N39.0",
+                "Urinary tract infection, site not specified",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000022",
+                "E0000018",
+                "P000855",
+                "I50.9",
+                "Heart failure, unspecified",
+                0,
+                "2025-04-02"
+              ],
+              [
+                "D0000023",
+                "E0000018",
+                "P000855",
+                "E11.9",
+                "Type 2 diabetes mellitus without complications",
+                0,
+                "2025-04-02"
+              ],
+              [
+                "D0000024",
+                "E0000019",
+                "P000462",
+                "T14.90XA",
+                "Injury, unspecified, initial encounter",
+                1,
+                "2025-04-02"
+              ],
+              [
+                "D0000025",
+                "E0000020",
+                "P000097",
+                "Z00.00",
+                "Encounter for general adult medical examination without abnormal findings",
+                1,
+                "2025-04-03"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 275
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"encounters\" LIMIT 25",
+          "result": {
+            "columns": [
+              "encounter_id",
+              "patient_id",
+              "facility_id",
+              "provider_id",
+              "encounter_type",
+              "visit_reason",
+              "admit_ts",
+              "discharge_ts",
+              "length_of_stay_days",
+              "discharge_disposition"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "TIMESTAMP",
+              "TIMESTAMP",
+              "BIGINT",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "E0000001",
+                "P000920",
+                "F12",
+                "PR0088",
+                "outpatient",
+                "acute_episode",
+                "2025-04-01 08:15:00",
+                "2025-04-01 08:58:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000002",
+                "P000162",
+                "F06",
+                "PR0065",
+                "outpatient",
+                "chronic_management",
+                "2025-04-01 08:30:00",
+                "2025-04-01 08:59:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000003",
+                "P001011",
+                "F15",
+                "PR0097",
+                "outpatient",
+                "chronic_management",
+                "2025-04-01 10:15:00",
+                "2025-04-01 10:41:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000004",
+                "P000782",
+                "F03",
+                "PR0051",
+                "ED",
+                "emergency",
+                "2025-04-01 11:22:00",
+                "2025-04-01 15:16:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000005",
+                "P001298",
+                "F08",
+                "PR0071",
+                "outpatient",
+                "chronic_management",
+                "2025-04-01 12:00:00",
+                "2025-04-01 12:55:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000006",
+                "P000886",
+                "F09",
+                "PR0076",
+                "outpatient",
+                "acute_episode",
+                "2025-04-01 12:30:00",
+                "2025-04-01 12:50:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000007",
+                "P000752",
+                "F09",
+                "PR0075",
+                "outpatient",
+                "chronic_management",
+                "2025-04-01 13:15:00",
+                "2025-04-01 13:38:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000008",
+                "P000297",
+                "F08",
+                "PR0074",
+                "outpatient",
+                "chronic_management",
+                "2025-04-01 14:15:00",
+                "2025-04-01 15:24:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000009",
+                "P000013",
+                "F09",
+                "PR0075",
+                "outpatient",
+                "acute_episode",
+                "2025-04-02 08:00:00",
+                "2025-04-02 08:40:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000010",
+                "P000223",
+                "F03",
+                "PR0050",
+                "ED",
+                "emergency",
+                "2025-04-02 09:33:00",
+                "2025-04-02 13:33:00",
+                0,
+                "admitted"
+              ],
+              [
+                "E0000011",
+                "P000634",
+                "F04",
+                "PR0057",
+                "outpatient",
+                "preventive",
+                "2025-04-02 11:15:00",
+                "2025-04-02 12:18:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000012",
+                "P000957",
+                "F11",
+                "PR0085",
+                "outpatient",
+                "preventive",
+                "2025-04-02 11:45:00",
+                "2025-04-02 12:31:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000013",
+                "P000319",
+                "F06",
+                "PR0064",
+                "outpatient",
+                "chronic_management",
+                "2025-04-02 12:30:00",
+                "2025-04-02 12:57:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000014",
+                "P000326",
+                "F07",
+                "PR0070",
+                "outpatient",
+                "acute_episode",
+                "2025-04-02 12:45:00",
+                "2025-04-02 13:43:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000015",
+                "P000223",
+                "F03",
+                "PR0037",
+                "inpatient",
+                "emergency_admission",
+                "2025-04-02 13:33:00",
+                "2025-04-05 16:50:00",
+                3,
+                "home"
+              ],
+              [
+                "E0000016",
+                "P000434",
+                "F08",
+                "PR0073",
+                "outpatient",
+                "preventive",
+                "2025-04-02 14:00:00",
+                "2025-04-02 15:11:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000017",
+                "P000684",
+                "F08",
+                "PR0072",
+                "outpatient",
+                "chronic_management",
+                "2025-04-02 15:45:00",
+                "2025-04-02 16:35:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000018",
+                "P000855",
+                "F03",
+                "PR0043",
+                "inpatient",
+                "direct_admission",
+                "2025-04-02 16:44:00",
+                "2025-04-04 10:33:00",
+                2,
+                "home"
+              ],
+              [
+                "E0000019",
+                "P000462",
+                "F01",
+                "PR0014",
+                "ED",
+                "emergency",
+                "2025-04-02 20:55:00",
+                "2025-04-03 01:51:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000020",
+                "P000097",
+                "F03",
+                "PR0042",
+                "outpatient",
+                "preventive",
+                "2025-04-03 09:00:00",
+                "2025-04-03 09:22:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000021",
+                "P001292",
+                "F09",
+                "PR0077",
+                "outpatient",
+                "chronic_management",
+                "2025-04-03 13:30:00",
+                "2025-04-03 13:58:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000022",
+                "P000109",
+                "F10",
+                "PR0080",
+                "outpatient",
+                "chronic_management",
+                "2025-04-03 15:00:00",
+                "2025-04-03 15:24:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000023",
+                "P001322",
+                "F02",
+                "PR0019",
+                "inpatient",
+                "direct_admission",
+                "2025-04-03 18:51:00",
+                "2025-04-08 17:32:00",
+                5,
+                "expired"
+              ],
+              [
+                "E0000024",
+                "P000896",
+                "F03",
+                "PR0052",
+                "ED",
+                "emergency",
+                "2025-04-03 19:15:00",
+                "2025-04-04 01:11:00",
+                0,
+                "home"
+              ],
+              [
+                "E0000025",
+                "P000558",
+                "F01",
+                "PR0004",
+                "inpatient",
+                "elective_admission",
+                "2025-04-04 07:20:00",
+                "2025-04-08 12:36:00",
+                4,
+                "ama"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 248
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"facilities\" LIMIT 25",
+          "result": {
+            "columns": [
+              "facility_id",
+              "facility_name",
+              "facility_type",
+              "service_focus",
+              "city",
+              "region",
+              "licensed_beds"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "F01",
+                "Riverside Memorial Hospital",
+                "hospital",
+                "Tertiary care, cardiac surgery",
+                "Riverton",
+                "Central",
+                412
+              ],
+              [
+                "F02",
+                "Lakeview Community Hospital",
+                "hospital",
+                "Community acute care",
+                "Lakeview",
+                "North",
+                248
+              ],
+              [
+                "F03",
+                "Eastgate Regional Hospital",
+                "hospital",
+                "Regional acute care, emergency",
+                "Eastgate",
+                "East",
+                186
+              ],
+              [
+                "F04",
+                "Riverton Primary Care Clinic",
+                "clinic",
+                "Primary care",
+                "Riverton",
+                "Central",
+                null
+              ],
+              [
+                "F05",
+                "Northgate Family Medicine",
+                "clinic",
+                "Primary care",
+                "Lakeview",
+                "North",
+                null
+              ],
+              [
+                "F06",
+                "Southpark Internal Medicine",
+                "clinic",
+                "Primary care",
+                "Riverton",
+                "Central",
+                null
+              ],
+              [
+                "F07",
+                "Elm Street Primary Care",
+                "clinic",
+                "Primary care",
+                "Eastgate",
+                "East",
+                null
+              ],
+              [
+                "F08",
+                "Harbor View Family Clinic",
+                "clinic",
+                "Primary care",
+                "Harbor View",
+                "East",
+                null
+              ],
+              [
+                "F09",
+                "Millbrook Primary Care",
+                "clinic",
+                "Primary care",
+                "Millbrook",
+                "West",
+                null
+              ],
+              [
+                "F10",
+                "Pine Valley Heart Failure Clinic",
+                "clinic",
+                "Cardiology, heart failure",
+                "Riverton",
+                "Central",
+                null
+              ],
+              [
+                "F11",
+                "Oakridge Cardiology Clinic",
+                "clinic",
+                "Cardiology",
+                "Lakeview",
+                "North",
+                null
+              ],
+              [
+                "F12",
+                "Summit Pulmonary & Sleep Clinic",
+                "clinic",
+                "Pulmonology",
+                "Eastgate",
+                "East",
+                null
+              ],
+              [
+                "F13",
+                "Westfield Diabetes & Endocrine Clinic",
+                "clinic",
+                "Endocrinology",
+                "Millbrook",
+                "West",
+                null
+              ],
+              [
+                "F14",
+                "Cedar Heights Primary Care",
+                "clinic",
+                "Primary care",
+                "Cedar Heights",
+                "West",
+                null
+              ],
+              [
+                "F15",
+                "Brookside Urgent Care",
+                "clinic",
+                "Urgent care",
+                "Brookside",
+                "North",
+                null
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 265
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"patients\" LIMIT 25",
+          "result": {
+            "columns": [
+              "patient_id",
+              "age_band",
+              "sex",
+              "payer",
+              "primary_clinic_id",
+              "has_heart_failure",
+              "has_copd",
+              "has_diabetes",
+              "has_ckd",
+              "has_hypertension"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT",
+              "BIGINT",
+              "BIGINT",
+              "BIGINT",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "P000001",
+                "18-34",
+                "male",
+                "Evergreen Health Plan",
+                "F04",
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000002",
+                "18-34",
+                "male",
+                "Self-pay",
+                "F07",
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000003",
+                "65-74",
+                "male",
+                "Self-pay",
+                "F04",
+                0,
+                1,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000004",
+                "50-64",
+                "female",
+                "Medicaid",
+                "F04",
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                "P000005",
+                "18-34",
+                "male",
+                "Cascade Mutual",
+                "F07",
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000006",
+                "75-84",
+                "female",
+                "Northstar Advantage",
+                "F06",
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000007",
+                "65-74",
+                "female",
+                "Northstar Advantage",
+                "F11",
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000008",
+                "50-64",
+                "female",
+                "Cascade Mutual",
+                "F09",
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                "P000009",
+                "65-74",
+                "female",
+                "Medicare",
+                "F08",
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000010",
+                "35-49",
+                "male",
+                "Medicaid",
+                "F09",
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000011",
+                "75-84",
+                "female",
+                "Medicare",
+                "F08",
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000012",
+                "75-84",
+                "male",
+                "Medicare",
+                "F04",
+                1,
+                0,
+                1,
+                1,
+                1
+              ],
+              [
+                "P000013",
+                "65-74",
+                "female",
+                "Northstar Advantage",
+                "F09",
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                "P000014",
+                "18-34",
+                "male",
+                "Medicaid",
+                "F09",
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000015",
+                "50-64",
+                "female",
+                "Evergreen Health Plan",
+                "F06",
+                0,
+                0,
+                1,
+                0,
+                1
+              ],
+              [
+                "P000016",
+                "65-74",
+                "male",
+                "Medicare",
+                "F06",
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000017",
+                "50-64",
+                "female",
+                "Medicaid",
+                "F06",
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000018",
+                "50-64",
+                "female",
+                "Cascade Mutual",
+                "F06",
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                "P000019",
+                "75-84",
+                "male",
+                "Medicaid",
+                "F06",
+                0,
+                0,
+                1,
+                0,
+                1
+              ],
+              [
+                "P000020",
+                "50-64",
+                "female",
+                "Self-pay",
+                "F06",
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                "P000021",
+                "50-64",
+                "male",
+                "Cascade Mutual",
+                "F05",
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000022",
+                "65-74",
+                "male",
+                "Medicare",
+                "F11",
+                1,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                "P000023",
+                "65-74",
+                "female",
+                "Medicaid",
+                "F06",
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000024",
+                "18-34",
+                "male",
+                "Self-pay",
+                "F04",
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                "P000025",
+                "35-49",
+                "male",
+                "Self-pay",
+                "F06",
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 246
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"providers\" LIMIT 25",
+          "result": {
+            "columns": [
+              "provider_id",
+              "specialty",
+              "credential",
+              "primary_facility_id",
+              "years_in_practice"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "BIGINT"
+            ],
+            "rows": [
+              [
+                "PR0001",
+                "Hospital Medicine",
+                "MD",
+                "F01",
+                7
+              ],
+              [
+                "PR0002",
+                "Hospital Medicine",
+                "MD",
+                "F01",
+                13
+              ],
+              [
+                "PR0003",
+                "Hospital Medicine",
+                "DO",
+                "F01",
+                22
+              ],
+              [
+                "PR0004",
+                "Hospital Medicine",
+                "MD",
+                "F01",
+                24
+              ],
+              [
+                "PR0005",
+                "Hospital Medicine",
+                "MD",
+                "F01",
+                24
+              ],
+              [
+                "PR0006",
+                "Hospital Medicine",
+                "DO",
+                "F01",
+                3
+              ],
+              [
+                "PR0007",
+                "Hospital Medicine",
+                "MD",
+                "F01",
+                13
+              ],
+              [
+                "PR0008",
+                "Cardiology",
+                "MD",
+                "F01",
+                16
+              ],
+              [
+                "PR0009",
+                "Cardiology",
+                "MD",
+                "F01",
+                14
+              ],
+              [
+                "PR0010",
+                "Cardiology",
+                "MD",
+                "F01",
+                20
+              ],
+              [
+                "PR0011",
+                "Pulmonology",
+                "MD",
+                "F01",
+                24
+              ],
+              [
+                "PR0012",
+                "Pulmonology",
+                "MD",
+                "F01",
+                9
+              ],
+              [
+                "PR0013",
+                "Emergency Medicine",
+                "MD",
+                "F01",
+                2
+              ],
+              [
+                "PR0014",
+                "Emergency Medicine",
+                "DO",
+                "F01",
+                31
+              ],
+              [
+                "PR0015",
+                "Emergency Medicine",
+                "MD",
+                "F01",
+                22
+              ],
+              [
+                "PR0016",
+                "Emergency Medicine",
+                "DO",
+                "F01",
+                11
+              ],
+              [
+                "PR0017",
+                "Emergency Medicine",
+                "MD",
+                "F01",
+                13
+              ],
+              [
+                "PR0018",
+                "Emergency Medicine",
+                "DO",
+                "F01",
+                11
+              ],
+              [
+                "PR0019",
+                "Hospital Medicine",
+                "MD",
+                "F02",
+                20
+              ],
+              [
+                "PR0020",
+                "Hospital Medicine",
+                "MD",
+                "F02",
+                29
+              ],
+              [
+                "PR0021",
+                "Hospital Medicine",
+                "DO",
+                "F02",
+                5
+              ],
+              [
+                "PR0022",
+                "Hospital Medicine",
+                "MD",
+                "F02",
+                12
+              ],
+              [
+                "PR0023",
+                "Hospital Medicine",
+                "MD",
+                "F02",
+                20
+              ],
+              [
+                "PR0024",
+                "Hospital Medicine",
+                "DO",
+                "F02",
+                23
+              ],
+              [
+                "PR0025",
+                "Hospital Medicine",
+                "MD",
+                "F02",
+                22
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 247
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"quality_scorecard_hcahps\" LIMIT 25",
+          "result": {
+            "columns": [
+              "record_id",
+              "quarter_start",
+              "quarter",
+              "facility_id",
+              "facility_name",
+              "domain",
+              "top_box_pct",
+              "survey_responses"
+            ],
+            "types": [
+              "VARCHAR",
+              "DATE",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "HC-2025Q2-F01-01",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Communication with nurses",
+                80.9,
+                509.0
+              ],
+              [
+                "HC-2025Q2-F01-02",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Communication with doctors",
+                83.4,
+                506.0
+              ],
+              [
+                "HC-2025Q2-F01-03",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Responsiveness of hospital staff",
+                70.0,
+                496.0
+              ],
+              [
+                "HC-2025Q2-F01-04",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Communication about medicines",
+                69.9,
+                499.0
+              ],
+              [
+                "HC-2025Q2-F01-05",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Discharge information",
+                90.1,
+                509.0
+              ],
+              [
+                "HC-2025Q2-F01-06",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Care transition",
+                53.7,
+                479.0
+              ],
+              [
+                "HC-2025Q2-F01-07",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Cleanliness and quietness",
+                64.1,
+                484.0
+              ],
+              [
+                "HC-2025Q2-F01-08",
+                "2025-04-01",
+                "2025Q2",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Overall hospital rating (9-10)",
+                73.2,
+                476.0
+              ],
+              [
+                "HC-2025Q2-F02-01",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Communication with nurses",
+                79.2,
+                294.0
+              ],
+              [
+                "HC-2025Q2-F02-02",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Communication with doctors",
+                80.7,
+                299.0
+              ],
+              [
+                "HC-2025Q2-F02-03",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Responsiveness of hospital staff",
+                69.7,
+                307.0
+              ],
+              [
+                "HC-2025Q2-F02-04",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Communication about medicines",
+                65.6,
+                313.0
+              ],
+              [
+                "HC-2025Q2-F02-05",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Discharge information",
+                90.1,
+                309.0
+              ],
+              [
+                "HC-2025Q2-F02-06",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Care transition",
+                52.8,
+                310.0
+              ],
+              [
+                "HC-2025Q2-F02-07",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Cleanliness and quietness",
+                60.9,
+                308.0
+              ],
+              [
+                "HC-2025Q2-F02-08",
+                "2025-04-01",
+                "2025Q2",
+                "F02",
+                "Lakeview Community Hospital",
+                "Overall hospital rating (9-10)",
+                73.2,
+                298.0
+              ],
+              [
+                "HC-2025Q2-F03-01",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Communication with nurses",
+                77.4,
+                260.0
+              ],
+              [
+                "HC-2025Q2-F03-02",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Communication with doctors",
+                76.7,
+                256.0
+              ],
+              [
+                "HC-2025Q2-F03-03",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Responsiveness of hospital staff",
+                64.7,
+                249.0
+              ],
+              [
+                "HC-2025Q2-F03-04",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Communication about medicines",
+                62.7,
+                257.0
+              ],
+              [
+                "HC-2025Q2-F03-05",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Discharge information",
+                81.3,
+                245.0
+              ],
+              [
+                "HC-2025Q2-F03-06",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Care transition",
+                47.7,
+                259.0
+              ],
+              [
+                "HC-2025Q2-F03-07",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Cleanliness and quietness",
+                60.1,
+                257.0
+              ],
+              [
+                "HC-2025Q2-F03-08",
+                "2025-04-01",
+                "2025Q2",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Overall hospital rating (9-10)",
+                70.5,
+                257.0
+              ],
+              [
+                "HC-2025Q3-F01-01",
+                "2025-07-01",
+                "2025Q3",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Communication with nurses",
+                81.4,
+                525.0
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 247
+          }
+        },
+        {
+          "sql": "SELECT * FROM \"main\".\"quality_scorecard_readmissions\" LIMIT 25",
+          "result": {
+            "columns": [
+              "record_id",
+              "month",
+              "facility_id",
+              "facility_name",
+              "cohort",
+              "index_discharges",
+              "readmissions_30d",
+              "readmission_rate_pct",
+              "target_rate_pct",
+              "follow_up_complete"
+            ],
+            "types": [
+              "VARCHAR",
+              "DATE",
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "RA-202504-F01-ALL",
+                "2025-04-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "All-cause",
+                22.0,
+                2.0,
+                9.1,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202504-F01-HF",
+                "2025-04-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Heart failure",
+                6.0,
+                0.0,
+                0.0,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202504-F01-COPD",
+                "2025-04-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "COPD",
+                2.0,
+                0.0,
+                0.0,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202504-F02-ALL",
+                "2025-04-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "All-cause",
+                8.0,
+                1.0,
+                12.5,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202504-F02-HF",
+                "2025-04-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "Heart failure",
+                2.0,
+                0.0,
+                0.0,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202504-F02-COPD",
+                "2025-04-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "COPD",
+                0.0,
+                0.0,
+                null,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202504-F03-ALL",
+                "2025-04-01",
+                "F03",
+                "Eastgate Regional Hospital",
+                "All-cause",
+                9.0,
+                0.0,
+                0.0,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202504-F03-HF",
+                "2025-04-01",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Heart failure",
+                1.0,
+                0.0,
+                0.0,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202504-F03-COPD",
+                "2025-04-01",
+                "F03",
+                "Eastgate Regional Hospital",
+                "COPD",
+                0.0,
+                0.0,
+                null,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202505-F01-ALL",
+                "2025-05-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "All-cause",
+                15.0,
+                3.0,
+                20.0,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202505-F01-HF",
+                "2025-05-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Heart failure",
+                3.0,
+                1.0,
+                33.3,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202505-F01-COPD",
+                "2025-05-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "COPD",
+                1.0,
+                1.0,
+                100.0,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202505-F02-ALL",
+                "2025-05-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "All-cause",
+                9.0,
+                0.0,
+                0.0,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202505-F02-HF",
+                "2025-05-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "Heart failure",
+                3.0,
+                0.0,
+                0.0,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202505-F02-COPD",
+                "2025-05-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "COPD",
+                0.0,
+                0.0,
+                null,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202505-F03-ALL",
+                "2025-05-01",
+                "F03",
+                "Eastgate Regional Hospital",
+                "All-cause",
+                16.0,
+                2.0,
+                12.5,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202505-F03-HF",
+                "2025-05-01",
+                "F03",
+                "Eastgate Regional Hospital",
+                "Heart failure",
+                2.0,
+                1.0,
+                50.0,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202505-F03-COPD",
+                "2025-05-01",
+                "F03",
+                "Eastgate Regional Hospital",
+                "COPD",
+                2.0,
+                0.0,
+                0.0,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202506-F01-ALL",
+                "2025-06-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "All-cause",
+                11.0,
+                0.0,
+                0.0,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202506-F01-HF",
+                "2025-06-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "Heart failure",
+                4.0,
+                0.0,
+                0.0,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202506-F01-COPD",
+                "2025-06-01",
+                "F01",
+                "Riverside Memorial Hospital",
+                "COPD",
+                0.0,
+                0.0,
+                null,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202506-F02-ALL",
+                "2025-06-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "All-cause",
+                16.0,
+                3.0,
+                18.8,
+                15.0,
+                1.0
+              ],
+              [
+                "RA-202506-F02-HF",
+                "2025-06-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "Heart failure",
+                4.0,
+                1.0,
+                25.0,
+                20.0,
+                1.0
+              ],
+              [
+                "RA-202506-F02-COPD",
+                "2025-06-01",
+                "F02",
+                "Lakeview Community Hospital",
+                "COPD",
+                2.0,
+                1.0,
+                50.0,
+                18.0,
+                1.0
+              ],
+              [
+                "RA-202506-F03-ALL",
+                "2025-06-01",
+                "F03",
+                "Eastgate Regional Hospital",
+                "All-cause",
+                10.0,
+                0.0,
+                0.0,
+                15.0,
+                1.0
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 251
+          }
+        }
+      ]
+    }
+  ]
+}

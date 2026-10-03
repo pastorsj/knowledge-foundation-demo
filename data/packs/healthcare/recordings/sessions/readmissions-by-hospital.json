@@ -1,0 +1,764 @@
+{
+  "schemaVersion": 2,
+  "id": "readmissions-by-hospital",
+  "title": "Q2 readmission rate by hospital",
+  "turns": [
+    {
+      "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+      "question": "What was the 30-day readmission rate at each of our three hospitals for patients discharged in Q2 2026 (April to June)? Leave out discharges that ended in death or hospice.",
+      "submittedAt": "2026-10-03T04:18:04.892860Z",
+      "completedAt": "2026-10-03T04:18:14.915106Z",
+      "status": "success",
+      "report": {
+        "markdown": "**Q2 2026 (April–June) 30-Day Readmission Rates by Hospital**\n*All-cause cohort; index discharges exclude deaths and hospice (per the scorecard definition).*\n\n| Hospital | Facility ID | Index Discharges | 30-Day Readmissions | Readmission Rate |\n|---|---|---|---|---|\n| Riverside Memorial Hospital | F01 | 42 | 4 | **9.5%** |\n| Lakeview Community Hospital | F02 | 40 | 8 | **20.0%** |\n| Eastgate Regional Hospital | F03 | 27 | 7 | **25.9%** |\n\n**Monthly breakdown (for context)**\n\n| Hospital | Month | Index Discharges | Readmissions | Rate | Target |\n|---|---|---|---|---|---|\n| Riverside Memorial (F01) | Apr 2026 | 16 | 1 | 6.2% | 15% |\n|  | May 2026 | 13 | 1 | 7.7% | 15% |\n|  | Jun 2026 | 13 | 2 | 15.4% | 15% |\n| Lakeview Community (F02) | Apr 2026 | 13 | 4 | 30.8% | 15% |\n|  | May 2026 | 15 | 2 | 13.3% | 15% |\n|  | Jun 2026 | 12 | 2 | 16.7% | 15% |\n| Eastgate Regional (F03) | Apr 2026 | 9 | 2 | 22.2% | 15% |\n|  | May 2026 | 5 | 1 | 20.0% | 15% |\n|  | Jun 2026 | 13 | 4 | 30.8% | 15% |\n\n**Key observations**\n- **Riverside Memorial (F01)** met the 15% target for the quarter (9.5%).\n- **Lakeview Community (F02)** exceeded the target at 20.0%, driven by a high April (30.8%).\n- **Eastgate Regional (F03)** had the highest quarterly rate (25.9%), with spikes in April and June.\n\n[1] [2]\n\n## Sources\n\n- [1] Structured retrieval result — healthcare_clinical — evidence `hermes-receipt:fd2ff8b3cf9589a62c70442aeb47f1d98e838a3566c832abb5fd4c2264f0be20`\n- [2] Structured retrieval result — healthcare_clinical — evidence `hermes-receipt:4b8492291ceb944c8a921ccf3e7cb293e17d3383218f5806b6ac6c38b0b1e317`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:fd2ff8b3cf9589a62c70442aeb47f1d98e838a3566c832abb5fd4c2264f0be20",
+            "label": "Structured retrieval result — healthcare_clinical",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-f35d2ada728c4fedac2db649fed59821"
+          },
+          {
+            "number": 2,
+            "evidenceId": "hermes-receipt:4b8492291ceb944c8a921ccf3e7cb293e17d3383218f5806b6ac6c38b0b1e317",
+            "label": "Structured retrieval result — healthcare_clinical",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-4c8346b906d84f64bca5519d29f0cbc5"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "54955d26-1d53-5d3b-88ef-53e5df8a612a",
+          "cursor": 272,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:04.986263Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b10c330aa434855460a50c8533d368e94abe8d3dbe626af08f63270f4fcfaffa",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "649e4ff6-7658-57e9-b3ed-7f0a6e244e61",
+          "cursor": 273,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": "805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526:api:1",
+          "parentInvocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:07.920625Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 7653,
+              "output_tokens": 540
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "10a5cd38-2b73-5144-9195-f8be44dd862d",
+          "cursor": 274,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-f35d2ada728c4fedac2db649fed59821",
+          "parentInvocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:07.962317Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:1d5e15cea0c0f632c2a52c6932c21b0dbe5f48a06cdbb39c834b76eafee28212",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "50b73203-93a8-5cac-b3d1-fe98a74bff01",
+          "cursor": 275,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": "805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-f35d2ada728c4fedac2db649fed59821",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:fd2ff8b3cf9589a62c70442aeb47f1d98e838a3566c832abb5fd4c2264f0be20"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:08.241058Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 277,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:fd2ff8b3cf9589a62c70442aeb47f1d98e838a3566c832abb5fd4c2264f0be20",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "dc6e71f8-2df4-543a-9960-c3d566c5fd39",
+          "cursor": 276,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-f35d2ada728c4fedac2db649fed59821",
+          "parentInvocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:08.265240Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.297
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:83bb69e7f470e71e1b6586f1ffd8a86f54f9001e1b497a886a371ed94403e1f0",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9a224d95-c39b-568f-a602-5b553919cbeb",
+          "cursor": 277,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": "805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526:api:2",
+          "parentInvocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:10.340890Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 9589,
+              "output_tokens": 408
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "39e29f6e-b5ff-540e-a5a0-f45ef22f49ee",
+          "cursor": 278,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-4c8346b906d84f64bca5519d29f0cbc5",
+          "parentInvocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:10.379171Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:cd461416dfb46f394f43afc99d3f897740cf35b84b41c5d22b96d102ec228025",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "cb4a827c-4e42-59bb-9ff6-379fdb0fc363",
+          "cursor": 279,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": "805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-4c8346b906d84f64bca5519d29f0cbc5",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:4b8492291ceb944c8a921ccf3e7cb293e17d3383218f5806b6ac6c38b0b1e317"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:10.673322Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 293,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:4b8492291ceb944c8a921ccf3e7cb293e17d3383218f5806b6ac6c38b0b1e317",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "31c2a997-2d68-585f-8584-d006a1c4aa43",
+          "cursor": 280,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-4c8346b906d84f64bca5519d29f0cbc5",
+          "parentInvocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:10.707857Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.324
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d42b0030dfafdea9059088ce5fcea9f7a817134db8f731a7113a480bcef5ea8a",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "2364a92a-7ee2-54d7-bd46-8e05bc37f3b4",
+          "cursor": 281,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": "805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526:api:3",
+          "parentInvocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:14.849022Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 10718,
+              "output_tokens": 814
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "af17efdf-1476-5e82-8a0f-d585aa84e5d9",
+          "cursor": 282,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:14.874926Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:3ef5e16d540f783ba3fee93b795a3cdb57c8b75a9c1ca4dfb01a651664d5bc10",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "cf68fcd6-3c42-52cb-9767-1f056c93b1c7",
+          "cursor": 283,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:14.894234Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 27960,
+              "output_tokens": 1762,
+              "total_tokens": 29722,
+              "output_characters": 1470
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e318ad0f89a056dc144c5b2342c12c0ba5406aa0593c8b6949518fa9f51815c2",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0b52b5e5-e10e-5ec8-ab51-d5e7a54f7040",
+          "cursor": 284,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:14.914725Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:805c5f70-a0ef-4c00-98f0-b1b876585441:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c44d73fc-31f2-53f9-bd89-e8880a59e534",
+          "cursor": 285,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:14.914777Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 2,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:805c5f70-a0ef-4c00-98f0-b1b876585441:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f8ac79e3-903e-56e5-9d4b-e82da516f7de",
+          "cursor": 286,
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "runId": "run_69e89b0346114cbfa96d2277caf8d257",
+          "sessionId": "record-e7645493-2ce7-40ca-a8f2-29c9c79a7b6d",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:861d68d692a968f90c3e0628:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:14.914808Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 9953,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 621,
+              "input_tokens": 27960,
+              "output_tokens": 1762,
+              "total_tokens": 29722
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:805c5f70-a0ef-4c00-98f0-b1b876585441:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:fd2ff8b3cf9589a62c70442aeb47f1d98e838a3566c832abb5fd4c2264f0be20",
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "invocationId": "hermes-tool:chatcmpl-tool-f35d2ada728c4fedac2db649fed59821",
+          "turnId": "805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 277,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:08.241058Z",
+          "content": {
+            "query": "30-day readmission rate at each of the three hospitals for Q2 2026 (April-June), excluding death/hospice discharges",
+            "databaseName": "healthcare_clinical",
+            "answer": null,
+            "sql": "WITH hospitals AS (\n  SELECT facility_id, facility_name\n  FROM healthcare_clinical.facilities\n  WHERE facility_type = 'hospital'\n)\nSELECT\n  r.facility_id,\n  h.facility_name,\n  r.month,\n  r.cohort,\n  r.index_discharges,\n  r.readmissions_30d,\n  r.readmission_rate_pct,\n  r.target_rate_pct\nFROM healthcare_clinical.quality_scorecard_readmissions r\nJOIN hospitals h ON r.facility_id = h.facility_id\nWHERE r.month >= '2026-04-01' AND r.month <= '2026-06-30'\n  AND r.cohort = 'All-cause'\nORDER BY r.facility_id, r.month;",
+            "rows": [
+              {
+                "facility_id": "F01",
+                "facility_name": "Riverside Memorial Hospital",
+                "month": "2026-04-01",
+                "cohort": "All-cause",
+                "index_discharges": 16.0,
+                "readmissions_30d": 1.0,
+                "readmission_rate_pct": 6.2,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F01",
+                "facility_name": "Riverside Memorial Hospital",
+                "month": "2026-05-01",
+                "cohort": "All-cause",
+                "index_discharges": 13.0,
+                "readmissions_30d": 1.0,
+                "readmission_rate_pct": 7.7,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F01",
+                "facility_name": "Riverside Memorial Hospital",
+                "month": "2026-06-01",
+                "cohort": "All-cause",
+                "index_discharges": 13.0,
+                "readmissions_30d": 2.0,
+                "readmission_rate_pct": 15.4,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F02",
+                "facility_name": "Lakeview Community Hospital",
+                "month": "2026-04-01",
+                "cohort": "All-cause",
+                "index_discharges": 13.0,
+                "readmissions_30d": 4.0,
+                "readmission_rate_pct": 30.8,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F02",
+                "facility_name": "Lakeview Community Hospital",
+                "month": "2026-05-01",
+                "cohort": "All-cause",
+                "index_discharges": 15.0,
+                "readmissions_30d": 2.0,
+                "readmission_rate_pct": 13.3,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F02",
+                "facility_name": "Lakeview Community Hospital",
+                "month": "2026-06-01",
+                "cohort": "All-cause",
+                "index_discharges": 12.0,
+                "readmissions_30d": 2.0,
+                "readmission_rate_pct": 16.7,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F03",
+                "facility_name": "Eastgate Regional Hospital",
+                "month": "2026-04-01",
+                "cohort": "All-cause",
+                "index_discharges": 9.0,
+                "readmissions_30d": 2.0,
+                "readmission_rate_pct": 22.2,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F03",
+                "facility_name": "Eastgate Regional Hospital",
+                "month": "2026-05-01",
+                "cohort": "All-cause",
+                "index_discharges": 5.0,
+                "readmissions_30d": 1.0,
+                "readmission_rate_pct": 20.0,
+                "target_rate_pct": 15.0
+              },
+              {
+                "facility_id": "F03",
+                "facility_name": "Eastgate Regional Hospital",
+                "month": "2026-06-01",
+                "cohort": "All-cause",
+                "index_discharges": 13.0,
+                "readmissions_30d": 4.0,
+                "readmission_rate_pct": 30.8,
+                "target_rate_pct": 15.0
+              }
+            ],
+            "sourceRowCount": 9,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:4b8492291ceb944c8a921ccf3e7cb293e17d3383218f5806b6ac6c38b0b1e317",
+          "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
+          "invocationId": "hermes-tool:chatcmpl-tool-4c8346b906d84f64bca5519d29f0cbc5",
+          "turnId": "805c5f70-a0ef-4c00-98f0-b1b876585441:805c5f70-a0ef-4c00-98f0-b1b876585441:6c884526",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 293,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:10.673322Z",
+          "content": {
+            "query": "Quarterly 30-day readmission rate at each hospital for Q2 2026, aggregated from monthly data",
+            "databaseName": "healthcare_clinical",
+            "answer": null,
+            "sql": "WITH hospitals AS (\n  SELECT facility_id, facility_name\n  FROM healthcare_clinical.facilities\n  WHERE facility_type = 'hospital'\n)\nSELECT\n  r.facility_id,\n  h.facility_name,\n  SUM(r.index_discharges) AS total_index_discharges,\n  SUM(r.readmissions_30d) AS total_readmissions,\n  ROUND(SUM(r.readmissions_30d) / SUM(r.index_discharges) * 100, 1) AS quarterly_readmission_rate_pct\nFROM healthcare_clinical.quality_scorecard_readmissions r\nJOIN hospitals h ON r.facility_id = h.facility_id\nWHERE r.month >= '2026-04-01' AND r.month <= '2026-06-30'\n  AND r.cohort = 'All-cause'\nGROUP BY r.facility_id, h.facility_name\nORDER BY r.facility_id;",
+            "rows": [
+              {
+                "facility_id": "F01",
+                "facility_name": "Riverside Memorial Hospital",
+                "total_index_discharges": 42.0,
+                "total_readmissions": 4.0,
+                "quarterly_readmission_rate_pct": 9.5
+              },
+              {
+                "facility_id": "F02",
+                "facility_name": "Lakeview Community Hospital",
+                "total_index_discharges": 40.0,
+                "total_readmissions": 8.0,
+                "quarterly_readmission_rate_pct": 20.0
+              },
+              {
+                "facility_id": "F03",
+                "facility_name": "Eastgate Regional Hospital",
+                "total_index_discharges": 27.0,
+                "total_readmissions": 7.0,
+                "quarterly_readmission_rate_pct": 25.9
+              }
+            ],
+            "sourceRowCount": 3,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "healthcare.clinical"
+      ]
+    }
+  ]
+}

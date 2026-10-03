@@ -1,0 +1,44 @@
+[
+  {
+    "id": "healthcare.clinical",
+    "pack_id": "healthcare",
+    "name": "Encounters & Claims",
+    "description": "Synthetic encounters, diagnoses, claims, patients, providers and facilities for Riverside Health Network, with a quality scorecard workbook (readmissions and HCAHPS-style scores).",
+    "default_enabled": true,
+    "kind": "structured",
+    "capabilities": [
+      "structured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": "healthcare_clinical"
+  },
+  {
+    "id": "healthcare.guidelines",
+    "pack_id": "healthcare",
+    "name": "Clinical Guidelines & Policies",
+    "description": "Heart failure discharge and transitional care protocol, infection-control SOP and a scanned heart failure discharge checklist.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  },
+  {
+    "id": "healthcare.operations",
+    "pack_id": "healthcare",
+    "name": "Payer & Operations",
+    "description": "Prior authorization policy, payer contract summary of appeal windows, and the Q2 2026 quality committee deck.",
+    "default_enabled": true,
+    "kind": "documents",
+    "capabilities": [
+      "unstructured_retrieval"
+    ],
+    "synthetic": true,
+    "status": "ready",
+    "database_name": null
+  }
+]

@@ -1,0 +1,881 @@
+{
+  "schemaVersion": 2,
+  "id": "appealable-denials",
+  "title": "Denials still open for appeal",
+  "turns": [
+    {
+      "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+      "question": "As of 2026-09-30, how many denied claims that have not been appealed are still inside their payer's first-level appeal window, and what is the billed amount by payer?",
+      "submittedAt": "2026-10-03T04:18:28.983234Z",
+      "completedAt": "2026-10-03T04:18:38.362044Z",
+      "status": "success",
+      "report": {
+        "markdown": "As of **2026-09-30**, there are **25 denied claims** that have not been appealed and are still within their payer's first-level appeal window, totaling **$106,658.13** in billed amounts.\n\n| Payer | Denied claims not appealed (in window) | Total billed amount (USD) |\n|-------|----------------------------------------|---------------------------|\n| Cascade Mutual | 1 | $315.25 |\n| Evergreen Health Plan | 2 | $252.54 |\n| Medicaid | 7 | $30,795.35 |\n| Medicare | 11 | $73,882.29 |\n| Northstar Advantage | 4 | $1,412.70 |\n| **Total** | **25** | **$106,658.13** |\n\n**Appeal windows used** (from the Payer Contract Summary RHN-CON-009): Medicare 120 days, Northstar Advantage 60 days, Medicaid 90 days, Evergreen Health Plan 180 days, Cascade Mutual 60 days. Self-pay has no appeal window and is excluded. [1] [2]\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:3fe15aa4ce55db0a66ef46319aedd2b5c4f42ae793f585419568e93d4fe0ddd3`\n- [2] Structured retrieval result — healthcare_clinical — evidence `hermes-receipt:44aaa829119c49afb3cd887c152ff705fe05bf7505c8c558ccd92daec8fae84d`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:3fe15aa4ce55db0a66ef46319aedd2b5c4f42ae793f585419568e93d4fe0ddd3",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-e9193bf23d884e1790f84976fe3c64ca"
+          },
+          {
+            "number": 2,
+            "evidenceId": "hermes-receipt:44aaa829119c49afb3cd887c152ff705fe05bf7505c8c558ccd92daec8fae84d",
+            "label": "Structured retrieval result — healthcare_clinical",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-dc5ad74a54fb4864ad890eaa6489c477"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "7459ca51-46e8-5eee-8f4c-abaa1e74c625",
+          "cursor": 307,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:29.101456Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:aff3725a2be30750492a6dd986c4dc4d60d22374bc67d742328d37ab8633a95d",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "bbbd432c-b269-55ec-af73-332fc2a6909d",
+          "cursor": 308,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd:api:1",
+          "parentInvocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:30.578016Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 8228,
+              "output_tokens": 225
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f3d3a55a-9f4d-547d-af61-509c20b97be9",
+          "cursor": 309,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e9193bf23d884e1790f84976fe3c64ca",
+          "parentInvocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:30.615163Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:1e9e5ad7fe839437d26c9dba7bdc9a27931518fc2788e5c635712083b7e5c30f",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e7c6266f-3260-5e22-93ac-75c43ee1319e",
+          "cursor": 310,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e9193bf23d884e1790f84976fe3c64ca",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:3fe15aa4ce55db0a66ef46319aedd2b5c4f42ae793f585419568e93d4fe0ddd3"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:31.266223Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 650,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:3fe15aa4ce55db0a66ef46319aedd2b5c4f42ae793f585419568e93d4fe0ddd3",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "47990130-af04-5cad-9f47-e26a82cb2e08",
+          "cursor": 311,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-e9193bf23d884e1790f84976fe3c64ca",
+          "parentInvocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:31.314244Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.685
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:6c2cefc739208658b625afb092b29aa256dd3eba3ea5934b7049fb054d5613e0",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "2ec35988-a754-58b1-9e3f-141c19814b64",
+          "cursor": 312,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd:api:2",
+          "parentInvocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:33.657912Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 12933,
+              "output_tokens": 535
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9fa11b5d-6c59-57f9-a850-7d25a9820bfa",
+          "cursor": 313,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-dc5ad74a54fb4864ad890eaa6489c477",
+          "parentInvocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:33.692990Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b7dccbe2409f7fe6ded7577dfe60347ecaccc57ea61e5e3179371fa16c83abbc",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e0cd3012-9c6a-5f7a-9d63-b1257cea4440",
+          "cursor": 314,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-dc5ad74a54fb4864ad890eaa6489c477",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:44aaa829119c49afb3cd887c152ff705fe05bf7505c8c558ccd92daec8fae84d"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:33.991154Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 297,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:44aaa829119c49afb3cd887c152ff705fe05bf7505c8c558ccd92daec8fae84d",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "523c27e7-9157-5b25-adcd-aa5fd76bcc85",
+          "cursor": 315,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-dc5ad74a54fb4864ad890eaa6489c477",
+          "parentInvocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:34.027333Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.328
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:cc5761c83493eb298a76d76c59204743304f77425f9fbaa2b691bf34edd9e527",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "93bc9151-12d5-5a5d-9c53-18abe62256d9",
+          "cursor": 316,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd:api:3",
+          "parentInvocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:38.301399Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14255,
+              "output_tokens": 640
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e3eae0c6-4a0a-57b1-906c-b8d2e5c680a4",
+          "cursor": 317,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:38.323511Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d9a47d732917e3cc2b451f03b39bddb2ef969e8c145f4ae8344ebed0035c47b8",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "74a392ac-62c8-5be5-abeb-d2d53b04a9aa",
+          "cursor": 318,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:38.343149Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 35416,
+              "output_tokens": 1400,
+              "total_tokens": 36816,
+              "output_characters": 983
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:114b164eac8ceda582dd0de23d82fa7c9bdfcd79bb81e23d9d41be7322374ac2",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "49601559-0f65-534d-991c-12766b329b03",
+          "cursor": 319,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:38.361609Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c7b5b1f2-3aa7-523b-99c6-92e94bd313fc",
+          "cursor": 320,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:38.361690Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 2,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "61a870ad-cf9f-5ccd-abfd-a83b17222345",
+          "cursor": 321,
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "runId": "run_815cd8ca1ce744feab0925861c92ae0d",
+          "sessionId": "record-7857b459-9186-4796-865c-8089113b5ed0",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:61f5e2ffb58ea5e870a9f74d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:38.361750Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 9315,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 1013,
+              "input_tokens": 35416,
+              "output_tokens": 1400,
+              "total_tokens": 36816
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:3fe15aa4ce55db0a66ef46319aedd2b5c4f42ae793f585419568e93d4fe0ddd3",
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "invocationId": "hermes-tool:chatcmpl-tool-e9193bf23d884e1790f84976fe3c64ca",
+          "turnId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 650,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:31.266223Z",
+          "content": {
+            "query": "first-level appeal window in days from the denial notice by payer",
+            "sourceIds": [
+              "healthcare.operations"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.774899959564209,
+                "vectorScore": 0.774899959564209,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-e59444b13b07179b",
+                "chunkId": "healthcare.operations:f-e59444b13b07179b:0003",
+                "title": "payer_contract_summary.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Payer Contract Summary: Denials and Appeals\n2. How the appeal window works\nThe first-level appeal window runs in calendar days from the date on the payer's denial notice (the adjudication date in the claims system). A claim is appealable on a given date if that date is on or before the notice date plus the window. An appeal that arrives after the window closes is rejected as untimely and the balance is written off. The window is the same for every denial reason, including \"Prior authorization missing\", \"Medical necessity\" and \"Coding error\".",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-e59444b13b07179b",
+                  "file_name": "payer_contract_summary.docx",
+                  "citation": "payer_contract_summary.docx",
+                  "headings": "Payer Contract Summary: Denials and Appeals › 2. How the appeal window works",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.6509239077568054,
+                "vectorScore": 0.6509239077568054,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-e59444b13b07179b",
+                "chunkId": "healthcare.operations:f-e59444b13b07179b:0004",
+                "title": "payer_contract_summary.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Payer Contract Summary: Denials and Appeals\n3. Payer terms\n\nMedicare, **Plan type** = Original Medicare (fee-for-service). Medicare, **First-level appeal window** = 120 days from the date of the denial notice. Medicare, **Where to file** = Medicare Administrative Contractor, redetermination request. Medicare, **Second-level appeal** = 180 days from the redetermination decision. Medicare, **Timely filing of new claims** = 12 months from the date of service. Northstar Advantage, **Plan type** = Medicare Advantage health plan. Northstar Advantage, **First-level appeal window** = 60 days from the date of the denial notice. Northstar Advantage, **Where to file** = Plan appeals portal. Northstar Advantage, **Second-level appeal** = 60 days from the plan's reconsideration decision, to the independent review entity. Northstar Advantage, **Timely filing of new claims** = 180 days from the date of service. Medicaid, **Plan type** = State Medicaid managed care. Medicaid, **First-level appeal window** = 90 days from the date of the denial notice. Medicaid, **Where to file** = Managed care organization appeals unit. Medicaid, **Second-level appeal** = State fair hearing within 120 days of the appeal decision. Medicaid, **Timely filing of new claims** = 180 days from the date of service. Evergreen Health Plan, **Plan type** = Commercial PPO. Evergreen Health Plan, **First-level appeal window** = 180 days from the date of the denial notice. Evergreen Health Plan, **Where to file** = Provide",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-e59444b13b07179b",
+                  "file_name": "payer_contract_summary.docx",
+                  "citation": "payer_contract_summary.docx",
+                  "headings": "Payer Contract Summary: Denials and Appeals › 3. Payer terms",
+                  "labels": [
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.6195573210716248,
+                "vectorScore": 0.6195573210716248,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-e59444b13b07179b",
+                "chunkId": "healthcare.operations:f-e59444b13b07179b:0006",
+                "title": "payer_contract_summary.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Payer Contract Summary: Denials and Appeals\n4. Working a denial\n1. Denials Management reads each denial notice within 3 business days and assigns a reason code.\n2. Denials that can be corrected (a coding error, incomplete documentation, a duplicate) are corrected and resubmitted as corrected claims where the payer allows, which does not use up the appeal window.\n3. For any denial that needs an appeal, the appeal is filed no later than 10 days before the window closes, with a letter of medical necessity where relevant.\n4. The claim's appeal status is updated when the appeal is filed and again when the payer decides.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-e59444b13b07179b",
+                  "file_name": "payer_contract_summary.docx",
+                  "citation": "payer_contract_summary.docx",
+                  "headings": "Payer Contract Summary: Denials and Appeals › 4. Working a denial",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.5853068232536316,
+                "vectorScore": 0.5853068232536316,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-e59444b13b07179b",
+                "chunkId": "healthcare.operations:f-e59444b13b07179b:0005",
+                "title": "payer_contract_summary.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Payer Contract Summary: Denials and Appeals\n3. Payer terms\n appeal window** = Not applicable. Self-pay, **Where to file** = Patient Financial Services handles billing disputes. Self-pay, **Second-level appeal** = Not applicable. Self-pay, **Timely filing of new claims** = Not applicable",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-e59444b13b07179b",
+                  "file_name": "payer_contract_summary.docx",
+                  "citation": "payer_contract_summary.docx",
+                  "headings": "Payer Contract Summary: Denials and Appeals › 3. Payer terms",
+                  "labels": [
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.5204174518585205,
+                "vectorScore": 0.5204174518585205,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-e59444b13b07179b",
+                "chunkId": "healthcare.operations:f-e59444b13b07179b:0007",
+                "title": "payer_contract_summary.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Payer Contract Summary: Denials and Appeals\n5. Contract notes for the next renewal\n- Cascade Mutual has the shortest window and the shortest timely filing limit in the network. Managed Care Contracting will ask for a first-level window of at least 90 days at the renewal that starts 2027-01-01.\n- Northstar Advantage requires that every appeal of a \"Medical necessity\" denial include a peer-to-peer request. The payer's clock does not start until the request is logged in its portal.\n- Evergreen Health Plan accepts corrected claims for 365 days; these are not appeals.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-e59444b13b07179b",
+                  "file_name": "payer_contract_summary.docx",
+                  "citation": "payer_contract_summary.docx",
+                  "headings": "Payer Contract Summary: Denials and Appeals › 5. Contract notes for the next renewal",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.4821145534515381,
+                "vectorScore": 0.4821145534515381,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-e59444b13b07179b",
+                "chunkId": "healthcare.operations:f-e59444b13b07179b:0002",
+                "title": "payer_contract_summary.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Payer Contract Summary: Denials and Appeals\n1. Purpose\nThis summary gives Revenue Cycle and Denials Management staff the contract terms that decide whether a denied claim can still be appealed. It condenses the payer agreements and, for Medicare and Medicaid, the program rules. If this summary and a signed contract differ, the contract controls.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-e59444b13b07179b",
+                  "file_name": "payer_contract_summary.docx",
+                  "citation": "payer_contract_summary.docx",
+                  "headings": "Payer Contract Summary: Denials and Appeals › 1. Purpose",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.42011430859565735,
+                "vectorScore": 0.42011430859565735,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-e59444b13b07179b",
+                "chunkId": "healthcare.operations:f-e59444b13b07179b:0001",
+                "title": "payer_contract_summary.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Payer Contract Summary: Denials and Appeals\n**Effective**, RHN-CON-009 = 2026-07-01. **Effective**, **Version** = **Review by**. **Effective**, 2026.3 = 2027-01-01. **Owner**, RHN-CON-009 = Managed Care Contracting and Denials Management. **Owner**, **Version** = Managed Care Contracting and Denials Management. **Owner**, 2026.3 = Managed Care Contracting and Denials Management. **Approved by**, RHN-CON-009 = Revenue Cycle Committee. **Approved by**, **Version** = Revenue Cycle Committee. **Approved by**, 2026.3 = Revenue Cycle Committee. **Applies to**, RHN-CON-009 = Claims for services delivered at all Riverside Health Network facilities. **Applies to**, **Version** = Claims for services delivered at all Riverside Health Network facilities. **Applies to**, 2026.3 = Claims for services delivered at all Riverside Health Network facilities",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-e59444b13b07179b",
+                  "file_name": "payer_contract_summary.docx",
+                  "citation": "payer_contract_summary.docx",
+                  "headings": "Payer Contract Summary: Denials and Appeals",
+                  "labels": [
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.4175916016101837,
+                "vectorScore": 0.4175916016101837,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-d42e105327d40935",
+                "chunkId": "healthcare.operations:f-d42e105327d40935:0008",
+                "title": "quality_committee_q2_2026.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Denials and prior authorization\nMedicare, Claims adjudicated in Q2 = 238. Medicare, Denied = 14. Medicare, Denial rate = 5.9%. Northstar Advantage, Claims adjudicated in Q2 = 122. Northstar Advantage, Denied = 11. Northstar Advantage, Denial rate = 9.0%. Medicaid, Claims adjudicated in Q2 = 76. Medicaid, Denied = 7. Medicaid, Denial rate = 9.2%. Evergreen Health Plan, Claims adjudicated in Q2 = 81. Evergreen Health Plan, Denied = 5. Evergreen Health Plan, Denial rate = 6.2%. Cascade Mutual, Claims adjudicated in Q2 = 91. Cascade Mutual, Denied = 6. Cascade Mutual, Denial rate = 6.6%. Self-pay, Claims adjudicated in Q2 = 24. Self-pay, Denied = 0. Self-pay, Denial rate = 0.0%. All payers, Claims adjudicated in Q2 = 632. All payers, Denied = 43. All payers, Denial rate = 6.8%\n• System denial rate on claims adjudicated in Q2: 6.8% (43 of 632).\n• Largest denial reason by claim count: Prior authorization missing (12 claims). Prior authorization missing: 12 claims.\n• Appeal windows differ by payer: see the payer contract summary RHN-CON-009. Prior authorization turnarounds are in policy RHN-REV-021.\nRiverside Health Network | Clinical Quality Committee | Synthetic data for demonstration\n6",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-d42e105327d40935",
+                  "file_name": "quality_committee_q2_2026.pptx",
+                  "citation": "quality_committee_q2_2026.pptx, p. 6",
+                  "page_start": 6,
+                  "page_end": 6,
+                  "headings": "Denials and prior authorization",
+                  "labels": [
+                    "paragraph",
+                    "table"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "healthcare.operations": 29
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 634.0,
+              "searchMs": 5.5,
+              "rerankMs": 0.0,
+              "totalMs": 639.5
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:44aaa829119c49afb3cd887c152ff705fe05bf7505c8c558ccd92daec8fae84d",
+          "jobId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e",
+          "invocationId": "hermes-tool:chatcmpl-tool-dc5ad74a54fb4864ad890eaa6489c477",
+          "turnId": "2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:2df6a64e-6ce8-49f9-876a-a37cd9dcd52e:7a6474bd",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 297,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:33.991154Z",
+          "content": {
+            "query": "Count and billed amount of denied claims not yet appealed that are still within their payer's first-level appeal window as of 2026-09-30",
+            "databaseName": "healthcare_clinical",
+            "answer": null,
+            "sql": "WITH appeal_windows AS (\n  SELECT 'Medicare' AS payer, 120 AS window_days\n  UNION ALL SELECT 'Northstar Advantage', 60\n  UNION ALL SELECT 'Medicaid', 90\n  UNION ALL SELECT 'Evergreen Health Plan', 180\n  UNION ALL SELECT 'Cascade Mutual', 60\n  -- Self-pay has no appeal window\n),\ndenied_claims AS (\n  SELECT\n    c.claim_id,\n    c.payer,\n    c.adjudicated_date,\n    c.billed_amount,\n    c.appeal_status,\n    aw.window_days\n  FROM healthcare_clinical.claims c\n  JOIN appeal_windows aw ON c.payer = aw.payer\n  WHERE c.denied = 1\n    AND c.appeal_status = 'none'\n    AND c.adjudicated_date IS NOT NULL\n)\nSELECT\n  dc.payer,\n  COUNT(*) AS denied_not_appealed_count,\n  SUM(dc.billed_amount) AS total_billed_amount_usd\nFROM denied_claims dc\nWHERE dc.adjudicated_date + INTERVAL (dc.window_days) DAY >= DATE '2026-09-30'\nGROUP BY dc.payer\nORDER BY dc.payer;",
+            "rows": [
+              {
+                "payer": "Cascade Mutual",
+                "denied_not_appealed_count": 1,
+                "total_billed_amount_usd": 315.25
+              },
+              {
+                "payer": "Evergreen Health Plan",
+                "denied_not_appealed_count": 2,
+                "total_billed_amount_usd": 252.54000000000002
+              },
+              {
+                "payer": "Medicaid",
+                "denied_not_appealed_count": 7,
+                "total_billed_amount_usd": 30795.35
+              },
+              {
+                "payer": "Medicare",
+                "denied_not_appealed_count": 11,
+                "total_billed_amount_usd": 73882.29
+              },
+              {
+                "payer": "Northstar Advantage",
+                "denied_not_appealed_count": 4,
+                "total_billed_amount_usd": 1412.6999999999998
+              }
+            ],
+            "sourceRowCount": 5,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "healthcare.operations",
+        "healthcare.clinical"
+      ]
+    }
+  ]
+}

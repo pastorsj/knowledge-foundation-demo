@@ -1,0 +1,1197 @@
+{
+  "schemaVersion": 2,
+  "id": "missed-hf-followup",
+  "title": "Missed 7-day heart failure follow-up",
+  "turns": [
+    {
+      "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+      "question": "Which heart failure patients discharged in August 2026 missed the follow-up visit our discharge protocol requires within 7 days? List patient id, hospital and discharge date.",
+      "submittedAt": "2026-10-03T04:18:14.939145Z",
+      "completedAt": "2026-10-03T04:18:28.723150Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the Heart Failure Discharge and Transitional Care Protocol (RHN-CLN-HF-014 v4.2), the 7-day follow-up visit is required for patients discharged to **home or home health** (the \"eligible\" dispositions) after an inpatient HF admission [1]. A visit on day 7 counts; day 8 or later is recorded as late [1].\n\nFrom the clinical data, here are the heart failure patients discharged in August 2026 from Riverside Health Network hospitals who **missed the 7-day follow-up window** (either no follow-up visit found, or the first follow-up occurred after 7 calendar days):\n\n| Patient ID | Hospital | Discharge Date | Discharge Disposition | Follow-up Status |\n|------------|----------|----------------|----------------------|------------------|\n| P000759 | Eastgate Regional Hospital | 2026-08-11 | home | No follow-up found |\n| P000694 | Eastgate Regional Hospital | 2026-08-12 | home | Completed after 7 days (visited 2026-08-28) |\n| P000126 | Lakeview Community Hospital | 2026-08-17 | home | No follow-up found |\n| P000759 | Eastgate Regional Hospital | 2026-08-25 | home_health | No follow-up found |\n| P000658 | Lakeview Community Hospital | 2026-08-26 | home_health | Completed after 7 days (visited 2026-09-14) |\n| P001221 | Lakeview Community Hospital | 2026-08-30 | home_health | No follow-up found |\n\n**Summary**: 6 index discharges (5 unique patients) missed the protocol's 7-day follow-up requirement. Two patients (P000694, P000658) had a follow-up visit but it occurred after the 7-day window; four discharges had no documented post-discharge follow-up visit within 30 days.\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:170ef4d49021a2ceeb8cf554ac91a5c33fae7de0d25892085f34d54bca434fb6`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:170ef4d49021a2ceeb8cf554ac91a5c33fae7de0d25892085f34d54bca434fb6",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-698236e632e64b8a9244aa2b56f99b5c"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "6d26925d-6542-562f-bb92-03ea744b8009",
+          "cursor": 288,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:15.020604Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d29ab25cc82ceebe73f421c2b62a9ff635e8c70b21853ef82b6457397722228c",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4e364a2d-b2d1-50c8-a211-c81d52425899",
+          "cursor": 289,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a:api:1",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:18.106398Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 8232,
+              "output_tokens": 825
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "fc5efb41-4163-5f0a-b289-3fa5ce884a79",
+          "cursor": 290,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-698236e632e64b8a9244aa2b56f99b5c",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:18.140369Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:de4a1605fa6e6a50bb006fade553e3f2c119b457f198c05648f6706d1821a026",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "15159da9-b6e9-5c1a-9c92-09a100e3c6eb",
+          "cursor": 291,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-cbf08b6622c1493f90cd2d7d1c6cf45b",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:18.141560Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:a2b77191553f6c536f16885213e7fba10fef36da16e5662417a4052181063c41",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c66c7153-15ff-543c-a4e4-e2eae120efe3",
+          "cursor": 292,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-cbf08b6622c1493f90cd2d7d1c6cf45b",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:849a2e4da9aceb6fb53a75b84bc9f7299e08d2697180a060e1ea160db6f5b8e5"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:18.427208Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 284,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:849a2e4da9aceb6fb53a75b84bc9f7299e08d2697180a060e1ea160db6f5b8e5",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "009da10e-a34c-5919-a900-b272270b47fc",
+          "cursor": 293,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-698236e632e64b8a9244aa2b56f99b5c",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:170ef4d49021a2ceeb8cf554ac91a5c33fae7de0d25892085f34d54bca434fb6"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:19.155249Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1013,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:170ef4d49021a2ceeb8cf554ac91a5c33fae7de0d25892085f34d54bca434fb6",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "1fd15245-72e7-568c-90f0-1303f6e4e2c4",
+          "cursor": 294,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-698236e632e64b8a9244aa2b56f99b5c",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:19.204268Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.048
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:c31ef93e32c4706610cf8187ae65d51a644d49d8191452f57099b848be9c7e34",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "18a8dc9c-2e3c-5fd8-8708-eb0220f4c5bd",
+          "cursor": 295,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-cbf08b6622c1493f90cd2d7d1c6cf45b",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:19.212521Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.319
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:344f986f056fd04cc06e0116eb89f1492a22cc9118906a5b77d49204ba2a00a8",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "21eadf0d-de82-538e-88a8-b082f30b146b",
+          "cursor": 296,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a:api:2",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:23.875600Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 16346,
+              "output_tokens": 1288
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "79d2b2be-d5b0-54ab-8383-da78268e8e04",
+          "cursor": 297,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-85b85f4cf0054b3baf69faf8f79204ab",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:23.913997Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:79e1d0bf6e69c519d83559e0d7a52e1ab44007369a6715af07a15f6f9d95a7eb",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "7f8742f2-976c-5163-940e-5b128bed8460",
+          "cursor": 298,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-85b85f4cf0054b3baf69faf8f79204ab",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:90e4b883f99846ff4bbed0cb6b747d6140ea2d2c7bbde1bb79fd718cc204db16"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:24.213603Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 298,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:90e4b883f99846ff4bbed0cb6b747d6140ea2d2c7bbde1bb79fd718cc204db16",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "5ba6774e-5f50-5528-8db7-197e0c0edede",
+          "cursor": 299,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-85b85f4cf0054b3baf69faf8f79204ab",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:24.250770Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.33
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e029c72094a2774babf732bd73bd05c7bb6c09681869ea10a9a25eb368a7d6aa",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "37f4e3b5-b32d-5efb-b709-0773d42b424d",
+          "cursor": 300,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a:api:3",
+          "parentInvocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:28.651781Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 19152,
+              "output_tokens": 1024
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9c3106a0-af22-57fe-8673-15d7a7c5fddb",
+          "cursor": 301,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:28.682288Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:46c83360760c85f4aaff46f1f705bad57ce5a1525afcf97c27179a5cf33fe5d6",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8e34d54b-e108-59ee-9418-05f918c8f412",
+          "cursor": 302,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:28.703167Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 43730,
+              "output_tokens": 3137,
+              "total_tokens": 46867,
+              "output_characters": 1761
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4c24409aa8aff31c1cf30eab2f38ee5794440b9b2ba6dc77a147adac373c485a",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "1e94a3f0-53b3-5caa-94d0-3b5a30d313f0",
+          "cursor": 303,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:28.722854Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:a6f1f883-7889-4fac-9627-4d3d4c19c18f:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ef5c3095-507b-57ed-b3e2-915e441b1bbe",
+          "cursor": 304,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:28.722912Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 2,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:a6f1f883-7889-4fac-9627-4d3d4c19c18f:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "6290d9ab-1734-5084-bf4a-7d9aeaefbe24",
+          "cursor": 305,
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "runId": "run_a7ba0085529d4904b4d55ba12ea6b49c",
+          "sessionId": "record-6c1c64d1-a1b7-4ef6-bc24-e72425ca4b96",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:010bd76fef30f85488e1e7cf:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:28.722944Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 13726,
+              "tool_call_count": 3,
+              "known_tool_duration_ms": 1697,
+              "input_tokens": 43730,
+              "output_tokens": 3137,
+              "total_tokens": 46867
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:a6f1f883-7889-4fac-9627-4d3d4c19c18f:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:849a2e4da9aceb6fb53a75b84bc9f7299e08d2697180a060e1ea160db6f5b8e5",
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "invocationId": "hermes-tool:chatcmpl-tool-cbf08b6622c1493f90cd2d7d1c6cf45b",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 284,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:18.427208Z",
+          "content": {
+            "query": "Heart failure inpatient discharges in August 2026 with follow-up visits within 7 days",
+            "databaseName": "healthcare_clinical",
+            "answer": null,
+            "sql": "WITH hf_discharges AS (\n    SELECT \n        e.encounter_id,\n        e.patient_id,\n        e.facility_id,\n        f.facility_name,\n        e.discharge_ts::date AS discharge_date,\n        e.discharge_disposition\n    FROM healthcare_clinical.encounters e\n    JOIN healthcare_clinical.facilities f ON e.facility_id = f.facility_id\n    JOIN healthcare_clinical.diagnoses d ON e.encounter_id = d.encounter_id\n    WHERE e.encounter_type = 'inpatient'\n      AND e.discharge_ts >= '2026-08-01' \n      AND e.discharge_ts < '2026-09-01'\n      AND d.is_primary = 1\n      AND d.icd10_code LIKE 'I50.%'\n      AND e.discharge_disposition NOT IN ('expired', 'hospice')\n),\nfollowup_visits AS (\n    SELECT \n        e.patient_id,\n        e.admit_ts::date AS followup_date,\n        e.encounter_id AS followup_encounter_id\n    FROM healthcare_clinical.encounters e\n    WHERE e.encounter_type = 'outpatient'\n      AND e.visit_reason = 'post_discharge_followup'\n      AND e.admit_ts >= '2026-08-01'\n      AND e.admit_ts < '2026-09-30'\n)\nSELECT \n    hfd.patient_id,\n    hfd.facility_name AS hospital,\n    hfd.discharge_date,\n    fv.followup_date,\n    CASE \n        WHEN fv.followup_date IS NOT NULL \n             AND fv.followup_date <= hfd.discharge_date + INTERVAL '7 days'\n        THEN 'Completed within 7 days'\n        WHEN fv.followup_date IS NOT NULL\n        THEN 'Completed after 7 days'\n        ELSE 'No follow-up found'\n    END AS followup_status\nFROM hf_discharges hfd\nLEFT JOIN followup_visits fv ON hfd.patient_id = fv.patient_id\n    AND fv.followup_date > hfd.discharge_date\n    AND fv.followup_date <= hfd.discharge_date + INTERVAL '30 days'\nQUALIFY ROW_NUMBER() OVER (PARTITION BY hfd.encounter_id ORDER BY fv.followup_date) = 1\nORDER BY hfd.discharge_date, hfd.patient_id;",
+            "rows": [
+              {
+                "patient_id": "P000299",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-07",
+                "followup_date": "2026-08-13",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000741",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-07",
+                "followup_date": "2026-08-13",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000759",
+                "hospital": "Eastgate Regional Hospital",
+                "discharge_date": "2026-08-11",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              },
+              {
+                "patient_id": "P001218",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-11",
+                "followup_date": "2026-08-17",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000694",
+                "hospital": "Eastgate Regional Hospital",
+                "discharge_date": "2026-08-12",
+                "followup_date": "2026-08-28",
+                "followup_status": "Completed after 7 days"
+              },
+              {
+                "patient_id": "P000371",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-16",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              },
+              {
+                "patient_id": "P000126",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-17",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              },
+              {
+                "patient_id": "P001013",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-20",
+                "followup_date": "2026-08-25",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P001149",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-22",
+                "followup_date": "2026-08-25",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P001047",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-23",
+                "followup_date": "2026-08-28",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000759",
+                "hospital": "Eastgate Regional Hospital",
+                "discharge_date": "2026-08-25",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              },
+              {
+                "patient_id": "P000658",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-26",
+                "followup_date": "2026-09-14",
+                "followup_status": "Completed after 7 days"
+              },
+              {
+                "patient_id": "P001221",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-30",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              }
+            ],
+            "sourceRowCount": 13,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:170ef4d49021a2ceeb8cf554ac91a5c33fae7de0d25892085f34d54bca434fb6",
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "invocationId": "hermes-tool:chatcmpl-tool-698236e632e64b8a9244aa2b56f99b5c",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1013,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:19.155249Z",
+          "content": {
+            "query": "heart failure discharge protocol follow-up visit within 7 days requirement",
+            "sourceIds": [
+              "healthcare.guidelines"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.8348660469055176,
+                "vectorScore": 0.8348660469055176,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0009",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n5. Post-discharge follow-up schedule\n5.1 The 7-day visit\nThe visit must take place within 7 calendar days of the discharge date. The clinic confirms the appointment by phone 2 days before it. Transport is arranged by Care Transitions for any patient who has no ride. A visit on day 7 counts; a visit on day 8 or later is recorded as late and still prompts the 14-day actions.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 5. Post-discharge follow-up schedule › 5.1 The 7-day visit",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.7044351100921631,
+                "vectorScore": 0.7044351100921631,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0010",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n5. Post-discharge follow-up schedule\n5.1 The 7-day visit\n5.2 Missed or unbooked visits\nIf the 7-day visit has not been completed by the end of day 7, the Care Transitions nurse:\n- calls the patient the same day and reschedules the visit within 2 business days;\n- records the reason (no transport, patient declined, clinic capacity, other);\n- escalates to the Care Transitions manager if the visit is still not completed by day 10; and\n- lists the patient in the monthly missed follow-up report that goes to the Clinical Quality Committee.\nHome or home health, What this protocol requires = Full schedule in section 5; counted in the 7-day completion measure. Skilled nursing facility or inpatient rehabilitation, What this protocol requires = Discharge summary and medication list to the facility within 24 hours; facility physician reviews within 72 hours of arrival; not counted in the 7-day measure. Against medical advice, What this protocol requires = Care Transitions calls within 24 hours and offers a visit within 7 days; not counted in the 7-day measure. Hospice, What this protocol requires = Palliative plan of care; excluded from every measure in section 8",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 5. Post-discharge follow-up schedule › 5.1 The 7-day visit › 5.2 Missed or unbooked visits",
+                  "labels": [
+                    "list_item",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.6812832951545715,
+                "vectorScore": 0.6812832951545715,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0008",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n5. Post-discharge follow-up schedule\nEvery eligible patient receives the schedule below. The unit books the 7-day visit and the 14-day laboratory order before discharge; Care Transitions owns the schedule from the day of discharge.\nWithin 48 hours of discharge, Required action = Nurse phone call: symptoms, daily weight, medicines in hand, open checklist items. Within 48 hours of discharge, Owner = Care Transitions RN. Within 48 hours of discharge, Notes = Up to 3 attempts in 48 hours; every attempt is documented. Within 7 calendar days, Required action = Follow-up visit at an HF clinic (Pine Valley Heart Failure Clinic, F10, or Oakridge Cardiology Clinic, F11), the patient's primary care clinic, or by telehealth. Within 7 calendar days, Owner = Receiving clinic. Within 7 calendar days, Notes = Booked before discharge; a kept visit is required, a call does not count. Within 14 days, Required action = Basic metabolic panel (potassium, creatinine) after any change to a diuretic, ARNI, ACE inhibitor or MRA dose. Within 14 days, Owner = Ordering clinic. Within 14 days, Notes = Result reviewed within 2 business days. Within 30 days, Required action = Cardiology or HF clinic review: volume status and titration of guideline-directed therapy. Within 30 days, Owner = Cardiology. Within 30 days, Notes = Repeat the checklist's education items if the patient has been readmitted. At 90 days, Required action = Functional status, medicat",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 5. Post-discharge follow-up schedule",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.6809343099594116,
+                "vectorScore": 0.6809343099594116,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0005",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nC. FOLLOW-UP\n- 48-hour Care Transitions call scheduled\n- 7-day follow-up visit scheduled (enter date below)\n- 14-day basic metabolic panel ordered\n- Home health referral sent (if eligible)\n- Discharge summary sent to primary care clinic\n7-day follow-up appointment date: NOT BOOKED",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist › C. FOLLOW-UP",
+                  "labels": [
+                    "list_item",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.6385959386825562,
+                "vectorScore": 0.6385959386825562,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0005",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\n3. Discharge readiness criteria\nThe discharging physician confirms and documents each criterion before the discharge order is signed. The Care Transitions nurse completes the discharge checklist (form RHN-F-0231) in parallel; a scanned copy is filed in the chart.\n- • Weight is at or within 3 lb of the documented dry weight, and the discharge weight is recorded on the checklist.\n- • Oral diuretic regimen has been stable for at least 24 hours with no intravenous diuretic in that period.\n- • Potassium and creatinine from the last 24 hours have been reviewed.\n- • Resting heart rate and blood pressure are within the targets the cardiology team has written in the plan of care.\nSynthetic document for demonstration only. Riverside Health Network is fictional. Page 1 of 4\nRIVERSIDE HEALTH NETWORK RHN-CLN-HF-014 | Version 4.2\n- (\\bullet) The patient or caregiver has a working home scale, or one has been supplied by the unit before the patient leaves.\n- (\\bullet) A follow-up visit within 7 days has been booked and the date is written on the checklist and the after-visit summary.\nNote: If any criterion cannot be met, the physician documents why and the Care Transitions manager is told the same day. A discharge is not delayed for a missing appointment alone: the nurse books the visit before the patient leaves the unit or, at the latest, within one business day of discharge.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope › 3. Discharge readiness criteria",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.6313359141349792,
+                "vectorScore": 0.6313359141349792,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0004",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\n2. Definitions\nIndex discharge. The discharge that ends an inpatient HF admission. Discharges that end in death or in transfer to hospice are not index discharges for quality reporting.\nEligible for the 7-day visit. An index discharge to home or to home health. Patients discharged to a skilled nursing facility, to inpatient rehabilitation or against medical advice follow section 6.\nCompleted follow-up visit. A kept outpatient encounter, in person or by telehealth, with a physician, nurse practitioner or physician assistant at a Riverside clinic or hospital outpatient department. A phone call from the Care Transitions nurse does not count as a visit.\n30-day readmission. Any later inpatient admission of the same patient that begins within 30 days of the index discharge, whatever its cause.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope › 2. Definitions",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.619781494140625,
+                "vectorScore": 0.619781494140625,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0012",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n7. Roles and responsibilities\nSynthetic document for demonstration only. Riverside Health Network is fictional. Page 3 of 4\nRIVERSIDE HEALTH NETWORK RHN-CLN-HF-014 | Version 4.2\n7-day follow-up completion, Definition = Eligible HF discharges with a completed outpatient visit within 7 calendar days, divided by eligible HF discharges. 7-day follow-up completion, Target = 85% or higher. 7-day follow-up completion, Reported = Monthly, by hospital. 30-day HF readmission rate, Definition = Index HF discharges followed by any inpatient admission within 30 days, divided by index HF discharges. 30-day HF readmission rate, Target = 20.0% or lower. 30-day HF readmission rate, Reported = Quarterly, by hospital. 48-hour call completion, Definition = Eligible discharges reached by phone within 48 hours. 48-hour call completion, Target = 90% or higher. 48-hour call completion, Reported = Monthly. Teach-back documented, Definition = Discharges with teach-back recorded for patient and, where applicable, caregiver. Teach-back documented, Target = 95% or higher. Teach-back documented, Reported = Monthly",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 4,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 7. Roles and responsibilities",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.6132983565330505,
+                "vectorScore": 0.6132983565330505,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0003",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\nThis protocol sets out how Riverside Health Network prepares adult patients with heart failure (HF) for discharge and how it supports them in the 90 days afterwards. Its goal is to cut avoidable 30-day readmissions by making the first week after discharge predictable: every eligible patient leaves with a scheduled follow-up visit, a working home scale, a reconciled medication list and a named nurse who will call within 48 hours.\nThe protocol applies to every inpatient admission whose primary diagnosis is heart failure (ICD-10 codes I50.x, for example I50.9 heart failure unspecified, I50.22 chronic systolic heart failure, I50.23 acute on chronic systolic heart failure and I50.32 chronic diastolic heart failure) at Riverside Memorial Hospital (F01), Lakeview Community Hospital (F02) and Eastgate Regional Hospital (F03). Patients with HF as a secondary diagnosis follow the unit’s general discharge process, with this protocol's education items as a recommended addition.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "healthcare.guidelines": 31
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 995.5,
+              "searchMs": 7.0,
+              "rerankMs": 0.0,
+              "totalMs": 1002.5
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:90e4b883f99846ff4bbed0cb6b747d6140ea2d2c7bbde1bb79fd718cc204db16",
+          "jobId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f",
+          "invocationId": "hermes-tool:chatcmpl-tool-85b85f4cf0054b3baf69faf8f79204ab",
+          "turnId": "a6f1f883-7889-4fac-9627-4d3d4c19c18f:a6f1f883-7889-4fac-9627-4d3d4c19c18f:b1e7725a",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 298,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:24.213603Z",
+          "content": {
+            "query": "Heart failure inpatient discharges in August 2026 with discharge disposition filter for eligible patients",
+            "databaseName": "healthcare_clinical",
+            "answer": null,
+            "sql": "WITH hf_discharges AS (\n    SELECT \n        e.encounter_id,\n        e.patient_id,\n        e.facility_id,\n        f.facility_name,\n        e.discharge_ts::date AS discharge_date,\n        e.discharge_disposition\n    FROM healthcare_clinical.encounters e\n    JOIN healthcare_clinical.facilities f ON e.facility_id = f.facility_id\n    JOIN healthcare_clinical.diagnoses d ON e.encounter_id = d.encounter_id\n    WHERE e.encounter_type = 'inpatient'\n      AND e.discharge_ts >= '2026-08-01' \n      AND e.discharge_ts < '2026-09-01'\n      AND d.is_primary = 1\n      AND d.icd10_code LIKE 'I50.%'\n      AND e.discharge_disposition IN ('home', 'home_health')\n),\nfollowup_visits AS (\n    SELECT \n        e.patient_id,\n        e.admit_ts::date AS followup_date,\n        e.encounter_id AS followup_encounter_id\n    FROM healthcare_clinical.encounters e\n    WHERE e.encounter_type = 'outpatient'\n      AND e.visit_reason = 'post_discharge_followup'\n      AND e.admit_ts >= '2026-08-01'\n      AND e.admit_ts < '2026-10-01'\n)\nSELECT \n    hfd.patient_id,\n    hfd.facility_name AS hospital,\n    hfd.discharge_date,\n    hfd.discharge_disposition,\n    fv.followup_date,\n    CASE \n        WHEN fv.followup_date IS NOT NULL \n             AND fv.followup_date <= hfd.discharge_date + INTERVAL '7 days'\n        THEN 'Completed within 7 days'\n        WHEN fv.followup_date IS NOT NULL\n        THEN 'Completed after 7 days'\n        ELSE 'No follow-up found'\n    END AS followup_status\nFROM hf_discharges hfd\nLEFT JOIN followup_visits fv ON hfd.patient_id = fv.patient_id\n    AND fv.followup_date > hfd.discharge_date\n    AND fv.followup_date <= hfd.discharge_date + INTERVAL '30 days'\nQUALIFY ROW_NUMBER() OVER (PARTITION BY hfd.encounter_id ORDER BY fv.followup_date) = 1\nORDER BY hfd.discharge_date, hfd.patient_id;",
+            "rows": [
+              {
+                "patient_id": "P000299",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-07",
+                "discharge_disposition": "home",
+                "followup_date": "2026-08-13",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000741",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-07",
+                "discharge_disposition": "home",
+                "followup_date": "2026-08-13",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000759",
+                "hospital": "Eastgate Regional Hospital",
+                "discharge_date": "2026-08-11",
+                "discharge_disposition": "home",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              },
+              {
+                "patient_id": "P001218",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-11",
+                "discharge_disposition": "home",
+                "followup_date": "2026-08-17",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000694",
+                "hospital": "Eastgate Regional Hospital",
+                "discharge_date": "2026-08-12",
+                "discharge_disposition": "home",
+                "followup_date": "2026-08-28",
+                "followup_status": "Completed after 7 days"
+              },
+              {
+                "patient_id": "P000126",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-17",
+                "discharge_disposition": "home",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              },
+              {
+                "patient_id": "P001013",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-20",
+                "discharge_disposition": "home",
+                "followup_date": "2026-08-25",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P001149",
+                "hospital": "Riverside Memorial Hospital",
+                "discharge_date": "2026-08-22",
+                "discharge_disposition": "home",
+                "followup_date": "2026-08-25",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P001047",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-23",
+                "discharge_disposition": "home",
+                "followup_date": "2026-08-28",
+                "followup_status": "Completed within 7 days"
+              },
+              {
+                "patient_id": "P000759",
+                "hospital": "Eastgate Regional Hospital",
+                "discharge_date": "2026-08-25",
+                "discharge_disposition": "home_health",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              },
+              {
+                "patient_id": "P000658",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-26",
+                "discharge_disposition": "home_health",
+                "followup_date": "2026-09-14",
+                "followup_status": "Completed after 7 days"
+              },
+              {
+                "patient_id": "P001221",
+                "hospital": "Lakeview Community Hospital",
+                "discharge_date": "2026-08-30",
+                "discharge_disposition": "home_health",
+                "followup_date": null,
+                "followup_status": "No follow-up found"
+              }
+            ],
+            "sourceRowCount": 12,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "healthcare.guidelines",
+        "healthcare.clinical"
+      ]
+    }
+  ]
+}

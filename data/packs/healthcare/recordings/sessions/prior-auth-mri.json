@@ -1,0 +1,690 @@
+{
+  "schemaVersion": 2,
+  "id": "prior-auth-mri",
+  "title": "MRI prior authorization turnaround",
+  "turns": [
+    {
+      "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+      "question": "Does a cardiac MRI need prior authorization, and how many business days does the payer have to decide? What is the expedited turnaround?",
+      "submittedAt": "2026-10-03T04:17:58.856980Z",
+      "completedAt": "2026-10-03T04:18:03.321634Z",
+      "status": "success",
+      "report": {
+        "markdown": "**Yes, a cardiac MRI requires prior authorization.**\n\n| Item | Details |\n|------|---------|\n| **Service category** | Advanced imaging (examples: MRI, CT, PET scans, **cardiac MRI**) |\n| **Prior authorization required?** | Yes |\n| **Standard decision turnaround** | 5 business days |\n| **Expedited decision turnaround** | 24 hours |\n| **Submit request at least** | 5 business days before the scan |\n\nThe policy notes that the decision clock starts when the payer receives a **complete** request. An expedited request is allowed when the ordering provider attests that the standard wait would seriously jeopardize the patient’s health or ability to regain function (e.g., a cardiac MRI for new symptoms with rising troponin) [1].\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — prior_authorization_policy.pdf — evidence `hermes-receipt:01977598aee8caf79cfa9e7d31fb847547dd66c4310bb4151d7a19079b4e76f7`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:01977598aee8caf79cfa9e7d31fb847547dd66c4310bb4151d7a19079b4e76f7",
+            "label": "Unstructured Retrieval evidence — prior_authorization_policy.pdf",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-75b08bdb8c96494ea0ca103005f1ccf9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "bb1d3142-3a20-5f5b-ad1e-1a3fbdc15f19",
+          "cursor": 260,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:58.972481Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:438f5c95b03f065ade6855adee244b39c1611aa3262e54f63d755863bee91e1c",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9b181968-75ab-5294-90f1-a601135ed02a",
+          "cursor": 261,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": "5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114:api:1",
+          "parentInvocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:59.883782Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4733,
+              "output_tokens": 156
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "cdf67dcb-f324-5809-ac12-a5b3d87c6196",
+          "cursor": 262,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-75b08bdb8c96494ea0ca103005f1ccf9",
+          "parentInvocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:17:59.921743Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:f305251a3a567ab603679c20e2f4cf0683a8b33a701780a60abddc9f929444d2",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "91b98035-df28-50e0-8b26-fcc44b8791e9",
+          "cursor": 263,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": "5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-75b08bdb8c96494ea0ca103005f1ccf9",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:01977598aee8caf79cfa9e7d31fb847547dd66c4310bb4151d7a19079b4e76f7"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:01.470230Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 1547,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:01977598aee8caf79cfa9e7d31fb847547dd66c4310bb4151d7a19079b4e76f7",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c5d19113-9cb9-5271-a67a-bebbd2d5602d",
+          "cursor": 264,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-75b08bdb8c96494ea0ca103005f1ccf9",
+          "parentInvocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:01.513817Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 1.582
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:fc42743f110b15404b9c8a8d2f20c47d22dd9890471caa131db0ad9b6bb4274f",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "85371e2b-3261-514f-aff9-20bf70b63ff1",
+          "cursor": 265,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": "5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114:api:2",
+          "parentInvocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:03.250135Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 9542,
+              "output_tokens": 340
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "398db3a2-98cf-535f-af03-f591c28bdef5",
+          "cursor": 266,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:03.286653Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:906b6de3b4a951ca53e6f058e01f57046af5b321523f542bbf28eb9265a08cb5",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "76d7c436-8467-521f-946f-f53abc8ed8a5",
+          "cursor": 267,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:03.302404Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 14275,
+              "output_tokens": 496,
+              "total_tokens": 14771,
+              "output_characters": 814
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:a02cdbc94bd2df23cb8f4f7b14ad5b8d8514be94a5769c7576c6339596916db3",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "556c2073-a7e3-51dc-b3f8-03f0ada83e2e",
+          "cursor": 268,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:03.321324Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5aa52edc-7a48-416b-aba4-3af764880640:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "59a48430-1c81-531f-b5f7-d05c33c5116a",
+          "cursor": 269,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:03.321378Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5aa52edc-7a48-416b-aba4-3af764880640:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "818373e0-ad2d-5f47-a6da-1a00567d4800",
+          "cursor": 270,
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "runId": "run_9daf5d61752a4323827eb68f633ed0b7",
+          "sessionId": "record-f4696770-1208-4fdd-9c0f-e3f6cff7f71b",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:f197cf01796e082b19b6436f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:03.321408Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 4403,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 1582,
+              "input_tokens": 14275,
+              "output_tokens": 496,
+              "total_tokens": 14771
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:5aa52edc-7a48-416b-aba4-3af764880640:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:01977598aee8caf79cfa9e7d31fb847547dd66c4310bb4151d7a19079b4e76f7",
+          "jobId": "5aa52edc-7a48-416b-aba4-3af764880640",
+          "invocationId": "hermes-tool:chatcmpl-tool-75b08bdb8c96494ea0ca103005f1ccf9",
+          "turnId": "5aa52edc-7a48-416b-aba4-3af764880640:5aa52edc-7a48-416b-aba4-3af764880640:11e1f114",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 1547,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:18:01.470230Z",
+          "content": {
+            "query": "cardiac MRI prior authorization required standard expedited decision time business days",
+            "sourceIds": [
+              "healthcare.operations"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.6206765174865723,
+                "vectorScore": 0.6206765174865723,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0005",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\n3. Services that require prior authorization\nThe decision turnaround is counted in business days from the time the payer receives a complete request. An expedited request is for a patient whose health or ability to regain function would be put at serious risk by the standard wait; the ordering provider must attest to this on the request. Service category\nAdvanced imaging, Examples = MRI, CT, PET scans, cardiac MRI. Advanced imaging, Prior authorization = Required. Advanced imaging, Standard decision = 5 business days. Advanced imaging, Expedited decision = 24 hours. Advanced imaging, Submit at least = 5 business days before the scan. Elective inpatient admission, Examples = Planned surgery, scheduled medical admission. Elective inpatient admission, Prior authorization = Required. Elective inpatient admission, Standard decision = 3 business days. Elective inpatient admission, Expedited decision = 24 hours. Elective inpatient admission, Submit at least = 7 business days before admission. Outpatient surgery, Examples = Ambulatory surgery and endoscopic procedures. Outpatient surgery, Prior authorization = Required. Outpatient surgery, Standard decision = 5 business days. Outpatient surgery, Expedited decision = 48 hours. Outpatient surgery, Submit at least = 7 business days before the procedure. Cardiac rehabilitation, Examples = Phase II supervised exercise program. Cardiac rehabilitation, Prior authorization = Required. Cardiac rehabilitation, Standa",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Prior Authorization Policy › 3. Services that require prior authorization",
+                  "labels": [
+                    "page_footer",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.48577946424484253,
+                "vectorScore": 0.48577946424484253,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0008",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\n4. How to request authorization\n5. Expedited requests\nA request may be marked expedited when the ordering provider attests that the standard wait could seriously jeopardize the patient’s life, health or ability to regain maximum function. Examples are a cardiac MRI for a patient with new symptoms and a rising troponin, or home oxygen for a patient who cannot be discharged without it. The coordinator calls the payer’s utilization line after submitting and notes the call in the record.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Prior Authorization Policy › 4. How to request authorization › 5. Expedited requests",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.41727983951568604,
+                "vectorScore": 0.41727983951568604,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0006",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\n3. Services that require prior authorization\nRIVERSIDE HEALTH NETWORK RHN-REV-021 | Version 2.4\nSpecialty infusion drugs, Examples = Biologic and high-cost infused therapies. Specialty infusion drugs, Prior authorization = Required. Specialty infusion drugs, Standard decision = 3 business days. Specialty infusion drugs, Expedited decision = 24 hours. Specialty infusion drugs, Submit at least = 5 business days before the first dose. Sleep studies, Examples = Overnight polysomnography. Sleep studies, Prior authorization = Required. Sleep studies, Standard decision = 5 business days. Sleep studies, Expedited decision = Not available. Sleep studies, Submit at least = 7 business days before the study. Physical therapy beyond 12 visits, Examples = Continuing therapy after the initial 12 visits. Physical therapy beyond 12 visits, Prior authorization = Required. Physical therapy beyond 12 visits, Standard decision = 3 business days. Physical therapy beyond 12 visits, Expedited decision = Not available. Physical therapy beyond 12 visits, Submit at least = 3 business days before visit 13. Emergency admission through the ED, Examples = Any admission that begins in an emergency department. Emergency admission through the ED, Prior authorization = Not required; notify the payer. Emergency admission through the ED, Standard decision = Not applicable. Emergency admission through the ED, Expedited decision = Not applicable. Emergency admission through the ED, Submi",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Prior Authorization Policy › 3. Services that require prior authorization",
+                  "labels": [
+                    "page_header",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.39749675989151,
+                "vectorScore": 0.39749675989151,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0007",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\n4. How to request authorization\n- The ordering provider documents the clinical reason in the order. The order is not released to scheduling until the authorization status is \"approved\" or \"not required\".\n- The Utilization Management coordinator submits the request through the payer’s portal or by fax on the same day the order is signed, attaching the clinical notes the payer’s criteria require.\n- The coordinator records the reference number and the decision due date in the electronic record and checks the status daily until a decision arrives.\n- If the payer asks for more information, the coordinator returns it within 2 business days. The payer’s clock restarts when the information arrives.\n- If the request is denied, the ordering provider decides within 2 business days whether to appeal or to change the order. A peer-to-peer call is requested for every denial of an advanced imaging or elective inpatient request.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Prior Authorization Policy › 4. How to request authorization",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.28570255637168884,
+                "vectorScore": 0.28570255637168884,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0003",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\n1. Purpose\nPrior authorization (PA) is the payer’s approval, obtained before a service is delivered, that the service is covered and medically necessary. A claim for a service that needed approval and did not have it is denied, and the denial code is “Prior authorization missing”. This policy lists the services that need approval, the time a payer has to decide, and who at Riverside Health Network does what.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Prior Authorization Policy › 1. Purpose",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.2477758228778839,
+                "vectorScore": 0.2477758228778839,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0009",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\n4. How to request authorization\n6. When authorization is missing\nIf a service was delivered without a required authorization the coordinator asks the payer for a retrospective authorization within 14 days of the service. Where the service was an emergency, the emergency notification rule in section 3 applies and no authorization is needed. Claims that are denied for \"Prior authorization missing\" are sent to Denials Management and are written off only after the appeal window in the payer’s contract has closed.\nSynthetic document for demonstration only. Riverside Health Network is fictional. Page 2 of 3\nRIVERSIDE HEALTH NETWORK RHN-REV-021 | Version 2.4",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Prior Authorization Policy › 4. How to request authorization › 6. When authorization is missing",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.23042702674865723,
+                "vectorScore": 0.23042702674865723,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0004",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\n2. Scope\nThe policy applies to services ordered for patients covered by Medicare Advantage (Northstar Advantage), Medicaid, Evergreen Health Plan and Cascade Mutual. Original Medicare does not use prior authorization for most services on this list, and self-pay patients are quoted a price instead. The Utilization Management team keeps the payer-specific exceptions in the payer portal matrix; where a payer’s contract differs from this policy, the contract controls.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Prior Authorization Policy › 2. Scope",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.22635245323181152,
+                "vectorScore": 0.22635245323181152,
+                "sourceId": "healthcare.operations",
+                "documentId": "healthcare.operations:f-1cccab48833baedc",
+                "chunkId": "healthcare.operations:f-1cccab48833baedc:0002",
+                "title": "prior_authorization_policy.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Prior Authorization Policy\nEffective, RHN-REV-021 = 2026-04-01. Effective, Version = Review by. Effective, 2.4 = 2027-04-01. Effective,  = . Approved by, RHN-REV-021 = Chief Financial Officer and Chief Medical Officer. Approved by, Version = Chief Financial Officer and Chief Medical Officer. Approved by, 2.4 = Chief Financial Officer and Chief Medical Officer. Approved by,  = 3cRevenue Cycle, Utilization Management. , RHN-REV-021 = All Riverside Health Network facilities and ordering providers. , Version = All Riverside Health Network facilities and ordering providers. , 2.4 = All Riverside Health Network facilities and ordering providers. ,  = 3cAll Riverside Health Network facilities and ordering providers",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-1cccab48833baedc",
+                  "file_name": "prior_authorization_policy.pdf",
+                  "citation": "prior_authorization_policy.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Prior Authorization Policy",
+                  "labels": [
+                    "table"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "healthcare.operations": 29
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 1529.5,
+              "searchMs": 7.1,
+              "rerankMs": 0.0,
+              "totalMs": 1536.6
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "healthcare.operations"
+      ]
+    }
+  ]
+}

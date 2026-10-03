@@ -1,0 +1,1091 @@
+{
+  "schemaVersion": 2,
+  "id": "scanned-checklist",
+  "title": "Scanned discharge checklist",
+  "turns": [
+    {
+      "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+      "question": "On the scanned heart failure discharge checklist, what discharge weight was recorded and which checklist items were left unchecked?",
+      "submittedAt": "2026-10-03T04:18:57.364411Z",
+      "completedAt": "2026-10-03T04:19:07.253860Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the scanned heart failure discharge checklist (form RHN-F-0231), here's what the document shows:\n\n**Discharge weight recorded:** **183.4 lb** (with a dry weight target of 181 lb) [1]\n\n**Checklist items and their status:**\n\nThe OCR parsing of the scanned checklist captures the text of each checklist item but does not preserve the visual checkbox states (checked/unchecked marks). The items listed are:\n\n**Section A – Clinical Readiness**\n- Weight at dry weight or within 3 lb; discharge weight recorded\n- Oral diuretic regimen stable for 24 hours, no IV diuretic\n- Potassium and creatinine from the last 24 hours reviewed\n\n**Section B – Medicines and Education**\n- Medication reconciliation completed by pharmacist or RN\n- Discharge medication list reviewed with patient\n- Teach-back completed with patient and caregiver\n- Daily weight log and 2,000 mg sodium handout given\n- Working home scale confirmed\n\n**Section C – Follow-Up**\n- 48-hour Care Transitions call scheduled\n- 7-day follow-up visit scheduled (enter date below)\n- 14-day basic metabolic panel ordered\n- Home health referral sent (if eligible)\n- Discharge summary sent to primary care clinic\n\n**Explicitly noted as incomplete:** The form shows **\"7-day follow-up appointment date: NOT BOOKED\"** [1], which indicates that follow-up item was not completed at discharge.\n\n**Limitation:** The OCR output does not indicate which of the other checkboxes were checked or left unchecked; it only captures the item text. The protocol requires the 7-day visit to be booked before discharge, so the \"NOT BOOKED\" status is a known open item.\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:e0817f2a0bd463ab5854b4e64d0c76107e4c19edeab045f8d1303e8c85faa2aa`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:e0817f2a0bd463ab5854b4e64d0c76107e4c19edeab045f8d1303e8c85faa2aa",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-b8e0c0b4388b4b97929ecddb71d91234"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "9cf7483e-4b5f-5aac-bcff-f189dda5a7a4",
+          "cursor": 323,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:57.455198Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:b10b5480ff5e434ce972a5914a2d8b77189b9c59e4fd39b939fdf8e4eb159f80",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "5a148c65-a027-5fe3-b022-9918bcd352f3",
+          "cursor": 324,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": "9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a:api:1",
+          "parentInvocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:59.624661Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4740,
+              "output_tokens": 182
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a0dad013-8dfa-5a91-a8c2-197ffaec3606",
+          "cursor": 325,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-b8e0c0b4388b4b97929ecddb71d91234",
+          "parentInvocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:18:59.667496Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e89199a7691406d560f434423a429ecae49b2118164da38fbcd0b7c6559bf51c",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d853e985-f129-5661-b55a-ed5b707eb7ea",
+          "cursor": 326,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": "9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-b8e0c0b4388b4b97929ecddb71d91234",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:e0817f2a0bd463ab5854b4e64d0c76107e4c19edeab045f8d1303e8c85faa2aa"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:00.281307Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 612,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:e0817f2a0bd463ab5854b4e64d0c76107e4c19edeab045f8d1303e8c85faa2aa",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "053b4f98-abbc-5378-be53-92be7622f00e",
+          "cursor": 327,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-b8e0c0b4388b4b97929ecddb71d91234",
+          "parentInvocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:00.327228Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.647
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:bb92619e7fdaa1a1c3044ef6de9e41a4fec239ecc01e1a73774b0309f8882bca",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "16650c3b-b1b7-5251-b343-ab72711fc1f7",
+          "cursor": 328,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": "9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a:api:2",
+          "parentInvocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:02.465932Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 9429,
+              "output_tokens": 417
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4cc28ad5-9e74-5a3b-8347-d0a01783887e",
+          "cursor": 329,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-dfd7028bd11b4019ada9a6bf8def2a9e",
+          "parentInvocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:02.504188Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:f72e686068018eea3573785435228307a7fde2899f70d496a601d46999ecc100",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "97bda1b2-430f-5aa9-a297-1d9cf0126210",
+          "cursor": 330,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": "9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-dfd7028bd11b4019ada9a6bf8def2a9e",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:1ae9eed43931feddb0dda95a93d88cde762af2bf182df2dac330bc1ea880ce07"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:03.207622Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 702,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:1ae9eed43931feddb0dda95a93d88cde762af2bf182df2dac330bc1ea880ce07",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d285c509-d2dd-5fac-bb6e-10059c5661e0",
+          "cursor": 331,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-dfd7028bd11b4019ada9a6bf8def2a9e",
+          "parentInvocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:03.252506Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.734
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:fcc605f17856ef3324b4185dfbaac7dbd3c75a97b513b2106cb8489d12207205",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "ecde81a1-ed89-5c0e-a197-c4c304822f17",
+          "cursor": 332,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": "9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a:api:3",
+          "parentInvocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:07.181065Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 14400,
+              "output_tokens": 969
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e7329f8e-0f0b-5709-89df-87f80bd01ad4",
+          "cursor": 333,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:07.211006Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8998dd533787d5eb40c40f61b9b0d7173f721226f487f48eace3715f1b39a3e0",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8eb58b76-3730-5448-8f3b-edee040acbac",
+          "cursor": 334,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:07.229801Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 28569,
+              "output_tokens": 1568,
+              "total_tokens": 30137,
+              "output_characters": 1777
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8e49d5a8f6b09acf389b71a031d2c7c91c69fd0ef17f752596e01ee893e0d9ab",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0037f398-1fe1-5ffd-b7fe-bd87caecb039",
+          "cursor": 335,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:07.253371Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:9562d71e-d320-4fc3-ace5-9964a28c107c:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "72cfb892-4d54-5caa-b42a-9d15ae35a2f5",
+          "cursor": 336,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:07.253451Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 1,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:9562d71e-d320-4fc3-ace5-9964a28c107c:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "08cb1cd9-17d0-58f9-b7a4-1f135f6df81d",
+          "cursor": 337,
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "runId": "run_f15ce7c74c264ded8f9c241702c14928",
+          "sessionId": "record-65effe6c-8cd0-424d-801d-21a624580da1",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:b61622f40d3c2cb9f546e7eb:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-03T04:19:07.253509Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 9818,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 1381,
+              "input_tokens": 28569,
+              "output_tokens": 1568,
+              "total_tokens": 30137
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:9562d71e-d320-4fc3-ace5-9964a28c107c:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:e0817f2a0bd463ab5854b4e64d0c76107e4c19edeab045f8d1303e8c85faa2aa",
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "invocationId": "hermes-tool:chatcmpl-tool-b8e0c0b4388b4b97929ecddb71d91234",
+          "turnId": "9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 612,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:19:00.281307Z",
+          "content": {
+            "query": "scanned heart failure discharge checklist discharge weight recorded unchecked items form RHN-F-0231",
+            "sourceIds": [
+              "healthcare.guidelines"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.5831304788589478,
+                "vectorScore": 0.5831304788589478,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0005",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\n3. Discharge readiness criteria\nThe discharging physician confirms and documents each criterion before the discharge order is signed. The Care Transitions nurse completes the discharge checklist (form RHN-F-0231) in parallel; a scanned copy is filed in the chart.\n- • Weight is at or within 3 lb of the documented dry weight, and the discharge weight is recorded on the checklist.\n- • Oral diuretic regimen has been stable for at least 24 hours with no intravenous diuretic in that period.\n- • Potassium and creatinine from the last 24 hours have been reviewed.\n- • Resting heart rate and blood pressure are within the targets the cardiology team has written in the plan of care.\nSynthetic document for demonstration only. Riverside Health Network is fictional. Page 1 of 4\nRIVERSIDE HEALTH NETWORK RHN-CLN-HF-014 | Version 4.2\n- (\\bullet) The patient or caregiver has a working home scale, or one has been supplied by the unit before the patient leaves.\n- (\\bullet) A follow-up visit within 7 days has been booked and the date is written on the checklist and the after-visit summary.\nNote: If any criterion cannot be met, the physician documents why and the Care Transitions manager is told the same day. A discharge is not delayed for a missing appointment alone: the nurse books the visit before the patient leaves the unit or, at the latest, within one business day of discharge.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope › 3. Discharge readiness criteria",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.5577158331871033,
+                "vectorScore": 0.5577158331871033,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0004",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nB. MEDICINES AND EDUCATION\n- Medication reconciliation completed by pharmacist or RN\n- Discharge medication list reviewed with patient\n- Teach-back completed with patient and caregiver\n- Daily weight log and 2,000 mg sodium handout given\n- Working home scale confirmed",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist › B. MEDICINES AND EDUCATION",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.5529887676239014,
+                "vectorScore": 0.5529887676239014,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0003",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nA. CLINICAL READINESS\n- Weight at dry weight or within 3 lb; discharge weight recorded\n- Oral diuretic regimen stable for 24 hours, no IV diuretic\n- Potassium and creatinine from the last 24 hours reviewed",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist › A. CLINICAL READINESS",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.5167746543884277,
+                "vectorScore": 0.5167746543884277,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0002",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nProtocol RHN-CLN-HF-014 v4.2\nADMISSION DATE 2026-08-08, FACILITY Eastgate Regional Hospital (F03) = DISCHARGE DATE 2026-08-11. PRIMARY DIAGNOSIS I50.32 Chronic diastolic HF, FACILITY Eastgate Regional Hospital (F03) = DISCHARGE DISPOSITION Home. DISCHARGE WEIGHT 183.4 lb DRY WEIGHT TARGET 181 lb BP / HR LVEF 32 %, FACILITY Eastgate Regional Hospital (F03) = ",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist",
+                  "labels": [
+                    "caption",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.4462813436985016,
+                "vectorScore": 0.4462813436985016,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0007",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n4. Medication reconciliation and patient education\n4.1 Medication reconciliation\n4.2 Education using teach-back\nThe nurse teaches and checks understanding, using the patient’s own words, of five points: daily morning weights; the 2 lb in one day or 5 lb in one week rule for calling the clinic; a sodium limit of 2,000 mg a day; how each medicine works and when not to take it; and the symptoms that mean call 911. Where a caregiver helps at home, the teach-back is repeated with the caregiver. A teach-back that was not completed is recorded as an open item on the checklist and passed to the 48-hour call.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 4. Medication reconciliation and patient education › 4.1 Medication reconciliation › 4.2 Education using teach-back",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.4359334409236908,
+                "vectorScore": 0.4359334409236908,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0005",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nC. FOLLOW-UP\n- 48-hour Care Transitions call scheduled\n- 7-day follow-up visit scheduled (enter date below)\n- 14-day basic metabolic panel ordered\n- Home health referral sent (if eligible)\n- Discharge summary sent to primary care clinic\n7-day follow-up appointment date: NOT BOOKED",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist › C. FOLLOW-UP",
+                  "labels": [
+                    "list_item",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.427340567111969,
+                "vectorScore": 0.427340567111969,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0006",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n4. Medication reconciliation and patient education\n4.1 Medication reconciliation\nA pharmacist or trained nurse reconciles the home medication list against the discharge list. Changes to diuretics and to guideline-directed medical therapy (beta-blocker, ARNI or ACE inhibitor, mineralocorticoid antagonist and SGLT2 inhibitor) are explained in plain language and printed on the after-visit summary. The reconciled list is sent to the receiving clinic with the discharge summary within 24 hours.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 4. Medication reconciliation and patient education › 4.1 Medication reconciliation",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.4089645445346832,
+                "vectorScore": 0.4089645445346832,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0011",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n6. Other discharge destinations\nA patient readmitted within 30 days of an HF discharge is reviewed by the unit’s nurse manager and the Care Transitions manager within 5 business days. The review asks which schedule steps were missed and whether the patient could have been supported differently.\nDischarging physician, Responsibility = Confirms the readiness criteria in section 3 and writes the plan of care. Unit nurse, Responsibility = Completes the checklist, performs teach-back, confirms the home scale, books the 7-day visit. Pharmacist, Responsibility = Reconciles medicines and reviews the discharge list. Care Transitions RN, Responsibility = Makes the 48-hour call, owns the schedule, rescheduled missed visits, reports open items. Receiving clinic, Responsibility = Holds capacity for HF visits within 7 days and reports no-shows the same day. Care Transitions manager, Responsibility = Reviews escalations and readmissions; reports monthly to the Clinical Quality Committee",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 6. Other discharge destinations",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "healthcare.guidelines": 31
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 594.8,
+              "searchMs": 6.3,
+              "rerankMs": 0.0,
+              "totalMs": 601.0
+            }
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:1ae9eed43931feddb0dda95a93d88cde762af2bf182df2dac330bc1ea880ce07",
+          "jobId": "9562d71e-d320-4fc3-ace5-9964a28c107c",
+          "invocationId": "hermes-tool:chatcmpl-tool-dfd7028bd11b4019ada9a6bf8def2a9e",
+          "turnId": "9562d71e-d320-4fc3-ace5-9964a28c107c:9562d71e-d320-4fc3-ace5-9964a28c107c:f1ca9b7a",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 702,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-03T04:19:03.207622Z",
+          "content": {
+            "query": "heart failure discharge checklist scan form RHN-F-0231 check marks checked unchecked checkboxes",
+            "sourceIds": [
+              "healthcare.guidelines"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.5278468132019043,
+                "vectorScore": 0.5278468132019043,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0004",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nB. MEDICINES AND EDUCATION\n- Medication reconciliation completed by pharmacist or RN\n- Discharge medication list reviewed with patient\n- Teach-back completed with patient and caregiver\n- Daily weight log and 2,000 mg sodium handout given\n- Working home scale confirmed",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist › B. MEDICINES AND EDUCATION",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 0.5205037593841553,
+                "vectorScore": 0.5205037593841553,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0005",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\n3. Discharge readiness criteria\nThe discharging physician confirms and documents each criterion before the discharge order is signed. The Care Transitions nurse completes the discharge checklist (form RHN-F-0231) in parallel; a scanned copy is filed in the chart.\n- • Weight is at or within 3 lb of the documented dry weight, and the discharge weight is recorded on the checklist.\n- • Oral diuretic regimen has been stable for at least 24 hours with no intravenous diuretic in that period.\n- • Potassium and creatinine from the last 24 hours have been reviewed.\n- • Resting heart rate and blood pressure are within the targets the cardiology team has written in the plan of care.\nSynthetic document for demonstration only. Riverside Health Network is fictional. Page 1 of 4\nRIVERSIDE HEALTH NETWORK RHN-CLN-HF-014 | Version 4.2\n- (\\bullet) The patient or caregiver has a working home scale, or one has been supplied by the unit before the patient leaves.\n- (\\bullet) A follow-up visit within 7 days has been booked and the date is written on the checklist and the after-visit summary.\nNote: If any criterion cannot be met, the physician documents why and the Care Transitions manager is told the same day. A discharge is not delayed for a missing appointment alone: the nurse books the visit before the patient leaves the unit or, at the latest, within one business day of discharge.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope › 3. Discharge readiness criteria",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 0.5143086910247803,
+                "vectorScore": 0.5143086910247803,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0003",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nA. CLINICAL READINESS\n- Weight at dry weight or within 3 lb; discharge weight recorded\n- Oral diuretic regimen stable for 24 hours, no IV diuretic\n- Potassium and creatinine from the last 24 hours reviewed",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist › A. CLINICAL READINESS",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 0.46299296617507935,
+                "vectorScore": 0.46299296617507935,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0002",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nProtocol RHN-CLN-HF-014 v4.2\nADMISSION DATE 2026-08-08, FACILITY Eastgate Regional Hospital (F03) = DISCHARGE DATE 2026-08-11. PRIMARY DIAGNOSIS I50.32 Chronic diastolic HF, FACILITY Eastgate Regional Hospital (F03) = DISCHARGE DISPOSITION Home. DISCHARGE WEIGHT 183.4 lb DRY WEIGHT TARGET 181 lb BP / HR LVEF 32 %, FACILITY Eastgate Regional Hospital (F03) = ",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist",
+                  "labels": [
+                    "caption",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.4603237807750702,
+                "vectorScore": 0.4603237807750702,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-4c0359d7d00042e4",
+                "chunkId": "healthcare.guidelines:f-4c0359d7d00042e4:0005",
+                "title": "hf_discharge_checklist_scan.png",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "RIVERSIDE HEALTH NETWORK\nHeart Failure Discharge & Transition Checklist\nC. FOLLOW-UP\n- 48-hour Care Transitions call scheduled\n- 7-day follow-up visit scheduled (enter date below)\n- 14-day basic metabolic panel ordered\n- Home health referral sent (if eligible)\n- Discharge summary sent to primary care clinic\n7-day follow-up appointment date: NOT BOOKED",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-4c0359d7d00042e4",
+                  "file_name": "hf_discharge_checklist_scan.png",
+                  "citation": "hf_discharge_checklist_scan.png, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "RIVERSIDE HEALTH NETWORK › Heart Failure Discharge & Transition Checklist › C. FOLLOW-UP",
+                  "labels": [
+                    "list_item",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.4159773588180542,
+                "vectorScore": 0.4159773588180542,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0006",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n4. Medication reconciliation and patient education\n4.1 Medication reconciliation\nA pharmacist or trained nurse reconciles the home medication list against the discharge list. Changes to diuretics and to guideline-directed medical therapy (beta-blocker, ARNI or ACE inhibitor, mineralocorticoid antagonist and SGLT2 inhibitor) are explained in plain language and printed on the after-visit summary. The reconciled list is sent to the receiving clinic with the discharge summary within 24 hours.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 4. Medication reconciliation and patient education › 4.1 Medication reconciliation",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.4080350697040558,
+                "vectorScore": 0.4080350697040558,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0008",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n5. Post-discharge follow-up schedule\nEvery eligible patient receives the schedule below. The unit books the 7-day visit and the 14-day laboratory order before discharge; Care Transitions owns the schedule from the day of discharge.\nWithin 48 hours of discharge, Required action = Nurse phone call: symptoms, daily weight, medicines in hand, open checklist items. Within 48 hours of discharge, Owner = Care Transitions RN. Within 48 hours of discharge, Notes = Up to 3 attempts in 48 hours; every attempt is documented. Within 7 calendar days, Required action = Follow-up visit at an HF clinic (Pine Valley Heart Failure Clinic, F10, or Oakridge Cardiology Clinic, F11), the patient's primary care clinic, or by telehealth. Within 7 calendar days, Owner = Receiving clinic. Within 7 calendar days, Notes = Booked before discharge; a kept visit is required, a call does not count. Within 14 days, Required action = Basic metabolic panel (potassium, creatinine) after any change to a diuretic, ARNI, ACE inhibitor or MRA dose. Within 14 days, Owner = Ordering clinic. Within 14 days, Notes = Result reviewed within 2 business days. Within 30 days, Required action = Cardiology or HF clinic review: volume status and titration of guideline-directed therapy. Within 30 days, Owner = Cardiology. Within 30 days, Notes = Repeat the checklist's education items if the patient has been readmitted. At 90 days, Required action = Functional status, medicat",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 5. Post-discharge follow-up schedule",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": 0.40700289607048035,
+                "vectorScore": 0.40700289607048035,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0011",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n6. Other discharge destinations\nA patient readmitted within 30 days of an HF discharge is reviewed by the unit’s nurse manager and the Care Transitions manager within 5 business days. The review asks which schedule steps were missed and whether the patient could have been supported differently.\nDischarging physician, Responsibility = Confirms the readiness criteria in section 3 and writes the plan of care. Unit nurse, Responsibility = Completes the checklist, performs teach-back, confirms the home scale, books the 7-day visit. Pharmacist, Responsibility = Reconciles medicines and reviews the discharge list. Care Transitions RN, Responsibility = Makes the 48-hour call, owns the schedule, rescheduled missed visits, reports open items. Receiving clinic, Responsibility = Holds capacity for HF visits within 7 days and reports no-shows the same day. Care Transitions manager, Responsibility = Reviews escalations and readmissions; reports monthly to the Clinical Quality Committee",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 6. Other discharge destinations",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "healthcare.guidelines": 31
+            },
+            "models": {
+              "embed": "nemotron-3-embed-1b",
+              "rerank": null
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 687.8,
+              "searchMs": 6.8,
+              "rerankMs": 0.0,
+              "totalMs": 694.7
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "healthcare.guidelines"
+      ]
+    }
+  ]
+}
