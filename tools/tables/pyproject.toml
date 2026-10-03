@@ -16,8 +16,9 @@ dependencies = [
     "opentelemetry-exporter-otlp-proto-http>=1.45",
     "opentelemetry-sdk>=1.45",
     "pydantic>=2.13,<3",
-    # The SQL guard; the same line as the API's data viewer.
+    # DuckDB's Python client needs it to return TIMESTAMPTZ values.
     "pytz>=2025.2",
+    # The SQL guard; the same line as the API's data viewer.
     "sqlglot>=30.20,<31",
 ]
 

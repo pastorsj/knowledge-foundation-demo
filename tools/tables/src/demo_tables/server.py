@@ -106,37 +106,49 @@ def create_server(settings: Settings) -> MCPServer:
             try:
                 async with slots:
                     rows = await query.run(attachments, sql, timeout=settings.timeout_seconds)
+                    # The worker's output is bounded (query.MAX_OUTPUT_BYTES), and shaping it runs off the loop.
+                    result = await asyncio.to_thread(_shape, question, sql, databases, rows, started)
             except query.QueryFailed as error:
                 raise ToolError(str(error)) from error
-            span.set_attribute("output.row_count", len(rows.rows))
-
-        warnings = []
-        if rows.truncated:
-            warnings.append(
-                f"The query returned more than {query.MAX_ROWS} rows; only the first {query.MAX_ROWS} rows are "
-                "shown. Aggregate or filter in SQL, or ORDER BY and LIMIT it."
-            )
-        if rows.clipped:
-            warnings.append(f"{rows.clipped} values longer than {query.MAX_CELL_CHARS} characters were cut.")
-        result = QueryResult(
-            question=question,
-            sql=sql,
-            database_name=databases[0].alias if len(databases) == 1 else DATABASE_NAME,
-            databases=databases,
-            columns=rows.columns,
-            rows=[dict(zip(rows.columns, row, strict=True)) for row in rows.rows],
-            row_count=len(rows.rows),
-            truncated=rows.truncated,
-            elapsed_ms=round((time.perf_counter() - started) * 1000, 1),
-            warnings=warnings,
-        )
-        return fit(result)
+            span.set_attribute("output.row_count", len(result.rows))
+        return result
 
     @server.custom_route("/health", methods=["GET"])
     async def health(_: Request) -> JSONResponse:
         return JSONResponse({"status": "ok"})
 
     return server
+
+
+def _shape(question: str, sql: str, databases: list[AttachedDatabase], rows: query.Rows, started: float) -> QueryResult:
+    warnings = []
+    if rows.byte_limited:
+        warnings.append(
+            f"Only the first {len(rows.rows)} rows were read: the rows are too large to return more. Select fewer "
+            "or shorter columns, or aggregate in SQL."
+        )
+    elif rows.truncated:
+        warnings.append(
+            f"The query returned more than {query.MAX_ROWS} rows; only the first {query.MAX_ROWS} rows are "
+            "shown. Aggregate or filter in SQL, or ORDER BY and LIMIT it."
+        )
+    if rows.clipped:
+        warnings.append(
+            f"{rows.clipped} values were cut to {query.MAX_CELL_CHARS} characters or {query.MAX_ITEMS} list items."
+        )
+    result = QueryResult(
+        question=question,
+        sql=sql,
+        database_name=databases[0].alias if len(databases) == 1 else DATABASE_NAME,
+        databases=databases,
+        columns=rows.columns,
+        rows=[dict(zip(rows.columns, row, strict=True)) for row in rows.rows],
+        row_count=len(rows.rows),
+        truncated=rows.truncated,
+        elapsed_ms=round((time.perf_counter() - started) * 1000, 1),
+        warnings=warnings,
+    )
+    return fit(result)
 
 
 def agent_chars(result: QueryResult) -> int:
@@ -167,13 +179,33 @@ def fit(result: QueryResult) -> QueryResult:
         )
 
     low, high = 0, total - 1  # the largest count that fits lies in [low, high]
-    while low < high:
+    while low < high:  # at most 8 steps over at most query.MAX_OUTPUT_BYTES of rows
         middle = (low + high + 1) // 2
         if agent_chars(keep(middle)) <= MAX_RESULT_CHARS:
             low = middle
         else:
             high = middle - 1
-    return keep(low)
+    fitted = keep(low)
+    if agent_chars(fitted) <= MAX_RESULT_CHARS:
+        return fitted
+    # Even without rows the echo is too long: a long SQL text, question or column list that JSON escapes twice over.
+    shortened = fitted.model_copy(
+        update={
+            "warnings": [*fitted.warnings, "The SQL and question are shortened in this result to fit."],
+            "columns": [_clip(column, 64) for column in fitted.columns],
+        }
+    )
+    limit = max(len(fitted.sql), len(fitted.question))
+    while agent_chars(shortened) > MAX_RESULT_CHARS and limit > 64:
+        limit //= 2
+        shortened = shortened.model_copy(
+            update={"sql": _clip(fitted.sql, limit), "question": _clip(fitted.question, limit)}
+        )
+    return shortened
+
+
+def _clip(text: str, limit: int) -> str:
+    return text if len(text) <= limit else text[: limit - 1] + "…"
 
 
 def _span(name: str, kind: SpanKind, attributes: dict[str, Any]) -> AbstractContextManager[Span]:

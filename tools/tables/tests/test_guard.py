@@ -56,6 +56,16 @@ ESCAPES = {
     "current_setting": "SELECT current_setting('enable_external_access')",
     "unparsable": "SELEC * FRM retail_sales.orders",
     "empty": "   ",
+    # A bare name is a CTE only where that CTE is visible: not outside its subquery, not before its definition.
+    "a_cte_name_used_outside_its_subquery": "SELECT * FROM (WITH duckdb_tables AS (SELECT 1 AS x) "
+    "SELECT * FROM duckdb_tables) a, duckdb_tables b",
+    "a_cte_name_used_before_its_definition": 'WITH a AS (SELECT * FROM "/tmp/x/secret.csv"), '
+    '"/tmp/x/secret.csv" AS (SELECT 1) SELECT * FROM a',
+    "a_cte_name_used_in_a_sibling_cte_body_before_it": "WITH a AS (SELECT * FROM b), b AS (SELECT 1 AS x) "
+    "SELECT * FROM a",
+    "a_derived_table_alias_used_as_a_table": "SELECT * FROM (SELECT 1 AS x) AS duckdb_tables, duckdb_tables",
+    "a_cte_inside_a_cte_used_outside_it": "WITH a AS (WITH secret AS (SELECT 1) SELECT * FROM secret) "
+    "SELECT * FROM a, secret",
 }
 
 ALLOWED = {
@@ -74,6 +84,13 @@ ALLOWED = {
     "unnest": "SELECT * FROM unnest([1, 2, 3])",
     "a_subquery": "SELECT * FROM (SELECT customer_id, count(*) AS n FROM retail_sales.orders GROUP BY 1) WHERE n > 1",
     "a_trailing_semicolon": "SELECT 1;",
+    "a_cte_used_by_a_later_cte": "WITH a AS (SELECT * FROM retail_sales.orders), b AS (SELECT * FROM a) "
+    "SELECT * FROM b",
+    "a_cte_used_in_a_subquery": "WITH a AS (SELECT * FROM retail_sales.orders) "
+    "SELECT * FROM (SELECT * FROM a) WHERE customer_id IN (SELECT customer_id FROM a)",
+    "a_cte_in_any_case": 'WITH Big AS (SELECT * FROM retail_sales.orders) SELECT * FROM "BIG"',
+    "a_recursive_cte": "WITH RECURSIVE t(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM t WHERE n < 5) SELECT * FROM t",
+    "a_cte_inside_a_subquery": "SELECT * FROM (WITH a AS (SELECT * FROM retail_sales.orders) SELECT * FROM a) s",
 }
 
 
