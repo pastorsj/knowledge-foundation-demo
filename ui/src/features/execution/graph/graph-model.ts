@@ -419,8 +419,8 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
     id: 'synthesis',
     label: 'Synthesis',
     subtitle: 'Combines observed results and evidence',
-    x: 3260,
-    y: 710,
+    x: 2120,
+    y: 560,
     width: 220,
     icon: 'synthesis',
     branch: 'orchestration',
@@ -430,8 +430,8 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
     id: 'report-generation',
     label: 'Response Formatting',
     subtitle: 'Readable Markdown and citations',
-    x: 3600,
-    y: 710,
+    x: 2460,
+    y: 560,
     width: 210,
     icon: 'report',
     branch: 'orchestration',
@@ -441,8 +441,8 @@ export const hermesExecutionGraphNodes: readonly ExecutionGraphNodeDefinition[] 
     id: 'trusted-answer',
     label: 'Answer',
     subtitle: 'Inspectable final response',
-    x: 3940,
-    y: 710,
+    x: 2800,
+    y: 560,
     icon: 'answer',
     branch: 'orchestration',
     kind: 'output',
@@ -488,7 +488,7 @@ export const hermesExecutionGraphGroups: readonly ExecutionGraphGroupDefinition[
   },
 ]
 
-export const HERMES_EXECUTION_CANVAS_WIDTH = 4180
+export const HERMES_EXECUTION_CANVAS_WIDTH = 3260
 export const HERMES_EXECUTION_CANVAS_HEIGHT = 1200
 
 /** The tool calls' shared dispatch bus, left of the structured rows */
@@ -738,7 +738,7 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     toOffset: -40,
     via: [
       [1520, 330],
-      [3330, 330],
+      [2190, 330],
     ],
   },
   {
@@ -755,10 +755,14 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     from: 'unstructured-retrieval',
     to: 'synthesis',
     label: 'SELECTED EVIDENCE',
-    fromPort: 'right',
+    fromPort: 'top',
+    fromOffset: 0,
     toPort: 'bottom',
     toOffset: 20,
-    via: [[3390, 1060]],
+    via: [
+      [3030, 900],
+      [2250, 900],
+    ],
   },
   {
     id: 'hermes-synthesis',
@@ -770,9 +774,9 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     toOffset: 60,
     via: [
       [460, 16],
-      [3430, 16],
+      [2290, 16],
     ],
-    labelAt: [1945, 8],
+    labelAt: [1400, 8],
   },
   {
     id: 'synthesis-report',
@@ -781,7 +785,6 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     label: 'COMPILES',
     fromPort: 'right',
     toPort: 'left',
-    labelAt: [3540, 742],
   },
   {
     id: 'report-answer',
@@ -790,7 +793,6 @@ export const hermesExecutionGraphEdges: readonly ExecutionGraphEdgeDefinition[] 
     label: 'PUBLISHES',
     fromPort: 'right',
     toPort: 'left',
-    labelAt: [3875, 742],
   },
 ]
 

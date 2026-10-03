@@ -569,9 +569,7 @@
           "occurredAt": "2026-09-28T05:00:23.867804Z",
           "content": {
             "query": "Return window and restocking fee for electronics, and any exceptions for gold-tier loyalty members",
-            "sourceIds": [
-              "retail.policies"
-            ],
+            "sourceIds": ["retail.policies"],
             "collection": "knowledge",
             "collectionVersion": "knowledge__v1",
             "hits": [
@@ -591,14 +589,8 @@
                   "file_name": "return-policy.pdf",
                   "page_start": 1,
                   "page_end": 1,
-                  "headings": [
-                    "Returns and exchanges",
-                    "Electronics"
-                  ],
-                  "doc_items": [
-                    "section_header",
-                    "text"
-                  ],
+                  "headings": ["Returns and exchanges", "Electronics"],
+                  "doc_items": ["section_header", "text"],
                   "parser": "nemotron-parse-2.0"
                 }
               },
@@ -618,14 +610,8 @@
                   "file_name": "loyalty-program-terms.pdf",
                   "page_start": 3,
                   "page_end": 3,
-                  "headings": [
-                    "Member benefits by tier"
-                  ],
-                  "doc_items": [
-                    "section_header",
-                    "table",
-                    "text"
-                  ],
+                  "headings": ["Member benefits by tier"],
+                  "doc_items": ["section_header", "table", "text"],
                   "parser": "nemotron-parse-2.0"
                 }
               },
@@ -643,14 +629,8 @@
                 "metadata": {
                   "citation": "store-operations-manual.docx, Returns desk procedure",
                   "file_name": "store-operations-manual.docx",
-                  "headings": [
-                    "Customer service",
-                    "Returns desk procedure"
-                  ],
-                  "doc_items": [
-                    "section_header",
-                    "text"
-                  ],
+                  "headings": ["Customer service", "Returns desk procedure"],
+                  "doc_items": ["section_header", "text"],
                   "parser": "docling-docx"
                 }
               }
@@ -682,10 +662,7 @@
           }
         }
       ],
-      "sourceIds": [
-        "retail.sales",
-        "retail.policies"
-      ]
+      "sourceIds": ["retail.sales", "retail.policies"]
     }
   ]
 }

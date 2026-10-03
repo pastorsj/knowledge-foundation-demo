@@ -19,15 +19,11 @@
       "tools": [
         {
           "pill": "retrieval",
-          "tools": [
-            "retrieve_evidence"
-          ]
+          "tools": ["retrieve_evidence"]
         },
         {
           "pill": "duckdb",
-          "tools": [
-            "query_tables"
-          ]
+          "tools": ["query_tables"]
         }
       ]
     },

@@ -333,9 +333,7 @@
           "occurredAt": "2026-09-28T05:00:23.867804Z",
           "content": {
             "query": "Lockout/tagout steps before clearing a jam on press line 3",
-            "sourceIds": [
-              "manufacturing.sops"
-            ],
+            "sourceIds": ["manufacturing.sops"],
             "collection": "knowledge",
             "collectionVersion": "knowledge__v1",
             "hits": [
@@ -355,13 +353,8 @@
                   "file_name": "press-line-sop.pdf",
                   "page_start": 3,
                   "page_end": 3,
-                  "headings": [
-                    "Clearing a jam"
-                  ],
-                  "doc_items": [
-                    "section_header",
-                    "text"
-                  ],
+                  "headings": ["Clearing a jam"],
+                  "doc_items": ["section_header", "text"],
                   "parser": "nemotron-parse-2.0"
                 }
               }
@@ -393,9 +386,7 @@
           }
         }
       ],
-      "sourceIds": [
-        "manufacturing.sops"
-      ]
+      "sourceIds": ["manufacturing.sops"]
     }
   ]
 }

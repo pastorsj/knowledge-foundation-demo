@@ -115,9 +115,11 @@ upstream:
 | File                                                       | Purpose                                                                              |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `app/api/v1/[...path]/route.ts`                            | Allowlisted API proxy (replaces the open upstream proxy)                             |
-| `app/api/recordings/[...path]/route.ts`                    | Read-only replay bundle of the active data pack                                      |
+| `app/selected-pack.ts`, `features/layout/components/IndustrySelect.tsx` | The industry selector (`?pack=`, cookie `kf-pack`, `DEFAULT_PACK`) |
+| `features/execution/data-viewer/DataViewerDialog.tsx`      | The data viewer outside a run (Your data's tables), the execution feature's `DataViewer` slot |
+| `app/api/recordings/[...path]/route.ts`                    | Read-only replay bundles, per pack (`/api/recordings/<pack>/…`, `packs.json`)        |
 | `app/api/health/route.ts`                                  | UI liveness (upstream proxied the backend's health)                                  |
-| `shared/config/env.ts`                                     | Runtime configuration: `UI_MODE`, `API_URL`, `PACKS_DIR`, `DATA_PACK`, `PHOENIX_URL` |
+| `shared/config/env.ts`                                     | Runtime configuration: `UI_MODE`, `API_URL`, `PACKS_DIR`, `DEFAULT_PACK`, `PHOENIX_URL`, `FILE_UPLOAD_*` |
 | `shared/context/ExecutionFeatureContext.tsx`               | The typed slot where `features/execution` plugs in                                   |
 | `features/chat/hooks/use-hermes-chat.ts`                   | Submits a question as a job                                                          |
 | `features/landing/*`                                       | Landing page with the pack's featured questions                                      |

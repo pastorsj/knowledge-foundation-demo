@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import { LIVE_URL, REPLAY_URL } from '../playwright.config'
 
@@ -13,7 +14,8 @@ const SAVED_LIVE_SESSION = JSON.stringify({
       {
         id: 's_saved',
         userId: 'local',
-        title: 'Which assets led?',
+        title: 'Which customers spent the most?',
+        packId: 'retail',
         createdAt: '2026-09-01T00:00:00.000Z',
         updatedAt: '2026-09-01T00:00:00.000Z',
         messages: [
@@ -34,72 +36,149 @@ const SAVED_LIVE_SESSION = JSON.stringify({
   version: 0,
 })
 
+const FILES = path.join(__dirname, 'fixtures', 'files')
+
 /**
  * Opens the live landing page with its featured questions. The server renders them only when the
  * API answers `GET /v1/pack` within 3 s, which a busy test run can miss now and then: reload until
  * they are there.
  */
-const gotoLanding = async (page: Page) => {
+const gotoLanding = async (page: Page, query = '', count = 6) => {
   await expect(async () => {
-    await page.goto('/')
+    await page.goto(`/${query}`)
     await expect(
       page.getByRole('region', { name: 'Featured questions' }).getByRole('link')
-    ).toHaveCount(6, { timeout: 2_000 })
+    ).toHaveCount(count, { timeout: 2_000 })
   }).toPass({ timeout: 20_000 })
 }
 
+/** Picks an industry in the selector (the landing header's or the app bar's). */
+const industrySelect = (page: Page) => page.getByTestId('industry-select').filter({ visible: true })
+
+const pickIndustry = async (page: Page, name: string) => {
+  await industrySelect(page).click()
+  await page.getByRole('option', { name }).click()
+}
+
+const examples = (page: Page) =>
+  page.getByRole('option').evaluateAll((rows) => rows.map((row) => row.dataset.scenarioId))
+
 test.describe('live mode', () => {
   test.use({ baseURL: LIVE_URL })
+  test.beforeEach(async ({ context }) => context.clearCookies())
+
+  test('the landing page lists the industries, and switching one changes its questions and ?pack=', async ({
+    page,
+  }) => {
+    await gotoLanding(page)
+    await expect(page).toHaveTitle('NVIDIA Knowledge Foundation')
+    await expect(
+      page.getByRole('heading', { name: 'Ask your enterprise knowledge.' })
+    ).toBeVisible()
+
+    await industrySelect(page).click()
+    await expect(page.getByRole('option')).toHaveText(['Manufacturing', 'Retail', 'Your data'])
+    await page.getByRole('option', { name: 'Manufacturing' }).click()
+
+    await expect(page).toHaveURL(/\?pack=manufacturing$/)
+    const featured = page.getByRole('region', { name: 'Featured questions' })
+    await expect(featured.getByRole('link')).toHaveCount(2)
+    await expect(featured.getByRole('link', { name: /Press Lockout/ })).toHaveAttribute(
+      'href',
+      '/research?pack=manufacturing&question=press-lockout'
+    )
+    // The cookie remembers it: the landing page opens on Manufacturing again
+    await gotoLanding(page, '', 2)
+    await expect(industrySelect(page)).toContainText('Manufacturing')
+  })
 
   test('a featured question is asked and answered with its cited evidence', async ({ page }) => {
     await gotoLanding(page)
-    await expect(page).toHaveTitle('Enterprise Research')
-
-    await page.getByRole('link', { name: /Market Leaders/ }).click()
+    await page.getByRole('link', { name: /Top Customers/ }).click()
     const composer = page.getByRole('textbox', { name: 'Chat message input' })
-    await expect(composer).toHaveValue('Which assets led the market?')
+    await expect(composer).toHaveValue('Which customers spent the most last quarter?')
 
     await page.getByRole('button', { name: 'Send message' }).click()
 
-    await expect(page.getByText('Asset A led the market')).toBeVisible()
+    await expect(page.getByText('Customer C2 spent the most last quarter')).toBeVisible()
     const evidence = page.getByRole('region', { name: 'Sources' }).locator('summary')
-    await expect(evidence).toContainText('Market analytics result — market scan')
+    await expect(evidence).toContainText('Structured query result — retail sales')
     await evidence.click()
     await expect(evidence).toContainText('Close')
     await expect(composer).toBeEnabled()
   })
 
-  test('the composer offers the pack examples as demo scenarios', async ({ page }) => {
-    await page.goto('/research')
-    const composer = page.getByRole('textbox', { name: 'Chat message input' })
-
+  test('switching to Manufacturing changes the picker’s examples, the sources and ?pack=', async ({
+    page,
+  }) => {
+    await page.goto('/research?pack=retail')
     await page.getByTestId('demo-scenario-select').click()
     // The pack's examples in their order, only those whose data sources the API offers
-    const options = page.getByRole('option')
-    await expect(options).toHaveCount(7)
-    expect(await options.evaluateAll((rows) => rows.map((row) => row.dataset.scenarioId))).toEqual([
-      'unusual-sessions',
-      'outcome-prediction',
-      'peer-network',
-      'sector-sql',
-      'market-leaders',
-      'news-and-filings',
-      'news-sentiment-reaction',
+    expect(await examples(page)).toEqual([
+      'churn-risk',
+      'basket-size',
+      'returns-and-revenue',
+      'gold-orders',
+      'top-customers',
+      'returns-policy',
+      'tier-revenue',
     ])
-    // Each with pills for the tools it is expected to use
-    const peers = page.getByRole('option', { name: /Peer Network/ })
-    await expect(peers.locator('.tool-pill')).toHaveText(['cuDF', 'cuGraph'])
-    await expect(
-      page.getByRole('option', { name: /Unusual Sessions/ }).locator('.tool-pill')
-    ).toHaveText(['cuDF', 'cuML'])
-    await peers.click()
+    await expect(page.getByRole('option', { name: /Churn Risk/ }).locator('.tool-pill')).toHaveText(
+      ['DuckDB', 'Kumo']
+    )
+    await page.keyboard.press('Escape')
+    const panel = page.getByRole('button', { name: 'Close data sources panel' }).locator('../..')
+    await expect(page.getByText('Sales', { exact: true })).toBeVisible()
 
-    await expect(composer).toHaveValue(/^In the return-correlation network/)
-    await expect(page.getByTestId('demo-scenario-select')).toContainText('Peer Network')
+    await pickIndustry(page, 'Manufacturing')
+
+    await expect(page).toHaveURL(/[?&]pack=manufacturing/)
+    await expect(page.getByText('Procedures', { exact: true })).toBeVisible()
+    await expect(page.getByText('Maintenance', { exact: true })).toBeVisible()
+    await expect(page.getByText('Sales', { exact: true })).toHaveCount(0)
+    await expect(panel).toBeVisible()
+    await page.getByTestId('demo-scenario-select').click()
+    await expect.poll(() => examples(page)).toEqual(['press-lockout', 'downtime', 'failure-risk'])
+  })
+
+  test('Your data: upload a PDF and a CSV, watch them ingest, and ask a cited question', async ({
+    page,
+  }) => {
+    await page.goto('/research?pack=retail')
+    await pickIndustry(page, 'Your data')
+    await expect(page).toHaveURL(/[?&]pack=workspace/)
+
+    // The panel opens to Files; the composer takes the files
+    await expect(page.getByRole('radio', { name: 'Files' })).toBeChecked()
+    await page
+      .getByTestId('composer-file-input')
+      .setInputFiles([path.join(FILES, 'policy.pdf'), path.join(FILES, 'orders.csv')])
+
+    const cards = page.getByTestId('file-source-card')
+    await expect(cards).toHaveCount(2)
+    // Each file moves through its stages on each status poll, to Available
+    await expect(cards.filter({ hasText: 'Available' })).toHaveCount(2, { timeout: 30_000 })
+    await expect(page.getByRole('list', { name: 'Document pipeline' })).toHaveCount(1)
+    await expect(page.getByRole('list', { name: 'Table pipeline' })).toHaveCount(1)
+    await expect(cards.filter({ hasText: 'policy.pdf' }).getByTestId('file-parser')).toHaveText(
+      'Nemotron Parse 2.0'
+    )
+    await expect(cards.filter({ hasText: 'orders.csv' })).toContainText('orders')
+
+    // The sources panel lists Your documents and Your tables
+    await page.getByRole('radio', { name: 'Connections' }).click()
+    await expect(page.getByText('Your documents', { exact: true })).toBeVisible()
+    await expect(page.getByText('Your tables', { exact: true })).toBeVisible()
+
+    const composer = page.getByRole('textbox', { name: 'Chat message input' })
+    await composer.fill('What is the return window, and which order was the largest?')
+    await page.getByRole('button', { name: 'Send message' }).click()
+    await expect(page.getByText('Opened items may be returned within 30 days')).toBeVisible()
+    await expect(page.getByRole('region', { name: 'Sources' }).locator('summary')).toHaveCount(2)
   })
 
   test('the example picker shows five rows and scrolls the others into view', async ({ page }) => {
-    await page.goto('/research')
+    await page.goto('/research?pack=retail')
     await page.getByTestId('demo-scenario-select').click()
     const list = page.getByTestId('demo-scenario-list')
     const options = page.getByRole('option')
@@ -125,13 +204,7 @@ test.describe('live mode', () => {
 
     // Exactly five rows, none cut; the others are underneath
     await expect.poll(shown).toEqual({
-      whole: [
-        'unusual-sessions',
-        'outcome-prediction',
-        'peer-network',
-        'sector-sql',
-        'market-leaders',
-      ],
+      whole: ['churn-risk', 'basket-size', 'returns-and-revenue', 'gold-orders', 'top-customers'],
       cut: 0,
     })
     // The keyboard scrolls the list to the row it moves to
@@ -139,16 +212,16 @@ test.describe('live mode', () => {
     await expect(options.last()).toHaveAttribute('data-active-item')
     await expect.poll(shown).toEqual({
       whole: [
-        'peer-network',
-        'sector-sql',
-        'market-leaders',
-        'news-and-filings',
-        'news-sentiment-reaction',
+        'returns-and-revenue',
+        'gold-orders',
+        'top-customers',
+        'returns-policy',
+        'tier-revenue',
       ],
       cut: 0,
     })
     await page.keyboard.press('Enter')
-    await expect(page.getByTestId('demo-scenario-select')).toContainText('News & Price Reaction')
+    await expect(page.getByTestId('demo-scenario-select')).toContainText('Revenue by Tier')
   })
 
   test('recorded sessions are listed beside My sessions and replay without the API', async ({
@@ -158,7 +231,7 @@ test.describe('live mode', () => {
     page.on('request', (request) => {
       if (new URL(request.url()).pathname.startsWith('/api/v1/jobs/')) exports.push(request.url())
     })
-    await page.goto('/research')
+    await page.goto('/research?pack=retail')
     await expect(page.getByRole('tab', { name: 'My sessions' })).toHaveAttribute(
       'aria-selected',
       'true'
@@ -183,7 +256,7 @@ test.describe('live mode', () => {
   test('voice input records a question and puts its transcript in the composer', async ({
     page,
   }) => {
-    await page.goto('/research')
+    await page.goto('/research?pack=retail')
     const composer = page.getByRole('textbox', { name: 'Chat message input' })
 
     await page.getByRole('button', { name: 'Start voice input' }).click()
@@ -192,7 +265,7 @@ test.describe('live mode', () => {
     await page.getByRole('button', { name: 'Stop voice recording' }).click()
 
     // The fake API transcribes any valid WAV recording to the same question
-    await expect(composer).toHaveValue('Which assets led the market?')
+    await expect(composer).toHaveValue('Which customers spent the most last quarter?')
     await expect(page.getByRole('button', { name: 'Start voice input' })).toBeEnabled()
   })
 
@@ -208,12 +281,10 @@ test.describe('live mode', () => {
       for (const colorScheme of ['light', 'dark'] as const) {
         const where = `${viewport.width}x${viewport.height} ${colorScheme}`
         await page.emulateMedia({ colorScheme })
-        await gotoLanding(page)
-        const featured = page.getByRole('region', { name: 'Featured questions' })
-        await expect(featured.getByRole('link')).toHaveCount(6)
+        await gotoLanding(page, '?pack=retail')
 
         const logos = page.locator('main [data-brand] img')
-        await expect(logos).toHaveCount(14)
+        await expect(logos).toHaveCount(12)
         await expect
           .poll(() =>
             logos.evaluateAll((images: HTMLImageElement[]) => images.map((i) => i.complete))
@@ -223,9 +294,6 @@ test.describe('live mode', () => {
           images.filter((i) => i.naturalWidth === 0).map((i) => i.src)
         )
         expect(broken, `${where}: logos that did not load`).toEqual([])
-        const langchain = page.locator('main [data-brand="LangChain"] img')
-        await expect(langchain).toHaveAttribute('src', '/ecosystem-logos/langchain.svg')
-        expect(await langchain.evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0)
 
         const size = await page.evaluate(() => ({
           scrollHeight: document.documentElement.scrollHeight,
@@ -250,7 +318,7 @@ test.describe('replay mode', () => {
     }, SAVED_LIVE_SESSION)
 
     await page.goto('/')
-    await page.getByRole('link', { name: /Enter market analysis/ }).click()
+    await page.getByRole('link', { name: /Ask your knowledge/ }).click()
 
     await expect(page.getByText('What do you want to know?')).toBeVisible()
     await expect(page.getByRole('textbox', { name: 'Chat message input' })).toBeDisabled()
@@ -266,14 +334,32 @@ test.describe('replay mode', () => {
     )
   })
 
-  test('serves the health check and the data pack recordings', async ({ request }) => {
+  test('the industry selector lists the recorded packs, and each pack lists its own recordings', async ({
+    page,
+  }) => {
+    await page.goto('/research?pack=retail')
+    await expect(page.getByRole('button', { name: /^Recorded session: / })).toHaveCount(2)
+
+    await pickIndustry(page, 'Manufacturing')
+    await expect(page).toHaveURL(/[?&]pack=manufacturing/)
+    await expect(page.getByRole('button', { name: /^Recorded session: / })).toHaveCount(1)
+    await expect(
+      page.getByRole('button', { name: 'Recorded session: Press line lockout; Completed' })
+    ).toBeVisible()
+  })
+
+  test('serves the health check, the packs and their recordings', async ({ request }) => {
     expect(await (await request.get('/api/health')).json()).toEqual({
       status: 'ok',
       mode: 'replay',
     })
-    expect(await (await request.get('/api/recordings/index.json')).json()).toMatchObject({
-      schemaVersion: 2,
-      pack: { id: 'e2e' },
+    expect(await (await request.get('/api/recordings/packs.json')).json()).toMatchObject({
+      packs: [{ id: 'manufacturing' }, { id: 'retail' }],
     })
+    expect(await (await request.get('/api/recordings/retail/index.json')).json()).toMatchObject({
+      schemaVersion: 2,
+      pack: { id: 'retail' },
+    })
+    expect((await request.get('/api/recordings/../secret.json')).status()).toBe(404)
   })
 })

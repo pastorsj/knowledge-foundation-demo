@@ -7,10 +7,7 @@
     "default_enabled": true,
     "kind": "structured",
     "database_name": "retail_sales",
-    "capabilities": [
-      "structured_retrieval",
-      "structured_prediction"
-    ],
+    "capabilities": ["structured_retrieval", "structured_prediction"],
     "synthetic": true,
     "status": "ready"
   },
@@ -22,9 +19,7 @@
     "default_enabled": true,
     "kind": "documents",
     "database_name": null,
-    "capabilities": [
-      "unstructured_retrieval"
-    ],
+    "capabilities": ["unstructured_retrieval"],
     "synthetic": true,
     "status": "ready"
   }

@@ -11,15 +11,14 @@ Screenshot baselines of the views that keep the original demo UI's look
 | `recorded-list`                  | The Recorded list with its tool pills                           |
 | `recorded-answer`                | A recorded answer with its Sources and Inspect actions          |
 | `execution-graph`                | The execution workspace: replay bar, run summary and graph      |
-| `explorer-market`                | The market tool explorer (anomaly scan)                         |
+| `explorer-duckdb-sql`            | The DuckDB table query explorer (SQL and rows)                  |
 | `explorer-retrieval`             | The retrieval explorer                                          |
 | `explorer-auto-ontology-sql`     | The Auto Ontology text-to-SQL explorer                          |
 | `explorer-kumo`                  | The Kumo explorer                                               |
 | `activity-thinking`, `-timeline` | The Agent Activity panel: Thinking and Timeline                 |
-| `activity-benchmark`, `-milvus`  | The Benchmark tab, and its Milvus comparison                    |
 | `data-viewer-table`, `-sql`      | The data viewer: a table, and a SQL query's result              |
 
-The data never changes under them: the fixture pack (`e2e/fixtures/packs/e2e`, synthetic) and the
+The data never changes under them: the fixture packs (`e2e/fixtures/packs`, synthetic) and the
 fake API (`e2e/fake-api.mjs`), never a pack's recordings, which are re-recorded. The page clock and
 `Math.random` are fixed, toHaveScreenshot finishes CSS animations, the pointer rests on the app bar,
 and `screenshot.css` hides the empty chat's starfield, a canvas that turns every frame. The views

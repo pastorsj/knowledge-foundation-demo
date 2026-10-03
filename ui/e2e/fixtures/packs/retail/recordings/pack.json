@@ -15,19 +15,11 @@
       "tag": null,
       "description": null,
       "question": "What is the return window for opened electronics, and which loyalty tier brought the most net revenue in the third quarter of 2026?",
-      "sources": [
-        "retail.sales",
-        "retail.policies"
-      ],
-      "tools": [
-        "retrieval",
-        "duckdb"
-      ],
+      "sources": ["retail.sales", "retail.policies"],
+      "tools": ["retrieval", "duckdb"],
       "featured": true
     }
   ],
-  "examples": [
-    "returns-and-revenue"
-  ],
+  "examples": ["returns-and-revenue"],
   "conversations": []
 }

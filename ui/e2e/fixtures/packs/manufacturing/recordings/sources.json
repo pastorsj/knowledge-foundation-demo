@@ -7,9 +7,7 @@
     "default_enabled": true,
     "kind": "documents",
     "database_name": null,
-    "capabilities": [
-      "unstructured_retrieval"
-    ],
+    "capabilities": ["unstructured_retrieval"],
     "synthetic": true,
     "status": "ready"
   }

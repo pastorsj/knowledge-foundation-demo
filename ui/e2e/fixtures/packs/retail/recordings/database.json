@@ -83,79 +83,24 @@
       },
       "previews": {
         "customers": {
-          "columns": [
-            "customer_id",
-            "name",
-            "tier",
-            "joined_at"
-          ],
-          "types": [
-            "VARCHAR",
-            "VARCHAR",
-            "VARCHAR",
-            "DATE"
-          ],
+          "columns": ["customer_id", "name", "tier", "joined_at"],
+          "types": ["VARCHAR", "VARCHAR", "VARCHAR", "DATE"],
           "rows": [
-            [
-              "C1",
-              "Ada Park",
-              "gold",
-              "2024-03-02"
-            ],
-            [
-              "C2",
-              "Ben Ortiz",
-              "gold",
-              "2025-01-15"
-            ],
-            [
-              "C3",
-              "Cy Moreau",
-              "silver",
-              "2025-06-30"
-            ]
+            ["C1", "Ada Park", "gold", "2024-03-02"],
+            ["C2", "Ben Ortiz", "gold", "2025-01-15"],
+            ["C3", "Cy Moreau", "silver", "2025-06-30"]
           ],
           "truncated": false,
           "duration_ms": 2
         },
         "orders": {
-          "columns": [
-            "order_id",
-            "customer_id",
-            "ordered_at",
-            "net_amount"
-          ],
-          "types": [
-            "VARCHAR",
-            "VARCHAR",
-            "TIMESTAMP",
-            "DOUBLE"
-          ],
+          "columns": ["order_id", "customer_id", "ordered_at", "net_amount"],
+          "types": ["VARCHAR", "VARCHAR", "TIMESTAMP", "DOUBLE"],
           "rows": [
-            [
-              "O-1001",
-              "C1",
-              "2026-07-04 10:12:00",
-              120.0
-            ],
-            [
-              "O-1002",
-              "C2",
-              "2026-08-11 15:40:00",
-              175.0
-            ],
-            [
-              "O-1003",
-              "C1",
-              "2026-09-02 09:05:00",
-              100.0
-            ],
-            [
-              "O-1004",
-              "C3",
-              "2026-09-18 18:22:00",
-              45.25
-            ]
+            ["O-1001", "C1", "2026-07-04 10:12:00", 120.0],
+            ["O-1002", "C2", "2026-08-11 15:40:00", 175.0],
+            ["O-1003", "C1", "2026-09-02 09:05:00", 100.0],
+            ["O-1004", "C3", "2026-09-18 18:22:00", 45.25]
           ],
           "truncated": false,
           "duration_ms": 2
@@ -163,29 +108,27 @@
       },
       "queries": [
         {
+          "sql": "SELECT * FROM \"main\".\"customers\" LIMIT 25",
+          "result": {
+            "columns": ["customer_id", "name", "tier", "joined_at"],
+            "types": ["VARCHAR", "VARCHAR", "VARCHAR", "DATE"],
+            "rows": [
+              ["C1", "Ada Park", "gold", "2024-03-02"],
+              ["C2", "Ben Ortiz", "gold", "2025-01-15"],
+              ["C3", "Cy Moreau", "silver", "2025-06-30"]
+            ],
+            "truncated": false,
+            "duration_ms": 2
+          }
+        },
+        {
           "sql": "SELECT c.tier, count(*) AS orders, round(sum(o.net_amount), 2) AS net_revenue\nFROM retail_sales.orders AS o\nJOIN retail_sales.customers AS c USING (customer_id)\nWHERE o.ordered_at >= TIMESTAMP '2026-07-01' AND o.ordered_at < TIMESTAMP '2026-10-01'\nGROUP BY c.tier\nORDER BY net_revenue DESC",
           "result": {
-            "columns": [
-              "tier",
-              "orders",
-              "net_revenue"
-            ],
-            "types": [
-              "VARCHAR",
-              "BIGINT",
-              "DOUBLE"
-            ],
+            "columns": ["tier", "orders", "net_revenue"],
+            "types": ["VARCHAR", "BIGINT", "DOUBLE"],
             "rows": [
-              [
-                "gold",
-                3,
-                395.0
-              ],
-              [
-                "silver",
-                1,
-                45.25
-              ]
+              ["gold", 3, 395.0],
+              ["silver", 1, 45.25]
             ],
             "truncated": false,
             "duration_ms": 4
@@ -194,20 +137,9 @@
         {
           "sql": "SELECT count(*) AS order_count, round(avg(o.net_amount), 2) AS average_order_value\nFROM orders AS o\nJOIN customers AS c ON c.customer_id = o.customer_id\nWHERE c.tier = 'gold'",
           "result": {
-            "columns": [
-              "order_count",
-              "average_order_value"
-            ],
-            "types": [
-              "BIGINT",
-              "DOUBLE"
-            ],
-            "rows": [
-              [
-                4,
-                128.88
-              ]
-            ],
+            "columns": ["order_count", "average_order_value"],
+            "types": ["BIGINT", "DOUBLE"],
+            "rows": [[4, 128.88]],
             "truncated": false,
             "duration_ms": 3
           }

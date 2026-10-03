@@ -367,9 +367,7 @@
           }
         }
       ],
-      "sourceIds": [
-        "retail.sales"
-      ]
+      "sourceIds": ["retail.sales"]
     },
     {
       "jobId": "18d6824d-df8e-4d57-89eb-22a055226124",
@@ -736,9 +734,7 @@
           }
         }
       ],
-      "sourceIds": [
-        "retail.sales"
-      ]
+      "sourceIds": ["retail.sales"]
     }
   ]
 }
