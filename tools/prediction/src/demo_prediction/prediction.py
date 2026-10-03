@@ -272,7 +272,7 @@ def entity_ids(source: catalog.Source, entity: catalog.TableInfo, condition: str
     except entities.SelectionFailed as error:
         if where is None:
             raise
-        warnings.append(_unfiltered(condition or "", str(error)))
+        warnings.append(_unfiltered(condition or "", _redact(error)))
         ids, population = entities.select(source.path, entity.name, key, None, KUMO_MAX_ENTITIES)
         where = None
     if population > KUMO_MAX_ENTITIES:

@@ -6,6 +6,9 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
+import threading
+import time
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -22,6 +25,7 @@ from kumo_relational_client import RelationalError
 from mcp.client import Client
 from mcp.server.mcpserver import MCPServer
 from mcp.types import CallToolResult
+from sqlglot import exp
 
 from demo_prediction import catalog
 from demo_prediction import entities
@@ -319,6 +323,11 @@ async def test_a_temporal_entity_filter_is_left_to_a_warning(knowledge_dir: Path
         "orders.net_amount > 10",
         "customers.secret = 1",
         "customers.tier",
+        # Re-emitted without escaping its backslash, an escape string means something else to DuckDB.
+        "customers.tier = E'gold\\' OR customers.tier = ''silver'",
+        "customers.tier = $$gold$$",
+        "customers.tier = $tag$gold$tag$",
+        "customers.tier = 'go\\ld'",
     ],
     ids=[
         "subquery-file",
@@ -330,6 +339,10 @@ async def test_a_temporal_entity_filter_is_left_to_a_warning(knowledge_dir: Path
         "other-table",
         "no-column",
         "bare",
+        "escape-string",
+        "dollar-quoted",
+        "tagged-dollar-quoted",
+        "backslash",
     ],
 )
 async def test_an_entity_filter_that_is_not_one_plain_condition_never_runs(
@@ -360,6 +373,54 @@ def test_a_plain_condition_is_regenerated_from_its_parse():
     )
 
     assert sql == "Customers.tier IN ('gold', 'silver') AND NOT joined_at < CAST('2025-01-01' AS DATE)"
+
+
+def test_a_condition_whose_sql_does_not_parse_back_the_same_is_refused(monkeypatch: pytest.MonkeyPatch):
+    """Belt and braces: the SQL that runs must parse to the tree that was checked."""
+    real = exp.Expression.sql
+
+    def drift(node, *args, **kwargs):
+        text = real(node, *args, **kwargs)
+        return text.replace("'gold'", "'silver'") if isinstance(node, exp.EQ) else text
+
+    monkeypatch.setattr(exp.Expression, "sql", drift)
+    with pytest.raises(entities.FilterRejected, match="parse back"):
+        entities.condition_sql("customers.tier = 'gold'", "customers", ["customer_id", "tier"])
+
+
+async def test_duckdb_error_text_does_not_reach_the_agent(knowledge_dir: Path, stub: type[StubClient]):
+    """A filter that parses but fails in DuckDB (here a cast of the tier text) is reported in written words."""
+    result = await predict(knowledge_dir, f"{CHURN} WHERE CAST(customers.tier AS INTEGER) > 0")
+
+    (warning,) = result.structured_content["warnings"]
+    assert "could not be applied" in warning and "DuckDB could not apply it" in warning
+    assert "gold" not in warning and "Conversion Error" not in warning
+    assert stub.calls[0]["indices"] == ["C1", "C2", "C3"]
+
+
+def test_at_most_two_entity_workers_run_at_once(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+    running, peak = [0], [0]
+    lock = threading.Lock()
+
+    def slow_run(*args, **kwargs):
+        with lock:
+            running[0] += 1
+            peak[0] = max(peak[0], running[0])
+        time.sleep(0.2)
+        with lock:
+            running[0] -= 1
+        return subprocess.CompletedProcess(args, 0, stdout=b'{"ids": [], "population": 0}', stderr=b"")
+
+    monkeypatch.setattr(entities.subprocess, "run", slow_run)
+    threads = [
+        threading.Thread(target=entities.select, args=(tmp_path / "x.duckdb", "t", "k", None, 10)) for _ in range(6)
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    assert peak[0] == entities.MAX_CONCURRENT_WORKERS == 2
 
 
 async def test_at_most_1000_entities_in_primary_key_order_and_the_25_best(knowledge_dir: Path, stub: type[StubClient]):

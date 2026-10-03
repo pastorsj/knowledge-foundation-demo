@@ -40,9 +40,11 @@ Each call:
    order. Past 1,000, the first 1,000 are scored and a warning names the population's size and says to narrow it
    with `FOR EACH ... WHERE`. Kumo predicts for every id it is given whatever the filter says, so a plain entity
    filter (such as `customers.tier = 'gold'`) is applied here (`entities.py`). sqlglot parses it as one condition
-   over the entity table's own columns, with no subquery, table, generator, aggregate or file function. The SQL
-   regenerated from that parse runs in a worker process: a fresh DuckDB with the source attached read-only, external
-   access off, the configuration locked, a 2 GiB address space and a 10 s kill. A filter it cannot apply, including
+   over the entity table's own columns, with no subquery, table, generator, aggregate or file function, and with no
+   backslash or dollar sign (escape strings and dollar quoting are where sqlglot's reading and DuckDB's can differ).
+   The SQL regenerated from that parse must parse back to the same tree. It runs in a worker process (at most 2 at
+   once): a fresh DuckDB with the source attached read-only, external access off, the configuration locked, a 2 GiB
+   address space and a 10 s kill. DuckDB's own error text goes to the log, never into the result. A filter it cannot apply, including
    one over time (`COUNT(orders.*, -90, 0, days) > 0`), never runs; the result warns that the entities may include
    ones it excludes. `FOR <key> = ...` and `FOR <key> IN (...)` leave the ids to the query.
 6. Builds the graph: `relational.Graph.from_duckdb(connection={"uri": <file>, "kwargs": {"read_only": True}},
