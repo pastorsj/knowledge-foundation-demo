@@ -1,0 +1,4 @@
+plant_id,plant_name,city,country,timezone,opened_year,headcount,shifts_per_day,main_products
+DAY,Dayton Plant,"Dayton, OH",United States,America/New_York,1998,312,2,"Transmission housings, brackets and mounts, pump components"
+MTY,Monterrey Plant,"Monterrey, NL",Mexico,America/Monterrey,2009,268,2,"Valve bodies, pump components, brackets and mounts"
+BRN,Brno Plant,Brno,Czechia,Europe/Prague,2014,184,2,"Valve bodies, transmission housings, pump components"

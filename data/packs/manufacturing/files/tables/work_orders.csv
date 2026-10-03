@@ -1,0 +1,883 @@
+work_order_id,plant_id,machine_id,part_number,product_family,customer,start_date,due_date,completed_date,status,qty_started,qty_good,qty_scrap
+WO-00001,BRN,BRN-GRD-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-01,2025-08-05,2025-07-31,completed,2495,2474,21
+WO-00002,BRN,BRN-LTH-01,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-07-31,2025-07-28,completed,1650,1633,17
+WO-00003,BRN,BRN-LTH-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-01,2025-08-03,2025-07-29,completed,1704,1692,12
+WO-00004,BRN,BRN-LTH-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-01,2025-08-01,2025-07-28,completed,1431,1414,17
+WO-00005,BRN,BRN-MIL-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-07-01,2025-07-28,2025-07-24,completed,1138,1129,9
+WO-00006,BRN,BRN-MIL-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-01,2025-07-22,2025-07-21,completed,763,753,10
+WO-00007,BRN,BRN-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-01,2025-07-27,2025-07-24,completed,1049,1044,5
+WO-00008,BRN,BRN-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-08-03,2025-07-29,completed,882,875,7
+WO-00009,BRN,BRN-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2025-07-01,2025-08-04,2025-07-30,completed,754,747,7
+WO-00010,BRN,BRN-MIL-06,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-07-25,2025-07-22,completed,681,675,6
+WO-00011,BRN,BRN-PRS-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-01,2025-07-31,2025-07-28,completed,5482,5376,106
+WO-00012,BRN,BRN-PRS-02,AP-3301,Valve bodies,Brightline Hydraulics,2025-07-01,2025-07-31,2025-07-29,completed,6070,5988,82
+WO-00013,BRN,BRN-PRS-03,AP-3340,Valve bodies,Corvane Aerospace,2025-07-01,2025-08-05,2025-07-31,completed,6595,6477,118
+WO-00014,BRN,BRN-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-01,2025-08-01,2025-07-28,completed,2740,2712,28
+WO-00015,BRN,BRN-RBT-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-01,2025-08-05,2025-07-31,completed,3677,3627,50
+WO-00016,DAY,DAY-GRD-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-01,2025-08-03,2025-07-31,completed,2498,2467,31
+WO-00017,DAY,DAY-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-07-01,2025-07-28,2025-07-28,completed,2156,2142,14
+WO-00018,DAY,DAY-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2025-07-01,2025-07-27,2025-07-23,completed,1000,993,7
+WO-00019,DAY,DAY-LTH-03,AP-4410,Transmission housings,Nordhaven Motors,2025-07-01,2025-07-27,2025-07-24,completed,1076,1064,12
+WO-00020,DAY,DAY-LTH-04,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-07-24,2025-07-21,completed,1099,1091,8
+WO-00021,DAY,DAY-LTH-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-01,2025-08-02,2025-07-30,completed,1717,1683,34
+WO-00022,DAY,DAY-MIL-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-01,2025-07-22,2025-07-22,completed,798,791,7
+WO-00023,DAY,DAY-MIL-02,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-01,2025-07-28,2025-07-25,completed,651,641,10
+WO-00024,DAY,DAY-MIL-03,AP-4410,Transmission housings,Nordhaven Motors,2025-07-01,2025-08-01,2025-07-30,completed,725,715,10
+WO-00025,DAY,DAY-MIL-04,AP-4410,Transmission housings,Nordhaven Motors,2025-07-01,2025-07-30,2025-07-28,completed,668,654,14
+WO-00026,DAY,DAY-MIL-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-01,2025-08-06,2025-08-05,completed,1450,1442,8
+WO-00027,DAY,DAY-MIL-06,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-01,2025-07-30,2025-07-28,completed,1000,991,9
+WO-00028,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-01,2025-08-01,2025-07-31,completed,820,770,50
+WO-00029,DAY,DAY-PRS-01,AP-4410,Transmission housings,Nordhaven Motors,2025-07-01,2025-07-27,2025-07-24,completed,3588,3477,111
+WO-00030,DAY,DAY-PRS-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-07-01,2025-07-30,2025-07-25,completed,6300,6241,59
+WO-00031,DAY,DAY-PRS-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-01,2025-08-08,2025-08-05,completed,8631,8555,76
+WO-00032,DAY,DAY-PRS-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-01,2025-07-29,2025-07-29,completed,6978,6909,69
+WO-00033,DAY,DAY-RBT-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-07-01,2025-08-05,2025-08-01,completed,5169,5107,62
+WO-00034,DAY,DAY-RBT-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-01,2025-07-30,2025-07-29,completed,4056,4018,38
+WO-00035,DAY,DAY-RBT-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-01,2025-07-30,2025-07-28,completed,2552,2537,15
+WO-00036,MTY,MTY-GRD-01,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-08-04,2025-07-30,completed,2368,2343,25
+WO-00037,MTY,MTY-GRD-02,AP-3340,Valve bodies,Corvane Aerospace,2025-07-01,2025-08-03,2025-07-30,completed,2246,2219,27
+WO-00038,MTY,MTY-LTH-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-01,2025-08-06,2025-08-05,completed,2260,2240,20
+WO-00039,MTY,MTY-LTH-02,AP-3301,Valve bodies,Brightline Hydraulics,2025-07-01,2025-07-29,2025-07-29,completed,1791,1772,19
+WO-00040,MTY,MTY-LTH-03,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-08-05,2025-07-31,completed,1933,1911,22
+WO-00041,MTY,MTY-LTH-04,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-01,2025-07-27,2025-07-23,completed,1790,1775,15
+WO-00042,MTY,MTY-LTH-05,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-08-04,2025-08-01,completed,1825,1779,46
+WO-00043,MTY,MTY-MIL-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-01,2025-07-22,2025-07-18,completed,574,568,6
+WO-00044,MTY,MTY-MIL-02,AP-3340,Valve bodies,Corvane Aerospace,2025-07-01,2025-08-03,2025-07-30,completed,903,887,16
+WO-00045,MTY,MTY-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-01,2025-07-30,2025-07-28,completed,1049,1042,7
+WO-00046,MTY,MTY-MIL-04,AP-3301,Valve bodies,Brightline Hydraulics,2025-07-01,2025-07-25,2025-07-22,completed,840,790,50
+WO-00047,MTY,MTY-MIL-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-01,2025-08-06,2025-08-05,completed,1067,1049,18
+WO-00048,MTY,MTY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-07-01,2025-07-24,2025-07-18,completed,839,829,10
+WO-00049,MTY,MTY-PRS-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-01,2025-07-31,2025-07-28,completed,4978,4915,63
+WO-00050,MTY,MTY-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-01,2025-07-30,2025-07-28,completed,5178,5076,102
+WO-00051,MTY,MTY-PRS-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-01,2025-07-31,2025-07-29,completed,7318,7258,60
+WO-00052,MTY,MTY-RBT-01,AP-6205,Pump components,Brightline Hydraulics,2025-07-01,2025-07-22,2025-07-21,completed,2758,2718,40
+WO-00053,MTY,MTY-RBT-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-01,2025-07-23,2025-07-21,completed,2790,2737,53
+WO-00054,MTY,MTY-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2025-07-21,2025-08-12,2025-08-08,completed,671,663,8
+WO-00055,MTY,MTY-MIL-06,AP-3301,Valve bodies,Brightline Hydraulics,2025-07-21,2025-08-26,2025-08-21,completed,1197,1187,10
+WO-00056,BRN,BRN-MIL-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-22,2025-08-28,2025-08-22,completed,1073,1059,14
+WO-00057,DAY,DAY-LTH-04,AP-6205,Pump components,Brightline Hydraulics,2025-07-22,2025-08-22,2025-08-18,completed,1687,1667,20
+WO-00058,MTY,MTY-RBT-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-22,2025-08-23,2025-08-20,completed,4935,4894,41
+WO-00059,MTY,MTY-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2025-07-22,2025-08-31,2025-08-26,completed,4101,4052,49
+WO-00060,BRN,BRN-MIL-06,AP-3301,Valve bodies,Brightline Hydraulics,2025-07-23,2025-08-12,2025-08-11,completed,751,656,95
+WO-00061,DAY,DAY-MIL-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-07-23,2025-08-15,2025-08-12,completed,1012,1001,11
+WO-00062,MTY,MTY-MIL-04,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-23,2025-08-25,2025-08-20,completed,993,970,23
+WO-00063,DAY,DAY-LTH-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-24,2025-08-18,2025-08-15,completed,1729,1717,12
+WO-00064,MTY,MTY-LTH-04,AP-3340,Valve bodies,Corvane Aerospace,2025-07-24,2025-08-27,2025-08-25,completed,1899,1878,21
+WO-00065,BRN,BRN-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-25,2025-08-17,2025-08-13,completed,787,783,4
+WO-00066,DAY,DAY-LTH-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-25,2025-09-03,2025-08-29,completed,2628,2604,24
+WO-00067,DAY,DAY-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2025-07-25,2025-08-31,2025-08-29,completed,6956,6885,71
+WO-00068,DAY,DAY-MIL-02,AP-6205,Pump components,Brightline Hydraulics,2025-07-28,2025-08-24,2025-08-21,completed,871,862,9
+WO-00069,DAY,DAY-PRS-02,AP-4410,Transmission housings,Nordhaven Motors,2025-07-28,2025-09-05,2025-09-02,completed,5536,5480,56
+WO-00070,BRN,BRN-LTH-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-29,2025-08-23,2025-08-20,completed,1357,1339,18
+WO-00071,BRN,BRN-LTH-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-29,2025-08-23,2025-08-20,completed,1110,1093,17
+WO-00072,BRN,BRN-PRS-01,AP-4410,Transmission housings,Nordhaven Motors,2025-07-29,2025-09-02,2025-08-28,completed,4917,4846,71
+WO-00073,BRN,BRN-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-29,2025-08-22,2025-08-20,completed,2649,2620,29
+WO-00074,DAY,DAY-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-07-29,2025-08-19,2025-08-18,completed,1749,1735,14
+WO-00075,DAY,DAY-MIL-04,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-29,2025-09-05,2025-09-02,completed,913,900,13
+WO-00076,DAY,DAY-MIL-06,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-29,2025-09-01,2025-08-28,completed,884,874,10
+WO-00077,DAY,DAY-RBT-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-29,2025-08-27,2025-08-21,completed,3787,3743,44
+WO-00078,MTY,MTY-MIL-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-29,2025-08-31,2025-08-27,completed,968,962,6
+WO-00079,MTY,MTY-PRS-01,AP-3301,Valve bodies,Brightline Hydraulics,2025-07-29,2025-08-24,2025-08-19,completed,4804,4744,60
+WO-00080,MTY,MTY-PRS-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-29,2025-08-19,2025-08-18,completed,4982,4934,48
+WO-00081,BRN,BRN-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2025-07-30,2025-09-08,2025-09-03,completed,1709,1694,15
+WO-00082,BRN,BRN-MIL-01,AP-6205,Pump components,Brightline Hydraulics,2025-07-30,2025-08-25,2025-08-21,completed,767,759,8
+WO-00083,BRN,BRN-MIL-04,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-30,2025-09-06,2025-09-02,completed,968,961,7
+WO-00084,BRN,BRN-PRS-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-30,2025-08-20,2025-08-19,completed,4567,4521,46
+WO-00085,DAY,DAY-PRS-04,AP-4410,Transmission housings,Nordhaven Motors,2025-07-30,2025-09-01,2025-08-28,completed,4753,4704,49
+WO-00086,DAY,DAY-RBT-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-07-30,2025-08-29,2025-08-26,completed,3592,3559,33
+WO-00087,MTY,MTY-LTH-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-07-30,2025-09-03,2025-09-01,completed,1826,1795,31
+WO-00088,MTY,MTY-PRS-03,AP-3301,Valve bodies,Brightline Hydraulics,2025-07-30,2025-08-19,2025-08-18,completed,4122,4076,46
+WO-00089,BRN,BRN-MIL-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-31,2025-09-08,2025-09-04,completed,1407,1401,6
+WO-00090,DAY,DAY-LTH-05,AP-4425,Transmission housings,Kestrel Powertrain,2025-07-31,2025-08-25,2025-08-22,completed,1190,1179,11
+WO-00091,DAY,DAY-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-31,2025-08-25,2025-08-21,completed,853,847,6
+WO-00092,MTY,MTY-GRD-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-07-31,2025-09-02,2025-08-29,completed,2687,2659,28
+WO-00093,MTY,MTY-GRD-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-07-31,2025-09-07,2025-09-04,completed,3728,3625,103
+WO-00094,MTY,MTY-MIL-02,AP-6205,Pump components,Brightline Hydraulics,2025-07-31,2025-09-07,2025-09-04,completed,1153,1120,33
+WO-00095,BRN,BRN-GRD-01,AP-4410,Transmission housings,Nordhaven Motors,2025-08-01,2025-08-23,2025-08-21,completed,1189,1179,10
+WO-00096,BRN,BRN-PRS-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-08-01,2025-08-24,2025-08-20,completed,4024,3944,80
+WO-00097,BRN,BRN-RBT-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-08-01,2025-08-22,2025-08-21,completed,2772,2745,27
+WO-00098,DAY,DAY-GRD-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-08-01,2025-09-01,2025-08-28,completed,1627,1614,13
+WO-00099,DAY,DAY-MIL-07,AP-4410,Transmission housings,Nordhaven Motors,2025-08-01,2025-08-28,2025-08-25,completed,621,612,9
+WO-00100,MTY,MTY-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-01,2025-08-22,2025-08-26,completed,1154,1135,19
+WO-00101,DAY,DAY-RBT-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-08-04,2025-08-30,2025-08-27,completed,4076,4046,30
+WO-00102,MTY,MTY-LTH-05,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-04,2025-08-25,2025-08-21,completed,1123,1106,17
+WO-00103,DAY,DAY-MIL-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-08-06,2025-09-13,2025-09-11,completed,1473,1449,24
+WO-00104,DAY,DAY-PRS-03,AP-4410,Transmission housings,Nordhaven Motors,2025-08-06,2025-09-12,2025-09-09,completed,4870,4815,55
+WO-00105,MTY,MTY-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-08-06,2025-08-30,2025-08-26,completed,1742,1724,18
+WO-00106,MTY,MTY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2025-08-06,2025-09-04,2025-09-01,completed,860,856,4
+WO-00107,MTY,MTY-MIL-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-08-11,2025-09-03,2025-09-01,completed,946,931,15
+WO-00108,BRN,BRN-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2025-08-12,2025-09-16,2025-09-11,completed,780,771,9
+WO-00109,DAY,DAY-MIL-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-08-13,2025-09-18,2025-09-16,completed,1397,1358,39
+WO-00110,BRN,BRN-MIL-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-14,2025-09-13,2025-09-11,completed,844,832,12
+WO-00111,DAY,DAY-LTH-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-08-18,2025-09-23,2025-09-22,completed,2159,2136,23
+WO-00112,DAY,DAY-LTH-01,AP-4410,Transmission housings,Nordhaven Motors,2025-08-19,2025-09-26,2025-09-23,completed,1558,1543,15
+WO-00113,DAY,DAY-LTH-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-08-19,2025-09-08,2025-09-08,completed,1349,1334,15
+WO-00114,MTY,MTY-PRS-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-08-19,2025-09-12,2025-09-08,completed,5287,5231,56
+WO-00115,MTY,MTY-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-19,2025-09-20,2025-09-17,completed,5583,5438,145
+WO-00116,BRN,BRN-PRS-02,AP-6205,Pump components,Brightline Hydraulics,2025-08-20,2025-09-18,2025-09-12,completed,4531,4479,52
+WO-00117,MTY,MTY-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2025-08-20,2025-09-20,2025-09-19,completed,6207,6032,175
+WO-00118,BRN,BRN-LTH-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-08-21,2025-09-22,2025-09-19,completed,1901,1882,19
+WO-00119,BRN,BRN-LTH-03,AP-3301,Valve bodies,Brightline Hydraulics,2025-08-21,2025-09-20,2025-09-17,completed,1817,1803,14
+WO-00120,BRN,BRN-PRS-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-08-21,2025-09-16,2025-09-12,completed,6565,6519,46
+WO-00121,BRN,BRN-RBT-01,AP-3301,Valve bodies,Brightline Hydraulics,2025-08-21,2025-09-14,2025-09-12,completed,3194,3157,37
+WO-00122,MTY,MTY-MIL-04,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-21,2025-09-16,2025-09-11,completed,705,692,13
+WO-00123,MTY,MTY-RBT-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-08-21,2025-09-15,2025-09-12,completed,3909,3870,39
+WO-00124,BRN,BRN-GRD-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-08-22,2025-09-28,2025-09-24,completed,3038,3018,20
+WO-00125,BRN,BRN-MIL-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-22,2025-09-29,2025-09-25,completed,1135,1117,18
+WO-00126,BRN,BRN-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2025-08-22,2025-09-30,2025-09-26,completed,4314,4278,36
+WO-00127,DAY,DAY-MIL-02,AP-4410,Transmission housings,Nordhaven Motors,2025-08-22,2025-10-01,2025-09-29,completed,937,934,3
+WO-00128,DAY,DAY-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-08-22,2025-09-22,2025-09-19,completed,1168,1159,9
+WO-00129,DAY,DAY-RBT-03,AP-6205,Pump components,Brightline Hydraulics,2025-08-22,2025-09-12,2025-09-12,completed,2566,2534,32
+WO-00130,MTY,MTY-LTH-05,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-22,2025-09-27,2025-09-25,completed,1798,1774,24
+WO-00131,MTY,MTY-MIL-06,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-22,2025-09-12,2025-09-10,completed,593,508,85
+WO-00132,BRN,BRN-MIL-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-08-25,2025-09-29,2025-09-26,completed,1379,1358,21
+WO-00133,DAY,DAY-LTH-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-08-25,2025-09-27,2025-09-24,completed,1915,1896,19
+WO-00134,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2025-08-26,2025-09-21,2025-09-17,completed,615,604,11
+WO-00135,MTY,MTY-LTH-04,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-26,2025-09-30,2025-09-29,completed,1871,1798,73
+WO-00136,DAY,DAY-RBT-02,AP-4425,Transmission housings,Kestrel Powertrain,2025-08-27,2025-09-23,2025-09-19,completed,2068,1997,71
+WO-00137,MTY,MTY-LTH-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-08-27,2025-09-24,2025-09-22,completed,1453,1433,20
+WO-00138,MTY,MTY-LTH-03,AP-3301,Valve bodies,Brightline Hydraulics,2025-08-27,2025-09-22,2025-09-22,completed,1640,1624,16
+WO-00139,MTY,MTY-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2025-08-27,2025-10-01,2025-10-01,completed,4186,4146,40
+WO-00140,DAY,DAY-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-08-28,2025-09-23,2025-09-19,completed,2138,2117,21
+WO-00141,MTY,MTY-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-08-28,2025-09-18,2025-09-18,completed,811,802,9
+WO-00142,BRN,BRN-PRS-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-08-29,2025-09-22,2025-09-22,completed,5794,5741,53
+WO-00143,DAY,DAY-GRD-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-08-29,2025-09-27,2025-09-25,completed,1681,1656,25
+WO-00144,DAY,DAY-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2025-08-29,2025-10-05,2025-10-02,completed,811,801,10
+WO-00145,DAY,DAY-PRS-04,AP-4410,Transmission housings,Nordhaven Motors,2025-08-29,2025-10-01,2025-10-01,completed,5198,5143,55
+WO-00146,MTY,MTY-GRD-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-01,2025-09-23,2025-09-22,completed,1688,1676,12
+WO-00147,DAY,DAY-LTH-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-02,2025-09-28,2025-09-24,completed,1559,1545,14
+WO-00148,DAY,DAY-PRS-01,AP-4410,Transmission housings,Nordhaven Motors,2025-09-02,2025-10-07,2025-10-03,completed,5016,4936,80
+WO-00149,MTY,MTY-LTH-02,AP-3301,Valve bodies,Brightline Hydraulics,2025-09-02,2025-10-05,2025-10-02,completed,2031,2008,23
+WO-00150,MTY,MTY-MIL-01,AP-3301,Valve bodies,Brightline Hydraulics,2025-09-02,2025-10-08,2025-10-06,completed,1115,1102,13
+WO-00151,MTY,MTY-MIL-05,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-09-02,2025-10-06,2025-10-03,completed,1319,1303,16
+WO-00152,BRN,BRN-MIL-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-03,2025-10-07,2025-10-02,completed,1005,993,12
+WO-00153,DAY,DAY-MIL-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-03,2025-10-04,2025-10-01,completed,970,962,8
+WO-00154,DAY,DAY-PRS-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-09-03,2025-10-09,2025-10-06,completed,9026,8963,63
+WO-00155,BRN,BRN-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2025-09-04,2025-09-30,2025-09-26,completed,1073,1068,5
+WO-00156,BRN,BRN-MIL-05,AP-3312,Valve bodies,Brightline Hydraulics,2025-09-05,2025-10-03,2025-10-01,completed,779,766,13
+WO-00157,MTY,MTY-GRD-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-09-05,2025-09-26,2025-09-25,completed,1758,1746,12
+WO-00158,MTY,MTY-MIL-02,AP-3340,Valve bodies,Corvane Aerospace,2025-09-05,2025-10-09,2025-10-08,completed,1081,1067,14
+WO-00159,DAY,DAY-LTH-04,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-09-09,2025-10-01,2025-09-29,completed,1799,1784,15
+WO-00160,MTY,MTY-PRS-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-09,2025-10-03,2025-10-01,completed,4045,3998,47
+WO-00161,DAY,DAY-PRS-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-10,2025-10-17,2025-10-15,completed,7042,6972,70
+WO-00162,MTY,MTY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-09-11,2025-10-04,2025-10-01,completed,874,867,7
+WO-00163,BRN,BRN-MIL-03,AP-4410,Transmission housings,Nordhaven Motors,2025-09-12,2025-10-19,2025-10-16,completed,908,904,4
+WO-00164,BRN,BRN-MIL-06,AP-3312,Valve bodies,Brightline Hydraulics,2025-09-12,2025-10-12,2025-10-10,completed,843,830,13
+WO-00165,DAY,DAY-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2025-09-12,2025-10-16,2025-10-13,completed,814,801,13
+WO-00166,MTY,MTY-MIL-04,AP-3301,Valve bodies,Brightline Hydraulics,2025-09-12,2025-10-03,2025-10-03,completed,719,712,7
+WO-00167,BRN,BRN-PRS-02,AP-3301,Valve bodies,Brightline Hydraulics,2025-09-15,2025-10-07,2025-10-02,completed,4167,4108,59
+WO-00168,BRN,BRN-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-09-15,2025-10-21,2025-10-17,completed,6140,6025,115
+WO-00169,BRN,BRN-RBT-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-15,2025-10-17,2025-10-13,completed,3727,3678,49
+WO-00170,DAY,DAY-RBT-03,AP-4410,Transmission housings,Nordhaven Motors,2025-09-15,2025-10-06,2025-10-02,completed,1714,1693,21
+WO-00171,MTY,MTY-RBT-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-09-15,2025-10-22,2025-10-17,completed,3975,3901,74
+WO-00172,DAY,DAY-MIL-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-09-17,2025-10-13,2025-10-09,completed,1008,999,9
+WO-00173,BRN,BRN-LTH-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-09-18,2025-10-19,2025-10-15,completed,2025,2005,20
+WO-00174,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2025-09-18,2025-10-22,2025-10-20,completed,849,842,7
+WO-00175,MTY,MTY-PRS-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-18,2025-10-09,2025-10-09,completed,3929,3808,121
+WO-00176,MTY,MTY-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-09-19,2025-10-23,2025-10-20,completed,1187,1179,8
+WO-00177,BRN,BRN-LTH-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-09-22,2025-10-24,2025-10-21,completed,1627,1604,23
+WO-00178,DAY,DAY-MIL-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-22,2025-10-19,2025-10-17,completed,790,784,6
+WO-00179,DAY,DAY-RBT-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-09-22,2025-10-18,2025-10-14,completed,3554,3520,34
+WO-00180,DAY,DAY-RBT-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-09-22,2025-10-17,2025-10-13,completed,3838,3801,37
+WO-00181,MTY,MTY-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2025-09-22,2025-10-19,2025-10-14,completed,4673,4629,44
+WO-00182,BRN,BRN-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2025-09-23,2025-10-31,2025-10-27,completed,6532,6470,62
+WO-00183,DAY,DAY-LTH-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-09-23,2025-10-24,2025-10-22,completed,2375,2302,73
+WO-00184,MTY,MTY-GRD-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-09-23,2025-10-20,2025-10-16,completed,2326,2304,22
+WO-00185,MTY,MTY-LTH-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-09-23,2025-10-22,2025-10-20,completed,1577,1551,26
+WO-00186,MTY,MTY-LTH-03,AP-3340,Valve bodies,Corvane Aerospace,2025-09-23,2025-10-24,2025-10-22,completed,1896,1849,47
+WO-00187,DAY,DAY-LTH-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-09-24,2025-10-31,2025-10-29,completed,2963,2930,33
+WO-00188,BRN,BRN-GRD-01,AP-3301,Valve bodies,Brightline Hydraulics,2025-09-25,2025-10-22,2025-10-17,completed,1992,1979,13
+WO-00189,DAY,DAY-LTH-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-09-25,2025-10-30,2025-10-28,completed,2358,2340,18
+WO-00190,DAY,DAY-LTH-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-25,2025-10-26,2025-10-23,completed,1922,1904,18
+WO-00191,BRN,BRN-MIL-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-09-26,2025-10-25,2025-10-27,completed,677,638,39
+WO-00192,DAY,DAY-GRD-01,AP-4410,Transmission housings,Nordhaven Motors,2025-09-26,2025-10-19,2025-10-16,completed,1176,1163,13
+WO-00193,MTY,MTY-GRD-02,AP-3340,Valve bodies,Corvane Aerospace,2025-09-26,2025-10-25,2025-10-23,completed,2334,2312,22
+WO-00194,MTY,MTY-LTH-05,AP-3301,Valve bodies,Brightline Hydraulics,2025-09-26,2025-10-25,2025-10-22,completed,1717,1693,24
+WO-00195,BRN,BRN-LTH-02,AP-3340,Valve bodies,Corvane Aerospace,2025-09-29,2025-11-04,2025-10-30,completed,1892,1834,58
+WO-00196,BRN,BRN-MIL-02,AP-4425,Transmission housings,Kestrel Powertrain,2025-09-29,2025-11-01,2025-10-29,completed,812,809,3
+WO-00197,BRN,BRN-RBT-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-29,2025-10-28,2025-10-22,completed,3180,3152,28
+WO-00198,DAY,DAY-LTH-04,AP-4425,Transmission housings,Kestrel Powertrain,2025-09-30,2025-10-23,2025-10-21,completed,1155,1141,14
+WO-00199,DAY,DAY-MIL-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-09-30,2025-11-07,2025-11-04,completed,1626,1612,14
+WO-00200,MTY,MTY-LTH-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-09-30,2025-10-22,2025-10-17,completed,1357,1344,13
+WO-00201,BRN,BRN-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2025-10-02,2025-10-23,2025-10-21,completed,498,494,4
+WO-00202,DAY,DAY-MIL-04,AP-4410,Transmission housings,Nordhaven Motors,2025-10-02,2025-11-01,2025-10-29,completed,685,675,10
+WO-00203,DAY,DAY-PRS-04,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-02,2025-10-23,2025-10-21,completed,2996,2965,31
+WO-00204,MTY,MTY-MIL-06,AP-6205,Pump components,Brightline Hydraulics,2025-10-02,2025-10-28,2025-10-27,completed,781,774,7
+WO-00205,MTY,MTY-PRS-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-10-02,2025-11-04,2025-11-03,completed,9189,9108,81
+WO-00206,MTY,MTY-RBT-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-02,2025-10-24,2025-10-21,completed,2085,2053,32
+WO-00207,BRN,BRN-MIL-04,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-03,2025-11-10,2025-11-12,completed,1117,1101,16
+WO-00208,BRN,BRN-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-03,2025-11-08,2025-11-07,completed,6679,6575,104
+WO-00209,DAY,DAY-MIL-06,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-10-03,2025-11-03,2025-10-31,completed,1029,1026,3
+WO-00210,DAY,DAY-RBT-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-10-03,2025-11-11,2025-11-07,completed,5468,5428,40
+WO-00211,MTY,MTY-LTH-02,AP-6205,Pump components,Brightline Hydraulics,2025-10-03,2025-10-26,2025-10-22,completed,1169,1159,10
+WO-00212,MTY,MTY-MIL-04,AP-3301,Valve bodies,Brightline Hydraulics,2025-10-06,2025-11-08,2025-11-03,completed,1135,1121,14
+WO-00213,MTY,MTY-MIL-05,AP-3301,Valve bodies,Brightline Hydraulics,2025-10-06,2025-11-02,2025-10-29,completed,855,846,9
+WO-00214,DAY,DAY-PRS-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-10-07,2025-11-12,2025-11-07,completed,7889,7826,63
+WO-00215,MTY,MTY-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2025-10-07,2025-11-07,2025-11-05,completed,990,980,10
+WO-00216,DAY,DAY-PRS-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-10-08,2025-11-04,2025-10-30,completed,5987,5923,64
+WO-00217,MTY,MTY-MIL-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-10-09,2025-11-13,2025-11-10,completed,1133,1122,11
+WO-00218,DAY,DAY-MIL-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-10,2025-11-11,2025-11-07,completed,835,823,12
+WO-00219,MTY,MTY-PRS-03,AP-6205,Pump components,Brightline Hydraulics,2025-10-10,2025-11-14,2025-11-12,completed,6399,6334,65
+WO-00220,BRN,BRN-MIL-06,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-13,2025-11-12,2025-11-10,completed,837,827,10
+WO-00221,BRN,BRN-RBT-01,AP-4410,Transmission housings,Nordhaven Motors,2025-10-14,2025-11-10,2025-11-07,completed,2365,2338,27
+WO-00222,DAY,DAY-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2025-10-14,2025-11-19,2025-11-14,completed,893,883,10
+WO-00223,DAY,DAY-RBT-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-10-14,2025-11-17,2025-11-14,completed,5778,5726,52
+WO-00224,DAY,DAY-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-15,2025-11-11,2025-11-06,completed,2215,2180,35
+WO-00225,MTY,MTY-PRS-01,AP-3301,Valve bodies,Brightline Hydraulics,2025-10-15,2025-11-17,2025-11-18,completed,6334,6201,133
+WO-00226,BRN,BRN-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-16,2025-11-15,2025-11-12,completed,1571,1550,21
+WO-00227,DAY,DAY-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-16,2025-11-21,2025-11-18,completed,5511,5458,53
+WO-00228,BRN,BRN-MIL-03,AP-6205,Pump components,Brightline Hydraulics,2025-10-17,2025-11-07,2025-11-06,completed,586,580,6
+WO-00229,DAY,DAY-GRD-01,AP-4410,Transmission housings,Nordhaven Motors,2025-10-17,2025-11-20,2025-11-17,completed,1709,1690,19
+WO-00230,MTY,MTY-GRD-01,AP-3340,Valve bodies,Corvane Aerospace,2025-10-17,2025-11-25,2025-11-24,completed,2529,2495,34
+WO-00231,BRN,BRN-GRD-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-20,2025-11-10,2025-11-10,completed,1405,1392,13
+WO-00232,BRN,BRN-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-20,2025-11-16,2025-11-13,completed,3864,3808,56
+WO-00233,DAY,DAY-MIL-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-20,2025-11-25,2025-11-20,completed,829,816,13
+WO-00234,MTY,MTY-LTH-04,AP-3340,Valve bodies,Corvane Aerospace,2025-10-20,2025-11-16,2025-11-12,completed,1573,1517,56
+WO-00235,MTY,MTY-RBT-01,AP-3340,Valve bodies,Corvane Aerospace,2025-10-20,2025-11-22,2025-11-19,completed,3627,3434,193
+WO-00236,DAY,DAY-MIL-07,AP-4410,Transmission housings,Nordhaven Motors,2025-10-21,2025-11-13,2025-11-07,completed,472,466,6
+WO-00237,MTY,MTY-LTH-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-10-21,2025-11-14,2025-11-10,completed,1312,1290,22
+WO-00238,MTY,MTY-MIL-03,AP-6205,Pump components,Brightline Hydraulics,2025-10-21,2025-11-17,2025-11-12,completed,786,781,5
+WO-00239,BRN,BRN-LTH-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-10-22,2025-11-24,2025-11-25,completed,2220,2191,29
+WO-00240,BRN,BRN-MIL-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-10-22,2025-11-18,2025-11-14,completed,819,812,7
+WO-00241,DAY,DAY-LTH-04,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-22,2025-11-14,2025-11-12,completed,1151,1138,13
+WO-00242,DAY,DAY-PRS-04,AP-4410,Transmission housings,Nordhaven Motors,2025-10-22,2025-11-25,2025-11-24,completed,4646,4589,57
+WO-00243,MTY,MTY-RBT-02,AP-3340,Valve bodies,Corvane Aerospace,2025-10-22,2025-12-01,2025-11-27,completed,4298,4240,58
+WO-00244,BRN,BRN-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2025-10-23,2025-11-17,2025-11-18,completed,2665,2630,35
+WO-00245,DAY,DAY-LTH-02,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-23,2025-11-26,2025-11-24,completed,1507,1490,17
+WO-00246,MTY,MTY-LTH-02,AP-6205,Pump components,Brightline Hydraulics,2025-10-23,2025-11-26,2025-11-26,completed,1974,1948,26
+WO-00247,MTY,MTY-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-23,2025-11-13,2025-11-11,completed,1067,1050,17
+WO-00248,MTY,MTY-LTH-05,AP-6205,Pump components,Brightline Hydraulics,2025-10-23,2025-11-22,2025-11-21,completed,1795,1781,14
+WO-00249,DAY,DAY-LTH-05,AP-6205,Pump components,Brightline Hydraulics,2025-10-24,2025-11-26,2025-11-24,completed,1702,1684,18
+WO-00250,MTY,MTY-GRD-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-24,2025-11-30,2025-11-27,completed,2315,2280,35
+WO-00251,MTY,MTY-MIL-06,AP-3340,Valve bodies,Corvane Aerospace,2025-10-28,2025-12-06,2025-12-03,completed,1210,1198,12
+WO-00252,BRN,BRN-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2025-10-29,2025-12-01,2025-12-01,completed,994,918,76
+WO-00253,BRN,BRN-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2025-10-29,2025-11-21,2025-11-19,completed,4113,4073,40
+WO-00254,DAY,DAY-LTH-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-29,2025-11-26,2025-11-25,completed,1420,1405,15
+WO-00255,BRN,BRN-MIL-02,AP-3340,Valve bodies,Corvane Aerospace,2025-10-30,2025-12-03,2025-12-01,completed,953,940,13
+WO-00256,DAY,DAY-LTH-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-10-30,2025-11-24,2025-11-20,completed,1425,1414,11
+WO-00257,DAY,DAY-MIL-04,AP-4410,Transmission housings,Nordhaven Motors,2025-10-30,2025-12-02,2025-12-02,completed,731,723,8
+WO-00258,MTY,MTY-MIL-05,AP-3312,Valve bodies,Brightline Hydraulics,2025-10-30,2025-11-24,2025-11-21,completed,704,695,9
+WO-00259,BRN,BRN-LTH-02,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-31,2025-11-26,2025-11-25,completed,1162,1146,16
+WO-00260,DAY,DAY-PRS-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-10-31,2025-11-26,2025-11-21,completed,3272,3237,35
+WO-00261,DAY,DAY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-11-03,2025-12-03,2025-12-03,completed,1240,1232,8
+WO-00262,MTY,MTY-MIL-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-11-04,2025-12-08,2025-12-08,completed,1124,1117,7
+WO-00263,MTY,MTY-PRS-02,AP-3301,Valve bodies,Brightline Hydraulics,2025-11-04,2025-12-01,2025-11-28,completed,5159,5102,57
+WO-00264,DAY,DAY-MIL-02,AP-4410,Transmission housings,Nordhaven Motors,2025-11-05,2025-12-10,2025-12-11,completed,874,868,6
+WO-00265,MTY,MTY-MIL-01,AP-6205,Pump components,Brightline Hydraulics,2025-11-06,2025-12-12,2025-12-10,completed,1111,1101,10
+WO-00266,BRN,BRN-MIL-03,AP-3340,Valve bodies,Corvane Aerospace,2025-11-07,2025-12-13,2025-12-11,completed,1116,1103,13
+WO-00267,DAY,DAY-RBT-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-11-07,2025-12-11,2025-12-11,completed,4757,4695,62
+WO-00268,BRN,BRN-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-11-10,2025-12-14,2025-12-11,completed,6010,5901,109
+WO-00269,BRN,BRN-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-10,2025-12-11,2025-12-09,completed,2734,2707,27
+WO-00270,DAY,DAY-MIL-01,AP-6205,Pump components,Brightline Hydraulics,2025-11-10,2025-12-04,2025-12-02,completed,695,687,8
+WO-00271,DAY,DAY-MIL-07,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-11-10,2025-12-06,2025-12-04,completed,968,963,5
+WO-00272,DAY,DAY-MIL-08,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-10,2025-12-03,2025-12-03,completed,621,613,8
+WO-00273,DAY,DAY-PRS-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-11-10,2025-12-10,2025-12-10,completed,7737,7666,71
+WO-00274,DAY,DAY-RBT-03,AP-6205,Pump components,Brightline Hydraulics,2025-11-10,2025-12-08,2025-12-08,completed,3088,3057,31
+WO-00275,BRN,BRN-GRD-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-11-11,2025-12-17,2025-12-16,completed,3176,3148,28
+WO-00276,BRN,BRN-MIL-06,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-11,2025-12-12,2025-12-09,completed,774,766,8
+WO-00277,MTY,MTY-LTH-01,AP-3301,Valve bodies,Brightline Hydraulics,2025-11-11,2025-12-06,2025-12-03,completed,1284,1256,28
+WO-00278,MTY,MTY-MIL-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-11-11,2025-12-13,2025-12-11,completed,1236,1229,7
+WO-00279,MTY,MTY-LTH-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-11-12,2025-12-12,2025-12-09,completed,1755,1683,72
+WO-00280,BRN,BRN-LTH-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-11-13,2025-12-11,2025-12-12,completed,1463,1449,14
+WO-00281,BRN,BRN-MIL-04,AP-3312,Valve bodies,Brightline Hydraulics,2025-11-13,2025-12-19,2025-12-16,completed,918,905,13
+WO-00282,DAY,DAY-LTH-04,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-13,2025-12-10,2025-12-10,completed,1209,1196,13
+WO-00283,MTY,MTY-LTH-04,AP-3340,Valve bodies,Corvane Aerospace,2025-11-13,2025-12-07,2025-12-08,completed,1509,1483,26
+WO-00284,MTY,MTY-MIL-03,AP-3301,Valve bodies,Brightline Hydraulics,2025-11-13,2025-12-06,2025-12-04,completed,741,729,12
+WO-00285,MTY,MTY-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-11-13,2025-12-11,2025-12-09,completed,4427,4376,51
+WO-00286,BRN,BRN-PRS-03,AP-4410,Transmission housings,Nordhaven Motors,2025-11-14,2025-12-20,2025-12-17,completed,4807,4754,53
+WO-00287,DAY,DAY-MIL-05,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-17,2025-12-25,2025-12-23,completed,904,897,7
+WO-00288,DAY,DAY-RBT-02,AP-4410,Transmission housings,Nordhaven Motors,2025-11-17,2025-12-22,2025-12-23,completed,3354,3307,47
+WO-00289,BRN,BRN-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2025-11-18,2025-12-15,2025-12-10,completed,744,735,9
+WO-00290,DAY,DAY-GRD-01,AP-4410,Transmission housings,Nordhaven Motors,2025-11-18,2025-12-20,2025-12-22,completed,1729,1707,22
+WO-00291,BRN,BRN-RBT-02,AP-4410,Transmission housings,Nordhaven Motors,2025-11-19,2025-12-23,2025-12-22,completed,3132,3111,21
+WO-00292,DAY,DAY-PRS-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-11-19,2025-12-24,2025-12-23,completed,7938,7874,64
+WO-00293,MTY,MTY-PRS-01,AP-3340,Valve bodies,Corvane Aerospace,2025-11-19,2025-12-12,2025-12-10,completed,4579,4441,138
+WO-00294,BRN,BRN-PRS-01,AP-3340,Valve bodies,Corvane Aerospace,2025-11-20,2025-12-22,2025-12-19,completed,5874,5818,56
+WO-00295,MTY,MTY-RBT-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-11-20,2025-12-16,2025-12-12,completed,3780,3745,35
+WO-00296,DAY,DAY-LTH-01,AP-4410,Transmission housings,Nordhaven Motors,2025-11-21,2025-12-19,2025-12-19,completed,1305,1292,13
+WO-00297,DAY,DAY-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-11-21,2025-12-11,2025-12-12,completed,767,763,4
+WO-00298,DAY,DAY-PRS-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-24,2025-12-25,2026-01-05,completed,4763,4710,53
+WO-00299,MTY,MTY-LTH-05,AP-6205,Pump components,Brightline Hydraulics,2025-11-24,2025-12-18,2025-12-16,completed,1462,1421,41
+WO-00300,MTY,MTY-MIL-05,AP-3340,Valve bodies,Corvane Aerospace,2025-11-24,2025-12-22,2025-12-17,completed,832,809,23
+WO-00301,DAY,DAY-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2025-11-25,2025-12-21,2025-12-19,completed,1079,1070,9
+WO-00302,DAY,DAY-LTH-05,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-25,2025-12-18,2025-12-16,completed,1032,1027,5
+WO-00303,DAY,DAY-PRS-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-11-25,2025-12-29,2026-01-09,completed,8179,8083,96
+WO-00304,MTY,MTY-GRD-01,AP-3340,Valve bodies,Corvane Aerospace,2025-11-25,2025-12-20,2025-12-16,completed,1658,1632,26
+WO-00305,BRN,BRN-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-11-26,2025-12-27,2026-01-06,completed,2331,2314,17
+WO-00306,BRN,BRN-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2025-11-26,2025-12-22,2025-12-19,completed,1254,1236,18
+WO-00307,DAY,DAY-LTH-03,AP-4425,Transmission housings,Kestrel Powertrain,2025-11-26,2026-01-02,2026-01-14,completed,1750,1733,17
+WO-00308,MTY,MTY-LTH-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-11-27,2025-12-19,2025-12-17,completed,1636,1615,21
+WO-00309,MTY,MTY-GRD-02,AP-3301,Valve bodies,Brightline Hydraulics,2025-11-28,2025-12-27,2025-12-23,completed,2051,1990,61
+WO-00310,MTY,MTY-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2025-11-28,2026-01-01,2026-01-08,completed,3683,3640,43
+WO-00311,MTY,MTY-PRS-02,AP-3340,Valve bodies,Corvane Aerospace,2025-12-01,2025-12-28,2025-12-23,completed,4623,4547,76
+WO-00312,BRN,BRN-MIL-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-12-02,2025-12-29,2026-01-05,completed,760,742,18
+WO-00313,BRN,BRN-MIL-02,AP-6205,Pump components,Brightline Hydraulics,2025-12-02,2026-01-11,2026-01-16,completed,1262,1250,12
+WO-00314,DAY,DAY-MIL-01,AP-6205,Pump components,Brightline Hydraulics,2025-12-03,2025-12-25,2025-12-23,completed,656,652,4
+WO-00315,DAY,DAY-MIL-04,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-12-03,2025-12-27,2026-01-05,completed,1006,997,9
+WO-00316,DAY,DAY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-12-04,2026-01-10,2026-01-19,completed,1568,1563,5
+WO-00317,DAY,DAY-MIL-08,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-04,2025-12-26,2026-01-05,completed,797,791,6
+WO-00318,MTY,MTY-LTH-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-04,2026-01-02,2026-01-12,completed,2035,1979,56
+WO-00319,MTY,MTY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-12-04,2026-01-08,2026-01-16,completed,1424,1414,10
+WO-00320,DAY,DAY-MIL-07,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-05,2026-01-10,2026-01-19,completed,1231,1214,17
+WO-00321,MTY,MTY-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-05,2026-01-11,2026-01-20,completed,1320,1312,8
+WO-00322,DAY,DAY-RBT-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-09,2026-01-16,2026-01-22,completed,5133,5097,36
+WO-00323,MTY,MTY-LTH-04,AP-3312,Valve bodies,Brightline Hydraulics,2025-12-09,2026-01-16,2026-01-23,completed,1915,1896,19
+WO-00324,MTY,MTY-MIL-04,AP-3301,Valve bodies,Brightline Hydraulics,2025-12-09,2026-01-07,2026-01-15,completed,1033,1020,13
+WO-00325,BRN,BRN-MIL-06,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-10,2026-01-05,2026-01-12,completed,816,805,11
+WO-00326,BRN,BRN-RBT-01,AP-3340,Valve bodies,Corvane Aerospace,2025-12-10,2026-01-07,2026-01-16,completed,3423,3389,34
+WO-00327,MTY,MTY-LTH-03,AP-3301,Valve bodies,Brightline Hydraulics,2025-12-10,2026-01-08,2026-01-16,completed,1863,1834,29
+WO-00328,MTY,MTY-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2025-12-10,2026-01-13,2026-01-20,completed,5867,5758,109
+WO-00329,BRN,BRN-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2025-12-11,2026-01-08,2026-01-15,completed,858,851,7
+WO-00330,DAY,DAY-LTH-04,AP-4410,Transmission housings,Nordhaven Motors,2025-12-11,2025-12-31,2026-01-09,completed,954,947,7
+WO-00331,DAY,DAY-PRS-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-12-11,2026-01-18,2026-01-26,completed,8525,8448,77
+WO-00332,MTY,MTY-MIL-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-12-11,2026-01-09,2026-01-15,completed,799,790,9
+WO-00333,MTY,MTY-PRS-01,AP-3301,Valve bodies,Brightline Hydraulics,2025-12-11,2026-01-08,2026-01-16,completed,5369,5294,75
+WO-00334,BRN,BRN-MIL-03,AP-3301,Valve bodies,Brightline Hydraulics,2025-12-12,2026-01-12,2026-01-21,completed,1004,989,15
+WO-00335,BRN,BRN-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2025-12-12,2026-01-08,2026-01-19,completed,5057,4992,65
+WO-00336,DAY,DAY-MIL-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-12,2026-01-16,2026-01-27,completed,1420,1412,8
+WO-00337,DAY,DAY-RBT-01,AP-4410,Transmission housings,Nordhaven Motors,2025-12-12,2026-01-05,2026-01-14,completed,2070,2038,32
+WO-00338,MTY,MTY-MIL-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-12-12,2026-01-13,2026-01-21,completed,1308,1298,10
+WO-00339,BRN,BRN-LTH-03,AP-4410,Transmission housings,Nordhaven Motors,2025-12-15,2026-01-24,2026-01-29,completed,1637,1619,18
+WO-00340,DAY,DAY-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-12-15,2026-01-17,2026-01-23,completed,1256,1248,8
+WO-00341,MTY,MTY-RBT-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-12-15,2026-01-14,2026-01-21,completed,3023,2984,39
+WO-00342,BRN,BRN-GRD-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-12-17,2026-01-12,2026-01-21,completed,1935,1908,27
+WO-00343,BRN,BRN-MIL-04,AP-3301,Valve bodies,Brightline Hydraulics,2025-12-17,2026-01-20,2026-01-27,completed,1157,1142,15
+WO-00344,DAY,DAY-LTH-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-17,2026-01-10,2026-01-20,completed,1768,1758,10
+WO-00345,MTY,MTY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2025-12-17,2026-01-13,2026-01-20,completed,2490,2466,24
+WO-00346,MTY,MTY-LTH-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-12-17,2026-01-14,2026-01-22,completed,1656,1641,15
+WO-00347,BRN,BRN-PRS-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-18,2026-01-20,2026-01-28,completed,6962,6909,53
+WO-00348,MTY,MTY-LTH-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2025-12-18,2026-01-10,2026-01-20,completed,1660,1649,11
+WO-00349,MTY,MTY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2025-12-18,2026-01-15,2026-01-26,completed,836,828,8
+WO-00350,BRN,BRN-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2025-12-22,2026-01-17,2026-01-22,completed,1008,996,12
+WO-00351,BRN,BRN-PRS-01,AP-3312,Valve bodies,Brightline Hydraulics,2025-12-22,2026-01-28,2026-02-05,completed,6667,6549,118
+WO-00352,DAY,DAY-LTH-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2025-12-22,2026-01-23,2026-01-29,completed,1710,1684,26
+WO-00353,DAY,DAY-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2025-12-22,2026-01-28,2026-02-04,completed,1525,1508,17
+WO-00354,BRN,BRN-RBT-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2025-12-23,2026-01-15,2026-01-21,completed,2838,2819,19
+WO-00355,DAY,DAY-GRD-01,AP-4425,Transmission housings,Kestrel Powertrain,2025-12-23,2026-01-17,2026-01-23,completed,1424,1404,20
+WO-00356,DAY,DAY-MIL-01,AP-4410,Transmission housings,Nordhaven Motors,2026-01-05,2026-02-02,2026-01-28,completed,637,629,8
+WO-00357,DAY,DAY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2026-01-05,2026-01-27,2026-01-23,completed,668,662,6
+WO-00358,DAY,DAY-PRS-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-05,2026-02-06,2026-02-02,completed,6720,6661,59
+WO-00359,DAY,DAY-RBT-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-01-05,2026-02-12,2026-02-06,completed,4797,4753,44
+WO-00360,MTY,MTY-GRD-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-01-05,2026-02-05,2026-01-30,completed,1876,1856,20
+WO-00361,MTY,MTY-PRS-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-01-05,2026-02-10,2026-02-06,completed,6779,6679,100
+WO-00362,BRN,BRN-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2026-01-06,2026-02-06,2026-02-05,completed,892,886,6
+WO-00363,DAY,DAY-MIL-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-01-06,2026-02-08,2026-02-03,completed,767,755,12
+WO-00364,DAY,DAY-MIL-08,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-06,2026-01-30,2026-01-28,completed,1025,1017,8
+WO-00365,DAY,DAY-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2026-01-06,2026-02-02,2026-01-29,completed,5056,5001,55
+WO-00366,BRN,BRN-LTH-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-07,2026-02-05,2026-01-30,completed,1887,1875,12
+WO-00367,MTY,MTY-RBT-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-09,2026-02-14,2026-02-12,completed,4925,4854,71
+WO-00368,DAY,DAY-LTH-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-01-12,2026-02-18,2026-02-16,completed,1853,1815,38
+WO-00369,DAY,DAY-PRS-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-01-12,2026-02-07,2026-02-04,completed,4144,4102,42
+WO-00370,BRN,BRN-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2026-01-13,2026-02-07,2026-02-04,completed,556,551,5
+WO-00371,MTY,MTY-LTH-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-01-13,2026-02-18,2026-02-18,completed,2309,2278,31
+WO-00372,DAY,DAY-LTH-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-15,2026-02-11,2026-02-10,completed,1949,1938,11
+WO-00373,DAY,DAY-RBT-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-01-15,2026-02-10,2026-02-06,completed,3096,3013,83
+WO-00374,BRN,BRN-MIL-05,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-01-16,2026-02-17,2026-02-13,completed,1381,1374,7
+WO-00375,MTY,MTY-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2026-01-16,2026-02-17,2026-02-17,completed,995,984,11
+WO-00376,MTY,MTY-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2026-01-16,2026-02-08,2026-02-09,completed,727,722,5
+WO-00377,BRN,BRN-MIL-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-19,2026-02-25,2026-02-19,completed,1349,1339,10
+WO-00378,BRN,BRN-RBT-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-01-19,2026-02-23,2026-02-20,completed,5126,5081,45
+WO-00379,MTY,MTY-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-01-19,2026-02-10,2026-02-06,completed,1008,988,20
+WO-00380,MTY,MTY-MIL-06,AP-3312,Valve bodies,Brightline Hydraulics,2026-01-19,2026-02-18,2026-02-17,completed,893,886,7
+WO-00381,MTY,MTY-PRS-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-01-19,2026-02-26,2026-02-24,completed,8841,8772,69
+WO-00382,BRN,BRN-PRS-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-01-20,2026-02-19,2026-02-17,completed,6064,6003,61
+WO-00383,DAY,DAY-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2026-01-20,2026-02-15,2026-02-11,completed,572,566,6
+WO-00384,DAY,DAY-MIL-07,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-20,2026-02-17,2026-02-13,completed,1103,1024,79
+WO-00385,DAY,DAY-LTH-05,AP-4410,Transmission housings,Nordhaven Motors,2026-01-21,2026-02-21,2026-02-17,completed,1332,1319,13
+WO-00386,MTY,MTY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-01-21,2026-02-17,2026-02-17,completed,2651,2638,13
+WO-00387,MTY,MTY-LTH-02,AP-6205,Pump components,Brightline Hydraulics,2026-01-21,2026-02-16,2026-02-12,completed,1303,1290,13
+WO-00388,MTY,MTY-MIL-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-01-21,2026-02-18,2026-02-17,completed,1276,1262,14
+WO-00389,MTY,MTY-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-01-21,2026-02-23,2026-02-23,completed,6209,6063,146
+WO-00390,BRN,BRN-GRD-01,AP-6205,Pump components,Brightline Hydraulics,2026-01-22,2026-02-22,2026-02-19,completed,2066,2047,19
+WO-00391,BRN,BRN-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-01-22,2026-02-13,2026-02-11,completed,797,791,6
+WO-00392,BRN,BRN-RBT-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-22,2026-02-28,2026-02-26,completed,5275,5233,42
+WO-00393,MTY,MTY-MIL-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-01-22,2026-02-22,2026-02-19,completed,983,974,9
+WO-00394,MTY,MTY-RBT-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-01-22,2026-02-19,2026-02-18,completed,4582,4517,65
+WO-00395,BRN,BRN-LTH-02,AP-6205,Pump components,Brightline Hydraulics,2026-01-23,2026-02-12,2026-02-11,completed,1194,1187,7
+WO-00396,DAY,DAY-RBT-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-23,2026-02-27,2026-02-25,completed,5127,5078,49
+WO-00397,MTY,MTY-LTH-05,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-01-23,2026-02-24,2026-02-23,completed,2340,2322,18
+WO-00398,DAY,DAY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-01-26,2026-02-15,2026-02-12,completed,1833,1817,16
+WO-00399,DAY,DAY-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-26,2026-03-02,2026-02-27,completed,1440,1434,6
+WO-00400,DAY,DAY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2026-01-26,2026-02-19,2026-02-13,completed,614,603,11
+WO-00401,MTY,MTY-LTH-04,AP-3301,Valve bodies,Brightline Hydraulics,2026-01-26,2026-03-05,2026-03-02,completed,2235,2175,60
+WO-00402,DAY,DAY-PRS-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-01-27,2026-02-27,2026-02-24,completed,6769,6720,49
+WO-00403,MTY,MTY-MIL-05,AP-3340,Valve bodies,Corvane Aerospace,2026-01-27,2026-03-03,2026-03-03,completed,1201,1191,10
+WO-00404,BRN,BRN-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2026-01-28,2026-02-18,2026-02-16,completed,568,565,3
+WO-00405,DAY,DAY-MIL-02,AP-4410,Transmission housings,Nordhaven Motors,2026-01-28,2026-02-24,2026-02-20,completed,626,613,13
+WO-00406,BRN,BRN-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-01-29,2026-02-28,2026-02-26,completed,4260,4204,56
+WO-00407,DAY,DAY-MIL-01,AP-4410,Transmission housings,Nordhaven Motors,2026-01-29,2026-03-02,2026-03-04,completed,690,682,8
+WO-00408,DAY,DAY-MIL-08,AP-6205,Pump components,Brightline Hydraulics,2026-01-29,2026-02-22,2026-02-18,completed,686,682,4
+WO-00409,BRN,BRN-LTH-03,AP-3340,Valve bodies,Corvane Aerospace,2026-01-30,2026-03-05,2026-03-04,completed,2061,2037,24
+WO-00410,DAY,DAY-LTH-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-30,2026-02-24,2026-02-20,completed,1647,1630,17
+WO-00411,DAY,DAY-PRS-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-01-30,2026-03-08,2026-03-05,completed,8394,8320,74
+WO-00412,BRN,BRN-LTH-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-02-02,2026-03-09,2026-03-06,completed,2708,2688,20
+WO-00413,DAY,DAY-PRS-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-02-03,2026-02-26,2026-02-24,completed,5249,5114,135
+WO-00414,MTY,MTY-GRD-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-02-03,2026-03-06,2026-03-03,completed,1878,1855,23
+WO-00415,DAY,DAY-MIL-04,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-02-04,2026-03-15,2026-03-11,completed,1559,1548,11
+WO-00416,BRN,BRN-MIL-06,AP-6205,Pump components,Brightline Hydraulics,2026-02-05,2026-03-08,2026-03-05,completed,924,914,10
+WO-00417,DAY,DAY-LTH-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-02-05,2026-03-04,2026-03-03,completed,2014,1994,20
+WO-00418,DAY,DAY-PRS-04,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-02-05,2026-03-06,2026-03-04,completed,7619,7563,56
+WO-00419,BRN,BRN-MIL-01,AP-6205,Pump components,Brightline Hydraulics,2026-02-06,2026-02-27,2026-02-25,completed,606,597,9
+WO-00420,BRN,BRN-PRS-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-02-06,2026-02-28,2026-02-26,completed,3754,3688,66
+WO-00421,DAY,DAY-RBT-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-02-09,2026-03-04,2026-02-26,completed,2699,2680,19
+WO-00422,DAY,DAY-RBT-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-02-09,2026-03-05,2026-03-02,completed,2259,2168,91
+WO-00423,MTY,MTY-LTH-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-02-09,2026-03-03,2026-02-27,completed,1463,1441,22
+WO-00424,MTY,MTY-PRS-02,AP-3340,Valve bodies,Corvane Aerospace,2026-02-09,2026-03-03,2026-02-27,completed,3672,3633,39
+WO-00425,MTY,MTY-MIL-04,AP-3301,Valve bodies,Brightline Hydraulics,2026-02-10,2026-03-17,2026-03-12,completed,1129,1115,14
+WO-00426,DAY,DAY-LTH-03,AP-4410,Transmission housings,Nordhaven Motors,2026-02-11,2026-03-17,2026-03-12,completed,1420,1405,15
+WO-00427,BRN,BRN-LTH-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-02-12,2026-03-19,2026-03-17,completed,1728,1713,15
+WO-00428,BRN,BRN-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-02-12,2026-03-04,2026-03-03,completed,821,815,6
+WO-00429,DAY,DAY-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2026-02-12,2026-03-11,2026-03-11,completed,587,579,8
+WO-00430,DAY,DAY-GRD-01,AP-4410,Transmission housings,Nordhaven Motors,2026-02-13,2026-03-05,2026-03-04,completed,1093,1082,11
+WO-00431,MTY,MTY-LTH-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-02-13,2026-03-09,2026-03-09,completed,1648,1634,14
+WO-00432,MTY,MTY-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2026-02-13,2026-03-13,2026-03-10,completed,3031,2993,38
+WO-00433,BRN,BRN-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2026-02-16,2026-03-24,2026-03-19,completed,803,796,7
+WO-00434,DAY,DAY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2026-02-16,2026-03-28,2026-03-23,completed,1103,1090,13
+WO-00435,DAY,DAY-MIL-07,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-02-16,2026-03-19,2026-03-13,completed,1185,1178,7
+WO-00436,MTY,MTY-RBT-03,AP-6205,Pump components,Brightline Hydraulics,2026-02-16,2026-03-16,2026-03-12,completed,3072,3031,41
+WO-00437,BRN,BRN-MIL-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-02-17,2026-03-23,2026-03-20,completed,1139,1128,11
+WO-00438,DAY,DAY-LTH-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-02-17,2026-03-17,2026-03-12,completed,1704,1676,28
+WO-00439,BRN,BRN-PRS-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-02-18,2026-03-21,2026-03-19,completed,6541,6454,87
+WO-00440,DAY,DAY-LTH-05,AP-4410,Transmission housings,Nordhaven Motors,2026-02-18,2026-03-16,2026-03-11,completed,1152,1138,14
+WO-00441,MTY,MTY-GRD-01,AP-3340,Valve bodies,Corvane Aerospace,2026-02-18,2026-03-17,2026-03-12,completed,1730,1711,19
+WO-00442,MTY,MTY-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2026-02-18,2026-03-22,2026-03-19,completed,937,927,10
+WO-00443,MTY,MTY-MIL-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-02-18,2026-03-12,2026-03-10,completed,717,714,3
+WO-00444,MTY,MTY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-02-18,2026-03-16,2026-03-13,completed,1112,1101,11
+WO-00445,DAY,DAY-MIL-08,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-02-19,2026-03-28,2026-03-25,completed,1387,1311,76
+WO-00446,MTY,MTY-LTH-01,AP-3340,Valve bodies,Corvane Aerospace,2026-02-19,2026-03-22,2026-03-19,completed,1731,1684,47
+WO-00447,MTY,MTY-RBT-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-02-19,2026-03-27,2026-03-25,completed,4243,4192,51
+WO-00448,BRN,BRN-GRD-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-02-20,2026-03-16,2026-03-13,completed,1956,1928,28
+WO-00449,BRN,BRN-MIL-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-02-20,2026-03-27,2026-03-25,completed,1586,1573,13
+WO-00450,MTY,MTY-MIL-02,AP-3340,Valve bodies,Corvane Aerospace,2026-02-20,2026-03-28,2026-03-31,completed,1074,1065,9
+WO-00451,BRN,BRN-RBT-01,AP-4410,Transmission housings,Nordhaven Motors,2026-02-23,2026-03-22,2026-03-18,completed,2034,1959,75
+WO-00452,DAY,DAY-LTH-01,AP-6205,Pump components,Brightline Hydraulics,2026-02-23,2026-03-19,2026-03-16,completed,1341,1332,9
+WO-00453,DAY,DAY-MIL-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-02-23,2026-04-02,2026-03-31,completed,1359,1346,13
+WO-00454,MTY,MTY-LTH-05,AP-3340,Valve bodies,Corvane Aerospace,2026-02-24,2026-03-29,2026-03-26,completed,1891,1872,19
+WO-00455,MTY,MTY-PRS-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-02-24,2026-03-28,2026-03-25,completed,5717,5656,61
+WO-00456,DAY,DAY-PRS-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-02-25,2026-03-23,2026-03-20,completed,6822,6763,59
+WO-00457,DAY,DAY-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-02-25,2026-03-29,2026-03-25,completed,4277,4229,48
+WO-00458,MTY,MTY-PRS-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-02-25,2026-03-31,2026-03-31,completed,6712,6642,70
+WO-00459,BRN,BRN-MIL-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-02-26,2026-03-18,2026-03-17,completed,656,649,7
+WO-00460,DAY,DAY-RBT-03,AP-6205,Pump components,Brightline Hydraulics,2026-02-26,2026-03-28,2026-03-26,completed,3424,3386,38
+WO-00461,BRN,BRN-PRS-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-02-27,2026-03-20,2026-03-18,completed,4680,4645,35
+WO-00462,BRN,BRN-PRS-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-02-27,2026-04-01,2026-03-30,completed,7424,7349,75
+WO-00463,BRN,BRN-RBT-02,AP-3340,Valve bodies,Corvane Aerospace,2026-02-27,2026-03-25,2026-03-25,completed,2810,2719,91
+WO-00464,DAY,DAY-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-02-27,2026-04-06,2026-04-02,completed,3410,3369,41
+WO-00465,DAY,DAY-MIL-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-03-02,2026-04-05,2026-04-01,completed,1436,1425,11
+WO-00466,MTY,MTY-LTH-03,AP-6205,Pump components,Brightline Hydraulics,2026-03-02,2026-04-05,2026-04-03,completed,2042,2014,28
+WO-00467,MTY,MTY-PRS-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-03-02,2026-04-05,2026-04-01,completed,8399,8326,73
+WO-00468,DAY,DAY-RBT-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-03-03,2026-04-08,2026-04-06,completed,4839,4798,41
+WO-00469,MTY,MTY-LTH-04,AP-3340,Valve bodies,Corvane Aerospace,2026-03-03,2026-04-08,2026-04-06,completed,1959,1911,48
+WO-00470,BRN,BRN-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-03-04,2026-04-06,2026-04-01,completed,1200,1190,10
+WO-00471,DAY,DAY-LTH-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-04,2026-03-29,2026-03-26,completed,1228,1214,14
+WO-00472,MTY,MTY-GRD-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-03-04,2026-04-13,2026-04-09,completed,2471,2442,29
+WO-00473,MTY,MTY-MIL-05,AP-3340,Valve bodies,Corvane Aerospace,2026-03-04,2026-03-28,2026-03-26,completed,705,694,11
+WO-00474,BRN,BRN-LTH-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-03-05,2026-04-03,2026-03-30,completed,1883,1866,17
+WO-00475,DAY,DAY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-03-05,2026-04-09,2026-04-08,completed,3410,3386,24
+WO-00476,DAY,DAY-MIL-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-05,2026-04-08,2026-04-07,completed,905,899,6
+WO-00477,DAY,DAY-PRS-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-03-05,2026-04-12,2026-04-08,completed,8309,8259,50
+WO-00478,BRN,BRN-MIL-06,AP-6205,Pump components,Brightline Hydraulics,2026-03-06,2026-03-26,2026-03-25,completed,608,604,4
+WO-00479,DAY,DAY-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2026-03-06,2026-04-08,2026-04-07,completed,6296,6246,50
+WO-00480,BRN,BRN-LTH-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-03-09,2026-04-09,2026-04-07,completed,2256,2236,20
+WO-00481,MTY,MTY-LTH-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-03-10,2026-04-09,2026-04-08,completed,1900,1887,13
+WO-00482,MTY,MTY-MIL-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-03-11,2026-04-18,2026-04-15,completed,1150,1136,14
+WO-00483,MTY,MTY-RBT-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-03-11,2026-04-14,2026-04-10,completed,3280,3213,67
+WO-00484,DAY,DAY-LTH-05,AP-6205,Pump components,Brightline Hydraulics,2026-03-12,2026-04-05,2026-04-02,completed,1306,1288,18
+WO-00485,DAY,DAY-MIL-04,AP-4410,Transmission housings,Nordhaven Motors,2026-03-12,2026-04-05,2026-04-03,completed,599,595,4
+WO-00486,DAY,DAY-MIL-06,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-12,2026-04-09,2026-04-06,completed,638,634,4
+WO-00487,DAY,DAY-LTH-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-13,2026-04-03,2026-04-02,completed,1069,1056,13
+WO-00488,DAY,DAY-LTH-04,AP-4410,Transmission housings,Nordhaven Motors,2026-03-13,2026-04-06,2026-04-06,completed,918,908,10
+WO-00489,MTY,MTY-GRD-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-03-13,2026-04-10,2026-04-10,completed,2270,2247,23
+WO-00490,MTY,MTY-MIL-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-03-13,2026-04-14,2026-04-14,completed,1366,1349,17
+WO-00491,MTY,MTY-RBT-03,AP-3340,Valve bodies,Corvane Aerospace,2026-03-13,2026-04-05,2026-04-06,completed,2581,2551,30
+WO-00492,BRN,BRN-GRD-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-03-16,2026-04-08,2026-04-03,completed,1471,1436,35
+WO-00493,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-16,2026-04-17,2026-04-17,completed,855,846,9
+WO-00494,DAY,DAY-LTH-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-03-17,2026-04-16,2026-04-13,completed,2042,2024,18
+WO-00495,MTY,MTY-MIL-06,AP-3312,Valve bodies,Brightline Hydraulics,2026-03-17,2026-04-13,2026-04-09,completed,743,734,9
+WO-00496,BRN,BRN-LTH-02,AP-6205,Pump components,Brightline Hydraulics,2026-03-18,2026-04-21,2026-04-21,completed,1991,1973,18
+WO-00497,BRN,BRN-MIL-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-03-18,2026-04-15,2026-04-14,completed,1127,1114,13
+WO-00498,BRN,BRN-PRS-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-03-19,2026-04-25,2026-04-22,completed,7615,7550,65
+WO-00499,BRN,BRN-RBT-01,AP-6205,Pump components,Brightline Hydraulics,2026-03-19,2026-04-22,2026-04-20,completed,3721,3671,50
+WO-00500,BRN,BRN-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2026-03-20,2026-04-14,2026-04-13,completed,524,521,3
+WO-00501,BRN,BRN-PRS-02,AP-4410,Transmission housings,Nordhaven Motors,2026-03-20,2026-04-12,2026-04-10,completed,3145,3108,37
+WO-00502,MTY,MTY-LTH-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-03-20,2026-04-12,2026-04-09,completed,1472,1464,8
+WO-00503,MTY,MTY-MIL-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-03-20,2026-04-12,2026-04-09,completed,684,675,9
+WO-00504,BRN,BRN-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2026-03-23,2026-04-27,2026-04-24,completed,1085,1073,12
+WO-00505,DAY,DAY-PRS-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-23,2026-04-25,2026-04-24,completed,4880,4835,45
+WO-00506,DAY,DAY-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2026-03-24,2026-04-29,2026-04-27,completed,859,853,6
+WO-00507,BRN,BRN-MIL-02,AP-6205,Pump components,Brightline Hydraulics,2026-03-26,2026-04-26,2026-04-27,completed,1003,995,8
+WO-00508,BRN,BRN-MIL-06,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-03-26,2026-04-15,2026-04-15,completed,705,701,4
+WO-00509,BRN,BRN-RBT-02,AP-3340,Valve bodies,Corvane Aerospace,2026-03-26,2026-05-02,2026-05-04,completed,4372,4294,78
+WO-00510,DAY,DAY-MIL-08,AP-4410,Transmission housings,Nordhaven Motors,2026-03-26,2026-04-25,2026-04-21,completed,698,688,10
+WO-00511,DAY,DAY-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-26,2026-04-28,2026-04-23,completed,4943,4876,67
+WO-00512,MTY,MTY-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-03-26,2026-04-30,2026-04-28,completed,6318,6217,101
+WO-00513,MTY,MTY-RBT-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-03-26,2026-04-28,2026-04-23,completed,3867,3834,33
+WO-00514,DAY,DAY-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2026-03-27,2026-04-25,2026-04-23,completed,1266,1256,10
+WO-00515,DAY,DAY-RBT-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-27,2026-04-30,2026-04-28,completed,3321,3209,112
+WO-00516,MTY,MTY-LTH-05,AP-3340,Valve bodies,Corvane Aerospace,2026-03-27,2026-04-27,2026-04-27,completed,1807,1783,24
+WO-00517,MTY,MTY-MIL-05,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-03-27,2026-04-21,2026-04-17,completed,953,944,9
+WO-00518,BRN,BRN-LTH-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-03-31,2026-05-08,2026-05-06,completed,1780,1757,23
+WO-00519,BRN,BRN-PRS-03,AP-4410,Transmission housings,Nordhaven Motors,2026-03-31,2026-04-28,2026-04-28,completed,3996,3944,52
+WO-00520,DAY,DAY-MIL-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-01,2026-05-04,2026-04-30,completed,1032,1020,12
+WO-00521,MTY,MTY-MIL-02,AP-6205,Pump components,Brightline Hydraulics,2026-04-01,2026-04-28,2026-04-27,completed,845,836,9
+WO-00522,MTY,MTY-PRS-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-04-01,2026-05-02,2026-04-29,completed,6586,6411,175
+WO-00523,BRN,BRN-MIL-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-02,2026-04-28,2026-04-27,completed,644,639,5
+WO-00524,DAY,DAY-MIL-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-04-02,2026-05-08,2026-05-06,completed,1403,1389,14
+WO-00525,MTY,MTY-PRS-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-02,2026-05-05,2026-04-30,completed,6411,6352,59
+WO-00526,DAY,DAY-LTH-03,AP-4410,Transmission housings,Nordhaven Motors,2026-04-03,2026-05-02,2026-04-28,completed,1289,1279,10
+WO-00527,DAY,DAY-LTH-05,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-04-03,2026-05-03,2026-05-01,completed,2546,2526,20
+WO-00528,DAY,DAY-RBT-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-03,2026-04-29,2026-04-28,completed,3256,3224,32
+WO-00529,DAY,DAY-MIL-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-06,2026-04-30,2026-04-28,completed,677,669,8
+WO-00530,MTY,MTY-LTH-03,AP-3340,Valve bodies,Corvane Aerospace,2026-04-06,2026-05-02,2026-04-29,completed,1511,1496,15
+WO-00531,BRN,BRN-GRD-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-07,2026-05-15,2026-05-14,completed,2072,2038,34
+WO-00532,DAY,DAY-LTH-04,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-04-07,2026-05-10,2026-05-08,completed,2431,2415,16
+WO-00533,DAY,DAY-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2026-04-07,2026-04-30,2026-04-28,completed,566,518,48
+WO-00534,DAY,DAY-RBT-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-07,2026-04-29,2026-04-27,completed,2637,2619,18
+WO-00535,MTY,MTY-LTH-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-07,2026-05-09,2026-05-06,completed,1753,1696,57
+WO-00536,MTY,MTY-RBT-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-04-07,2026-05-13,2026-05-11,completed,3983,3931,52
+WO-00537,BRN,BRN-LTH-01,AP-3340,Valve bodies,Corvane Aerospace,2026-04-08,2026-05-13,2026-05-12,completed,1872,1853,19
+WO-00538,DAY,DAY-MIL-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-04-08,2026-05-06,2026-05-04,completed,1225,1214,11
+WO-00539,DAY,DAY-PRS-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-08,2026-05-11,2026-05-06,completed,5006,4946,60
+WO-00540,DAY,DAY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-04-09,2026-05-06,2026-05-05,completed,2316,2268,48
+WO-00541,DAY,DAY-PRS-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-09,2026-05-16,2026-05-14,completed,5976,5908,68
+WO-00542,MTY,MTY-LTH-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-09,2026-05-03,2026-04-29,completed,1175,1166,9
+WO-00543,MTY,MTY-GRD-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-04-10,2026-05-03,2026-05-04,completed,1665,1650,15
+WO-00544,MTY,MTY-LTH-01,AP-6205,Pump components,Brightline Hydraulics,2026-04-10,2026-04-30,2026-04-29,completed,1172,1154,18
+WO-00545,MTY,MTY-MIL-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-04-10,2026-05-06,2026-05-06,completed,776,761,15
+WO-00546,MTY,MTY-MIL-06,AP-3312,Valve bodies,Brightline Hydraulics,2026-04-10,2026-05-17,2026-05-18,completed,1112,1095,17
+WO-00547,BRN,BRN-PRS-02,AP-3340,Valve bodies,Corvane Aerospace,2026-04-13,2026-05-11,2026-05-07,completed,4895,4836,59
+WO-00548,MTY,MTY-GRD-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-04-13,2026-05-18,2026-05-18,completed,2787,2762,25
+WO-00549,MTY,MTY-RBT-02,AP-3340,Valve bodies,Corvane Aerospace,2026-04-13,2026-05-09,2026-05-06,completed,2656,2624,32
+WO-00550,BRN,BRN-MIL-05,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-14,2026-05-16,2026-05-15,completed,821,812,9
+WO-00551,DAY,DAY-LTH-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-14,2026-05-14,2026-05-12,completed,1518,1505,13
+WO-00552,BRN,BRN-MIL-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-15,2026-05-11,2026-05-07,completed,549,543,6
+WO-00553,MTY,MTY-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2026-04-15,2026-05-19,2026-05-18,completed,1011,998,13
+WO-00554,BRN,BRN-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-04-16,2026-05-12,2026-05-13,completed,1113,1105,8
+WO-00555,MTY,MTY-MIL-03,AP-3340,Valve bodies,Corvane Aerospace,2026-04-16,2026-05-13,2026-05-13,completed,859,852,7
+WO-00556,BRN,BRN-LTH-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-20,2026-05-22,2026-05-21,completed,1929,1909,20
+WO-00557,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-20,2026-05-19,2026-05-18,completed,628,622,6
+WO-00558,MTY,MTY-MIL-05,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-04-20,2026-05-19,2026-05-18,completed,1125,1109,16
+WO-00559,BRN,BRN-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-21,2026-05-27,2026-05-27,completed,3386,3356,30
+WO-00560,BRN,BRN-LTH-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-04-22,2026-05-21,2026-05-20,completed,1932,1877,55
+WO-00561,DAY,DAY-MIL-08,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-04-22,2026-05-13,2026-05-12,completed,863,854,9
+WO-00562,BRN,BRN-PRS-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-04-23,2026-05-23,2026-05-21,completed,6703,6651,52
+WO-00563,DAY,DAY-LTH-02,AP-6205,Pump components,Brightline Hydraulics,2026-04-24,2026-05-26,2026-05-22,completed,1735,1671,64
+WO-00564,DAY,DAY-PRS-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-04-24,2026-05-17,2026-05-13,completed,4523,4466,57
+WO-00565,MTY,MTY-RBT-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-04-24,2026-06-02,2026-06-01,completed,4842,4766,76
+WO-00566,BRN,BRN-MIL-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-27,2026-05-28,2026-05-27,completed,970,959,11
+WO-00567,DAY,DAY-PRS-02,AP-4410,Transmission housings,Nordhaven Motors,2026-04-27,2026-05-19,2026-05-14,completed,2869,2829,40
+WO-00568,BRN,BRN-MIL-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-04-28,2026-05-30,2026-05-28,completed,1097,1083,14
+WO-00569,BRN,BRN-MIL-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-28,2026-05-28,2026-05-27,completed,731,724,7
+WO-00570,DAY,DAY-MIL-05,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-04-28,2026-06-01,2026-05-28,completed,1392,1380,12
+WO-00571,DAY,DAY-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2026-04-28,2026-06-03,2026-05-29,completed,4139,4075,64
+WO-00572,MTY,MTY-LTH-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-28,2026-05-22,2026-05-19,completed,1324,1307,17
+WO-00573,MTY,MTY-MIL-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-04-28,2026-06-04,2026-06-02,completed,1058,1048,10
+WO-00574,BRN,BRN-PRS-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-04-29,2026-06-07,2026-06-05,completed,8855,8773,82
+WO-00575,DAY,DAY-LTH-03,AP-4410,Transmission housings,Nordhaven Motors,2026-04-29,2026-06-07,2026-06-04,completed,1624,1607,17
+WO-00576,DAY,DAY-MIL-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-04-29,2026-06-04,2026-06-01,completed,1066,1056,10
+WO-00577,DAY,DAY-MIL-06,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-04-29,2026-05-19,2026-05-18,completed,755,751,4
+WO-00578,DAY,DAY-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-29,2026-06-01,2026-05-28,completed,2780,2747,33
+WO-00579,DAY,DAY-RBT-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-04-29,2026-05-28,2026-05-26,completed,2562,2514,48
+WO-00580,MTY,MTY-PRS-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-04-29,2026-05-23,2026-05-22,completed,4972,4907,65
+WO-00581,MTY,MTY-LTH-01,AP-6205,Pump components,Brightline Hydraulics,2026-04-30,2026-06-01,2026-06-01,completed,1861,1836,25
+WO-00582,MTY,MTY-LTH-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-04-30,2026-05-22,2026-05-20,completed,1308,1296,12
+WO-00583,MTY,MTY-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-04-30,2026-05-20,2026-05-20,completed,1162,1136,26
+WO-00584,MTY,MTY-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2026-04-30,2026-06-05,2026-06-04,completed,6858,6789,69
+WO-00585,DAY,DAY-MIL-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-05-01,2026-06-07,2026-06-08,completed,1547,1541,6
+WO-00586,DAY,DAY-LTH-05,AP-4410,Transmission housings,Nordhaven Motors,2026-05-04,2026-06-02,2026-05-29,completed,1149,1132,17
+WO-00587,MTY,MTY-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-04,2026-06-03,2026-05-29,completed,5071,5020,51
+WO-00588,BRN,BRN-RBT-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-05,2026-06-09,2026-06-09,completed,3740,3696,44
+WO-00589,DAY,DAY-MIL-01,AP-4410,Transmission housings,Nordhaven Motors,2026-05-05,2026-06-14,2026-06-10,completed,941,927,14
+WO-00590,MTY,MTY-GRD-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-05,2026-06-06,2026-06-02,completed,2012,1978,34
+WO-00591,DAY,DAY-GRD-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-05-06,2026-06-06,2026-06-03,completed,2598,2574,24
+WO-00592,BRN,BRN-LTH-03,AP-4410,Transmission housings,Nordhaven Motors,2026-05-07,2026-06-12,2026-06-09,completed,1638,1618,20
+WO-00593,DAY,DAY-MIL-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-05-07,2026-06-13,2026-06-10,completed,880,862,18
+WO-00594,DAY,DAY-PRS-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-05-07,2026-06-01,2026-06-01,completed,6565,6459,106
+WO-00595,MTY,MTY-LTH-04,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-07,2026-06-10,2026-06-08,completed,1910,1869,41
+WO-00596,MTY,MTY-MIL-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-05-07,2026-06-01,2026-05-28,completed,927,920,7
+WO-00597,MTY,MTY-RBT-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-05-07,2026-05-29,2026-05-27,completed,3332,3312,20
+WO-00598,BRN,BRN-MIL-01,AP-4410,Transmission housings,Nordhaven Motors,2026-05-11,2026-06-08,2026-06-05,completed,728,722,6
+WO-00599,BRN,BRN-PRS-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-05-11,2026-06-01,2026-05-28,completed,3806,3762,44
+WO-00600,DAY,DAY-LTH-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-05-11,2026-06-03,2026-06-01,completed,1152,1139,13
+WO-00601,MTY,MTY-RBT-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-12,2026-06-13,2026-06-10,completed,3494,3449,45
+WO-00602,BRN,BRN-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-05-13,2026-06-13,2026-06-11,completed,2592,2565,27
+WO-00603,DAY,DAY-LTH-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-05-13,2026-06-19,2026-06-18,completed,2276,2258,18
+WO-00604,DAY,DAY-MIL-08,AP-4410,Transmission housings,Nordhaven Motors,2026-05-13,2026-06-14,2026-06-12,completed,718,705,13
+WO-00605,BRN,BRN-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2026-05-14,2026-06-06,2026-06-04,completed,553,549,4
+WO-00606,DAY,DAY-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-05-14,2026-06-04,2026-06-03,completed,3153,3107,46
+WO-00607,MTY,MTY-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-05-14,2026-06-21,2026-06-18,completed,1495,1477,18
+WO-00608,BRN,BRN-GRD-01,AP-6205,Pump components,Brightline Hydraulics,2026-05-15,2026-06-19,2026-06-17,completed,2481,2459,22
+WO-00609,DAY,DAY-PRS-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-05-15,2026-06-07,2026-06-08,completed,6072,6021,51
+WO-00610,DAY,DAY-PRS-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-05-15,2026-06-21,2026-06-19,completed,5381,5324,57
+WO-00611,BRN,BRN-MIL-05,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-05-18,2026-06-10,2026-06-08,completed,889,883,6
+WO-00612,DAY,DAY-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2026-05-19,2026-06-21,2026-06-17,completed,756,746,10
+WO-00613,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2026-05-19,2026-06-23,2026-06-22,completed,883,870,13
+WO-00614,MTY,MTY-GRD-01,AP-3340,Valve bodies,Corvane Aerospace,2026-05-19,2026-06-16,2026-06-15,completed,2006,1989,17
+WO-00615,MTY,MTY-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2026-05-19,2026-06-12,2026-06-08,completed,693,683,10
+WO-00616,MTY,MTY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2026-05-19,2026-06-20,2026-06-17,completed,1037,1027,10
+WO-00617,MTY,MTY-MIL-06,AP-3301,Valve bodies,Brightline Hydraulics,2026-05-19,2026-06-24,2026-06-19,completed,1208,1196,12
+WO-00618,MTY,MTY-LTH-05,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-20,2026-06-12,2026-06-10,completed,1278,1263,15
+WO-00619,BRN,BRN-LTH-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-05-21,2026-06-29,2026-06-25,completed,2992,2962,30
+WO-00620,MTY,MTY-LTH-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-21,2026-06-17,2026-06-12,completed,1323,1300,23
+WO-00621,MTY,MTY-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-21,2026-06-28,2026-06-24,completed,2062,2046,16
+WO-00622,BRN,BRN-LTH-04,AP-4410,Transmission housings,Nordhaven Motors,2026-05-22,2026-06-20,2026-06-18,completed,1207,1198,9
+WO-00623,BRN,BRN-PRS-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-05-22,2026-06-19,2026-06-18,completed,5886,5810,76
+WO-00624,MTY,MTY-PRS-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-05-25,2026-06-21,2026-06-16,completed,6513,6455,58
+WO-00625,DAY,DAY-LTH-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-05-26,2026-06-18,2026-06-15,completed,1130,1117,13
+WO-00626,DAY,DAY-RBT-03,AP-6205,Pump components,Brightline Hydraulics,2026-05-27,2026-07-01,2026-06-26,completed,3644,3601,43
+WO-00627,BRN,BRN-MIL-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-05-28,2026-06-17,2026-06-16,completed,600,593,7
+WO-00628,BRN,BRN-MIL-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-05-28,2026-06-17,2026-06-16,completed,543,510,33
+WO-00629,BRN,BRN-RBT-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-05-28,2026-06-22,2026-06-19,completed,3283,3239,44
+WO-00630,MTY,MTY-RBT-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-05-28,2026-07-02,2026-07-01,completed,4702,4611,91
+WO-00631,BRN,BRN-MIL-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-05-29,2026-06-30,2026-06-26,completed,1054,1041,13
+WO-00632,BRN,BRN-PRS-02,AP-3340,Valve bodies,Corvane Aerospace,2026-05-29,2026-06-22,2026-06-18,completed,4362,4298,64
+WO-00633,DAY,DAY-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2026-05-29,2026-06-22,2026-06-19,completed,567,560,7
+WO-00634,DAY,DAY-RBT-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-05-29,2026-06-24,2026-06-19,completed,3368,3348,20
+WO-00635,MTY,MTY-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2026-05-29,2026-07-03,2026-07-01,completed,1040,1020,20
+WO-00636,DAY,DAY-LTH-05,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-06-01,2026-06-22,2026-06-19,completed,1557,1540,17
+WO-00637,DAY,DAY-RBT-02,AP-4410,Transmission housings,Nordhaven Motors,2026-06-01,2026-07-07,2026-07-02,completed,3150,3121,29
+WO-00638,MTY,MTY-PRS-02,AP-3340,Valve bodies,Corvane Aerospace,2026-06-01,2026-06-25,2026-06-19,completed,4059,4018,41
+WO-00639,DAY,DAY-LTH-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-02,2026-07-08,2026-07-07,completed,1749,1734,15
+WO-00640,DAY,DAY-MIL-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-06-02,2026-07-01,2026-06-26,completed,1075,1068,7
+WO-00641,DAY,DAY-PRS-01,AP-4410,Transmission housings,Nordhaven Motors,2026-06-02,2026-06-26,2026-06-23,completed,3198,3156,42
+WO-00642,MTY,MTY-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-06-02,2026-07-07,2026-07-02,completed,2809,2787,22
+WO-00643,MTY,MTY-RBT-01,AP-3340,Valve bodies,Corvane Aerospace,2026-06-02,2026-06-26,2026-06-22,completed,2631,2587,44
+WO-00644,MTY,MTY-GRD-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-06-03,2026-06-25,2026-06-22,completed,1927,1908,19
+WO-00645,MTY,MTY-MIL-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-06-03,2026-06-29,2026-06-25,completed,660,649,11
+WO-00646,DAY,DAY-GRD-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-04,2026-06-29,2026-06-26,completed,1524,1510,14
+WO-00647,DAY,DAY-PRS-03,AP-4410,Transmission housings,Nordhaven Motors,2026-06-04,2026-06-26,2026-06-24,completed,3247,3208,39
+WO-00648,BRN,BRN-MIL-06,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-05,2026-07-06,2026-07-03,completed,771,721,50
+WO-00649,DAY,DAY-LTH-03,AP-4410,Transmission housings,Nordhaven Motors,2026-06-05,2026-07-01,2026-06-29,completed,1101,1089,12
+WO-00650,MTY,MTY-PRS-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-06-05,2026-07-06,2026-07-03,completed,6217,6112,105
+WO-00651,BRN,BRN-MIL-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-06-08,2026-07-02,2026-06-29,completed,879,867,12
+WO-00652,BRN,BRN-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-08,2026-07-04,2026-06-30,completed,3473,3432,41
+WO-00653,BRN,BRN-MIL-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-06-09,2026-07-09,2026-07-03,completed,981,975,6
+WO-00654,DAY,DAY-MIL-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-06-09,2026-07-06,2026-07-01,completed,1000,992,8
+WO-00655,DAY,DAY-PRS-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-09,2026-07-02,2026-06-26,completed,3271,3237,34
+WO-00656,MTY,MTY-LTH-04,AP-3340,Valve bodies,Corvane Aerospace,2026-06-09,2026-07-16,2026-07-13,completed,2209,2169,40
+WO-00657,MTY,MTY-MIL-04,AP-3312,Valve bodies,Brightline Hydraulics,2026-06-09,2026-07-12,2026-07-09,completed,933,894,39
+WO-00658,BRN,BRN-LTH-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-06-10,2026-07-06,2026-07-07,completed,1395,1380,15
+WO-00659,BRN,BRN-RBT-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-06-10,2026-07-16,2026-07-14,completed,4016,3964,52
+WO-00660,DAY,DAY-MIL-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-06-11,2026-07-09,2026-07-07,completed,1189,1183,6
+WO-00661,DAY,DAY-MIL-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-06-11,2026-07-15,2026-07-14,completed,1159,1142,17
+WO-00662,MTY,MTY-LTH-05,AP-3312,Valve bodies,Brightline Hydraulics,2026-06-11,2026-07-11,2026-07-07,completed,1589,1539,50
+WO-00663,MTY,MTY-RBT-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-06-11,2026-07-04,2026-06-30,completed,2658,2631,27
+WO-00664,BRN,BRN-LTH-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-06-12,2026-07-18,2026-07-16,completed,2248,2230,18
+WO-00665,DAY,DAY-MIL-08,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-06-15,2026-07-24,2026-07-21,completed,1352,1340,12
+WO-00666,MTY,MTY-LTH-02,AP-3340,Valve bodies,Corvane Aerospace,2026-06-15,2026-07-09,2026-07-06,completed,1512,1493,19
+WO-00667,DAY,DAY-LTH-02,AP-4410,Transmission housings,Nordhaven Motors,2026-06-16,2026-07-09,2026-07-06,completed,938,923,15
+WO-00668,MTY,MTY-GRD-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-06-16,2026-07-08,2026-07-03,completed,1377,1352,25
+WO-00669,BRN,BRN-MIL-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-17,2026-07-13,2026-07-10,completed,565,559,6
+WO-00670,BRN,BRN-MIL-04,AP-4410,Transmission housings,Nordhaven Motors,2026-06-17,2026-07-20,2026-07-16,completed,705,700,5
+WO-00671,MTY,MTY-PRS-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-06-17,2026-07-10,2026-07-08,completed,4846,4788,58
+WO-00672,BRN,BRN-GRD-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-06-18,2026-07-12,2026-07-09,completed,1783,1765,18
+WO-00673,DAY,DAY-MIL-06,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-06-18,2026-07-25,2026-07-23,completed,1475,1470,5
+WO-00674,MTY,MTY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2026-06-18,2026-07-19,2026-07-17,completed,987,978,9
+WO-00675,BRN,BRN-LTH-04,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-06-19,2026-07-26,2026-07-23,completed,2843,2828,15
+WO-00676,BRN,BRN-PRS-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-19,2026-07-15,2026-07-13,completed,3369,3308,61
+WO-00677,BRN,BRN-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-06-19,2026-07-23,2026-07-23,completed,5779,5705,74
+WO-00678,DAY,DAY-LTH-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-06-19,2026-07-29,2026-07-27,completed,2204,2160,44
+WO-00679,MTY,MTY-MIL-03,AP-3340,Valve bodies,Corvane Aerospace,2026-06-19,2026-07-10,2026-07-13,completed,630,617,13
+WO-00680,BRN,BRN-RBT-01,AP-4410,Transmission housings,Nordhaven Motors,2026-06-22,2026-07-19,2026-07-17,completed,2296,2266,30
+WO-00681,DAY,DAY-LTH-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-06-22,2026-07-20,2026-07-16,completed,1749,1737,12
+WO-00682,DAY,DAY-MIL-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-06-22,2026-07-25,2026-07-23,completed,1112,1098,14
+WO-00683,DAY,DAY-PRS-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-22,2026-07-16,2026-07-15,completed,3543,3507,36
+WO-00684,DAY,DAY-RBT-01,AP-4410,Transmission housings,Nordhaven Motors,2026-06-22,2026-07-13,2026-07-13,completed,1953,1936,17
+WO-00685,MTY,MTY-MIL-06,AP-3340,Valve bodies,Corvane Aerospace,2026-06-22,2026-07-26,2026-07-22,completed,978,964,14
+WO-00686,MTY,MTY-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-06-22,2026-07-27,2026-07-22,completed,6137,6060,77
+WO-00687,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-23,2026-07-20,2026-07-17,completed,720,707,13
+WO-00688,MTY,MTY-GRD-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-06-23,2026-07-28,2026-07-24,completed,3276,3243,33
+WO-00689,MTY,MTY-RBT-01,AP-3340,Valve bodies,Corvane Aerospace,2026-06-23,2026-07-20,2026-07-15,completed,2881,2826,55
+WO-00690,DAY,DAY-PRS-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-06-24,2026-07-22,2026-07-21,completed,5477,5421,56
+WO-00691,DAY,DAY-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-25,2026-07-21,2026-07-20,completed,3985,3911,74
+WO-00692,MTY,MTY-LTH-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-06-25,2026-07-20,2026-07-17,completed,2054,2037,17
+WO-00693,BRN,BRN-LTH-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-06-26,2026-07-19,2026-07-20,completed,1475,1405,70
+WO-00694,MTY,MTY-MIL-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-06-26,2026-07-26,2026-07-24,completed,1246,1242,4
+WO-00695,BRN,BRN-MIL-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-06-29,2026-07-22,2026-07-17,completed,668,649,19
+WO-00696,DAY,DAY-GRD-01,AP-6205,Pump components,Brightline Hydraulics,2026-06-29,2026-07-20,2026-07-20,completed,1575,1560,15
+WO-00697,DAY,DAY-MIL-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-06-29,2026-07-20,2026-07-17,completed,873,864,9
+WO-00698,DAY,DAY-PRS-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-06-29,2026-08-07,2026-08-04,completed,6162,6034,128
+WO-00699,DAY,DAY-RBT-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-06-29,2026-07-26,2026-07-22,completed,3764,3730,34
+WO-00700,BRN,BRN-MIL-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-06-30,2026-07-21,2026-07-21,completed,993,985,8
+WO-00701,DAY,DAY-LTH-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-06-30,2026-07-25,2026-07-22,completed,1749,1735,14
+WO-00702,BRN,BRN-PRS-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-07-01,2026-07-22,2026-07-21,completed,4434,4379,55
+WO-00703,MTY,MTY-RBT-03,AP-3340,Valve bodies,Corvane Aerospace,2026-07-01,2026-07-23,2026-07-21,completed,2680,2641,39
+WO-00704,DAY,DAY-MIL-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-07-02,2026-08-06,2026-08-06,completed,1485,1475,10
+WO-00705,MTY,MTY-MIL-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-02,2026-07-30,2026-07-29,completed,850,840,10
+WO-00706,MTY,MTY-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2026-07-02,2026-08-07,2026-08-04,completed,4166,4132,34
+WO-00707,MTY,MTY-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-07-03,2026-07-25,2026-07-23,completed,1851,1841,10
+WO-00708,DAY,DAY-RBT-02,AP-6205,Pump components,Brightline Hydraulics,2026-07-06,2026-08-12,2026-08-07,completed,4300,4229,71
+WO-00709,MTY,MTY-GRD-01,AP-3340,Valve bodies,Corvane Aerospace,2026-07-06,2026-08-04,2026-07-29,completed,1749,1724,25
+WO-00710,MTY,MTY-PRS-01,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-07-06,2026-08-11,2026-08-10,completed,7582,7526,56
+WO-00711,BRN,BRN-MIL-05,AP-3301,Valve bodies,Brightline Hydraulics,2026-07-07,2026-08-11,2026-08-10,completed,1267,1253,14
+WO-00712,BRN,BRN-MIL-06,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-07-07,2026-08-10,2026-08-07,completed,1180,1163,17
+WO-00713,DAY,DAY-LTH-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-07-07,2026-08-04,2026-08-03,completed,2175,2153,22
+WO-00714,MTY,MTY-LTH-02,AP-3340,Valve bodies,Corvane Aerospace,2026-07-07,2026-07-31,2026-07-29,completed,1486,1467,19
+WO-00715,BRN,BRN-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-08,2026-08-14,2026-08-12,completed,2007,1976,31
+WO-00716,DAY,DAY-LTH-04,AP-4410,Transmission housings,Nordhaven Motors,2026-07-08,2026-07-31,2026-07-29,completed,949,940,9
+WO-00717,DAY,DAY-MIL-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-07-08,2026-08-05,2026-07-31,completed,668,658,10
+WO-00718,MTY,MTY-LTH-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-07-08,2026-08-14,2026-08-12,completed,2374,2350,24
+WO-00719,MTY,MTY-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-09,2026-08-08,2026-08-05,completed,5188,5130,58
+WO-00720,BRN,BRN-GRD-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-07-10,2026-08-15,2026-08-12,completed,3234,3194,40
+WO-00721,MTY,MTY-MIL-04,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-07-10,2026-08-14,2026-08-13,completed,1338,1329,9
+WO-00722,BRN,BRN-MIL-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-13,2026-08-13,2026-08-07,completed,827,820,7
+WO-00723,BRN,BRN-PRS-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-07-14,2026-08-10,2026-08-05,completed,6281,6179,102
+WO-00724,DAY,DAY-RBT-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-07-14,2026-08-17,2026-08-12,completed,4675,4625,50
+WO-00725,MTY,MTY-LTH-04,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-14,2026-08-13,2026-08-11,completed,1581,1444,137
+WO-00726,MTY,MTY-MIL-03,AP-3340,Valve bodies,Corvane Aerospace,2026-07-14,2026-08-13,2026-08-07,completed,783,776,7
+WO-00727,BRN,BRN-RBT-02,AP-3340,Valve bodies,Corvane Aerospace,2026-07-15,2026-08-07,2026-08-05,completed,2604,2566,38
+WO-00728,DAY,DAY-MIL-03,AP-6205,Pump components,Brightline Hydraulics,2026-07-15,2026-08-04,2026-08-03,completed,598,592,6
+WO-00729,DAY,DAY-PRS-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-07-16,2026-08-14,2026-08-10,completed,5170,5102,68
+WO-00730,MTY,MTY-RBT-01,AP-6205,Pump components,Brightline Hydraulics,2026-07-16,2026-08-11,2026-08-06,completed,2722,2657,65
+WO-00731,BRN,BRN-LTH-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-17,2026-08-21,2026-08-20,completed,1937,1870,67
+WO-00732,BRN,BRN-MIL-04,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-07-17,2026-08-13,2026-08-11,completed,1044,1038,6
+WO-00733,DAY,DAY-LTH-05,AP-4425,Transmission housings,Kestrel Powertrain,2026-07-17,2026-08-09,2026-08-07,completed,1122,1109,13
+WO-00734,BRN,BRN-MIL-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-07-20,2026-08-22,2026-08-18,completed,734,728,6
+WO-00735,BRN,BRN-RBT-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-20,2026-08-24,2026-08-21,completed,4003,3944,59
+WO-00736,DAY,DAY-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2026-07-20,2026-08-25,2026-08-21,completed,1093,1087,6
+WO-00737,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2026-07-20,2026-08-17,2026-08-13,completed,754,749,5
+WO-00738,MTY,MTY-LTH-03,AP-3340,Valve bodies,Corvane Aerospace,2026-07-20,2026-08-26,2026-08-20,completed,2001,1977,24
+WO-00739,MTY,MTY-MIL-05,AP-6205,Pump components,Brightline Hydraulics,2026-07-20,2026-08-26,2026-08-21,completed,1094,1051,43
+WO-00740,BRN,BRN-LTH-02,AP-3340,Valve bodies,Corvane Aerospace,2026-07-21,2026-08-15,2026-08-12,completed,1450,1428,22
+WO-00741,DAY,DAY-GRD-01,AP-6205,Pump components,Brightline Hydraulics,2026-07-21,2026-08-12,2026-08-07,completed,1354,1327,27
+WO-00742,DAY,DAY-PRS-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-07-21,2026-08-20,2026-08-14,completed,6872,6830,42
+WO-00743,BRN,BRN-MIL-01,AP-4410,Transmission housings,Nordhaven Motors,2026-07-22,2026-08-19,2026-08-17,completed,663,656,7
+WO-00744,BRN,BRN-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-22,2026-08-28,2026-08-24,completed,6208,6137,71
+WO-00745,DAY,DAY-MIL-08,AP-4410,Transmission housings,Nordhaven Motors,2026-07-22,2026-08-15,2026-08-13,completed,620,613,7
+WO-00746,DAY,DAY-PRS-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-07-22,2026-08-22,2026-08-18,completed,7444,7302,142
+WO-00747,MTY,MTY-RBT-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-22,2026-08-25,2026-08-20,completed,3629,3590,39
+WO-00748,DAY,DAY-LTH-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-07-23,2026-08-16,2026-08-12,completed,1551,1503,48
+WO-00749,DAY,DAY-RBT-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-07-23,2026-08-26,2026-08-25,completed,4238,4185,53
+WO-00750,MTY,MTY-MIL-06,AP-3340,Valve bodies,Corvane Aerospace,2026-07-23,2026-08-16,2026-08-13,completed,685,678,7
+WO-00751,MTY,MTY-PRS-02,AP-3340,Valve bodies,Corvane Aerospace,2026-07-23,2026-08-26,2026-08-25,completed,6477,6320,157
+WO-00752,BRN,BRN-LTH-04,AP-3301,Valve bodies,Brightline Hydraulics,2026-07-24,2026-08-16,2026-08-13,completed,1388,1373,15
+WO-00753,BRN,BRN-PRS-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-07-24,2026-08-28,2026-08-25,completed,7015,6938,77
+WO-00754,DAY,DAY-MIL-05,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-07-24,2026-08-29,2026-08-25,completed,1112,1099,13
+WO-00755,DAY,DAY-MIL-06,AP-4410,Transmission housings,Nordhaven Motors,2026-07-24,2026-08-16,2026-08-12,completed,454,448,6
+WO-00756,MTY,MTY-LTH-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-07-24,2026-08-27,2026-08-24,completed,1964,1949,15
+WO-00757,MTY,MTY-GRD-02,AP-3340,Valve bodies,Corvane Aerospace,2026-07-27,2026-09-04,2026-08-31,completed,2708,2663,45
+WO-00758,MTY,MTY-MIL-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-07-27,2026-09-02,2026-08-27,completed,994,979,15
+WO-00759,DAY,DAY-LTH-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-07-28,2026-09-01,2026-08-31,completed,2825,2795,30
+WO-00760,DAY,DAY-LTH-04,AP-6205,Pump components,Brightline Hydraulics,2026-07-30,2026-08-20,2026-08-19,completed,1282,1262,20
+WO-00761,MTY,MTY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-07-30,2026-09-07,2026-09-03,completed,3714,3684,30
+WO-00762,MTY,MTY-LTH-02,AP-3340,Valve bodies,Corvane Aerospace,2026-07-30,2026-08-22,2026-08-20,completed,1328,1222,106
+WO-00763,MTY,MTY-MIL-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-07-30,2026-08-28,2026-08-25,completed,988,977,11
+WO-00764,DAY,DAY-MIL-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-03,2026-08-26,2026-08-20,completed,523,514,9
+WO-00765,DAY,DAY-LTH-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-08-04,2026-08-31,2026-08-27,completed,1599,1578,21
+WO-00766,DAY,DAY-MIL-03,AP-4410,Transmission housings,Nordhaven Motors,2026-08-04,2026-09-01,2026-08-28,completed,657,650,7
+WO-00767,DAY,DAY-PRS-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-08-05,2026-08-26,2026-08-25,completed,5147,5104,43
+WO-00768,MTY,MTY-RBT-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-05,2026-08-28,2026-08-25,completed,2487,2452,35
+WO-00769,BRN,BRN-PRS-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-06,2026-08-27,2026-08-26,completed,3365,3316,49
+WO-00770,BRN,BRN-RBT-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-06,2026-09-11,2026-09-08,completed,3256,3189,67
+WO-00771,MTY,MTY-PRS-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-08-06,2026-08-30,2026-08-28,completed,5995,5945,50
+WO-00772,DAY,DAY-MIL-02,AP-6205,Pump components,Brightline Hydraulics,2026-08-07,2026-09-05,2026-09-01,completed,842,834,8
+WO-00773,MTY,MTY-RBT-01,AP-6205,Pump components,Brightline Hydraulics,2026-08-07,2026-08-31,2026-08-27,completed,2523,2496,27
+WO-00774,BRN,BRN-MIL-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-08-10,2026-09-13,2026-09-08,completed,1044,1030,14
+WO-00775,BRN,BRN-MIL-06,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-08-10,2026-09-07,2026-09-03,completed,1102,1096,6
+WO-00776,DAY,DAY-GRD-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-10,2026-09-05,2026-09-01,completed,1461,1437,24
+WO-00777,DAY,DAY-LTH-05,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-08-10,2026-09-15,2026-09-10,completed,2495,2423,72
+WO-00778,DAY,DAY-RBT-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-08-10,2026-09-15,2026-09-11,completed,4738,4700,38
+WO-00779,MTY,MTY-MIL-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-08-10,2026-09-05,2026-08-31,completed,782,773,9
+WO-00780,BRN,BRN-MIL-05,AP-3340,Valve bodies,Corvane Aerospace,2026-08-11,2026-09-09,2026-09-07,completed,894,879,15
+WO-00781,DAY,DAY-PRS-04,AP-4410,Transmission housings,Nordhaven Motors,2026-08-11,2026-09-15,2026-09-15,completed,4775,4715,60
+WO-00782,MTY,MTY-PRS-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-11,2026-09-04,2026-08-31,completed,3856,3819,37
+WO-00783,BRN,BRN-MIL-04,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-08-12,2026-09-07,2026-09-03,completed,949,941,8
+WO-00784,MTY,MTY-LTH-04,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-12,2026-09-15,2026-09-18,completed,1820,1702,118
+WO-00785,BRN,BRN-GRD-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-08-13,2026-09-09,2026-09-07,completed,2181,2120,61
+WO-00786,BRN,BRN-LTH-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-13,2026-09-08,2026-09-07,completed,1181,1160,21
+WO-00787,BRN,BRN-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-13,2026-09-13,2026-09-09,completed,1531,1519,12
+WO-00788,DAY,DAY-LTH-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-08-13,2026-09-19,2026-09-16,completed,2089,2062,27
+WO-00789,DAY,DAY-MIL-06,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-08-13,2026-09-04,2026-09-02,completed,712,706,6
+WO-00790,DAY,DAY-RBT-01,AP-6205,Pump components,Brightline Hydraulics,2026-08-13,2026-09-15,2026-09-11,completed,3535,3499,36
+WO-00791,MTY,MTY-LTH-05,AP-6205,Pump components,Brightline Hydraulics,2026-08-13,2026-09-04,2026-09-02,completed,1247,1231,16
+WO-00792,BRN,BRN-LTH-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-08-14,2026-09-17,2026-09-16,completed,2229,2207,22
+WO-00793,DAY,DAY-MIL-07,AP-6205,Pump components,Brightline Hydraulics,2026-08-14,2026-09-18,2026-09-16,completed,1037,1030,7
+WO-00794,DAY,DAY-MIL-08,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-08-14,2026-09-17,2026-09-15,completed,1143,1135,8
+WO-00795,MTY,MTY-MIL-04,AP-3340,Valve bodies,Corvane Aerospace,2026-08-14,2026-09-13,2026-09-11,completed,905,900,5
+WO-00796,MTY,MTY-MIL-06,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-08-14,2026-09-16,2026-09-15,completed,1047,1040,7
+WO-00797,DAY,DAY-PRS-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-08-17,2026-09-18,2026-09-16,completed,8083,8011,72
+WO-00798,BRN,BRN-MIL-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-08-18,2026-09-24,2026-09-21,completed,1250,1241,9
+WO-00799,BRN,BRN-MIL-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-08-19,2026-09-16,2026-09-11,completed,1061,1047,14
+WO-00800,DAY,DAY-PRS-01,AP-4410,Transmission housings,Nordhaven Motors,2026-08-19,2026-09-12,2026-09-10,completed,3328,3283,45
+WO-00801,DAY,DAY-LTH-04,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-20,2026-09-18,2026-09-17,completed,1204,1188,16
+WO-00802,BRN,BRN-LTH-01,AP-6205,Pump components,Brightline Hydraulics,2026-08-21,2026-09-26,2026-09-22,completed,1825,1805,20
+WO-00803,DAY,DAY-MIL-01,AP-4410,Transmission housings,Nordhaven Motors,2026-08-21,2026-09-25,2026-09-23,completed,788,780,8
+WO-00804,MTY,MTY-LTH-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-21,2026-09-14,2026-09-10,completed,1218,1205,13
+WO-00805,MTY,MTY-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-21,2026-09-25,2026-09-24,completed,2029,2008,21
+WO-00806,MTY,MTY-RBT-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-08-21,2026-09-25,2026-09-24,completed,4607,4569,38
+WO-00807,BRN,BRN-RBT-01,AP-6205,Pump components,Brightline Hydraulics,2026-08-24,2026-09-15,2026-09-10,completed,2375,2339,36
+WO-00808,DAY,DAY-MIL-04,AP-4410,Transmission housings,Nordhaven Motors,2026-08-24,2026-09-21,2026-09-17,completed,665,661,4
+WO-00809,MTY,MTY-MIL-05,AP-3340,Valve bodies,Corvane Aerospace,2026-08-24,2026-09-15,2026-09-11,completed,655,647,8
+WO-00810,BRN,BRN-PRS-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-25,2026-09-24,2026-09-21,completed,4627,4571,56
+WO-00811,MTY,MTY-LTH-01,AP-6205,Pump components,Brightline Hydraulics,2026-08-25,2026-09-30,2026-09-25,completed,1860,1841,19
+WO-00812,BRN,BRN-PRS-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-08-26,2026-09-25,2026-09-21,completed,5902,5825,77
+WO-00813,DAY,DAY-MIL-05,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-08-26,2026-09-28,2026-09-25,completed,1136,1122,14
+WO-00814,DAY,DAY-PRS-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-08-26,2026-09-18,2026-09-17,completed,5454,5408,46
+WO-00815,DAY,DAY-RBT-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-26,2026-10-04,,in_progress,3183,3144,39
+WO-00816,MTY,MTY-MIL-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-08-26,2026-09-30,2026-09-28,completed,1148,1136,12
+WO-00817,MTY,MTY-PRS-02,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-08-26,2026-09-27,2026-09-24,completed,6693,6627,66
+WO-00818,MTY,MTY-RBT-02,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-08-26,2026-09-20,2026-09-17,completed,3635,3601,34
+WO-00819,BRN,BRN-PRS-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-08-27,2026-09-20,2026-09-16,completed,4240,4181,59
+WO-00820,DAY,DAY-LTH-02,AP-6205,Pump components,Brightline Hydraulics,2026-08-28,2026-10-05,,in_progress,1961,1885,76
+WO-00821,MTY,MTY-MIL-02,AP-6205,Pump components,Brightline Hydraulics,2026-08-28,2026-09-30,2026-09-30,completed,961,949,12
+WO-00822,MTY,MTY-RBT-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-08-28,2026-09-25,2026-09-23,completed,2716,2687,29
+WO-00823,DAY,DAY-MIL-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-08-31,2026-10-07,,in_progress,672,625,47
+WO-00824,MTY,MTY-PRS-03,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-08-31,2026-09-29,2026-09-24,completed,6731,6672,59
+WO-00825,DAY,DAY-LTH-01,AP-6205,Pump components,Brightline Hydraulics,2026-09-01,2026-10-08,,in_progress,1758,1739,19
+WO-00826,MTY,MTY-GRD-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-01,2026-09-23,2026-09-21,completed,1644,1584,60
+WO-00827,MTY,MTY-MIL-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-09-01,2026-10-01,2026-09-28,completed,919,911,8
+WO-00828,MTY,MTY-PRS-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-09-01,2026-09-24,2026-09-22,completed,4097,4051,46
+WO-00829,DAY,DAY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-09-02,2026-09-29,2026-09-25,completed,2353,2325,28
+WO-00830,DAY,DAY-MIL-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-09-02,2026-10-09,,in_progress,726,711,15
+WO-00831,DAY,DAY-MIL-06,AP-6205,Pump components,Brightline Hydraulics,2026-09-03,2026-10-01,2026-09-29,completed,779,773,6
+WO-00832,MTY,MTY-LTH-05,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-03,2026-10-01,,in_progress,1450,1431,19
+WO-00833,BRN,BRN-MIL-04,AP-6205,Pump components,Brightline Hydraulics,2026-09-04,2026-10-10,,in_progress,640,634,6
+WO-00834,BRN,BRN-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-09-04,2026-10-08,,in_progress,1135,1060,75
+WO-00835,MTY,MTY-GRD-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-09-04,2026-10-04,,in_progress,2402,2384,18
+WO-00836,BRN,BRN-GRD-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-08,2026-10-08,,in_progress,1734,1714,20
+WO-00837,BRN,BRN-LTH-02,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-09-08,2026-10-16,,in_progress,1552,1495,57
+WO-00838,BRN,BRN-MIL-05,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-08,2026-09-30,2026-09-25,completed,594,588,6
+WO-00839,BRN,BRN-MIL-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-09,2026-10-02,,in_progress,776,763,13
+WO-00840,BRN,BRN-RBT-02,AP-3340,Valve bodies,Corvane Aerospace,2026-09-09,2026-10-10,,in_progress,2656,2624,32
+WO-00841,BRN,BRN-LTH-03,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-09-10,2026-10-10,,in_progress,1215,1174,41
+WO-00842,BRN,BRN-RBT-01,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-09-11,2026-10-14,,in_progress,2753,2705,48
+WO-00843,DAY,DAY-LTH-05,AP-6205,Pump components,Brightline Hydraulics,2026-09-11,2026-10-18,,in_progress,1117,1108,9
+WO-00844,DAY,DAY-PRS-01,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-09-11,2026-10-03,2026-09-30,completed,4706,4664,42
+WO-00845,MTY,MTY-LTH-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-11,2026-10-04,,in_progress,1063,1049,14
+WO-00846,BRN,BRN-MIL-02,AP-3340,Valve bodies,Corvane Aerospace,2026-09-14,2026-10-19,,in_progress,476,471,5
+WO-00847,DAY,DAY-RBT-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-09-14,2026-10-14,,in_progress,1750,1728,22
+WO-00848,DAY,DAY-RBT-02,AP-5118,Brackets & mounts,Ostergaard Rail Systems,2026-09-14,2026-10-08,,in_progress,2659,2641,18
+WO-00849,MTY,MTY-MIL-04,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-14,2026-10-21,,in_progress,514,508,6
+WO-00850,MTY,MTY-MIL-05,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-14,2026-10-17,,in_progress,435,431,4
+WO-00851,DAY,DAY-MIL-08,AP-6205,Pump components,Brightline Hydraulics,2026-09-16,2026-10-09,,in_progress,472,468,4
+WO-00852,DAY,DAY-PRS-04,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-09-16,2026-10-09,,in_progress,3068,3044,24
+WO-00853,BRN,BRN-LTH-04,AP-6205,Pump components,Brightline Hydraulics,2026-09-17,2026-10-27,,in_progress,796,787,9
+WO-00854,BRN,BRN-PRS-01,AP-4425,Transmission housings,Kestrel Powertrain,2026-09-17,2026-10-20,,in_progress,1954,1928,26
+WO-00855,DAY,DAY-LTH-03,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-09-17,2026-10-12,,in_progress,699,694,5
+WO-00856,DAY,DAY-MIL-07,AP-4425,Transmission housings,Kestrel Powertrain,2026-09-17,2026-10-22,,in_progress,379,376,3
+WO-00857,DAY,DAY-PRS-03,AP-4425,Transmission housings,Kestrel Powertrain,2026-09-17,2026-10-15,,in_progress,2268,2236,32
+WO-00858,MTY,MTY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-09-17,2026-10-10,,in_progress,566,561,5
+WO-00859,DAY,DAY-LTH-04,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-09-18,2026-10-20,,in_progress,854,849,5
+WO-00860,DAY,DAY-MIL-04,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-09-18,2026-10-25,,in_progress,447,442,5
+WO-00861,DAY,DAY-PRS-02,AP-4425,Transmission housings,Kestrel Powertrain,2026-09-18,2026-10-18,,in_progress,2061,2035,26
+WO-00862,MTY,MTY-RBT-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-18,2026-10-19,,in_progress,1732,1711,21
+WO-00863,MTY,MTY-LTH-04,AP-3340,Valve bodies,Corvane Aerospace,2026-09-21,2026-10-19,,in_progress,644,638,6
+WO-00864,BRN,BRN-MIL-01,AP-3340,Valve bodies,Corvane Aerospace,2026-09-22,2026-10-15,,in_progress,274,268,6
+WO-00865,BRN,BRN-PRS-02,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-22,2026-10-20,,in_progress,1377,1358,19
+WO-00866,BRN,BRN-PRS-03,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-22,2026-10-16,,in_progress,1674,1654,20
+WO-00867,MTY,MTY-GRD-02,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-22,2026-10-18,,in_progress,732,718,14
+WO-00868,BRN,BRN-LTH-01,AP-4410,Transmission housings,Nordhaven Motors,2026-09-23,2026-10-28,,in_progress,320,316,4
+WO-00869,MTY,MTY-PRS-01,AP-6205,Pump components,Brightline Hydraulics,2026-09-23,2026-10-23,,in_progress,1759,1744,15
+WO-00870,DAY,DAY-MIL-01,AP-4410,Transmission housings,Nordhaven Motors,2026-09-24,2026-10-21,,in_progress,183,181,2
+WO-00871,MTY,MTY-RBT-01,AP-3340,Valve bodies,Corvane Aerospace,2026-09-24,2026-11-02,,in_progress,855,845,10
+WO-00872,MTY,MTY-LTH-03,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-25,2026-10-30,,in_progress,313,309,4
+WO-00873,MTY,MTY-PRS-02,AP-3340,Valve bodies,Corvane Aerospace,2026-09-25,2026-10-23,,in_progress,1168,1148,20
+WO-00874,MTY,MTY-PRS-03,AP-5130,Brackets & mounts,Kestrel Powertrain,2026-09-25,2026-10-20,,in_progress,1302,1285,17
+WO-00875,MTY,MTY-RBT-03,AP-6205,Pump components,Brightline Hydraulics,2026-09-25,2026-10-24,,in_progress,647,640,7
+WO-00876,DAY,DAY-GRD-01,AP-6220,Pump components,Tamsin Agricultural Equipment,2026-09-28,2026-10-22,,in_progress,333,331,2
+WO-00877,DAY,DAY-MIL-05,AP-4410,Transmission housings,Nordhaven Motors,2026-09-28,2026-10-31,,in_progress,108,108,0
+WO-00878,MTY,MTY-LTH-01,AP-3312,Valve bodies,Brightline Hydraulics,2026-09-28,2026-10-29,,in_progress,177,173,4
+WO-00879,BRN,BRN-MIL-05,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-29,2026-11-03,,in_progress,117,113,4
+WO-00880,MTY,MTY-MIL-01,AP-3301,Valve bodies,Brightline Hydraulics,2026-09-29,2026-11-04,,in_progress,87,87,0
+WO-00881,MTY,MTY-MIL-03,AP-6205,Pump components,Brightline Hydraulics,2026-09-29,2026-10-27,,in_progress,105,105,0
+WO-00882,DAY,DAY-MIL-06,AP-5102,Brackets & mounts,Tamsin Agricultural Equipment,2026-09-30,2026-11-02,,in_progress,74,74,0
