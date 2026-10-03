@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+schema_version: "3"
+examples: [electronics-fee, top-customers]
+questions:
+  - id: electronics-fee
+    label: Electronics restocking fee
+    tag: DOCUMENTS
+    question: What restocking fee applies to opened electronics?
+    sources: [policies]
+    tools: [retrieval]
+    featured: true
+  - id: top-customers
+    label: Top customers
+    tag: SQL
+    question: Which customers spent the most across all their orders?
+    sources: [sales]
+    tools: [duckdb]
+  - id: fee-exposure
+    label: Fees on recent orders
+    tag: HYBRID
+    description: Combines the policy with the orders table.
+    question: How much restocking fee would the gold customers' recent orders incur if returned?
+    sources: [policies, sales]
+    tools: [retrieval, duckdb]
+conversations:
+  - id: fees-then-orders
+    label: Fees, then orders
+    tag: HYBRID
+    sources: [policies, sales]
+    turns:
+      - What restocking fee applies to furniture?
+      - Which customers ordered furniture last quarter?

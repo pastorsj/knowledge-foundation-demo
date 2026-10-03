@@ -90,6 +90,8 @@ StageRunner = Callable[[str, Callable[[], Any]], Any]
 ParseProbe = Callable[[Settings], str | None]
 
 _page_progress: ContextVar[Progress | None] = ContextVar("page_progress", default=None)
+# A fast tokenizer must not be used from two threads at once; chunking is quick next to parsing and embedding.
+_chunk_lock = threading.Lock()
 
 
 @dataclass
@@ -342,9 +344,10 @@ def chunk(document: DoclingDocument, tokenizer: BaseTokenizer) -> list[Chunk]:
     from docling.chunking import HybridChunker
 
     chunker = HybridChunker(tokenizer=tokenizer)
+    with _chunk_lock:
+        items = [(item, chunker.contextualize(chunk=item)) for item in chunker.chunk(dl_doc=document)]
     chunks: list[Chunk] = []
-    for item in chunker.chunk(dl_doc=document):
-        text = chunker.contextualize(chunk=item)
+    for item, text in items:
         if not text.strip():
             continue
         headings = list(item.meta.headings or [])

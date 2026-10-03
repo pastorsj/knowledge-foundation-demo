@@ -31,6 +31,40 @@ Any stage can end in `failed` with an error code; a failed file never blocks the
 
 Every manifest write is validated against its contract and atomic (`tempfile` + `os.replace`).
 
+## HTTP API (`demo-ingest serve`, port 8330)
+
+AI-Q's documents contract, so its upload UI works unchanged; responses add `kind`, `stage`, `stage_detail`, `parser`,
+`tables`, `warnings` and `error_code` per file. Errors are `{"error": {"code", "message"}}`.
+
+| Route | Purpose |
+|---|---|
+| `GET /health` | `200 {"status": "ready"}` once the catalog is writable and Milvus answers, else `503` |
+| `GET`, `POST /v1/collections`; `GET`, `DELETE /v1/collections/{name}` | collections; `workspace` is the upload collection (deleting it removes its files) |
+| `POST /v1/collections/workspace/documents` | multipart `files` → `{job_id, file_ids, message}` |
+| `GET /v1/collections/{name}/documents` | `{files: [FileInfo]}` |
+| `DELETE /v1/collections/{name}/documents` | body `{file_ids}`; removes chunks, tables and originals |
+| `GET /v1/documents/{job_id}/status` | `IngestionJobStatus` |
+| `POST /v1/packs/sync`, `GET /v1/packs/status` | start a pack sync (`202`), per-pack `{id, status, files_total, files_done, error}` |
+
+Uploads stream to disk; `file_id` is `f-` plus the first 16 hex digits of the file's sha256, so identical bytes are
+one file (a re-upload returns it, or ingests it again if it had failed). A file that cannot be ingested (unsupported,
+renamed, empty, too large) fails on its own with an error code and message; the rest of the batch continues.
+Uploaded documents become the source `workspace.documents`, tables `workspace.tables` (DuckDB alias
+`workspace_tables`), both in the pack `workspace` ("Your data").
+
+**Nemotron Parse fallback.** When Parse is disabled, unreachable, failing, or slower than three quarters of the stage
+timeout, a PDF is read from its text layer instead (parser `pdf-text-layer`, with a warning); an image fails with
+`parser_unavailable`.
+
+## Industry packs (`demo-ingest sync-packs`)
+
+Every `PACKS_DIR/<id>/pack.yaml` (validated with `data/schemas`) is ingested through the same pipeline into
+`<id>.<source>` sources, with the pack's declared keys, column descriptions and prediction templates. The server
+syncs in the background at startup; the command syncs and exits non-zero if any pack or file failed. A pack is skipped
+when its digest is unchanged: sha256 over `pack.yaml`, `questions.yaml` and `files/**`, plus the Parse model (or
+`pdf-text-layer` when Parse is disabled) and the embed model. A sync whose PDFs fell back to the text layer because
+Parse was unreachable records no digest, so the next sync tries Parse again.
+
 ## Configuration
 
 | Variable | Default | Meaning |

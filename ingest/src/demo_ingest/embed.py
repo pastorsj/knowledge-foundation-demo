@@ -72,6 +72,10 @@ class Embedder:
         self._settings = settings
         self._client: NVIDIAEmbeddings | None = None
 
+    def check(self) -> None:
+        """Fail now, before a document is parsed, when nothing could embed it."""
+        self._get_client()
+
     def _get_client(self) -> NVIDIAEmbeddings:
         if self._client is None:
             if not self._settings.retriever_api_key:
