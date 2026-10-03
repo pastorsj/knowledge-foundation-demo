@@ -261,13 +261,17 @@ def unique(names: list[str]) -> list[str]:
 
 _DATABASE_FILE = re.compile(r"[^\s\"'`]*\.duckdb\b")
 _ABSOLUTE_PATH = re.compile(r"(?<![\w.:])/(?:[^\s\"'`/]+/)*[^\s\"'`/]*")
+# A relative path: one starting ./, ../ or ~/, or a quoted name/... (DuckDB quotes the files it names). An unquoted
+# word/word stays, as in DuckDB's own "LIMIT/OFFSET" or "arg_min/arg_max", and so does a quoted date like '12/03/2024'.
+_RELATIVE_PATH = re.compile(r"(?<![\w.:/-])(?:~|\.\.?)/[^\s\"'`]*|(?<=[\"'`])[A-Za-z_][\w.-]*/[^\s\"'`]*(?=[\"'`])")
 
 
 def redact_error(message: str) -> str:
-    """DuckDB's error class and its first two lines, without database files or absolute paths."""
+    """DuckDB's error class and its first two lines, without database files or absolute or relative paths."""
     lines = [line.strip() for line in message.strip().splitlines() if line.strip()][:2]
     text = " ".join(lines) or "DuckDB could not run the query."
-    text = _ABSOLUTE_PATH.sub("<path>", _DATABASE_FILE.sub("<database file>", text))
+    text = _DATABASE_FILE.sub("<database file>", text)
+    text = _RELATIVE_PATH.sub("<path>", _ABSOLUTE_PATH.sub("<path>", text))
     return text if len(text) <= MAX_ERROR_CHARS else text[: MAX_ERROR_CHARS - 1] + "…"
 
 

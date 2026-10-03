@@ -320,6 +320,17 @@ def test_error_text_loses_database_files_and_absolute_paths():
     assert "LINE 1" not in message  # the first two lines only
 
 
+def test_error_text_loses_relative_paths_but_keeps_duckdbs_own_slashes():
+    message = worker.redact_error(
+        "IO Error: No files found that match the pattern \"sources/retail.sales/notes.csv\" or './secret/x' "
+        "or ../etc/passwd or ~/notes, Subquery in LIMIT/OFFSET not supported: '12/03/2024'"
+    )
+
+    assert "sources/" not in message and "secret" not in message and "etc/passwd" not in message
+    assert "~/notes" not in message and message.count("<path>") == 4
+    assert "LIMIT/OFFSET" in message and "'12/03/2024'" in message
+
+
 async def test_a_database_error_reaches_the_agent(server: MCPServer):
     result = await query(server, "SELECT nope FROM retail_sales.orders")
 

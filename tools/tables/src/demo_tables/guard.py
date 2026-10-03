@@ -130,9 +130,10 @@ def _check_table(
 def _check_recursive_anchors(tree: exp.Expression, tables: Mapping[str, Collection[str]]) -> None:
     """In WITH RECURSIVE, a CTE may name itself only in a FROM or JOIN at the top level of its UNION's right side.
 
-    That is the only place DuckDB binds the name to the CTE. Elsewhere (the anchor, the body's own WITH, a subquery
-    of the recursive term, an INTERSECT or EXCEPT body, which DuckDB does not recurse over) it binds to the catalog,
-    while sqlglot sees the CTE across the whole body.
+    That is the only place DuckDB binds the name to the CTE, and only when the body is a plain UNION or UNION ALL.
+    Elsewhere (the anchor, the body's own WITH, a subquery of the recursive term, an INTERSECT, EXCEPT or UNION BY
+    NAME body, which DuckDB does not recurse over) it binds to the catalog, while sqlglot sees the CTE across the
+    whole body.
     """
     for with_ in tree.find_all(exp.With):
         if not with_.recursive:
@@ -140,8 +141,8 @@ def _check_recursive_anchors(tree: exp.Expression, tables: Mapping[str, Collecti
         for cte in with_.expressions:
             body = cte.this
             allowed: set[int] = set()
-            if isinstance(body, exp.Union) and isinstance(body.expression, exp.Select):
-                recursive = body.expression
+            recursive = _recursive_term(body)
+            if recursive is not None:
                 for source in [recursive.args.get("from_"), *(recursive.args.get("joins") or [])]:
                     if source is not None and isinstance(source.this, exp.Table):
                         allowed.add(id(source.this))
@@ -150,8 +151,27 @@ def _check_recursive_anchors(tree: exp.Expression, tables: Mapping[str, Collecti
                 if bare and table.name == cte.alias and id(table) not in allowed:
                     raise QueryRejected(
                         f"The recursive CTE {cte.alias!r} may name itself only in the FROM or JOIN of its recursive "
-                        f"part, right after UNION. {_only(tables)}"
+                        f"part, right after a plain UNION or UNION ALL. {_only(tables)}"
                     )
+
+
+# The parts of a plain `<anchor> UNION [ALL | DISTINCT] <recursive term>`, plus the WITH sqlglot attaches to it. Any
+# other part set (BY NAME, CORRESPONDING, ON or BY columns, a LEFT/FULL side, an INNER/OUTER kind, ORDER BY, LIMIT,
+# or one a later sqlglot adds) makes it a set operation the guard does not treat as recursive.
+_PLAIN_UNION_ARGS = frozenset({"this", "expression", "distinct", "with_"})
+
+
+def _recursive_term(body: exp.Expression) -> exp.Select | None:
+    """The SELECT DuckDB runs over a recursive CTE's own rows, or None if DuckDB does not recurse over `body`.
+
+    DuckDB recurses only over a plain UNION or UNION ALL. sqlglot also parses UNION BY NAME (and CORRESPONDING) as
+    a Union, but DuckDB binds a name in its right side to the catalog. A parenthesized term or body is not unwrapped.
+    """
+    if type(body) is not exp.Union or not isinstance(body.expression, exp.Select):
+        return None
+    if any(value is not None for key, value in body.args.items() if key not in _PLAIN_UNION_ARGS):
+        return None
+    return body.expression
 
 
 def ascii_lower(text: str) -> str:
