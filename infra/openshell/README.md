@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # OpenShell
 
 The Hermes agent runs inside an [OpenShell](https://github.com/NVIDIA/OpenShell)
@@ -6,13 +11,13 @@ OpenShell artifacts only: the gateway image, the supervisor and sandbox runtime
 images, and the CLI release tarball.
 
 ```text
-api ──▶ hermes-gateway (openshell forward service) ──gRPC/mTLS──▶ openshell gateway :18080
+api ──▶ hermes-gateway (openshell forward service) ──gRPC/mTLS──▶ openshell gateway (host 127.0.0.1:18380)
                                                                     │ Docker driver
                                                                     ▼
                              supervisor container (host network) ◀─▶ sandbox (network=none)
                                         │                            Hermes on 127.0.0.1:8642
                                         ▼
-         host.openshell.internal = 127.0.0.1 ─▶ Switchyard :4000, API :8000, MCP :8120/:3010/:3003, Phoenix :6006
+         host.openshell.internal = 127.0.0.1 ─▶ Switchyard :4300, API :8300, MCP :8320/:8321/:8322/:3303, Phoenix :6306
 ```
 
 - The sandbox has no network interface. Every connection Hermes opens is
@@ -29,14 +34,14 @@ api ──▶ hermes-gateway (openshell forward service) ──gRPC/mTLS──�
 | File | Purpose |
 |---|---|
 | `versions.env` | The OpenShell pin: version, three image digests, two CLI checksums. |
-| `gateway.toml` | Gateway config (schema v2): bind `0.0.0.0:18080` in its container, health on `:18081`, `grpc_endpoint` `https://127.0.0.1:18080`, runtime images by digest, sandbox namespace `market-demo`, bind mounts off. |
+| `gateway.toml` | Gateway config (schema v2): bind `0.0.0.0:18080` in its container, health on `:18081`, `grpc_endpoint` `https://127.0.0.1:18380` (the host port), gateway name and sandbox namespace `knowledge-foundation`, runtime images by digest, bind mounts off. |
 | `cli.Dockerfile` | CLI image from the sha256-checked release tarball (amd64, arm64). Runs one-off commands and the forwarder. |
-| `providers/switchyard.yaml` | Credential-free inference provider: `POST /v1/chat/completions` and `GET /v1/models` on `host.openshell.internal:4000`. |
-| `providers/receipts.yaml` | Binds `HERMES_RECEIPT_API_KEY` to the API's three `/internal/hermes` routes on `:8000` (execution-scope, tool-receipts, llm-calls). Hermes sees only a placeholder; the supervisor substitutes the real key on those routes. |
+| `providers/switchyard.yaml` | Credential-free inference provider: `POST /v1/chat/completions` and `GET /v1/models` on `host.openshell.internal:4300`. |
+| `providers/receipts.yaml` | Binds `HERMES_RECEIPT_API_KEY` to the API's three `/internal/hermes` routes on `:8300` (execution-scope, tool-receipts, llm-calls). Hermes sees only a placeholder; the supervisor substitutes the real key on those routes. |
 
 ## Compose contract
 
-Every resource belongs to the Compose project `market-demo`. `docker compose
+Every resource belongs to the Compose project `knowledge-foundation`. `docker compose
 --env-file infra/openshell/versions.env` makes the pins available for
 interpolation (for example `image: ${OPENSHELL_GATEWAY_IMAGE}`).
 
@@ -44,12 +49,12 @@ interpolation (for example `image: ${OPENSHELL_GATEWAY_IMAGE}`).
 |---|---|---|
 | `openshell-certs` (one-shot) | gateway | `user: "0"`, `network_mode: none`, `command: [generate-certs, --output-dir, /var/lib/openshell/tls]`, `XDG_CONFIG_HOME=/client`, volumes `openshell-state:/var/lib/openshell`, `openshell-client:/client`. Idempotent. |
 | `openshell-preflight` (one-shot) | gateway | `user: "0"`, `network_mode: none`, `command: [config, preflight, --path, /etc/openshell/gateway.toml]`, `gateway.toml` mounted read-only. |
-| `openshell` | gateway | `user: "0"` (Docker socket), `command: [--config, /etc/openshell/gateway.toml]` (overrides the image's `--bind-address 0.0.0.0 --port 8080`), ports `127.0.0.1:18080:18080` and `127.0.0.1:18081:18081`, env `OPENSHELL_DB_URL=sqlite:/var/lib/openshell/gateway.db?mode=rwc`, `OPENSHELL_LOCAL_TLS_DIR=/var/lib/openshell/tls`, `OPENSHELL_TELEMETRY_ENABLED=false`, `XDG_STATE_HOME=/var/lib/openshell`, volumes `/var/run/docker.sock`, `openshell-state`, `gateway.toml:ro`. Depends on both one-shots. |
+| `openshell` | gateway | `user: "0"` (Docker socket), `command: [--config, /etc/openshell/gateway.toml]` (overrides the image's `--bind-address 0.0.0.0 --port 8080`), ports `127.0.0.1:18380:18080` and `127.0.0.1:18381:18081` (the demo's own block, clear of OpenShell's defaults), env `OPENSHELL_DB_URL=sqlite:/var/lib/openshell/gateway.db?mode=rwc`, `OPENSHELL_LOCAL_TLS_DIR=/var/lib/openshell/tls`, `OPENSHELL_TELEMETRY_ENABLED=false`, `XDG_STATE_HOME=/var/lib/openshell`, volumes `/var/run/docker.sock`, `openshell-state`, `gateway.toml:ro`. Depends on both one-shots. |
 | `openshell-cli` (tools profile) | `cli.Dockerfile` | `user: "0"`, env `OPENSHELL_GATEWAY=openshell`, `OPENSHELL_GATEWAY_ENDPOINT=https://openshell:18080`, `XDG_CONFIG_HOME=/client`, volumes `openshell-client:/client` and `./infra/openshell/providers:/providers:ro`, on the gateway's network. `generate-certs` puts the CLI's mTLS bundle in that volume, and `openshell` is a default SAN of the gateway certificate. |
-| `hermes-gateway` | `cli.Dockerfile` | As `openshell-cli`, plus the default network, `restart: unless-stopped` and `command: [forward, service, hermes, --target-port, "8642", --local, "0.0.0.0:8642"]`. Start it only after the sandbox is Ready: it exits when the sandbox is not, and the restart policy brings it back once the sandbox is Ready again, for example after a gateway restart. Health: `curl -o /dev/null -w '%{http_code}' http://127.0.0.1:8642/v1/capabilities` returns 200 or 401. |
-| `agent` (build profile) | `agent/Dockerfile` | `image: market-demo/hermes-sandbox:local`, build context `./agent`, `additional_contexts: {contracts: ./contracts}`, build arg `AGENT_FEATURES`. `demo.sh` derives it from `COMPOSE_PROFILES`: keep `retrieval`, `analytics`, `kumo` and `ontology`, map `analytics-gpu` to `analytics`, and ignore every other profile. For example, `core,retrieval,analytics-gpu,kumo` becomes `retrieval,analytics,kumo`. |
+| `hermes-gateway` | `cli.Dockerfile` | As `openshell-cli`, plus the default network, `restart: unless-stopped` and `command: [forward, service, hermes, --target-port, "8642", --local, "0.0.0.0:8642"]`. Start it only after the sandbox is Ready: it exits when the sandbox is not, and the restart policy brings it back once the sandbox is Ready again, for example after a gateway restart. Health: `curl -fs -o /dev/null -m 3 http://127.0.0.1:8642/health`, the one route without a key. |
+| `agent` (build profile) | `agent/Dockerfile` | `image: knowledge-foundation/hermes-sandbox:local`, build context `./agent`, `additional_contexts: {contracts: ./contracts}`, build arg `AGENT_FEATURES` (default `retrieval,tables`). `demo.sh` derives it from `COMPOSE_PROFILES`: `retrieval,tables` always, `kumo` with the `kumo` profile (or `prediction` with a `KUMO_RELATIONAL_URL`), `ontology` with the `ontology` profile. For example, `core,parse,kumo` becomes `retrieval,tables,kumo`. |
 
-The gateway health endpoint is `http://127.0.0.1:18081/readyz`.
+The gateway health endpoint is `http://127.0.0.1:18381/readyz`.
 
 ## Bring-up
 
@@ -68,7 +73,7 @@ This is the sequence proven on Docker 28.4 (Ubuntu 24.04 arm64, kernel 6.8):
 set -a; . infra/openshell/versions.env; set +a          # the image pins, for the two pulls
 docker pull "$OPENSHELL_SUPERVISOR_IMAGE"; docker pull "$OPENSHELL_SANDBOX_IMAGE"   # else the gateway pulls at start
 dc up -d openshell                                      # certs and preflight run first
-curl -fsS http://127.0.0.1:18081/readyz
+curl -fsS http://127.0.0.1:18381/readyz
 
 cli profile lint -f /providers/switchyard.yaml
 cli profile import -f /providers/switchyard.yaml        # create-only; see "Updating profiles"
@@ -80,7 +85,7 @@ dc run --rm -T -e HERMES_RECEIPT_API_KEY openshell-cli \
 # Start Switchyard, the MCP servers, Phoenix and the API first: Hermes parks an
 # MCP server it cannot reach at startup.
 dc run --rm -T -e HERMES_API_SERVER_KEY --entrypoint sh openshell-cli -c \
-  'exec openshell sandbox create --name hermes --from market-demo/hermes-sandbox:local \
+  'exec openshell sandbox create --name hermes --from knowledge-foundation/hermes-sandbox:local \
      --provider switchyard --provider receipts --no-auto-providers \
      --label demo.fingerprint=<hash> --env "API_SERVER_KEY=$HERMES_API_SERVER_KEY" \
      --no-credential-warnings --detach --no-tty -- /opt/hermes/.venv/bin/hermes gateway run'
@@ -131,18 +136,18 @@ dangling > "$state.before"
 comm -13 "$state.before" <(dangling) >> "$state"
 
 # 2. Just before sandbox delete: the workload's volume, from its labelled container.
-workload=$(docker ps -aq -f label=openshell.ai/sandbox-namespace=market-demo \
+workload=$(docker ps -aq -f label=openshell.ai/sandbox-namespace=knowledge-foundation \
   -f label=openshell.ai/sandbox-name=hermes -f label=openshell.ai/isolation-role=sandbox)
 [ -z "$workload" ] || docker inspect \
   -f '{{range .Mounts}}{{if eq .Destination "/opt/data"}}{{.Name}}{{end}}{{end}}' "$workload" >> "$state"
 
 # 3. Once sandbox delete has removed the containers (no container labelled
-#    openshell.ai/sandbox-namespace=market-demo is left): remove only the recorded
+#    openshell.ai/sandbox-namespace=knowledge-foundation is left): remove only the recorded
 #    volumes, and only those that hold this profile.
 while read -r v; do
   docker volume inspect "$v" >/dev/null 2>&1 || continue   # docker run -v would create it
-  docker run --rm --network none -v "$v:/v:ro" --entrypoint grep market-demo/hermes-sandbox:local \
-    -qsx 'name: market-analysis-agent' /v/distribution.yaml && docker volume rm "$v"
+  docker run --rm --network none -v "$v:/v:ro" --entrypoint grep knowledge-foundation/hermes-sandbox:local \
+    -qsx 'name: knowledge-foundation-agent' /v/distribution.yaml && docker volume rm "$v"
 done < "$state"
 rm -f "$state" "$state.before"
 ```
