@@ -66,6 +66,15 @@ ESCAPES = {
     "a_derived_table_alias_used_as_a_table": "SELECT * FROM (SELECT 1 AS x) AS duckdb_tables, duckdb_tables",
     "a_cte_inside_a_cte_used_outside_it": "WITH a AS (WITH secret AS (SELECT 1) SELECT * FROM secret) "
     "SELECT * FROM a, secret",
+    # DuckDB binds a recursive CTE's anchor (the union's left side) to the catalog, not to the CTE itself.
+    "a_recursive_cte_named_in_its_own_anchor": "WITH RECURSIVE duckdb_databases AS (SELECT path::VARCHAR AS p "
+    "FROM duckdb_databases UNION SELECT p FROM duckdb_databases WHERE false) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_named_in_a_subquery_of_its_anchor": "WITH RECURSIVE t AS (SELECT * FROM (SELECT * FROM t) "
+    "UNION ALL SELECT * FROM t) SELECT * FROM t",
+    # DuckDB folds ASCII letters only; Unicode case folding would make these CTE names match the system views.
+    "a_cte_name_with_a_long_s": 'WITH "duckdb_databaſes" AS (SELECT 1 AS x) SELECT * FROM duckdb_databases',
+    "a_cte_name_with_a_kelvin_sign": 'WITH "ducKdb_tables" AS (SELECT 1 AS x) SELECT * FROM duckdb_tables',
+    "a_cte_name_with_a_dotless_i": 'WITH "pragma_database_lıst" AS (SELECT 1 AS x) SELECT * FROM pragma_database_list',
 }
 
 ALLOWED = {
