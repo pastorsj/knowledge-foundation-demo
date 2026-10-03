@@ -219,25 +219,29 @@ sources:
           name: Inpatient admission within 30 days
           description: >-
             Likelihood that a patient has any inpatient admission in the next 30 days, which for a recently discharged
-            patient is a readmission. Add WHERE patients.has_heart_failure = 1 to rank heart failure patients only.
+            patient is a readmission. Kumo scores at most 1,000 entities per request (1,400 patients here), so add
+            WHERE patients.has_heart_failure = 1 after FOR EACH to rank the 238 heart failure patients only.
           pql: >-
             PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'inpatient', 0, 30, days) > 0
             FOR EACH patients.patient_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: ed_visit_30d
           name: Emergency department visit within 30 days
           description: Likelihood that a patient has at least one emergency department visit in the next 30 days.
           pql: >-
             PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'ED', 0, 30, days) > 0
             FOR EACH patients.patient_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
         - id: claim_denial_60d
           name: Claim denial within 60 days
-          description: Likelihood that at least one claim submitted for a patient in the next 60 days is denied.
+          description: >-
+            Likelihood that at least one claim submitted for a patient in the next 60 days is denied. Kumo scores at
+            most 1,000 entities per request (1,400 patients here), so filter after FOR EACH, for example
+            WHERE patients.payer = 'Northstar Advantage' (226 patients).
           pql: >-
             PREDICT COUNT(claims.* WHERE claims.denied = 1, 0, 60, days) > 0
             FOR EACH patients.patient_id
-          anchor_time: "2026-09-30T00:00:00Z"
+          anchor_time: "2026-10-01T00:00:00Z"
 
   - id: guidelines
     name: Clinical Guidelines & Policies

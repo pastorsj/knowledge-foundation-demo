@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # healthcare pack
 
 Riverside Health Network is a **fictional** regional provider with 3 hospitals and 12 clinics. This pack gives the
@@ -96,7 +98,7 @@ Every number below is computed from the files by `generator/build.py`. Rates are
 
 ### 1. `scanned-checklist`
 
-Discharge weight **184.6 lb** (dry weight target 181 lb). Three items are unchecked: "Teach-back completed with patient and caregiver"; "Working home scale confirmed"; "7-day follow-up visit scheduled (enter date below)". The 7-day appointment date is blank and handwritten "NOT BOOKED". The form is for patient P000759 (Eastgate Regional Hospital, discharged 2026-08-11), who also appears in the answer to question 7.
+Discharge weight **183.4 lb** (dry weight target 181 lb). Three items are unchecked: "Teach-back completed with patient and caregiver"; "Working home scale confirmed"; "7-day follow-up visit scheduled (enter date below)". The 7-day appointment date is blank and handwritten "NOT BOOKED". The form is for patient P000759 (Eastgate Regional Hospital, discharged 2026-08-11), who also appears in the answer to question 7.
 
 ### 2. `prior-auth-mri`
 
@@ -144,7 +146,8 @@ GROUP BY facility_id ORDER BY facility_id;
 
 ### 5. `top-denial-reasons`
 
-Claims denied (adjudicated) from 2026-01-01 to 2026-09-30: 154 claims with $1,194,648.24 billed. The three
+Claims whose denial notice is dated in 2026 (`denied = 1` and `adjudicated_date` from 2026-01-01 to 2026-09-30; the
+submission date does not matter): 154 claims with $1,194,648.24 billed. The three
 reasons with the most billed dollars:
 
 | Rank | Denial reason | Denied claims | Billed amount |
@@ -158,7 +161,9 @@ Together they are $714,702.85, which is **59.8%** of all denied billed dollars.
 ### 6. `readmission-by-condition`
 
 30-day readmission rate for index discharges from 2025-04-01 to 2026-08-31 (the last month with a full 30-day
-follow-up; deaths and hospice excluded):
+follow-up; deaths and hospice excluded), by the stay's **primary** diagnosis (`diagnoses.is_primary = 1`): heart
+failure is a primary I50.x code, COPD a primary J44.x code, and every other discharge is "other". A secondary
+I50.x code does not make a stay a heart failure discharge.
 
 | Cohort | Index discharges | Readmitted within 30 days | Rate |
 |---|---|---|---|
@@ -212,27 +217,33 @@ The first deadline to close is claim CL0002998 (Medicaid, deadline 2026-10-01).
 
 ### 9. `hf-readmission-risk` (Kumo)
 
-A Kumo answer varies with the model, so the key states what a correct run looks like. It must use the
-`readmission_30d` template: `PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'inpatient', 0, 30, days) > 0
-FOR EACH patients.patient_id`, restricted to heart failure patients (`WHERE patients.has_heart_failure = 1`, or by
-ranking those patients' scores), with `anchor_time` 2026-09-30T00:00:00Z, and return a ranked list of `patient_id`s with
-probabilities. Reference rates from the tables:
+A Kumo answer varies with the model, so the key states what a correct run looks like, not an exact ranking. Kumo scores
+at most 1,000 entities per request (after the entity filter) and returns the top 25, so the question names a
+subpopulation and the run must filter: the `readmission_30d` template with
+`FOR EACH patients.patient_id WHERE patients.has_heart_failure = 1` (the full PQL is
+`PREDICT COUNT(encounters.* WHERE encounters.encounter_type = 'inpatient', 0, 30, days) > 0 FOR EACH patients.patient_id
+WHERE patients.has_heart_failure = 1`), with `anchor_time` 2026-10-01T00:00:00Z. The population is
+238 heart failure patients (all 1,400 patients would be too many). The run returns the top 25 `patient_id`s
+with probabilities. Reference rates from the tables:
 
-- 238 patients have heart failure. Averaged over 17 consecutive 30-day windows from 2025-04-01,
-  8.3% of them were admitted in a window, against 3.0% of all patients.
+- Averaged over 17 consecutive 30-day windows from 2025-04-01, 8.3% of the heart failure
+  patients were admitted in a window, against 3.0% of all patients.
 - After an index discharge, the readmission rate within 30 days is 20.9% for heart failure and
   14.6% for all discharges (question 6), so recently discharged heart failure patients are the highest risk.
-- The top of a sensible ranking is made of older heart failure patients (75 and over) discharged recently, after a short
-  stay, with several earlier admissions. 7 heart failure patients were discharged in September 2026:
-  P000130, P000218, P000655, P000957, P001021, P001269, P001383.
+- The top 25 should include several of the 7 heart failure patients discharged in September 2026
+  (P000130, P000218, P000655, P000957, P001021, P001269, P001383) and be weighted to older patients (75 and over) after a short stay with several earlier
+  admissions. Overlap with that list and those characteristics is the check; the exact order is not.
 
 ### 10. `claim-denial-risk` (Kumo)
 
-It must use the `claim_denial_60d` template: `PREDICT COUNT(claims.* WHERE claims.denied = 1, 0, 60, days) > 0 FOR EACH
-patients.patient_id`, with `anchor_time` 2026-09-30T00:00:00Z, and return the top-ranked `patient_id`s with probabilities.
-Reference rates from the claims table, averaged over 6 consecutive 60-day windows of claim submission
-dates from 2025-08-05 to 2026-07-30 (outcomes all known): 2.1% of all patients had a claim denied in a
-window, and by payer:
+Same limits: the question names Northstar Advantage patients (226 of the 1,400 patients, the payer with
+the highest denial rate), so the run must filter. It must use the `claim_denial_60d` template with
+`FOR EACH patients.patient_id WHERE patients.payer = 'Northstar Advantage'` (the full PQL is
+`PREDICT COUNT(claims.* WHERE claims.denied = 1, 0, 60, days) > 0 FOR EACH patients.patient_id WHERE patients.payer =
+'Northstar Advantage'`), with `anchor_time` 2026-10-01T00:00:00Z, and return the top 25 `patient_id`s with
+probabilities. Reference rates from the claims table, averaged over 6 consecutive 60-day windows of
+claim submission dates from 2025-08-05 to 2026-07-30 (outcomes all known): 4.1% of Northstar
+Advantage patients had a claim denied in a window, against 2.1% of all patients, and by payer:
 
 | Payer | Patients | Share with a denied claim in a 60-day window |
 |---|---|---|
@@ -242,10 +253,12 @@ window, and by payer:
 | Evergreen Health Plan | 254 | 1.6% |
 | Cascade Mutual | 234 | 1.7% |
 
-Denials also repeat for the same patient: of the 167 patients with a denied claim submitted on or before
-2026-05-31, 7.8% had another denied claim submitted from 2026-06-01 to 2026-07-30, against
-1.9% of patients never denied before. A sensible ranking puts patients denied before first, then
-patients on the higher-denial payers (Northstar Advantage, Cascade Mutual) with many recent claims.
+Denials also repeat for the same patient: of the 50 Northstar Advantage patients with a denied claim
+submitted on or before 2026-05-31, 18.0% had another denied claim submitted from 2026-06-01 to
+2026-07-30, against 1.1% of Northstar Advantage patients never denied before. The top 25 should
+include several of the 16 Northstar Advantage patients with a denied claim submitted since 2026-07-01
+(P000156, P000174, P000230, P000304, P000345, P000368, P000443, P000620, P000796, P000860, P001082, P001105, P001175, P001184, P001298, P001333), and favor patients denied before with many recent claims. Overlap with that list is the check;
+the exact order is not.
 
 ## Other facts the documents and tables share
 

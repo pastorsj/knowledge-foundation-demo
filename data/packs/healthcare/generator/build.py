@@ -1346,6 +1346,7 @@ def fill(text: str, ctx: dict) -> str:
 
 def parse_doc(text: str) -> tuple[dict[str, str], list[tuple]]:
     meta: dict[str, str] = {}
+    text = re.sub(r"\A(?:<!--.*?-->[ \t]*\n)+", "", text, flags=re.DOTALL)  # the SPDX header is not content
     body = text
     if text.startswith("---\n"):
         head, _, body = text[4:].partition("\n---\n")
@@ -2144,7 +2145,7 @@ FORM_SECTIONS = [
         ],
     ),
 ]
-FORM_WEIGHT_LB = "184.6"
+FORM_WEIGHT_LB = "183.4"
 FORM_DRY_WEIGHT_LB = "181"
 FORM_NOTE = "Pt lives alone, daughter drives. Clinic line busy, appt NOT booked. RN to call pt 48 h."
 
@@ -2336,6 +2337,9 @@ def _md_table(header: list[str], rows: list[list[str]]) -> str:
     return "\n".join(out)
 
 
+Q10_PAYER = "Northstar Advantage"  # the payer the claim-denial-risk question asks about (highest denial rate)
+
+
 def answer_key(res: dict) -> dict[str, str]:
     t, ctx, case, sc = res["tables"], res["ctx"], res["case"], res["scorecards"]
     enc, dx, claims, pat = t["encounters"], t["diagnoses"], t["claims"], t["patients"]
@@ -2473,6 +2477,7 @@ def answer_key(res: dict) -> dict[str, str]:
     starts = [pd.Timestamp("2026-05-31") - pd.Timedelta(days=60 * k) for k in range(6)]  # latest window ends 2026-07-30
     by_payer: dict[str, list[float]] = {p: [] for p in PAYERS if p != "Self-pay"}
     overall: list[float] = []
+    ns_ids = set(pat.loc[pat["payer"] == Q10_PAYER, "patient_id"])
     for st in starts:
         w = cl[(cl["sub"] > st) & (cl["sub"] <= st + pd.Timedelta(days=60)) & (cl["denied"] == 1)]
         who = set(w["patient_id"])
@@ -2487,11 +2492,24 @@ def answer_key(res: dict) -> dict[str, str]:
         ["Payer", "Patients", "Share with a denied claim in a 60-day window"],
         [[p, int((pat["payer"] == p).sum()), pct(float(np.mean(v)))] for p, v in by_payer.items()],
     )
-    prior = set(cl.loc[(cl["denied"] == 1) & (cl["sub"] <= "2026-05-31"), "patient_id"])
-    later = set(cl.loc[(cl["denied"] == 1) & (cl["sub"] >= "2026-06-01") & (cl["sub"] <= "2026-07-30"), "patient_id"])
+    # The question asks about one payer's patients (226 of 1,400): Kumo scores at most 1,000 entities per request
+    ak["q10_payer_n"] = str(len(ns_ids))
+    ak["q10_payer_rate"] = pct(float(np.mean(by_payer[Q10_PAYER])))
+    prior = set(cl.loc[(cl["denied"] == 1) & (cl["sub"] <= "2026-05-31") & cl["patient_id"].isin(ns_ids), "patient_id"])
+    later = set(
+        cl.loc[
+            (cl["denied"] == 1) & (cl["sub"] >= "2026-06-01") & (cl["sub"] <= "2026-07-30") & cl["patient_id"].isin(ns_ids),
+            "patient_id",
+        ]
+    )
     ak["q10_prior_n"] = str(len(prior))
     ak["q10_prior_rate"] = pct(100.0 * len(prior & later) / len(prior))
-    ak["q10_never_rate"] = pct(100.0 * len(later - prior) / (len(pat) - len(prior)))
+    ak["q10_never_rate"] = pct(100.0 * len(later - prior) / (len(ns_ids) - len(prior)))
+    recent = sorted(
+        set(cl.loc[(cl["denied"] == 1) & (cl["sub"] >= "2026-07-01") & cl["patient_id"].isin(ns_ids), "patient_id"])
+    )
+    ak["q10_recent_n"] = str(len(recent))
+    ak["q10_recent_ids"] = ", ".join(recent)
     return ak
 
 
