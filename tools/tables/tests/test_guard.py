@@ -71,6 +71,19 @@ ESCAPES = {
     "FROM duckdb_databases UNION SELECT p FROM duckdb_databases WHERE false) SELECT * FROM duckdb_databases",
     "a_recursive_cte_named_in_a_subquery_of_its_anchor": "WITH RECURSIVE t AS (SELECT * FROM (SELECT * FROM t) "
     "UNION ALL SELECT * FROM t) SELECT * FROM t",
+    # Its own name only at the top level of a UNION's right side: not in the body's own WITH, not under INTERSECT
+    # or EXCEPT (DuckDB recurses only over UNION), not in a subquery of the recursive term.
+    "a_recursive_cte_named_in_its_bodys_own_with": "WITH RECURSIVE duckdb_databases AS (WITH x AS (SELECT "
+    "path::VARCHAR AS p FROM duckdb_databases) SELECT p FROM x UNION SELECT p FROM duckdb_databases WHERE false) "
+    "SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_intersect": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS p INTERSECT "
+    "SELECT path FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_over_except": "WITH RECURSIVE duckdb_databases AS (SELECT 'x' AS p EXCEPT "
+    "SELECT CAST(path AS VARCHAR) FROM duckdb_databases) SELECT * FROM duckdb_databases",
+    "a_recursive_cte_without_a_union": "WITH RECURSIVE duckdb_databases AS (SELECT path FROM duckdb_databases) "
+    "SELECT * FROM duckdb_databases",
+    "a_recursive_cte_named_in_a_subquery_of_its_recursive_term": "WITH RECURSIVE t AS (SELECT 1 AS n UNION ALL "
+    "SELECT n + 1 FROM (SELECT * FROM t) s WHERE n < 5) SELECT * FROM t",
     # DuckDB folds ASCII letters only; Unicode case folding would make these CTE names match the system views.
     "a_cte_name_with_a_long_s": 'WITH "duckdb_databaſes" AS (SELECT 1 AS x) SELECT * FROM duckdb_databases',
     "a_cte_name_with_a_kelvin_sign": 'WITH "ducKdb_tables" AS (SELECT 1 AS x) SELECT * FROM duckdb_tables',
@@ -99,6 +112,10 @@ ALLOWED = {
     "SELECT * FROM (SELECT * FROM a) WHERE customer_id IN (SELECT customer_id FROM a)",
     "a_cte_in_any_case": 'WITH Big AS (SELECT * FROM retail_sales.orders) SELECT * FROM "BIG"',
     "a_recursive_cte": "WITH RECURSIVE t(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM t WHERE n < 5) SELECT * FROM t",
+    "a_recursive_cte_joining_a_table": "WITH RECURSIVE t(n) AS (SELECT 1 UNION SELECT t.n + 1 FROM t "
+    "JOIN retail_sales.orders o ON o.net_amount > t.n WHERE t.n < 3) SELECT * FROM t",
+    "a_recursive_with_whose_ctes_do_not_recurse": "WITH RECURSIVE a AS (SELECT * FROM retail_sales.orders), "
+    "b AS (SELECT * FROM a INTERSECT SELECT * FROM a) SELECT * FROM b",
     "a_cte_inside_a_subquery": "SELECT * FROM (WITH a AS (SELECT * FROM retail_sales.orders) SELECT * FROM a) s",
 }
 

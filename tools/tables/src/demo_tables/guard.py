@@ -128,21 +128,29 @@ def _check_table(
 
 
 def _check_recursive_anchors(tree: exp.Expression, tables: Mapping[str, Collection[str]]) -> None:
-    """Refuse a recursive CTE's own name in its anchor: DuckDB binds it there to the catalog, not to the CTE.
+    """In WITH RECURSIVE, a CTE may name itself only in a FROM or JOIN at the top level of its UNION's right side.
 
-    sqlglot treats the name as the CTE across the whole union; only the recursive term (its right side) may use it.
+    That is the only place DuckDB binds the name to the CTE. Elsewhere (the anchor, the body's own WITH, a subquery
+    of the recursive term, an INTERSECT or EXCEPT body, which DuckDB does not recurse over) it binds to the catalog,
+    while sqlglot sees the CTE across the whole body.
     """
     for with_ in tree.find_all(exp.With):
         if not with_.recursive:
             continue
         for cte in with_.expressions:
             body = cte.this
-            anchor = body.this if isinstance(body, exp.SetOperation) else body
-            for table in anchor.find_all(exp.Table):
-                if not table.db and not table.catalog and table.name == cte.alias:
+            allowed: set[int] = set()
+            if isinstance(body, exp.Union) and isinstance(body.expression, exp.Select):
+                recursive = body.expression
+                for source in [recursive.args.get("from_"), *(recursive.args.get("joins") or [])]:
+                    if source is not None and isinstance(source.this, exp.Table):
+                        allowed.add(id(source.this))
+            for table in body.find_all(exp.Table):
+                bare = not table.db and not table.catalog
+                if bare and table.name == cte.alias and id(table) not in allowed:
                     raise QueryRejected(
-                        f"The recursive CTE {cte.alias!r} may use its own name only after UNION, in its recursive "
-                        f"part. {_only(tables)}"
+                        f"The recursive CTE {cte.alias!r} may name itself only in the FROM or JOIN of its recursive "
+                        f"part, right after UNION. {_only(tables)}"
                     )
 
 

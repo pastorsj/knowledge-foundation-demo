@@ -21,6 +21,7 @@ import datetime
 import decimal
 import json
 import math
+import re
 import sys
 import tempfile
 from dataclasses import dataclass
@@ -258,6 +259,18 @@ def unique(names: list[str]) -> list[str]:
     return result
 
 
+_DATABASE_FILE = re.compile(r"[^\s\"'`]*\.duckdb\b")
+_ABSOLUTE_PATH = re.compile(r"(?<![\w.:])/(?:[^\s\"'`/]+/)*[^\s\"'`/]*")
+
+
+def redact_error(message: str) -> str:
+    """DuckDB's error class and its first two lines, without database files or absolute paths."""
+    lines = [line.strip() for line in message.strip().splitlines() if line.strip()][:2]
+    text = " ".join(lines) or "DuckDB could not run the query."
+    text = _ABSOLUTE_PATH.sub("<path>", _DATABASE_FILE.sub("<database file>", text))
+    return text if len(text) <= MAX_ERROR_CHARS else text[: MAX_ERROR_CHARS - 1] + "…"
+
+
 def main() -> None:
     import duckdb
 
@@ -270,8 +283,7 @@ def main() -> None:
     except _Refused as error:
         result = {"error": str(error)}
     except duckdb.Error as error:  # the agent needs DuckDB's message (a missing column, a type) to fix its SQL
-        message = str(error).strip()
-        result = {"error": message[: MAX_ERROR_CHARS - 1] + "…" if len(message) > MAX_ERROR_CHARS else message}
+        result = {"error": redact_error(str(error))}
     except MemoryError:
         result = {"error": "The query ran out of memory. Filter or aggregate it and try again."}
     sys.stdout.write(json.dumps(result))
