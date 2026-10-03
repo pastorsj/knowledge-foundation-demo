@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 from conftest import CATALOG_FIXTURES
+
 from demo_ingest.catalog import Catalog
 from demo_ingest.catalog import CatalogError
 from demo_ingest.settings import Settings

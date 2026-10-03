@@ -31,6 +31,7 @@ from typing import Any
 
 import pytest
 import requests
+
 from demo_ingest.catalog import Catalog
 from demo_ingest.settings import Settings
 

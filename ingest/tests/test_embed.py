@@ -11,11 +11,12 @@ from typing import Any
 import pytest
 import requests
 from conftest import embed
+from requests.adapters import HTTPAdapter
+from tenacity import wait_none
+
 from demo_ingest import embed as embedding
 from demo_ingest.models import IngestError
 from demo_ingest.settings import Settings
-from requests.adapters import HTTPAdapter
-from tenacity import wait_none
 
 EMBED_URL = "https://integrate.api.nvidia.com/v1/embeddings"
 

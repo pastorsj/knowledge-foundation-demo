@@ -21,12 +21,13 @@ from conftest import CATALOG_FIXTURES
 from conftest import FIXTURES
 from conftest import FakeEmbedder
 from conftest import FakeParse
+from jsonschema import Draft202012Validator
+
 from demo_ingest.app import create_app
 from demo_ingest.catalog import Catalog
 from demo_ingest.index import KnowledgeIndex
 from demo_ingest.settings import Settings
 from demo_ingest.store import JobStore
-from jsonschema import Draft202012Validator
 
 pytestmark = pytest.mark.anyio
 TABLES = CATALOG_FIXTURES / "tables"

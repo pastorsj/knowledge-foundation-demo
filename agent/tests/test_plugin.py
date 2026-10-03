@@ -225,10 +225,6 @@ def test_fixture_tool_results_give_the_fixture_receipts(hooks, api, fixture):
         assert output is None
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="contracts/fixtures/receipts.json: five receiptIds are not sha256(jobId, tool call id) since the E2 rewrite",
-)
 def test_fixture_receipt_ids_are_the_plugin_evidence_ids():
     """A fixture receipt's id is the evidence id the plugin derives for its job and tool call."""
     derived = [

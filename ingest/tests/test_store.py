@@ -7,6 +7,7 @@ import sqlite3
 from pathlib import Path
 
 import pytest
+
 from demo_ingest.store import JobStore
 
 

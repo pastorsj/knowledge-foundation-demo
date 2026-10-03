@@ -15,12 +15,13 @@ from conftest import REPO
 from conftest import FakeEmbedder
 from conftest import closed_port_url
 from conftest import write_policy_pdf
+from jsonschema import Draft202012Validator
+
 from demo_ingest import packs
 from demo_ingest.catalog import Catalog
 from demo_ingest.index import KnowledgeIndex
 from demo_ingest.pipeline import Pipeline
 from demo_ingest.settings import Settings
-from jsonschema import Draft202012Validator
 
 SCHEMAS = REPO / "data" / "schemas"
 

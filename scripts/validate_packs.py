@@ -54,7 +54,8 @@ def pack_errors(pack_dir: Path, pack_schema: dict, questions_schema: dict) -> li
         if not set(examples) <= question_ids:
             errors.append(f"questions.yaml: examples name unknown questions: {sorted(set(examples) - question_ids)}")
         if not featured <= set(examples):
-            errors.append(f"questions.yaml: featured questions missing from examples: {sorted(featured - set(examples))}")
+            missing = sorted(featured - set(examples))
+            errors.append(f"questions.yaml: featured questions missing from examples: {missing}")
         if len(examples) > MAX_EXAMPLES:
             errors.append(f"questions.yaml: more than {MAX_EXAMPLES} examples")
     if not any(question.get("featured") for question in questions["questions"]):

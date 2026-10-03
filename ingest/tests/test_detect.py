@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 from conftest import CATALOG_FIXTURES
+
 from demo_ingest.detect import Detected
 from demo_ingest.detect import detect
 from demo_ingest.models import IngestError

@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 from conftest import CATALOG_FIXTURES
 from conftest import FakeEmbedder
+
 from demo_ingest import pipeline as pipeline_module
 from demo_ingest import tables
 from demo_ingest.catalog import Catalog

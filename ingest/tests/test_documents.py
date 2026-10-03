@@ -13,6 +13,7 @@ import pytest
 from conftest import FakeEmbedder
 from conftest import FakeParse
 from conftest import closed_port_url
+
 from demo_ingest import documents
 from demo_ingest.catalog import Catalog
 from demo_ingest.index import KnowledgeIndex

@@ -8,9 +8,10 @@ from pathlib import Path
 
 import pytest
 from conftest import embed
+from pymilvus import MilvusClient
+
 from demo_ingest.documents import Chunk
 from demo_ingest.index import KnowledgeIndex
-from pymilvus import MilvusClient
 
 
 @pytest.fixture(scope="module")

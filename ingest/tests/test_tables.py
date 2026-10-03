@@ -12,9 +12,10 @@ import openpyxl
 import pytest
 from conftest import CATALOG_FIXTURES
 from conftest import FIXTURES
+from jsonschema import Draft202012Validator
+
 from demo_ingest import tables
 from demo_ingest.models import IngestError
-from jsonschema import Draft202012Validator
 
 TABLES = CATALOG_FIXTURES / "tables"
 SOURCE_SCHEMA = json.loads((CATALOG_FIXTURES.parents[1] / "catalog" / "source-manifest.schema.json").read_text())
