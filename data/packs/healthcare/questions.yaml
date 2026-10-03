@@ -1,0 +1,121 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/questions.schema.json
+schema_version: "3"
+
+examples:
+  - scanned-checklist
+  - prior-auth-mri
+  - readmissions-by-hospital
+  - missed-hf-followup
+  - appealable-denials
+  - hf-readmission-risk
+  - hf-followup-schedule
+  - top-denial-reasons
+  - readmission-by-condition
+  - claim-denial-risk
+
+questions:
+  - id: scanned-checklist
+    label: Scanned discharge checklist
+    tag: DOCUMENTS
+    description: Reads a scanned, slightly rotated form with typed fields, check marks and handwriting.
+    question: >-
+      On the scanned heart failure discharge checklist, what discharge weight was recorded and which checklist items
+      were left unchecked?
+    sources: [guidelines]
+    tools: [retrieval]
+    featured: true
+
+  - id: prior-auth-mri
+    label: MRI prior authorization turnaround
+    tag: DOCUMENTS
+    description: Answered from the table of services in the prior authorization policy.
+    question: >-
+      Does a cardiac MRI need prior authorization, and how many business days does the payer have to decide? What is
+      the expedited turnaround?
+    sources: [operations]
+    tools: [retrieval]
+    featured: true
+
+  - id: hf-followup-schedule
+    label: Heart failure follow-up schedule
+    tag: DOCUMENTS
+    description: Answered from the follow-up schedule table in the heart failure discharge protocol.
+    question: >-
+      What follow-up steps does the heart failure discharge protocol require after a patient goes home, and by when?
+    sources: [guidelines]
+    tools: [retrieval]
+
+  - id: readmissions-by-hospital
+    label: Q2 readmission rate by hospital
+    tag: SQL
+    description: A window function over inpatient encounters, matching the quality committee deck.
+    question: >-
+      What was the 30-day readmission rate at each of our three hospitals for patients discharged in Q2 2026 (April to
+      June)? Leave out discharges that ended in death or hospice.
+    sources: [clinical]
+    tools: [duckdb]
+    featured: true
+
+  - id: top-denial-reasons
+    label: Costliest denial reasons
+    tag: SQL
+    description: Ranks denial reasons by billed dollars rather than by claim count.
+    question: >-
+      Which three denial reasons account for the most billed dollars on claims denied in 2026, and what share of all
+      denied billed dollars do they make up?
+    sources: [clinical]
+    tools: [duckdb]
+
+  - id: readmission-by-condition
+    label: Readmissions by condition
+    tag: SQL
+    description: Joins inpatient encounters to their primary diagnosis.
+    question: >-
+      Compare the 30-day readmission rate for heart failure discharges, COPD discharges and all other inpatient
+      discharges from April 2025 through August 2026. Leave out deaths and hospice discharges.
+    sources: [clinical]
+    tools: [duckdb]
+
+  - id: missed-hf-followup
+    label: Missed 7-day heart failure follow-up
+    tag: HYBRID
+    description: The protocol sets the rule (7 days, which discharges count); the encounters table shows who missed it.
+    question: >-
+      Which heart failure patients discharged in August 2026 missed the follow-up visit our discharge protocol requires
+      within 7 days? List patient id, hospital and discharge date.
+    sources: [guidelines, clinical]
+    tools: [retrieval, duckdb]
+    featured: true
+
+  - id: appealable-denials
+    label: Denials still open for appeal
+    tag: HYBRID
+    description: Appeal windows come from the payer contract summary; the denied claims come from the claims table.
+    question: >-
+      As of 2026-09-30, how many denied claims that have not been appealed are still inside their payer's first-level
+      appeal window, and what is the billed amount by payer?
+    sources: [operations, clinical]
+    tools: [retrieval, duckdb]
+    featured: true
+
+  - id: hf-readmission-risk
+    label: Heart failure readmission risk
+    tag: PREDICTION
+    description: Kumo scores every heart failure patient for an inpatient admission in the next 30 days.
+    question: >-
+      Which heart failure patients are most likely to be admitted to the hospital again in the next 30 days?
+    sources: [clinical]
+    tools: [kumo]
+    featured: true
+
+  - id: claim-denial-risk
+    label: Claim denial risk
+    tag: PREDICTION
+    description: Kumo scores every patient for a denied claim in the next 60 days.
+    question: >-
+      Which patients are most likely to have a claim denied in the next 60 days?
+    sources: [clinical]
+    tools: [kumo]
