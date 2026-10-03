@@ -5,29 +5,30 @@
 Ported from tools/market-analytics (`Predictor`, the window parser, one attempt within 60 s). The source is the one
 selected source whose tables include every table the query names. Its graph is built on each call from its DuckDB
 file, read-only, with the catalog's primary keys, time columns and foreign keys (`TableInfo`). Kumo scores up to
-`MAX_ENTITIES` entities of the entity table, in primary-key order, filtered by the query's entity filter when that
-filter is a plain condition on the entity table; the result lists the `MAX_ROWS` highest.
+`KUMO_MAX_ENTITIES` entities of the entity table (its per-request limit), in primary-key order, filtered by the
+query's entity filter when that filter is a plain condition on the entity table (entities.py); the result lists the
+`MAX_ROWS` highest, within the 30,000-character result budget.
 
-Without KUMO_RELATIONAL_URL, or when the endpoint fails, the result says so (`available: false` and the reason)
-rather than raising: the agent reports it instead of retrying.
+Without KUMO_RELATIONAL_URL, or when the endpoint fails, the result says so (`available: false` and a written
+reason) rather than raising: the agent reports it instead of retrying.
 """
 
 from __future__ import annotations
 
 import datetime
+import json
 import logging
 import math
 import re
-import tempfile
-import threading
 import time
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any
 
-import duckdb
 import pandas as pd
+import pydantic_core
+from kumo_relational_client import NimRequestError
 from kumo_relational_client import RelationalClient
+from kumo_relational_client import RelationalError
 from kumo_relational_client import relational
 from openinference.semconv.trace import OpenInferenceSpanKindValues as SpanKind
 from openinference.semconv.trace import SpanAttributes
@@ -36,6 +37,7 @@ from pydantic import BaseModel
 from pydantic import Field
 
 from . import catalog
+from . import entities
 from .pql import Horizon
 from .pql import PqlError
 from .pql import Query
@@ -49,12 +51,23 @@ MODEL = "kumo-relational"
 # One attempt and no retries, so a slow or warming NIM yields `available=false` well inside the agent's MCP
 # timeout rather than a transport error with no receipt.
 TIMEOUT_SECONDS = 60.0
-MAX_ENTITIES = 100
+KUMO_MAX_ENTITIES = 1000  # Kumo Relational's documented limit of entities per prediction request
 MAX_ROWS = 25
-MAX_TEXT_CHARS = 200  # entity ids and class labels, so 25 rows always fit the result budget
-FILTER_TIMEOUT_SECONDS = 10.0
+MAX_TEXT_CHARS = 200  # entity ids and class labels
+MAX_PQL_CHARS = 2000  # the tool's own limit, and a template's (contracts/catalog/source-manifest.schema.json)
+MAX_WARNINGS = 10
+MAX_WARNING_CHARS = 500
+# 60% of Hermes' 50,000-character limit for one MCP result, as the agent reads it (tools/retrieval/budget.py).
+MAX_RESULT_CHARS = 30_000
+EVIDENCE_ID = "hermes-receipt:" + "0" * 64
 TEMPLATE_PREFIX = "template:"
 NO_ENDPOINT = "No Kumo endpoint is configured (KUMO_RELATIONAL_URL)."
+UNREACHABLE = "The Kumo endpoint could not be reached (KUMO_RELATIONAL_URL); it may be down or still starting."
+TIMED_OUT = f"The Kumo endpoint did not answer within {TIMEOUT_SECONDS:g} seconds."
+REFUSED_KEY = "The Kumo endpoint refused the credentials (KUMO_API_KEY)."
+UNEXPECTED = "The prediction failed unexpectedly; the prediction service's log has the details."
+URL = re.compile(r"https?://\S+")
+PATH = re.compile(r"(?<![\w.])/(?:[\w.-]+/)+[\w.-]*")
 # An aggregate over a window, which only Kumo evaluates (it is relative to the anchor time).
 TEMPORAL = re.compile(r"\(\s*[^()]*,\s*-?\d+\s*,\s*-?\d+\s*,\s*[a-z]+\s*\)", re.IGNORECASE)
 
@@ -127,7 +140,7 @@ class Predictor:
                 entity_table=plan.entity.name,
                 rows=rows or [],
                 elapsed_ms=round((time.perf_counter() - started) * 1000, 1),
-                warnings=warnings,
+                warnings=[_clip(warning, MAX_WARNING_CHARS) for warning in warnings[:MAX_WARNINGS]],
             )
 
         if not self.settings.kumo_url:
@@ -141,6 +154,12 @@ class Predictor:
                     warnings += notes
                 graph, notes = build_graph(plan.source)
                 warnings += notes
+            except Exception as error:  # the source's file or catalog entry does not make a graph
+                logger.warning("the graph of %s could not be built", plan.source.id, exc_info=True)
+                span.set_attribute("error.type", type(error).__name__)
+                reason = f"The tables of {plan.source.id} could not be read as a Kumo graph: {_redact(error)}"
+                return result(reason=reason)
+            try:
                 with RelationalClient(
                     url=self.settings.kumo_url,
                     api_key=self.settings.kumo_api_key,
@@ -151,14 +170,14 @@ class Predictor:
                         plan.pql, ids, anchor_time=plan.anchor, run_mode="fast", num_retries=0, verbose=False
                     )
                 rows, task_type = to_rows(frame)
-            except Exception as error:  # the NIM is down, still warming up, or rejected the query or the graph
-                logger.warning("Kumo prediction over %s failed: %r", plan.source.id, error)
+            except Exception as error:  # the NIM is down, still warming up, or rejected the query
+                logger.warning("Kumo prediction over %s failed", plan.source.id, exc_info=True)
                 span.set_attribute("error.type", type(error).__name__)
-                return result(reason=f"{type(error).__name__}: {error}"[:500])
+                return result(reason=kumo_reason(error))
             span.set_attribute("output.row_count", len(rows))
         if len(rows) > MAX_ROWS:
             warnings.append(f"Showing the {MAX_ROWS} highest of {len(rows)} predictions.")
-        return result(rows=rows[:MAX_ROWS], task_type=task_type)
+        return fit(result(rows=rows[:MAX_ROWS], task_type=task_type))
 
     def plan(self, pql: str, source_ids: list[str], anchor_time: str | None) -> Plan:
         try:
@@ -172,6 +191,8 @@ class Predictor:
                 template_id = text.removeprefix(TEMPLATE_PREFIX).strip()
                 source, template = _template(sources, template_id)
                 text, template_anchor = template.pql, template.anchor_time
+                if len(text) > MAX_PQL_CHARS:
+                    raise PredictionError(f"The template {template_id!r} is longer than {MAX_PQL_CHARS} characters.")
                 query = parse(text)
                 _require_tables(source, query)
             else:
@@ -230,32 +251,84 @@ def build_graph(source: catalog.Source) -> tuple[relational.Graph, list[str]]:
 
 
 def entity_ids(source: catalog.Source, entity: catalog.TableInfo, condition: str | None) -> tuple[list[Any], list[str]]:
-    """Up to MAX_ENTITIES primary keys of the entity table, in order, that satisfy the query's entity filter.
+    """Up to KUMO_MAX_ENTITIES primary keys of the entity table, in order, that satisfy the query's entity filter.
 
     Kumo scores every id it is given, whatever the filter says, so a plain condition on the entity table is applied
-    here. A filter over time (an aggregate with a window) only Kumo can evaluate; it is reported instead.
+    here (entities.py). A filter over time (an aggregate with a window) only Kumo can evaluate, and a filter the tool
+    cannot apply is reported, not run.
     """
     warnings = []
+    key = entity.primary_key or ""
+    where = None
     if condition and TEMPORAL.search(condition):
         warnings.append(_unfiltered(condition, "it aggregates over time, which only Kumo evaluates"))
-        condition = None
-    table, key = _identifier(entity.name), _identifier(entity.primary_key or "")
-    select = f"SELECT {key} FROM source.main.{table} AS {table}"
-    order = f" ORDER BY 1 LIMIT {MAX_ENTITIES + 1}"
+    elif condition:
+        try:
+            where = entities.condition_sql(condition, entity.name, [column.name for column in entity.columns])
+        except entities.FilterRejected as error:
+            warnings.append(_unfiltered(condition, str(error)))
     try:
-        ids = _select(source.path, select + (f" WHERE ({condition})" if condition else "") + order)
-    except duckdb.Error as error:
-        if condition is None:
+        ids, population = entities.select(source.path, entity.name, key, where, KUMO_MAX_ENTITIES)
+    except entities.SelectionFailed as error:
+        if where is None:
             raise
-        warnings.append(_unfiltered(condition, str(error).strip().splitlines()[0][:300]))
-        ids = _select(source.path, select + order)
-    if len(ids) > MAX_ENTITIES:
+        warnings.append(_unfiltered(condition or "", str(error)))
+        ids, population = entities.select(source.path, entity.name, key, None, KUMO_MAX_ENTITIES)
+        where = None
+    if population > KUMO_MAX_ENTITIES:
+        passing = " that pass the filter" if where else ""
         warnings.insert(
             0,
-            f"Predictions cover the first {MAX_ENTITIES} entities of {entity.name} by {entity.primary_key}; it has "
-            "more. Narrow them with a WHERE on the entity table.",
+            f"{entity.name} has {population:,} entities{passing}, and Kumo scores at most {KUMO_MAX_ENTITIES:,} per "
+            f"request: these predictions cover the first {KUMO_MAX_ENTITIES:,} by {key}. Narrow the population with "
+            f"FOR EACH {entity.name}.{key} WHERE <a condition on {entity.name}>.",
         )
-    return ids[:MAX_ENTITIES], warnings
+    return ids, warnings
+
+
+def kumo_reason(error: Exception) -> str:
+    """A written reason for a failed Kumo call: what happened and what to check, without URLs or paths."""
+    message = getattr(error, "message", str(error))
+    if isinstance(error, NimRequestError):
+        if error.status_code in (401, 403) or error.code == "AUTHENTICATION_FAILED":
+            return REFUSED_KEY
+        if 400 <= error.status_code < 500 and error.status_code not in (408, 429):
+            return f"Kumo rejected the query: {_redact(message)}"
+        if error.status_code == 408:
+            return TIMED_OUT
+        return f"The Kumo endpoint failed to answer (HTTP {error.status_code}); try again later."
+    if isinstance(error, RelationalError):
+        if error.code == "TRANSPORT_ERROR":
+            return TIMED_OUT if re.search(r"timed? ?out", message, re.IGNORECASE) else UNREACHABLE
+        if error.code == "AUTHENTICATION_FAILED":
+            return REFUSED_KEY
+        if error.code == "INVALID_REQUEST":
+            return f"Kumo rejected the query: {_redact(message)}"
+        return f"Kumo could not make the prediction ({error.code or 'no code'})."
+    if isinstance(error, TimeoutError):
+        return TIMED_OUT
+    if isinstance(error, ConnectionError):
+        return UNREACHABLE
+    return UNEXPECTED
+
+
+def agent_chars(result: PredictionResult) -> int:
+    """The result's length as the agent reads it: indented JSON text, in a JSON string, after the evidence id."""
+    text = pydantic_core.to_json(result, fallback=str, indent=2).decode()
+    return len(json.dumps({"evidence_id": EVIDENCE_ID, "result": text}, ensure_ascii=False))
+
+
+def fit(result: PredictionResult) -> PredictionResult:
+    """The result without its lowest rows while it is longer than MAX_RESULT_CHARS as the agent reads it."""
+    if agent_chars(result) <= MAX_RESULT_CHARS:
+        return result
+    total = len(result.rows)
+    for count in range(total - 1, -1, -1):  # at most MAX_ROWS steps
+        warning = f"Only the {count} highest of {total} rows fit in {MAX_RESULT_CHARS:,} characters."
+        fitted = result.model_copy(update={"rows": result.rows[:count], "warnings": [*result.warnings, warning]})
+        if agent_chars(fitted) <= MAX_RESULT_CHARS:
+            return fitted
+    return fitted
 
 
 def to_rows(frame: pd.DataFrame) -> tuple[list[EntityPrediction], str]:
@@ -287,35 +360,6 @@ def to_rows(frame: pd.DataFrame) -> tuple[list[EntityPrediction], str]:
         raise ValueError(f"Kumo returned columns this tool does not read: {sorted(columns)}")
     rows.sort(key=_rank, reverse=True)
     return rows, task_type
-
-
-def _select(path: Path, sql: str) -> list[Any]:
-    """One query over the source's file in a locked-down DuckDB: it can read that file and nothing else."""
-    with (
-        tempfile.TemporaryDirectory(prefix="demo-prediction-") as temp_directory,
-        duckdb.connect(
-            ":memory:",
-            config={
-                "autoinstall_known_extensions": "false",
-                "autoload_known_extensions": "false",
-                "python_enable_replacements": "false",
-                "threads": "1",
-                "memory_limit": "512MB",
-                "temp_directory": temp_directory,
-                "max_temp_directory_size": "0B",
-            },
-        ) as connection,
-    ):
-        location = str(path).replace("'", "''")
-        connection.execute(f"ATTACH '{location}' AS source (READ_ONLY)")
-        connection.execute("SET enable_external_access = false")
-        connection.execute("SET lock_configuration = true")
-        timer = threading.Timer(FILTER_TIMEOUT_SECONDS, connection.interrupt)
-        timer.start()
-        try:
-            return [row[0] for row in connection.execute(sql).fetchall()]
-        finally:
-            timer.cancel()
 
 
 def _template(sources: list[catalog.Source], template_id: str) -> tuple[catalog.Source, catalog.Template]:
@@ -379,8 +423,15 @@ def _unfiltered(condition: str, why: str) -> str:
     )
 
 
-def _identifier(name: str) -> str:
-    return '"' + name.replace('"', '""') + '"'
+def _clip(text: str, limit: int) -> str:
+    return text if len(text) <= limit else text[: limit - 1] + "…"
+
+
+def _redact(error: Exception | str) -> str:
+    """The first line of a message, without URLs or file paths, at most 300 characters."""
+    lines = str(error).strip().splitlines()
+    text = PATH.sub("<path>", URL.sub("<url>", lines[0] if lines else type(error).__name__))
+    return _clip(text, 300)
 
 
 def _text(value: Any) -> str:

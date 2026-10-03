@@ -35,10 +35,12 @@ Each call:
 3. Runs it in a worker process (`python -I -m demo_tables.query`, at most 4 at once): a fresh in-memory DuckDB,
    each source `ATTACH '<path>' AS <alias> (READ_ONLY)`, then `SET enable_external_access = false`,
    `SET autoload_known_extensions = false`, `SET lock_configuration = true`. DuckDB must also see one `SELECT`.
-   The worker fetches at most 201 rows. It has 1 GB of DuckDB memory, 2 threads, no spilling and a 4 GiB address
-   space, and is killed after 10 seconds.
+   The worker fetches one row at a time, at most 201, and stops adding rows before its output passes 1 MB; each
+   cell stays within 2,000 characters of JSON and 100 list or struct items. It has 1 GB of DuckDB memory, 2
+   threads, no spilling and a 4 GiB address space, and is killed after 10 seconds. The server reads at most 1 MB
+   plus 64 KiB from it, and kills a worker that writes more.
 4. Keeps the result under 30,000 characters as the agent reads it (as `tools/retrieval` does), by dropping its last
-   rows.
+   rows (off the event loop); if even no rows fit, the echoed SQL, question and column names are shortened.
 
 The two locks are independent: a query the guard misreads still cannot reach a file, change a setting or write to a
 source (`tests/test_server.py` runs the escapes against the worker alone).

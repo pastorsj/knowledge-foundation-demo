@@ -21,6 +21,8 @@ dependencies = [
     "opentelemetry-sdk>=1.45",
     "pandas>=2.3,<3",
     "pydantic>=2.13,<3",
+    # Parses the entity filter before it runs (entities.py); the same line as the tables guard.
+    "sqlglot>=30.20,<31",
 ]
 
 [project.scripts]

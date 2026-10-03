@@ -129,9 +129,12 @@ def read_source(knowledge_dir: Path, source_id: str) -> SourceManifest | None:
     except FileNotFoundError:
         return None
     try:
-        return SourceManifest.model_validate_json(text)
+        manifest = SourceManifest.model_validate_json(text)
     except ValidationError as error:
         raise CatalogError(f"{source_id} has an unreadable manifest") from error
+    if manifest.id != source_id:
+        raise CatalogError(f"{source_id}'s manifest names another source ({manifest.id!r})")
+    return manifest
 
 
 def structured_sources(knowledge_dir: Path, source_ids: list[str]) -> list[Source]:

@@ -235,6 +235,69 @@ async def test_a_long_value_is_cut(server: MCPServer):
     assert any("cut" in warning for warning in result.structured_content["warnings"])
 
 
+async def test_a_huge_list_is_cut_in_the_worker(server: MCPServer):
+    """One cell of 8 million numbers: the worker writes a short list, not 44 MB."""
+    result = await query(server, "SELECT range(8000000) AS r")
+
+    assert not result.is_error, result.content[0].text
+    (row,) = result.structured_content["rows"]
+    assert 0 < len(row["r"]) <= worker.MAX_ITEMS and row["r"][:3] == [0, 1, 2]
+    assert any("cut" in warning for warning in result.structured_content["warnings"])
+
+
+async def test_many_big_rows_stay_small_and_fast(server: MCPServer):
+    """200 rows of 150,000 numbers each once took 2.8 GB and blocked the event loop for 5.7 s."""
+    started = time.monotonic()
+
+    result = await query(server, "SELECT range(150000) AS r FROM range(200)")
+
+    assert not result.is_error, result.content[0].text
+    assert as_hermes_reads_it(result.content[0].text) <= 30_000
+    assert result.structured_content["truncated"]
+    assert time.monotonic() - started < 5
+
+
+async def test_the_worker_stops_adding_rows_at_its_byte_budget(knowledge_dir: Path):
+    databases = [worker.Attachment(alias="retail_sales", path=knowledge_dir / "sources" / SALES / "tables.duckdb")]
+
+    rows = await worker.run(databases, "SELECT repeat('x', 1000) AS s FROM range(100)", timeout=10, max_bytes=10_000)
+
+    assert 0 < len(rows.rows) < 10 and rows.truncated and rows.byte_limited
+
+
+async def test_a_worker_writing_past_the_cap_is_stopped(knowledge_dir: Path, monkeypatch: pytest.MonkeyPatch):
+    """Should the worker ever write more than its budget, the server stops reading and kills it."""
+    monkeypatch.setattr(worker, "OUTPUT_OVERHEAD_BYTES", -9_000)  # read at most 1,000 of the budget's 10,000 bytes
+    databases = [worker.Attachment(alias="retail_sales", path=knowledge_dir / "sources" / SALES / "tables.duckdb")]
+
+    with pytest.raises(worker.QueryFailed, match="too large"):
+        await worker.run(databases, "SELECT repeat('x', 1000) AS s FROM range(100)", timeout=10, max_bytes=10_000)
+
+
+async def test_a_long_sql_echo_is_shortened_to_fit(server: MCPServer):
+    """A query whose text JSON escapes twice over (quotes in a comment) is echoed shortened, not past the budget."""
+    sql = "SELECT 1 AS a /* " + '"\\' * 4900 + " */"
+    result = await query(server, sql, question='"\\' * 499)
+
+    assert not result.is_error, result.content[0].text
+    assert as_hermes_reads_it(result.content[0].text) <= 30_000
+    content = result.structured_content
+    assert content["sql"] != sql and content["sql"].startswith("SELECT 1 AS a /*") and content["sql"].endswith("…")
+    assert any("SQL" in warning and "shortened" in warning for warning in content["warnings"])
+
+
+async def test_a_manifest_must_carry_its_own_id(server: MCPServer, knowledge_dir: Path):
+    write_source(knowledge_dir, {**targets_source(), "id": "retail.other"})
+    (knowledge_dir / "catalog" / "sources" / "retail.other.json").rename(
+        knowledge_dir / "catalog" / "sources" / f"{TARGETS}.json"
+    )
+
+    result = await query(server, "SELECT 1", [TARGETS])
+
+    assert result.is_error
+    assert "names another source" in result.content[0].text
+
+
 async def test_a_database_error_reaches_the_agent(server: MCPServer):
     result = await query(server, "SELECT nope FROM retail_sales.orders")
 

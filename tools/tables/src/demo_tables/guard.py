@@ -21,8 +21,11 @@ from collections.abc import Mapping
 
 import sqlglot
 from sqlglot import exp
+from sqlglot.errors import OptimizeError
 from sqlglot.errors import ParseError
 from sqlglot.errors import TokenError
+from sqlglot.optimizer.normalize_identifiers import normalize_identifiers
+from sqlglot.optimizer.scope import traverse_scope
 
 # Table functions that read nothing but their arguments.
 GENERATORS = frozenset({"range", "generate_series", "unnest"})
@@ -77,13 +80,29 @@ def validate(sql: str, tables: Mapping[str, Collection[str]]) -> None:
             raise QueryRejected(f"This FROM clause is not supported: {_only(tables)}")
 
     known = {alias.casefold(): {name.casefold() for name in names} for alias, names in tables.items()}
-    ctes = {cte.alias_or_name.casefold() for cte in tree.find_all(exp.CTE)}
-    for table in tree.find_all(exp.Table):
-        _check_table(table, known, ctes, tables)
+    # Names resolve per scope, as DuckDB binds them: a bare name is a CTE only where that CTE is visible (its WITH
+    # encloses the reference, and it is defined before the CTE that uses it). DuckDB matches identifiers in any
+    # case, so the names are compared case-folded, on a copy; the query that runs is the one the agent wrote.
+    resolved = normalize_identifiers(tree.copy(), dialect="duckdb")
+    checked: set[int] = set()
+    try:
+        scopes = list(traverse_scope(resolved))
+    except OptimizeError as error:
+        raise QueryRejected(f"The query's names could not be resolved: {_first_line(error)}") from error
+    for scope in scopes:
+        visible = {name.casefold() for name in scope.cte_sources}
+        for table in scope.tables:
+            _check_table(table, known, visible, tables)
+            checked.add(id(table))
+    for table in resolved.find_all(exp.Table):
+        if id(table) not in checked:  # a table the scopes did not place: refuse rather than guess
+            raise QueryRejected(
+                f"{table.sql(dialect='duckdb')} is used where a table cannot be checked. {_only(tables)}"
+            )
 
 
 def _check_table(
-    table: exp.Table, known: dict[str, set[str]], ctes: set[str], tables: Mapping[str, Collection[str]]
+    table: exp.Table, known: dict[str, set[str]], visible_ctes: set[str], tables: Mapping[str, Collection[str]]
 ) -> None:
     target = table.this
     if not isinstance(target, exp.Identifier):  # a table function
@@ -92,9 +111,12 @@ def _check_table(
             raise QueryRejected(f"{name}() is not supported as a table: {_only(tables)}")
         return
     if not table.db and not table.catalog:
-        if target.name.casefold() in ctes:
+        if target.name.casefold() in visible_ctes:
             return
-        raise QueryRejected(f"Name every table as <alias>.<table>; {target.name!r} is not one. {_only(tables)}")
+        raise QueryRejected(
+            f"Name every table as <alias>.<table>; {target.name!r} is not one, nor a CTE defined before it in the "
+            f"same or an enclosing WITH. {_only(tables)}"
+        )
     alias = (table.catalog or table.db).casefold()
     schema_ok = not table.catalog or table.db.casefold() == "main"
     if not schema_ok or alias not in known or table.name.casefold() not in known[alias]:
