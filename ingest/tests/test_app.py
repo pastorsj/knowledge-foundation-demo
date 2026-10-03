@@ -229,6 +229,12 @@ async def test_upload_limits(parse_settings: Settings, embedder, tokenizer):
         status = await wait(client, job["job_id"])
         assert details(status)["big.csv"]["error_code"] == "too_large"
 
+        oversized = await client.post(
+            "/v1/collections/workspace/documents", files=upload(("huge.csv", b"1" * 3_200_000))
+        )
+        assert oversized.status_code == 413
+        assert oversized.json()["error"]["code"] == "request_too_large"
+
         assert (
             await client.post("/v1/collections/nope/documents", files=upload(("a.csv", b"a\n1\n")))
         ).status_code == 404
@@ -324,3 +330,67 @@ async def test_a_restart_recovers_a_file_stored_without_its_extension(parse_sett
 
     assert details(status)["awkward.xlsx"]["tables"] == ["awkward_q1_sales", "awkward_q2_sales"]
     assert [p.name for p in legacy.parent.iterdir()] == [f"{file_id}.xlsx"]
+
+
+async def test_a_file_interrupted_twice_fails_instead_of_running_again(parse_settings: Settings, embedder, tokenizer):
+    store = JobStore(parse_settings.db_path)
+    data = (TABLES / "orders.csv").read_bytes()
+    file_id = "f-00000000000000cc"
+    stored = parse_settings.knowledge_dir / "sources" / "workspace.tables" / "files" / f"{file_id}.csv"
+    stored.parent.mkdir(parents=True)
+    stored.write_bytes(data)
+    entry = {"file_id": file_id, "file_name": "orders.csv", "source_id": "workspace.tables", "sha256": "c" * 64}
+    job_id = store.create_job("workspace", [{**entry, "size_bytes": len(data), "kind": "table", "stage": "loading"}])
+    store.claim(file_id)  # two runs that never finished
+    store.update_file(file_id, claimed=0)
+    store.claim(file_id)
+
+    async with running(parse_settings, embedder, tokenizer) as client:
+        status = await wait(client, job_id)
+
+    assert status["status"] == "failed"
+    assert details(status)["orders.csv"]["error_code"] == "interrupted"
+
+
+async def test_tables_are_replaced_whole_while_a_reader_holds_the_database(
+    client: httpx.AsyncClient, parse_settings: Settings
+):
+    import subprocess
+    import sys
+
+    first = (
+        await client.post(
+            "/v1/collections/workspace/documents",
+            files=upload(("customers.csv", (TABLES / "customers.csv").read_bytes())),
+        )
+    ).json()
+    await wait(client, first["job_id"])
+    database = parse_settings.knowledge_dir / "sources" / "workspace.tables" / "tables.duckdb"
+    reader = subprocess.Popen(
+        [
+            sys.executable,
+            "-c",
+            f"import duckdb, time; c = duckdb.connect({str(database)!r}, read_only=True); "
+            "print('attached', flush=True); time.sleep(60)",
+        ],
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    try:
+        assert reader.stdout.readline().strip() == "attached"  # another process holds it read-only, as tables does
+
+        second = (
+            await client.post(
+                "/v1/collections/workspace/documents",
+                files=upload(("orders.csv", (TABLES / "orders.csv").read_bytes())),
+            )
+        ).json()
+        status = await wait(client, second["job_id"], timeout=20)
+    finally:
+        reader.kill()
+        reader.wait()
+
+    assert details(status)["orders.csv"]["status"] == "success"
+    manifest = Catalog(parse_settings.knowledge_dir).read_source("workspace.tables")
+    assert sorted(t["name"] for t in manifest["database"]["tables"]) == ["customers", "orders"]
+    assert sorted(p.name for p in database.parent.glob("tables.duckdb*")) == ["tables.duckdb"]

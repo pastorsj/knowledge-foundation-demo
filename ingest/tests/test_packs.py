@@ -16,6 +16,7 @@ from conftest import FakeEmbedder
 from conftest import closed_port_url
 from conftest import write_awkward_xlsx
 from conftest import write_policy_pdf
+from conftest import write_scan_png
 from jsonschema import Draft202012Validator
 
 from demo_ingest import packs
@@ -189,15 +190,20 @@ def test_a_text_layer_fallback_from_an_unreachable_parse_is_retried_next_sync(
 def test_a_text_layer_fallback_with_parse_disabled_is_complete(
     pack_settings: Settings, catalog: Catalog, pipeline: Pipeline, embedder, packs_dir: Path
 ):
-    write_policy_pdf(packs_dir / "mini" / "files" / "policies" / "policy.pdf")
+    pdf = write_policy_pdf(packs_dir / "mini" / "files" / "policies" / "policy.pdf")
+    write_scan_png(packs_dir / "mini" / "files" / "policies" / "scan.png", pdf)  # unreadable without Parse
     settings = replace(pack_settings, parse_base_url="")
-    sync(settings, catalog, pipeline)
+    statuses = sync(settings, catalog, pipeline)
+    assert statuses["mini"]["status"] == "ready" and "parser_unavailable" in statuses["mini"]["error"]
     assert len(catalog.read_pack("mini")["digest"]) == 64
+    scan = next(f for f in catalog.read_source("mini.policies")["files"] if f["file_name"] == "scan.png")
+    assert scan["status"] == "failed"
     embedder.calls.clear()
 
     sync(settings, catalog, pipeline)
 
     assert embedder.calls == []
+    assert packs.sync_cli(settings, pipeline=pipeline) == 0
 
 
 def test_an_invalid_pack_fails_alone(pack_settings: Settings, catalog: Catalog, pipeline: Pipeline, packs_dir: Path):
@@ -235,3 +241,36 @@ def test_a_multi_sheet_workbook_in_a_pack_loads(
     assert workbook["tables"] == ["credit_risk_report_q1_sales", "credit_risk_report_q2_sales"]
     stored = sorted(p.name for p in (catalog.source_dir("mini.sales") / "files").iterdir())
     assert stored == sorted(f"{f['file_id']}{Path(f['file_name']).suffix}" for f in sales["files"])
+
+
+def test_parse_errors_do_not_hold_back_the_digest(
+    pack_settings: Settings, catalog: Catalog, pipeline: Pipeline, packs_dir: Path, fake_parse
+):
+    # Parse answers, but with errors: the text layer is used, and trying again would end the same way.
+    fake_parse.fail_status = 400
+    write_policy_pdf(packs_dir / "mini" / "files" / "policies" / "policy.pdf")
+
+    sync(replace(pack_settings, parse_base_url=fake_parse.url), catalog, pipeline)
+
+    pdf = next(f for f in catalog.read_source("mini.policies")["files"] if f["file_name"] == "policy.pdf")
+    assert pdf["parser"] == "pdf-text-layer"
+    assert len(catalog.read_pack("mini")["digest"]) == 64
+
+
+def test_a_failed_re_ingest_keeps_the_previous_chunks(
+    *, pack_settings: Settings, catalog: Catalog, pipeline: Pipeline, index: KnowledgeIndex, embedder, packs_dir: Path
+):
+    from demo_ingest.models import IngestError
+
+    sync(pack_settings, catalog, pipeline)
+    before = index.count(source_id="mini.policies")
+    assert before > 0
+    embedder.fail_with = IngestError("embedding_failed", "the endpoint is down")
+    questions = packs_dir / "mini" / "questions.yaml"
+    questions.write_text(questions.read_text() + "\n# changed\n")  # a new digest, the same files
+
+    statuses = sync(pack_settings, catalog, pipeline)
+
+    assert statuses["mini"]["status"] == "failed"
+    assert index.count(source_id="mini.policies") == before
+    assert "digest" not in catalog.read_pack("mini")  # transient: the next sync tries again

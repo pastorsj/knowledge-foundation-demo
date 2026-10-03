@@ -8,6 +8,7 @@ Text formats have none to check, so they are only refused when their bytes are a
 
 from __future__ import annotations
 
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
@@ -49,6 +50,9 @@ SIGNATURES = {
 }
 FILETYPE_IMAGES = {"png": "png", "jpg": "jpeg", "tif": "tiff", "webp": "webp", "bmp": "bmp"}
 ACCEPTED_EXTENSIONS = sorted(DOCUMENTS | TABLES)
+# Office files are zip archives: refuse one that would expand past these (a zip bomb) before a parser opens it.
+MAX_UNZIPPED_BYTES = 1024**3
+MAX_COMPRESSION_RATIO = 200
 
 
 @dataclass(frozen=True)
@@ -105,7 +109,29 @@ def detect(path: Path, file_name: str, *, max_bytes: int = 100 * 1024 * 1024) ->
             raise _mismatch(file_name, "text", found or "binary data")
     elif found not in SIGNATURES[expected]:
         raise _mismatch(file_name, f"a {expected.upper()} file", found)
+    if expected in ("docx", "pptx", "xlsx"):
+        _check_archive(path, file_name, expected)
     return Detected(kind, expected)
+
+
+def _check_archive(path: Path, file_name: str, expected: str) -> None:
+    try:
+        with zipfile.ZipFile(path) as archive:
+            members = archive.infolist()
+    except (zipfile.BadZipFile, OSError) as error:
+        raise IngestError("type_mismatch", f"{file_name} is not a readable {expected.upper()} file: {error}") from error
+    expanded = sum(member.file_size for member in members)
+    compressed = sum(member.compress_size for member in members)
+    if expanded > MAX_UNZIPPED_BYTES:
+        raise IngestError(
+            "too_large",
+            f"{file_name} expands to {expanded / 2**30:.1f} GB; the limit is {MAX_UNZIPPED_BYTES / 2**30:.0f} GB.",
+        )
+    if expanded > 2**20 and expanded > MAX_COMPRESSION_RATIO * max(compressed, 1):
+        raise IngestError(
+            "too_large",
+            f"{file_name} is compressed {expanded // max(compressed, 1)}:1, too much to be a real document.",
+        )
 
 
 def _mismatch(file_name: str, expected: str, found: str | None) -> IngestError:

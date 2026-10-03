@@ -69,7 +69,9 @@ CREATE TABLE IF NOT EXISTS files (
     error_code       TEXT,
     error_message    TEXT,
     uploaded_at      TEXT NOT NULL,
-    ingested_at      TEXT
+    ingested_at      TEXT,
+    attempts         INTEGER NOT NULL DEFAULT 0,
+    claimed          INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_files_collection ON files(collection, sha256);
 CREATE INDEX IF NOT EXISTS idx_files_source ON files(source_id);
@@ -99,8 +101,14 @@ _UPDATABLE = frozenset(
         "error_code",
         "error_message",
         "ingested_at",
+        "claimed",
     }
 )
+# Columns added after the first release, for stores created before them.
+_ADDED_COLUMNS = {
+    "attempts": "INTEGER NOT NULL DEFAULT 0",
+    "claimed": "INTEGER NOT NULL DEFAULT 0",
+}
 _JSON_COLUMNS = {"tables": "tables_json", "warnings": "warnings_json"}
 
 
@@ -111,6 +119,10 @@ class JobStore:
         with closing(self._connect()) as connection:
             connection.execute("PRAGMA journal_mode=WAL")
             connection.executescript(_SCHEMA)
+            present = {row[1] for row in connection.execute("PRAGMA table_info(files)")}
+            for column, definition in _ADDED_COLUMNS.items():
+                if column not in present:
+                    connection.execute(f"ALTER TABLE files ADD COLUMN {column} {definition}")
 
     def _connect(self) -> sqlite3.Connection:
         connection = sqlite3.connect(self._path, timeout=30, isolation_level=None)
@@ -238,6 +250,21 @@ class JobStore:
                 _refresh_job(connection, job_id)
 
         self._run(update)
+
+    def claim(self, file_id: str) -> dict[str, Any] | None:
+        """Take an unfinished, unclaimed file for one worker and count the attempt; None if it is not to be run."""
+
+        def update(connection: sqlite3.Connection) -> dict[str, Any] | None:
+            cursor = connection.execute(
+                "UPDATE files SET claimed = 1, attempts = attempts + 1 "
+                "WHERE file_id = ? AND claimed = 0 AND status NOT IN (?, ?)",
+                (file_id, FileStatus.SUCCESS, FileStatus.FAILED),
+            )
+            if cursor.rowcount != 1:
+                return None
+            return _file_row(connection.execute("SELECT * FROM files WHERE file_id = ?", (file_id,)).fetchone())
+
+        return self._run(update)
 
     def get_file(self, file_id: str) -> dict[str, Any] | None:
         def select(connection: sqlite3.Connection) -> dict[str, Any] | None:

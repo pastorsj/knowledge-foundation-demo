@@ -42,6 +42,8 @@ from .settings import Settings
 logger = logging.getLogger(__name__)
 
 MAX_EXAMPLES = 12
+# Failures another sync may not repeat: the pack's digest is withheld after one, so the next sync retries.
+TRANSIENT_ERRORS = {"embedding_failed", "index_unavailable", "timeout"}
 KINDS = {"documents": "document", "structured": "table"}
 
 
@@ -222,17 +224,21 @@ def _sync_pack(
         source_statuses.append(source_status(entries))
         catalog.write_source(_source_manifest(pack_id, source, entries, extra))
 
-    failed = [o for o in outcomes if not o.ready]
-    complete = not failed and not any(o.fallback == "unavailable" for o in outcomes)
+    # Complete unless Parse did not answer (a PDF read from its text layer, an image not read) or a failure was
+    # transient. Configuration (Parse turned off) and the content itself would give the same result next time.
+    retry = [o for o in outcomes if o.fallback == "unavailable" or (not o.ready and o.error_code in TRANSIENT_ERRORS)]
+    skipped = [o for o in outcomes if not o.ready and o.error_code == "parser_unavailable" and o.fallback == "disabled"]
+    failed = [o for o in outcomes if not o.ready and o not in skipped]
     final = "failed" if "failed" in source_statuses or "empty" in source_statuses else "ready"
     manifest = _pack_manifest(pack, questions, status=final)
-    if complete and final == "ready":
+    if not retry and final == "ready":
         manifest["digest"] = digest
     catalog.write_pack(manifest)
     with lock:
         status.status = final
+        if failed or skipped:
+            status.error = "; ".join(f"{o.error_code}: {o.error_message}" for o in failed + skipped)[:600]
         if failed:
-            status.error = "; ".join(f"{o.error_code}: {o.error_message}" for o in failed)[:600]
             status.status = "failed"  # the CLI and the status report a pack with a failed file
     logger.info("pack %s: %s (%d files, %d failed)", pack_id, final, len(outcomes), len(failed))
 
@@ -290,7 +296,8 @@ def _sync_documents(
         row, outcome = _run(pipeline, source_id, path, "document")
         rows.append(row)
         done(outcome)
-    kept = {row["document_id"] for row in rows if row["document_id"]}
+    # A file still in the pack keeps its chunks even when this sync failed to re-ingest it.
+    kept = {f"{source_id}:{row['file_id']}" for row in rows}
     for old in previous.get("files", []):
         if old.get("document_id") and old["document_id"] not in kept:
             pipeline.remove_outputs({"source_id": source_id, "document_id": old["document_id"]})
