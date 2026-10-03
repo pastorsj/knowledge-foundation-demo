@@ -22,6 +22,7 @@ import threading
 from collections import defaultdict
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import nullcontext
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
@@ -416,7 +417,24 @@ class Pipeline:
         def update(**fields: Any) -> None:
             self.store.update_file(file_id, **fields)
 
-        with self.source_lock(source_id):
+        try:
+            self._process(row, path, update)
+        except Exception as error:  # the database copy, the catalog or the store failed: the file ends here
+            logger.exception("%s (%s) could not be finished", row["file_name"], file_id)
+            if row["kind"] == "table":
+                self.discard_database(source_id)
+            message = f"Ingestion failed: {type(error).__name__}: {error}"[:600]
+            update(stage=Stage.FAILED, error_code="internal_error", error_message=message, claimed=0)
+            try:
+                self.refresh_workspace_source(source_id)
+            except Exception:
+                logger.exception("could not rewrite %s", source_id)
+
+    def _process(self, row: dict[str, Any], path: Path, update: Update) -> None:
+        file_id, source_id = row["file_id"], row["source_id"]
+        # Only tables share a file (the source's DuckDB), so only they take the source lock: documents of one source
+        # ingest in parallel, and uploads and deletes never wait for a document being parsed.
+        with self.source_lock(source_id) if row["kind"] == "table" else nullcontext():
             # Tables: copy-on-write. Readers attach tables.duckdb read-only, so ingest loads into a private copy
             # and swaps it in whole (os.replace) once the file has loaded and profiled.
             building = self.begin_database(source_id) if row["kind"] == "table" else None
@@ -509,11 +527,21 @@ class Pipeline:
     def begin_database(self, source_id: str) -> Path:
         """A private copy of the source's DuckDB to write; the caller holds the source lock."""
         target = database_path(self.catalog, source_id)
+        building = self.discard_database(source_id)
+        if target.exists():
+            try:
+                shutil.copyfile(target, building)
+            except BaseException:
+                self.discard_database(source_id)
+                raise
+        return building
+
+    def discard_database(self, source_id: str) -> Path:
+        """Remove an unfinished copy (and its WAL); returns its path."""
+        target = database_path(self.catalog, source_id)
         building = target.with_name(f"{target.name}.building")
         for leftover in (building, building.with_name(f"{building.name}.wal")):
             leftover.unlink(missing_ok=True)
-        if target.exists():
-            shutil.copyfile(target, building)
         return building
 
     def end_database(self, source_id: str, building: Path, *, commit: bool) -> None:

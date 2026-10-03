@@ -43,9 +43,11 @@ def anyio_backend() -> str:
 
 
 @asynccontextmanager
-async def running(settings: Settings, embedder: FakeEmbedder, tokenizer: Any) -> AsyncIterator[httpx.AsyncClient]:
+async def running(
+    settings: Settings, embedder: FakeEmbedder, tokenizer: Any, parse_probe: Any = None
+) -> AsyncIterator[httpx.AsyncClient]:
     index = KnowledgeIndex(settings.milvus_uri, settings.collection_alias)
-    app = create_app(settings, embedder=embedder, index=index, tokenizer=tokenizer)
+    app = create_app(settings, embedder=embedder, index=index, tokenizer=tokenizer, parse_probe=parse_probe)
     try:
         async with app.router.lifespan_context(app):
             transport = httpx.ASGITransport(app=app)
@@ -394,3 +396,98 @@ async def test_tables_are_replaced_whole_while_a_reader_holds_the_database(
     manifest = Catalog(parse_settings.knowledge_dir).read_source("workspace.tables")
     assert sorted(t["name"] for t in manifest["database"]["tables"]) == ["customers", "orders"]
     assert sorted(p.name for p in database.parent.glob("tables.duckdb*")) == ["tables.duckdb"]
+
+
+def second_pdf(policy_pdf: Path) -> bytes:
+    """Other bytes (so not deduplicated), the same pages: a PDF reader ignores what follows %%EOF."""
+    return policy_pdf.read_bytes() + b"\n% a second copy\n"
+
+
+async def test_two_workspace_documents_parse_at_the_same_time(
+    settings: Settings, embedder, tokenizer, policy_pdf: Path
+):
+    import threading
+
+    both_parsing = threading.Barrier(2, timeout=10)
+
+    def probe(settings: Settings) -> str:
+        both_parsing.wait()  # passes only when the two documents are in their parsing stage together
+        return "PARSE_BASE_URL is empty"
+
+    async with running(settings, embedder, tokenizer, parse_probe=probe) as client:
+        files = upload(("a.pdf", policy_pdf.read_bytes()), ("b.pdf", second_pdf(policy_pdf)))
+        job = (await client.post("/v1/collections/workspace/documents", files=files)).json()
+        status = await wait(client, job["job_id"])
+
+    assert [f["status"] for f in status["file_details"]] == ["success", "success"], status["file_details"]
+
+
+async def test_an_upload_returns_while_a_document_is_mid_parse(
+    settings: Settings, embedder, tokenizer, policy_pdf: Path
+):
+    import threading
+
+    parsing, release = threading.Event(), threading.Event()
+
+    def probe(settings: Settings) -> str:
+        parsing.set()
+        release.wait(30)
+        return "PARSE_BASE_URL is empty"
+
+    async with running(settings, embedder, tokenizer, parse_probe=probe) as client:
+        first = (
+            await client.post("/v1/collections/workspace/documents", files=upload(("a.pdf", policy_pdf.read_bytes())))
+        ).json()
+        assert await asyncio.to_thread(parsing.wait, 10)
+        try:
+            # Another document for the same source: its manifest refresh must not wait for the first to finish.
+            second = client.post(
+                "/v1/collections/workspace/documents", files=upload(("notes.md", b"# Notes\n\nHello.\n"))
+            )
+            response = await asyncio.wait_for(second, timeout=5)
+            assert response.status_code == 200
+            deleted = client.request(
+                "DELETE", "/v1/collections/workspace/documents", json={"file_ids": response.json()["file_ids"]}
+            )
+            assert (await asyncio.wait_for(deleted, timeout=5)).status_code == 200
+        finally:
+            release.set()
+        assert (await wait(client, first["job_id"]))["status"] == "completed"
+
+
+async def test_a_failed_database_copy_fails_the_file_and_leaves_no_copy(
+    client: httpx.AsyncClient, parse_settings: Settings, monkeypatch: pytest.MonkeyPatch
+):
+    from demo_ingest import pipeline as pipeline_module
+
+    first = (
+        await client.post(
+            "/v1/collections/workspace/documents",
+            files=upload(("customers.csv", (TABLES / "customers.csv").read_bytes())),
+        )
+    ).json()
+    await wait(client, first["job_id"])
+
+    def disk_full(source: Path, target: Path) -> None:
+        Path(target).write_bytes(b"partial")
+        raise OSError(28, "No space left on device")
+
+    monkeypatch.setattr(pipeline_module.shutil, "copyfile", disk_full)
+    second = (
+        await client.post(
+            "/v1/collections/workspace/documents", files=upload(("orders.csv", (TABLES / "orders.csv").read_bytes()))
+        )
+    ).json()
+    status = await wait(client, second["job_id"], timeout=20)
+
+    orders = details(status)["orders.csv"]
+    assert (orders["status"], orders["error_code"]) == ("failed", "internal_error")
+    assert "No space left on device" in orders["error_message"]
+    directory = parse_settings.knowledge_dir / "sources" / "workspace.tables"
+    assert sorted(p.name for p in directory.glob("tables.duckdb*")) == ["tables.duckdb"]
+    manifest = Catalog(parse_settings.knowledge_dir).read_source("workspace.tables")
+    assert {f["file_name"]: f["status"] for f in manifest["files"]} == {
+        "customers.csv": "ready",
+        "orders.csv": "failed",
+    }
+    assert JobStore(parse_settings.db_path).get_file(orders["file_id"])["claimed"] == 0
