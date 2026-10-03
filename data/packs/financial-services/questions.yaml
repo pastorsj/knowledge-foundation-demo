@@ -1,0 +1,124 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# yaml-language-server: $schema=../../schemas/questions.schema.json
+#
+# Ten questions for Harborview Community Bank: three over documents, three over tables, two over both, and two
+# Kumo predictions. The expected answer to each is in README.md ("Answer key"). Sources are pack-local ids.
+schema_version: "3"
+examples:
+  - underwriting-limits
+  - modification-request-scan
+  - deposits-by-branch
+  - dti-over-policy
+  - deck-vs-loan-data
+  - loan-default-risk
+  - complaint-deadlines
+  - delinquency-by-product
+  - card-disputes-q3
+  - account-closure-risk
+
+questions:
+  - id: underwriting-limits
+    label: Mortgage limits at a 700 score
+    tag: DOCUMENTS
+    description: Reads the underwriting table in the consumer credit policy PDF.
+    question: >-
+      Under the consumer credit policy, what is the maximum debt-to-income ratio and the maximum loan-to-value for a
+      mortgage applicant with a 700 credit score?
+    sources: [policies]
+    tools: [retrieval]
+    featured: true
+
+  - id: modification-request-scan
+    label: Scanned loan modification request
+    tag: DOCUMENTS
+    description: Needs Nemotron Parse to read a scanned, signed form.
+    question: >-
+      In the scanned loan modification request, which loan is the borrower asking to modify, and what payment relief
+      are they requesting?
+    sources: [policies]
+    tools: [retrieval]
+    featured: true
+
+  - id: complaint-deadlines
+    label: Complaint handling deadlines
+    tag: DOCUMENTS
+    description: Reads the service-level table in the complaint handling procedure (DOCX).
+    question: >-
+      A customer complains that their loan modification request was denied. How soon must the bank acknowledge and
+      resolve the complaint, and when does it escalate to the Complaint Resolution Team?
+    sources: [policies]
+    tools: [retrieval]
+
+  - id: deposits-by-branch
+    label: Top branches by deposits
+    tag: SQL
+    description: Joins accounts to monthly balances for September 2026.
+    question: >-
+      Which five branches held the most deposits (checking and savings balances) at the end of September 2026, and how
+      much did each hold?
+    sources: [banking]
+    tools: [duckdb]
+    featured: true
+
+  - id: delinquency-by-product
+    label: Delinquency by loan product
+    tag: SQL
+    description: Reads the delinquency sheet of the credit risk report workbook.
+    question: >-
+      Which loan product had the highest 30-day delinquency rate in September 2026, and how does each product compare
+      with September 2025?
+    sources: [banking]
+    tools: [duckdb]
+
+  - id: card-disputes-q3
+    label: Card disputes in Q3 2026
+    tag: SQL
+    description: Counts and sums card disputes filed in the third quarter.
+    question: >-
+      How many card disputes were filed in the third quarter of 2026, how much money was disputed in total, and which
+      reason was the most common?
+    sources: [banking]
+    tools: [duckdb]
+
+  - id: dti-over-policy
+    label: Loans above the policy DTI limit
+    tag: HYBRID
+    description: Reads the DTI limits from the policy and applies them to this year's personal loans.
+    question: >-
+      Which personal loans originated this year would no longer meet the credit policy's maximum DTI for their credit
+      band at origination?
+    sources: [policies, banking]
+    tools: [retrieval, duckdb]
+    featured: true
+
+  - id: deck-vs-loan-data
+    label: Risk deck against the loan data
+    tag: HYBRID
+    description: Checks the delinquency figures in the Q3 deck against the loan payment tables.
+    question: >-
+      The Q3 2026 risk committee deck reports a 30-day delinquency rate for each loan product. Do those figures match
+      what the loan and payment tables show at 30 September 2026?
+    sources: [disclosures, banking]
+    tools: [retrieval, duckdb]
+    featured: true
+
+  - id: loan-default-risk
+    label: Loans likely to go delinquent
+    tag: PREDICTION
+    description: Kumo predicts which loans end up 30 or more days past due in the next 90 days.
+    question: >-
+      Which active loans are most likely to be 30 or more days past due within the next 90 days?
+    sources: [banking]
+    tools: [kumo]
+    featured: true
+
+  - id: account-closure-risk
+    label: Checking accounts likely to close
+    tag: PREDICTION
+    description: Kumo predicts customer attrition as checking account closures in the next 90 days.
+    question: >-
+      Which checking accounts are most likely to be closed in the next 90 days?
+    sources: [banking]
+    tools: [kumo]
