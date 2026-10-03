@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 ---
 title: Consumer Credit Policy
 subtitle: Underwriting, pricing, delinquency management and loan modification for personal, auto and mortgage loans

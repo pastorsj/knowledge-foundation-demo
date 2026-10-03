@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 ---
 title: Credit Risk Committee, Q3 2026
 subtitle: Harborview Community Bank | Data as of 30 September 2026 | Meeting of 14 October 2026
