@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""Shared fixtures: a small active data pack, test settings, a fake Hermes and the running app.
+"""Shared fixtures: the fixture knowledge catalog, test settings, a fake Hermes and the running app.
 
 Everything runs offline: outgoing HTTP goes to ``httpx.MockTransport`` handlers, and the app is
 driven in-process through ``httpx.ASGITransport``.
@@ -10,7 +10,7 @@ driven in-process through ``httpx.ASGITransport``.
 from __future__ import annotations
 
 import asyncio
-import json
+import shutil
 from collections.abc import AsyncIterator
 from collections.abc import Callable
 from pathlib import Path
@@ -20,7 +20,7 @@ import duckdb
 import httpx
 import pytest
 from fastapi import FastAPI
-from support import PACK
+from support import CATALOG
 from support import RECEIPT_KEY
 from support import REPO
 from support import FakeHermes
@@ -31,39 +31,38 @@ from demo_api.settings import Settings
 
 
 @pytest.fixture
-def data_dir(tmp_path: Path) -> Path:
-    """A built pack: pack.json, a DuckDB file with tables, keys and a view, and a retrieval index."""
-    active = tmp_path / "active"
-    (active / "structured").mkdir(parents=True)
-    (active / "pack.json").write_text(json.dumps(PACK))
-    manifest = {
-        "collection": "aiq_market_intelligence_current",
-        "physical_collection": "x__1",
-        "source_ids": ["market_news"],
-    }
-    (active / "collection-manifest.json").write_text(json.dumps(manifest))
-    with duckdb.connect(str(active / "structured" / "market_analysis.duckdb")) as connection:
-        connection.execute("CREATE TABLE assets (asset_id VARCHAR PRIMARY KEY, name VARCHAR NOT NULL)")
-        connection.execute(
-            "CREATE TABLE daily_prices (price_id VARCHAR PRIMARY KEY, "
-            "asset_id VARCHAR NOT NULL REFERENCES assets(asset_id), close DOUBLE, traded_at TIMESTAMPTZ)"
-        )
-        connection.execute("INSERT INTO assets VALUES ('A1', 'Alpha'), ('B2', 'Beta')")
-        connection.execute(
-            "INSERT INTO daily_prices SELECT 'P' || i, CASE WHEN i % 2 = 0 THEN 'A1' ELSE 'B2' END, 100 + i, "
-            "TIMESTAMPTZ '2026-08-01 21:00:00+00' + INTERVAL (i) DAY FROM range(150) t(i)"
-        )
-        connection.execute("CREATE SCHEMA prediction")
-        connection.execute("CREATE VIEW prediction.asset_entities AS SELECT asset_id FROM main.assets")
-    return active
+def knowledge_dir(tmp_path: Path) -> Path:
+    """The knowledge volume as ingest leaves it for the fixture catalog (contracts/fixtures/catalog).
+
+    The retail pack (retail.policies documents, retail.sales tables) and the empty workspace. retail.sales's
+    DuckDB is loaded from the fixture CSVs the way ingest loads files: tables without constraints, whose keys
+    live in the source manifest.
+    """
+    root = tmp_path / "knowledge"
+    for kind in ("packs", "sources"):
+        shutil.copytree(CATALOG / kind, root / "catalog" / kind)
+    database = root / "sources" / "retail.sales" / "tables.duckdb"
+    database.parent.mkdir(parents=True)
+    with duckdb.connect(str(database)) as connection:
+        for table in ("customers", "orders"):
+            csv = CATALOG / "tables" / f"{table}.csv"
+            connection.execute(f"CREATE TABLE {table} AS SELECT * FROM read_csv('{csv}')")
+    return root
 
 
 @pytest.fixture
-def settings(tmp_path: Path, data_dir: Path) -> Settings:
+def features() -> str:
+    """AGENT_FEATURES; a test parametrizes ``features`` to run with other tool groups."""
+    return "retrieval,tables"
+
+
+@pytest.fixture
+def settings(tmp_path: Path, knowledge_dir: Path, features: str) -> Settings:
     return Settings(
-        data_active_dir=data_dir,
+        knowledge_dir=knowledge_dir,
+        ingest_url="http://ingest.test",
         api_db_path=tmp_path / "api" / "jobs.db",
-        agent_features="retrieval,tables",
+        agent_features=features,
         hermes_url="http://hermes.test",
         hermes_api_server_key="test-hermes-key",
         hermes_receipt_api_key=RECEIPT_KEY,
@@ -85,7 +84,7 @@ def fake_hermes() -> FakeHermes:
 
 @pytest.fixture
 def upstreams(fake_hermes: FakeHermes) -> dict[str, Callable[[httpx.Request], Any]]:
-    """Fake services the app calls, by host. Tests add ``phoenix.test`` or ``ontology.test`` handlers."""
+    """Fake services the app calls, by host. Tests add ``phoenix.test``, ``ontology.test`` or ``ingest.test``."""
     return {"hermes.test": fake_hermes.handle}
 
 

@@ -2,7 +2,7 @@
   {
     "schemaVersion": "2",
     "artifactKind": "structured_query",
-    "receiptId": "hermes-receipt:ca45eef2f9b69e18546819c8492e8df1dec888ba511f47e35bacee7d2384bd52",
+    "receiptId": "hermes-receipt:35c83c1f1b17dc8d15c700887357312f4ce5799814066f1c7e5e93c8189075ba",
     "jobId": "2e1e9c6d-8c4a-4d2f-9716-1cb1e6659c78",
     "invocationId": "hermes-tool:call_QhOAsXb68luYCFIAF1hWJ7z2",
     "turnId": null,
@@ -168,7 +168,7 @@
   {
     "schemaVersion": "2",
     "artifactKind": "retrieval_evidence",
-    "receiptId": "hermes-receipt:13eb2c592272b0a3ed87cccec303387046bc101e463e657ba81841303e1677d8",
+    "receiptId": "hermes-receipt:e5f42b35d3b0ec0525f9af0a2e4d506ced230ec54903423b0f84837e47fb2507",
     "jobId": "5b0c7f2e-31d4-4a8e-b0c2-7d9e6f1a2b3c",
     "invocationId": "hermes-tool:call_Vn3kR8sTq2LwYp6ZbD1cHx4M",
     "turnId": null,
@@ -270,7 +270,7 @@
   {
     "schemaVersion": "2",
     "artifactKind": "structured_query",
-    "receiptId": "hermes-receipt:4146977422d50c18419c9d9e43d368422dfec5d10fd3587aee8bab5fef0fa469",
+    "receiptId": "hermes-receipt:20ab500a2e61f9e583b3170724a0125136e0f118bc72e628eb9e61e1a833dfad",
     "jobId": "0dcd9841-b68a-456b-9dc5-87403c34efcb",
     "invocationId": "hermes-tool:call_bbG7Kuc3cdq0i8DLST8RrXwd",
     "turnId": null,
@@ -320,7 +320,7 @@
   {
     "schemaVersion": "2",
     "artifactKind": "structured_prediction",
-    "receiptId": "hermes-receipt:7b73bfec19e43a552c6390b07cfb572528835c2ff0206eb6d21e8b95d2c695c6",
+    "receiptId": "hermes-receipt:a3deaea1c67bd182ce0af86784b536d9f2511b6fa8e987b2504a67aa0e1f9602",
     "jobId": "18d6824d-df8e-4d57-89eb-22a055226124",
     "invocationId": "hermes-tool:call_qhoJqt3GMJfjreJf15M2C5U9",
     "turnId": null,
@@ -371,7 +371,7 @@
   {
     "schemaVersion": "2",
     "artifactKind": "structured_prediction",
-    "receiptId": "hermes-receipt:604cee9ef905498e13e8eb997eabab49423932c4912f3b62707c3c194653d3cf",
+    "receiptId": "hermes-receipt:65245c1f6edb49fa020b78df3a7105eefce8853cd0e4129dc05feb9bf3fcdb56",
     "jobId": "821ffdc2-5ecc-47f6-9198-99ccb45b00af",
     "invocationId": "hermes-tool:call_uumTAP1PA8GjUZLh8k49XXQs",
     "turnId": null,

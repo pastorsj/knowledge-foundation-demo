@@ -3,7 +3,7 @@
 
 """The ``execution.v2`` event contract: the only event format the API emits."""
 
-from .execution import COMPONENT_BY_FAMILY
+from .execution import COMPONENT_BY_SERVER
 from .execution import EVENT_STORE_TYPE
 from .execution import DisplayAttributes
 from .execution import DisplaySafeProjection
@@ -14,7 +14,7 @@ from .execution import ObservationKind
 from .execution import RoutingTier
 
 __all__ = [
-    "COMPONENT_BY_FAMILY",
+    "COMPONENT_BY_SERVER",
     "EVENT_STORE_TYPE",
     "DisplayAttributes",
     "DisplaySafeProjection",

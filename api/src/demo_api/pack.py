@@ -1,27 +1,15 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""The active data pack, as the ``data`` one-shot built it under ``/data/active``.
+"""The pack contracts: ``PackView`` (``GET /v1/pack``, ``contracts/schemas/pack.schema.json``) and ``PackList``
+(``GET /v1/packs``, ``contracts/schemas/packs.schema.json``).
 
-``pack.json`` lists the pack's sources and questions. A source is offered to users only when the
-running stack can serve it:
-
-- its capabilities are narrowed to the tool families in the agent image (``AGENT_FEATURES``);
-- a document source also needs the retrieval index, which ``retrieval-index`` records in
-  ``collection-manifest.json``.
-
-``GET /v1/pack`` (``PackView``, a contract: ``contracts/schemas/pack.schema.json``) offers the questions of those
-sources, and among them the examples of the composer's picker. ``PackList`` (``contracts/schemas/packs.schema.json``)
-is the contract of ``GET /v1/packs``, the packs a user can pick.
-
-Files are read on every call, because ``/data/active`` is a symlink that a rebuild can switch.
+``catalog.py`` builds them from the pack manifests the ingest service writes: a pack offers the questions whose
+sources and tools the running stack serves, and among them the examples of the composer's picker.
 """
 
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass
-from pathlib import Path
 from typing import Any
 from typing import Literal
 
@@ -29,52 +17,8 @@ from pydantic import BaseModel
 from pydantic import ConfigDict
 from pydantic import Field
 
-from .registry import ToolRegistry
-
 # The most examples the composer's picker offers
 MAX_EXAMPLES = 12
-
-
-class PackUnavailableError(Exception):
-    """``/data/active/pack.json`` is missing or unreadable (the data one-shot has not run)."""
-
-
-@dataclass(frozen=True, slots=True)
-class Source:
-    id: str
-    name: str
-    description: str
-    agent_description: str
-    kind: str
-    capabilities: tuple[str, ...]
-    synthetic: bool
-    default_enabled: bool
-    example_questions: tuple[str, ...]
-    database_name: str | None
-
-    def public(self) -> dict[str, Any]:
-        return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "default_enabled": self.default_enabled,
-            "kind": self.kind,
-            "capabilities": list(self.capabilities),
-            "synthetic": self.synthetic,
-            "database_name": self.database_name,
-        }
-
-    def catalog_entry(self) -> dict[str, Any]:
-        """How the agent sees this source in its run instructions."""
-        return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.agent_description,
-            "kind": self.kind,
-            "capabilities": list(self.capabilities),
-            "synthetic": self.synthetic,
-            "example_questions": list(self.example_questions),
-        }
 
 
 class _View(BaseModel):
@@ -158,86 +102,3 @@ def picker_examples(questions: list[dict[str, Any]], declared: list[str] | None)
         featured = [question["id"] for question in questions if question.get("featured")]
         declared = featured + [question_id for question_id in offered if question_id not in featured]
     return [question_id for question_id in declared if question_id in offered][:MAX_EXAMPLES]
-
-
-class ActivePack:
-    def __init__(self, data_dir: Path, registry: ToolRegistry, features: frozenset[str]) -> None:
-        self.data_dir = data_dir
-        self._families = registry.families(features)
-
-    def manifest(self) -> dict[str, Any]:
-        try:
-            return json.loads((self.data_dir / "pack.json").read_text(encoding="utf-8"))
-        except (OSError, ValueError) as error:
-            raise PackUnavailableError("The active data pack is not built yet") from error
-
-    def collection_manifest(self) -> dict[str, Any] | None:
-        try:
-            return json.loads((self.data_dir / "collection-manifest.json").read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            return None
-
-    def sources(self) -> list[Source]:
-        manifest = self.manifest()
-        structured = manifest.get("structured") or {}
-        indexed = set((self.collection_manifest() or {}).get("source_ids", []))
-        sources = []
-        for entry in manifest.get("sources", []):
-            capabilities = tuple(family for family in entry.get("capabilities", []) if family in self._families)
-            if entry["kind"] == "documents" and entry["id"] not in indexed:
-                capabilities = ()
-            if not capabilities:
-                continue
-            sources.append(
-                Source(
-                    id=entry["id"],
-                    name=entry["name"],
-                    description=entry.get("description", ""),
-                    agent_description=entry.get("agent_description") or entry.get("description", ""),
-                    kind=entry["kind"],
-                    capabilities=capabilities,
-                    synthetic=bool(entry.get("synthetic", False)),
-                    default_enabled=entry.get("default_enabled", True),
-                    example_questions=tuple(entry.get("example_questions", [])),
-                    database_name=structured.get("database_name") if entry["id"] == structured.get("source") else None,
-                )
-            )
-        return sources
-
-    def public_view(self) -> PackView:
-        """``GET /v1/pack``: what the UI shows on its landing page and in the composer's example picker, and the
-        conversations `demo-api record` asks.
-
-        A build from before ``examples`` existed has none in its pack.json, so it gets the default list too.
-        """
-        manifest = self.manifest()
-        available = {source.id for source in self.sources()}
-        questions = [
-            question for question in manifest.get("questions", []) if set(question.get("sources", [])) <= available
-        ]
-        return PackView(
-            **{key: manifest.get(key) for key in ("id", "version", "title", "description", "as_of", "disclaimer")},
-            kind=manifest.get("kind", "industry"),
-            icon=manifest.get("icon"),
-            status=manifest.get("status", "ready"),
-            questions=[
-                PackQuestionView(
-                    **{key: question.get(key) for key in ("id", "label", "tag", "description", "question", "sources")},
-                    tools=question.get("tools", []),
-                    featured=bool(question.get("featured", False)),
-                )
-                for question in questions
-            ],
-            examples=picker_examples(questions, manifest.get("examples")),
-            conversations=[
-                PackConversationView(
-                    **{key: conversation.get(key) for key in ("id", "label", "tag", "description", "sources", "turns")}
-                )
-                for conversation in manifest.get("conversations", [])
-                if set(conversation.get("sources", [])) <= available
-            ],
-        )
-
-    def database_path(self) -> Path | None:
-        database = (self.manifest().get("structured") or {}).get("database")
-        return self.data_dir / database if database else None

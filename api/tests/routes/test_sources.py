@@ -1,125 +1,110 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""The pack, its data sources, and the read-only data viewer."""
+"""The catalog's data sources, and the read-only data viewer of each structured source."""
 
 from __future__ import annotations
 
-import json
-
+import duckdb
 import httpx
 import pytest
 import yaml
-from jsonschema import Draft202012Validator
 from pydantic import SecretStr
-from support import REPO
+from support import DOCUMENTS
+from support import TABLES
+from support import read_manifest
+from support import update_manifest
+from support import write_manifest
 
-STRUCTURED = "/v1/data_sources/market_analysis_structured"
-
-
-async def test_pack_lists_questions_the_running_sources_can_answer(api, data_dir):
-    pack = (await api.get("/v1/pack")).json()
-    assert (pack["id"], pack["title"]) == ("market-analysis", "Synthetic Multi-Asset Market Analysis")
-    assert (pack["kind"], pack["icon"], pack["status"]) == ("industry", None, "ready")  # a pack.json without them
-    assert [(q["id"], q["featured"]) for q in pack["questions"]] == [("market-leaders", True), ("filings", False)]
-    assert pack["examples"] == ["market-leaders", "filings"]
-    assert [(c["id"], len(c["turns"])) for c in pack["conversations"]] == [("leaders-follow-up", 2)]
-
-    (data_dir / "collection-manifest.json").unlink()
-    pack = (await api.get("/v1/pack")).json()
-    assert [q["id"] for q in pack["questions"]] == ["market-leaders"]
-    assert pack["examples"] == ["market-leaders"]
+STRUCTURED = f"/v1/data_sources/{TABLES}"
 
 
-async def test_pack_matches_its_contract(api):
-    schema = json.loads((REPO / "contracts" / "schemas" / "pack.schema.json").read_text(encoding="utf-8"))
-    Draft202012Validator(schema).validate((await api.get("/v1/pack")).json())
+async def test_data_sources_of_a_pack_offer_only_capabilities_of_the_running_tools(api):
+    sources = (await api.get("/v1/data_sources", params={"pack": "retail"})).json()
+
+    # AGENT_FEATURES=retrieval,tables: no Kumo, no Auto Ontology
+    assert [(s["id"], s["pack_id"], s["kind"], s["capabilities"], s["database_name"]) for s in sources] == [
+        (DOCUMENTS, "retail", "documents", ["unstructured_retrieval"], None),
+        (TABLES, "retail", "structured", ["structured_retrieval"], "retail_sales"),
+    ]
+    assert all(source["status"] == "ready" for source in sources)
 
 
-async def test_the_example_picker_offers_the_pack_s_examples_in_order(api, data_dir):
-    pack = json.loads((data_dir / "pack.json").read_text())
-    extra = {
-        "id": "outlook",
-        "label": "Outlook",
-        "question": "What comes next?",
-        "sources": ["market_analysis_structured"],
+async def test_data_sources_cover_every_pack_unless_one_is_named(api, knowledge_dir):
+    uploads = read_manifest(knowledge_dir, "sources", DOCUMENTS) | {
+        "id": "workspace.documents",
+        "pack_id": "workspace",
+        "status": "ingesting",
     }
-    pack["questions"].append(extra | {"tools": ["kumo"]})
-    pack["examples"] = ["outlook", "filings", "market-leaders"]
-    (data_dir / "pack.json").write_text(json.dumps(pack))
+    write_manifest(knowledge_dir, "sources", uploads)
 
-    assert (await api.get("/v1/pack")).json()["examples"] == ["outlook", "filings", "market-leaders"]
-
-    # Only those whose sources the stack serves: no retrieval index, no filings
-    (data_dir / "collection-manifest.json").unlink()
-    assert (await api.get("/v1/pack")).json()["examples"] == ["outlook", "market-leaders"]
+    every = [source["id"] for source in (await api.get("/v1/data_sources")).json()]
+    assert every == [DOCUMENTS, TABLES, "workspace.documents"]
+    workspace = (await api.get("/v1/data_sources", params={"pack": "workspace"})).json()
+    assert [(source["id"], source["status"]) for source in workspace] == [("workspace.documents", "ingesting")]
+    assert (await api.get("/v1/data_sources", params={"pack": "aerospace"})).status_code == 404
 
 
-async def test_without_a_list_the_picker_offers_the_featured_questions_then_the_rest_up_to_12(api, data_dir):
-    pack = json.loads((data_dir / "pack.json").read_text())
-    question = pack["questions"][0]
-    pack["questions"] = [question | {"id": f"q{n}", "featured": n in (7, 14)} for n in range(15)]
-    (data_dir / "pack.json").write_text(json.dumps(pack))
-
-    view = (await api.get("/v1/pack")).json()
-    assert len(view["questions"]) == 15
-    assert view["examples"] == ["q7", "q14", "q0", "q1", "q2", "q3", "q4", "q5", "q6", "q8", "q9", "q10"]
-
-
-async def test_data_sources_offer_only_capabilities_of_the_running_tools(api):
-    sources = {source["id"]: source for source in (await api.get("/v1/data_sources")).json()}
-
-    # AGENT_FEATURES=retrieval,tables: no Auto Ontology, no Kumo.
-    assert sources["market_analysis_structured"]["capabilities"] == ["structured_retrieval"]
-    assert sources["market_analysis_structured"]["database_name"] == "market_analysis"
-    assert sources["market_news"]["capabilities"] == ["unstructured_retrieval"]
-
-
-async def test_an_unbuilt_pack_is_503(api, data_dir):
-    (data_dir / "pack.json").unlink()
-    assert (await api.get("/v1/pack")).status_code == 503
-    assert (await api.get("/v1/data_sources")).status_code == 503
-
-
-async def test_schema_lists_tables_views_keys_and_relationships(api):
+async def test_schema_lists_the_tables_with_the_keys_the_catalog_profiled(api):
     schema = (await api.get(f"{STRUCTURED}/schema")).json()
 
+    assert (schema["source_id"], schema["database_name"]) == (TABLES, "retail_sales")
     tables = {table["name"]: table for table in schema["tables"]}
-    assert set(tables) == {"assets", "daily_prices", "prediction.asset_entities"}
-    assert tables["prediction.asset_entities"]["kind"] == "view"
-    assert tables["daily_prices"]["primary_key"] == ["price_id"]
-    assert tables["daily_prices"]["columns"][2] == {
-        "name": "close",
-        "type": "DOUBLE",
+    assert set(tables) == {"customers", "orders"}
+    # Ingest loads files without constraints; the keys come from the source manifest
+    assert tables["orders"]["primary_key"] == ["order_id"]
+    assert tables["orders"]["columns"][0] == {
+        "name": "order_id",
+        "type": "VARCHAR",
         "nullable": True,
-        "primary_key": False,
+        "primary_key": True,
     }
+    assert tables["orders"]["columns"][2]["type"] == "TIMESTAMP"
     assert schema["relationships"] == [
-        {"from_table": "daily_prices", "from_column": "asset_id", "to_table": "assets", "to_column": "asset_id"}
+        {"from_table": "orders", "from_column": "customer_id", "to_table": "customers", "to_column": "customer_id"}
     ]
 
 
-async def test_preview_returns_the_first_rows(api):
-    preview = (await api.get(f"{STRUCTURED}/preview", params={"table": "daily_prices"})).json()
+async def test_schema_lists_views_and_other_schemas_too(api, knowledge_dir):
+    with duckdb.connect(str(knowledge_dir / "sources" / TABLES / "tables.duckdb")) as connection:
+        connection.execute("CREATE SCHEMA marts")
+        connection.execute("CREATE VIEW marts.gold_customers AS SELECT customer_id FROM main.customers")
 
-    assert preview["columns"] == ["price_id", "asset_id", "close", "traded_at"]
-    assert preview["types"] == ["VARCHAR", "VARCHAR", "DOUBLE", "TIMESTAMP WITH TIME ZONE"]
-    assert (len(preview["rows"]), preview["truncated"]) == (100, True)
-    assert preview["rows"][0][3].startswith("2026-08-01")
-    few = (await api.get(f"{STRUCTURED}/preview", params={"table": "prediction.asset_entities", "limit": 1})).json()
-    assert (len(few["rows"]), few["truncated"]) == (1, True)
+    tables = {table["name"]: table for table in (await api.get(f"{STRUCTURED}/schema")).json()["tables"]}
+    assert (tables["marts.gold_customers"]["kind"], tables["marts.gold_customers"]["primary_key"]) == ("view", [])
+    gold = (await api.get(f"{STRUCTURED}/preview", params={"table": "marts.gold_customers", "limit": 1})).json()
+    assert (gold["rows"], gold["truncated"]) == ([["C1"]], True)
+
+
+async def test_preview_returns_the_first_rows(api):
+    preview = (await api.get(f"{STRUCTURED}/preview", params={"table": "orders", "limit": 2})).json()
+
+    assert preview["columns"] == ["order_id", "customer_id", "ordered_at", "net_amount"]
+    assert preview["types"] == ["VARCHAR", "VARCHAR", "TIMESTAMP", "DOUBLE"]
+    assert (preview["rows"], preview["truncated"]) == (
+        [["O1", "C1", "2026-06-01 10:00:00", 120.5], ["O2", "C1", "2026-08-15 12:30:00", 80.0]],
+        True,
+    )
     assert (await api.get(f"{STRUCTURED}/preview", params={"table": "secrets"})).status_code == 404
 
 
-async def test_query_runs_one_bounded_select(api):
-    sql = "SELECT a.name, count(*) AS n FROM daily_prices p JOIN assets a USING (asset_id) GROUP BY 1 ORDER BY 1"
+@pytest.mark.parametrize(
+    "tables",
+    [
+        "orders o JOIN customers c USING (customer_id)",
+        # How the agent writes it: the tables tool attaches each source under its alias
+        "retail_sales.orders o JOIN retail_sales.main.customers c USING (customer_id)",
+    ],
+)
+async def test_query_runs_one_bounded_select(api, tables):
+    sql = f"SELECT c.tier, count(*) AS n, sum(o.net_amount) AS revenue FROM {tables} GROUP BY 1 ORDER BY 1"
     result = (await api.post(f"{STRUCTURED}/query", json={"sql": sql})).json()
 
     assert result.pop("duration_ms") >= 0
     assert result == {
-        "columns": ["name", "n"],
-        "types": ["VARCHAR", "BIGINT"],
-        "rows": [["Alpha", 75], ["Beta", 75]],
+        "columns": ["tier", "n", "revenue"],
+        "types": ["VARCHAR", "BIGINT", "DOUBLE"],
+        "rows": [["gold", 4, 515.5], ["silver", 1, 45.25]],
         "truncated": False,
     }
 
@@ -127,12 +112,14 @@ async def test_query_runs_one_bounded_select(api):
 @pytest.mark.parametrize(
     "sql",
     [
-        "DELETE FROM assets",
+        "DELETE FROM orders",
         "SELECT 1; SELECT 2",
         "SELECT * FROM read_csv('/etc/passwd')",
-        "SELECT * FROM other_db.main.assets",
+        "SELECT * FROM other_db.main.orders",
+        "SELECT * FROM other_db.orders",
         "SELECT * FROM missing_table",
-        "COPY assets TO '/tmp/out.csv'",
+        "COPY orders TO '/tmp/out.csv'",
+        "ATTACH '/tmp/other.duckdb' AS other",
         "SELECT FROM WHERE",
     ],
 )
@@ -142,8 +129,10 @@ async def test_query_refuses_anything_but_a_select_over_the_database(api, sql):
     assert "detail" in response.json()
 
 
-async def test_viewer_routes_are_404_for_a_document_source(api):
-    assert (await api.get("/v1/data_sources/market_news/schema")).status_code == 404
+async def test_viewer_routes_are_404_for_a_document_source_or_an_unavailable_one(api, knowledge_dir):
+    assert (await api.get(f"/v1/data_sources/{DOCUMENTS}/schema")).status_code == 404
+    update_manifest(knowledge_dir, "sources", TABLES, status="failed")
+    assert (await api.get(f"{STRUCTURED}/schema")).status_code == 404
 
 
 async def test_ontology_is_404_without_the_ontology_profile(api):
@@ -164,9 +153,9 @@ EXPORT = {
                         "tables": [
                             {
                                 "id": "t-1",
-                                "name": "assets",
+                                "name": "customers",
                                 "pk": ["c-1"],
-                                "columns": [{"id": "c-1", "name": "asset_id", "type": "VARCHAR", "sample": "A1"}],
+                                "columns": [{"id": "c-1", "name": "customer_id", "type": "VARCHAR", "sample": "C1"}],
                             }
                         ],
                     }
@@ -178,9 +167,9 @@ EXPORT = {
         "terms": [
             {
                 "id": "term-1",
-                "name": "Asset",
+                "name": "Customer",
                 "represents": ["t-1"],
-                "columns_attributes": [{"id": "attr-1", "name": "Asset id", "column_id": "c-1"}],
+                "columns_attributes": [{"id": "attr-1", "name": "Customer id", "column_id": "c-1"}],
             }
         ]
     },
@@ -194,7 +183,7 @@ def ontology_service(settings, upstreams) -> list[httpx.Request]:
     def handle(request: httpx.Request) -> httpx.Response:
         calls.append(request)
         if request.url.path == "/api/datasources/dbs":
-            return httpx.Response(200, json={"data": [{"id": "db-1", "name": "market_analysis"}], "count": 1})
+            return httpx.Response(200, json={"data": [{"id": "db-1", "name": "retail_sales"}], "count": 1})
         if request.url.path == "/api/model/export":
             return httpx.Response(200, text=yaml.safe_dump(EXPORT), headers={"content-type": "application/x-yaml"})
         return httpx.Response(200, json={})
@@ -216,12 +205,12 @@ async def test_ontology_is_a_bounded_graph_from_auto_ontology(ontology_service, 
         "/api/auth/sign-out",
     ]
     assert [(node["kind"], node["label"]) for node in snapshot["nodes"]] == [
-        ("database", "market_analysis"),
+        ("database", "retail_sales"),
         ("schema", "main"),
-        ("table", "assets"),
-        ("column", "asset_id"),
-        ("term", "Asset"),
-        ("attribute", "Asset id"),
+        ("table", "customers"),
+        ("column", "customer_id"),
+        ("term", "Customer"),
+        ("attribute", "Customer id"),
     ]
     assert {edge["kind"] for edge in snapshot["edges"]} == {"contains", "represents", "has_attribute", "maps_to"}
     assert "never-leaks" not in str(snapshot) and "db-1" not in str(snapshot)

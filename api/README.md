@@ -7,17 +7,42 @@ SPDX-License-Identifier: Apache-2.0
 
 A FastAPI service (`demo_api`) between the UI and the agent. It turns each question into a job, runs
 the job on Hermes through the Hermes Runs API, stores what happens as `execution.v2` events, and
-serves the answer, its evidence and a read-only view of the pack's database. It also transcribes voice input.
+serves the answer, its evidence and a read-only view of each structured source's database. It reads the
+knowledge catalog, forwards uploads to the ingest service, and transcribes voice input.
 
 ```text
 UI ──/api/v1 proxy──▶ API ──Runs API──▶ hermes-gateway ──▶ Hermes (OpenShell sandbox)
-                       ▲                                        │
-                       └──── /internal/hermes (receipts plugin) ◀┘
+                       │ ▲                                      │
+                       │ └──── /internal/hermes (receipts plugin) ◀┘
+                       ├──/v1/collections, /v1/documents──▶ ingest
+                       └──reads──▶ /knowledge (catalog, DuckDB files; read-only)
 ```
+
+## The knowledge catalog
+
+Every industry pack and the user's workspace sit side by side in the knowledge volume, which only the ingest
+service writes (`src/demo_api/catalog.py`, read on every request):
+
+```text
+/knowledge/catalog/packs/<pack_id>.json        PackManifest   (contracts/catalog/pack-manifest.schema.json)
+/knowledge/catalog/sources/<source_id>.json    SourceManifest (contracts/catalog/source-manifest.schema.json)
+/knowledge/sources/<source_id>/tables.duckdb   a structured source's tables
+```
+
+A source (`retail.policies`, `workspace.tables`) is offered while its status is `ready` or `ingesting`, with its
+capabilities narrowed to the tool families of `AGENT_FEATURES`; a structured source also needs a table. A pack
+offers the questions whose sources are offered and whose tool pills are served (`kumo` needs the `kumo` feature,
+`duckdb` the `tables` one, `ontology` the `ontology` one, `retrieval` the `retrieval` one).
+
+What the agent sees of each selected source (its run instructions, `hermes/request.py`) is `Source.catalog_entry()`:
+for a structured source, its `database` (`alias`, and at most 30 tables with name, description, row count, primary
+key, time column, at most 40 columns with type and description, and foreign keys) and its `prediction_templates`
+(when the prediction tool runs), so the agent writes `<alias>.<table>` SQL and PQL without a schema tool.
 
 ## How a job runs
 
-1. `POST /v1/jobs/async/submit` checks the selected sources and queues the job. One job runs at a time
+1. `POST /v1/jobs/async/submit` checks the selected catalog sources and queues the job, with its `pack_id`
+   (given, or the one pack of its sources) and each source's catalog entry. One job runs at a time
    and four more may wait; a sixth live job gets `429` with `Retry-After`.
 2. The runner starts a Hermes run (`src/demo_api/jobs/executor.py`). The request follows the
    agent's "Run contract" (`agent/README.md`): model `enterprise-research`, `session_id` = job id,
@@ -53,13 +78,17 @@ Hermes to stop their runs, waiting up to 10 s. The container therefore needs a s
 | Route | Purpose |
 |---|---|
 | `GET /health` | 200 while the store answers and the job workers run |
-| `GET /v1/pack` | Title, disclaimer, questions and the example picker's questions (`examples`) of the active pack |
-| `GET /v1/data_sources` | Sources the running tools can serve, with their capabilities |
-| `GET /v1/data_sources/{id}/schema` | Tables, views, columns, keys and relationships |
+| `GET /v1/packs` | `PackList`: `{packs: [{id, kind, title, description, icon, status}]}`, the industries by title, then the workspace |
+| `GET /v1/pack?id=` | `PackView` of one pack (default: the first industry): title, disclaimer, the questions this stack can answer, the picker's `examples`, conversations |
+| `GET /v1/data_sources?pack=` | Sources of the pack (every pack when omitted) the running tools can serve: `{id, pack_id, name, description, default_enabled, kind, capabilities, synthetic, status, database_name}` |
+| `GET /v1/data_sources/{id}/schema` | Tables, views, columns, keys (the profiled ones from the catalog included) and relationships |
 | `GET /v1/data_sources/{id}/preview?table=&limit=` | First rows (at most 100) |
-| `POST /v1/data_sources/{id}/query` `{sql}` | One SELECT over the database, in a separate process: 5 s, 100 rows, 2 at a time |
+| `POST /v1/data_sources/{id}/query` `{sql}` | One SELECT over the source's database (attached under its alias, so `<alias>.<table>` works), in a separate process: 5 s, 100 rows, 2 at a time |
 | `GET /v1/data_sources/{id}/ontology` | Auto Ontology graph (ontology profile; 404 otherwise) |
-| `POST /v1/jobs/async/submit` | `{input, data_sources?, job_id?}`, header `conversation-id` → `{job_id, status}` |
+| `GET`/`POST /v1/collections`, `GET`/`DELETE /v1/collections/{name}` | Forwarded to ingest |
+| `GET`/`POST`/`DELETE /v1/collections/{name}/documents` | Forwarded to ingest; the multipart upload is streamed, at most `INGEST_MAX_REQUEST_MB` (413) |
+| `GET /v1/documents/{job_id}/status` | Forwarded to ingest |
+| `POST /v1/jobs/async/submit` | `{input, pack_id?, data_sources?, job_id?}`, header `conversation-id` → `{job_id, status}` |
 | `GET /v1/jobs/async/job/{id}` | `{job_id, status, error, created_at}` |
 | `GET /v1/jobs/async/job/{id}/report` | `{job_id, has_report, report}` |
 | `POST /v1/jobs/async/job/{id}/cancel` | `{job_id, status: "interrupted", cancelled: true}`; 409 once finished |
@@ -72,7 +101,8 @@ Hermes to stop their runs, waiting up to 10 s. The container therefore needs a s
 | `POST /internal/hermes/jobs/{id}/llm-calls` | Plugin: one model call, with the served model and its tier |
 
 Unknown jobs, and jobs deleted by retention, are 404. `/internal/hermes/**` needs the `X-Receipt-Key`
-header.
+header. Before ingest has written the catalog, the pack and data source routes are 503. The documents routes
+return ingest's status code, body and content type as they are; an unreachable ingest is 503, a slow one 504.
 
 ### The event stream
 
@@ -99,15 +129,17 @@ Voice input is off unless `SPEECH_INPUT_ENABLED` is true and `SPEECH_API_KEY` is
 
 ## Recordings
 
-`demo-api record` asks the pack's featured questions (`--all` for every question and conversation,
-`--question ID` for some) on a running stack and writes the bundle the UI replays. A question is a
-session of one turn; a conversation (`conversations` in `questions.yaml`) is one session whose turns
-are asked in order with one `conversation-id`, so each sees the answers before it:
+`demo-api record --pack <id>` asks that pack's featured questions (`--all` for every question and
+conversation, `--question ID` for some) on a running stack, in that pack with each question's sources, and
+writes the bundle the UI replays. A question is a session of one turn; a conversation (`conversations` in
+`questions.yaml`) is one session whose turns are asked in order with one `conversation-id`, so each sees the
+answers before it:
 
 ```text
 data/packs/<pack>/recordings/
   index.json          {schemaVersion: 2, pack: {id, version}, recordedAt, sessions: [{id, title, featured, turns: [{jobId, question}], tools}]}
-  pack.json           copy of /data/active/pack.json
+  pack.json           the pack's PackView (GET /v1/pack?id=<pack>)
+  sources.json        the pack's data sources (GET /v1/data_sources?pack=<pack>)
   sessions/<id>.json  {schemaVersion: 2, id, title, turns: [<export>]}
   database.json       {schemaVersion: 1, sources: [{id, name, databaseName, schema, previews, queries: [{sql, result}]}]}
 ```
@@ -118,14 +150,15 @@ behind it, for the UI's replays list.
 
 An export turn is `{jobId, question, submittedAt, completedAt, status, report: {markdown, citations[]} | null,
 events: [execution.v2], receipts: [ReceiptV2], sourceIds}`. `database.json` lets the data viewer work
-in replay: each structured source's `GET .../schema`, the first 8 rows of each table
-(`GET .../preview`), and the `POST .../query` results of the SQL the recorded answers ran and of the
-viewer's starting query for each table. `demo-api snapshot-database --out <recordings>` rewrites only
-`database.json`. `scripts/demo.sh record` runs the command in
-the api image on the stack's network, where the defaults (`--api-url http://api:8000`,
-`DATA_ACTIVE_DIR=/data/active`) are right. A question or conversation that does not succeed is left
-out, and the command exits 1. `--question` updates only the named sessions and keeps the rest of the
-bundle; a whole set (the featured questions, or `--all`) replaces it.
+in replay: for each structured source of the pack (each entry's `id` is the source id), its `GET .../schema`,
+the first 8 rows of each table (`GET .../preview`), and the `POST .../query` results of the SQL the recorded
+answers ran on its database and of the viewer's starting query for each table.
+`demo-api snapshot-database --pack <id> --out <recordings>` rewrites only `database.json`.
+`scripts/demo.sh record --pack <id>` runs the command in the api image on the stack's network, where the default
+`--api-url http://api:8000` is right. A pack the catalog does not hold, or a question id it does not offer on
+this stack, stops the command before anything is asked (exit 2). A question or conversation that does not
+succeed is left out, and the command exits 1. `--question` updates only the named sessions and keeps the rest of
+the bundle; a whole set (the featured questions, or `--all`) replaces it.
 
 ## Environment
 
@@ -138,7 +171,9 @@ Secrets can also be files in `/run/secrets` named after the setting (Compose sec
 | `HERMES_RECEIPT_API_KEY` | – (secret) | `X-Receipt-Key` of the internal routes |
 | `AGENT_FEATURES` | `retrieval,tables` | Tool groups in the agent image (as its build argument); limits capabilities and toolsets |
 | `AGENT_EFFICIENT_MODEL`, `AGENT_CAPABLE_MODEL` | empty | Switchyard's model ids, for the tier of each model call |
-| `DATA_ACTIVE_DIR` | `/data/active` | The built data pack |
+| `KNOWLEDGE_DIR` | `/knowledge` | The knowledge volume (read-only): catalog and DuckDB files |
+| `INGEST_URL` | `http://ingest:8330` | The ingest service the documents routes forward to |
+| `INGEST_MAX_REQUEST_MB` | `512` | The largest upload request forwarded (413 beyond) |
 | `API_DB_PATH` | `/var/lib/demo-api/jobs.db` | SQLite job store |
 | `JOB_MAX_ACTIVE`, `JOB_MAX_QUEUED` | `1`, `4` | Queue size |
 | `JOB_DEADLINE_SECONDS` | `1200` | Per-job backstop deadline |
@@ -162,10 +197,13 @@ Secrets can also be files in `/run/secrets` named after the setting (Compose sec
 ## Run and test
 
 ```bash
-uv run --directory api pytest                     # offline: fake Hermes, Phoenix and Auto Ontology
+uv run --directory api pytest                     # offline: fake Hermes, ingest, Phoenix and Auto Ontology
 docker build --build-context contracts=contracts -t knowledge-foundation/api:local api
-scripts/demo.sh record                            # record the featured questions on the running stack
+scripts/demo.sh record --pack retail              # record a pack's featured questions on the running stack
 ```
+
+The tests run on the shared catalog fixture (`contracts/fixtures/catalog`): its manifests, and a DuckDB file
+loaded from its CSVs the way ingest loads them.
 
 `tests/jobs/test_runner.py` pins the job semantics the prototype got from Dask and NAT: order, the
 queue cap, cancelling queued and running jobs, the deadline, progress budgets, restart recovery,
