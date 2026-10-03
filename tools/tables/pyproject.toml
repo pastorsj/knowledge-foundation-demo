@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+[project]
+name = "demo-tables"
+version = "0.1.0"
+description = "query_tables MCP server: one read-only DuckDB SELECT over the knowledge catalog's structured sources."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    # Same DuckDB as the ingest service that writes the sources' tables.duckdb files.
+    "duckdb==1.5.5",
+    "mcp>=2.2,<3",
+    "openinference-semantic-conventions>=0.1.39",
+    "opentelemetry-exporter-otlp-proto-http>=1.45",
+    "opentelemetry-sdk>=1.45",
+    "pydantic>=2.13,<3",
+    # The SQL guard; the same line as the API's data viewer.
+    "pytz>=2025.2",
+    "sqlglot>=30.20,<31",
+]
+
+[project.scripts]
+demo-tables = "demo_tables.__main__:main"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28",
+    "pytest>=9.1",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
