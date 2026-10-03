@@ -15,7 +15,7 @@
 
 'use client'
 
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { type CSSProperties, type FC, useCallback, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Flex, Select, Text } from '@/adapters/ui'
 import { packIcon } from '@/adapters/ui/icons'
@@ -66,6 +66,15 @@ const usePacks = (initial: readonly PackSummary[] | undefined): PackSummary[] =>
     }
   }, [fetched, mode])
   return packs
+}
+
+/**
+ * The menu is as wide as its longest industry, not as the trigger (which shows one short name), and
+ * ends where the trigger ends, so it stays on screen at the right edge of the header.
+ */
+const MENU_STYLE: CSSProperties = {
+  width: 'max-content',
+  transform: 'translateX(calc(var(--popover-anchor-width) - 100%))',
 }
 
 interface IndustrySelectProps {
@@ -133,6 +142,7 @@ export const IndustrySelect: FC<IndustrySelectProps> = ({ packId, packs: initial
             'data-testid': 'industry-select',
             title: isBusy ? 'The industry is fixed while an answer is running' : 'Industry',
           },
+          SelectContent: { style: MENU_STYLE },
         }}
         items={items.map((pack) => {
           const Icon = packIcon(pack.icon)
