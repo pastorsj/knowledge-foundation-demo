@@ -25,7 +25,7 @@ repos:
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
-        args: [-x] # follow sourced files, as CI does, so one changed script checks on its own
+        args: [-x] # follow sourced files, as demo.sh sources them, so one changed script checks on its own
 
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.1
