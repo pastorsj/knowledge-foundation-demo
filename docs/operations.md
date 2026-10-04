@@ -201,9 +201,9 @@ and never block questions. The API's settings are in [`api/README.md`](../api/RE
 ## Recording and replay
 
 ```bash
-./scripts/demo.sh record --pack retail    # ask that pack's featured questions on the running stack
-./scripts/demo.sh replay                  # the UI alone on every pack's recordings: no .env, keys, API or GPU
-./scripts/demo.sh up                      # back to live mode (recreates only the UI)
+./scripts/demo.sh record --pack retail --all    # ask every question of that pack on the running stack
+./scripts/demo.sh replay                        # the UI alone on every pack's recordings: no .env, keys, API or GPU
+./scripts/demo.sh up                            # back to live mode (recreates only the UI)
 ```
 
 `replay` swaps the UI container into replay mode on the same port; it needs at least one pack with recordings.

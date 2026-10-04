@@ -57,7 +57,8 @@ Data and recordings
   data generate PACK      regenerate a pack's files from its seeded generator (uv on the host)
   record --pack PACK [ARGS...]
                           record that pack's featured questions from the running stack into
-                          data/packs/PACK/recordings (ARGS go to `demo-api record`)
+                          data/packs/PACK/recordings (ARGS go to `demo-api record`: --all for
+                          every question, as committed; --question ID for one)
   replay                  serve the UI on the recorded sessions only: no .env, keys or GPU
 
 Development

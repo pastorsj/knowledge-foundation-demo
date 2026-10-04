@@ -131,15 +131,15 @@ with seeded noise, so only a vision parser reads them.
    documents, SQL, both and prediction; the featured ones in `examples`).
 3. `./scripts/demo.sh data generate <id>`, then `./scripts/demo.sh data validate`.
 4. On a running stack, `./scripts/demo.sh data sync`; the new pack appears in the selector once ingested.
-5. Ask the featured questions, check the answers against the README's answer key, then record them (below).
+5. Ask every question, check the answers against the README's answer key, then record them all (below).
 
 No service changes: the tools' schemas are data-independent, and the API and UI list whatever the catalog holds.
 
 ## Recordings
 
 ```bash
-./scripts/demo.sh record --pack retail              # the featured questions
-./scripts/demo.sh record --pack retail --all        # every question and conversation
+./scripts/demo.sh record --pack retail --all        # every question and conversation (what is committed)
+./scripts/demo.sh record --pack retail              # the featured questions only: replaces the bundle
 ./scripts/demo.sh record --pack retail --question gold-churn-risk
 ./scripts/demo.sh replay                            # the UI alone on every pack's recordings
 ```
@@ -152,7 +152,9 @@ and replays a session without the API.
 
 `replay` needs at least one pack with recordings; until a pack is recorded, it has nothing to show. A bundle holds
 questions, answers, evidence excerpts and model names: review it before committing, and record again after a
-change to the pack's files or questions.
+change to the pack's files or questions. Every question of a committed bundle has a recording, and
+`api/tests/test_pills.py` checks that each one used the tools its `questions.yaml` entry declares; so record a whole
+pack with `--all`, or update single questions with `--question`.
 
 ## Licenses
 
