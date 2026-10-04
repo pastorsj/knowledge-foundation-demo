@@ -191,3 +191,17 @@ def test_agent_and_tool_traces_share_one_phoenix_project():
     }
     assert {"switchyard", "retrieval", "tables", "prediction"} <= attributes.keys()
     assert {name: value for name, value in attributes.items() if value != f"openinference.project.name={project}"} == {}
+
+
+def test_the_tools_catalog_fixtures_are_copies_of_the_contracts():
+    """Each tool project tests against its own copy of the contract's catalog fixtures (services share no files at
+    run time); a copy that drifts would test a catalog no service writes."""
+    contract = ROOT / "contracts" / "fixtures" / "catalog"
+    for tool in ("retrieval", "tables", "prediction"):
+        copies = ROOT / "tools" / tool / "tests" / "fixtures" / "catalog"
+        files = sorted(path.relative_to(copies) for path in copies.rglob("*") if path.is_file())
+        assert files, f"tools/{tool} has no catalog fixtures"
+        for relative in files:
+            assert (copies / relative).read_bytes() == (contract / relative).read_bytes(), (
+                f"tools/{tool}/tests/fixtures/catalog/{relative} differs from contracts/fixtures/catalog/{relative}"
+            )
