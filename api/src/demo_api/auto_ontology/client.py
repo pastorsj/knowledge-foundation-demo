@@ -94,13 +94,13 @@ class AutoOntologyClient:
         except (yaml.YAMLError, ValidationError) as error:
             raise AutoOntologyError("Auto Ontology returned an invalid model export") from error
 
-    async def ontology_snapshot(self, *, source_id: str, database_name: str) -> OntologySnapshot:
-        """The ontology of the database registered under ``database_name``."""
+    async def ontology_snapshot(self, *, source_id: str, database_name: str, registered_as: str) -> OntologySnapshot:
+        """The ontology of the database Auto Ontology registered as ``registered_as``, labelled ``database_name``."""
         databases = [
-            db for db in (await self.list_databases()).data if (db.name or "").casefold() == database_name.casefold()
+            db for db in (await self.list_databases()).data if (db.name or "").casefold() == registered_as.casefold()
         ]
         if len(databases) != 1:
-            raise AutoOntologyError(f"Auto Ontology has no single database named {database_name}", status_code=404)
+            raise AutoOntologyError(f"Auto Ontology has no single database named {registered_as}", status_code=404)
         try:
             return project_snapshot(
                 await self.export_model(databases[0].id), source_id=source_id, database_name=database_name

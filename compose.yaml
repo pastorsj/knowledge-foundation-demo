@@ -224,6 +224,7 @@ services:
       # demo.sh sets http://auto-ontology-frontend:3000 under the ontology profile; empty = off.
       AUTO_ONTOLOGY_URL: ${AUTO_ONTOLOGY_URL:-}
       AUTO_ONTOLOGY_EMAIL: admin@example.com
+      AUTO_ONTOLOGY_SOURCE: ${AUTO_ONTOLOGY_SOURCE:-retail.sales}
     volumes: [api-data:/var/lib/demo-api, knowledge:/knowledge:ro]
     # No dependency on hermes-gateway: the API must be up before the sandbox is created.
     depends_on:

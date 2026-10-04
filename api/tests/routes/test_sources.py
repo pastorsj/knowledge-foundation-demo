@@ -183,7 +183,8 @@ def ontology_service(settings, upstreams) -> list[httpx.Request]:
     def handle(request: httpx.Request) -> httpx.Response:
         calls.append(request)
         if request.url.path == "/api/datasources/dbs":
-            return httpx.Response(200, json={"data": [{"id": "db-1", "name": "retail_sales"}], "count": 1})
+            # Auto Ontology names a DuckDB connection after the file: tables.duckdb is "tables"
+            return httpx.Response(200, json={"data": [{"id": "db-1", "name": "tables"}], "count": 1})
         if request.url.path == "/api/model/export":
             return httpx.Response(200, text=yaml.safe_dump(EXPORT), headers={"content-type": "application/x-yaml"})
         return httpx.Response(200, json={})
@@ -191,6 +192,7 @@ def ontology_service(settings, upstreams) -> list[httpx.Request]:
     settings.auto_ontology_url = "http://ontology.test"
     settings.auto_ontology_email = "demo@example.com"
     settings.auto_ontology_password = SecretStr("not-a-real-password")
+    settings.auto_ontology_source = TABLES
     upstreams["ontology.test"] = handle
     return calls
 
@@ -216,3 +218,13 @@ async def test_ontology_is_a_bounded_graph_from_auto_ontology(ontology_service, 
     assert "never-leaks" not in str(snapshot) and "db-1" not in str(snapshot)
     column = next(node for node in snapshot["nodes"] if node["kind"] == "column")
     assert column["primary_key"] is True
+
+
+async def test_ontology_is_404_for_a_source_auto_ontology_does_not_serve(ontology_service, settings, api):
+    settings.auto_ontology_source = "manufacturing.operations"
+
+    response = await api.get(f"{STRUCTURED}/ontology")
+
+    assert response.status_code == 404
+    assert "manufacturing.operations" in response.json()["detail"]
+    assert ontology_service == []

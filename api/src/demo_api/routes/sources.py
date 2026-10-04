@@ -89,10 +89,12 @@ async def query(source_id: str, body: QueryRequest, services: ServicesDep) -> di
 
 @router.get("/data_sources/{source_id}/ontology")
 async def ontology(source_id: str, services: ServicesDep) -> OntologySnapshot:
-    source, _ = await _structured(services, source_id)
+    source, path = await _structured(services, source_id)
     settings = services.settings
     if not settings.auto_ontology_url:
         raise HTTPException(404, "Auto Ontology is not running (ontology profile).")
+    if source.id != settings.auto_ontology_source:
+        raise HTTPException(404, f"Auto Ontology serves {settings.auto_ontology_source} only (AUTO_ONTOLOGY_SOURCE).")
     client = AutoOntologyClient(
         settings.auto_ontology_url,
         email=settings.auto_ontology_email,
@@ -102,7 +104,10 @@ async def ontology(source_id: str, services: ServicesDep) -> OntologySnapshot:
     )
     try:
         async with client:
-            return await client.ontology_snapshot(source_id=source.id, database_name=source.database_name)
+            # Auto Ontology names a DuckDB connection after its file's catalog, the file name without .duckdb.
+            return await client.ontology_snapshot(
+                source_id=source.id, database_name=source.database_name, registered_as=path.stem
+            )
     except AutoOntologyError as error:
         raise HTTPException(error.status_code, str(error)) from error
 

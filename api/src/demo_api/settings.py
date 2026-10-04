@@ -93,6 +93,8 @@ class Settings(BaseSettings):
     auto_ontology_password: SecretStr = SecretStr("")
     # The Origin Auto Ontology's sign-in trusts, when it is not AUTO_ONTOLOGY_URL (e.g. http://127.0.0.1:3000)
     auto_ontology_origin: str = ""
+    # The one structured source Auto Ontology serves (compose.yaml: CONNECTION_STRINGS)
+    auto_ontology_source: str = "retail.sales"
 
     @property
     def features(self) -> frozenset[str]:
