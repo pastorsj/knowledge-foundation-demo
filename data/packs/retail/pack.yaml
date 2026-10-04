@@ -90,7 +90,8 @@ sources:
       order_items and returns: April 2025 to September 2026, a loyalty-member sample; returns carry condition (opened,
       unopened, defective) and returned_amount. merchandising_plan_category_targets (quarterly net sales targets by
       category) and merchandising_plan_promo_calendar come from the planning workbook. Net sales is SUM(orders.net_amount);
-      quarters are calendar quarters.
+      by product or category it is SUM(order_items.line_amount) (an order spans categories, so joining orders to
+      order_items repeats net_amount). Quarters are calendar quarters.
     kind: structured
     files:
       - files/sales/*.csv
