@@ -58,13 +58,25 @@ avoid other demos' (port 6006 is held by another one). `doctor` refuses to start
 
 The Kumo Relational NIM ships for amd64 only, so `doctor` refuses the `kumo` profile on the Spark. The
 `prediction` profile runs only the prediction server on the Spark and sends every prediction to a remote Kumo
-Relational NIM, on an x86_64 GPU host behind a gateway that authenticates with an `X-API-Key` header. Both settings
-in `.env` section 3 are required:
+Relational NIM on an x86_64 GPU host. Both settings in `.env` section 3 are required:
 
 | Variable | What |
 |---|---|
 | `KUMO_RELATIONAL_URL` | The NIM's base URL, the one that serves `/v1/health/ready`. Use `https://`: the Kumo client refuses to send the key over plain `http://` to anything but `localhost`, `127.0.0.1` or `::1` |
-| `KUMO_API_KEY` | The gateway's key, sent as `X-API-Key` |
+| `KUMO_API_KEY` | The key the endpoint expects, sent as `X-API-Key` |
+
+The NIM itself serves plain HTTP and checks no key, and the `prediction` container cannot reach a tunnel on the
+host: `127.0.0.1` inside it is the container. Two shapes work:
+
+- **An `https://` endpoint that checks `X-API-Key`**, such as a TLS reverse proxy in front of the NIM on the
+  x86_64 host. Set `KUMO_RELATIONAL_URL` to it and `KUMO_API_KEY` to its key.
+- **A tunnel that ends inside the `prediction` container's network namespace**: a service in a Compose override
+  file of your own, kept outside the repository, with `network_mode: service:prediction`, that forwards a local
+  port to the NIM. Set `KUMO_RELATIONAL_URL=http://127.0.0.1:<port>` (loopback, so the client sends the key) and
+  `KUMO_API_KEY` to any value the far end accepts (`doctor` requires one). The tunnel shares the container's
+  namespace, so restart it whenever `up` recreates `prediction`.
+
+Without either, run `COMPOSE_PROFILES=core,parse` (no predictions).
 
 `doctor` reports a problem while either is empty or the URL is plain `http://` to another host, and
 `doctor --keys` asks `GET $KUMO_RELATIONAL_URL/v1/health/ready` with the key. With a `KUMO_RELATIONAL_URL`, the
@@ -90,7 +102,8 @@ Its models use `INFERENCE_*` (reasoning and non-reasoning, by the ids in `AUTO_O
 `RETRIEVER_*` (embed and rerank). The ingestion service then builds the ontology of `AUTO_ONTOLOGY_SOURCE` in the
 background, in about 10 minutes for `retail.sales`; until then `ask_question` answers that the semantic layer has
 not been created ([how](../tools/auto-ontology/README.md#how-the-ontology-is-built)). If `up` recreated
-`prediction` and Kumo goes through a sidecar in its network namespace, start the sidecar again afterwards.
+`prediction` and Kumo goes through a tunnel in its network namespace ([the second shape](#kumo-through-a-remote-nim)),
+start the tunnel again afterwards.
 
 ## Brev VM mode
 

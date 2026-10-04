@@ -219,8 +219,9 @@ before committing ([data packs](data-packs.md#recordings)). To report a security
 - **Synthetic data.** Every industry's company, people, documents and figures are fictional, generated for a
   software demonstration.
 - **Kumo is x86_64 only.** The Kumo Relational NIM ships for amd64. On a DGX Spark, predictions need a remote NIM
-  (a Brev x86_64 VM through an SSH tunnel) with the `prediction` profile; without one, `predict` answers
-  `available: false` with the reason, and without the tool the API offers no prediction questions.
+  (on an x86_64 host, reached as [operations](operations.md#kumo-through-a-remote-nim) describes) with the
+  `prediction` profile; without one, `predict` answers `available: false` with the reason, and without the tool
+  the API offers no prediction questions.
 - **Parse needs a GPU or a key.** Without the `parse` profile or a hosted `PARSE_BASE_URL`, PDFs are read from
   their text layer (no layout, no scanned pages) and images are refused.
 - **Auto Ontology is private.** The `ontology` profile needs access to the `NVIDIA/auto-ontology` submodule,

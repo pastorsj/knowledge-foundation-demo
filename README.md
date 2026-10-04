@@ -92,6 +92,8 @@ git clone https://github.com/pastorsj/knowledge-foundation-demo.git && cd knowle
 | DGX Spark (arm64, GB10) | `core,parse,prediction` (the default) | Everything but the Kumo NIM: predictions go to a remote Kumo Relational NIM (`KUMO_RELATIONAL_URL`, `KUMO_API_KEY`) ([operations](docs/operations.md#dgx-spark-mode)) |
 | Brev or any x86_64 GPU VM | `core,parse,kumo` | Everything, the Kumo Relational NIM included ([operations](docs/operations.md#brev-vm-mode)) |
 
+No Kumo NIM? Use `COMPOSE_PROFILES=core,parse`: everything but predictions.
+
 The first `up` downloads Nemotron Parse 2.0 and builds every image. Then open:
 
 | What | URL |
