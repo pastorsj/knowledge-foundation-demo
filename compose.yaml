@@ -281,8 +281,6 @@ services:
       INGEST_MAX_FILE_MB: ${INGEST_MAX_FILE_MB:-100}
       INGEST_MAX_FILES: ${INGEST_MAX_FILES:-20}
       INGEST_STAGE_TIMEOUT_SECONDS: ${INGEST_STAGE_TIMEOUT_SECONDS:-1800}
-      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://phoenix:6006/v1/traces
-      OTEL_RESOURCE_ATTRIBUTES: openinference.project.name=knowledge-foundation
     volumes: [knowledge:/knowledge, ./data/packs:/packs:ro]
     depends_on:
       milvus: { condition: service_healthy }
