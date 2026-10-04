@@ -2420,8 +2420,10 @@ def compute_answers(t: dict, f: dict, extra: dict, scan: dict) -> dict[str, str]
     ]
     a["failure-risk-30d"] = "\n".join(
         [
-            f"Kumo returns probabilities, so the check is overlap, not exact values. The population is all {len(mi)} machines, "
-            "well under Kumo's limit of 1,000 entities per request, so the run needs no entity filter; it returns the top 25 "
+            "Kumo returns probabilities, so the check is overlap, not exact values. "
+            f"The population is all {len(mi)} machines, "
+            "well under Kumo's limit of 1,000 entities per request, so the run needs no entity filter; "
+            "it returns the top 25 "
             "and the answer gives five. The generator simulates October "
             "2026 beyond the data (the tables stop at 30 September). The machines below are in a degradation ramp "
             "at the anchor time (2026-10-01T00:00:00Z) and fail within 30 days; at least three of the five "
@@ -2438,7 +2440,8 @@ def compute_answers(t: dict, f: dict, extra: dict, scan: dict) -> dict[str, str]
     last30 = sensor[sensor["reading_date"] >= "2026-09-01"].groupby("machine_id")["alarm_count"].sum()
     recent = ", ".join(f"{k} ({v})" for k, v in last30.sort_values(ascending=False).head(5).items())
     a["high-alarm-risk"] = (
-        f"Kumo returns probabilities; the check is overlap with the simulated truth (all {len(mi)} machines are scored, "
+        "Kumo returns probabilities; the check is overlap with the simulated truth "
+        f"(all {len(mi)} machines are scored, "
         "under the limit of 1,000 entities per request, and the top 25 come back). The generator continues the "
         f"simulation through 30 October 2026: {len(top_alarm)} machines exceed 10 alarms in the 30 days after the "
         "anchor time (2026-10-01T00:00:00Z): "

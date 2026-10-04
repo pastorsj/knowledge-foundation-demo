@@ -353,10 +353,8 @@ test_unit() {
     log "$project"
     (cd "$ROOT/$project" && uv run --locked pytest -q -m "not gpu and not slow and not live")
   done
-  # infra/phoenix holds the one Python file outside the uv projects.
-  # shellcheck disable=SC2086 # one project per word
-  (cd "$ROOT" && uvx "$RUFF" check $PYTHON_PROJECTS infra/phoenix &&
-    uvx "$RUFF" format --check $PYTHON_PROJECTS infra/phoenix)
+  # The whole tree, as pre-commit lints it: the uv projects, the pack generators, scripts/ and infra/.
+  (cd "$ROOT" && uvx "$RUFF" check . && uvx "$RUFF" format --check .)
 }
 
 test_ui() {

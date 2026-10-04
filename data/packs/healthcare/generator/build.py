@@ -2498,7 +2498,10 @@ def answer_key(res: dict) -> dict[str, str]:
     prior = set(cl.loc[(cl["denied"] == 1) & (cl["sub"] <= "2026-05-31") & cl["patient_id"].isin(ns_ids), "patient_id"])
     later = set(
         cl.loc[
-            (cl["denied"] == 1) & (cl["sub"] >= "2026-06-01") & (cl["sub"] <= "2026-07-30") & cl["patient_id"].isin(ns_ids),
+            (cl["denied"] == 1)
+            & (cl["sub"] >= "2026-06-01")
+            & (cl["sub"] <= "2026-07-30")
+            & cl["patient_id"].isin(ns_ids),
             "patient_id",
         ]
     )

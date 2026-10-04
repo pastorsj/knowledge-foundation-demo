@@ -639,7 +639,8 @@ def build_readme(facts: dict[str, str]) -> None:
     text = (CONTENT / "readme.md").read_text(encoding="utf-8")
     import re
 
-    text = re.sub(r"<!--(?!\s*SPDX).*?-->\n?", "", text, flags=re.DOTALL)  # drop the authoring note, keep the SPDX header
+    # Drop the authoring note, keep the SPDX header.
+    text = re.sub(r"<!--(?!\s*SPDX).*?-->\n?", "", text, flags=re.DOTALL)
     (PACK / "README.md").write_text(render.fill(text, facts), encoding="utf-8")
 
 
