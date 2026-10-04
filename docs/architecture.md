@@ -133,7 +133,8 @@ agent reads it:
 | Any data tool, `ask_question` included | The `execution-receipts` plugin measures the final string and, past 30,000 characters, drops rows from the end of the longest list, then cuts the longest text, and says what it left out in `shortened_to_fit`. The receipt is built from the whole result |
 
 Relay, bundled with Hermes, exports the agent's OpenInference spans to Phoenix (project `knowledge-foundation`).
-Switchyard and the three tool servers export theirs to the same project, so a job's trace shows the agent's turns, the
+Switchyard and the three tool servers export theirs to the same project, and join the agent's trace through W3C
+trace context (on model calls, and in each MCP request's `_meta`), so a job is one trace: the agent's run, the
 router's decisions and the tools' steps together.
 
 ## The knowledge catalog

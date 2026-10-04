@@ -18,7 +18,7 @@ cited evidence. The job API drives it through the Hermes Runs API; see
 | Receipts and source scope | `profile/plugins/` | The `execution-receipts` Hermes plugin, baked into `/opt/data/plugins`. |
 | Tracing | `profile/relay-plugins.toml` | NeMo Relay sends OpenInference traces to Phoenix (project `knowledge-foundation`). `enable_full_payloads` is one line to flip. |
 | Network and filesystem limits | `sandbox-policy.yaml` | Baked at `/etc/openshell/policy.yaml`. Switchyard and the receipt API are allowed by the provider profiles in `infra/openshell/providers/`. |
-| Changes to Hermes itself | `patches/` | Three Runs API patches and one MCP discovery fix; see `patches/README.md`. |
+| Changes to Hermes itself | `patches/` | Four Runs API patches and two MCP fixes; see `patches/README.md`. |
 | Profile manifest | `profile/distribution.yaml` | Hermes profile distribution metadata (`knowledge-foundation-agent`). |
 
 Hermes reaches everything as `host.openshell.internal:<port>`: Switchyard

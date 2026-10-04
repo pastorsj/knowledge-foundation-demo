@@ -99,7 +99,14 @@ def test_run_request_follows_the_agent_run_contract():
         "job-1",
         ["skills", "retrieval"],
     )
-    assert set(request["metadata"]) == {"aiq.job.ref", "aiq.session.ref", "aiq.execution.mode", "aiq.agent.type"}
+    assert set(request["metadata"]) == {
+        "session.id",
+        "aiq.job.ref",
+        "aiq.session.ref",
+        "aiq.execution.mode",
+        "aiq.agent.type",
+    }
+    assert request["metadata"]["session.id"] == "job-1"  # Switchyard's spans carry the same session id
     assert request["conversation_history"] == [
         {"role": "user", "content": "Earlier?"},
         {"role": "assistant", "content": "Yes [1]."},

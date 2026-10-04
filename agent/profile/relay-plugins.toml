@@ -30,5 +30,8 @@ max_queue_size = 512
 max_export_batch_size = 32
 scheduled_delay_millis = 1000
 resource_attributes = { "openinference.project.name" = "knowledge-foundation" }
-# Job correlation metadata sent on each run (patch 0001) becomes span attributes.
+# Each run's metadata (patch 0001 on the turn, 0005 on the run's root span) becomes span attributes. Relay
+# reserves session.id, so the run's session.id metadata (the job id, as on Switchyard's spans) is mapped to it:
+# Phoenix groups the job's traces under that session.
 promote_metadata_prefixes = ["aiq.", "hermes."]
+attribute_mappings = [{ key = "openinference.metadata.session.id", alias = "session.id" }]

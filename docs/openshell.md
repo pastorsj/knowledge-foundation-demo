@@ -38,7 +38,7 @@ api ──▶ hermes-gateway (openshell forward service) ──gRPC/mTLS──�
 
 | Path in the image | What |
 |---|---|
-| `/opt/hermes` | Hermes with the four patches in `agent/patches/` applied (read-only) |
+| `/opt/hermes` | Hermes with the six patches in `agent/patches/` applied (read-only) |
 | `/etc/openshell/policy.yaml` | The sandbox policy, `agent/sandbox-policy.yaml` |
 | `/opt/agent/skills`, `/opt/agent/contracts` | The skills and the tool registry (read-only) |
 | `/opt/data` | `HERMES_HOME`: the rendered `config.yaml`, `SOUL.md`, the Relay config, the profile manifest (`name: knowledge-foundation-agent`) and the `execution-receipts` plugin |

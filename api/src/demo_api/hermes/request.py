@@ -58,8 +58,13 @@ def build_run_request(
 
 
 def relay_metadata(*, job_id: str, session_id: str) -> dict[str, str]:
-    """Span attributes that join the run's Phoenix trace to its job (Hermes patch 0001)."""
+    """Span attributes that join the run's Phoenix trace to its job (Hermes patches 0001 and 0005).
+
+    ``session.id`` is the Hermes session, which is the job: Switchyard's spans carry the same id, and Phoenix files
+    the trace under that session (``agent/profile/relay-plugins.toml`` maps the reserved name).
+    """
     return {
+        "session.id": job_id,
         "aiq.job.ref": correlation_ref(job_id),
         "aiq.session.ref": correlation_ref(session_id),
         "aiq.execution.mode": "async",

@@ -1,0 +1,127 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sam Pastoriza <pastorsj@users.noreply.github.com>
+Date: Sun, 4 Oct 2026 12:30:00 -0400
+Subject: [PATCH] fix(runs): export each run as one Relay trace
+
+Relay exports a scope when it closes. An API-server session scope never
+closes, so every Runs turn hung from a root span that never reached the
+exporter: trace UIs saw no root, and session views no input or output.
+Each run now opens its session scope, the AGENT root of the trace, with
+the run's metadata and input, and closes it with the run's answer when
+the run ends (unless another turn still runs in it). ensure_session takes
+the scope's input, and close_session the output from its event.
+
+Signed-off-by: Sam Pastoriza <pastorsj@users.noreply.github.com>
+---
+ agent/relay_runtime.py               | 10 ++++---
+ gateway/platforms/api_server_runs.py | 44 ++++++++++++++++++++++++++--
+ 2 files changed, 47 insertions(+), 7 deletions(-)
+
+diff --git a/agent/relay_runtime.py b/agent/relay_runtime.py
+index c8c0724..49e70a0 100644
+--- a/agent/relay_runtime.py
++++ b/agent/relay_runtime.py
+@@ -413,7 +413,8 @@ class RelayRuntime:
+             scope_metadata["nemo_relay_scope_role"] = "subagent"
+         context = contextvars.Context()
+         args = (self.relay.scope.push, SESSION_SCOPE, self.relay.ScopeType.Agent)
+-        push_kwargs.update(handle=parent_handle, metadata=scope_metadata, input=_scope_input(session.cwd))
++        push_kwargs.update(handle=parent_handle, metadata=scope_metadata)
++        push_kwargs.setdefault("input", _scope_input(session.cwd))
+         try:
+             future = _scope_op_executor().submit(context.run, *args, **push_kwargs)
+         except RuntimeError:
+@@ -433,8 +434,9 @@ class RelayRuntime:
+         data: Any = None,
+         metadata: dict[str, Any] | None = None,
+         cwd: str | None = None,
++        input: Any = None,
+     ) -> RelaySession | None:
+-        """Return the existing session scope or create it once."""
++        """Return the existing session scope or create it once (``input``: the new scope's input, default its cwd)."""
+         session_id = _session_id(event)
+         if not session_id:
+             return None
+@@ -454,7 +456,7 @@ class RelayRuntime:
+             if session.handle is None:
+                 self._open_session_scope(
+                     session, {**(metadata or {}), **runtime_metadata(self.runtime_id)},
+-                    resolve_parent=True, data=data, exit_fallback=True,
++                    resolve_parent=True, data=data, exit_fallback=True, **({} if input is None else {"input": input}),
+                 )
+         return session
+ 
+@@ -718,7 +720,7 @@ class RelayRuntime:
+             session.closing = True
+             if session.handle is not None:
+                 failure = self._close_scope_handle(
+-                    session, session.handle, output={}, allow_closing=True,
++                    session, session.handle, output=event.get("output") or {}, allow_closing=True,
+                     failure_label="session scope close failed", operation_already_held=True,
+                 )
+         # No subscriber flush here: process-wide, may wait on other sessions and deadlock an asyncio
+diff --git a/gateway/platforms/api_server_runs.py b/gateway/platforms/api_server_runs.py
+index 6971b5b..27d1af9 100644
+--- a/gateway/platforms/api_server_runs.py
++++ b/gateway/platforms/api_server_runs.py
+@@ -802,6 +802,38 @@ def _served_runtime(agent) -> Dict[str, str]:
+     return pair
+ 
+ 
++def _open_relay_run_trace(session_id: Optional[str], run: _RunLaunch) -> None:
++    """Open the run's Relay session scope, the AGENT root of its trace, with the run's metadata and input.
++
++    Relay exports a scope when it closes, and nothing closes an API-server session, so every turn's
++    spans hung from a root that never reached the exporter. A run is one trace instead:
++    ``_close_relay_run_trace`` closes the scope with the run's answer.
++    """
++    from agent import relay_runtime
++
++    runtime = relay_runtime.get_runtime()
++    if runtime is None or not session_id:
++        return
++    metadata = {**run.relay_metadata, "hermes.execution_surface": "api_server"}
++    question = run.user_message if isinstance(run.user_message, str) else None
++    with suppress(Exception):
++        runtime.ensure_session({"session_id": session_id}, metadata=metadata, input=question)
++
++
++def _close_relay_run_trace(session_id: Optional[str], result: Any) -> None:
++    """Close the run's Relay session scope, exporting its trace's root, unless a turn still runs in it."""
++    from agent import relay_runtime
++
++    runtime = relay_runtime.get_runtime(create=False)
++    if runtime is None or not session_id or relay_runtime.SESSION_COORDINATOR.has_active_turn(
++            profile_key=runtime.profile_key, session_id=session_id):
++        return
++    answer = result.get("final_response") if isinstance(result, dict) else None
++    event = {"session_id": session_id, **({"output": answer} if isinstance(answer, str) and answer else {})}
++    with suppress(Exception):
++        runtime.close_session(event)
++
++
+ def _run_agent_sync(self, run: _RunLaunch, agent, approval_notify, *, _api_server):
+     """Executor-thread body of one run; returns ``(result, usage, served_runtime)``."""
+     from gateway.session_context import clear_session_vars
+@@ -852,9 +884,15 @@ def _run_agent_sync(self, run: _RunLaunch, agent, approval_notify, *, _api_serve
+             # Passed only when set: a human turn keeps today's call shape.
+             author_kwargs = {"turn_author": run.turn_author} if run.turn_author is not None else {}
+             relay_kwargs = {"relay_metadata": run.relay_metadata} if run.relay_metadata else {}
+-            r = agent.run_conversation(
+-                user_message=run.user_message, conversation_history=run.conversation_history,
+-                task_id=effective_task_id, **relay_kwargs, **author_kwargs)
++            relay_session_id = getattr(agent, "session_id", None) or session_id
++            _open_relay_run_trace(relay_session_id, run)
++            r = None
++            try:
++                r = agent.run_conversation(
++                    user_message=run.user_message, conversation_history=run.conversation_history,
++                    task_id=effective_task_id, **relay_kwargs, **author_kwargs)
++            finally:
++                _close_relay_run_trace(relay_session_id, r)
+         finally:
+             # Clear ownership now so a later stop can't reap work this run left running.
+             _api_server._clear_turn_process_ownership(agent)
+-- 
+2.43.0
+

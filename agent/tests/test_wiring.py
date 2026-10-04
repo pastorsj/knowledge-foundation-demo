@@ -193,6 +193,18 @@ def test_agent_and_tool_traces_share_one_phoenix_project():
     assert {name: value for name, value in attributes.items() if value != f"openinference.project.name={project}"} == {}
 
 
+def test_relay_spans_carry_the_session_id_switchyards_spans_carry():
+    """Relay reserves session.id, so the run's session.id metadata reaches Phoenix through an attribute mapping. It
+    is the run's Hermes session id, the job id, which Switchyard puts on its spans: Phoenix files a trace under the
+    session of whichever span arrives first, so the two must agree."""
+    relay = tomllib.loads((AGENT / "profile" / "relay-plugins.toml").read_text(encoding="utf-8"))
+    (endpoint,) = relay["components"][0]["config"]["opentelemetry"]["endpoints"]
+    assert {"key": "openinference.metadata.session.id", "alias": "session.id"} in endpoint["attribute_mappings"]
+    request = (ROOT / "api" / "src" / "demo_api" / "hermes" / "request.py").read_text(encoding="utf-8")
+    assert '"session_id": job_id,' in request
+    assert '"session.id": job_id,' in request
+
+
 def test_the_tools_catalog_fixtures_are_copies_of_the_contracts():
     """Each tool project tests against its own copy of the contract's catalog fixtures (services share no files at
     run time); a copy that drifts would test a catalog no service writes."""

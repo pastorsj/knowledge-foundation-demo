@@ -4,9 +4,9 @@
 """Find a job's trace in Phoenix.
 
 Each run request carries ``aiq.job.ref`` metadata, which NeMo Relay promotes to an attribute of the
-turn span (Hermes patch 0001). Relay exports that span only once the turn ends, so the search falls back
-to ``session.id``: Switchyard's spans in the same trace carry the Hermes session id, which is the job id,
-and arrive with each model call.
+run's root and turn spans (Hermes patches 0001 and 0005). Relay exports those only once the run ends, so
+the search falls back to ``session.id``: Switchyard's spans in the same trace carry the Hermes session id,
+which is the job id, and arrive with each model call.
 Any matching span names the trace. The browser opens it at ``<Phoenix URL>/redirects/traces/<trace id>``.
 """
 

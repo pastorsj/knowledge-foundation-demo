@@ -1,0 +1,121 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sam Pastoriza <pastorsj@users.noreply.github.com>
+Date: Sun, 4 Oct 2026 12:40:00 -0400
+Subject: [PATCH] fix(mcp): propagate the Relay tool span to MCP servers
+
+An MCP tools/call left the agent with no trace context, so each MCP
+server's spans became a trace of their own beside the agent's. The
+managed tool callback now runs with Relay's tool span as the current
+OpenTelemetry span context, and the MCP tool handler sends it as W3C
+trace context in the request's _meta (SEP-414), which MCP SDK servers
+already read: the server's spans nest under the tool call.
+
+Signed-off-by: Sam Pastoriza <pastorsj@users.noreply.github.com>
+---
+ agent/relay_tools.py       | 30 +++++++++++++++++++++++++++++-
+ tools/mcp_tool_handlers.py | 21 ++++++++++++++++++---
+ 2 files changed, 47 insertions(+), 4 deletions(-)
+
+diff --git a/agent/relay_tools.py b/agent/relay_tools.py
+index 44d06a1..2042968 100644
+--- a/agent/relay_tools.py
++++ b/agent/relay_tools.py
+@@ -37,8 +37,11 @@ def execute(
+     def invoke(next_args: Any) -> Any:
+         nonlocal callback_error, observed_args
+         observed_args = next_args if isinstance(next_args, dict) else args
++        context = callback_context.copy()
++        # Relay's current scope is the tool span here, not in the callback's context: hand it over.
++        context.run(_attach_trace_context, _tool_traceparent(runtime.relay))
+         try:
+-            result = callback_context.copy().run(guarded, observed_args)
++            result = context.run(guarded, observed_args)
+         except BaseException as exc:
+             callback_error = exc
+             raise
+@@ -70,6 +73,31 @@ def execute(
+     return json.dumps(_jsonable(managed_result), ensure_ascii=False), observed_args
+ 
+ 
++def _tool_traceparent(relay: Any) -> str | None:
++    """The W3C ``traceparent`` of Relay's current scope (inside ``tools.execute``, the tool span)."""
++    try:
++        return relay.capture_traceparent()
++    except Exception:  # tracing must never fail a tool call
++        logger.debug("Relay trace context unavailable for the tool callback", exc_info=True)
++        return None
++
++
++def _attach_trace_context(traceparent: str | None) -> None:
++    """Make ``traceparent`` the current OpenTelemetry span context in this context.
++
++    A client that propagates W3C trace context then parents the callee's spans under the tool call: the
++    MCP handler puts it in each ``tools/call`` request's ``_meta`` (SEP-414), where MCP servers read it.
++    """
++    if not traceparent:
++        return
++    try:
++        from opentelemetry import context, propagate
++
++        context.attach(propagate.extract({"traceparent": traceparent}))
++    except Exception:  # tracing must never fail a tool call
++        logger.debug("OpenTelemetry trace context unavailable for the tool callback", exc_info=True)
++
++
+ def _jsonable(value: Any) -> Any:
+     if value is None or isinstance(value, (str, int, float, bool)):
+         return value
+diff --git a/tools/mcp_tool_handlers.py b/tools/mcp_tool_handlers.py
+index dd8b8e6..4090613 100644
+--- a/tools/mcp_tool_handlers.py
++++ b/tools/mcp_tool_handlers.py
+@@ -377,7 +377,19 @@ async def _track_inflight_rpc(server: Any, server_name: str, op: str, *, retry_s
+             inflight.discard(task)
+ 
+ 
+-async def _call_tool_racing_stdio_death(server, server_name: str, tool_name: str, args: dict):
++def _trace_context_meta() -> Optional[Dict[str, Any]]:
++    """The current W3C trace context (the calling Relay tool span) for a request's ``_meta`` (SEP-414),
++    so the MCP server's spans join the agent's trace; None without one."""
++    try:
++        from opentelemetry import propagate
++    except ImportError:
++        return None
++    carrier: Dict[str, Any] = {}
++    propagate.inject(carrier)
++    return carrier or None
++
++
++async def _call_tool_racing_stdio_death(server, server_name: str, tool_name: str, args: dict, meta=None):
+     """``session.call_tool`` that fails fast when the stdio child is/gets dead: pre-call (a dead
+     child must not hold the slot for the full timeout) and mid-call (race against
+     ``_watch_stdio_children``). Both raise :class:`_StdioChildExited` for the respawn path, which
+@@ -391,7 +403,8 @@ async def _call_tool_racing_stdio_death(server, server_name: str, tool_name: str
+             f"MCP stdio subprocess for '{server_name}' had already exited when the call was dispatched",
+             in_flight=False,
+         )
+-    _call_coro = server.session.call_tool(tool_name, arguments=args)
++    # ``meta`` only when set: a call without trace context keeps today's call shape.
++    _call_coro = server.session.call_tool(tool_name, arguments=args, **({"meta": meta} if meta else {}))
+     _watch_children = getattr(server, "_watch_stdio_children", None)
+     if not (inspect.iscoroutinefunction(_watch_children) and asyncio.iscoroutine(_call_coro)):
+         # Stubbed sessions return a non-awaitable, or there is no child-watcher to race: plain await.
+@@ -567,12 +580,14 @@ def _make_tool_handler(server_name: str, tool_name: str, tool_timeout: float):
+         # Only a tool annotated readOnlyHint=True is replayed after session expiry; a 401 is always
+         # pre-dispatch so the auth recoverer keeps its retry for every tool.
+         read_only = _tool_is_read_only(server_name, tool_name)
++        # Read here: the call runs on the MCP loop, whose context does not carry the caller's span.
++        trace_meta = _trace_context_meta()
+ 
+         async def _call():
+             async with server._rpc_lock, _track_inflight_rpc(server, server_name, op, retry_safe=read_only):
+                 server._pending_call_context = contextvars.copy_context()  # for the elicitation callback
+                 try:
+-                    result = await _call_tool_racing_stdio_death(server, server_name, tool_name, args)
++                    result = await _call_tool_racing_stdio_death(server, server_name, tool_name, args, trace_meta)
+                 finally:
+                     server._pending_call_context = None
+             if getattr(server, "_mark_session_proven", None) is not None:  # round-trip done: transport healthy
+-- 
+2.43.0
+

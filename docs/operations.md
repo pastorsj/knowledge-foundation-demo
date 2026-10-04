@@ -155,17 +155,29 @@ or with the UI alone shared through a Brev link.
 
 ## Phoenix
 
-Phoenix runs at <http://127.0.0.1:6306>, on loopback only. All traces go to the project `knowledge-foundation`:
+Phoenix runs at <http://127.0.0.1:6306>, on loopback only. All traces go to the project `knowledge-foundation`,
+one trace per job:
 
 | Source | Spans |
 |---|---|
-| Hermes, through NeMo Relay | The agent turn, each model call and each tool call. Run metadata (`aiq.job.ref`, `hermes.*`) is promoted to span attributes |
-| Switchyard | `libsy.run` per request, with `switchyard.route`, `session.id` (the job id) and `evidence.verdict` on escalation templates |
+| Hermes, through NeMo Relay | `hermes.session` (`AGENT`, the root: the question in, the answer out), `hermes.turn`, each model call (`openai.chat_completions`, under `hermes.logical_llm_call`) and each tool call (`mcp__<server>__<tool>`, `skill_view`). Run metadata (`aiq.job.ref`, `hermes.*`) is promoted to span attributes, and `session.id` is mapped (Hermes patches 0001, 0005) |
+| Switchyard | `switchyard.request`, `libsy.run` and the upstream `chat <model>` call under each model call, with `switchyard.route`, `session.id` (the job id) and `evidence.verdict` on escalation templates |
 | retrieval | `embed`, `search` and `rerank`, under the MCP `tools/call retrieve_evidence` span |
 | tables | `guard` and `duckdb`, under `tools/call query_tables` |
 | prediction | `kumo`, under `tools/call predict` |
 
-Ingest sends no spans; its stages are in the file cards and in `./scripts/demo.sh logs ingest`.
+The tool servers' `tools/call` spans sit under the agent's tool call: Hermes sends the tool span as W3C trace
+context in each MCP request's `_meta` (patch 0006). The servers drop the MCP SDK's spans for pings, `initialize` and
+`tools/list`. Ingest sends no spans; its stages are in the file cards and in `./scripts/demo.sh logs ingest`.
+
+**Sessions.** A Phoenix session is a job (`session.id` is the Hermes session id, which is the job id, as on
+Switchyard's spans). A follow-up question is a job of its own; `aiq.session.ref` (a hash of the conversation id) is
+the same on every job of a conversation.
+
+**Token counts.** Each model call has two `LLM` spans: Relay's, as Hermes saw the reply, and Switchyard's upstream
+call. Phoenix adds both, so a trace's or a session's token total is twice the tokens Hermes used (escalation
+templates add the judge's calls on Switchyard's side). Read one side: Relay's `openai.chat_completions` spans, or
+Switchyard's `session-stats` below.
 
 In the UI, each run's execution view links to its trace. The API finds it through
 `GET /v1/jobs/async/job/{id}/trace`, which looks the job up by `aiq.job.ref` and falls back to `session.id`; the
