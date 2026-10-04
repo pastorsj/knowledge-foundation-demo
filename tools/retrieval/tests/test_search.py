@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 from collections.abc import AsyncIterator
 from dataclasses import replace
 
@@ -16,10 +17,12 @@ from conftest import POLICIES
 from conftest import RERANK_URL
 from conftest import FakeNvidia
 from conftest import chunks
+from conftest import embed
 from conftest import index
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
 from demo_retrieval import store
+from demo_retrieval.search import RetrievalFailed
 from demo_retrieval.search import Retriever
 from demo_retrieval.settings import Settings
 
@@ -172,6 +175,26 @@ async def test_dropped_connections_and_gateway_error_pages_are_retried(retriever
 async def test_client_errors_are_not_retried(retriever: Retriever, nvidia_api: FakeNvidia):
     nvidia_api.fail(401)
 
-    with pytest.raises(Exception, match=r"^\[401\]"):
+    with pytest.raises(RetrievalFailed, match=r"^The embeddings endpoint failed \(HTTP 401\)\.$"):
         await retriever.retrieve("employee discount eligibility", [POLICIES], top_k=1)
     assert len(nvidia_api.to(EMBED_URL)) == 1
+
+
+async def test_a_failing_rerank_is_named_without_its_url(retriever: Retriever, nvidia_api: FakeNvidia):
+    query = "employee discount eligibility"
+    embedding = json.dumps({"data": [{"index": 0, "embedding": embed(query)}]}).encode()
+    nvidia_api.failures += [(200, embedding), (403, b'{"title": "Forbidden"}')]  # the embeddings answer, not the rerank
+
+    with pytest.raises(RetrievalFailed) as failed:
+        await retriever.retrieve(query, [POLICIES], top_k=1)
+
+    assert str(failed.value) == "The rerank endpoint failed (HTTP 403)."
+
+
+async def test_an_index_with_nothing_in_it_yet_says_so(settings: Settings):
+    retriever = Retriever(settings)  # no collection or alias: ingest has indexed nothing
+    try:
+        with pytest.raises(RetrievalFailed, match="No documents are indexed yet"):
+            await retriever.retrieve("employee discount eligibility", [POLICIES], top_k=1)
+    finally:
+        await retriever.close()

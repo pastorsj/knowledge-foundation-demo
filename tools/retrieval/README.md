@@ -114,6 +114,9 @@ Everything uses public API; there are no patches.
 4. **Retries around every embed and rerank call** (3 attempts, because an agent is waiting). Dropped connections,
    timeouts, 408, 429 and 5xx are retried, including the async client's `[###] Unknown Error`, which is how it
    reports a non-JSON error body, such as a gateway's 502/503/504 page.
+   A call that still fails is a `ToolError` with a written message and no host name or URL ("The embeddings
+   endpoint failed (HTTP 401).", "No documents are indexed yet: ...", "The document index (Milvus) did not
+   answer; ..."); the details go to the log. The failed receipt's `errorSummary` shows that message.
 5. **Explicit spans.** LangChain's instrumentation emits nothing for direct embed, search or rerank calls.
 6. **Pin `==1.4.3` and set `NVIDIA_USAGE_TELEMETRY_ENABLED=false`.** The next release turns on usage telemetry
    by default, and 1.4.3 is the floor for GHSA-g28h-2cmm-rj9x.

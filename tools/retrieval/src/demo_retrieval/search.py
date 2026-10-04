@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
+import re
 import time
 from contextlib import AbstractContextManager
 from typing import Any
@@ -28,7 +30,13 @@ from . import nvidia
 from . import store
 from .settings import Settings
 
+logger = logging.getLogger(__name__)
+
 CANDIDATES_PER_HIT = 4
+NOTHING_INDEXED = (
+    "No documents are indexed yet: the selected sources have nothing to search until their first file is ingested."
+)
+INDEX_UNAVAILABLE = "The document index (Milvus) did not answer; try again shortly."
 # A passage is at most this long; a longer chunk ends in an ellipsis. Passages are not cut shorter: the fact a
 # question needs can sit at a chunk's end, so a result fits its size budget by returning fewer passages instead.
 MAX_SNIPPET_CHARS = 2400
@@ -84,6 +92,16 @@ class RetrievalResult(BaseModel):
     timings: Timings
 
 
+class RetrievalFailed(Exception):
+    """An upstream failure, as a written message without host names or URLs; the details go to the log."""
+
+
+def _endpoint_failed(endpoint: str, error: Exception) -> RetrievalFailed:
+    status = re.match(r"\[(\d{3})\]", str(error))  # the NVIDIA clients start an HTTP error with "[<status>]"
+    how = f"HTTP {status[1]}" if status else type(error).__name__
+    return RetrievalFailed(f"The {endpoint} endpoint failed ({how}).")
+
+
 class Retriever:
     def __init__(self, settings: Settings) -> None:
         self.collection = store.ALIAS
@@ -96,21 +114,39 @@ class Retriever:
         await self._milvus.close()
 
     async def retrieve(self, query: str, source_ids: list[str], top_k: int) -> RetrievalResult:
+        """Raises RetrievalFailed, with a message fit for the agent and the receipts, when an upstream fails."""
+        try:
+            return await self._retrieve(query, source_ids, top_k)
+        except RetrievalFailed as error:
+            logger.warning("retrieve_evidence failed: %s", error, exc_info=error.__cause__)
+            raise
+
+    async def _retrieve(self, query: str, source_ids: list[str], top_k: int) -> RetrievalResult:
         started = time.perf_counter()
         embed = {SpanAttributes.EMBEDDING_MODEL_NAME: self.models.embed, SpanAttributes.INPUT_VALUE: query}
         with _span("embed", SpanKind.EMBEDDING, embed):
-            vector = await self._embed_query(query)
+            try:
+                vector = await self._embed_query(query)
+            except Exception as error:
+                raise _endpoint_failed("embeddings", error) from error
         embedded = time.perf_counter()
 
         # Every source gets the same share, and the shares together fit in one rerank request.
         per_source = min(top_k * CANDIDATES_PER_HIT, nvidia.MAX_RERANK_PASSAGES // len(source_ids))
         with _span("search", SpanKind.RETRIEVER, {SpanAttributes.INPUT_VALUE: query}) as span:
             # Resolve the alias once, so every source is searched in the same collection, even during a re-embed.
-            version = (await self._milvus.describe_alias(self.collection))["collection_name"]
+            try:
+                version = (await self._milvus.describe_alias(self.collection))["collection_name"]
+            except Exception as error:  # no alias until ingest indexes its first chunk
+                missing = re.search(r"not (?:exist|found)|doesn't exist|does not exist", str(error), re.IGNORECASE)
+                raise RetrievalFailed(NOTHING_INDEXED if missing else INDEX_UNAVAILABLE) from error
             scope = {"collection": version, "source_ids": source_ids, "per_source": per_source}
             span.set_attribute(SpanAttributes.METADATA, json.dumps(scope))
             searches = [store.search(self._milvus, version, vector, source, per_source) for source in source_ids]
-            groups = await asyncio.gather(*searches)
+            try:
+                groups = await asyncio.gather(*searches)
+            except Exception as error:
+                raise RetrievalFailed(INDEX_UNAVAILABLE) from error
         searched = time.perf_counter()
 
         candidates = [candidate for group in groups for candidate in group]
@@ -118,7 +154,10 @@ class Retriever:
             ranked = sorted(((candidate, candidate[1]) for candidate in candidates), key=lambda pair: -pair[1])[:top_k]
             finished = searched
         else:
-            ranked = await self._traced_rerank(query, candidates, top_k)
+            try:
+                ranked = await self._traced_rerank(query, candidates, top_k)
+            except Exception as error:
+                raise _endpoint_failed("rerank", error) from error
             finished = time.perf_counter()
 
         return RetrievalResult(

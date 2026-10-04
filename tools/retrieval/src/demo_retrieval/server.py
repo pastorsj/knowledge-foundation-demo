@@ -17,6 +17,7 @@ from starlette.responses import JSONResponse
 
 from . import budget
 from . import catalog
+from .search import RetrievalFailed
 from .search import RetrievalResult
 from .search import Retriever
 from .settings import Settings
@@ -55,7 +56,10 @@ def create_server(retriever: Retriever, knowledge_dir: Path) -> MCPServer:
             requested = catalog.document_sources(knowledge_dir, source_ids)
         except catalog.CatalogError as error:
             raise ToolError(str(error)) from error
-        return budget.fit(await retriever.retrieve(query, requested, min(top_k, budget.MAX_HITS)))
+        try:
+            return budget.fit(await retriever.retrieve(query, requested, min(top_k, budget.MAX_HITS)))
+        except RetrievalFailed as error:  # written for the agent; no host names or URLs
+            raise ToolError(str(error)) from error
 
     @server.custom_route("/health", methods=["GET"])
     async def health(_: Request) -> JSONResponse:
