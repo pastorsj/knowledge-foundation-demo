@@ -331,6 +331,24 @@ def test_error_text_loses_relative_paths_but_keeps_duckdbs_own_slashes():
     assert "LIMIT/OFFSET" in message and "'12/03/2024'" in message
 
 
+@pytest.mark.parametrize(
+    "message",
+    [
+        "Conversion Error: Could not convert string 'N/A' to INT32",
+        'Binder Error: Referenced column "km/h" not found in FROM clause!',
+    ],
+)
+def test_error_text_keeps_the_datas_own_values_with_a_slash(message: str):
+    assert worker.redact_error(message) == message
+
+
+def test_error_text_loses_the_attached_database_files_by_name():
+    attached = "/srv/knowledge base/sources/retail.sales/tables.duckdb.v2"
+    message = worker.redact_error(f"IO Error: could not read {attached}: busy", [attached])
+
+    assert message == "IO Error: could not read <database file>: busy"
+
+
 async def test_a_database_error_reaches_the_agent(server: MCPServer):
     result = await query(server, "SELECT nope FROM retail_sales.orders")
 

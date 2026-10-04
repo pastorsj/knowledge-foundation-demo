@@ -261,15 +261,21 @@ def unique(names: list[str]) -> list[str]:
 
 _DATABASE_FILE = re.compile(r"[^\s\"'`]*\.duckdb\b")
 _ABSOLUTE_PATH = re.compile(r"(?<![\w.:])/(?:[^\s\"'`/]+/)*[^\s\"'`/]*")
-# A relative path: one starting ./, ../ or ~/, or a quoted name/... (DuckDB quotes the files it names). An unquoted
-# word/word stays, as in DuckDB's own "LIMIT/OFFSET" or "arg_min/arg_max", and so does a quoted date like '12/03/2024'.
-_RELATIVE_PATH = re.compile(r"(?<![\w.:/-])(?:~|\.\.?)/[^\s\"'`]*|(?<=[\"'`])[A-Za-z_][\w.-]*/[^\s\"'`]*(?=[\"'`])")
+# A relative path: one starting ./, ../ or ~/, or a quoted dir/.../name.ext (DuckDB quotes the files it names). An
+# unquoted word/word stays, as in DuckDB's own "LIMIT/OFFSET" or "arg_min/arg_max", and so does a quoted value without
+# a file extension, which is the data's own: 'N/A', "km/h", '12/03/2024'.
+_RELATIVE_PATH = re.compile(
+    r"(?<![\w.:/-])(?:~|\.\.?)/[^\s\"'`]*|(?<=[\"'`])[A-Za-z_][\w.-]*/[^\s\"'`]*\.[A-Za-z]\w{0,7}(?=[\"'`])"
+)
 
 
-def redact_error(message: str) -> str:
-    """DuckDB's error class and its first two lines, without database files or absolute or relative paths."""
+def redact_error(message: str, attached: list[str] | None = None) -> str:
+    """DuckDB's error class and its first two lines, without the attached database files (``attached``: their paths),
+    other database files, or absolute or relative paths."""
     lines = [line.strip() for line in message.strip().splitlines() if line.strip()][:2]
     text = " ".join(lines) or "DuckDB could not run the query."
+    for path in sorted(attached or [], key=len, reverse=True):
+        text = text.replace(path, "<database file>")
     text = _DATABASE_FILE.sub("<database file>", text)
     text = _RELATIVE_PATH.sub("<path>", _ABSOLUTE_PATH.sub("<path>", text))
     return text if len(text) <= MAX_ERROR_CHARS else text[: MAX_ERROR_CHARS - 1] + "…"
@@ -282,12 +288,13 @@ def main() -> None:
         import resource
 
         resource.setrlimit(resource.RLIMIT_AS, (ADDRESS_SPACE_BYTES, ADDRESS_SPACE_BYTES))
+    payload = json.load(sys.stdin)
     try:
-        result = execute(json.load(sys.stdin))
+        result = execute(payload)
     except _Refused as error:
         result = {"error": str(error)}
     except duckdb.Error as error:  # the agent needs DuckDB's message (a missing column, a type) to fix its SQL
-        result = {"error": redact_error(str(error))}
+        result = {"error": redact_error(str(error), [database["path"] for database in payload["databases"]])}
     except MemoryError:
         result = {"error": "The query ran out of memory. Filter or aggregate it and try again."}
     sys.stdout.write(json.dumps(result))
