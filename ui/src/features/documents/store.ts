@@ -22,6 +22,7 @@ const initialState: DocumentsState = {
   isPolling: false,
   isLoadingFiles: false,
   loadedSessionId: null,
+  filesError: null,
   recentlyDeletedIds: new Set<string>(),
   error: null,
   shownBannersForJobs: {},
@@ -223,10 +224,12 @@ export const useDocumentsStore = create<DocumentsStore>()(
             const serverFileNames = new Set(files.map((f) => f.file_name))
             const tombstoneIds = state.recentlyDeletedIds
             const transientStatuses = new Set(['uploading', 'ingesting', 'deleting'])
+            // An upload the server refused (a 413, a 415) never reached it: its failed card stays
+            // until the user removes it
             const preservedTransient = state.trackedFiles.filter(
               (f) =>
                 f.collectionName === collectionName &&
-                transientStatuses.has(f.status) &&
+                (transientStatuses.has(f.status) || (f.status === 'failed' && !f.serverFileId)) &&
                 !serverFileIds.has(f.serverFileId ?? '') &&
                 !serverFileIds.has(f.id)
             )
@@ -281,6 +284,8 @@ export const useDocumentsStore = create<DocumentsStore>()(
                   jobId: existingFile?.jobId,
                   uploadedAt: existingFile?.uploadedAt || file.uploaded_at,
                   ...pipelineOf(file),
+                  // A failed file's list entry has no stage before the failure: keep the one polled
+                  lastStage: pipelineOf(file).lastStage ?? existingFile?.lastStage ?? null,
                 }
               })
 
@@ -288,11 +293,16 @@ export const useDocumentsStore = create<DocumentsStore>()(
             return {
               trackedFiles: resultTrackedFiles,
               loadedSessionId: collectionName,
+              filesError: null,
             }
           },
           false,
           'setFilesFromServer'
         )
+      },
+
+      markLoaded: (collectionName, error = null) => {
+        set({ loadedSessionId: collectionName, filesError: error }, false, 'markLoaded')
       },
 
       // --------------------------------------------------------------------------

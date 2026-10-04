@@ -19,6 +19,7 @@
  */
 
 import type { FileUploadConfig } from '@/shared/context'
+import { describeAcceptedTypes } from './utils'
 import {
   DEFAULT_MAX_FILE_SIZE,
   DEFAULT_MAX_TOTAL_SIZE,
@@ -199,7 +200,7 @@ export function validateFileUpload(
       fileErrors.push({
         file,
         code: 'DUPLICATE_FILE',
-        message: `"${file.name}" already exists in this session`,
+        message: `"${file.name}" is already in Your data`,
       })
       continue
     }
@@ -209,7 +210,7 @@ export function validateFileUpload(
       fileErrors.push({
         file,
         code: 'INVALID_TYPE',
-        message: `"${file.name}" is not a supported file type. Accepted: ${config.acceptedTypes}`,
+        message: `"${file.name}" is not a supported file type. Accepted: ${describeAcceptedTypes(config.acceptedTypes)}`,
       })
       continue
     }

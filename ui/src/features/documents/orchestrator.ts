@@ -171,16 +171,26 @@ class UploadOrchestratorImpl {
         // Confirm the collection marker (in case it was set by a different mechanism)
         markSessionHasCollection(sessionId)
       } else {
-        // Collection not found (404) - may have been TTL-cleaned on the backend.
-        // Remove the marker so we don't keep retrying for an expired collection.
+        // No workspace collection (404): the ingest service creates it when it starts, so it is
+        // starting, or its store was reset. Say so; the Files tab offers to try again.
         unmarkSessionCollection(sessionId)
+        store.markLoaded(
+          sessionId,
+          'The ingestion service has not created Your data’s collection yet. It does when it starts.'
+        )
       }
 
       this.lastLoadedSessionId = sessionId
-    } catch (_error) {
-      // Network/connection errors should still mark session as loaded to prevent retry loops.
-      // Don't unmark the collection here - the backend may just be temporarily unavailable.
+    } catch (error) {
+      // The ingest service or the API is down (a 502, 503 or 504, or no answer): say so, and
+      // don't retry by itself (the Files tab offers to). The collection marker stays.
       this.lastLoadedSessionId = sessionId
+      if (sessionId === this.currentSessionId) {
+        store.markLoaded(
+          sessionId,
+          error instanceof Error && error.message ? error.message : 'The request failed.'
+        )
+      }
     } finally {
       store.setLoadingFiles(false)
     }
@@ -238,6 +248,11 @@ class UploadOrchestratorImpl {
       for (const file of persistedJob.files) {
         store.addTrackedFile(file as TrackedFile)
       }
+    } finally {
+      // The files are listed (or the persisted ones stand in for them): the tab is no longer loading
+      this.lastLoadedSessionId = sessionId
+      store.markLoaded(sessionId)
+      store.setLoadingFiles(false)
     }
 
     this.startPolling(jobId, sessionId)

@@ -25,6 +25,7 @@ import {
   useDocumentsStore,
   FileUploadZone,
   mapToDisplayStatus,
+  UploadOrchestrator,
   WORKSPACE_COLLECTION,
 } from '@/features/documents'
 import { useAppConfig, useExecutionFeature } from '@/shared/context'
@@ -60,6 +61,7 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
   const activeCollection = useDocumentsStore((state) => state.currentCollectionName)
   const isLoadingFiles = useDocumentsStore((state) => state.isLoadingFiles)
   const loadedSessionId = useDocumentsStore((state) => state.loadedSessionId)
+  const filesError = useDocumentsStore((state) => state.filesError)
   const isThisSessionProcessing = activeCollection === sessionId && (isUploading || isPolling)
 
   const hasLoadedForSession = loadedSessionId === sessionId
@@ -82,6 +84,25 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
   )
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const retryLoad = useCallback(() => {
+    void UploadOrchestrator.refreshFilesForSession(sessionId)
+  }, [sessionId])
+
+  /** The files could not be listed: why, and a way to try again; uploading stays possible */
+  const filesErrorBanner = filesError ? (
+    <Banner kind="inline" status="warning" data-testid="files-error">
+      <Flex direction="col" gap="2" align="start">
+        <Text kind="label/semibold/sm">Couldn’t reach the ingestion service</Text>
+        <Text kind="body/regular/xs">
+          {filesError} Your files are listed once it answers.
+        </Text>
+        <Button kind="secondary" size="small" onClick={retryLoad}>
+          Retry
+        </Button>
+      </Flex>
+    </Banner>
+  ) : null
 
   const handleAddFileClick = useCallback(() => {
     fileInputRef.current?.click()
@@ -132,13 +153,14 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
 
     return (
       <Flex direction="col" gap="4" className="flex-1">
+        {filesErrorBanner}
         {!knowledgeLayerAvailable && (
           <Banner kind="inline" status="info" className="mb-6 px-4 py-3">
             Setup backend to enable files.
           </Banner>
         )}
 
-        {knowledgeLayerAvailable && (
+        {knowledgeLayerAvailable && !filesError && (
           <Flex direction="col" gap="1">
             <Text
               kind="label/semibold/xs"
@@ -189,6 +211,7 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
           {uploadError}
         </Banner>
       )}
+      {filesErrorBanner}
 
       <Flex align="center" justify="between" className="mb-1">
         <Text kind="label/semibold/xs" className="text-subtle font-mono uppercase tracking-widest">

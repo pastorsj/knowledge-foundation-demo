@@ -111,6 +111,71 @@ describe('UploadOrchestrator', () => {
   })
 })
 
+describe('UploadOrchestrator: loading Your data’s files', () => {
+  beforeEach(() => {
+    useDocumentsStore.setState({
+      trackedFiles: [],
+      loadedSessionId: null,
+      filesError: null,
+      isLoadingFiles: false,
+    })
+    getCollection.mockReset()
+    listFiles.mockReset().mockResolvedValue([])
+  })
+
+  afterEach(() => UploadOrchestrator.cleanup())
+
+  const COLLECTION = { name: 'workspace', file_count: 0, chunk_count: 0, metadata: {} }
+
+  test('lists the files, and stops loading', async () => {
+    getCollection.mockResolvedValue(COLLECTION)
+    listFiles.mockResolvedValue([
+      {
+        file_id: 'f1',
+        file_name: 'policy.pdf',
+        collection_name: 'workspace',
+        status: 'success',
+        chunk_count: 1,
+        metadata: {},
+      },
+    ])
+    await UploadOrchestrator.handleSessionChange('workspace')
+    expect(useDocumentsStore.getState()).toMatchObject({
+      loadedSessionId: 'workspace',
+      filesError: null,
+      isLoadingFiles: false,
+    })
+    expect(useDocumentsStore.getState().trackedFiles.map((f) => f.fileName)).toEqual(['policy.pdf'])
+  })
+
+  test('says why when the ingest service is down, instead of loading forever, and tries again on Retry', async () => {
+    getCollection.mockRejectedValueOnce(new Error('The ingest service is unavailable.'))
+    await UploadOrchestrator.handleSessionChange('workspace')
+    expect(useDocumentsStore.getState()).toMatchObject({
+      loadedSessionId: 'workspace',
+      filesError: 'The ingest service is unavailable.',
+      isLoadingFiles: false,
+    })
+
+    getCollection.mockResolvedValue(COLLECTION)
+    await UploadOrchestrator.refreshFilesForSession('workspace')
+    expect(useDocumentsStore.getState().filesError).toBeNull()
+    expect(listFiles).toHaveBeenCalledWith('workspace')
+  })
+
+  test('says so when the workspace collection does not exist yet (a 404)', async () => {
+    getCollection.mockResolvedValue(null)
+    await UploadOrchestrator.handleSessionChange('workspace')
+    expect(useDocumentsStore.getState()).toMatchObject({
+      loadedSessionId: 'workspace',
+      isLoadingFiles: false,
+    })
+    expect(useDocumentsStore.getState().filesError).toMatch(
+      /has not created Your data’s collection/
+    )
+  })
+})
+
 describe('the pipeline as the card shows it', () => {
   test('steps: a document parses, chunks, embeds and indexes; a table loads and profiles', () => {
     expect(pipelineSteps('document', 'embedding', 'ingesting')).toEqual([

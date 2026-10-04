@@ -26,7 +26,9 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'text-summary', 'cobertura', 'html'],
       reportsDirectory: './coverage',
-      exclude: ['**/*.spec.{ts,tsx}', '**/test-utils/**', '**/*.d.ts'],
+      // Every source file, so a file no test imports shows at 0 % instead of not at all
+      include: ['src/**/*.{ts,tsx}', 'e2e-live/checks.ts'],
+      exclude: ['**/*.spec.{ts,tsx}', '**/test-utils/**', '**/*.d.ts', 'src/generated/**'],
       thresholds: {
         // The ResultChart module is held to full coverage so it cannot regress.
         'src/shared/components/ResultChart/**': {

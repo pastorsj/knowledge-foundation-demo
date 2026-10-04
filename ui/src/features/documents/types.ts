@@ -111,6 +111,8 @@ export interface DocumentsState {
   isLoadingFiles: boolean
   /** Session ID for which files were last loaded from the server (null = never loaded) */
   loadedSessionId: string | null
+  /** Why the last load of the files failed (the ingest service or the API is down), or null */
+  filesError: string | null
   /** Client id + serverFileId tombstoned after delete — filters stale server rows by file_id; not fileName (re-upload) */
   recentlyDeletedIds: Set<string>
   /** Error message */
@@ -153,6 +155,8 @@ export interface DocumentsActions {
   updateFilesFromJobStatus: (jobStatus: IngestionJobStatus) => void
   /** Load files from server for a collection (used when switching sessions) */
   setFilesFromServer: (collectionName: string, files: FileInfo[]) => void
+  /** The files of a collection were looked for: none to list, or `error` says why they could not be */
+  markLoaded: (collectionName: string, error?: string | null) => void
 
   // Banner tracking (for deduplication)
   /** Mark a banner as shown for a job */
