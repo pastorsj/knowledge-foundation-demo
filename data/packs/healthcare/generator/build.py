@@ -15,6 +15,9 @@
 #   "pypdfium2",
 #   "pyyaml",
 # ]
+#
+# [tool.uv]
+# exclude-newer = "2026-10-01T00:00:00Z"  # the versions that reproduce files/ byte for byte
 # ///
 """Build the healthcare pack: Riverside Health Network, a fictional regional provider.
 

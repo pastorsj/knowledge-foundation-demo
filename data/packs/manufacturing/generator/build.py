@@ -15,6 +15,9 @@
 #   "pypdfium2>=4.30",
 #   "pyyaml>=6.0",
 # ]
+#
+# [tool.uv]
+# exclude-newer = "2026-10-01T00:00:00Z"  # the versions that reproduce files/ byte for byte
 # ///
 """Generate the Atlas Precision Components pack: a fictional machining manufacturer.
 

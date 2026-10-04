@@ -14,6 +14,9 @@
 #     "pillow",
 #     "pypdfium2",
 # ]
+#
+# [tool.uv]
+# exclude-newer = "2026-10-01T00:00:00Z"  # the versions that reproduce files/ byte for byte
 # ///
 """Build the Financial Services (retail banking) industry pack: Harborview Community Bank.
 
