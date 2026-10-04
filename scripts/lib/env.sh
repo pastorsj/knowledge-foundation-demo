@@ -5,7 +5,7 @@
 # The configuration demo.sh works from: .env exactly as Compose reads it, plus derived values.
 # .env is never sourced: bash and Compose parse it differently.
 
-readonly DEFAULT_PROFILES=core,parse
+readonly DEFAULT_PROFILES=core,parse,prediction
 readonly GENERATED_SECRETS="HERMES_API_SERVER_KEY HERMES_RECEIPT_API_KEY
   AUTO_ONTOLOGY_ADMIN_PASSWORD AUTO_ONTOLOGY_AUTH_SECRET"
 
@@ -16,16 +16,16 @@ readonly ENV_KEYS="COMPOSE_PROFILES UI_PORT UI_BIND_HOST
   AGENT_EFFICIENT_MODEL AGENT_CAPABLE_MODEL AGENT_JUDGE_MODEL AGENT_AUX_MODEL
   AUTO_ONTOLOGY_REASONING_MODEL AUTO_ONTOLOGY_NON_REASONING_MODEL
   RETRIEVER_BASE_URL RETRIEVER_API_KEY RETRIEVER_EMBED_MODEL RETRIEVER_RERANK_MODEL
-  PARSE_BASE_URL PARSE_API_KEY KUMO_RELATIONAL_URL
+  PARSE_BASE_URL PARSE_API_KEY KUMO_RELATIONAL_URL KUMO_API_KEY
   SPEECH_INPUT_ENABLED SPEECH_API_KEY
   $GENERATED_SECRETS OPENSHELL_SUPERVISOR_IMAGE OPENSHELL_SANDBOX_IMAGE"
 
 # Read ENV_KEYS from Compose's own view of the environment (shell, versions.env, .env), then
 # derive and export what Compose cannot compute itself:
-#   COMPOSE_PROFILES    defaults to core,parse
+#   COMPOSE_PROFILES    defaults to core,parse,prediction
 #   PARSE_BASE_URL      the local Nemotron Parse server under the parse profile
 #   PARSE_API_KEY       always exported (Compose needs every secret's variable set); empty for the local server
-#   KUMO_RELATIONAL_URL the local NIM under the kumo profile
+#   KUMO_RELATIONAL_URL the local NIM under the kumo profile; else .env's remote NIM (prediction profile)
 #   AUTO_ONTOLOGY_URL   the Auto Ontology web app under the ontology profile, for the API
 #   AGENT_FEATURES      the optional tools baked into the agent image
 #   RETRIEVER_API_KEY   INFERENCE_API_KEY when empty: one build.nvidia.com key serves both
@@ -122,7 +122,9 @@ cmd_init() {
 Now edit .env:
   INFERENCE_API_KEY   the key for INFERENCE_BASE_URL (section 1): an nvapi- key for build.nvidia.com
   RETRIEVER_API_KEY   only for a different retriever key (section 2); empty uses INFERENCE_API_KEY
-  COMPOSE_PROFILES    what runs (section 3): core,parse on a DGX Spark; core,parse,kumo on x86_64
+  COMPOSE_PROFILES    what runs (section 3): core,parse,prediction on a DGX Spark; core,parse,kumo on x86_64
+  KUMO_RELATIONAL_URL, KUMO_API_KEY
+                      a remote Kumo Relational NIM and its key (section 3), required by the prediction profile
 Then run: ./scripts/demo.sh doctor --keys && ./scripts/demo.sh up
 EOF
 }

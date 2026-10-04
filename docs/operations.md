@@ -13,7 +13,7 @@ recordings, the on-demand checks and troubleshooting. `./scripts/demo.sh --help`
 | Command | What it does |
 |---|---|
 | `./scripts/demo.sh init` | Creates `.env` from `.env.example` (mode 600) and fills its generated secrets |
-| `./scripts/demo.sh doctor [--keys]` | Checks the host, the ports, `.env` and the profiles; `--keys` asks each endpoint for its model list |
+| `./scripts/demo.sh doctor [--keys]` | Checks the host, the ports, `.env` and the profiles; `--keys` asks each endpoint for its model list, and the remote Kumo NIM whether it is ready |
 | `./scripts/demo.sh up [--no-build]` | Builds, starts Milvus, Parse, ingest, the tools, Switchyard, Phoenix and the API, then the OpenShell sandbox and the Hermes forwarder, then the UI. The industry packs ingest in the background |
 | `./scripts/demo.sh status` | Services, the sandbox and its endpoints, Switchyard's routes, profiles and agent features, each pack's ingestion, the URLs |
 | `./scripts/demo.sh check` | Proves the sandbox boundary on the running stack ([OpenShell](openshell.md#proving-the-boundary)) |
@@ -37,13 +37,14 @@ the next `up` ingests every pack again.
 
 ## DGX Spark mode
 
-The default profiles, `core,parse`, run the whole demo on a DGX Spark (GB10, arm64) except Kumo. Nemotron Parse
-runs on the GPU in vLLM with a small share of the unified memory (`PARSE_GPU_MEMORY_UTILIZATION=0.15`); the agent,
-embedding and rerank models are hosted.
+The default profiles, `core,parse,prediction`, run the whole demo on a DGX Spark (GB10, arm64) except the Kumo
+NIM. Nemotron Parse runs on the GPU in vLLM with a small share of the unified memory
+(`PARSE_GPU_MEMORY_UTILIZATION=0.15`); the agent, embedding and rerank models are hosted, and predictions go to a
+remote Kumo Relational NIM ([below](#kumo-through-a-remote-nim)).
 
 ```bash
 ./scripts/demo.sh init
-"${EDITOR:-vi}" .env              # INFERENCE_API_KEY; COMPOSE_PROFILES=core,parse
+"${EDITOR:-vi}" .env              # INFERENCE_API_KEY, KUMO_RELATIONAL_URL, KUMO_API_KEY
 ./scripts/demo.sh doctor --keys
 ./scripts/demo.sh up
 ./scripts/demo.sh check
@@ -55,33 +56,23 @@ avoid other demos' (port 6006 is held by another one). `doctor` refuses to start
 
 ### Kumo through a remote NIM
 
-The Kumo Relational NIM ships for amd64 only, so `doctor` refuses the `kumo` profile on the Spark. Run the NIM on
-an x86_64 GPU host (a Brev VM), reach it through an SSH tunnel, and run only the prediction server on the Spark
-with the `prediction` profile. These steps follow the design; they have not yet been run end to end on this stack.
+The Kumo Relational NIM ships for amd64 only, so `doctor` refuses the `kumo` profile on the Spark. The
+`prediction` profile runs only the prediction server on the Spark and sends every prediction to a remote Kumo
+Relational NIM, on an x86_64 GPU host behind a gateway that authenticates with an `X-API-Key` header. Both settings
+in `.env` section 3 are required:
 
-1. **On the x86_64 VM**, start the NIM alone, published on the VM's loopback (the same image `compose.yaml` pins):
+| Variable | What |
+|---|---|
+| `KUMO_RELATIONAL_URL` | The NIM's base URL, the one that serves `/v1/health/ready`. Use `https://`: the Kumo client refuses to send the key over plain `http://` to anything but `localhost`, `127.0.0.1` or `::1` |
+| `KUMO_API_KEY` | The gateway's key, sent as `X-API-Key` |
 
-   ```bash
-   docker run -d --name kumo-relational --gpus all --shm-size 16g --restart unless-stopped \
-     -p 127.0.0.1:8322:8000 \
-     nvcr.io/nim/nvidia/kumo-relational:1.0.1@sha256:d2fedf5583d01932efdb7d91d0bcc31b7ff951fcd516f069c4cd900adb87908f
-   curl -fsS http://127.0.0.1:8322/v1/health/ready   # on the VM, once it has started (a few minutes)
-   ```
+`doctor` reports a problem while either is empty or the URL is plain `http://` to another host, and
+`doctor --keys` asks `GET $KUMO_RELATIONAL_URL/v1/health/ready` with the key. With a `KUMO_RELATIONAL_URL`, the
+agent image gains the `kumo` feature, so the first `up` with it rebuilds the image and recreates the sandbox once.
 
-2. **On the Spark**, bring the stack up once (so its network exists), then forward a port on the Compose
-   network's gateway address, which the prediction container can reach and nothing outside the host can:
-
-   ```bash
-   gw=$(docker network inspect knowledge-foundation_default -f '{{(index .IPAM.Config 0).Gateway}}')
-   ssh -N -L "$gw:18322:127.0.0.1:8322" <vm>    # keep it running (or use autossh)
-   ```
-
-3. In `.env`, set `COMPOSE_PROFILES=core,parse,prediction` and `KUMO_RELATIONAL_URL=http://<gw>:18322`, then run
-   `./scripts/demo.sh up`. With a `KUMO_RELATIONAL_URL` the agent image gains the `kumo` feature, so `up` rebuilds
-   it and recreates the sandbox once.
-
-Without the tunnel, `predict` answers `available: false` with the reason, and the answer says so. Each prediction
-is one attempt within 60 s, so a cold or distant NIM shows up as unavailable rather than as a stalled job.
+If the NIM cannot be reached, `predict` answers `available: false` with the reason, and the answer says so. Each
+prediction is one attempt within 60 s, so a cold or distant NIM shows up as unavailable rather than as a stalled
+job. To run without predictions, drop `prediction` from `COMPOSE_PROFILES`.
 
 ## Brev VM mode
 
@@ -103,7 +94,8 @@ or with the UI alone shared through a Brev link.
    `ontology` profile, also bring the private submodule ([Auto Ontology](../tools/auto-ontology/README.md#run)).
 3. **Configure.** Run `./scripts/demo.sh init` on the VM, then edit `.env` there (it stays mode 600; keep keys off
    command lines). Set `INFERENCE_API_KEY` (your `nvapi-` key, which also serves the retriever) and
-   `COMPOSE_PROFILES=core,parse,kumo`. Leave `KUMO_RELATIONAL_URL` empty: the `kumo` profile runs its own NIM.
+   `COMPOSE_PROFILES=core,parse,kumo`. `KUMO_RELATIONAL_URL` and `KUMO_API_KEY` stay unused: the `kumo` profile
+   runs its own NIM.
 4. **The Kumo NIM image.** `up` pulls `nvcr.io/nim/nvidia/kumo-relational:1.0.1` (about 14 GB to download, 44 GB
    unpacked); the pull has worked without a login. If it is denied, log in with an NGC API key, piped rather than
    typed on the command line:
@@ -234,6 +226,8 @@ agent image or a tool image gets a new ID.
 | `doctor` reports a problem | Each message names the variable or host requirement; fix it and run `doctor --keys` again |
 | <a id="port-collisions"></a>`127.0.0.1:<port> is already in use` | Another demo or service holds one of the block's ports. Find it with `ss -ltnp 'sport = :<port>'` or `docker ps --filter publish=<port>`, and stop it. Only the UI's port is a setting (`UI_PORT`); the others are fixed in `compose.yaml`, chosen to avoid the common ones (Phoenix's 6006, the API's 8000, Switchyard's 4000, OpenShell's 18080) |
 | `the kumo profile needs an x86_64 Docker host` | On a Spark, use a remote NIM with the `prediction` profile ([above](#kumo-through-a-remote-nim)) |
+| `KUMO_RELATIONAL_URL is empty` or `KUMO_API_KEY is empty` | The `prediction` profile (the default) needs a remote Kumo Relational NIM's URL and key. Set both, or drop `prediction` from `COMPOSE_PROFILES` to run without predictions |
+| `kumo: GET KUMO_RELATIONAL_URL/v1/health/ready failed` | curl's line above it says why: 401 or 403 is a key the gateway refuses, a connection error a NIM that is down or a wrong URL, 503 a NIM that is still starting |
 | `the parse and kumo profiles need the NVIDIA Container Toolkit` | Install it, or drop `parse` and set a hosted `PARSE_BASE_URL` |
 | `up` waits a long time on `parse` | The first start downloads the Parse weights (its health check allows 15 minutes). `./scripts/demo.sh logs parse` shows the download and vLLM's start |
 | A file card shows `pdf-text-layer` and a warning | Parse was disabled, unreachable or too slow, so the PDF was read from its text layer. Check `./scripts/demo.sh logs parse ingest`; for a pack, `./scripts/demo.sh data sync` tries Parse again |
@@ -243,7 +237,7 @@ agent image or a tool image gets a new ID.
 | The packs and data source routes answer 503 | Ingest has not written the catalog yet; wait for the first sync |
 | Documents fail at `embedding` | `RETRIEVER_API_KEY` (or `INFERENCE_API_KEY`) is missing or not accepted by `RETRIEVER_BASE_URL`; `doctor --keys` checks the embed model is listed |
 | Retrieval fails on a gateway with 404 on rerank | The gateway has no NVIDIA `/ranking` route: set `RETRIEVER_RERANK_MODEL=` (empty) and `./scripts/demo.sh restart switchyard` |
-| Predictions say `available: false` | No `KUMO_RELATIONAL_URL` (Spark without a tunnel), the NIM is still starting, or the tunnel is down; the reason is in the answer |
+| Predictions say `available: false` | The remote NIM could not be reached, is still starting, refused `KUMO_API_KEY`, or rejected the query; the reason is in the answer. `doctor --keys` checks the endpoint and the key |
 | Milvus restarts or is unhealthy | Docker has less than 8 GiB of memory; give it more |
 | `sandbox hermes is not Ready after 180s` | The sandbox's recent log is printed just before it. Check the Docker host kernel (Linux 6.2+ with Landlock) and `./scripts/demo.sh logs openshell-preflight openshell` |
 | `hermes-gateway` never turns healthy | The sandbox is not Ready, or `HERMES_API_SERVER_KEY` is shorter than 16 characters (run `init`) |

@@ -81,7 +81,7 @@ and builds, so there is no CLI to install.
 ```bash
 git clone https://github.com/pastorsj/knowledge-foundation-demo.git && cd knowledge-foundation-demo
 ./scripts/demo.sh init            # creates .env (mode 600) and its internal secrets
-"${EDITOR:-vi}" .env              # set INFERENCE_API_KEY and COMPOSE_PROFILES (below)
+"${EDITOR:-vi}" .env              # set INFERENCE_API_KEY, the Kumo NIM's URL and key, COMPOSE_PROFILES (below)
 ./scripts/demo.sh doctor --keys   # checks the host, .env and every model id
 ./scripts/demo.sh up              # builds and starts everything; the packs ingest in the background
 ./scripts/demo.sh check           # proves the sandbox boundary
@@ -89,7 +89,7 @@ git clone https://github.com/pastorsj/knowledge-foundation-demo.git && cd knowle
 
 | Host | `COMPOSE_PROFILES` | What runs locally |
 |---|---|---|
-| DGX Spark (arm64, GB10) | `core,parse` (the default) | Everything but Kumo. For predictions, run the Kumo NIM on an x86_64 host and add `prediction` with `KUMO_RELATIONAL_URL` ([operations](docs/operations.md#dgx-spark-mode)) |
+| DGX Spark (arm64, GB10) | `core,parse,prediction` (the default) | Everything but the Kumo NIM: predictions go to a remote Kumo Relational NIM (`KUMO_RELATIONAL_URL`, `KUMO_API_KEY`) ([operations](docs/operations.md#dgx-spark-mode)) |
 | Brev or any x86_64 GPU VM | `core,parse,kumo` | Everything, the Kumo Relational NIM included ([operations](docs/operations.md#brev-vm-mode)) |
 
 The first `up` downloads Nemotron Parse 2.0 and builds every image. Then open:

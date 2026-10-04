@@ -67,8 +67,8 @@ check_host() {
       problem "the parse and kumo profiles need the NVIDIA Container Toolkit"
   fi
   if has_profile kumo && [ "$(docker info --format '{{.Architecture}}')" != x86_64 ]; then
-    problem "the kumo profile needs an x86_64 Docker host (the Kumo NIM is amd64 only): on this host, run the NIM" \
-      "on an x86_64 machine (a Brev VM) and use the prediction profile with KUMO_RELATIONAL_URL pointing at it"
+    problem "the kumo profile needs an x86_64 Docker host (the Kumo NIM is amd64 only): on this host, use the" \
+      "prediction profile with a remote Kumo Relational NIM (KUMO_RELATIONAL_URL and KUMO_API_KEY)"
   fi
   if [ "$(docker info --format '{{.MemTotal}}')" -lt $((8 * 1024 * 1024 * 1024)) ]; then
     warn "Docker has less than 8 GiB of memory; Milvus needs at least 8 GiB"
@@ -106,6 +106,7 @@ check_config() {
   check_inference
   check_retriever
   check_parse
+  check_kumo
   check_speech
   # Hermes refuses an API server key under 16 characters; init generates 64.
   local key value
@@ -130,10 +131,6 @@ check_profiles() {
       *) problem "unknown profile '$profile' in COMPOSE_PROFILES (known: $KNOWN_PROFILES)" ;;
     esac
   done
-  if has_profile prediction && ! has_profile kumo && [ -z "$KUMO_RELATIONAL_URL" ]; then
-    warn "the prediction profile without kumo needs KUMO_RELATIONAL_URL (a remote Kumo NIM); predictions report" \
-      "themselves unavailable until it is set"
-  fi
   if has_profile ontology && [ ! -e "$ROOT/vendor/auto-ontology/.git" ]; then
     problem "the ontology profile needs the private submodule:" \
       "git submodule update --init --checkout vendor/auto-ontology"
@@ -256,6 +253,28 @@ check_retriever() {
   fi
 }
 
+# The prediction profile without kumo sends predictions to a remote Kumo Relational NIM: its URL and key are
+# required. The Kumo client sends the key (X-API-Key) over plain http only to localhost, 127.0.0.1 or ::1.
+remote_kumo() {
+  has_profile prediction && ! has_profile kumo
+}
+
+check_kumo() {
+  remote_kumo || return 0
+  local key
+  for key in KUMO_RELATIONAL_URL KUMO_API_KEY; do
+    [ -n "${!key}" ] || problem "$key is empty: the prediction profile needs a remote Kumo Relational NIM's URL" \
+      "and key (.env section 3)"
+  done
+  case $KUMO_RELATIONAL_URL in
+    "" | https://?* | http://localhost[:/]* | http://localhost | http://127.0.0.1[:/]* | http://127.0.0.1 | \
+      http://\[::1\]*) ;;
+    http://?*) problem "KUMO_RELATIONAL_URL must be https://: the Kumo client sends KUMO_API_KEY over plain http" \
+      "only to localhost" ;;
+    *) problem "KUMO_RELATIONAL_URL must start with https://" ;;
+  esac
+}
+
 # Voice input (.env section 6) needs an nvapi- key for Nemotron ASR on build.nvidia.com.
 check_speech() {
   case $SPEECH_INPUT_ENABLED in
@@ -296,6 +315,21 @@ check_keys() {
   fi
   models_listed retriever "${RETRIEVER_BASE_URL:-https://$BUILD_NVIDIA_HOST/v1}" "$RETRIEVER_API_KEY" \
     "${RETRIEVER_EMBED_MODEL:-nvidia/nemotron-3-embed-1b}"
+  if remote_kumo; then
+    kumo_ready
+  fi
+}
+
+# The remote Kumo Relational NIM answers GET /v1/health/ready with the configured key.
+kumo_ready() {
+  [ -n "$KUMO_RELATIONAL_URL" ] && [ -n "$KUMO_API_KEY" ] || return 0 # already reported as empty
+  # curl reads the header from stdin, so the key never appears in a process listing.
+  if printf 'header = "X-API-Key: %s"\n' "$KUMO_API_KEY" |
+    curl -fsS -o /dev/null --max-time 30 --config - "${KUMO_RELATIONAL_URL%/}/v1/health/ready"; then
+    log "kumo: the remote Kumo Relational NIM is ready"
+  else
+    problem "kumo: GET KUMO_RELATIONAL_URL/v1/health/ready failed with the configured key"
+  fi
 }
 
 # [MODELS_AUTH=anthropic] models_listed NAME BASE_URL KEY MODEL...

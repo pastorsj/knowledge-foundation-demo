@@ -73,7 +73,7 @@ On demand (run by hand)
                           answer checks, plus an LLM grader when GRADER_* are set (eval/README.md)
 
 Configuration comes from .env (see .env.example); a shell variable overrides it.
-Profiles come from COMPOSE_PROFILES (default core,parse).
+Profiles come from COMPOSE_PROFILES (default core,parse,prediction).
 EOF
 }
 
