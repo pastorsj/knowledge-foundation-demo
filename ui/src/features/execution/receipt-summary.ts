@@ -128,14 +128,21 @@ const byScore = (a: EntityPrediction, b: EntityPrediction): number =>
 /**
  * A prediction in Kumo's output columns, as the original UI showed them, the most likely entity
  * first: a binary task's TRUE_PROB with its complement FALSE_PROB and PREDICTION (whether TRUE_PROB
- * is the larger), a multiclass task's CLASS with its SCORE, a regression's predicted value. Every
+ * is the larger), a ranking's or multiclass task's CLASS with its SCORE (its probability, else its
+ * value), a regression's predicted value. Every
  * row carries the run's ANCHOR_TIMESTAMP when the receipt has one.
  */
 const kumoRows = (content: StructuredPrediction): Row[] =>
   [...content.rows].sort(byScore).map((row) => {
     const anchor = content.anchorTime ? { ANCHOR_TIMESTAMP: content.anchorTime } : {}
     if (row.label !== null) {
-      return { ...anchor, ENTITY: row.entityId, CLASS: row.label, SCORE: row.probability }
+      // A ranking's or multiclass task's score is its probability, else (no probability) its value
+      return {
+        ...anchor,
+        ENTITY: row.entityId,
+        CLASS: row.label,
+        SCORE: row.probability ?? row.value,
+      }
     }
     if (row.probability !== null) {
       return {

@@ -142,6 +142,22 @@ describe('summarizeReceipt', () => {
     })
   })
 
+  it('takes a ranking or multiclass row’s SCORE from its value when it has no probability', () => {
+    const ranking = summarizeReceipt(
+      prediction([
+        { entityId: 'C4', probability: null, value: 0.31, label: 'P-100' },
+        { entityId: 'C5', probability: null, value: 0.87, label: 'P-200' },
+      ])
+    )
+    expect(ranking.output).toMatchObject({
+      columns: ['ANCHOR_TIMESTAMP', 'ENTITY', 'CLASS', 'SCORE'],
+      rows: [
+        ['2026-09-30T00:00:00Z', 'C5', 'P-200', '0.87'],
+        ['2026-09-30T00:00:00Z', 'C4', 'P-100', '0.31'],
+      ],
+    })
+  })
+
   it('reports a failed call without its content, with the reason a prediction could not run', () => {
     const summary = summarizeReceipt(receiptOf('structured_prediction', 'failed'))
     expect(summary).toMatchObject({
