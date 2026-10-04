@@ -153,7 +153,7 @@ class PredictionHorizon(ContractModel):
 
 class EntityPrediction(ContractModel):
     """One entity's predicted outcome: `probability` for a binary task (or the score of a multiclass `label`),
-    `value` for a regression."""
+    `value` for a regression (or the score of a ranked `label`, any number)."""
 
     entity_id: OpenIdentifier
     probability: float | None = Field(default=None, ge=0, le=1)

@@ -2,12 +2,17 @@
 # SPDX-License-Identifier: Apache-2.0
 """predict: run a PQL query on NVIDIA Kumo Relational over one structured source of the knowledge catalog.
 
-Ported from tools/market-analytics (`Predictor`, the window parser, one attempt within 60 s). The source is the one
-selected source whose tables include every table the query names. Its graph is built on each call from its DuckDB
-file, read-only, with the catalog's primary keys, time columns and foreign keys (`TableInfo`). Kumo scores up to
-`KUMO_MAX_ENTITIES` entities of the entity table (its per-request limit), in primary-key order, filtered by the
-query's entity filter when that filter is a plain condition on the entity table (entities.py); the result lists the
-`MAX_ROWS` highest, within the 30,000-character result budget.
+Ported from the market demo's predictor (`Predictor`, the window parser, one attempt within 60 s per request). The
+source is the one selected source whose tables include every table the query names. Its graph is built on each call
+from its DuckDB file, read-only, with the catalog's primary keys, time columns and foreign keys (`TableInfo`). Kumo
+scores up to `KUMO_MAX_ENTITIES` entities of the entity table, in primary-key order, filtered by the query's entity
+filter when that filter is a plain condition on the entity table (entities.py); the result lists the `MAX_ROWS`
+highest, within the 30,000-character result budget.
+
+Kumo checks each request's size client-side (30 MB) and caps a `RANK TOP` request at 200 entities, so the entities
+go in batches of `KUMO_BATCH` (`KUMO_RANK_BATCH` for a ranking, which scores at most `KUMO_MAX_RANKED` entities), at
+most two requests of up to 60 s each, inside the agent's 180 s MCP timeout. A request that is still too large fails
+at once with a reason that says how to narrow the population (`FOR EACH ... WHERE`).
 
 Without KUMO_RELATIONAL_URL, or when the endpoint fails, the result says so (`available: false` and a written
 reason) rather than raising: the agent reports it instead of retrying.
@@ -51,7 +56,13 @@ MODEL = "kumo-relational"
 # One attempt and no retries, so a slow or warming NIM yields `available=false` well inside the agent's MCP
 # timeout rather than a transport error with no receipt.
 TIMEOUT_SECONDS = 60.0
-KUMO_MAX_ENTITIES = 1000  # Kumo Relational's documented limit of entities per prediction request
+KUMO_MAX_ENTITIES = 1000  # Kumo Relational's documented limit of entities per prediction
+# Entities per request. 1,000 retail customers with their orders and returns make a context over Kumo's 30 MB request
+# limit; 500 fit (template:return_risk_30d took 73 s in two requests, measured live; 115 s in four of 250). Kumo caps
+# temporal link prediction (RANK TOP k) at 200 per request, so a ranking scores two requests' worth.
+KUMO_BATCH = 500
+KUMO_RANK_BATCH = 200
+KUMO_MAX_RANKED = 2 * KUMO_RANK_BATCH
 MAX_ROWS = 25
 MAX_TEXT_CHARS = 200  # entity ids and class labels
 MAX_PQL_CHARS = 2000  # the tool's own limit, and a template's (contracts/catalog/source-manifest.schema.json)
@@ -60,6 +71,7 @@ MAX_WARNING_CHARS = 500
 # 60% of Hermes' 50,000-character limit for one MCP result, as the agent reads it (tools/retrieval/budget.py).
 MAX_RESULT_CHARS = 30_000
 EVIDENCE_ID = "hermes-receipt:" + "0" * 64
+RANKING = "temporal_link_prediction"  # RANK TOP k
 TEMPLATE_PREFIX = "template:"
 NO_ENDPOINT = "No Kumo endpoint is configured (KUMO_RELATIONAL_URL)."
 UNREACHABLE = "The Kumo endpoint could not be reached (KUMO_RELATIONAL_URL); it may be down or still starting."
@@ -79,9 +91,11 @@ class PredictionError(ValueError):
 class EntityPrediction(BaseModel):
     entity_id: str
     probability: float | None = Field(
-        default=None, description="Binary: the outcome's probability. Multiclass and ranking: the label's score"
+        default=None, description="Binary: the outcome's probability. Multiclass: the predicted class's score"
     )
-    value: float | None = Field(default=None, description="Regression: the predicted value")
+    value: float | None = Field(
+        default=None, description="Regression: the predicted value. Ranking: the item's score (any number)"
+    )
     label: str | None = Field(default=None, description="Multiclass and ranking: the predicted class or item")
 
 
@@ -150,7 +164,8 @@ class Predictor:
             try:
                 ids = None
                 if plan.query.for_each:
-                    ids, notes = entity_ids(plan.source, plan.entity, plan.query.entity_filter)
+                    limit = KUMO_MAX_RANKED if plan.query.task_type == RANKING else KUMO_MAX_ENTITIES
+                    ids, notes = entity_ids(plan.source, plan.entity, plan.query.entity_filter, limit)
                     warnings += notes
                 graph, notes = build_graph(plan.source)
                 warnings += notes
@@ -167,13 +182,19 @@ class Predictor:
                     max_retries=0,
                 ) as client:
                     frame = client.relational(graph).predict(
-                        plan.pql, ids, anchor_time=plan.anchor, run_mode="fast", num_retries=0, verbose=False
+                        plan.pql,
+                        ids,
+                        anchor_time=plan.anchor,
+                        run_mode="fast",
+                        batch_size=batch_size(plan.query),
+                        num_retries=0,
+                        verbose=False,
                     )
                 rows, task_type = to_rows(frame)
             except Exception as error:  # the NIM is down, still warming up, or rejected the query
                 logger.warning("Kumo prediction over %s failed", plan.source.id, exc_info=True)
                 span.set_attribute("error.type", type(error).__name__)
-                return result(reason=kumo_reason(error))
+                return result(reason=kumo_reason(error, plan, None if ids is None else len(ids)))
             span.set_attribute("output.row_count", len(rows))
         if len(rows) > MAX_ROWS:
             warnings.append(f"Showing the {MAX_ROWS} highest of {len(rows)} predictions.")
@@ -250,8 +271,10 @@ def build_graph(source: catalog.Source) -> tuple[relational.Graph, list[str]]:
     return graph, warnings
 
 
-def entity_ids(source: catalog.Source, entity: catalog.TableInfo, condition: str | None) -> tuple[list[Any], list[str]]:
-    """Up to KUMO_MAX_ENTITIES primary keys of the entity table, in order, that satisfy the query's entity filter.
+def entity_ids(
+    source: catalog.Source, entity: catalog.TableInfo, condition: str | None, limit: int = KUMO_MAX_ENTITIES
+) -> tuple[list[Any], list[str]]:
+    """Up to ``limit`` primary keys of the entity table, in order, that satisfy the query's entity filter.
 
     Kumo scores every id it is given, whatever the filter says, so a plain condition on the entity table is applied
     here (entities.py). A filter over time (an aggregate with a window) only Kumo can evaluate, and a filter the tool
@@ -268,27 +291,49 @@ def entity_ids(source: catalog.Source, entity: catalog.TableInfo, condition: str
         except entities.FilterRejected as error:
             warnings.append(_unfiltered(condition, str(error)))
     try:
-        ids, population = entities.select(source.path, entity.name, key, where, KUMO_MAX_ENTITIES)
+        ids, population = entities.select(source.path, entity.name, key, where, limit)
     except entities.SelectionFailed as error:
         if where is None:
             raise
         warnings.append(_unfiltered(condition or "", _redact(error)))
-        ids, population = entities.select(source.path, entity.name, key, None, KUMO_MAX_ENTITIES)
+        ids, population = entities.select(source.path, entity.name, key, None, limit)
         where = None
-    if population > KUMO_MAX_ENTITIES:
+    if population > limit:
         passing = " that pass the filter" if where else ""
         warnings.insert(
             0,
-            f"{entity.name} has {population:,} entities{passing}, and Kumo scores at most {KUMO_MAX_ENTITIES:,} per "
-            f"request: these predictions cover the first {KUMO_MAX_ENTITIES:,} by {key}. Narrow the population with "
+            f"{entity.name} has {population:,} entities{passing}, and Kumo scores at most {limit:,} per "
+            f"prediction: these predictions cover the first {limit:,} by {key}. Narrow the population with "
             f"FOR EACH {entity.name}.{key} WHERE <a condition on {entity.name}>.",
         )
     return ids, warnings
 
 
-def kumo_reason(error: Exception) -> str:
+def batch_size(query: Query) -> int:
+    return KUMO_RANK_BATCH if query.task_type == RANKING else KUMO_BATCH
+
+
+def too_large(plan: Plan | None, count: int | None) -> str:
+    """Why a request over Kumo's 30 MB limit failed, and the remedy: fewer entities per request."""
+    if plan is None:
+        return (
+            "Kumo's request is larger than its 30 MB limit: narrow the population with FOR EACH <table>.<key> WHERE "
+            "<a condition on that table's own columns> to a few hundred entities."
+        )
+    table, key = plan.entity.name, plan.entity.primary_key
+    entities_text = f"{count:,} {table} entities" if count is not None else f"the {table} entities"
+    return (
+        f"Kumo's request for {entities_text} ({batch_size(plan.query)} per request) is larger than its 30 MB limit: "
+        f"narrow the population with FOR EACH {table}.{key} WHERE <a condition on {table}'s own columns> to a few "
+        "hundred entities."
+    )
+
+
+def kumo_reason(error: Exception, plan: Plan | None = None, count: int | None = None) -> str:
     """A written reason for a failed Kumo call: what happened and what to check, without URLs or paths."""
     message = getattr(error, "message", str(error))
+    if "Context size exceeds" in message:
+        return too_large(plan, count)
     if isinstance(error, NimRequestError):
         if error.status_code in (401, 403) or error.code == "AUTHENTICATION_FAILED":
             return REFUSED_KEY
@@ -346,8 +391,10 @@ def to_rows(frame: pd.DataFrame) -> tuple[list[EntityPrediction], str]:
             frame = frame.sort_values("SCORE", ascending=False, kind="stable").drop_duplicates("ENTITY")
         else:  # RANK TOP k: k rows per entity, all kept
             task_type = "temporal_link_prediction"
+        # A class's score is a probability; a ranking's is any number, so it is a value (receipts bound probabilities).
+        score_field = "probability" if task_type == "multiclass_classification" else "value"
         rows = [
-            EntityPrediction(entity_id=_text(entity), probability=_number(score), label=_text(label))
+            EntityPrediction(entity_id=_text(entity), label=_text(label), **{score_field: _number(score)})
             for entity, label, score in zip(frame["ENTITY"], frame["CLASS"], frame["SCORE"], strict=True)
         ]
     elif "PREDICTION" in columns:

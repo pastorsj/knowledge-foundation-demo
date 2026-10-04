@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
-"""predict around a stubbed Kumo client (ported from tools/market-analytics), plus one live call when configured."""
+"""predict around a stubbed Kumo client (ported from the market demo's predictor), plus one live call if configured."""
 
 from __future__ import annotations
 
@@ -424,7 +424,7 @@ def test_at_most_two_entity_workers_run_at_once(monkeypatch: pytest.MonkeyPatch,
 
 
 async def test_at_most_1000_entities_in_primary_key_order_and_the_25_best(knowledge_dir: Path, stub: type[StubClient]):
-    """Kumo's per-request limit: the first 1,000 of 1,200 are scored, and the warning names the population."""
+    """The tool's limit: the first 1,000 of 1,200 are scored, and the warning names the population."""
     result = await predict(knowledge_dir, "PREDICT accounts.segment = 'smb' FOR EACH accounts.account_id", [ACCOUNTS])
 
     (call,) = stub.calls
@@ -554,3 +554,61 @@ def test_live_prediction(knowledge_dir: Path) -> None:
     assert result.available, result.reason
     assert {row.entity_id for row in result.rows} == {"C1", "C2", "C3"}
     assert all(0 <= row.probability <= 1 for row in result.rows)
+
+
+async def test_a_request_over_kumos_size_limit_says_how_to_narrow_the_population(
+    knowledge_dir: Path, stub: type[StubClient]
+):
+    stub.error = RelationalError(
+        "Context size exceeds the 30MB limit. Current context contains 482,994 nodes ...\nPlease reduce either the "
+        "number of tables (see 'https://github.com/kumo-ai/kumo-relational-client')",
+        code="INVALID_REQUEST",
+    )
+
+    result = await predict(knowledge_dir, "template:churn_90d")
+
+    content = result.structured_content
+    assert content["available"] is False
+    assert content["reason"] == (
+        f"Kumo's request for 3 customers entities ({prediction.KUMO_BATCH} per request) is larger than its 30 MB "
+        "limit: narrow the population with FOR EACH customers.customer_id WHERE <a condition on customers's own "
+        "columns> to a few hundred entities."
+    )
+
+
+@pytest.mark.parametrize(
+    ("pql", "batch"),
+    [
+        (CHURN, prediction.KUMO_BATCH),
+        ("PREDICT LIST_DISTINCT(orders.product_id, 0, 30, days) RANK TOP 3 FOR EACH customers.customer_id", 200),
+    ],
+    ids=["binary", "ranking"],
+)
+async def test_the_entities_go_to_kumo_in_batches(knowledge_dir: Path, stub: type[StubClient], pql: str, batch: int):
+    await predict(knowledge_dir, pql)
+
+    (call,) = stub.calls
+    assert call["batch_size"] == batch
+
+
+async def test_a_ranking_score_is_a_value_not_a_probability(knowledge_dir: Path, stub: type[StubClient]):
+    stub.answer = lambda ids: pd.DataFrame({"ENTITY": ["C1", "C1"], "CLASS": ["P7", "P2"], "SCORE": [3.2, -0.4]})
+
+    result = await predict(
+        knowledge_dir, "PREDICT LIST_DISTINCT(orders.product_id, 0, 30, days) RANK TOP 2 FOR EACH customers.customer_id"
+    )
+
+    content = result.structured_content
+    assert content["task_type"] == "temporal_link_prediction"
+    assert content["rows"] == [row("C1", value=3.2, label="P7"), row("C1", value=-0.4, label="P2")]
+
+
+async def test_a_ranking_scores_two_requests_worth_of_entities(knowledge_dir: Path, stub: type[StubClient]):
+    stub.answer = lambda ids: pd.DataFrame({"ENTITY": ids, "CLASS": ["P1"] * len(ids), "SCORE": [1.0] * len(ids)})
+    pql = "PREDICT LIST_DISTINCT(accounts.segment, 0, 30, days) RANK TOP 1 FOR EACH accounts.account_id"
+
+    result = await predict(knowledge_dir, pql, [ACCOUNTS])
+
+    (call,) = stub.calls
+    assert (len(call["indices"]), call["batch_size"]) == (prediction.KUMO_MAX_RANKED, prediction.KUMO_RANK_BATCH)
+    assert "at most 400 per prediction" in result.structured_content["warnings"][0]

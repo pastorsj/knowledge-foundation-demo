@@ -70,9 +70,9 @@ def create_server(settings: Settings) -> MCPServer:
         yes/no outcome, such as COUNT(orders.*, 0, 90, days) = 0; an aggregate alone for a number, such as
         SUM(orders.net_amount, 0, 30, days); or a column of the entity table for a class. Or pass
         pql="template:<id>" to run one of the source's prediction templates, with its anchor time. Kumo scores up to
-        1,000 entities (its per-request limit) in primary-key order, so narrow a larger population with FOR EACH ...
-        WHERE; the result lists the 25 highest. When Kumo is unavailable the result
-        says so (available: false, with the reason): report that instead of estimating the outcome yourself.
+        1,000 entities (400 for RANK TOP k) in primary-key order, so narrow a larger population with FOR EACH ...
+        WHERE <a condition on that table's own columns>; the result lists the 25 highest. When Kumo is unavailable
+        the result says so (available: false, with the reason): report that instead of estimating the outcome yourself.
         """
         try:
             return await anyio.to_thread.run_sync(predictor.predict, pql, source_ids, anchor_time)

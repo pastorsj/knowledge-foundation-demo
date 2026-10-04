@@ -36,9 +36,9 @@ Each call:
    table; none or several is a `ToolError`, as is an entity column that is not its table's primary key.
 4. Without `KUMO_RELATIONAL_URL`, returns `available: false`,
    `reason: "No Kumo endpoint is configured (KUMO_RELATIONAL_URL)."`.
-5. Picks the entities: up to 1,000 primary keys of the entity table (Kumo's documented per-request limit), in key
-   order. Past 1,000, the first 1,000 are scored and a warning names the population's size and says to narrow it
-   with `FOR EACH ... WHERE`. Kumo predicts for every id it is given whatever the filter says, so a plain entity
+5. Picks the entities: up to 1,000 primary keys of the entity table (400 for `RANK TOP k`), in key order. Past
+   that, the first 1,000 (400) are scored and a warning names the population's size and says to narrow it with
+   `FOR EACH ... WHERE`. Kumo predicts for every id it is given whatever the filter says, so a plain entity
    filter (such as `customers.tier = 'gold'`) is applied here (`entities.py`). sqlglot parses it as one condition
    over the entity table's own columns, with no subquery, table, generator, aggregate or file function, and with no
    backslash or dollar sign (escape strings and dollar quoting are where sqlglot's reading and DuckDB's can differ).
@@ -53,8 +53,14 @@ Each call:
    column), then `graph.link(table, column, references_table)` for each catalog foreign key that points at its
    table's primary key, then `graph.validate()`.
 7. Predicts: `RelationalClient(url=..., api_key=..., timeout=60, max_retries=0).relational(graph).predict(pql, ids,
-   anchor_time=..., run_mode="fast", num_retries=0, verbose=False)`. One attempt within 60 s, so a slow or warming
-   NIM yields `available: false` before the agent's MCP timeout. A failure is `available: false` with a written
+   anchor_time=..., run_mode="fast", batch_size=500, num_retries=0, verbose=False)` (`batch_size=200` for
+   `RANK TOP k`, Kumo's cap). Kumo checks each request's size client-side against its 30 MB limit: 1,000 retail
+   customers with their orders and returns are over it, 500 are not (`template:return_risk_30d` took 73 s in two
+   requests, measured live on the Spark). So at most two requests, one attempt each within 60 s, and a slow or
+   warming NIM yields `available: false` before the agent's 180 s MCP timeout. A request still over 30 MB fails at
+   once with the reason "Kumo's request for N <table> entities (500 per request) is larger than its 30 MB limit:
+   narrow the population with FOR EACH <table>.<key> WHERE <a condition on <table>'s own columns> to a few hundred
+   entities." A failure is `available: false` with a written
    reason, and no URL or file path in it:
    - the endpoint could not be reached, or did not answer within 60 s;
    - it refused the credentials;
@@ -88,7 +94,8 @@ Never install the client's `[explain]` extra: it sends raw cell values to a thir
 | `elapsed_ms`, `warnings` | the whole call; entities capped, filters not applied, links left out, rows cut |
 
 Rows by task: binary, `probability` (`TRUE_PROB`); regression, `value` (`PREDICTION`); multiclass, each entity's
-best `label` (`CLASS`) with its `SCORE` as `probability`; `RANK TOP k`, every `(entity, label, score)` row.
+best `label` (`CLASS`) with its `SCORE` as `probability`; `RANK TOP k`, every `(entity, label, score)` row with the
+score as `value` (a ranking score is any number, and receipts bound `probability` to [0, 1]).
 
 Timestamps: an anchor with a time zone is converted to UTC and passed without one, as the sources' DuckDB
 `TIMESTAMP` columns are.

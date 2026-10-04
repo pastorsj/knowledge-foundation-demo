@@ -99,10 +99,11 @@ Two kinds of `WHERE` do different things:
   a column of the aggregated table.
 - **After `FOR EACH`, it filters the entities scored**:
   `FOR EACH <entity_table>.<primary_key> WHERE <condition>`. Use it when the
-  question is about some entities only: a column of the entity table
-  (`accounts.account_type = 'checking'`), or past activity with a window that
-  ends at the anchor (`COUNT(orders.*, -90, 0, days) > 0`: active in the 90
-  days before).
+  question is about some entities only. Only a condition on the entity table's
+  own columns (`accounts.account_type = 'checking'`) narrows the population the
+  tool sends: a condition over past activity (`COUNT(orders.*, -90, 0, days)
+  > 0`) is not applied to the entities, so the result may include ones it
+  excludes (a warning says so), and the request is no smaller.
 
 An event condition written after `FOR EACH` changes which entities are scored,
 not what counts as the outcome. "Which machines are likely to fail unplanned"
@@ -122,7 +123,7 @@ More examples (the names are illustrative; take yours from the catalog):
 
 ```
 PREDICT COUNT(orders.*, 0, 90, days) = 0 FOR EACH customers.customer_id
-PREDICT COUNT(orders.*, 0, 30, days) = 0 FOR EACH customers.customer_id WHERE COUNT(orders.*, -90, 0, days) > 0
+PREDICT COUNT(orders.*, 0, 30, days) = 0 FOR EACH customers.customer_id WHERE customers.tier = 'gold'
 PREDICT SUM(orders.net_amount, 0, 30, days) FOR EACH stores.store_id
 PREDICT COUNT(admissions.*, 0, 30, days) > 0 FOR EACH patients.patient_id
 PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_id
@@ -138,9 +139,14 @@ PREDICT MAX(loan_payments.days_past_due, 0, 90, days) >= 30 FOR EACH loans.loan_
   values is USD).
 - Multiclass: each row's `label` is the predicted class and `probability` its
   score.
+- Ranking (`RANK TOP k`): each row's `label` is an item and `value` its score
+  (a ranking score, not a probability).
 - The tool scores a bounded set of entities and returns the highest-ranked
   rows. When `warnings` say entities were left out, say the ranking covers the
-  entities scored, or narrow them with `WHERE`.
+  entities scored, or narrow them with `WHERE` on the entity table's columns.
+- When the reason says the request is larger than Kumo's 30 MB limit, narrow
+  the population with `FOR EACH <table>.<key> WHERE <a condition on that
+  table's own columns>` and run it again.
 
 ## Procedure
 

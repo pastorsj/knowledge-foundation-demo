@@ -3,7 +3,7 @@
   "$defs": {
     "EntityPrediction": {
       "additionalProperties": false,
-      "description": "One entity's predicted outcome: `probability` for a binary task (or the score of a multiclass `label`),\n`value` for a regression.",
+      "description": "One entity's predicted outcome: `probability` for a binary task (or the score of a multiclass `label`),\n`value` for a regression (or the score of a ranked `label`, any number).",
       "properties": {
         "entityId": {
           "maxLength": 128,

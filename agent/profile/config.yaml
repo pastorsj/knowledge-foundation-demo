@@ -109,7 +109,7 @@ mcp_servers:
     url: http://host.openshell.internal:8322/mcp
     enabled: true
     connect_timeout: 15
-    timeout: 180  # one Kumo attempt of up to 60 s, plus reading the source's graph
+    timeout: 180  # at most two Kumo requests (batches) of up to 60 s each, plus reading the graph
     supports_parallel_tool_calls: true
     tools:
       include: [predict]
