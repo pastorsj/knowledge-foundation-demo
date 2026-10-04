@@ -20,7 +20,6 @@ import logging
 import os
 import re
 import tempfile
-import time
 import unicodedata
 from collections.abc import Callable
 from collections.abc import Iterable
@@ -47,7 +46,8 @@ PARSERS = {
 TIME_TYPES = ("DATE", "TIMESTAMP")
 # Types a guessed (undeclared, not id-named) primary key may have: never a measure, a date or a flag.
 KEY_TYPES = ("VARCHAR", "BIGINT", "INTEGER", "HUGEINT", "UBIGINT", "UINTEGER", "SMALLINT", "UUID")
-LOCK_WAIT_SECONDS = 30.0
+# A table name (TableInfo.name) has at most 128 characters: a workbook's stem and sheet get this many each.
+SHEET_PART = 56
 
 Progress = Callable[[int, int], None]
 
@@ -71,8 +71,8 @@ def snake_case(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
 
 
-def _identifier(name: str, *, fallback: str, digit_prefix: str) -> str:
-    snake = snake_case(name)[:100].strip("_") or fallback
+def _identifier(name: str, *, fallback: str, digit_prefix: str, limit: int = 100) -> str:
+    snake = snake_case(name)[:limit].strip("_") or fallback
     return f"{digit_prefix}_{snake}" if snake[0].isdigit() else snake
 
 
@@ -95,9 +95,11 @@ def column_names(raw: list[Any]) -> list[str]:
 
 
 def table_name(stem: str, sheet: str | None, existing: Iterable[str]) -> str:
-    base = _identifier(stem, fallback="table", digit_prefix="t")
-    if sheet is not None:
-        base = f"{base}_{_identifier(sheet, fallback='sheet', digit_prefix='s')}"
+    if sheet is None:
+        base = _identifier(stem, fallback="table", digit_prefix="t")
+    else:
+        stem_part = _identifier(stem, fallback="table", digit_prefix="t", limit=SHEET_PART)
+        base = f"{stem_part}_{_identifier(sheet, fallback='sheet', digit_prefix='s', limit=SHEET_PART)}"
     return unique(base, existing)
 
 
@@ -119,21 +121,13 @@ def _quote(identifier: str) -> str:
 
 @contextmanager
 def connect(db_path: Path, *, read_only: bool = False):
-    """A short-lived connection. Readers in other services open the file read-only, so ingest never holds it long,
-    and waits (rather than fails) while one of them has it open."""
+    """A short-lived connection. Ingest writes only private ``.building`` copies and every other opener of a live
+    file is read-only, so no writer ever waits for a lock."""
     config = {}
     if directory := os.environ.get("DUCKDB_EXTENSION_DIRECTORY"):
         config["extension_directory"] = directory
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    deadline = time.monotonic() + LOCK_WAIT_SECONDS
-    while True:
-        try:
-            connection = duckdb.connect(str(db_path), read_only=read_only, config=config)
-            break
-        except duckdb.IOException as error:
-            if "lock" not in str(error).lower() or time.monotonic() > deadline:
-                raise
-            time.sleep(0.5)
+    connection = duckdb.connect(str(db_path), read_only=read_only, config=config)
     try:
         yield connection
     finally:
@@ -343,13 +337,6 @@ def drop_tables(db_path: Path, names: Iterable[str]) -> None:
     with connect(db_path) as connection:
         for name in names:
             connection.execute(f"DROP TABLE IF EXISTS {_quote(name)}")
-
-
-def table_names(db_path: Path) -> list[str]:
-    if not db_path.exists():
-        return []
-    with connect(db_path, read_only=True) as connection:
-        return [row[0] for row in connection.execute("SELECT table_name FROM duckdb_tables() ORDER BY table_name")]
 
 
 # Profiling

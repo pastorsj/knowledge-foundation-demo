@@ -125,17 +125,12 @@ class KnowledgeIndex:
         return len(rows)
 
     def delete_document(self, document_id: str) -> None:
-        self._delete(f"document_id == {json.dumps(document_id)}")
-
-    def delete_source(self, source_id: str) -> None:
-        self._delete(f"source_id == {json.dumps(source_id)}")
-
-    def _delete(self, expression: str) -> None:
         with self._lock:
             if (target := self._target()) is not None:
-                self._client.delete(target, filter=expression)
+                self._client.delete(target, filter=f"document_id == {json.dumps(document_id)}")
 
     def count(self, *, source_id: str | None = None, document_id: str | None = None) -> int:
+        """Chunks indexed for a source or a document (the tests check the index with it)."""
         filters = [
             f"{name} == {json.dumps(value)}"
             for name, value in (("source_id", source_id), ("document_id", document_id))

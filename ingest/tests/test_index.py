@@ -90,16 +90,14 @@ def test_chunks_carry_their_citation_and_metadata(index: KnowledgeIndex, milvus_
     assert "page_start" not in unpaged
 
 
-def test_delete_document_and_source(index: KnowledgeIndex):
+def test_delete_document(index: KnowledgeIndex):
     replace(index, "t.docs", "t.docs:a", chunks("alpha", "beta"))
     replace(index, "t.docs", "t.docs:b", chunks("gamma"))
     replace(index, "u.docs", "u.docs:a", chunks("delta"))
 
     index.delete_document("t.docs:a")
-    assert index.count(source_id="t.docs") == 1
 
-    index.delete_source("t.docs")
-    assert index.count(source_id="t.docs") == 0
+    assert index.count(source_id="t.docs") == 1
     assert index.count(source_id="u.docs") == 1
 
 

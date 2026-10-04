@@ -229,3 +229,13 @@ def test_a_sheet_whose_column_mixes_types_keeps_every_value(db: Path, tmp_path: 
     assert types == {"order_id": "BIGINT", "amount": "VARCHAR", "shipped": "TIMESTAMP"}
     assert (info["row_count"], info["primary_key"], info["time_column"]) == (2, "order_id", "shipped")
     assert result.warnings == []
+
+
+def test_a_long_workbook_and_sheet_name_fit_the_manifest():
+    taken = [tables.table_name("q" * 150, "9" * 150, [])]
+    for _ in range(98):
+        taken.append(tables.table_name("q" * 150, "9" * 150, taken))
+
+    assert max(len(name) for name in taken) <= 128
+    assert len(set(taken)) == len(taken)
+    assert len(tables.table_name("x" * 150, None, [])) == 100  # a single table keeps its longer name

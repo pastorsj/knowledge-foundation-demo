@@ -273,15 +273,6 @@ class JobStore:
 
         return self._run(select, write=False)
 
-    def find_by_sha(self, collection: str, sha256: str) -> dict[str, Any] | None:
-        def select(connection: sqlite3.Connection) -> dict[str, Any] | None:
-            row = connection.execute(
-                "SELECT * FROM files WHERE collection = ? AND sha256 = ?", (collection, sha256)
-            ).fetchone()
-            return _file_row(row) if row else None
-
-        return self._run(select, write=False)
-
     def job_status(self, job_id: str) -> dict[str, Any] | None:
         """AI-Q's IngestionJobStatus, each file with its stage, kind, parser, tables and warnings."""
 

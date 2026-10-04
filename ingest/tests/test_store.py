@@ -117,7 +117,6 @@ def test_a_deduplicated_file_joins_the_new_job(store: JobStore):
     status = store.job_status(again)
     assert status["status"] == "completed"
     assert [f["file_id"] for f in status["file_details"]] == ["f-aaaaaaaaaaaaaaaa"]
-    assert store.find_by_sha("workspace", "a" * 16 + "0" * 48)["file_id"] == "f-aaaaaaaaaaaaaaaa"
 
 
 def test_delete_files_returns_the_deleted_rows(store: JobStore):
