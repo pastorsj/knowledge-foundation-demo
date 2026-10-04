@@ -4,7 +4,8 @@
 
 PDFs and images go through docling's VlmPipeline with its ``nemotron_parse_v2`` preset on the API engine, against
 the vLLM server that serves NVIDIA Nemotron Parse 2.0 (one request per page). Born-digital formats (DOCX, PPTX,
-HTML, Markdown, text) use docling's own backends and no model.
+HTML, Markdown, text) use docling's own backends and no model. The preset's ``max_size`` keeps every page image
+inside the model card's maximum resolution, which also keeps a request under a hosted endpoint's body limit.
 
 When Parse is disabled, unreachable, failing, or slower than the parse budget (most of the stage timeout), a PDF
 falls back to its text layer: pypdfium2's text of each page becomes one Markdown section (``## Page N``) that
@@ -68,8 +69,12 @@ logger = logging.getLogger(__name__)
 PARSE_PARSER = "nemotron-parse-2.0"
 TEXT_LAYER_PARSER = "pdf-text-layer"
 TEXT_LAYER_WARNING = "Parsed from the PDF's text layer: Nemotron Parse was unavailable ({reason})."
-# The served context is 9000 tokens (prompt and image included), so the model card's 9000 cannot be the output cap.
-PARSE_MAX_TOKENS = 8192
+# The model card's maximum resolution is 1664x2048 (W x H). docling renders a page at the preset's scale (2.0, 144 dpi
+# for a PDF; an image without DPI metadata counts 72 px per inch, so it would be doubled) and ``max_size`` caps its
+# longer side, keeping the aspect ratio: 1664 keeps a page of either orientation inside the box. docling sends the
+# page as a base64 PNG in the request, so this also bounds the body: about 3 MB for a 1404x1794 scan, which doubled
+# was a 10.9 MB request that build.nvidia.com refused with HTTP 413.
+PARSE_MAX_IMAGE_SIDE = 1664
 PARSE_REQUEST_TIMEOUT = 300
 PARSE_PROBE_TIMEOUT = 5.0
 # The share of the stage timeout Parse may use, so the text-layer fallback still finishes inside the stage.
@@ -185,14 +190,16 @@ def _parse_converter(settings: Settings, budget: float) -> DocumentConverter:
             "top_k": 1,
             "repetition_penalty": 1.1,
             "temperature": 0,
-            "max_tokens": PARSE_MAX_TOKENS,
+            "max_tokens": settings.parse_max_tokens,
         },
         headers=_parse_headers(settings),
         timeout=PARSE_REQUEST_TIMEOUT,
         concurrency=settings.parse_concurrency,
     )
     options = VlmPipelineOptions(
-        vlm_options=VlmConvertOptions.from_preset("nemotron_parse_v2", engine_options=engine),
+        vlm_options=VlmConvertOptions.from_preset(
+            "nemotron_parse_v2", engine_options=engine, max_size=PARSE_MAX_IMAGE_SIDE
+        ),
         enable_remote_services=True,
         document_timeout=budget,  # an abandoned conversion stops at its next page batch
     )

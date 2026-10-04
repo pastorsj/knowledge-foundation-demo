@@ -51,8 +51,14 @@ One docling `DocumentConverter` reads every document kind:
   reading order and tables; docling's `format-latex` extra converts Parse's LaTeX tables. PDFs are rendered with
   `PyPdfiumDocumentBackend`, one request per page, `PARSE_CONCURRENCY` (4) pages in flight per document. The
   request parameters are the model card's: `skip_special_tokens: false`, `top_k: 1`, `repetition_penalty: 1.1`,
-  `temperature: 0`, and `max_tokens: 8192` (the card says 9,000, but the served context is 9,000 tokens including
-  the prompt and the image).
+  `temperature: 0`, and `max_tokens` from `PARSE_MAX_TOKENS`: 8192 by default (the card says 9,000, but the local
+  vLLM's context is 9,000 tokens including the prompt and the image), 4096 for build.nvidia.com.
+- **Page images** are rendered at the preset's `scale` (2.0: 144 dpi for a PDF page; an image without DPI metadata
+  counts as 72 dpi, so it would be doubled) with the preset's `max_size` set to 1,664: docling scales a page down,
+  keeping its aspect ratio, until its longer side is at most 1,664 px, so every page fits the model card's maximum
+  resolution of 1,664 x 2,048 (W x H) in either orientation. docling sends each page as a base64 PNG in the request
+  body; the cap keeps a scanned Letter page at about 3 MB, under build.nvidia.com's body limit (a scan sent doubled
+  made a 10.9 MB request, refused with HTTP 413).
 - **DOCX, PPTX, HTML, Markdown and text** use docling's own format backends: born-digital files carry exact text,
   so no model reads them.
 - docling is installed as `docling-slim` 2.132 with the extras `format-pdf-pypdfium2`, `format-office`,
@@ -83,8 +89,10 @@ rather than read from the text layer.
 A spike on a DGX Spark (GB10, 2026-10-02) parsed a two-page PDF with a table in 2.3 s and a scanned page in 1.8 s
 this way, tables included. The Nemotron Parse NIM has no GB10 profile, which is why vLLM is used.
 
-**Without a GPU**, set `PARSE_BASE_URL=https://integrate.api.nvidia.com/v1`, `PARSE_MODEL=nvidia/nemotron-parse-2.0`
-and an `nvapi-` `PARSE_API_KEY`: the hosted model takes the same chat contract.
+**Without a GPU**, set `PARSE_BASE_URL=https://integrate.api.nvidia.com/v1`, `PARSE_MODEL=nvidia/nemotron-parse-2.0`,
+`PARSE_MAX_TOKENS=4096` and an `nvapi-` `PARSE_API_KEY`: the hosted model takes the same chat contract, but serves
+a 4,096-token context, so it refuses the default cap of 8,192 with HTTP 400 (every PDF would then fall back to its
+text layer and every image would fail).
 
 ### Fallbacks
 
@@ -215,7 +223,8 @@ Uploaded documents become the source `workspace.documents` and tables `workspace
 | Files ingested at once | 2 | `INGEST_WORKERS` |
 | Pages in flight to Parse per document | 4 | `PARSE_CONCURRENCY` |
 | Stage timeout | 1,800 s | `INGEST_STAGE_TIMEOUT_SECONDS` |
-| Parse output per page | 8,192 tokens | fixed: the served context is 9,000 |
+| Parse output per page | 8,192 tokens (4,096 for build.nvidia.com) | `PARSE_MAX_TOKENS` |
+| Page image sent to Parse | longer side 1,664 px | fixed: inside the model card's 1,664 x 2,048 |
 | Chunk size | 512 tokens | fixed |
 
 Not accepted: legacy `.xls` and `.doc`, audio and video. Uploads are single-user: there is one workspace, shared

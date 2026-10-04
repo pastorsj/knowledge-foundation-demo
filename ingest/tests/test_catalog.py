@@ -90,17 +90,20 @@ def test_settings_defaults(tmp_path: Path):
     assert settings.parse_api_key is None
     assert settings.embed_model == "nvidia/nemotron-3-embed-1b"
     assert (settings.workers, settings.max_file_mb, settings.max_files) == (2, 100, 20)
-    assert (settings.parse_concurrency, settings.stage_timeout_s) == (4, 1800)
+    assert (settings.parse_concurrency, settings.parse_max_tokens, settings.stage_timeout_s) == (4, 8192, 1800)
 
 
 def test_settings_read_secret_files_and_an_empty_parse_url_disables_parse(tmp_path: Path):
     (tmp_path / "parse_api_key").write_text("parse-key\n")
     (tmp_path / "retriever_api_key").write_text("nvapi-secret\n")
 
-    settings = Settings.from_env({"PARSE_BASE_URL": "", "INGEST_WORKERS": "3"}, secrets_dir=tmp_path)
+    settings = Settings.from_env(
+        {"PARSE_BASE_URL": "", "INGEST_WORKERS": "3", "PARSE_MAX_TOKENS": "4096"}, secrets_dir=tmp_path
+    )
 
     assert settings.parse_base_url == ""
     assert settings.parse_api_key == "parse-key"
     assert settings.retriever_api_key == "nvapi-secret"
     assert settings.workers == 3
+    assert settings.parse_max_tokens == 4096
     assert "nvapi-secret" not in repr(settings)

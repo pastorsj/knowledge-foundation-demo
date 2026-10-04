@@ -42,6 +42,9 @@ class Settings:
     max_file_mb: int = 100
     max_files: int = 20
     parse_concurrency: int = 4
+    # Parse's output cap per page. The local vLLM serves a 9000-token context, so 8192 fits; build.nvidia.com serves
+    # nvidia/nemotron-parse-2.0 with a 4096-token context and refuses a larger cap (HTTP 400), so set 4096 there.
+    parse_max_tokens: int = 8192
     stage_timeout_s: float = 1800
     # The embed model's Hugging Face tokenizer, for the chunker's token counts.
     tokenizer_dir: Path = IMAGE_ROOT / "tokenizer"
@@ -87,6 +90,7 @@ class Settings:
             max_file_mb=int(get("INGEST_MAX_FILE_MB", str(defaults.max_file_mb))),
             max_files=int(get("INGEST_MAX_FILES", str(defaults.max_files))),
             parse_concurrency=int(get("PARSE_CONCURRENCY", str(defaults.parse_concurrency))),
+            parse_max_tokens=int(get("PARSE_MAX_TOKENS", str(defaults.parse_max_tokens))),
             stage_timeout_s=float(get("INGEST_STAGE_TIMEOUT_SECONDS", str(defaults.stage_timeout_s))),
             tokenizer_dir=Path(get("INGEST_TOKENIZER_DIR", str(defaults.tokenizer_dir))),
             catalog_schema_dir=Path(get("CATALOG_SCHEMA_DIR", str(defaults.catalog_schema_dir))),

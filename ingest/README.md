@@ -87,6 +87,7 @@ or a scan was not read; an embedding, Milvus, internal or timeout error) it is l
 | `INGEST_WORKERS` | `2` | files ingested at once |
 | `INGEST_MAX_FILE_MB`, `INGEST_MAX_FILES` | `100`, `20` | upload limits (per file, per request) |
 | `PARSE_CONCURRENCY` | `4` | pages in flight to Parse per document |
+| `PARSE_MAX_TOKENS` | `8192` | Parse's output cap per page; `4096` for build.nvidia.com |
 | `INGEST_STAGE_TIMEOUT_SECONDS` | `1800` | per-stage timeout |
 | `INGEST_TOKENIZER_DIR` | `/opt/demo-ingest/tokenizer` | the embed model's tokenizer, for chunk sizes |
 

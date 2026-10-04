@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import base64
+import io
 import json
 import os
 import time
@@ -42,12 +44,63 @@ def test_parse_converts_a_pdf_into_pages_and_a_table(
     assert progress[-1] == (2, 2)
     markdown = converted.document.export_to_markdown()
     assert "Restocking fees" in markdown and "Clearance" in markdown
-    # The model card's request parameters, with max_tokens inside the served context (9000)
+    # The model card's request parameters, with max_tokens inside the local vLLM's served context (9000)
     assert len(fake_parse.requests) == 2
     request = fake_parse.requests[0]
     assert request["model"] == "nvidia/NVIDIA-Nemotron-Parse-2.0"
     assert (request["skip_special_tokens"], request["top_k"], request["repetition_penalty"]) == (False, 1, 1.1)
     assert (request["temperature"], request["max_tokens"]) == (0, 8192)
+
+
+def test_the_output_cap_follows_the_setting(parse_settings: Settings, fake_parse: FakeParse, policy_pdf: Path):
+    fake_parse.label = "policy-pdf"
+
+    # build.nvidia.com serves Parse with a 4096-token context and refuses max_tokens=8192 with HTTP 400
+    converted = documents.convert(policy_pdf, "pdf", replace(parse_settings, parse_max_tokens=4096), None)
+
+    assert converted.parser == "nemotron-parse-2.0"
+    assert {request["max_tokens"] for request in fake_parse.requests} == {4096}
+
+
+def _sent_image_sizes(fake_parse: FakeParse) -> list[tuple[int, int]]:
+    from PIL import Image
+
+    sizes = []
+    for request in fake_parse.requests:
+        url = request["messages"][0]["content"][0]["image_url"]["url"]
+        assert url.startswith("data:image/png;base64,")
+        sizes.append(Image.open(io.BytesIO(base64.b64decode(url.split(",", 1)[1]))).size)
+    return sizes
+
+
+@pytest.mark.parametrize("size", [(1404, 1794), (1794, 1404), (918, 1188)], ids=["portrait", "landscape", "small"])
+def test_page_images_stay_inside_the_model_cards_resolution(
+    parse_settings: Settings, fake_parse: FakeParse, tmp_path: Path, size: tuple[int, int]
+):
+    """An image without DPI metadata would be sent at twice its size (the preset's scale); a 1404x1794 scan then
+    made a 10.9 MB request that build.nvidia.com refused with HTTP 413."""
+    from PIL import Image
+    from PIL import ImageDraw
+
+    fake_parse.label = "scan-png"
+    image = Image.new("L", size, 255)
+    ImageDraw.Draw(image).text((40, 40), "Clearance items are final sale.", fill=0)
+    image.save(tmp_path / "scan.png", format="PNG")
+
+    documents.convert(tmp_path / "scan.png", "png", parse_settings, None)
+
+    [(width, height)] = _sent_image_sizes(fake_parse)
+    assert width <= 1664 and height <= 2048 and max(width, height) == 1664  # scaled up to the cap, never past it
+    assert abs(width / height - size[0] / size[1]) < 0.01
+
+
+def test_pdf_pages_keep_the_presets_resolution(parse_settings: Settings, fake_parse: FakeParse, policy_pdf: Path):
+    fake_parse.label = "policy-pdf"
+
+    documents.convert(policy_pdf, "pdf", parse_settings, None)
+
+    # A Letter page at the preset's scale (2.0, 144 dpi) already fits, so the recorded responses still match
+    assert _sent_image_sizes(fake_parse) == [(1224, 1584), (1224, 1584)]
 
 
 def test_parse_reads_an_image(parse_settings: Settings, fake_parse: FakeParse, scan_png: Path):

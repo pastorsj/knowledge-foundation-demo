@@ -84,6 +84,7 @@ Document embedding (ingest and retrieval) and reranking (retrieval).
 | `PARSE_MODEL` | `nvidia/NVIDIA-Nemotron-Parse-2.0` | The served model id; on build.nvidia.com `nvidia/nemotron-parse-2.0` |
 | `PARSE_GPU_MEMORY_UTILIZATION` | `0.15` | The vLLM server's share of GPU memory (the Spark's memory is unified: keep it small) |
 | `PARSE_CONCURRENCY` | `4` | Pages in flight to Parse per document |
+| `PARSE_MAX_TOKENS` | `8192` | Parse's output cap per page. 8192 fits the local vLLM's 9,000-token context; set `4096` with build.nvidia.com, which serves `nvidia/nemotron-parse-2.0` with a 4,096-token context and refuses a larger cap with HTTP 400 |
 | `INGEST_MAX_FILE_MB`, `INGEST_MAX_FILES`, `INGEST_MAX_REQUEST_MB` | `100`, `20`, `512` | Upload limits: per file, files per request, the request body. The UI's upload zone uses the same values |
 | `INGEST_WORKERS` | `2` | Files ingested at once |
 | `INGEST_STAGE_TIMEOUT_SECONDS` | `1800` | Seconds one pipeline stage of one file may take; Parse may use three quarters of it ([ingestion](ingestion.md)) |
