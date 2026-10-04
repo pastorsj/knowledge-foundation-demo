@@ -74,6 +74,24 @@ If the NIM cannot be reached, `predict` answers `available: false` with the reas
 prediction is one attempt within 60 s, so a cold or distant NIM shows up as unavailable rather than as a stalled
 job. To run without predictions, drop `prediction` from `COMPOSE_PROFILES`.
 
+### Auto Ontology on the Spark
+
+The `ontology` profile runs on the Spark: upstream's images build for arm64 unchanged
+([Auto Ontology](../tools/auto-ontology/README.md#arm64)). With access to the private submodule:
+
+```bash
+git submodule update --init --checkout vendor/auto-ontology
+"${EDITOR:-vi}" .env              # COMPOSE_PROFILES=core,parse,prediction,ontology; AUTO_ONTOLOGY_SOURCE
+./scripts/demo.sh up
+```
+
+`up` builds the three images, rebuilds the agent image with the `ontology` feature and recreates the sandbox once.
+Its models use `INFERENCE_*` (reasoning and non-reasoning, by the ids in `AUTO_ONTOLOGY_*_MODEL`) and
+`RETRIEVER_*` (embed and rerank). The ingestion service then builds the ontology of `AUTO_ONTOLOGY_SOURCE` in the
+background, in about 10 minutes for `retail.sales`; until then `ask_question` answers that the semantic layer has
+not been created ([how](../tools/auto-ontology/README.md#how-the-ontology-is-built)). If `up` recreated
+`prediction` and Kumo goes through a sidecar in its network namespace, start the sidecar again afterwards.
+
 ## Brev VM mode
 
 On a Linux x86_64 VM with an NVIDIA GPU, such as a Brev instance, `core,parse,kumo` runs everything locally,
@@ -250,6 +268,9 @@ agent image or a tool image gets a new ID.
 | A run has no Phoenix link | Phoenix has no span for the job yet (Relay exports every second), or `PHOENIX_URL` is empty |
 | Every `up` recreates containers or the sandbox | An image got a new ID. Build through `demo.sh`, which turns off provenance attestations; a plain `docker build` retags the image with a different ID |
 | `the ontology profile needs the private submodule` | Run `git submodule update --init --checkout vendor/auto-ontology` (needs access), or drop the profile |
+| Auto Ontology: "The semantic layer hasn't been created yet" | The ontology is still compiling (about 10 minutes after the first `up`; `./scripts/demo.sh logs auto-ontology-ingestion` shows `semantic: finished successfully`). If the log says `compilation disabled`, run `./scripts/demo.sh restart auto-ontology-ingestion` ([why](../tools/auto-ontology/README.md#how-the-ontology-is-built)) |
+| Auto Ontology answers from old data after a sync | It keeps reading the DuckDB file it opened; run `./scripts/demo.sh restart auto-ontology` and `./scripts/demo.sh restart auto-ontology-ingestion` |
+| The data viewer's ontology: "Auto Ontology serves retail.sales only" | Auto Ontology serves one source, `AUTO_ONTOLOGY_SOURCE`; the other sources have no ontology |
 
 For the sandbox specifically, see the troubleshooting table in
 [`infra/openshell/README.md`](../infra/openshell/README.md#troubleshooting).

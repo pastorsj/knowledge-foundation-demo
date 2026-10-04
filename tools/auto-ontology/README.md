@@ -10,9 +10,10 @@ exposes `ask_question`, which Hermes sees as `mcp__auto_ontology__ask_question`.
 SQL, the rows and the resolution lineage (which phrase mapped to which ontology object, table and column).
 
 **It is optional.** The `tables` tool (`query_tables`, DuckDB) answers the demo's structured questions; Auto
-Ontology adds a second, ontology-grounded path when the `ontology` profile is on. **It is blocked until repository
-access:** the upstream repository, `NVIDIA/auto-ontology`, is private, so the submodule needs a GitHub token that is
-SSO-authorized for the NVIDIA organization, and there are no public images.
+Ontology adds a second, ontology-grounded path when the `ontology` profile is on. **It needs repository access:** the
+upstream repository, `NVIDIA/auto-ontology`, is private, so the submodule needs a GitHub token that is SSO-authorized
+for the NVIDIA organization, and there are no public images. With access, it builds and runs on the DGX Spark
+(arm64) as well as on x86_64 ([arm64](#arm64)).
 
 This directory holds only what we add to upstream:
 
@@ -31,6 +32,7 @@ auto-ontology-db (pgvector) ──> auto-ontology-migrate ──> auto-ontology 
                                                             ├──> auto-ontology-ingestion (:3002)
                                                             └──> auto-ontology-mcp (127.0.0.1:3303 → :3003/mcp) <── Hermes
 auto-ontology-db ──> auto-ontology-frontend-migrate ──> auto-ontology-frontend (web UI; the API signs in here)
+                                                     └──> auto-ontology-compile (turns compilation on) ──> ingestion
 ```
 
 - **One structured source.** `AUTO_ONTOLOGY_SOURCE` (default `retail.sales`) names a structured source of the
@@ -38,7 +40,11 @@ auto-ontology-db ──> auto-ontology-frontend-migrate ──> auto-ontology-fr
   (`CONNECTION_STRINGS=duckdb:///knowledge/sources/<source>/tables.duckdb`, the `knowledge` volume mounted
   read-only). The backend waits for ingest to be healthy.
 - **No seed.** The ontology is built by upstream's own ingestion from that database; nothing is imported from the
-  packs. The market demo's seed (`seed.py`, a hand-written `model.yaml` per pack) is gone.
+  packs ([how](#how-the-ontology-is-built)). The market demo's seed (`seed.py`, a hand-written `model.yaml` per
+  pack) is gone.
+- Upstream names a DuckDB connection after the file's catalog, so the database is `tables` (from `tables.duckdb`)
+  whatever the source, and its SQL reads `tables.main.<table>`. The API's ontology view looks it up by that name and
+  labels it with the source's alias (`retail_sales`); for any other source it answers 404.
 - The images are upstream's own Dockerfiles (non-root uid 1000, tini), built from `.build/auto-ontology`. Only the
   MCP server is published, on 127.0.0.1:3303. The sandbox reaches it as `host.openshell.internal:3303`.
 - The database connection comes from `CONNECTION_STRINGS`, not from the catalog, so upstream's `check_readiness`
@@ -49,9 +55,51 @@ auto-ontology-db ──> auto-ontology-frontend-migrate ──> auto-ontology-fr
 - The API signs in to the web app (`AUTO_ONTOLOGY_URL`, set by `demo.sh`) for the data viewer's ontology view
   (`GET /v1/data_sources/{id}/ontology`).
 
+## How the ontology is built
+
+Upstream answers no question until its semantic layer, the ontology, exists: before that, `ask_question` returns
+"The semantic layer hasn't been created yet" (the backend's 409). The ingestion service builds it in two passes,
+each run when the service starts and then every 24 hours:
+
+1. **Catalog.** It reads the schema of `CONNECTION_STRINGS` (for `retail.sales`: 8 tables, 68 columns, no declared
+   keys) and embeds it on the retriever endpoint, in about 2 s.
+2. **Semantic compilation.** It samples each table and asks the reasoning and non-reasoning models for terms,
+   attributes, keys and relationships, then embeds them. For `retail.sales` on the inference gateway this took
+   about 10 minutes (579 s) and produced 8 terms, 62 attributes and 4 inferred relationships.
+
+Upstream runs the second pass only when Settings > Semantic Compilation is on, and it is off on a new database. The
+`auto-ontology-compile` one-shot in `compose.yaml` turns it on (`frontend.configurations`,
+`semantic_compilation_enabled = true`) after the web app's migration and before the ingestion service starts, so
+the first `up` compiles the ontology with no other step. Nothing else is triggered or imported.
+
+- Allow about 10 minutes after the first `up` before asking. `./scripts/demo.sh logs auto-ontology-ingestion`
+  shows `semantic: finished successfully` when it is ready.
+- Every restart of `auto-ontology-ingestion` (including `demo.sh restart switchyard`, which recreates it when its
+  settings change) compiles again; the previous ontology keeps answering meanwhile.
+- A stack whose ingestion service started before the one-shot existed needs one
+  `./scripts/demo.sh restart auto-ontology-ingestion`.
+- Ingest replaces `tables.duckdb` with a new file when a source is synced again, and Auto Ontology keeps reading the
+  file it opened. After a sync that changed the source, run
+  `./scripts/demo.sh restart auto-ontology` and `./scripts/demo.sh restart auto-ontology-ingestion`.
+- The compile log warns that the gateway's model ids are "not known to support structured output" and may retry a
+  key-detection call three times (`LLM returned None for FkAndPkResult`); the pass still completes.
+
 To serve another source, set `AUTO_ONTOLOGY_SOURCE` in `.env` (any `<pack>.<source>` of kind `structured`, such as
 `manufacturing.operations`) and run `./scripts/demo.sh up`. Auto Ontology keeps what it ingested in the
-`auto-ontology-db` volume; `./scripts/demo.sh down --volumes` resets it, with the rest of the demo's data.
+`auto-ontology-db` volume; `./scripts/demo.sh down --volumes` resets it, with the rest of the demo's data. Switching
+sources on a running stack has not been tried: both register as `tables`, so check the ontology view afterwards.
+
+## Answers
+
+Measured on the DGX Spark against `retail.sales` (the `top-stores-q3` question of the retail pack):
+
+- An `ask_question` call takes 30 to 55 s; an agent run that makes one, 30 to 110 s.
+- The agent follows its skill: with only `retail.sales` selected, it answers plain SQL questions with `query_tables`
+  (exact, a few seconds) and calls `ask_question` when the question asks for Auto Ontology or uses business terms.
+- The SQL is sound and the ranking matched the answer key in every run. The totals matched exactly when the question
+  defined the measure and the window; otherwise Auto Ontology sometimes read "net sales" as orders less returns, or
+  compared the `ordered_at` timestamps with an inclusive end date and dropped the last day. The skill
+  (`querying-auto-ontology`) tells the agent to give an exclusive end date and to say whether returns count.
 
 ## Pin
 
@@ -101,6 +149,15 @@ Other settings:
 | `AUTO_ONTOLOGY_ADMIN_EMAIL`, `AUTO_ONTOLOGY_ADMIN_PASSWORD`, `AUTH_SECRET`, `APP_URL` | frontend | web UI sign-in; `./scripts/demo.sh init` generates the secrets |
 | `AUTO_ONTOLOGY_API_URL`, `AUTO_ONTOLOGY_MCP_TRUSTED_SERVICE_MODE=true`, `AUTO_ONTOLOGY_MCP_CHAT_TIMEOUT_S=900` | MCP | the backend at `http://auto-ontology:3001` |
 
+## arm64
+
+The three images build from upstream's Dockerfiles with no change on the DGX Spark (aarch64, Docker 29, BuildKit):
+`auto-ontology` (about 560 MB), `auto-ontology-frontend` (about 280 MB) and `auto-ontology-mcp` (about 90 MB).
+The base image, Node 22 and the Python wheels (DuckDB, psycopg, `nemo-retriever` from PyPI, the vendored `kumorfm`
+aarch64 wheel) all have arm64 builds. The three builds took about 2 minutes on the Spark. The backend
+Dockerfile's header still describes a `nemo-retriever` stub; at this pin the real package comes from PyPI and chat
+works.
+
 ## Run
 
 With access to `NVIDIA/auto-ontology` (a `gh` token SSO-authorized for the NVIDIA organization):
@@ -111,7 +168,8 @@ tools/auto-ontology/prepare.sh                                # writes .build/au
 ```
 
 Then add `ontology` to `COMPOSE_PROFILES` in `.env` and run `./scripts/demo.sh up`. `demo.sh` builds the agent image
-with the `ontology` feature, so Hermes gets the `auto_ontology` server. Without access, `doctor` refuses the
+with the `ontology` feature, so Hermes gets the `auto_ontology` server, and the ingestion service builds the
+ontology in the background ([how](#how-the-ontology-is-built)). Without access, `doctor` refuses the
 profile and names the submodule command. The images are built locally from the submodule; do not publish them.
 
 ## Move the pin
