@@ -157,7 +157,12 @@ def _agent_template(template: dict[str, Any]) -> dict[str, Any]:
 
 
 class KnowledgeCatalog:
-    """The catalog under ``root``. Each call reads it anew; ``read()`` reads it once for a whole request."""
+    """The catalog under ``root``. Each call reads it anew; ``read()`` reads it once for a whole request.
+
+    A manifest is parsed and validated once per version of its file (inode, size, modification and change times;
+    ingest replaces a manifest whole), so a request costs a ``stat`` per manifest and a bad one is logged once. Cached
+    manifests are shared between requests: read them, never change them.
+    """
 
     def __init__(
         self, root: Path, registry: ToolRegistry, features: frozenset[str], *, schema_dir: Path = SCHEMA_DIR
@@ -169,6 +174,7 @@ class KnowledgeCatalog:
             kind: Draft202012Validator(json.loads((schema_dir / f"{name}.schema.json").read_text(encoding="utf-8")))
             for kind, name in (("packs", "pack-manifest"), ("sources", "source-manifest"))
         }
+        self._parsed: dict[Path, tuple[tuple[int, ...], dict[str, Any] | None]] = {}
 
     def read(self) -> CatalogSnapshot:
         """Every valid manifest, read now. Blocking: a route runs it in a thread, once per request."""
@@ -196,20 +202,38 @@ class KnowledgeCatalog:
     def _manifests(self, catalog: Path, kind: str) -> list[dict[str, Any]]:
         """Every manifest in ``catalog/<kind>`` that matches its schema; any other is logged and skipped."""
         manifests = []
-        for path in sorted((catalog / kind).glob("*.json")):
-            try:
-                manifest = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, ValueError):
-                logger.warning("Skipping unreadable catalog manifest %s/%s", kind, path.name)
-                continue
-            if error := best_match(self._validators[kind].iter_errors(manifest)):
-                where = "/".join(str(part) for part in error.absolute_path) or "the manifest"
-                logger.warning("Skipping catalog manifest %s/%s: %s: %s", kind, path.name, where, error.message)
-                continue
+        paths = sorted((catalog / kind).glob("*.json"))
+        for path in paths:
+            manifest = self._manifest(path, kind)
             # A manifest is named after its id; anything else (a temporary file, say) is not one
-            if manifest["id"] == path.stem:
+            if manifest is not None and manifest["id"] == path.stem:
                 manifests.append(manifest)
+        directory, present = catalog / kind, set(paths)
+        for gone in [path for path in self._parsed if path.parent == directory and path not in present]:
+            self._parsed.pop(gone, None)
         return manifests
+
+    def _manifest(self, path: Path, kind: str) -> dict[str, Any] | None:
+        """The file's manifest if it matches its schema, else None (logged once per version of the file)."""
+        try:
+            stat = path.stat()
+        except OSError:
+            return None  # removed since the directory was listed
+        version = (stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns)
+        if (cached := self._parsed.get(path)) is not None and cached[0] == version:
+            return cached[1]
+        manifest: dict[str, Any] | None
+        try:
+            manifest = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            logger.warning("Skipping unreadable catalog manifest %s/%s", kind, path.name)
+            manifest = None
+        if manifest is not None and (error := best_match(self._validators[kind].iter_errors(manifest))):
+            where = "/".join(str(part) for part in error.absolute_path) or "the manifest"
+            logger.warning("Skipping catalog manifest %s/%s: %s: %s", kind, path.name, where, error.message)
+            manifest = None
+        self._parsed[path] = (version, manifest)
+        return manifest
 
 
 class CatalogSnapshot:

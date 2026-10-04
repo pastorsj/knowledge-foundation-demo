@@ -3,7 +3,7 @@
 
 """``/internal/hermes``: the routes the agent's ``execution-receipts`` plugin calls.
 
-The sandbox reaches them at ``http://host.openshell.internal:8000``. The plugin sends the
+The sandbox reaches them at ``http://host.openshell.internal:8300`` (``agent/Dockerfile``). The plugin sends the
 ``X-Receipt-Key`` header; inside the sandbox the key is an OpenShell placeholder that the
 supervisor swaps for the real one on these routes only. The UI proxy never forwards ``/internal``.
 

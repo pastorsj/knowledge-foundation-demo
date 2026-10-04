@@ -262,3 +262,26 @@ def test_manifests_are_read_on_every_call(knowledge_dir, tool_registry):
     shutil.rmtree(knowledge_dir / "catalog" / "packs")
     assert knowledge.source(DOCUMENTS) is None
     assert knowledge.packs() == []
+
+
+def test_a_manifest_is_validated_once_per_version_of_its_file(knowledge_dir, tool_registry, caplog, monkeypatch):
+    manifest_path(knowledge_dir, "sources", "retail.broken").write_text("[]")
+    knowledge = catalog(knowledge_dir, tool_registry)
+    validations = []
+    validator = knowledge._validators["sources"]
+
+    class Counting:
+        def iter_errors(self, manifest):
+            validations.append(manifest.get("id") if isinstance(manifest, dict) else manifest)
+            return validator.iter_errors(manifest)
+
+    monkeypatch.setitem(knowledge._validators, "sources", Counting())
+
+    knowledge.sources()
+    knowledge.sources()
+
+    assert sorted(map(str, validations)) == sorted(["[]", DOCUMENTS, TABLES])  # each file once
+    assert caplog.text.count("retail.broken") == 1  # logged once, not once per request
+    update_manifest(knowledge_dir, "sources", DOCUMENTS, name="Policies, revised")
+    assert knowledge.source(DOCUMENTS).name == "Policies, revised"  # a new version is read and validated
+    assert validations[-1] == DOCUMENTS and len(validations) == 4
