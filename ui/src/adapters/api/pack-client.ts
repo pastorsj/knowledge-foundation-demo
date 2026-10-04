@@ -16,7 +16,9 @@ import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { z } from 'zod'
 import { isPill } from '@/shared/components/ToolPills'
+import type { PackSummary as GeneratedPackSummary } from '@/generated/packs'
 import { isPackId, readApiUrl, readPacksDir, readRecordingsDir } from '@/shared/config/env'
+import { orderPacks } from '@/shared/config/packs'
 
 const PackQuestionSchema = z.object({
   id: z.string(),
@@ -66,9 +68,15 @@ export const PackSummarySchema = z.object({
 
 export const PackListSchema = z.object({ packs: z.array(PackSummarySchema) })
 
+// The schema parses to the generated type, so the two cannot drift apart unnoticed
+const _parsesToGenerated = (parsed: z.infer<typeof PackSummarySchema>): GeneratedPackSummary =>
+  parsed
+void _parsesToGenerated
+
 export type PackQuestion = z.infer<typeof PackQuestionSchema>
 export type Pack = z.infer<typeof PackSchema>
-export type PackSummary = z.infer<typeof PackSummarySchema>
+/** The generated `PackSummary`, which PackSummarySchema parses to */
+export type PackSummary = GeneratedPackSummary
 
 const getJson = async (url: string): Promise<unknown> => {
   const response = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(3000) })
@@ -130,11 +138,5 @@ export const readRecordedPacks = async (): Promise<PackSummary[]> => {
       }
     })
   )
-  return packs
-    .flat()
-    .sort(
-      (a, b) =>
-        Number(a.kind === 'workspace') - Number(b.kind === 'workspace') ||
-        a.title.localeCompare(b.title)
-    )
+  return orderPacks(packs.flat())
 }

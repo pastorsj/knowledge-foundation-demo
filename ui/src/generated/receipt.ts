@@ -194,7 +194,7 @@ export interface PredictionHorizon {
 }
 /**
  * One entity's predicted outcome: `probability` for a binary task (or the score of a multiclass `label`),
- * `value` for a regression.
+ * `value` for a regression (or the score of a ranked `label`, any number).
  */
 export interface EntityPrediction {
   entityId: string

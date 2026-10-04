@@ -895,3 +895,28 @@
     transition: none;
   }
 }
+
+/* The knowledge catalog not ready, or the pack still syncing: in place of the featured questions */
+.notice {
+  display: grid;
+  gap: 3px;
+  margin-top: 16px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-color-base);
+  border-left: 3px solid var(--text-color-feedback-warning, var(--color-brand));
+  color: var(--text-color-secondary);
+  background: var(--background-color-surface-raised);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.notice strong {
+  color: var(--text-color-primary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* A technology without an NVIDIA mark or a logo of its own here */
+.neutralMark {
+  color: var(--text-color-secondary);
+}

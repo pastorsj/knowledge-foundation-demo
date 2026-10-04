@@ -30,8 +30,16 @@ export function SourceKindIcon({ kind, className = 'h-3.5 w-3.5' }: Props): Reac
       </svg>
     )
   }
+  if (kind === 'table') {
+    return (
+      <svg {...common} aria-hidden="true" data-kind="table">
+        <rect x="2.5" y="3" width="11" height="10" rx="1" />
+        <path d="M2.5 6.5h11M2.5 9.75h11M6.5 6.5V13" />
+      </svg>
+    )
+  }
   return (
-    <svg {...common} aria-hidden="true">
+    <svg {...common} aria-hidden="true" data-kind="doc">
       <path d="M4 2.5h5l3 3V13a.5.5 0 0 1-.5.5h-7A.5.5 0 0 1 4 13z" />
       <path d="M9 2.5v3h3" />
     </svg>

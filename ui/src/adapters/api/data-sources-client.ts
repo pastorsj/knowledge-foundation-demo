@@ -24,8 +24,30 @@ export interface DataSourceFromAPI {
   database_name?: string | null
   /** The pack it belongs to; null for the workspace's sources in older catalogs */
   pack_id?: string | null
-  /** `ingesting` while some of its files are in the pipeline */
+  /** `ready`; `ingesting` while some of its files are in the pipeline; `failed`; `empty` */
   status?: string | null
+}
+
+/** What a 503 means here: the API has no catalog until ingest has synced the packs (first start). */
+export const CATALOG_BUILDING_MESSAGE =
+  'The knowledge catalog is being built: ingest is syncing the packs. This page retries by itself.'
+
+/** Answers worth trying again by themselves: the API or ingest is starting (or a proxy failed). */
+const RETRYABLE_STATUSES: ReadonlySet<number> = new Set([502, 503, 504])
+
+/** A data sources request the API refused, with its status; `retryable` when it may soon succeed. */
+export class DataSourcesError extends Error {
+  readonly status: number
+
+  constructor(message: string, status: number) {
+    super(message)
+    this.name = 'DataSourcesError'
+    this.status = status
+  }
+
+  get retryable(): boolean {
+    return RETRYABLE_STATUSES.has(this.status)
+  }
 }
 
 /**
@@ -40,8 +62,15 @@ export const fetchDataSources = async (
   const query = packId ? `?${new URLSearchParams({ pack: packId })}` : ''
   const response = await fetch(`/api/v1/data_sources${query}`, { signal })
   if (!response.ok) {
+    // FastAPI answers `{detail}`; this UI's proxy, `{error: {message}}`
     const body = await response.json().catch(() => ({}))
-    throw new Error(body?.error?.message || `Failed to fetch data sources: ${response.status}`)
+    const detail = typeof body?.detail === 'string' ? body.detail : body?.error?.message
+    throw new DataSourcesError(
+      response.status === 503
+        ? CATALOG_BUILDING_MESSAGE
+        : detail || `Failed to fetch data sources: ${response.status}`,
+      response.status
+    )
   }
   const data = await response.json()
   return Array.isArray(data) ? data : (data.data_sources ?? [])

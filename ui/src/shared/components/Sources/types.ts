@@ -5,7 +5,7 @@
  * Origin of a cited source. Drives the icon and accent so users can tell
  * document-backed claims from web ones at a glance.
  */
-export type SourceKind = 'web' | 'doc'
+export type SourceKind = 'web' | 'doc' | 'table'
 
 /** Evidence captured during a run, cited as `Label — evidence `id` — invocation `id``. */
 export interface SourceEvidence {

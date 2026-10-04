@@ -15,29 +15,19 @@
 
 'use client'
 
-import { type CSSProperties, type FC, useCallback, useEffect, useState } from 'react'
+import { type CSSProperties, type FC, useCallback, useEffect, useId, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Flex, Select, Text } from '@/adapters/ui'
 import { packIcon } from '@/adapters/ui/icons'
 import { useChatStore, useIsCurrentSessionBusy } from '@/features/chat'
 import type { PackSummary } from '@/generated/packs'
+import { orderPacks, PACK_COOKIE, titleOfPackId } from '@/shared/config/packs'
 import { useAppConfig } from '@/shared/context'
 import { useLayoutStore } from '../store'
-
-/** The cookie that remembers the selected pack between visits */
-export const PACK_COOKIE = 'kf-pack'
 
 /** The label of a pack in the selector: the workspace is always "Your data". */
 export const packLabel = (pack: Pick<PackSummary, 'kind' | 'title'>): string =>
   pack.kind === 'workspace' ? 'Your data' : pack.title
-
-/** Industries by title, then the workspace, as `GET /v1/packs` orders them. */
-const ordered = (packs: readonly PackSummary[]): PackSummary[] =>
-  [...packs].sort(
-    (a, b) =>
-      Number(a.kind === 'workspace') - Number(b.kind === 'workspace') ||
-      a.title.localeCompare(b.title)
-  )
 
 /** Remembers the pack for the server-rendered pages. */
 export const rememberPack = (packId: string): void => {
@@ -50,7 +40,7 @@ export const rememberPack = (packId: string): void => {
  */
 const usePacks = (initial: readonly PackSummary[] | undefined): PackSummary[] => {
   const { mode } = useAppConfig()
-  const [packs, setPacks] = useState<PackSummary[]>(() => ordered(initial ?? []))
+  const [packs, setPacks] = useState<PackSummary[]>(() => orderPacks(initial ?? []))
   const fetched = Boolean(initial?.length)
   useEffect(() => {
     if (fetched) return
@@ -58,7 +48,7 @@ const usePacks = (initial: readonly PackSummary[] | undefined): PackSummary[] =>
     fetch(mode === 'live' ? '/api/v1/packs' : '/api/recordings/packs.json', { cache: 'no-store' })
       .then((response) => (response.ok ? response.json() : { packs: [] }))
       .then((body: { packs?: PackSummary[] }) => {
-        if (active && Array.isArray(body.packs)) setPacks(ordered(body.packs))
+        if (active && Array.isArray(body.packs)) setPacks(orderPacks(body.packs))
       })
       .catch(() => undefined)
     return () => {
@@ -66,6 +56,14 @@ const usePacks = (initial: readonly PackSummary[] | undefined): PackSummary[] =>
     }
   }, [fetched, mode])
   return packs
+}
+
+const BUSY_HINT = 'The industry is fixed while an answer is running'
+
+/** What the selector says of a pack that is not ready (the workspace is `empty` until an upload) */
+const PACK_STATUS: Partial<Record<PackSummary['status'], string>> = {
+  ingesting: 'Syncing…',
+  failed: 'Failed',
 }
 
 /**
@@ -94,6 +92,7 @@ export const IndustrySelect: FC<IndustrySelectProps> = ({ packId, packs: initial
   const streaming = useChatStore((state) => state.isStreaming || state.isDeepResearchStreaming)
   const isBusy = useIsCurrentSessionBusy() || streaming
   const storePack = useLayoutStore((state) => state.packId)
+  const busyHintId = useId()
   // The landing page follows its URL; the research page, the store (a restored session switches it)
   const selected = pathname === '/' ? packId : (storePack ?? packId)
 
@@ -114,15 +113,15 @@ export const IndustrySelect: FC<IndustrySelectProps> = ({ packId, packs: initial
     [pathname, router, searchParams, selected]
   )
 
-  // A pack the list does not name yet (an older API) still shows as selected
+  // A pack the list does not name (the API not answering yet) still shows as selected, by its name
   const items = packs.some((pack) => pack.id === selected)
     ? packs
     : [
         ...packs,
         {
           id: selected,
-          kind: 'industry',
-          title: selected,
+          kind: selected === 'workspace' ? 'workspace' : 'industry',
+          title: titleOfPackId(selected),
           description: null,
           icon: null,
           status: 'ready',
@@ -142,7 +141,9 @@ export const IndustrySelect: FC<IndustrySelectProps> = ({ packId, packs: initial
         attributes={{
           SelectTrigger: {
             'data-testid': 'industry-select',
-            title: isBusy ? 'The industry is fixed while an answer is running' : 'Industry',
+            title: isBusy ? BUSY_HINT : 'Industry',
+            // A disabled trigger takes no focus, so its title is never heard: say why in its description
+            'aria-describedby': isBusy ? busyHintId : undefined,
           },
           SelectContent: { style: MENU_STYLE },
         }}
@@ -154,18 +155,37 @@ export const IndustrySelect: FC<IndustrySelectProps> = ({ packId, packs: initial
               <Flex align="center" gap="2">
                 <Icon className="h-4 w-4 shrink-0" width={16} height={16} />
                 <Text kind="label/regular/md">{packLabel(pack)}</Text>
+                {PACK_STATUS[pack.status] && (
+                  <Text
+                    kind="label/regular/sm"
+                    className={pack.status === 'failed' ? 'text-error' : 'text-subtle'}
+                    data-testid="pack-status"
+                  >
+                    {PACK_STATUS[pack.status]}
+                  </Text>
+                )}
               </Flex>
             ),
             attributes: {
               SelectItem: {
                 'data-pack-id': pack.id,
                 'data-pack-kind': pack.kind,
-                title: pack.description ?? packLabel(pack),
+                title:
+                  pack.status === 'ingesting'
+                    ? 'Ingest is still syncing this pack: answers may miss some of its data'
+                    : pack.status === 'failed'
+                      ? 'This pack failed to sync: answers may miss its data'
+                      : (pack.description ?? packLabel(pack)),
               },
             },
           }
         })}
       />
+      {isBusy && (
+        <span id={busyHintId} className="sr-only">
+          {BUSY_HINT}
+        </span>
+      )}
     </div>
   )
 }

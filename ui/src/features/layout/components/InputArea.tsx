@@ -77,7 +77,7 @@ interface InputAreaProps {
  * Positioned at the bottom of the chat area.
  */
 export const InputArea: FC<InputAreaProps> = memo(function InputArea({
-  placeholder = 'Check data sources and ask a research question...',
+  placeholder = 'Ask a question about the selected sources...',
   scenarios = NO_SCENARIOS,
   showDemoScenarios = true,
 }) {

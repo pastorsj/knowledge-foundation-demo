@@ -9,9 +9,7 @@
 
 import { cookies } from 'next/headers'
 import { isPackId, readDefaultPack } from '@/shared/config/env'
-
-/** The cookie the industry selector sets (IndustrySelect's PACK_COOKIE). */
-const PACK_COOKIE = 'kf-pack'
+import { PACK_COOKIE } from '@/shared/config/packs'
 
 export const selectedPack = async (param: unknown): Promise<string> => {
   if (isPackId(param)) return param

@@ -11,6 +11,7 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { fetchDataSources, fetchRecordedDataSources } from '@/adapters/api'
+import type { DataSourcesError } from '@/adapters/api'
 import type { DataSourceFromAPI } from '@/adapters/api'
 import type { LayoutState, LayoutStore } from './types'
 
@@ -37,6 +38,26 @@ const defaultEnabled = (sources: readonly DataSourceFromAPI[]): string[] =>
 
 /** Bumped by every fetch, so a slow answer for a pack left behind never lands */
 let fetchGeneration = 0
+
+/**
+ * How often the sources are fetched again while the API cannot list them yet (a 503 while ingest
+ * builds the catalog, or the API restarting) or while any of them is still ingesting.
+ */
+export const SOURCES_RETRY_MS = 5000
+let retryTimer: ReturnType<typeof setTimeout> | null = null
+const clearRetry = (): void => {
+  if (retryTimer) clearTimeout(retryTimer)
+  retryTimer = null
+}
+const retryLater = (run: () => void): void => {
+  clearRetry()
+  retryTimer = setTimeout(() => {
+    retryTimer = null
+    run()
+  }, SOURCES_RETRY_MS)
+}
+const ingesting = (sources: readonly DataSourceFromAPI[]): boolean =>
+  sources.some((source) => source.status === 'ingesting')
 
 export const useLayoutStore = create<LayoutStore>()(
   devtools(
@@ -141,15 +162,18 @@ export const useLayoutStore = create<LayoutStore>()(
 
       setPromptDraft: (value) => set({ promptDraft: value }, false, 'setPromptDraft'),
 
-      fetchDataSources: async (from = get().dataSourcesFrom, enabledIds) => {
+      fetchDataSources: async (from = get().dataSourcesFrom, enabledIds, silent = false) => {
         const { packId } = get()
         if (!packId) return
         const generation = ++fetchGeneration
-        set(
-          { dataSourcesLoading: true, dataSourcesError: null, dataSourcesFrom: from },
-          false,
-          'fetchDataSources/start'
-        )
+        clearRetry()
+        if (!silent) {
+          set(
+            { dataSourcesLoading: true, dataSourcesError: null, dataSourcesFrom: from },
+            false,
+            'fetchDataSources/start'
+          )
+        }
 
         try {
           const sources =
@@ -165,10 +189,17 @@ export const useLayoutStore = create<LayoutStore>()(
                 ? enabledIds.filter((id) => available.has(id))
                 : defaultEnabled(sources),
               dataSourcesLoading: false,
+              dataSourcesError: null,
             },
             false,
             'fetchDataSources/success'
           )
+          // A source still ingesting: its status (and its files' tables) changes soon
+          if (ingesting(sources)) {
+            retryLater(() => {
+              if (get().packId === packId) void get().refreshDataSources()
+            })
+          }
         } catch (error) {
           if (generation !== fetchGeneration) return
           set(
@@ -180,6 +211,14 @@ export const useLayoutStore = create<LayoutStore>()(
             false,
             'fetchDataSources/error'
           )
+          // The catalog is being built, or the API is restarting: try again by itself
+          if ((error as Partial<DataSourcesError> | null)?.retryable === true) {
+            retryLater(() => {
+              if (generation === fetchGeneration && get().packId === packId) {
+                void get().fetchDataSources(from, enabledIds, true)
+              }
+            })
+          }
         }
       },
 
@@ -208,6 +247,11 @@ export const useLayoutStore = create<LayoutStore>()(
             false,
             'refreshDataSources'
           )
+          if (ingesting(sources)) {
+            retryLater(() => {
+              if (get().packId === packId) void get().refreshDataSources()
+            })
+          }
         } catch {
           // The sources shown stay as they were; the next refresh tries again
         }

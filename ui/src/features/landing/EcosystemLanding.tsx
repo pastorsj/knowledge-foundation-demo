@@ -19,6 +19,10 @@ interface EcosystemLandingProps {
   packTitle?: string | null
   /** The industry selector, in the header */
   industrySelect?: ReactNode
+  /** Why there are no featured questions yet (the catalog not built, the pack syncing) */
+  notice?: ReactNode
+  /** Your data is selected: its next step is an upload */
+  workspace?: boolean
 }
 
 const NvidiaMark = ({ size = 'medium' }: { size?: 'small' | 'medium' }): ReactNode => (
@@ -79,6 +83,27 @@ const BrandMark = ({
   </span>
 )
 
+/** Docling (IBM Research, LF AI & Data) has no mark here: a neutral document glyph, not NVIDIA's. */
+const NeutralMark = ({ brand }: { brand: string }): ReactNode => (
+  <span
+    className={`${styles.brandMark} ${styles.brandMarkSmall} ${styles.neutralMark}`}
+    data-brand={brand}
+    aria-hidden="true"
+  >
+    <svg
+      viewBox="0 0 16 16"
+      width="15"
+      height="15"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+    >
+      <path d="M4 2.5h5l3 3V13a.5.5 0 0 1-.5.5h-7A.5.5 0 0 1 4 13z" />
+      <path d="M9 2.5v3h3M6 8.5h4M6 10.75h4" />
+    </svg>
+  </span>
+)
+
 const NimMark = (): ReactNode => (
   <BrandMark brand="NVIDIA NIM" src={LOGOS.nim} treatment="monochrome" />
 )
@@ -106,6 +131,8 @@ export const EcosystemLanding = ({
   packId = null,
   packTitle = null,
   industrySelect = null,
+  notice = null,
+  workspace = false,
 }: EcosystemLandingProps): ReactNode => (
   <main className={styles.page}>
     <div className={styles.shell}>
@@ -116,7 +143,10 @@ export const EcosystemLanding = ({
         </div>
         <div className={styles.context}>
           <span className={styles.statusDot} aria-hidden="true" />
-          {packTitle ? `Architecture overview · ${packTitle}` : 'Architecture overview'}
+          {/* The selector names the pack; without it, the header does */}
+          {packTitle && !industrySelect
+            ? `Architecture overview · ${packTitle}`
+            : 'Architecture overview'}
           {industrySelect}
         </div>
       </header>
@@ -236,7 +266,7 @@ export const EcosystemLanding = ({
               </div>
               <div className={styles.technologyRow}>
                 <Technology mark={<NimMark />}>Nemotron Parse</Technology>
-                <Technology mark={<NvidiaMark size="small" />}>Docling</Technology>
+                <Technology mark={<NeutralMark brand="Docling" />}>Docling</Technology>
               </div>
             </article>
           </div>
@@ -276,6 +306,28 @@ export const EcosystemLanding = ({
             </div>
           </div>
         </section>
+
+        {notice}
+
+        {workspace && (
+          <section className={styles.featured} aria-labelledby="workspace-title">
+            <h2 id="workspace-title" className={styles.featuredTitle}>
+              Your data
+            </h2>
+            <ul className={styles.featuredList}>
+              <li>
+                <Link className={styles.featuredQuestion} href={researchHref('workspace')}>
+                  <strong>Upload documents and tables</strong>
+                  <span className={styles.featuredText}>
+                    PDFs, images, Office files and web pages are parsed with Nemotron Parse; CSV,
+                    Excel, Parquet and JSON files become DuckDB tables. Then ask about them, with
+                    citations.
+                  </span>
+                </Link>
+              </li>
+            </ul>
+          </section>
+        )}
 
         {featuredQuestions.length > 0 && (
           <section className={styles.featured} aria-labelledby="featured-title">

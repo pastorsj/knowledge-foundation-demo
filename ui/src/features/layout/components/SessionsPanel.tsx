@@ -565,8 +565,7 @@ export const SessionsPanel: FC<SessionsPanelProps> = memo(function SessionsPanel
               </Text>
             </Flex>
             <Text kind="body/regular/xs" className="text-subtle">
-              Note: Chat sessions are saved in this browser. Research reports may expire on the
-              server.
+              Note: Chat sessions are saved in this browser; their runs stay on the server.
             </Text>
           </Flex>
         )}

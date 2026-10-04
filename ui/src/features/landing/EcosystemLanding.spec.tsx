@@ -35,7 +35,7 @@ describe('EcosystemLanding', () => {
     expect(screen.queryByText(/market/i)).not.toBeInTheDocument()
   })
 
-  test('marks each technology with its logo or the NVIDIA mark', () => {
+  test('marks each technology with its logo, the NVIDIA mark, or (Docling) a neutral glyph', () => {
     const { container } = render(<EcosystemLanding featuredQuestions={[]} disclaimer={null} />)
     const brands = (selector: string) =>
       [...container.querySelectorAll(selector)].map((mark) => mark.getAttribute('data-brand'))
@@ -59,10 +59,12 @@ describe('EcosystemLanding', () => {
       expect(image.getAttribute('src')).toMatch(/^\/ecosystem-logos\/[a-z]+\.(svg|png)$/)
       expect(image).toHaveAttribute('alt', '')
     }
-    // Every mark without a logo file is the NVIDIA mark; no text badges remain.
-    expect(new Set(brands('[data-brand]:not(:has(img))'))).toEqual(new Set(['NVIDIA']))
+    // Every mark without a logo file is the NVIDIA mark, but Docling's (an IBM Research and LF AI &
+    // Data project, not NVIDIA's); no text badges remain.
+    expect(new Set(brands('[data-brand]:not(:has(img))'))).toEqual(new Set(['NVIDIA', 'Docling']))
     const mark = (name: string) => screen.getByText(name).parentElement!.firstElementChild!
     expect(mark('NVIDIA Kumo')).toHaveAttribute('data-brand', 'NVIDIA')
+    expect(mark('Docling')).toHaveAttribute('data-brand', 'Docling')
     expect(mark('NVIDIA Kumo').outerHTML).toBe(mark('Auto Ontology').outerHTML)
     for (const model of ['Nemotron Parse', 'Nemotron Embed', 'Nemotron Rerank']) {
       expect(mark(model)).toHaveAttribute('data-brand', 'NVIDIA NIM')
@@ -91,7 +93,9 @@ describe('EcosystemLanding', () => {
     )
 
     expect(screen.getByText('Synthetic data for a software demonstration.')).toBeInTheDocument()
-    expect(screen.getByText('Architecture overview · Retail')).toBeInTheDocument()
+    // The selector names the pack: the header does not name it again
+    expect(screen.getByText('Architecture overview')).toBeInTheDocument()
+    expect(screen.queryByText(/Architecture overview · /)).toBeNull()
     expect(screen.getByTestId('industry-select-slot')).toBeInTheDocument()
     const link = screen.getByRole('link', { name: /Returns and revenue/ })
     expect(link).toHaveAttribute('href', '/research?pack=retail&question=returns-and-revenue')
@@ -102,5 +106,31 @@ describe('EcosystemLanding', () => {
       'href',
       '/research?pack=retail'
     )
+  })
+
+  test('names the pack in the header when there is no selector', () => {
+    render(<EcosystemLanding featuredQuestions={[]} disclaimer={null} packTitle="Retail" />)
+    expect(screen.getByText('Architecture overview · Retail')).toBeInTheDocument()
+  })
+
+  test('in Your data, offers the upload as the next step', () => {
+    render(
+      <EcosystemLanding featuredQuestions={[]} disclaimer={null} packId="workspace" workspace />
+    )
+    expect(screen.getByRole('link', { name: /Upload documents and tables/ })).toHaveAttribute(
+      'href',
+      '/research?pack=workspace'
+    )
+  })
+
+  test('shows a notice in place of the featured questions', () => {
+    render(
+      <EcosystemLanding
+        featuredQuestions={[]}
+        disclaimer={null}
+        notice={<p role="status">The knowledge catalog is not ready yet</p>}
+      />
+    )
+    expect(screen.getByRole('status')).toHaveTextContent('The knowledge catalog is not ready yet')
   })
 })

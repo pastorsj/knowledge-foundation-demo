@@ -327,7 +327,7 @@ const WelcomeState: FC = () => (
         What do you want to know?
       </Text>
       <Text kind="body/regular/md" className="text-subtle">
-        Ask a question about your connected data sources, or commission a deep research report.
+        Ask a question about the selected data sources: every answer cites them.
       </Text>
     </Flex>
   </Flex>

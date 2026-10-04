@@ -6,16 +6,20 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { useChatStore } from '@/features/chat'
 import { useLayoutStore } from '../store'
+import { CATALOG_BUILDING_MESSAGE } from '@/adapters/api'
 import { DataSourcesPanel } from './DataSourcesPanel'
 
-vi.mock('@/adapters/api', () => ({ fetchDataSources: vi.fn() }))
+vi.mock('@/adapters/api', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/adapters/api')>()),
+  fetchDataSources: vi.fn(),
+}))
 
 const initialLayout = useLayoutStore.getState()
 const initialChat = useChatStore.getState()
 
 const SOURCES = [
-  { id: 'retail.sales', name: 'Market data', description: 'Prices and volumes' },
-  { id: 'retail.policies', name: 'Store policies', description: 'Reviewed news' },
+  { id: 'retail.sales', name: 'Sales & Customers', description: 'Stores, orders and returns' },
+  { id: 'retail.policies', name: 'Store policies', description: 'Return windows and fees' },
 ]
 
 describe('DataSourcesPanel', () => {
@@ -83,5 +87,32 @@ describe('DataSourcesPanel', () => {
     expect(screen.getByText('Unable to load data sources')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Retry loading data sources' }))
     expect(fetchDataSources).toHaveBeenCalledOnce()
+  })
+
+  test('in Your data without files, points to the Files tab instead of "no data sources"', async () => {
+    useLayoutStore.setState({
+      packId: 'workspace',
+      availableDataSources: [],
+      enabledDataSourceIds: [],
+      dataSourcesPanelTab: 'connections',
+    })
+    render(<DataSourcesPanel />)
+    // Your data opens on Files; back to Connections
+    await userEvent.click(screen.getByRole('radio', { name: 'Connections' }))
+    expect(screen.getByText(/Your documents and Your tables appear here/)).toBeInTheDocument()
+    expect(screen.queryByText('No data sources available')).toBeNull()
+    expect(screen.getByText(/No files yet/)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Open Files' }))
+    expect(useLayoutStore.getState().dataSourcesPanelTab).toBe('files')
+  })
+
+  test('says the sources are not ready yet while the catalog is being built', () => {
+    useLayoutStore.setState({
+      availableDataSources: null,
+      dataSourcesError: CATALOG_BUILDING_MESSAGE,
+    })
+    render(<DataSourcesPanel />)
+    expect(screen.getByText('Data sources not ready yet')).toBeInTheDocument()
+    expect(screen.getByText(CATALOG_BUILDING_MESSAGE)).toBeInTheDocument()
   })
 })

@@ -23,6 +23,7 @@ import { cn } from '@/shared/lib/cn'
 import { DataConnectionCard } from './DataConnectionCard'
 import { FileSourcesTab } from './FileSourcesTab'
 import { UploadOrchestrator, WORKSPACE_COLLECTION } from '@/features/documents'
+import { CATALOG_BUILDING_MESSAGE } from '@/adapters/api'
 import type { DataSourcesPanelTab } from '../types'
 
 /**
@@ -230,8 +231,9 @@ export const DataSourcesPanel: FC = memo(function DataSourcesPanel() {
               Individual Connections ({sources.length})
             </Text>
             <Text kind="body/regular/xs" className="text-subtle mb-3">
-              Each industry has its own documents and tables. Enable any combination; the agent uses
-              only the enabled ones.
+              {isWorkspace
+                ? 'Your documents and Your tables appear here once an upload is ready. Enable either or both; the agent uses only the enabled ones.'
+                : 'Each industry has its own documents and tables. Enable any combination; the agent uses only the enabled ones.'}
             </Text>
 
             {dataSourcesLoading ? (
@@ -241,7 +243,9 @@ export const DataSourcesPanel: FC = memo(function DataSourcesPanel() {
             ) : dataSourcesError ? (
               <Flex direction="col" align="center" className="py-4">
                 <Text kind="body/regular/sm" className="text-error mb-2">
-                  Unable to load data sources
+                  {dataSourcesError === CATALOG_BUILDING_MESSAGE
+                    ? 'Data sources not ready yet'
+                    : 'Unable to load data sources'}
                 </Text>
                 <Text kind="body/regular/xs" className="text-subtle mb-3">
                   {dataSourcesError}
@@ -256,10 +260,17 @@ export const DataSourcesPanel: FC = memo(function DataSourcesPanel() {
                 </Button>
               </Flex>
             ) : sources.length === 0 ? (
-              <Flex direction="col" align="center" className="py-4">
+              <Flex direction="col" align="center" gap="3" className="py-4 text-center">
                 <Text kind="body/regular/sm" className="text-subtle">
-                  No data sources available
+                  {isWorkspace
+                    ? 'No files yet. Upload documents or tables in the Files tab to ask about them.'
+                    : 'No data sources available'}
                 </Text>
+                {isWorkspace && (
+                  <Button kind="secondary" size="small" onClick={() => handleTabChange('files')}>
+                    Open Files
+                  </Button>
+                )}
               </Flex>
             ) : (
               <Flex direction="col" gap="2">

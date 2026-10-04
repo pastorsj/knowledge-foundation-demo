@@ -2,7 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { afterEach, describe, expect, test, vi } from 'vitest'
-import { fetchDataSources, fetchRecordedDataSources } from './data-sources-client'
+import {
+  CATALOG_BUILDING_MESSAGE,
+  DataSourcesError,
+  fetchDataSources,
+  fetchRecordedDataSources,
+} from './data-sources-client'
 
 const SOURCES = [{ id: 'retail.policies', name: 'Store policies', pack_id: 'retail' }]
 
@@ -39,6 +44,27 @@ describe('fetchDataSources', () => {
     )
 
     await expect(fetchDataSources('retail')).rejects.toThrow('The API is unavailable')
+  })
+
+  test('reads the API’s own error (FastAPI’s detail), which is not worth retrying by itself', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(Response.json({ detail: 'Unknown pack nope' }, { status: 404 }))
+    )
+
+    const error = await fetchDataSources('nope').catch((caught: unknown) => caught)
+    expect(error).toBeInstanceOf(DataSourcesError)
+    expect(error).toMatchObject({ message: 'Unknown pack nope', status: 404, retryable: false })
+  })
+
+  test('says a 503 is the catalog being built, and that it retries', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(Response.json({ detail: 'catalog unavailable' }, { status: 503 }))
+    )
+
+    const error = await fetchDataSources('retail').catch((caught: unknown) => caught)
+    expect(error).toMatchObject({ message: CATALOG_BUILDING_MESSAGE, status: 503, retryable: true })
   })
 })
 

@@ -90,6 +90,31 @@ describe('IndustrySelect', () => {
     useChatStore.setState({ isDeepResearchStreaming: true })
     render(<IndustrySelect packId="retail" packs={PACKS} />)
     expect(screen.getByTestId('industry-select')).toBeDisabled()
+    // Said to a screen reader too, which never focuses a disabled trigger to hear its title
+    expect(screen.getByTestId('industry-select')).toHaveAccessibleDescription(
+      'The industry is fixed while an answer is running'
+    )
+  })
+
+  test('marks a pack still syncing, and one that failed', async () => {
+    const packs = [
+      { ...pack('retail', 'Retail'), status: 'ingesting' as const },
+      { ...pack('healthcare', 'Healthcare'), status: 'failed' as const },
+    ]
+    render(<IndustrySelect packId="retail" packs={packs} />)
+    expect(screen.getByTestId('industry-select')).toHaveTextContent('Retail')
+    await userEvent.click(screen.getByTestId('industry-select'))
+    expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual([
+      'HealthcareFailed',
+      'RetailSyncing…',
+    ])
+  })
+
+  test('names a pack the list does not have by its id, as a title', () => {
+    useLayoutStore.setState({ packId: 'financial-services' })
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async () => Response.json({ packs: [] }))
+    render(<IndustrySelect packId="financial-services" />)
+    expect(screen.getByTestId('industry-select')).toHaveTextContent('Financial Services')
   })
 
   test('fetches the packs when the server listed none: the API live, the recordings in replay', async () => {

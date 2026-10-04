@@ -15,6 +15,8 @@ export {
 } from './documents-client'
 
 export {
+  CATALOG_BUILDING_MESSAGE,
+  DataSourcesError,
   fetchDataSources,
   fetchRecordedDataSources,
   type DataSourceFromAPI,

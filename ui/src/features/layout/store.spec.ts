@@ -2,10 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { fetchDataSources, fetchRecordedDataSources } from '@/adapters/api'
-import { useLayoutStore } from './store'
+import {
+  CATALOG_BUILDING_MESSAGE,
+  DataSourcesError,
+  fetchDataSources,
+  fetchRecordedDataSources,
+} from '@/adapters/api'
+import { SOURCES_RETRY_MS, useLayoutStore } from './store'
 
-vi.mock('@/adapters/api', () => ({ fetchDataSources: vi.fn(), fetchRecordedDataSources: vi.fn() }))
+vi.mock('@/adapters/api', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/adapters/api')>()),
+  fetchDataSources: vi.fn(),
+  fetchRecordedDataSources: vi.fn(),
+}))
 const startNewSessionDraft = vi.fn()
 vi.mock('@/features/chat/store', () => ({
   useChatStore: { getState: () => ({ startNewSessionDraft }) },
@@ -132,6 +141,61 @@ describe('useLayoutStore', () => {
         dataSourcesLoading: false,
         dataSourcesError: 'API down',
       })
+    })
+
+    test('while the catalog is being built (503), says so and tries again every 5 s by itself', async () => {
+      vi.useFakeTimers()
+      try {
+        vi.mocked(fetchDataSources)
+          .mockRejectedValueOnce(new DataSourcesError(CATALOG_BUILDING_MESSAGE, 503))
+          .mockResolvedValueOnce([{ id: 'retail.sales', name: 'Sales' }])
+        await useLayoutStore.getState().fetchDataSources()
+        expect(useLayoutStore.getState().dataSourcesError).toBe(CATALOG_BUILDING_MESSAGE)
+
+        // The retry keeps the message up (no spinner) until the sources come
+        await vi.advanceTimersByTimeAsync(SOURCES_RETRY_MS - 1)
+        expect(fetchDataSources).toHaveBeenCalledTimes(1)
+        await vi.advanceTimersByTimeAsync(1)
+        expect(fetchDataSources).toHaveBeenCalledTimes(2)
+        expect(useLayoutStore.getState()).toMatchObject({
+          dataSourcesError: null,
+          dataSourcesLoading: false,
+          availableDataSources: [{ id: 'retail.sales', name: 'Sales' }],
+        })
+        await vi.advanceTimersByTimeAsync(SOURCES_RETRY_MS * 3)
+        expect(fetchDataSources).toHaveBeenCalledTimes(2)
+      } finally {
+        vi.useRealTimers()
+      }
+    })
+
+    test('does not try again by itself after an error that will not pass (a 404)', async () => {
+      vi.useFakeTimers()
+      try {
+        vi.mocked(fetchDataSources).mockRejectedValue(new DataSourcesError('Unknown pack', 404))
+        await useLayoutStore.getState().fetchDataSources()
+        await vi.advanceTimersByTimeAsync(SOURCES_RETRY_MS * 2)
+        expect(fetchDataSources).toHaveBeenCalledTimes(1)
+      } finally {
+        vi.useRealTimers()
+      }
+    })
+
+    test('refreshes the sources every 5 s while one is ingesting, then stops', async () => {
+      vi.useFakeTimers()
+      try {
+        vi.mocked(fetchDataSources)
+          .mockResolvedValueOnce([{ id: 'retail.sales', name: 'Sales', status: 'ingesting' }])
+          .mockResolvedValueOnce([{ id: 'retail.sales', name: 'Sales', status: 'ready' }])
+        await useLayoutStore.getState().fetchDataSources()
+        await vi.advanceTimersByTimeAsync(SOURCES_RETRY_MS)
+        expect(fetchDataSources).toHaveBeenCalledTimes(2)
+        expect(useLayoutStore.getState().availableDataSources?.[0].status).toBe('ready')
+        await vi.advanceTimersByTimeAsync(SOURCES_RETRY_MS * 2)
+        expect(fetchDataSources).toHaveBeenCalledTimes(2)
+      } finally {
+        vi.useRealTimers()
+      }
     })
   })
 

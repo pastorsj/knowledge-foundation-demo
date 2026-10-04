@@ -94,7 +94,12 @@ export interface LayoutActions {
    * Fetch the selected pack's data sources and enable the ones enabled by default (or `enabledIds`):
    * from the API, or in replay mode from the pack's recordings bundle
    */
-  fetchDataSources: (from?: 'api' | 'recordings', enabledIds?: string[]) => Promise<void>
+  /** `silent` keeps what the panel shows (a retry of an error) until the answer comes */
+  fetchDataSources: (
+    from?: 'api' | 'recordings',
+    enabledIds?: string[],
+    silent?: boolean
+  ) => Promise<void>
   /** Fetch the sources again, keeping the selection (e.g. when an upload's tables land) */
   refreshDataSources: () => Promise<void>
 }
