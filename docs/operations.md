@@ -19,7 +19,7 @@ recordings, the on-demand checks and troubleshooting. `./scripts/demo.sh --help`
 | `./scripts/demo.sh check` | Proves the sandbox boundary on the running stack ([OpenShell](openshell.md#proving-the-boundary)) |
 | `./scripts/demo.sh logs [agent\|routing\|SERVICE...] [-f]` | `agent`: Hermes in the sandbox; `routing`: Switchyard's routing decisions; else Compose logs |
 | `./scripts/demo.sh restart SERVICE` | `agent`: recreate the sandbox; `switchyard`: apply `.env` sections 1 and 2 to Switchyard, the API, ingest, retrieval and Auto Ontology; anything else: `docker compose restart` |
-| `./scripts/demo.sh data sync` / `data status` | Ingest every pack whose files changed; each pack's progress |
+| `./scripts/demo.sh data sync [--force]` / `data status` | Ingest every pack whose files changed (`--force`: every pack); each pack's progress |
 | `./scripts/demo.sh down [--volumes] [--prune]` | Deletes the sandbox, then stops everything. `--volumes` also deletes the knowledge catalog, uploads, jobs and traces; `--prune` also removes this project's untagged images and Docker's unused build cache (host-wide) |
 
 The first `up` builds every image and downloads Nemotron Parse 2.0 into the `parse-cache` volume (`up` waits up to

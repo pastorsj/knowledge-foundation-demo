@@ -153,14 +153,21 @@ the old tables or the new ones, never half of each.
 
 At startup `demo-ingest serve` syncs every `PACKS_DIR/<id>/pack.yaml` (`./data/packs`, mounted read-only at
 `/packs`) in the background. `./scripts/demo.sh data sync` (`POST /v1/packs/sync`) starts another sync on a running
-stack, and `./scripts/demo.sh data status` (`GET /v1/packs/status`) shows each pack's progress.
+stack, `./scripts/demo.sh data sync --force` (`POST /v1/packs/sync?force=true`) ingests every pack again whatever its
+digest, and `./scripts/demo.sh data status` (`GET /v1/packs/status`) shows each pack's progress.
 
 - Each pack is validated against `data/schemas` (as `scripts/validate_packs.py` does before a commit), then each of
   its sources becomes the catalog source `<pack>.<source>`, with the pack's declared keys, column descriptions and
   prediction templates. The pack's files are copied into the source, then ingested like uploads.
-- A pack is skipped when its digest is unchanged: sha256 over `pack.yaml`, `questions.yaml` and `files/**`, plus the
-  Parse model (or `pdf-text-layer`) and the embed model. Enabling Parse therefore re-ingests every pack on the next
-  sync. Changing the embed model needs a rebuild of the index instead (`./scripts/demo.sh down --volumes`, then
+- A pack is skipped when its digest is unchanged and it is `ready`: sha256 over `pack.yaml`, `questions.yaml` and
+  `files/**`, plus the Parse model (or `pdf-text-layer`) and the embed model. Enabling Parse therefore re-ingests
+  every pack on the next sync.
+- The digest is recorded only when the sync is complete: every file ready, or failed for a reason another sync would
+  repeat (the file itself: an unsupported, mismatched, empty, oversized or unreadable file; or Parse turned off).
+  After anything else (Parse not answering, so a PDF fell back to its text layer or a scan went unread; an
+  embedding, Milvus or internal error; a timeout) the pack keeps no new digest, so the next `data sync` retries it.
+  `--force` (`demo-ingest sync-packs --force`) ingests every pack again regardless, for instance after a fix outside
+  the digest's inputs. Changing the embed model needs a rebuild of the index instead (`./scripts/demo.sh down --volumes`, then
   `up`): workspace uploads are not re-embedded, a model of another dimension cannot reuse the collection, and the
   ingest image bakes in the model's tokenizer.
 - Documents that left a pack are removed from the index; a documents source is re-indexed file by file.

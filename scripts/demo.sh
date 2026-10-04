@@ -52,6 +52,7 @@ Run
 
 Data and recordings
   data sync               ingest every industry pack whose files changed (data/packs), on the running stack
+  data sync --force       ingest every industry pack again, whatever changed
   data status             each pack's ingestion status
   data validate           check every pack's pack.yaml and questions.yaml against data/schemas
   data generate PACK      regenerate a pack's files from its seeded generator (uv on the host)
@@ -305,13 +306,19 @@ cmd_record() {
   log "review $out before committing: it holds questions, answers, evidence excerpts and model names"
 }
 
-# data sync|status|validate|generate PACK
+# data sync [--force]|status|validate|generate PACK
 cmd_data() {
   case ${1:-} in
     sync)
-      curl -fsS --max-time 10 -X POST http://127.0.0.1:8330/v1/packs/sync >/dev/null ||
+      local query=""
+      case ${2:-} in
+        "") ;;
+        --force) query="?force=true" ;;
+        *) die "$EXIT_USAGE" "usage: demo.sh data sync [--force]" ;;
+      esac
+      curl -fsS --max-time 10 -X POST "http://127.0.0.1:8330/v1/packs/sync$query" >/dev/null ||
         die "$EXIT_UNAVAILABLE" "ingest is not answering on 127.0.0.1:8330: ./scripts/demo.sh up"
-      log "pack sync started; ./scripts/demo.sh data status follows it"
+      log "pack sync started${query:+ (every pack, forced)}; ./scripts/demo.sh data status follows it"
       ;;
     status) packs_status ;;
     validate)
@@ -324,7 +331,7 @@ cmd_data() {
       command -v uv >/dev/null || die "$EXIT_CONFIG" "data generate runs with uv on the host: install uv"
       uv run "$ROOT/data/packs/$2/generator/build.py"
       ;;
-    *) die "$EXIT_USAGE" "usage: demo.sh data sync|status|validate|generate PACK" ;;
+    *) die "$EXIT_USAGE" "usage: demo.sh data sync [--force]|status|validate|generate PACK" ;;
   esac
 }
 
