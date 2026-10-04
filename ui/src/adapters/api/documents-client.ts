@@ -10,7 +10,6 @@
 
 import {
   CollectionInfoSchema,
-  CollectionListResponseSchema,
   FileInfoSchema,
   FileListResponseSchema,
   UploadResponseSchema,
@@ -58,19 +57,18 @@ async function handleApiError(response: Response, context: string): Promise<neve
 /**
  * Create a documents API client
  *
- * @param options - Client options including auth token
+ * @param options - Client options (none)
  * @returns Documents client with all API methods
+ *
+ * The ingest service creates Your data's one collection, `workspace`, at startup: the client
+ * reads it, and uploads to it, but never creates or deletes a collection.
  *
  * @example
  * ```typescript
- * const { idToken } = useAuth()
- * const client = createDocumentsClient({ authToken: idToken })
- *
- * // Create collection
- * const collection = await client.createCollection('my-session-id')
+ * const client = createDocumentsClient()
  *
  * // Upload files
- * const { job_id, file_ids } = await client.uploadFiles('my-session-id', files)
+ * const { job_id, file_ids } = await client.uploadFiles('workspace', files)
  *
  * // Poll for status
  * const status = await client.getJobStatus(job_id)
@@ -92,42 +90,6 @@ export const createDocumentsClient = (_options: DocumentsClientOptions = {}) => 
     // --------------------------------------------------------------------------
 
     /**
-     * Create a new collection
-     */
-    async createCollection(name: string, description?: string): Promise<CollectionInfo> {
-      const response = await fetch(getCollectionsUrl(), {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify({ name, description }),
-      })
-
-      if (!response.ok) {
-        await handleApiError(response, 'Failed to create collection')
-      }
-
-      const data = await response.json()
-      return CollectionInfoSchema.parse(data)
-    },
-
-    /**
-     * List all collections
-     */
-    async listCollections(): Promise<CollectionInfo[]> {
-      const response = await fetch(getCollectionsUrl(), {
-        method: 'GET',
-        headers: getHeaders(),
-      })
-
-      if (!response.ok) {
-        await handleApiError(response, 'Failed to list collections')
-      }
-
-      const data = await response.json()
-      const validated = CollectionListResponseSchema.parse(data)
-      return validated.collections
-    },
-
-    /**
      * Get a specific collection by name
      */
     async getCollection(name: string, signal?: AbortSignal): Promise<CollectionInfo | null> {
@@ -147,20 +109,6 @@ export const createDocumentsClient = (_options: DocumentsClientOptions = {}) => 
 
       const data = await response.json()
       return CollectionInfoSchema.parse(data)
-    },
-
-    /**
-     * Delete a collection and all its files
-     */
-    async deleteCollection(name: string): Promise<void> {
-      const response = await fetch(`${getCollectionsUrl()}/${name}`, {
-        method: 'DELETE',
-        headers: getHeaders(),
-      })
-
-      if (!response.ok && response.status !== 404) {
-        await handleApiError(response, 'Failed to delete collection')
-      }
     },
 
     // --------------------------------------------------------------------------

@@ -28,7 +28,6 @@ const ROUTES: ReadonlyArray<readonly [Method, RegExp]> = [
   ['GET', /^packs$/],
   // Your data has one collection, `workspace`
   ['GET', /^collections\/workspace(\/documents)?$/],
-  ['POST', /^collections$/],
   ['POST', /^collections\/workspace\/documents$/],
   ['DELETE', /^collections\/workspace\/documents$/],
   ['GET', /^documents\/[^/]+\/status$/],
@@ -116,16 +115,23 @@ const readBody = async (request: Request, speech: boolean): Promise<BodyInit | R
 
 /**
  * A request another site made the browser send (a form or fetch from elsewhere, which a multipart
- * upload can do without a CORS preflight): its Sec-Fetch-Site is not same-origin, or its Origin's
- * host is not this one's.
+ * upload can do without a CORS preflight). A browser sets Sec-Fetch-Site itself, and no page script
+ * can forge it: when present, it decides, so a reverse proxy or a shared link that rewrites `Host`
+ * still lets this site's own writes through. Without it (an older browser, or a script), the
+ * Origin's host must be the host the browser addressed (`X-Forwarded-Host`, else `Host`); an opaque
+ * Origin (`null`) never is.
  */
 const crossSite = (request: Request): boolean => {
   const site = request.headers.get('sec-fetch-site')
-  if (site && site !== 'same-origin') return true
+  if (site) return site !== 'same-origin'
   const origin = request.headers.get('origin')
   if (!origin) return false
+  const host =
+    request.headers.get('x-forwarded-host')?.split(',')[0].trim() ||
+    request.headers.get('host') ||
+    new URL(request.url).host
   try {
-    return new URL(origin).host !== (request.headers.get('host') ?? new URL(request.url).host)
+    return new URL(origin).host !== host
   } catch {
     return true
   }

@@ -53,7 +53,6 @@ export const useFileUpload = (options: UseFileUploadOptions = {}): UseFileUpload
   const isPolling = useDocumentsStore((s) => s.isPolling)
   const error = useDocumentsStore((s) => s.error)
   const setCurrentCollection = useDocumentsStore((s) => s.setCurrentCollection)
-  const setCollectionInfo = useDocumentsStore((s) => s.setCollectionInfo)
   const addTrackedFile = useDocumentsStore((s) => s.addTrackedFile)
   const updateTrackedFile = useDocumentsStore((s) => s.updateTrackedFile)
   const removeTrackedFile = useDocumentsStore((s) => s.removeTrackedFile)
@@ -97,27 +96,6 @@ export const useFileUpload = (options: UseFileUploadOptions = {}): UseFileUpload
   // The orchestrator is a singleton that manages polling across component lifecycles.
   // Cleanup happens via session changes (handleSessionChange) when user switches sessions.
 
-  const ensureCollectionExists = useCallback(
-    async (collectionName: string): Promise<void> => {
-      let collection = await clientRef.current.getCollection(collectionName)
-
-      if (!collection) {
-        collection = await clientRef.current.createCollection(
-          collectionName,
-          'Your uploaded documents and tables'
-        )
-      }
-
-      // Mark this session as having a collection so future session switches
-      // know to check the backend for files (prevents unnecessary 404s)
-      markSessionHasCollection(collectionName)
-
-      setCurrentCollection(collectionName)
-      setCollectionInfo(collection)
-    },
-    [setCurrentCollection, setCollectionInfo]
-  )
-
   const uploadFiles = useCallback(
     async (files: File[], targetSessionId?: string) => {
       if (files.length === 0) return
@@ -158,7 +136,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}): UseFileUpload
       const trackedFileMap: Map<string, TrackedFile> = new Map()
 
       // Add tracked files to the store immediately so uploading cards appear
-      // in the UI before any network calls (collection creation, upload POST)
+      // in the UI before the upload POST
       for (const file of validFiles) {
         const trackedFile: TrackedFile = {
           id: uuidv4(),
@@ -175,7 +153,9 @@ export const useFileUpload = (options: UseFileUploadOptions = {}): UseFileUpload
       }
 
       try {
-        await ensureCollectionExists(collectionName)
+        // The ingest service created the workspace collection at startup: upload straight to it
+        markSessionHasCollection(collectionName)
+        setCurrentCollection(collectionName)
 
         const { job_id, file_ids } = await clientRef.current.uploadFiles(collectionName, validFiles)
 
@@ -229,7 +209,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}): UseFileUpload
       sessionId,
       validationContext,
       fileUploadConfig,
-      ensureCollectionExists,
+      setCurrentCollection,
       addTrackedFile,
       updateTrackedFile,
       setUploading,

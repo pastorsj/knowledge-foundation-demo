@@ -18,7 +18,6 @@ const initialState: DocumentsState = {
   collectionInfo: null,
   trackedFiles: [],
   activeJobId: null,
-  isCreatingCollection: false,
   isUploading: false,
   isPolling: false,
   isLoadingFiles: false,
@@ -147,10 +146,6 @@ export const useDocumentsStore = create<DocumentsStore>()(
       // --------------------------------------------------------------------------
       // Loading States
       // --------------------------------------------------------------------------
-
-      setCreatingCollection: (loading) => {
-        set({ isCreatingCollection: loading }, false, 'setCreatingCollection')
-      },
 
       setUploading: (loading) => {
         set({ isUploading: loading }, false, 'setUploading')

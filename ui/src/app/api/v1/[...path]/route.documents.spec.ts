@@ -49,7 +49,6 @@ describe('/api/v1 proxy: Your data', () => {
     ['GET', 'collections/workspace'],
     ['GET', 'collections/workspace/documents'],
     ['GET', 'documents/job-1/status'],
-    ['POST', 'collections'],
   ])('forwards %s /v1/%s', async (method, path) => {
     const handler = method === 'GET' ? GET : method === 'POST' ? POST : DELETE
     const response = await call(handler, path, {
@@ -118,6 +117,8 @@ describe('/api/v1 proxy: Your data', () => {
   })
   test.each([
     ['GET', 'collections'],
+    // The ingest service creates the workspace collection itself
+    ['POST', 'collections'],
     ['DELETE', 'collections/workspace'],
     ['GET', 'collections/other/documents'],
     ['POST', 'collections/other/documents'],
@@ -129,7 +130,11 @@ describe('/api/v1 proxy: Your data', () => {
   test.each([
     [{ 'sec-fetch-site': 'cross-site' }],
     [{ 'sec-fetch-site': 'same-site' }],
+    [{ 'sec-fetch-site': 'none', origin: 'http://ui.test', host: 'ui.test' }],
     [{ origin: 'https://evil.example', host: 'ui.test' }],
+    [{ origin: 'null', host: 'ui.test' }],
+    [{ origin: 'http://ui.test:3300', host: 'ui.test:8080' }],
+    [{ origin: 'http://ui.test', host: 'ui.test', 'x-forwarded-host': 'evil.example' }],
   ])('refuses a write another site sends (%j)', async (headers) => {
     for (const [handler, method, path] of [
       [POST, 'POST', 'collections/workspace/documents'],
@@ -140,6 +145,19 @@ describe('/api/v1 proxy: Your data', () => {
       expect(response.status).toBe(403)
     }
     expect(upstream).not.toHaveBeenCalled()
+  })
+
+  test.each([
+    // Behind a reverse proxy or a shared link that forwards another Host: the browser's word decides
+    [{ 'sec-fetch-site': 'same-origin', origin: 'https://share.example', host: 'ui:3000' }],
+    // Without Sec-Fetch-Site: the Origin against the host the browser addressed, port included
+    [{ origin: 'http://ui.test:3300', host: 'ui.test:3300' }],
+    [{ origin: 'https://share.example', host: 'ui:3000', 'x-forwarded-host': 'share.example' }],
+    // Not a browser (curl, the live test's API client): no Origin to check
+    [{}],
+  ])('allows a write from this site (%j)', async (headers) => {
+    const response = await call(POST, 'jobs/async/submit', { method: 'POST', headers, body: '{}' })
+    expect(response.status).toBe(200)
   })
 
   test('allows a same-origin write, and reads from anywhere', async () => {

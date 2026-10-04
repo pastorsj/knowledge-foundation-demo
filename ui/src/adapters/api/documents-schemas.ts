@@ -55,10 +55,6 @@ export const CollectionInfoSchema = z.object({
   metadata: z.record(z.unknown()).default({}),
 })
 
-/** Response for list collections endpoint */
-export const CollectionListResponseSchema = z.object({
-  collections: z.array(CollectionInfoSchema),
-})
 
 // ============================================================================
 // File Schemas
@@ -130,7 +126,6 @@ export const IngestionJobStatusSchema = z.object({
 export type DocumentFileStatus = z.infer<typeof DocumentFileStatusSchema>
 export type JobState = z.infer<typeof JobStateSchema>
 export type CollectionInfo = z.infer<typeof CollectionInfoSchema>
-export type CollectionListResponse = z.infer<typeof CollectionListResponseSchema>
 export type FileInfo = z.infer<typeof FileInfoSchema>
 export type FileListResponse = z.infer<typeof FileListResponseSchema>
 export type UploadResponse = z.infer<typeof UploadResponseSchema>

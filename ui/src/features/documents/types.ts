@@ -106,7 +106,6 @@ export interface DocumentsState {
   /** Active ingestion job ID for polling */
   activeJobId: string | null
   /** Loading states */
-  isCreatingCollection: boolean
   isUploading: boolean
   isPolling: boolean
   isLoadingFiles: boolean
@@ -142,7 +141,6 @@ export interface DocumentsActions {
   setActiveJobId: (jobId: string | null) => void
 
   // Loading states
-  setCreatingCollection: (loading: boolean) => void
   setUploading: (loading: boolean) => void
   setPolling: (polling: boolean) => void
   setLoadingFiles: (loading: boolean) => void
