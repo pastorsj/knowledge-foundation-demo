@@ -917,6 +917,3 @@
 }
 
 /* A technology without an NVIDIA mark or a logo of its own here */
-.neutralMark {
-  color: var(--text-color-secondary);
-}

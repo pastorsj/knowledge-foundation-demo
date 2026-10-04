@@ -35,7 +35,7 @@ describe('EcosystemLanding', () => {
     expect(screen.queryByText(/market/i)).not.toBeInTheDocument()
   })
 
-  test('marks each technology with its logo, the NVIDIA mark, or (Docling) a neutral glyph', () => {
+  test('marks each technology with its logo or the NVIDIA mark', () => {
     const { container } = render(<EcosystemLanding featuredQuestions={[]} disclaimer={null} />)
     const brands = (selector: string) =>
       [...container.querySelectorAll(selector)].map((mark) => mark.getAttribute('data-brand'))
@@ -43,6 +43,7 @@ describe('EcosystemLanding', () => {
     expect(new Set(brands('[data-brand]:has(img)'))).toEqual(
       new Set([
         'Nous Research',
+        'Docling',
         'DuckDB',
         'LangChain',
         'Milvus',
@@ -54,14 +55,13 @@ describe('EcosystemLanding', () => {
         'FastAPI',
       ])
     )
-    expect(container.querySelectorAll('[data-brand] img')).toHaveLength(12)
+    expect(container.querySelectorAll('[data-brand] img')).toHaveLength(13)
     for (const image of container.querySelectorAll('[data-brand] img')) {
       expect(image.getAttribute('src')).toMatch(/^\/ecosystem-logos\/[a-z]+\.(svg|png)$/)
       expect(image).toHaveAttribute('alt', '')
     }
-    // Every mark without a logo file is the NVIDIA mark, but Docling's (an IBM Research and LF AI &
-    // Data project, not NVIDIA's); no text badges remain.
-    expect(new Set(brands('[data-brand]:not(:has(img))'))).toEqual(new Set(['NVIDIA', 'Docling']))
+    // Every mark without a logo file is the NVIDIA mark; no text badges remain.
+    expect(new Set(brands('[data-brand]:not(:has(img))'))).toEqual(new Set(['NVIDIA']))
     const mark = (name: string) => screen.getByText(name).parentElement!.firstElementChild!
     expect(mark('NVIDIA Kumo')).toHaveAttribute('data-brand', 'NVIDIA')
     expect(mark('Docling')).toHaveAttribute('data-brand', 'Docling')

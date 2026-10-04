@@ -40,7 +40,8 @@ export const TOOL_LOGOS: Readonly<Partial<Record<string, readonly NodeLogo[]>>> 
   query_tables: [{ brand: 'DuckDB', src: '/ecosystem-logos/duckdb.svg' }],
 }
 
-/** The logos of the graph's resource nodes, by node id. */
+/** The logos of the graph's resource nodes, by node id. Nemotron Parse runs through Docling's preset (ingest/). */
 export const RESOURCE_LOGOS: Readonly<Partial<Record<string, readonly NodeLogo[]>>> = {
+  'nemotron-parse': [{ brand: 'Docling', src: '/ecosystem-logos/docling.png' }],
   milvus: [{ brand: 'Milvus', src: '/ecosystem-logos/milvus.svg' }],
 }

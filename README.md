@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
   <a href="https://developer.nvidia.com/nemotron"><img height="40" src="docs/assets/logos/nemotron.svg" alt="NVIDIA Nemotron" title="NVIDIA Nemotron"></a>&nbsp;&nbsp;
   <a href="https://github.com/NVIDIA-NeMo/Switchyard"><img height="40" src="docs/assets/logos/switchyard.svg" alt="NeMo Switchyard" title="NeMo Switchyard"></a>&nbsp;&nbsp;
   <a href="https://kumo.ai"><img height="40" src="docs/assets/logos/kumo.svg" alt="NVIDIA Kumo" title="NVIDIA Kumo"></a>&nbsp;&nbsp;
+  <a href="https://github.com/docling-project/docling"><img height="40" src="docs/assets/logos/docling.png" alt="Docling" title="Docling"></a>&nbsp;&nbsp;
   <a href="https://github.com/langchain-ai/langchain-nvidia"><img height="40" src="docs/assets/logos/langchain.svg" alt="LangChain" title="LangChain"></a>&nbsp;&nbsp;
   <a href="https://milvus.io"><img height="40" src="docs/assets/logos/milvus.svg" alt="Milvus" title="Milvus"></a>&nbsp;&nbsp;
   <a href="https://phoenix.arize.com"><img height="40" src="docs/assets/logos/phoenix.svg" alt="Arize Phoenix" title="Arize Phoenix"></a>&nbsp;&nbsp;

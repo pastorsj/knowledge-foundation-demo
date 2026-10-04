@@ -37,6 +37,7 @@ const NvidiaMark = ({ size = 'medium' }: { size?: 'small' | 'medium' }): ReactNo
 
 /** Logos of the third-party technologies the demo runs, served from `public/ecosystem-logos`. */
 const LOGOS = {
+  docling: '/ecosystem-logos/docling.png',
   duckdb: '/ecosystem-logos/duckdb.svg',
   fastapi: '/ecosystem-logos/fastapi.png',
   langchain: '/ecosystem-logos/langchain.svg',
@@ -80,27 +81,6 @@ const BrandMark = ({
     aria-hidden="true"
   >
     <Image className={styles.brandImage} src={src} alt="" width={40} height={40} unoptimized />
-  </span>
-)
-
-/** Docling (IBM Research, LF AI & Data) has no mark here: a neutral document glyph, not NVIDIA's. */
-const NeutralMark = ({ brand }: { brand: string }): ReactNode => (
-  <span
-    className={`${styles.brandMark} ${styles.brandMarkSmall} ${styles.neutralMark}`}
-    data-brand={brand}
-    aria-hidden="true"
-  >
-    <svg
-      viewBox="0 0 16 16"
-      width="15"
-      height="15"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-    >
-      <path d="M4 2.5h5l3 3V13a.5.5 0 0 1-.5.5h-7A.5.5 0 0 1 4 13z" />
-      <path d="M9 2.5v3h3M6 8.5h4M6 10.75h4" />
-    </svg>
   </span>
 )
 
@@ -266,7 +246,7 @@ export const EcosystemLanding = ({
               </div>
               <div className={styles.technologyRow}>
                 <Technology mark={<NimMark />}>Nemotron Parse</Technology>
-                <Technology mark={<NeutralMark brand="Docling" />}>Docling</Technology>
+                <Technology mark={<BrandMark brand="Docling" src={LOGOS.docling} />}>Docling</Technology>
               </div>
             </article>
           </div>
