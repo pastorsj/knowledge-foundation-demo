@@ -57,7 +57,7 @@ Document embedding (ingest and retrieval) and reranking (retrieval).
 |---|---|---|
 | `RETRIEVER_BASE_URL` | `https://integrate.api.nvidia.com/v1` | build.nvidia.com, a self-hosted NIM, or another OpenAI-compatible endpoint |
 | `RETRIEVER_API_KEY` | `INFERENCE_API_KEY` | Set it when section 1 uses a key that is not an `nvapi-` key |
-| `RETRIEVER_EMBED_MODEL` | `nvidia/nemotron-3-embed-1b` | Ingest and retrieval must use the same model. Changing it re-ingests the packs on the next sync |
+| `RETRIEVER_EMBED_MODEL` | `nvidia/nemotron-3-embed-1b` | Ingest and retrieval must use the same model. Changing it needs a rebuild of the index: `./scripts/demo.sh down --volumes`, then `up` (the packs re-ingest; uploads must be added again). Uploads are not re-embedded, a model of another dimension cannot reuse the collection, and the ingest image bakes in the model's tokenizer |
 | `RETRIEVER_RERANK_MODEL` | `nvidia/llama-nemotron-rerank-vl-1b-v2` | Empty: no reranking (hits keep their vector order). Set it empty for a gateway without NVIDIA's `/ranking` API |
 | `RETRIEVER_RERANK_URL` | the reranker's build.nvidia.com endpoint | A full rerank URL, e.g. a self-hosted NIM's `http://<host>:8000/v1/ranking` |
 
@@ -86,6 +86,7 @@ Document embedding (ingest and retrieval) and reranking (retrieval).
 | `PARSE_CONCURRENCY` | `4` | Pages in flight to Parse per document |
 | `INGEST_MAX_FILE_MB`, `INGEST_MAX_FILES`, `INGEST_MAX_REQUEST_MB` | `100`, `20`, `512` | Upload limits: per file, files per request, the request body. The UI's upload zone uses the same values |
 | `INGEST_WORKERS` | `2` | Files ingested at once |
+| `INGEST_STAGE_TIMEOUT_SECONDS` | `1800` | Seconds one pipeline stage of one file may take; Parse may use three quarters of it ([ingestion](ingestion.md)) |
 
 [Ingestion](ingestion.md) explains each.
 

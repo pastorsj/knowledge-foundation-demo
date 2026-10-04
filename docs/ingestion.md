@@ -159,8 +159,10 @@ stack, and `./scripts/demo.sh data status` (`GET /v1/packs/status`) shows each p
   its sources becomes the catalog source `<pack>.<source>`, with the pack's declared keys, column descriptions and
   prediction templates. The pack's files are copied into the source, then ingested like uploads.
 - A pack is skipped when its digest is unchanged: sha256 over `pack.yaml`, `questions.yaml` and `files/**`, plus the
-  Parse model (or `pdf-text-layer`) and the embed model. Changing the embed model or enabling Parse therefore
-  re-ingests every pack on the next sync.
+  Parse model (or `pdf-text-layer`) and the embed model. Enabling Parse therefore re-ingests every pack on the next
+  sync. Changing the embed model needs a rebuild of the index instead (`./scripts/demo.sh down --volumes`, then
+  `up`): workspace uploads are not re-embedded, a model of another dimension cannot reuse the collection, and the
+  ingest image bakes in the model's tokenizer.
 - Documents that left a pack are removed from the index; a documents source is re-indexed file by file.
 - `demo-ingest sync-packs` does the same once and exits non-zero if any pack or file failed.
 
