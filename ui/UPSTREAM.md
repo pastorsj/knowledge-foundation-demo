@@ -16,7 +16,8 @@ git -C <aiq clone> diff bf4e67d1 <new> -- frontends/ui
 ## What changed and why
 
 The demo has one agent (Hermes, in an OpenShell sandbox) behind a plain FastAPI
-API, no app authentication and no uploads. Every question is a durable job on
+API and no app authentication; uploads go to one shared collection, Your data
+(`workspace`), which the ingest service creates at startup. Every question is a durable job on
 `/v1/jobs/async`, and its answer is the job's `final_report`. Upstream's NAT
 chat, its deep-research panel and everything only they used are removed.
 
@@ -55,8 +56,9 @@ chat, panel, HITL and upload code used. Three were added: `finishDeepResearch`,
   prototype (`activity-panel-resize.ts`), following the running job or else the
   conversation's last answer; `ChatArea` adds "View Execution"; `InputArea`
   submits jobs and stops them, and gains the prototype's microphone when
-  `SPEECH_INPUT_ENABLED` is set; `DataSourcesPanel` loses
-  its Files tab; `AppBar` loses sign-in and gains the Phoenix link;
+  `SPEECH_INPUT_ENABLED` is set; `DataSourcesPanel` keeps
+  its Files tab for Your data only (upstream's per-session collections become
+  the one `workspace` collection, and each card shows its pipeline stage); `AppBar` loses sign-in and gains the Phoenix link;
   `SessionsPanel` gains a read-only mode for recordings.
 - `adapters/api`: the job client and data sources client call the same-origin
   `/api/v1` proxy; `pack-client` is new.
@@ -64,17 +66,20 @@ chat, panel, HITL and upload code used. Three were added: `finishDeepResearch`,
 invocation `id` `` become inspectable evidence (`EvidenceDisclosure`).
 - `app`: `layout.tsx` title "NVIDIA Knowledge Foundation"; `page.tsx` is the landing
   page; the chat moved to `research/page.tsx`. The package is `knowledge-foundation-ui` and the
-  browser storage keys are `kf-chat-store` and `kf-deep-research-<job id>`.
+  browser storage keys are `kf-chat-store`, `kf-deep-research-<job id>`,
+  `kf-documents-active-jobs` and `kf-documents-collections`.
 - Visible copy: the sign-in states and the "AI-Q" label next to the logo are
   gone (as in the prototype); the "Answer complete" banner is gone, since a
   successful job shows its answer instead (answer-first); the no-sources banner
-  no longer mentions files;
+  says the agent answers only from the enabled sources (in an empty Your data, it points to the
+  Files tab), and AI-Q's "deep research report" copy is gone;
   the landing page names LangChain instead of LlamaIndex and adds OpenShell and
   Switchyard to the Hermes card.
 - Landing page: "Ask your enterprise knowledge". It keeps the prototype's technology logos
   (`public/ecosystem-logos`, without RAPIDS) and adds the LangChain symbol; NVIDIA technologies
-  without a logo file (Kumo, Auto Ontology, Docling's pipeline) carry the NVIDIA mark, the Nemotron
-  models the NIM mark. Its cards are Documents, Tables and Ingestion, and its foundation strip names
+  without a logo file (Kumo, Auto Ontology) carry the NVIDIA mark, the Nemotron models the NIM
+  mark, and Docling (an IBM Research project, now LF AI & Data's, not NVIDIA's) a neutral document
+  glyph. Its cards are Documents, Tables and Ingestion, and its foundation strip names
   the one ingestion pipeline (parse, chunk, embed, index, load tables). The featured questions of the
   selected pack sit in a 3 × 2 grid of short cards (the full question is in the link and its
   tooltip), and the observability flow shares the footer row, so the page fits 1280×800, 1440×900
@@ -145,9 +150,9 @@ Line counts (`wc -l`, excluding `package-lock.json` and the generated `src/gener
 
 |                                     | Upstream | Now                                                               | Budget      |
 | ----------------------------------- | -------- | ----------------------------------------------------------------- | ----------- |
-| Non-test TS/TSX/JS                  | 33,046   | 10,184                                                            |             |
-| Tests and test utilities            | 30,399   | 6,678 (+1,764 lines added by this project)                        | ~3–4k added |
-| Hand-written CSS                    | 1,432    | 1,719: `globals.css` 804 (upstream, trimmed), landing 915 (added) | < 1k added  |
-| Diff vs upstream (without lockfile) |          | +5,780 / −52,969                                                  |             |
+| Non-test TS/TSX/JS                  | 33,046   | 17,515 (with the restored documents feature)                      |             |
+| Tests and test utilities            | 30,399   | 13,259 (with e2e and e2e-live)                                    | ~3–4k added |
+| Hand-written CSS                    | 1,432    | 1,899: `globals.css` 977 (upstream, trimmed), landing 922 (added) | < 1k added  |
+| Diff vs upstream (without lockfile) |          | +5,780 / −52,969 (before the documents feature was restored)      |             |
 
 The `features/execution` view is not counted here; it has its own budget.
