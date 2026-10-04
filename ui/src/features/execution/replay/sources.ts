@@ -108,7 +108,7 @@ const toToolPills = (value: unknown): ToolPillUse[] =>
 /**
  * The recordings archive a recorded run belongs to, as the original keyed its runs
  * ("recorded:<archive>:<job id>"): when the bundle was recorded, then its pack, e.g.
- * `20261001T045512Z-us-equities`.
+ * `20261001T045512Z-retail`.
  */
 export const archiveId = (index: RecordingIndex): string => {
   const recordedAt = index.recordedAt

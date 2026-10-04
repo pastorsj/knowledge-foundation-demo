@@ -45,6 +45,8 @@ export interface FileSourceCardProps {
   kind?: 'document' | 'table' | null
   /** The pipeline stage it is at, and its detail (`page 3 of 12`) */
   stage?: string | null
+  /** The last stage before a failure */
+  lastStage?: string | null
   stageDetail?: string | null
   /** Ingestion progress, 0 to 100 */
   progress?: number
@@ -205,6 +207,7 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
   expirationIntervalHours = 0,
   kind = null,
   stage = null,
+  lastStage = null,
   stageDetail = null,
   progress = 0,
   parser = null,
@@ -224,7 +227,7 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
   const isProcessing = status === 'uploading' || status === 'ingesting'
   const isDeleting = status === 'deleting'
   const deleteDisabled = isBusy || isProcessing || isDeleting
-  const steps = pipelineSteps(kind, stage, PIPELINE_STATUS[status])
+  const steps = pipelineSteps(kind, stage, PIPELINE_STATUS[status], lastStage)
   const reader = parserLabel(parser)
   const percent = Math.max(0, Math.min(100, Math.round(status === 'available' ? 100 : progress)))
 
@@ -359,8 +362,13 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
             )}
           </Flex>
 
-          {warnings?.map((warning) => (
-            <Text key={warning} kind="body/regular/xs" className="text-warning" role="note">
+          {warnings?.map((warning, index) => (
+            <Text
+              key={`${index}:${warning}`}
+              kind="body/regular/xs"
+              className="text-warning"
+              role="note"
+            >
               {warning}
             </Text>
           ))}

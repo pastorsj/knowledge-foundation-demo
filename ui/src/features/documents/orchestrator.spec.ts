@@ -127,8 +127,12 @@ describe('the pipeline as the card shows it', () => {
       'done',
       'done',
     ])
-    // A file fails at the step it stopped in
+    // A file fails at the step it stopped in, also when its stage reads `failed`
     expect(pipelineSteps('document', 'parsing', 'failed')[0].state).toBe('failed')
+    expect(
+      pipelineSteps('document', 'failed', 'failed', 'embedding').map((step) => step.state)
+    ).toEqual(['done', 'done', 'failed', 'pending'])
+    expect(pipelineSteps('table', 'failed', 'failed', 'profiling')[1].state).toBe('failed')
     // Before detection, a file is a document waiting to upload
     expect(pipelineSteps(null, null, 'uploading').map((step) => step.state)).toEqual([
       'pending',

@@ -28,7 +28,7 @@ describe('AppMotionConfig', () => {
     render(
       <AppMotionConfig>
         <span>content</span>
-      </AppMotionConfig>,
+      </AppMotionConfig>
     )
     expect(screen.getByText('content')).toBeInTheDocument()
     expect(captured.reducedMotion).toBe('never')
@@ -39,7 +39,7 @@ describe('AppMotionConfig', () => {
     render(
       <AppMotionConfig>
         <span>reduced</span>
-      </AppMotionConfig>,
+      </AppMotionConfig>
     )
     expect(screen.getByText('reduced')).toBeInTheDocument()
     expect(captured.reducedMotion).toBe('always')

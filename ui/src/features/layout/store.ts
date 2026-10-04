@@ -20,6 +20,7 @@ const initialState: LayoutState = {
   rightPanel: 'data-sources',
   dataSourcesPanelTab: 'connections',
   packId: null,
+  restoringPack: false,
   execution: null,
   enabledDataSourceIds: [], // Populated when data sources are fetched
   theme: 'system',
@@ -94,6 +95,7 @@ export const useLayoutStore = create<LayoutStore>()(
         set(
           {
             packId,
+            restoringPack: !draft,
             availableDataSources: null,
             enabledDataSourceIds: [],
             execution: null,
@@ -182,7 +184,7 @@ export const useLayoutStore = create<LayoutStore>()(
       },
 
       refreshDataSources: async () => {
-        const { packId, dataSourcesFrom, availableDataSources, enabledDataSourceIds } = get()
+        const { packId, dataSourcesFrom } = get()
         if (!packId) return
         try {
           const sources =
@@ -190,6 +192,7 @@ export const useLayoutStore = create<LayoutStore>()(
               ? await fetchRecordedDataSources(packId)
               : await fetchDataSources(packId)
           if (get().packId !== packId) return
+          const { availableDataSources, enabledDataSourceIds } = get()
           // Keep the selection; a source that just appeared (an upload's first table) starts enabled
           const known = new Set((availableDataSources ?? []).map((source) => source.id))
           const available = new Set(sources.map((source) => source.id))

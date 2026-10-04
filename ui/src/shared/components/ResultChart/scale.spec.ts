@@ -2,7 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, expect, test } from 'vitest'
-import { compactNumber, computeDomain, formatTick, formatValue, formatValueFull, niceCeil, ticks } from './scale'
+import {
+  compactNumber,
+  computeDomain,
+  formatTick,
+  formatValue,
+  formatValueFull,
+  niceCeil,
+  ticks,
+} from './scale'
 
 describe('niceCeil', () => {
   test('non-positive and non-finite fall back to 1', () => {

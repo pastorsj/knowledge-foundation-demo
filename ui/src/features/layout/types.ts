@@ -39,6 +39,8 @@ export interface LayoutState {
   dataSourcesPanelTab: DataSourcesPanelTab
   /** The selected pack (an industry or the workspace); null until the page names it */
   packId: string | null
+  /** Whether the last pack switch restored a session's own pack (its URL keeps `?session=`) */
+  restoringPack: boolean
   /** The run shown in the execution workspace (null = closed) */
   execution: { jobId: string; focus: ExecutionFocus | null } | null
   /** IDs of enabled data sources (array for zustand serialization) */

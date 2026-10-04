@@ -30,7 +30,8 @@ export const ChartBlock: FC<{ raw: string; fallback?: ReactNode }> = ({ raw, fal
     }
 
     const kpiOnly = parseKpiSpec(raw)
-    if (kpiOnly) return <ChartKpiCard title={kpiOnly.title} subtitle={kpiOnly.subtitle} kpis={kpiOnly.kpis} />
+    if (kpiOnly)
+      return <ChartKpiCard title={kpiOnly.title} subtitle={kpiOnly.subtitle} kpis={kpiOnly.kpis} />
 
     return fallback
   }, [raw, fallback])

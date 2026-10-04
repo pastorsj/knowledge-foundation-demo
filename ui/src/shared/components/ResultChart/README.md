@@ -21,7 +21,7 @@ draws it. There is no code execution and no charting-library dependency.
 import { ChartBlock, fenceBareSpecs } from '@/shared/components/ResultChart'
 
 // In MarkdownRenderer, chart/chart-carousel code fences become:
-<ChartBlock raw={codeContent} fallback={fallback} />
+;<ChartBlock raw={codeContent} fallback={fallback} />
 ```
 
 `fenceBareSpecs(markdown)` also wraps any standalone chart-spec JSON line the
@@ -52,15 +52,15 @@ KPI-only block draws headline tiles, and a carousel draws pageable line charts.
 }
 ```
 
-| Field | Notes |
-| --- | --- |
-| `type` | `bar`, `hbar`, `line`, `area`, `grouped-bar`, `delta` |
-| `title` | required; `subtitle` optional |
-| `x` | `{ key, label? }`; `key` must resolve on the data rows |
-| `y` | `{ label?, format? }`; `format` is `number`, `compact`, `percent`, or `currency` |
+| Field    | Notes                                                                                         |
+| -------- | --------------------------------------------------------------------------------------------- |
+| `type`   | `bar`, `hbar`, `line`, `area`, `grouped-bar`, `delta`                                         |
+| `title`  | required; `subtitle` optional                                                                 |
+| `x`      | `{ key, label? }`; `key` must resolve on the data rows                                        |
+| `y`      | `{ label?, format? }`; `format` is `number`, `compact`, `percent`, or `currency`              |
 | `series` | 1 to 6 of `{ key, label?, color? }`; `color` is `green`, `blue`, `amber`, `red`, or `neutral` |
-| `data` | 1 to 60 row objects keyed by `x.key` and each `series.key` |
-| `kpis` | optional headline tiles (see below) |
+| `data`   | 1 to 60 row objects keyed by `x.key` and each `series.key`                                    |
+| `kpis`   | optional headline tiles (see below)                                                           |
 
 `delta` diverges around zero and colors gains green / losses red by sign;
 `grouped-bar` draws a legend for its multiple series.
@@ -87,12 +87,25 @@ For a single value or a one-entity result where a chart would compare nothing:
 {
   "title": "Revenue Forecast: Baseline vs Prediction",
   "charts": [
-    { "type": "line", "title": "Baseline vs Prediction", "x": { "key": "month" }, "y": { "format": "currency" },
-      "series": [{ "key": "baseline", "color": "neutral" }, { "key": "prediction", "color": "green" }],
-      "data": [ { "month": "Jan", "baseline": 5200000, "prediction": 5300000 } ] },
-    { "type": "line", "title": "Units Shipped", "x": { "key": "month" }, "y": { "format": "compact" },
+    {
+      "type": "line",
+      "title": "Baseline vs Prediction",
+      "x": { "key": "month" },
+      "y": { "format": "currency" },
+      "series": [
+        { "key": "baseline", "color": "neutral" },
+        { "key": "prediction", "color": "green" }
+      ],
+      "data": [{ "month": "Jan", "baseline": 5200000, "prediction": 5300000 }]
+    },
+    {
+      "type": "line",
+      "title": "Units Shipped",
+      "x": { "key": "month" },
+      "y": { "format": "compact" },
       "series": [{ "key": "units", "color": "blue" }],
-      "data": [ { "month": "Jan", "units": 1800 } ] }
+      "data": [{ "month": "Jan", "units": 1800 }]
+    }
   ]
 }
 ```
@@ -101,18 +114,18 @@ A carousel holds 2 to 12 line charts and pages between them.
 
 ## Module layout
 
-| File | Responsibility |
-| --- | --- |
-| `ChartBlock.tsx` | entry: parse a raw fence, pick chart / KPI / carousel, or fall back |
-| `types.ts` | the zod spec schemas and exported types |
-| `parse.ts` | parse + validate specs; `fenceBareSpecs`, `toNumber` |
-| `normalize.ts` | safe axis defaults, top-N truncation, KPI degeneration |
-| `scale.ts`, `geometry.ts` | domains, formatting, plot geometry |
-| `renderers/` | per-type primitive marks (axis, bar, hbar, line) |
-| `ResultChart.tsx` | the SVG shell: maps marks, tooltips, gradient fills, toolbar |
-| `ResultChartCarousel.tsx` | the pageable carousel |
-| `ChartKpi.tsx` | KPI cards and tiles |
-| `ChartToolbar.tsx`, `ChartDataTable.tsx` | Show-data toggle and CSV export |
+| File                                     | Responsibility                                                      |
+| ---------------------------------------- | ------------------------------------------------------------------- |
+| `ChartBlock.tsx`                         | entry: parse a raw fence, pick chart / KPI / carousel, or fall back |
+| `types.ts`                               | the zod spec schemas and exported types                             |
+| `parse.ts`                               | parse + validate specs; `fenceBareSpecs`, `toNumber`                |
+| `normalize.ts`                           | safe axis defaults, top-N truncation, KPI degeneration              |
+| `scale.ts`, `geometry.ts`                | domains, formatting, plot geometry                                  |
+| `renderers/`                             | per-type primitive marks (axis, bar, hbar, line)                    |
+| `ResultChart.tsx`                        | the SVG shell: maps marks, tooltips, gradient fills, toolbar        |
+| `ResultChartCarousel.tsx`                | the pageable carousel                                               |
+| `ChartKpi.tsx`                           | KPI cards and tiles                                                 |
+| `ChartToolbar.tsx`, `ChartDataTable.tsx` | Show-data toggle and CSV export                                     |
 
 ## Safety and accessibility
 

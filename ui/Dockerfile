@@ -3,7 +3,7 @@
 
 # Next.js standalone build: the runtime image holds only the traced server,
 # its node_modules subset, and static assets. Configuration is runtime env
-# (UI_MODE, API_URL, PACKS_DIR, DATA_PACK, PHOENIX_URL); see .env.example.
+# (UI_MODE, API_URL, PACKS_DIR, DEFAULT_PACK, FILE_UPLOAD_*, PHOENIX_URL); see .env.example.
 
 ARG NODE_IMAGE=node:22-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c
 

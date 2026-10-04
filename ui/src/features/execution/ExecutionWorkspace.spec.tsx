@@ -67,10 +67,9 @@ describe('ExecutionWorkspace', () => {
     expect(within(summary).getByText('106,217 tokens')).toBeVisible()
 
     // The DuckDB tables node carries DuckDB's mark, the Milvus node its logo
-    expect(document.querySelector('[data-node-id="structured-database"] [role="img"]')).toHaveAttribute(
-      'aria-label',
-      'DuckDB'
-    )
+    expect(
+      document.querySelector('[data-node-id="structured-database"] [role="img"]')
+    ).toHaveAttribute('aria-label', 'DuckDB')
     expect(
       within(document.querySelector('[data-node-id="milvus"]') as HTMLElement).getByRole('img', {
         name: 'Milvus',
@@ -267,12 +266,16 @@ describe('ExecutionWorkspace', () => {
     expect(
       await within(browser).findByText(/Replay can rerun only the queries its recorded answers ran/)
     ).toBeVisible()
-    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(['/api/recordings/retail/database.json'])
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
+      '/api/recordings/retail/database.json',
+    ])
   })
 
   it('opens a DuckDB table query in the data viewer from its explorer', async () => {
     serveDatabase(readRecording('database.json'))
-    useExecutionStore.getState().addRecord({ ...turn, sourceIds: ['retail.sales'] } as ExecutionRecord)
+    useExecutionStore
+      .getState()
+      .addRecord({ ...turn, sourceIds: ['retail.sales'] } as ExecutionRecord)
     render(
       <ExecutionWorkspace
         jobId={JOB}
@@ -331,7 +334,9 @@ describe('ExecutionWorkspace', () => {
     expect(within(workspace).getByText('Step 10 of 10')).toBeVisible()
     // Only the bundle's copy of the database is asked for; there is no live job to export
     await vi.waitFor(() =>
-      expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(['/api/recordings/retail/database.json'])
+      expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
+        '/api/recordings/retail/database.json',
+      ])
     )
   })
 

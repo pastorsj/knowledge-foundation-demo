@@ -47,7 +47,7 @@ const ChartSpecObjectSchema = z.object({
  */
 export const ChartSpecSchema = ChartSpecObjectSchema.refine(
   (spec) => spec.type !== 'delta' || spec.series.length === 1,
-  { message: 'a delta chart must declare exactly one series', path: ['series'] },
+  { message: 'a delta chart must declare exactly one series', path: ['series'] }
 )
 
 const LineChartSpecSchema = ChartSpecObjectSchema.extend({ type: z.literal('line') })

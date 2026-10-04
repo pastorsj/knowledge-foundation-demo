@@ -61,7 +61,7 @@ describe('IndustrySelect', () => {
     ])
   })
 
-  test('switches the pack: the store, the cookie and ?pack=, without the old question or session', async () => {
+  test('on the research page, switches the store’s pack and the cookie; the layout owns the URL', async () => {
     const switchPack = vi.spyOn(useLayoutStore.getState(), 'switchPack').mockResolvedValue()
     render(<IndustrySelect packId="retail" packs={PACKS} />)
 
@@ -70,7 +70,8 @@ describe('IndustrySelect', () => {
 
     expect(switchPack).toHaveBeenCalledWith('manufacturing')
     expect(document.cookie).toContain('kf-pack=manufacturing')
-    expect(replace).toHaveBeenCalledWith('/research?pack=manufacturing')
+    // One owner of the URL: MainLayout's usePackFollowing follows the store's pack
+    expect(replace).not.toHaveBeenCalled()
   })
 
   test('on the landing page, only the URL changes: the server renders the pack’s questions', async () => {
@@ -82,7 +83,7 @@ describe('IndustrySelect', () => {
     await userEvent.click(screen.getByRole('option', { name: 'Your data' }))
 
     expect(switchPack).not.toHaveBeenCalled()
-    expect(replace).toHaveBeenCalledWith('/?pack=workspace')
+    expect(replace).toHaveBeenCalledWith('/?session=s_1&pack=workspace')
   })
 
   test('is disabled while the current session has a question in flight', () => {

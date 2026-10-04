@@ -101,12 +101,14 @@ export const IndustrySelect: FC<IndustrySelectProps> = ({ packId, packs: initial
     (id: string) => {
       if (!id || id === selected) return
       rememberPack(id)
-      // A question, or a session, belongs to the pack it came from
+      // On the research page the layout follows the store's pack into the URL (usePackFollowing)
+      if (pathname !== '/') {
+        void useLayoutStore.getState().switchPack(id)
+        return
+      }
       const params = new URLSearchParams(searchParams?.toString())
       params.set('pack', id)
       params.delete('question')
-      params.delete('session')
-      if (pathname !== '/') void useLayoutStore.getState().switchPack(id)
       router.replace(`${pathname}?${params}`)
     },
     [pathname, router, searchParams, selected]

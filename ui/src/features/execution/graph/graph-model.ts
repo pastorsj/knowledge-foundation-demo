@@ -77,10 +77,7 @@ export type NodeIcon =
 type Port = 'top' | 'right' | 'bottom' | 'left'
 
 export type ExecutionGraphGroupId =
-  | 'tool-control'
-  | 'agent-utilities'
-  | 'structured-data'
-  | 'unstructured-data'
+  'tool-control' | 'agent-utilities' | 'structured-data' | 'unstructured-data'
 
 export type ExecutionGraphNodeKind = 'input' | 'agent' | 'tool' | 'stage' | 'resource' | 'output'
 

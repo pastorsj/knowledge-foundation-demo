@@ -36,7 +36,11 @@ describe('lastUserMessageTime', () => {
     const when = new Date('2026-05-02T09:00:00Z')
     expect(
       lastUserMessageTime([
-        makeMessage({ role: 'user', content: 'earlier', timestamp: new Date('2026-05-01T00:00:00Z') }),
+        makeMessage({
+          role: 'user',
+          content: 'earlier',
+          timestamp: new Date('2026-05-01T00:00:00Z'),
+        }),
         makeMessage({ role: 'user', content: 'latest', timestamp: when }),
         makeMessage({ messageType: 'agent_response', timestamp: new Date('2026-05-03T00:00:00Z') }),
       ])

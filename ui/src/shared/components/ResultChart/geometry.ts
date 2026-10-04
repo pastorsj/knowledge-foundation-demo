@@ -17,7 +17,11 @@ export interface PlotBox {
   h: number
 }
 
-export function plotBox(height: number, padLeft: number = PAD.l, padRight: number = PAD.r): PlotBox {
+export function plotBox(
+  height: number,
+  padLeft: number = PAD.l,
+  padRight: number = PAD.r
+): PlotBox {
   return {
     x0: padLeft,
     x1: CHART_WIDTH - padRight,

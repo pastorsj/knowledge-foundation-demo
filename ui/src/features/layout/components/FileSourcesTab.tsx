@@ -230,6 +230,7 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
           expirationIntervalHours={fileUploadConfig.fileExpirationCheckIntervalHours}
           kind={file.kind}
           stage={file.stage}
+          lastStage={file.lastStage}
           stageDetail={file.stageDetail}
           progress={file.progress}
           parser={file.parser}

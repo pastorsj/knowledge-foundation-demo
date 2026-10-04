@@ -37,7 +37,10 @@ describe('renderBar', () => {
       title: 'T',
       x: { key: 'c' },
       series: [{ key: 'v' }],
-      data: [{ c: 'a', v: 50 }, { c: 'b', v: -30 }],
+      data: [
+        { c: 'a', v: 50 },
+        { c: 'b', v: -30 },
+      ],
     } as unknown as ChartSpec
     const box = plotBox(290)
     const marks = renderBar({ spec, box, min: -50, max: 100, colors: ['#0a0'], fmt: 'number' })
@@ -56,7 +59,10 @@ describe('renderBar', () => {
       title: 'T',
       x: { key: 'c' },
       series: [{ key: 'a' }, { key: 'b' }],
-      data: [{ c: 'x', a: 10, b: 20 }, { c: 'y', a: 30, b: 40 }],
+      data: [
+        { c: 'x', a: 10, b: 20 },
+        { c: 'y', a: 30, b: 40 },
+      ],
     } as unknown as ChartSpec
 
     const marks = renderBar(input(spec))
@@ -67,7 +73,13 @@ describe('renderBar', () => {
 
   test('thins category labels when crowded', () => {
     const data = Array.from({ length: 16 }, (_, i) => ({ c: `c${i}`, v: i + 1 }))
-    const spec = { type: 'bar', title: 'T', x: { key: 'c' }, series: [{ key: 'v' }], data } as unknown as ChartSpec
+    const spec = {
+      type: 'bar',
+      title: 'T',
+      x: { key: 'c' },
+      series: [{ key: 'v' }],
+      data,
+    } as unknown as ChartSpec
     const cats = renderBar(input(spec)).filter((m) => m.kind === 'text' && m.variant === 'cat')
     expect(cats.length).toBeLessThan(16)
   })

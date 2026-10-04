@@ -7,7 +7,15 @@ import type { ChartSpec, ValueFormat } from '../types'
 /** A single primitive drawing instruction. Renderers emit these; the shell maps them to SVG. */
 export type Mark =
   | { kind: 'gridline'; x1: number; y1: number; x2: number; y2: number }
-  | { kind: 'rect'; x: number; y: number; width: number; height: number; color: string; tip: string }
+  | {
+      kind: 'rect'
+      x: number
+      y: number
+      width: number
+      height: number
+      color: string
+      tip: string
+    }
   | { kind: 'path'; d: string; variant: 'line' | 'area'; color: string }
   | { kind: 'dot'; cx: number; cy: number; color: string; tip: string }
   | {

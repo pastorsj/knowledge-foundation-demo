@@ -26,12 +26,11 @@ type Method = 'GET' | 'POST' | 'DELETE'
 const ROUTES: ReadonlyArray<readonly [Method, RegExp]> = [
   ['GET', /^pack$/],
   ['GET', /^packs$/],
-  ['GET', /^collections(\/[^/]+)?$/],
+  // Your data has one collection, `workspace`
+  ['GET', /^collections\/workspace(\/documents)?$/],
   ['POST', /^collections$/],
-  ['DELETE', /^collections\/[^/]+$/],
-  ['GET', /^collections\/[^/]+\/documents$/],
-  ['POST', /^collections\/[^/]+\/documents$/],
-  ['DELETE', /^collections\/[^/]+\/documents$/],
+  ['POST', /^collections\/workspace\/documents$/],
+  ['DELETE', /^collections\/workspace\/documents$/],
   ['GET', /^documents\/[^/]+\/status$/],
   ['GET', /^data_sources(\/.+)?$/],
   ['POST', /^data_sources\/[^/]+\/query$/],
@@ -115,6 +114,23 @@ const readBody = async (request: Request, speech: boolean): Promise<BodyInit | R
     : body
 }
 
+/**
+ * A request another site made the browser send (a form or fetch from elsewhere, which a multipart
+ * upload can do without a CORS preflight): its Sec-Fetch-Site is not same-origin, or its Origin's
+ * host is not this one's.
+ */
+const crossSite = (request: Request): boolean => {
+  const site = request.headers.get('sec-fetch-site')
+  if (site && site !== 'same-origin') return true
+  const origin = request.headers.get('origin')
+  if (!origin) return false
+  try {
+    return new URL(origin).host !== (request.headers.get('host') ?? new URL(request.url).host)
+  } catch {
+    return true
+  }
+}
+
 const proxy = async (
   request: Request,
   method: Method,
@@ -122,6 +138,10 @@ const proxy = async (
 ): Promise<Response> => {
   if (readUiMode() === 'replay') {
     return errorResponse(404, 'REPLAY_MODE', 'The API is not available in replay mode')
+  }
+
+  if (method !== 'GET' && crossSite(request)) {
+    return errorResponse(403, 'CROSS_SITE', 'Only this site may change data through its API proxy')
   }
 
   const segments = (await params).path

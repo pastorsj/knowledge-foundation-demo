@@ -8,7 +8,9 @@ import type { ChatStore } from './types'
  * current conversation. A reopened session, recorded or saved, has no running job, so its
  * activity is its last answer's.
  */
-export const selectActivityJobId = (state: Pick<ChatStore, 'deepResearchJobId' | 'currentConversation'>): string | null => {
+export const selectActivityJobId = (
+  state: Pick<ChatStore, 'deepResearchJobId' | 'currentConversation'>
+): string | null => {
   if (state.deepResearchJobId) return state.deepResearchJobId
   const messages = state.currentConversation?.messages ?? []
   for (let index = messages.length - 1; index >= 0; index -= 1) {

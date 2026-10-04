@@ -57,7 +57,9 @@ describe('summarizeReceipt', () => {
     expect(summary.details.some((detail) => detail.startsWith('Reranker model'))).toBe(false)
     expect(summary.details.some((detail) => detail.startsWith('Reranking'))).toBe(false)
     if (summary.output?.kind !== 'passages') throw new Error('no passages')
-    expect(summary.output.passages[0].metadata.some((m) => m.startsWith('Rerank score'))).toBe(false)
+    expect(summary.output.passages[0].metadata.some((m) => m.startsWith('Rerank score'))).toBe(
+      false
+    )
     expect(summary.output.passages[0].metadata).toContain('Parser: pdf-text-layer')
   })
 

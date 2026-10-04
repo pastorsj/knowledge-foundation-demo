@@ -60,8 +60,22 @@ describe('Citation', () => {
 
   test('resolves by real [N] marker, not array position', () => {
     const sparse: SourceRef[] = [
-      { id: 'a', index: 2, title: 'Second source', kind: 'web', label: 'two.com', url: 'https://two.com' },
-      { id: 'b', index: 3, title: 'Third source', kind: 'web', label: 'three.com', url: 'https://three.com' },
+      {
+        id: 'a',
+        index: 2,
+        title: 'Second source',
+        kind: 'web',
+        label: 'two.com',
+        url: 'https://two.com',
+      },
+      {
+        id: 'b',
+        index: 3,
+        title: 'Third source',
+        kind: 'web',
+        label: 'three.com',
+        url: 'https://three.com',
+      },
     ]
     render(<Citation n={2} sources={sparse} />)
     const link = screen.getByLabelText('Source 2: two.com')
@@ -70,17 +84,48 @@ describe('Citation', () => {
 
   test('resolves a marker across a gap in the numbering', () => {
     const gapped: SourceRef[] = [
-      { id: 'a', index: 1, title: 'First source', kind: 'web', label: 'one.com', url: 'https://one.com' },
-      { id: 'c', index: 3, title: 'Third source', kind: 'web', label: 'three.com', url: 'https://three.com' },
+      {
+        id: 'a',
+        index: 1,
+        title: 'First source',
+        kind: 'web',
+        label: 'one.com',
+        url: 'https://one.com',
+      },
+      {
+        id: 'c',
+        index: 3,
+        title: 'Third source',
+        kind: 'web',
+        label: 'three.com',
+        url: 'https://three.com',
+      },
     ]
     render(<Citation n={3} sources={gapped} />)
-    expect(screen.getByLabelText('Source 3: three.com')).toHaveAttribute('href', 'https://three.com')
+    expect(screen.getByLabelText('Source 3: three.com')).toHaveAttribute(
+      'href',
+      'https://three.com'
+    )
   })
 
   test('a marker with no matching reference renders a bare chip, not the wrong source', () => {
     const gapped: SourceRef[] = [
-      { id: 'a', index: 1, title: 'First source', kind: 'web', label: 'one.com', url: 'https://one.com' },
-      { id: 'c', index: 3, title: 'Third source', kind: 'web', label: 'three.com', url: 'https://three.com' },
+      {
+        id: 'a',
+        index: 1,
+        title: 'First source',
+        kind: 'web',
+        label: 'one.com',
+        url: 'https://one.com',
+      },
+      {
+        id: 'c',
+        index: 3,
+        title: 'Third source',
+        kind: 'web',
+        label: 'three.com',
+        url: 'https://three.com',
+      },
     ]
     render(<Citation n={2} sources={gapped} />)
     expect(screen.getByLabelText('Source 2')).toBeInTheDocument()

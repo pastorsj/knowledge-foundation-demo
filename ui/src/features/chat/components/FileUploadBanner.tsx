@@ -63,11 +63,7 @@ const getBannerContent = (type: FileUploadStatusType): BannerContent | null => {
 /**
  * File upload status banner displayed in the chat area
  */
-export const FileUploadBanner: FC<FileUploadBannerProps> = ({
-  type,
-  timestamp,
-  onDismiss,
-}) => {
+export const FileUploadBanner: FC<FileUploadBannerProps> = ({ type, timestamp, onDismiss }) => {
   const content = getBannerContent(type)
 
   if (!content) return null

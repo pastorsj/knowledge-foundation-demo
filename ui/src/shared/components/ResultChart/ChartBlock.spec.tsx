@@ -35,7 +35,11 @@ describe('ChartBlock', () => {
   })
 
   test('renders a KPI-only spec as a card', () => {
-    render(<ChartBlock raw={JSON.stringify({ title: 'Churn', kpis: [{ label: 'Rate', value: '12%' }] })} />)
+    render(
+      <ChartBlock
+        raw={JSON.stringify({ title: 'Churn', kpis: [{ label: 'Rate', value: '12%' }] })}
+      />
+    )
     expect(screen.getByText('Rate')).toBeInTheDocument()
   })
 

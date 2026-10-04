@@ -79,8 +79,11 @@ const usePackFollowing = (packId: string): void => {
     }
     if (storePack && storePack !== packId) {
       rememberPack(storePack)
+      // A question belongs to the pack it came from; so does a session, unless it is being restored
       const params = new URLSearchParams(searchParams?.toString())
       params.set('pack', storePack)
+      params.delete('question')
+      if (!useLayoutStore.getState().restoringPack) params.delete('session')
       router.replace(`${pathname}?${params}`)
     }
   }, [packId, pathname, router, searchParams, storePack])

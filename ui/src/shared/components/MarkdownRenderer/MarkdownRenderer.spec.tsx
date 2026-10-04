@@ -21,9 +21,7 @@ describe('MarkdownRenderer', () => {
     })
 
     test('applies custom className', () => {
-      const { container } = render(
-        <MarkdownRenderer content="Test" className="custom-class" />
-      )
+      const { container } = render(<MarkdownRenderer content="Test" className="custom-class" />)
 
       expect(container.querySelector('.custom-class')).toBeInTheDocument()
     })
@@ -55,11 +53,7 @@ describe('MarkdownRenderer', () => {
     })
 
     test('headings have slugified id attributes for anchor navigation', () => {
-      render(
-        <MarkdownRenderer
-          content={`# Introduction\n\n## Key Findings\n\n### Next Steps`}
-        />
-      )
+      render(<MarkdownRenderer content={`# Introduction\n\n## Key Findings\n\n### Next Steps`} />)
 
       expect(screen.getByRole('heading', { level: 1 })).toHaveAttribute('id', 'introduction')
       expect(screen.getByRole('heading', { level: 2 })).toHaveAttribute('id', 'key-findings')
@@ -75,9 +69,13 @@ describe('MarkdownRenderer', () => {
     })
 
     test('renders multiple paragraphs', () => {
-      render(<MarkdownRenderer content={`Paragraph 1.
+      render(
+        <MarkdownRenderer
+          content={`Paragraph 1.
 
-Paragraph 2.`} />)
+Paragraph 2.`}
+        />
+      )
 
       expect(screen.getByText('Paragraph 1.')).toBeInTheDocument()
       expect(screen.getByText('Paragraph 2.')).toBeInTheDocument()
@@ -86,9 +84,13 @@ Paragraph 2.`} />)
 
   describe('lists', () => {
     test('renders unordered list', () => {
-      render(<MarkdownRenderer content={`- Item 1
+      render(
+        <MarkdownRenderer
+          content={`- Item 1
 - Item 2
-- Item 3`} />)
+- Item 3`}
+        />
+      )
 
       expect(screen.getByText('Item 1')).toBeInTheDocument()
       expect(screen.getByText('Item 2')).toBeInTheDocument()
@@ -96,9 +98,13 @@ Paragraph 2.`} />)
     })
 
     test('renders ordered list', () => {
-      render(<MarkdownRenderer content={`1. First
+      render(
+        <MarkdownRenderer
+          content={`1. First
 2. Second
-3. Third`} />)
+3. Third`}
+        />
+      )
 
       expect(screen.getByText('First')).toBeInTheDocument()
       expect(screen.getByText('Second')).toBeInTheDocument()
@@ -222,11 +228,15 @@ Paragraph 2.`} />)
 
   describe('horizontal rules', () => {
     test('renders horizontal rule', () => {
-      const { container } = render(<MarkdownRenderer content={`Above
+      const { container } = render(
+        <MarkdownRenderer
+          content={`Above
 
 ---
 
-Below`} />)
+Below`}
+        />
+      )
 
       expect(container.querySelector('hr')).toBeInTheDocument()
     })
@@ -373,11 +383,7 @@ describe('MarkdownRenderer answer variant', () => {
 
   test('a chip focus reveals a popover with the source snippet', () => {
     render(
-      <MarkdownRenderer
-        content="Record volume [1]."
-        variant="answer"
-        sources={answerSources}
-      />
+      <MarkdownRenderer content="Record volume [1]." variant="answer" sources={answerSources} />
     )
     fireEvent.focus(screen.getByLabelText('Source 1: nvidia.com'))
     expect(screen.getByRole('tooltip')).toHaveTextContent('Record shipments across the fleet.')

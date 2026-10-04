@@ -8,7 +8,9 @@ import { rehypeCitations } from './rehype-citations'
 function paragraph(text: string): Root {
   return {
     type: 'root',
-    children: [{ type: 'element', tagName: 'p', properties: {}, children: [{ type: 'text', value: text }] }],
+    children: [
+      { type: 'element', tagName: 'p', properties: {}, children: [{ type: 'text', value: text }] },
+    ],
   }
 }
 
@@ -21,9 +23,18 @@ describe('rehypeCitations', () => {
   test('splits a [n] marker into text + cite + text', () => {
     const tree = runPlugin(paragraph('Users total 11,463 [1] today.'))
     const p = tree.children[0] as {
-      children: Array<{ type: string; tagName?: string; value?: string; children?: Array<{ value: string }> }>
+      children: Array<{
+        type: string
+        tagName?: string
+        value?: string
+        children?: Array<{ value: string }>
+      }>
     }
-    expect(p.children.map((c) => c.tagName ?? c.value)).toEqual(['Users total 11,463 ', 'cite', ' today.'])
+    expect(p.children.map((c) => c.tagName ?? c.value)).toEqual([
+      'Users total 11,463 ',
+      'cite',
+      ' today.',
+    ])
     expect(p.children[1].children?.[0].value).toBe('1')
   })
 
@@ -50,7 +61,9 @@ describe('rehypeCitations', () => {
 
   test('still parses a real [n] citation when the preceding bracket is prose', () => {
     const tree = runPlugin(paragraph('Read results[1] and note the total [2].'))
-    const p = tree.children[0] as { children: Array<{ tagName?: string; children?: Array<{ value: string }> }> }
+    const p = tree.children[0] as {
+      children: Array<{ tagName?: string; children?: Array<{ value: string }> }>
+    }
     const cites = p.children.filter((c) => c.tagName === 'cite')
     expect(cites).toHaveLength(1)
     expect(cites[0].children?.[0].value).toBe('2')

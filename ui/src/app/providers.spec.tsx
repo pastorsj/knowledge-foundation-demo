@@ -88,6 +88,45 @@ describe('Providers', () => {
     expect(useChatStore.getState().currentUserId).toBe('local')
   })
 
+  test('a reloaded session of another industry switches the page to its pack, with its sources', async () => {
+    vi.mocked(fetchDataSources).mockResolvedValue([{ id: 'retail.policies', name: 'News' }])
+    const switchPack = vi.spyOn(useLayoutStore.getState(), 'switchPack').mockResolvedValue()
+    useLayoutStore.setState({ packId: 'retail' })
+    useChatStore.setState({
+      currentConversation: {
+        id: 's_mfg',
+        userId: 'local',
+        title: 'Press lockout',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        messages: [],
+        packId: 'manufacturing',
+        enabledDataSourceIds: ['manufacturing.sops'],
+      },
+    })
+
+    render(
+      <Providers
+        config={{
+          mode: 'live',
+          defaultPack: 'retail',
+          phoenixUrl: null,
+          speechInput: SPEECH_OFF,
+          fileUpload: FILE_UPLOAD,
+        }}
+      >
+        content
+      </Providers>
+    )
+
+    await waitFor(() =>
+      expect(switchPack).toHaveBeenCalledWith('manufacturing', {
+        draft: false,
+        enabledIds: ['manufacturing.sops'],
+      })
+    )
+  })
+
   test('live mode settles saved jobs that ended while the page was closed', async () => {
     vi.mocked(getJobStatus).mockResolvedValue({ job_id: 'job-1', status: 'failure', error: null })
     await loadSavedSessionWithRunningJob()

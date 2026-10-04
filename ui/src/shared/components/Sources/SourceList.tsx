@@ -50,7 +50,7 @@ export function SourceList({
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[color:var(--color-green-500)] min-w-0 break-words underline-offset-2 hover:underline"
+                  className="min-w-0 break-words underline-offset-2 hover:text-[color:var(--color-green-500)] hover:underline"
                 >
                   {s.label}
                 </a>
@@ -66,7 +66,7 @@ export function SourceList({
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-subtle hover:text-[color:var(--color-green-500)] min-w-0 truncate underline-offset-2 hover:underline"
+                  className="text-subtle min-w-0 truncate underline-offset-2 hover:text-[color:var(--color-green-500)] hover:underline"
                 >
                   {domain}
                 </a>

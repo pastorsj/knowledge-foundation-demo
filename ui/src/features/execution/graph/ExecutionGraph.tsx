@@ -677,11 +677,7 @@ export const ExecutionGraph: FC<ExecutionGraphProps> = ({
                 {nodeContents}
               </button>
             ) : (
-              <div
-                key={node.id}
-                {...sharedProps}
-                aria-describedby={describedBy}
-              >
+              <div key={node.id} {...sharedProps} aria-describedby={describedBy}>
                 {nodeContents}
               </div>
             )
