@@ -217,7 +217,7 @@ host. Every question they ask runs live and costs model calls.
 | Command | What it checks | Needs |
 |---|---|---|
 | `./scripts/demo.sh test live --url URL [--pack P] [--questions ID,...] [--budget ...]` | Each industry's featured questions asked through the UI (success, resolved citations, the declared tool pills, the replay, the closing events, a latency budget), and the upload flow on "Your data": a PDF and a spreadsheet through the pipeline stages, then a question that cites both | Node.js 22 (Playwright fetches Chromium), and the URL of the deployment's UI |
-| `./scripts/demo.sh eval [--pack P] [--runs N] [--questions ID,...] [--url URL]` | Answer quality: the checks of the pack's `answers.yaml`, and with `GRADER_*` set an LLM grader ([eval](../eval/README.md)) | uv; by default this host's UI |
+| `./scripts/demo.sh eval [--pack P] [--runs N] [--questions ID,...] [--url URL] [--out DIR] [--max-wait SECONDS]` | Answer quality: the checks of the pack's `answers.yaml`, and with `GRADER_*` set an LLM grader ([eval](../eval/README.md)) | uv; by default this host's UI |
 
 The URL is the UI's, given on the command line and never stored: `http://127.0.0.1:3300` on the host, or the same
 address through an SSH tunnel. The test cannot sign in, so do not point it at a public link.

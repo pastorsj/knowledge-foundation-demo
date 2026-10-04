@@ -26,6 +26,9 @@ die() {
 # Local images need no provenance attestations, and with them every build of an unchanged image gets a
 # new ID, so `up` would recreate every container and the sandbox.
 export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+# demo.sh shares the project with one-shots and your own override services and never removes orphans, so
+# Compose's hint to --remove-orphans is noise.
+export COMPOSE_IGNORE_ORPHANS=true
 
 # docker compose for this repository: the OpenShell pins, plus .env when it exists.
 # (Passing --env-file turns off Compose's own .env lookup, so .env is passed explicitly.)

@@ -22,8 +22,8 @@ readonly UP_TIMEOUT=3600 # the first start downloads Nemotron Parse and builds e
 readonly PYTHON_PROJECTS="agent api eval ingest tools/retrieval tools/tables tools/prediction tools/auto-ontology"
 readonly RUFF=ruff@0.16.9 # the version in .pre-commit-config.yaml
 # Profile sets `test compose` renders; each must be valid with no .env.
-readonly PROFILE_SETS="core core,parse core,parse,kumo core,parse,prediction core,parse,kumo,ontology replay
-  build,tools"
+readonly PROFILE_SETS="core core,prediction core,parse core,parse,kumo core,parse,prediction core,parse,kumo,ontology
+  core,parse,prediction,ontology replay build,tools"
 
 usage() {
   cat <<'EOF'
@@ -68,7 +68,7 @@ On demand (run by hand)
   test live --url URL [--pack P] [--questions ID,...] [--budget SECONDS|ID=SECONDS]...
                           ask a pack's featured questions, and the upload flow, on a running
                           deployment through its UI and API, and check each answer and replay
-  eval [--pack P] [--runs N] [--questions ID,...] [--url URL]
+  eval [--pack P] [--runs N] [--questions ID,...] [--url URL] [--out DIR] [--max-wait SECONDS]
                           answer-quality eval of a running deployment (default: this host's UI):
                           answer checks, plus an LLM grader when GRADER_* are set (eval/README.md)
 
@@ -236,8 +236,9 @@ cmd_status() {
     endpoints='"sandbox: \(.phase)", (.endpoint_statuses[]
       | "  \(.host):\(.ports | map(tostring) | join(",")) \(.path) \(.last_result)")'
     # shellcheck disable=SC2016 # expanded by the container's shell
+    # Compose warns "No services to build" on each run of the CLI container; drop that line only.
     cli_sh 'json=$(openshell sandbox get hermes -o json 2>/dev/null) && echo "$json" | jq -r "$1" ||
-      echo "sandbox: none"' "$endpoints"
+      echo "sandbox: none"' "$endpoints" 2> >(grep -v 'msg="No services to build"' >&2)
   else
     echo "sandbox: the OpenShell gateway is not running"
   fi
@@ -404,11 +405,12 @@ test_live() {
       npx playwright test --config playwright.live.config.ts)
 }
 
-# eval [--pack P] [--runs N] [--questions ID,...] [--url URL] [--out DIR]: the answer-quality eval (eval/README.md)
-# on a running deployment, by default this host's UI. The optional grader reads GRADER_BASE_URL, GRADER_API_KEY and
-# GRADER_MODEL from the environment only. Each question runs live and costs model calls.
+# eval [--pack P] [--runs N] [--questions ID,...] [--url URL] [--out DIR] [--max-wait SECONDS]: the answer-quality
+# eval (eval/README.md) on a running deployment, by default this host's UI. The optional grader reads
+# GRADER_BASE_URL, GRADER_API_KEY and GRADER_MODEL from the environment only. Each question runs live and costs model calls.
 cmd_eval() {
   local url="" args=() usage="usage: demo.sh eval [--pack P] [--runs N] [--questions ID,...] [--url URL] [--out DIR]"
+  usage+=" [--max-wait SECONDS]"
   while [ $# -gt 0 ]; do
     case $1 in
       --url | --pack | --runs | --questions | --out | --max-wait) [ $# -ge 2 ] || die "$EXIT_USAGE" "$usage" ;;
