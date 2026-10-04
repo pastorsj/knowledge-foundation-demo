@@ -319,9 +319,8 @@ export const EcosystemLanding = ({
                 <Link className={styles.featuredQuestion} href={researchHref('workspace')}>
                   <strong>Upload documents and tables</strong>
                   <span className={styles.featuredText}>
-                    PDFs, images, Office files and web pages are parsed with Nemotron Parse; CSV,
-                    Excel, Parquet and JSON files become DuckDB tables. Then ask about them, with
-                    citations.
+                    PDFs, images and Office files are parsed with Nemotron Parse; CSV, Excel and
+                    Parquet files become DuckDB tables.
                   </span>
                 </Link>
               </li>
