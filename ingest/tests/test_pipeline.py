@@ -168,3 +168,42 @@ def test_a_document_without_text_fails(pipeline: Pipeline, tmp_path: Path):
 
     assert (outcome.stage, outcome.error_code) == ("failed", "empty_file")
     assert "No text was found in blank.md" in outcome.error_message
+
+
+def test_error_messages_lose_urls_paths_and_extra_lines():
+    from demo_ingest.models import redact
+
+    message = redact(
+        "HTTPConnectionPool(host='milvus', port=19530): Max retries exceeded with url: http://milvus:19530/v2/x "
+        "(/knowledge/sources/workspace.tables/tables.duckdb)\nTraceback (most recent call last):"
+    )
+
+    assert message == ("HTTPConnectionPool(host='milvus', port=19530): Max retries exceeded with url: <url> (<path>)")
+
+
+def test_an_unexpected_error_does_not_carry_internal_paths(pipeline: Pipeline, tmp_path: Path, monkeypatch):
+    def broken(*args, **kwargs):
+        raise RuntimeError("cannot open /knowledge/sources/workspace.tables/tables.duckdb.building\nmore")
+
+    monkeypatch.setattr(pipeline_module.tables, "load_table_file", broken)
+
+    outcome, _ = run(pipeline, CATALOG_FIXTURES / "tables" / "orders.csv", "orders.csv", db_path=tmp_path / "t.duckdb")
+
+    assert outcome.error_code == "internal_error"
+    assert outcome.error_message == "Unexpected error: RuntimeError: cannot open <path>"
+
+
+def test_a_documents_source_embedded_with_another_model_is_reported(
+    pipeline: Pipeline, catalog: Catalog, caplog: pytest.LogCaptureFixture
+):
+    import json
+
+    manifest = json.loads((CATALOG_FIXTURES / "sources" / "retail.policies.json").read_text())
+    documents = {**manifest["documents"], "embed_model": "nvidia/other-embed"}
+    catalog.write_source({**manifest, "documents": documents})  # a pack source: its next sync re-embeds it
+    catalog.write_source({**manifest, "id": "workspace.documents", "pack_id": "workspace", "documents": documents})
+
+    pipeline.warn_about_other_embed_models()
+
+    assert "workspace.documents was embedded with nvidia/other-embed" in caplog.text
+    assert "retail.policies" not in caplog.text

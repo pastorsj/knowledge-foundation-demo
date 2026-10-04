@@ -4,8 +4,10 @@
 
 A pack is synced when its digest changed: sha256 over the sorted relative paths and bytes of ``pack.yaml``,
 ``questions.yaml`` and ``files/**``, plus what turns those bytes into the catalog (the Parse model, or
-``pdf-text-layer`` when Parse is disabled, and the embed model). A sync whose PDFs fell back to their text layer
-because Parse was unreachable leaves the digest out of the manifest, so the next sync tries Parse again.
+``pdf-text-layer`` when Parse is disabled, and the embed model). The digest is recorded only when every file is
+ready or failed for a reason another sync would repeat (the file's content, or Parse turned off); after anything
+else (Parse not answering, so a PDF fell back to its text layer or a scan was not read; an embedding, Milvus or
+internal error; a timeout) it is left out, so the next sync tries again. ``force`` ingests every pack again.
 
 Each structured source is rebuilt into a new DuckDB file that replaces the old one in one step, so readers see the
 old tables or the new ones. Each documents source is re-indexed file by file; documents that left the pack are
@@ -42,8 +44,17 @@ from .settings import Settings
 logger = logging.getLogger(__name__)
 
 MAX_EXAMPLES = 12
-# Failures another sync may not repeat: the pack's digest is withheld after one, so the next sync retries.
-TRANSIENT_ERRORS = {"embedding_failed", "index_unavailable", "timeout"}
+# Failures another sync would repeat: the content itself, or Parse turned off (a parser_unavailable whose Parse did not
+# answer carries fallback "unavailable"). Any other failure withholds the pack's digest, so the next sync retries.
+DETERMINISTIC_ERRORS = {
+    "unsupported_type",
+    "type_mismatch",
+    "empty_file",
+    "too_large",
+    "load_failed",
+    "conversion_failed",
+    "parser_unavailable",
+}
 KINDS = {"documents": "document", "structured": "table"}
 
 
@@ -149,9 +160,15 @@ def _sha256(path: Path) -> str:
 
 
 def sync_all(
-    settings: Settings, catalog: Catalog, pipeline: Pipeline, progress: SyncProgress | None = None
+    settings: Settings,
+    catalog: Catalog,
+    pipeline: Pipeline,
+    progress: SyncProgress | None = None,
+    *,
+    force: bool = False,
 ) -> list[dict[str, Any]]:
-    """Sync every pack under PACKS_DIR; returns each pack's final status. Never raises for one bad pack."""
+    """Sync every pack under PACKS_DIR (``force``: whatever its digest); returns each pack's final status. Never
+    raises for one bad pack."""
     progress = progress or SyncProgress()
     pack_dirs = sorted(p.parent for p in settings.packs_dir.glob("*/pack.yaml")) if settings.packs_dir.is_dir() else []
     with progress.lock:
@@ -161,7 +178,9 @@ def sync_all(
         for pack_dir in pack_dirs:
             status = progress.packs[pack_dir.name]
             try:
-                _sync_pack(settings, catalog, pipeline, pack_dir=pack_dir, status=status, lock=progress.lock)
+                _sync_pack(
+                    settings, catalog, pipeline, pack_dir=pack_dir, status=status, lock=progress.lock, force=force
+                )
             except Exception as error:
                 logger.exception("pack %s failed", pack_dir.name)
                 with progress.lock:
@@ -180,6 +199,7 @@ def _sync_pack(
     pack_dir: Path,
     status: PackStatus,
     lock: threading.Lock,
+    force: bool = False,
 ) -> None:
     pack, questions = load_pack(pack_dir, settings)
     pack_id = pack["id"]
@@ -188,7 +208,7 @@ def _sync_pack(
     with lock:
         status.files_total = sum(len(paths) for paths in files.values())
     current = catalog.read_pack(pack_id)
-    if current and current.get("digest") == digest and current["status"] == "ready":
+    if not force and current and current.get("digest") == digest and current["status"] == "ready":
         logger.info("pack %s is up to date", pack_id)
         with lock:
             status.status, status.files_done = "ready", status.files_total
@@ -224,9 +244,11 @@ def _sync_pack(
         source_statuses.append(source_status(entries))
         catalog.write_source(_source_manifest(pack_id, source, entries, extra))
 
-    # Complete unless Parse did not answer (a PDF read from its text layer, an image not read) or a failure was
-    # transient. Configuration (Parse turned off) and the content itself would give the same result next time.
-    retry = [o for o in outcomes if o.fallback == "unavailable" or (not o.ready and o.error_code in TRANSIENT_ERRORS)]
+    # Complete unless Parse did not answer (a PDF read from its text layer, an image not read) or a failure may not
+    # repeat. Configuration (Parse turned off) and the content itself would give the same result next time.
+    retry = [
+        o for o in outcomes if o.fallback == "unavailable" or (not o.ready and o.error_code not in DETERMINISTIC_ERRORS)
+    ]
     skipped = [o for o in outcomes if not o.ready and o.error_code == "parser_unavailable" and o.fallback == "disabled"]
     failed = [o for o in outcomes if not o.ready and o not in skipped]
     final = "failed" if "failed" in source_statuses or "empty" in source_statuses else "ready"
@@ -331,7 +353,7 @@ def _sync_structured(
         rows.append(row)
         done(outcome)
     profile = tables.profile_database(building, source.get("tables")) if building.exists() else []
-    with pipeline.source_lock(source_id):
+    with pipeline.build_lock(source_id):
         if building.exists():
             building.chmod(0o644)
             os.replace(building, target)
@@ -423,11 +445,11 @@ def _pack_manifest(pack: dict[str, Any], questions: dict[str, Any], *, status: s
     }
 
 
-def sync_cli(settings: Settings, *, pipeline: Pipeline | None = None) -> int:
-    """`demo-ingest sync-packs`: 0 when every pack is ready, 1 otherwise."""
+def sync_cli(settings: Settings, *, pipeline: Pipeline | None = None, force: bool = False) -> int:
+    """`demo-ingest sync-packs [--force]`: 0 when every pack is ready, 1 otherwise."""
     catalog = Catalog(settings.knowledge_dir, settings.catalog_schema_dir)
     pipeline = pipeline or Pipeline(settings, catalog)
-    statuses = sync_all(settings, catalog, pipeline)
+    statuses = sync_all(settings, catalog, pipeline, force=force)
     for status in statuses:
         line = f"{status['id']}: {status['status']} ({status['files_done']}/{status['files_total']} files)"
         print(line + (f": {status['error']}" if status["error"] else ""), flush=True)

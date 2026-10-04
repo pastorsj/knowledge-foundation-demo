@@ -274,3 +274,63 @@ def test_a_failed_re_ingest_keeps_the_previous_chunks(
     assert statuses["mini"]["status"] == "failed"
     assert index.count(source_id="mini.policies") == before
     assert "digest" not in catalog.read_pack("mini")  # transient: the next sync tries again
+
+
+@pytest.mark.parametrize(("file", "failure"), [("pdf", "http-503"), ("pdf", "slow"), ("png", "http-503")])
+def test_a_parse_that_stops_answering_mid_file_withholds_the_digest(
+    *,
+    pack_settings: Settings,
+    catalog: Catalog,
+    pipeline: Pipeline,
+    packs_dir: Path,
+    fake_parse,
+    file: str,
+    failure: str,
+):
+    # The probe answers, then the conversion fails as a restarting or overloaded vLLM does: the next sync retries.
+    directory = packs_dir / "mini" / "files" / "policies"
+    pdf = write_policy_pdf(directory / "policy.pdf" if file == "pdf" else packs_dir / "policy.pdf")
+    if file == "png":
+        write_scan_png(directory / "scan.png", pdf)
+    settings = replace(pack_settings, parse_base_url=fake_parse.url)
+    if failure == "slow":
+        fake_parse.delay = 5
+        settings = replace(settings, stage_timeout_s=2)
+    else:
+        fake_parse.fail_status = 503
+
+    sync(settings, catalog, pipeline)
+
+    entry = next(
+        f
+        for f in catalog.read_source("mini.policies")["files"]
+        if f["file_name"] == f"{'policy' if file == 'pdf' else 'scan'}.{file}"
+    )
+    assert entry["status"] == ("ready" if file == "pdf" else "failed")
+    assert "digest" not in catalog.read_pack("mini")
+
+
+def test_a_failure_unrelated_to_the_content_withholds_the_digest(
+    pack_settings: Settings, catalog: Catalog, pipeline: Pipeline, monkeypatch: pytest.MonkeyPatch
+):
+    from demo_ingest import pipeline as pipeline_module
+
+    def broken(*args, **kwargs):
+        raise RuntimeError("the disk went away")
+
+    monkeypatch.setattr(pipeline_module.tables, "load_table_file", broken)
+
+    statuses = sync(pack_settings, catalog, pipeline)
+
+    assert statuses["mini"]["status"] == "failed" and "internal_error" in statuses["mini"]["error"]
+    assert "digest" not in catalog.read_pack("mini")
+
+
+def test_force_ingests_a_ready_pack_again(pack_settings: Settings, catalog: Catalog, pipeline: Pipeline, embedder):
+    sync(pack_settings, catalog, pipeline)
+    embedder.calls.clear()
+
+    statuses = packs.sync_all(pack_settings, catalog, pipeline, force=True)
+
+    assert embedder.calls != []
+    assert statuses[0]["status"] == "ready" and len(catalog.read_pack("mini")["digest"]) == 64

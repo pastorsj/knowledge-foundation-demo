@@ -26,6 +26,7 @@ from tenacity import stop_after_attempt
 from tenacity import wait_exponential_jitter
 
 from .models import IngestError
+from .models import redact
 from .settings import Settings
 
 BATCH = 50  # texts per embeddings request
@@ -100,7 +101,7 @@ class Embedder:
             try:
                 vectors.extend(_embed_batch(client, texts[start : start + BATCH]))
             except Exception as error:
-                raise IngestError("embedding_failed", f"The embeddings endpoint failed: {error}"[:600]) from error
+                raise IngestError("embedding_failed", f"The embeddings endpoint failed: {redact(error)}") from error
             if on_progress:
                 on_progress(len(vectors), len(texts))
         return vectors

@@ -4,13 +4,30 @@
 
 from __future__ import annotations
 
+import re
 from datetime import UTC
 from datetime import datetime
 from enum import StrEnum
 
+URL = re.compile(r"https?://\S+")
+PATH = re.compile(r"(?<![\w.])/(?:[\w.-]+/)+[\w.-]*")
+
+
+def redact(error: BaseException | str, limit: int = 300) -> str:
+    """The first line of an error, without URLs or absolute paths: what the job status and manifests may show."""
+    lines = str(error).strip().splitlines()
+    text = lines[0] if lines else type(error).__name__
+    return PATH.sub("<path>", URL.sub("<url>", text))[:limit]
+
 
 class IngestError(Exception):
-    """A file that cannot be ingested. ``code`` is stable (the UI may map it); ``message`` is for people."""
+    """A file that cannot be ingested. ``code`` is stable (the UI may map it); ``message`` is for people.
+
+    ``transient``: another try may succeed (Parse did not answer); ``fallback``: why Parse was not used, as Outcome.
+    """
+
+    transient = False
+    fallback: str | None = None
 
     MESSAGES = {
         "unsupported_type": "This file type is not supported.",

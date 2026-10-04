@@ -5,7 +5,8 @@
 Uploads stream straight to disk: each multipart part is hashed and written as it arrives, and a part over the size
 limit stops being written (it fails ``too_large``) while the rest of the request is read. Identical bytes in the
 workspace are one file (``file_id = "f-" + sha256[:16]``); re-uploading them returns the existing file, except a
-failed one, which is ingested again. Errors are ``{"error": {"code", "message"}}``.
+failed one, which is ingested again (one request at a time decides, so two uploads of the same bytes run it once).
+Errors are ``{"error": {"code", "message"}}``.
 """
 
 from __future__ import annotations
@@ -218,8 +219,9 @@ def create_app(
     )
     progress = packs.SyncProgress()
     uploads_dir = settings.knowledge_dir / "ingest" / "uploads"
+    accepting = threading.Lock()
 
-    def start_pack_sync() -> bool:
+    def start_pack_sync(*, force: bool = False) -> bool:
         with progress.lock:
             if progress.running:
                 return False
@@ -227,7 +229,7 @@ def create_app(
 
         def run() -> None:
             try:
-                packs.sync_all(settings, catalog, pipeline, progress)
+                packs.sync_all(settings, catalog, pipeline, progress, force=force)
             except Exception:
                 logger.exception("pack sync failed")
                 with progress.lock:
@@ -318,22 +320,25 @@ def create_app(
         entries: list[dict[str, Any]] = []
         existing: list[str] = []
         file_ids: list[str] = []
-        for part in received:
-            file_id = f"f-{part.sha256[:16]}"
-            if file_id in file_ids:  # the same bytes twice in one request
-                part.path.unlink(missing_ok=True)
-                continue
-            file_ids.append(file_id)
-            previous = store.get_file(file_id)
-            if previous is not None and previous["status"] != FileStatus.FAILED:
-                part.path.unlink(missing_ok=True)
-                existing.append(file_id)
-                continue
-            if previous is not None:  # a failed file uploaded again is ingested again
-                pipeline.delete_uploads([file_id])
-            entries.append(_store_part(part, file_id))
-        job_id = store.create_job(WORKSPACE, entries, existing=existing)
-        pipeline.enqueue([e["file_id"] for e in entries if e["stage"] == Stage.RECEIVED])
+        # Check and insert as one step: two requests with the same bytes must not both insert (the second would reset
+        # a running file's claim, and a second worker would run it again).
+        with accepting:
+            for part in received:
+                file_id = f"f-{part.sha256[:16]}"
+                if file_id in file_ids:  # the same bytes twice in one request
+                    part.path.unlink(missing_ok=True)
+                    continue
+                file_ids.append(file_id)
+                previous = store.get_file(file_id)
+                if previous is not None and previous["status"] != FileStatus.FAILED:
+                    part.path.unlink(missing_ok=True)
+                    existing.append(file_id)
+                    continue
+                if previous is not None:  # a failed file uploaded again is ingested again
+                    pipeline.delete_uploads([file_id])
+                entries.append(_store_part(part, file_id))
+            job_id = store.create_job(WORKSPACE, entries, existing=existing)
+            pipeline.enqueue([e["file_id"] for e in entries if e["stage"] == Stage.RECEIVED])
         for source_id in {e["source_id"] for e in entries if e["source_id"]}:
             pipeline.refresh_workspace_source(source_id)
         queued = sum(1 for e in entries if e["stage"] == Stage.RECEIVED)
@@ -390,10 +395,11 @@ def create_app(
     # Packs
 
     @app.post("/v1/packs/sync")
-    async def sync_packs() -> JSONResponse:
+    async def sync_packs(force: bool = False) -> JSONResponse:
+        """Sync the packs whose digest changed; ``force=true`` ingests every pack again."""
         if not settings.packs_dir.is_dir():
             raise ApiError(404, "not_found", f"{settings.packs_dir} does not exist.")
-        started = start_pack_sync()
+        started = start_pack_sync(force=force)
         return JSONResponse({"status": "started" if started else "running"}, status_code=202)
 
     @app.get("/v1/packs/status")

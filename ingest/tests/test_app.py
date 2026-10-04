@@ -491,3 +491,172 @@ async def test_a_failed_database_copy_fails_the_file_and_leaves_no_copy(
         "orders.csv": "failed",
     }
     assert JobStore(parse_settings.db_path).get_file(orders["file_id"])["claimed"] == 0
+
+
+class HeldLoads:
+    """Wraps the table loader so a test can hold one file's load mid-way, and counts the loads per file name."""
+
+    def __init__(self, monkeypatch: pytest.MonkeyPatch, *held: str) -> None:
+        import threading
+
+        from demo_ingest import pipeline as pipeline_module
+
+        self.held = set(held)
+        self.loading, self.release = threading.Event(), threading.Event()
+        self.calls: dict[str, int] = {}
+        load = pipeline_module.tables.load_table_file
+
+        def loader(db_path, path, file_name, existing, on_progress):
+            self.calls[file_name] = self.calls.get(file_name, 0) + 1
+            if file_name in self.held:
+                self.loading.set()
+                assert self.release.wait(30)
+            return load(db_path, path, file_name, existing, on_progress)
+
+        monkeypatch.setattr(pipeline_module.tables, "load_table_file", loader)
+
+
+def table_names(database: Path) -> list[str]:
+    with duckdb.connect(str(database), read_only=True) as db:
+        return sorted(row[0] for row in db.execute("SELECT table_name FROM duckdb_tables()").fetchall())
+
+
+async def test_an_upload_and_a_delete_return_while_another_table_file_loads(
+    settings: Settings, embedder, tokenizer, monkeypatch: pytest.MonkeyPatch
+):
+    loads = HeldLoads(monkeypatch, "orders.csv")
+    database = settings.knowledge_dir / "sources" / "workspace.tables" / "tables.duckdb"
+    catalog = Catalog(settings.knowledge_dir)
+    async with running(settings, embedder, tokenizer) as client:
+        customers = (
+            await client.post("/v1/collections/workspace/documents", files=upload(("customers.csv", b"id,name\n1,a\n")))
+        ).json()
+        await wait(client, customers["job_id"])
+        orders = (
+            await client.post(
+                "/v1/collections/workspace/documents",
+                files=upload(("orders.csv", (TABLES / "orders.csv").read_bytes())),
+            )
+        ).json()
+        assert await asyncio.to_thread(loads.loading.wait, 10)
+        try:
+            # The orders file holds the build lock: neither request may wait for it.
+            extra = client.post("/v1/collections/workspace/documents", files=upload(("extra.csv", b"x,y\n1,2\n")))
+            extra = await asyncio.wait_for(extra, timeout=5)
+            assert extra.status_code == 200
+            deleted = client.request(
+                "DELETE", "/v1/collections/workspace/documents", json={"file_ids": customers["file_ids"]}
+            )
+            assert (await asyncio.wait_for(deleted, timeout=5)).status_code == 200
+            manifest = catalog.read_source("workspace.tables")
+            assert "customers.csv" not in {f["file_name"] for f in manifest["files"]}
+            assert manifest["database"]["tables"] == []  # the deleted table leaves the manifest at once
+        finally:
+            loads.release.set()
+        await wait(client, orders["job_id"])
+        await wait(client, extra.json()["job_id"])
+        for _ in range(200):  # the deleted table leaves the database once the loads are done
+            if "customers" not in table_names(database):
+                break
+            await asyncio.sleep(0.05)
+
+    assert table_names(database) == ["extra", "orders"]
+    manifest = catalog.read_source("workspace.tables")
+    assert sorted(t["name"] for t in manifest["database"]["tables"]) == ["extra", "orders"]
+
+
+async def test_a_failing_table_file_leaves_a_concurrent_table_load_alone(
+    settings: Settings, embedder, tokenizer, monkeypatch: pytest.MonkeyPatch
+):
+    from demo_ingest import pipeline as pipeline_module
+
+    loads = HeldLoads(monkeypatch, "orders.csv")
+    write_source = Catalog.write_source
+    failed: list[str] = []
+
+    def fail_once(self: Catalog, manifest: dict[str, Any]) -> None:
+        files = {f["file_name"]: f["status"] for f in manifest.get("files", [])}
+        if files.get("customers.csv") == "ready" and not failed:
+            failed.append("customers.csv")
+            raise OSError("the catalog could not be written")
+        write_source(self, manifest)
+
+    log_exception = pipeline_module.logger.exception
+
+    def handled_late(message: str, *args: Any, **kwargs: Any) -> None:
+        if "could not be finished" in message:  # the failing worker handles its error while orders is mid-load
+            assert loads.loading.wait(10)
+        log_exception(message, *args, **kwargs)
+
+    monkeypatch.setattr(Catalog, "write_source", fail_once)
+    monkeypatch.setattr(pipeline_module.logger, "exception", handled_late)
+    database = settings.knowledge_dir / "sources" / "workspace.tables" / "tables.duckdb"
+    async with running(settings, embedder, tokenizer) as client:
+        earlier = (
+            await client.post("/v1/collections/workspace/documents", files=upload(("stores.csv", b"store,city\n1,a\n")))
+        ).json()
+        await wait(client, earlier["job_id"])
+        customers = (
+            await client.post("/v1/collections/workspace/documents", files=upload(("customers.csv", b"id,name\n1,a\n")))
+        ).json()
+        orders = (
+            await client.post(
+                "/v1/collections/workspace/documents",
+                files=upload(("orders.csv", (TABLES / "orders.csv").read_bytes())),
+            )
+        ).json()
+        assert await asyncio.to_thread(loads.loading.wait, 10)
+        try:
+            first = await wait(client, customers["job_id"])
+        finally:
+            loads.release.set()
+        second = await wait(client, orders["job_id"])
+
+    assert failed and first["file_details"][0]["error_code"] == "internal_error"
+    assert second["file_details"][0]["status"] == "success"
+    assert {"orders", "stores"} <= set(table_names(database))  # nothing the other files committed was lost
+    manifest = Catalog(settings.knowledge_dir).read_source("workspace.tables")
+    assert sorted(t["name"] for t in manifest["database"]["tables"]) == ["orders", "stores"]
+    assert sorted(p.name for p in database.parent.glob("tables.duckdb*")) == ["tables.duckdb"]
+
+
+async def test_two_uploads_of_the_same_bytes_at_once_run_the_file_once(
+    settings: Settings, embedder, tokenizer, monkeypatch: pytest.MonkeyPatch
+):
+    loads = HeldLoads(monkeypatch)
+    csv = (TABLES / "orders.csv").read_bytes()
+    async with running(settings, embedder, tokenizer) as client:
+        responses = await asyncio.gather(
+            *(
+                client.post("/v1/collections/workspace/documents", files=upload((name, csv)))
+                for name in ("a.csv", "b.csv")
+            )
+        )
+        for response in responses:
+            assert (await wait(client, response.json()["job_id"]))["status"] == "completed"
+
+    assert sum(loads.calls.values()) == 1
+
+
+async def test_a_forced_pack_sync_ingests_a_ready_pack_again(parse_settings: Settings, embedder, tokenizer, tmp_path):
+    packs_dir = tmp_path / "packs-mounted"
+    shutil.copytree(FIXTURES / "packs", packs_dir)
+
+    async def synced(client: httpx.AsyncClient) -> None:
+        for _ in range(600):
+            body = (await client.get("/v1/packs/status")).json()
+            if not body["running"] and body["packs"] and body["packs"][0]["status"] == "ready":
+                return
+            await asyncio.sleep(0.05)
+        raise AssertionError(body)
+
+    async with running(replace(parse_settings, packs_dir=packs_dir), embedder, tokenizer) as client:
+        await synced(client)
+        embedder.calls.clear()
+        assert (await client.post("/v1/packs/sync")).status_code == 202
+        await synced(client)
+        assert embedder.calls == []  # up to date
+
+        assert (await client.post("/v1/packs/sync", params={"force": "true"})).status_code == 202
+        await synced(client)
+        assert embedder.calls != []

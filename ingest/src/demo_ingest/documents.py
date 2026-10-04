@@ -9,7 +9,9 @@ HTML, Markdown, text) use docling's own backends and no model.
 When Parse is disabled, unreachable, failing, or slower than the parse budget (most of the stage timeout), a PDF
 falls back to its text layer: pypdfium2's text of each page becomes one Markdown section (``## Page N``) that
 docling's Markdown backend converts; the file records parser ``pdf-text-layer`` and a warning. An image has no text
-layer, so it fails with ``parser_unavailable``.
+layer, so it fails with ``parser_unavailable``. A fallback is ``transient`` when another try may read the file with
+Parse: Parse did not answer (connection error, HTTP 5xx, 408 or 429, or slower than the budget). A 4xx or empty
+output would end the same way again.
 
 Chunks come from docling's HybridChunker, sized with the embed model's own tokenizer; each is embedded as its
 contextualized text (heading path + text).
@@ -52,6 +54,7 @@ from docling_core.types.io import DocumentStream
 from .detect import IMAGE_FORMATS
 from .models import IngestError
 from .models import Stage
+from .models import redact
 from .settings import Settings
 
 if TYPE_CHECKING:
@@ -83,6 +86,8 @@ BORN_DIGITAL = {
     "txt": (InputFormat.MD, "md"),  # docling has no plain-text backend; text is valid Markdown
 }
 _PAGE_HEADING = re.compile(r"^Page (\d+)$")
+# How docling reports a Parse that did not answer: requests' connection errors and timeouts, or the HTTP status.
+_TRANSIENT = re.compile(r"HTTP (?:5\d\d|408|429)\b|connection|timeout|timed out|max retries", re.IGNORECASE)
 
 Progress = Callable[[int, int], None]
 StageCallback = Callable[[str, str | None, float], None]
@@ -100,6 +105,7 @@ class Converted:
     parser: str
     pages: int
     warnings: list[str] = field(default_factory=list)
+    transient: bool = False  # Parse did not answer for some or all pages: another try may read them
 
 
 @dataclass
@@ -117,10 +123,20 @@ class DocumentResult:
     pages: int
     chunks: int
     warnings: list[str] = field(default_factory=list)
+    transient: bool = False
 
 
 class _ParseUnavailable(Exception):
-    """Parse cannot convert this file; the message is the reason the warning shows."""
+    """Parse cannot convert this file; the message is the reason the warning shows. ``transient``: Parse did not
+    answer (down, restarting, overloaded or slow), so another try may succeed."""
+
+    def __init__(self, reason: str, *, transient: bool) -> None:
+        super().__init__(redact(reason))
+        self.transient = transient
+
+
+def is_transient(text: str) -> bool:
+    return _TRANSIENT.search(text) is not None
 
 
 # Conversion
@@ -215,17 +231,19 @@ def convert(
         budget = max(1.0, settings.stage_timeout_s * PARSE_BUDGET)
         try:
             reason = probe(settings)
-            if reason is not None:
-                raise _ParseUnavailable(reason)
+            if reason is not None:  # off (configuration) or not answering (transient)
+                raise _ParseUnavailable(reason, transient=settings.parse_enabled)
             return _parse(path, fmt, settings, report, budget=budget, remaining=budget - (time.monotonic() - started))
         except _ParseUnavailable as unavailable:
             if fmt != "pdf":
-                raise IngestError(
+                error = IngestError(
                     "parser_unavailable",
                     f"Nemotron Parse is unavailable ({unavailable}), and an image has no text layer to read instead.",
-                ) from None
+                )
+                error.transient = unavailable.transient
+                raise error from None
             logger.warning("%s: Nemotron Parse unavailable (%s); using the text layer", path.name, unavailable)
-            return _text_layer(path, report, str(unavailable))
+            return _text_layer(path, report, str(unavailable), transient=unavailable.transient)
     if fmt not in BORN_DIGITAL:
         raise IngestError("unsupported_type", f"{fmt} is not a document format.")
     _, extension = BORN_DIGITAL[fmt]
@@ -256,24 +274,33 @@ def _parse(path: Path, fmt: str, settings: Settings, report: Progress, *, budget
     worker.start()
     worker.join(max(0.1, remaining))
     if worker.is_alive():
-        raise _ParseUnavailable(f"it did not answer within {budget:.0f} s")
+        raise _ParseUnavailable(f"it did not answer within {budget:.0f} s", transient=True)
     if "error" in outcome:
-        raise _ParseUnavailable(_first_line(outcome["error"]))
+        message = str(outcome["error"])
+        raise _ParseUnavailable(_first_line(outcome["error"]), transient=is_transient(message))
     result = outcome["result"]
     if result.status not in (ConversionStatus.SUCCESS, ConversionStatus.PARTIAL_SUCCESS):
-        raise _ParseUnavailable(_errors(result) or f"the conversion ended {result.status.value}")
+        errors = _errors(result)
+        reason = errors or f"the conversion ended {result.status.value}"
+        raise _ParseUnavailable(reason, transient=is_transient(errors))
     document = result.document
     if not document.texts and not document.tables:
-        raise _ParseUnavailable("it returned no content")
+        raise _ParseUnavailable("it returned no content", transient=False)
+    page_errors = [error for error in result.errors if getattr(error, "page_no", None) is not None]
     warnings = [
-        f"Nemotron Parse could not read page {error.page_no}: {error.error_message}"[:500]
-        for error in result.errors
-        if getattr(error, "page_no", None) is not None
+        f"Nemotron Parse could not read page {error.page_no}: {redact(error.error_message)}"[:500]
+        for error in page_errors
     ][:10]
-    return Converted(document=document, parser=PARSE_PARSER, pages=result.input.page_count, warnings=warnings)
+    return Converted(
+        document=document,
+        parser=PARSE_PARSER,
+        pages=result.input.page_count,
+        warnings=warnings,
+        transient=any(is_transient(error.error_message) for error in page_errors),
+    )
 
 
-def _text_layer(path: Path, report: Progress, reason: str) -> Converted:
+def _text_layer(path: Path, report: Progress, reason: str, *, transient: bool = False) -> Converted:
     import pypdfium2
     from docling.utils.locks import pypdfium2_lock
 
@@ -303,10 +330,12 @@ def _text_layer(path: Path, report: Progress, reason: str) -> Converted:
         report(number, total)
     has_text = any(texts)
     if not has_text:
-        raise IngestError(
+        error = IngestError(
             "parser_unavailable",
             f"Nemotron Parse is unavailable ({reason}), and the PDF has no text layer (it may be a scan).",
         )
+        error.transient = transient
+        raise error
     markdown = "\n".join(sections)
     result = _born_digital_converter().convert(
         DocumentStream(name="document.md", stream=io.BytesIO(markdown.encode())), raises_on_error=False
@@ -318,6 +347,7 @@ def _text_layer(path: Path, report: Progress, reason: str) -> Converted:
         parser=TEXT_LAYER_PARSER,
         pages=total,
         warnings=[TEXT_LAYER_WARNING.format(reason=reason)[:500]],
+        transient=transient,
     )
 
 
@@ -447,7 +477,11 @@ def ingest_document(
         ),
     )
     return DocumentResult(
-        parser=converted.parser, pages=converted.pages, chunks=len(chunks), warnings=converted.warnings
+        parser=converted.parser,
+        pages=converted.pages,
+        chunks=len(chunks),
+        warnings=converted.warnings,
+        transient=converted.transient,
     )
 
 

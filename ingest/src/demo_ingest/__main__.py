@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
-"""demo-ingest serve | sync-packs"""
+"""demo-ingest serve | sync-packs [--force]"""
 
 from __future__ import annotations
 
@@ -25,7 +25,8 @@ def main(argv: list[str] | None = None) -> None:
     )
     serve.add_argument("--host", default="0.0.0.0")
     serve.add_argument("--port", type=int, default=PORT)
-    commands.add_parser("sync-packs", help="ingest every pack under PACKS_DIR whose digest changed, then exit")
+    sync = commands.add_parser("sync-packs", help="ingest every pack under PACKS_DIR whose digest changed, then exit")
+    sync.add_argument("--force", action="store_true", help="ingest every pack again, whatever its digest")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     settings = Settings.from_env()
@@ -43,7 +44,7 @@ def main(argv: list[str] | None = None) -> None:
     else:
         from .packs import sync_cli
 
-        sys.exit(sync_cli(settings))
+        sys.exit(sync_cli(settings, force=args.force))
 
 
 if __name__ == "__main__":

@@ -10,6 +10,10 @@ can always run again from the start.
 Uploads: ``INGEST_WORKERS`` asyncio tasks take file ids from a queue in upload order and run each file in a thread
 pool. After each file, its source manifest is rewritten. The workspace's two sources materialize with their first
 file (``workspace.documents``, ``workspace.tables``) and disappear with their last.
+
+Two locks per source. The build lock makes one writer of a structured source's DuckDB copy at a time; a table file
+holds it while it loads and profiles, which can take minutes. The manifest lock is held only while a manifest is
+rewritten from the job store, so an upload or a delete never waits for another file's load.
 """
 
 from __future__ import annotations
@@ -21,8 +25,8 @@ import shutil
 import threading
 from collections import defaultdict
 from collections.abc import Callable
+from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import nullcontext
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
@@ -38,6 +42,7 @@ from .embed import Embedder
 from .models import FileStatus
 from .models import IngestError
 from .models import Stage
+from .models import redact
 from .models import status_for
 from .models import utcnow
 from .settings import Settings
@@ -100,7 +105,9 @@ class Outcome:
     document_id: str | None = None
     error_code: str | None = None
     error_message: str | None = None
-    # Why a PDF used its text layer: "disabled" (PARSE_BASE_URL empty) or "unavailable" (down, failing or slow).
+    # Why Parse was not used: "disabled" (PARSE_BASE_URL empty) or "unavailable" (it did not answer, for the whole
+    # file or some pages: down, restarting or slow, so another try may read it). A Parse that answered with an error
+    # or no content leaves it None: another try would end the same way.
     fallback: str | None = None
 
     @property
@@ -167,7 +174,11 @@ class Pipeline:
         self._index = index
         self._tokenizer = tokenizer
         self._index_lock = threading.Lock()
-        self._source_locks: defaultdict[str, threading.RLock] = defaultdict(threading.RLock)
+        self._build_locks: defaultdict[str, threading.RLock] = defaultdict(threading.RLock)
+        self._manifest_locks: defaultdict[str, threading.RLock] = defaultdict(threading.RLock)
+        # The profile of each workspace source's committed DuckDB, every table of it; set under the build lock when a
+        # copy is swapped in, so the last one set is the live file's. Manifests list the tables of finished files.
+        self._profiles: dict[str, list[dict[str, Any]]] = {}
         self._workspace_lock = threading.RLock()
         self._pool = ThreadPoolExecutor(max_workers=max(1, settings.workers), thread_name_prefix="ingest")
         self._queue: asyncio.Queue[str] | None = None
@@ -185,7 +196,7 @@ class Pipeline:
                 try:
                     self._index = KnowledgeIndex(self.settings.milvus_uri, self.settings.collection_alias)
                 except Exception as error:
-                    raise IngestError("index_unavailable", f"Milvus did not answer: {error}"[:600]) from error
+                    raise IngestError("index_unavailable", f"Milvus did not answer: {redact(error)}") from error
             return self._index
 
     @property
@@ -194,8 +205,13 @@ class Pipeline:
             self._tokenizer = documents.load_tokenizer(self.settings.tokenizer_dir)
         return self._tokenizer
 
-    def source_lock(self, source_id: str) -> threading.RLock:
-        return self._source_locks[source_id]
+    def build_lock(self, source_id: str) -> threading.RLock:
+        """Held by the one writer of the source's DuckDB copy, from begin_database to end_database."""
+        return self._build_locks[source_id]
+
+    def manifest_lock(self, source_id: str) -> threading.RLock:
+        """Held while the source's manifest is rewritten; never across a load."""
+        return self._manifest_locks[source_id]
 
     # One file
 
@@ -258,7 +274,7 @@ class Pipeline:
             )
         except Exception as error:
             logger.exception("%s (%s) failed unexpectedly", file_name, file_id)
-            message = f"Unexpected error: {type(error).__name__}: {error}"[:600]
+            message = f"Unexpected error: {type(error).__name__}: {redact(error)}"
             return Outcome(stage=Stage.FAILED, kind=kind, error_code="internal_error", error_message=message)
 
     def _run_document(
@@ -298,7 +314,8 @@ class Pipeline:
                 probe=probe,
             )
         except IngestError as error:
-            error.fallback = fallback.get("kind")  # an image that Parse could not read says why
+            # An image (or a PDF without text) that Parse could not read says why.
+            error.fallback = fallback.get("kind") or ("unavailable" if error.transient else None)
             raise
         return Outcome(
             stage=Stage.READY,
@@ -308,7 +325,7 @@ class Pipeline:
             chunks=result.chunks,
             warnings=result.warnings,
             document_id=document_id,
-            fallback=fallback.get("kind"),
+            fallback=fallback.get("kind") or ("unavailable" if result.transient else None),
         )
 
     def _run_table(self, path: Path, file_name: str, update: Update, db_path: Path, existing: set[str]) -> Outcome:
@@ -364,6 +381,20 @@ class Pipeline:
         for source_id in sources:
             self.refresh_workspace_source(source_id)
         self.refresh_workspace_pack()
+        self.warn_about_other_embed_models()
+
+    def warn_about_other_embed_models(self) -> None:
+        """Uploads embedded with another model are not re-embedded (a pack is: its digest covers the model). Say so,
+        as retrieval compares their vectors with the new model's."""
+        for manifest in self.catalog.sources():
+            model = (manifest.get("documents") or {}).get("embed_model")
+            if manifest.get("pack_id") == WORKSPACE and model and model != self.settings.embed_model:
+                logger.warning(
+                    "%s was embedded with %s, not RETRIEVER_EMBED_MODEL %s: upload its files again to re-embed them",
+                    manifest["id"],
+                    model,
+                    self.settings.embed_model,
+                )
 
     async def stop(self) -> None:
         for task in self._workers:
@@ -418,91 +449,125 @@ class Pipeline:
             self.store.update_file(file_id, **fields)
 
         try:
-            self._process(row, path, update)
-        except Exception as error:  # the database copy, the catalog or the store failed: the file ends here
-            logger.exception("%s (%s) could not be finished", row["file_name"], file_id)
             if row["kind"] == "table":
-                self.discard_database(source_id)
-            message = f"Ingestion failed: {type(error).__name__}: {error}"[:600]
+                self._process_table(row, path, update)
+            else:
+                self._finish(row, self._run_upload(row, path, update), update)
+        except Exception as error:  # the database copy, the catalog or the store failed: the file ends here
+            # A table's copy was already discarded under the build lock: another file may be writing a new one now.
+            logger.exception("%s (%s) could not be finished", row["file_name"], file_id)
+            message = f"Ingestion failed: {type(error).__name__}: {redact(error)}"
             update(stage=Stage.FAILED, error_code="internal_error", error_message=message, claimed=0)
             try:
                 self.refresh_workspace_source(source_id)
             except Exception:
                 logger.exception("could not rewrite %s", source_id)
 
-    def _process(self, row: dict[str, Any], path: Path, update: Update) -> None:
+    def _run_upload(self, row: dict[str, Any], path: Path, update: Update, **kwargs: Any) -> Outcome:
+        return self.run_file(
+            source_id=row["source_id"],
+            path=path,
+            file_name=row["file_name"],
+            file_id=row["file_id"],
+            update=update,
+            **kwargs,
+        )
+
+    def _process_table(self, row: dict[str, Any], path: Path, update: Update) -> None:
+        """Copy-on-write: readers attach tables.duckdb read-only, so a table file loads into a private copy that is
+        swapped in whole (os.replace) once the file has loaded and profiled. The build lock is held until the copy is
+        committed or discarded and the store has the file's tables, which the next writer names its own around."""
         file_id, source_id = row["file_id"], row["source_id"]
-        # Only tables share a file (the source's DuckDB), so only they take the source lock: documents of one source
-        # ingest in parallel, and uploads and deletes never wait for a document being parsed.
-        with self.source_lock(source_id) if row["kind"] == "table" else nullcontext():
-            # Tables: copy-on-write. Readers attach tables.duckdb read-only, so ingest loads into a private copy
-            # and swaps it in whole (os.replace) once the file has loaded and profiled.
-            building = self.begin_database(source_id) if row["kind"] == "table" else None
-            existing: set[str] = set()
-            if building is not None:
+        with self.build_lock(source_id):
+            building = self.begin_database(source_id)
+            ended = False
+            try:
                 # Names taken by the source's other files; this file's own earlier tables are replaced.
                 others = [r for r in self.store.source_files(source_id) if r["file_id"] != file_id]
                 existing = {name for r in others for name in r["tables"]}
                 tables.drop_tables(building, row["tables"])
-            outcome = self.run_file(
-                source_id=source_id,
-                path=path,
-                file_name=row["file_name"],
-                file_id=file_id,
-                update=update,
-                db_path=building,
-                existing_tables=existing,
-            )
-            profile = None
-            if building is not None and outcome.ready:
-                update(stage=Stage.PROFILING, stage_detail=None, progress_percent=85)
-                try:
-                    profile = self.run_stage(Stage.PROFILING, lambda: tables.profile_database(building, None))
-                except IngestError as error:
-                    outcome = Outcome(
-                        stage=Stage.FAILED, kind="table", error_code=error.code, error_message=error.message
-                    )
-            if building is not None:
+                outcome = self._run_upload(row, path, update, db_path=building, existing_tables=existing)
+                profile = None
+                if outcome.ready:
+                    update(stage=Stage.PROFILING, stage_detail=None, progress_percent=85)
+                    try:
+                        profile = self.run_stage(Stage.PROFILING, lambda: tables.profile_database(building, None))
+                    except IngestError as error:
+                        outcome = Outcome(
+                            stage=Stage.FAILED, kind="table", error_code=error.code, error_message=error.message
+                        )
                 self.end_database(source_id, building, commit=outcome.ready)
-            update(
-                parser=outcome.parser,
-                pages=outcome.pages,
-                chunks=outcome.chunks,
-                tables=outcome.tables,
-                warnings=outcome.warnings,
-                document_id=outcome.document_id,
-                error_code=outcome.error_code,
-                error_message=outcome.error_message,
-            )
-            # The catalog first, then the job store: a client that sees the file finished finds it in the manifest.
-            self.refresh_workspace_source(source_id, profile=profile, final={file_id: status_for(outcome.stage)})
+                ended = True
+                if profile is not None:
+                    self._profiles[source_id] = profile
+                self._finish(row, outcome, update)
+            finally:
+                if not ended:
+                    self.end_database(source_id, building, commit=False)
+
+    def _finish(self, row: dict[str, Any], outcome: Outcome, update: Update) -> None:
+        file_id, source_id = row["file_id"], row["source_id"]
+        update(
+            parser=outcome.parser,
+            pages=outcome.pages,
+            chunks=outcome.chunks,
+            tables=outcome.tables,
+            warnings=outcome.warnings,
+            document_id=outcome.document_id,
+            error_code=outcome.error_code,
+            error_message=outcome.error_message,
+        )
+        # The catalog first, then the job store: a client that sees the file finished finds it in the manifest. The
+        # manifest lock spans both, so no other rewrite can list the file as still ingesting after this one.
+        with self.manifest_lock(source_id):
+            self.refresh_workspace_source(source_id, final={file_id: status_for(outcome.stage)})
             update(
                 stage=outcome.stage,
                 stage_detail=None,
                 progress_percent=100 if outcome.ready else row["progress_percent"],
                 claimed=0,
             )
-            if self.store.get_file(file_id) is None:  # deleted while it ran: undo what it wrote
-                self.remove_outputs({**row, "tables": outcome.tables, "document_id": outcome.document_id})
-                self.refresh_workspace_source(source_id)
-
-    def profile_workspace_tables(self) -> list[dict[str, Any]]:
-        source_id = WORKSPACE_SOURCES["table"]["id"]
-        with self.source_lock(source_id):
-            return tables.profile_database(database_path(self.catalog, source_id), None)
+        if self.store.get_file(file_id) is None:  # deleted while it ran: undo what it wrote
+            self.remove_outputs({**row, "tables": outcome.tables, "document_id": outcome.document_id})
+            self.refresh_workspace_source(source_id)
 
     def delete_uploads(self, file_ids: list[str]) -> list[dict[str, Any]]:
+        """Delete files without waiting for another file's load: a deleted file's tables leave the manifest (so the
+        tables tool) at once, and the DuckDB file now or, while another table file is loading, right after it."""
         assert self.store is not None
         deleted = self.store.delete_files(WORKSPACE, file_ids)
+        drops: defaultdict[str, set[str]] = defaultdict(set)
         for row in deleted:
-            self.remove_outputs(row)
+            self.remove_outputs({**row, "tables": []})
+            if row["source_id"] and row["tables"]:
+                drops[row["source_id"]].update(row["tables"])
             path = self.stored_path(row)
             if path is not None:
                 path.unlink(missing_ok=True)
+        later: dict[str, set[str]] = {}
+        for source_id, names in drops.items():
+            lock = self.build_lock(source_id)
+            if lock.acquire(blocking=False):
+                try:
+                    self.drop_deleted_tables(source_id, names)
+                finally:
+                    lock.release()
+            else:
+                later[source_id] = names
         for source_id in {row["source_id"] for row in deleted if row["source_id"]}:
-            reprofile = source_id == WORKSPACE_SOURCES["table"]["id"]
-            self.refresh_workspace_source(source_id, profile=self.profile_workspace_tables() if reprofile else None)
+            self.refresh_workspace_source(source_id)
+        for source_id, names in later.items():
+            threading.Thread(
+                target=self._drop_later, args=(source_id, names), name=f"drop-{source_id}", daemon=True
+            ).start()
         return deleted
+
+    def _drop_later(self, source_id: str, names: set[str]) -> None:
+        try:
+            self.drop_deleted_tables(source_id, names)
+            self.refresh_workspace_source(source_id)
+        except Exception:
+            logger.exception("could not drop the deleted tables %s of %s", sorted(names), source_id)
 
     def remove_outputs(self, row: dict[str, Any]) -> None:
         """Remove what a file put in the index, the parsed documents and the database."""
@@ -518,14 +583,30 @@ class Pipeline:
             (directory / "documents" / f"{row['document_id']}.md").unlink(missing_ok=True)
             (directory / "chunks" / f"{row['document_id']}.jsonl").unlink(missing_ok=True)
         if row.get("tables"):
-            with self.source_lock(source_id):
-                if database_path(self.catalog, source_id).exists():
-                    building = self.begin_database(source_id)
-                    tables.drop_tables(building, row["tables"])
-                    self.end_database(source_id, building, commit=True)
+            self.drop_deleted_tables(source_id, row["tables"])
+
+    def drop_deleted_tables(self, source_id: str, names: Iterable[str]) -> None:
+        """Drop the tables no file of the source holds any more (a file loaded meanwhile may have reused a name), and
+        profile what is left; waits for the build lock."""
+        with self.build_lock(source_id):
+            in_use = {name for r in self.store.source_files(source_id) for name in r["tables"]} if self.store else set()
+            names = set(names) - in_use
+            if not names or not database_path(self.catalog, source_id).exists():
+                return
+            building = self.begin_database(source_id)
+            ended = False
+            try:
+                tables.drop_tables(building, names)
+                profile = tables.profile_database(building, None)
+                self.end_database(source_id, building, commit=True)
+                ended = True
+            finally:
+                if not ended:
+                    self.end_database(source_id, building, commit=False)
+            self._profiles[source_id] = profile
 
     def begin_database(self, source_id: str) -> Path:
-        """A private copy of the source's DuckDB to write; the caller holds the source lock."""
+        """A private copy of the source's DuckDB to write; the caller holds the build lock."""
         target = database_path(self.catalog, source_id)
         building = self.discard_database(source_id)
         if target.exists():
@@ -537,7 +618,7 @@ class Pipeline:
         return building
 
     def discard_database(self, source_id: str) -> Path:
-        """Remove an unfinished copy (and its WAL); returns its path."""
+        """Remove an unfinished copy (and its WAL); returns its path. The caller holds the build lock."""
         target = database_path(self.catalog, source_id)
         building = target.with_name(f"{target.name}.building")
         for leftover in (building, building.with_name(f"{building.name}.wal")):
@@ -550,28 +631,23 @@ class Pipeline:
             building.chmod(0o644)
             os.replace(building, database_path(self.catalog, source_id))
         else:
-            building.unlink(missing_ok=True)
+            self.discard_database(source_id)
 
     # Workspace catalog entries
 
-    def refresh_workspace_source(
-        self,
-        source_id: str,
-        *,
-        profile: list[dict[str, Any]] | None = None,
-        final: dict[str, str] | None = None,
-    ) -> None:
+    def refresh_workspace_source(self, source_id: str, *, final: dict[str, str] | None = None) -> None:
         """Rewrite the source manifest from the job store (``final``: statuses about to be stored); remove it with
         its last file."""
         assert self.store is not None
         spec = next(spec for spec in WORKSPACE_SOURCES.values() if spec["id"] == source_id)
-        with self.source_lock(source_id):
+        with self.manifest_lock(source_id):
             rows = [
                 {**row, "status": (final or {}).get(row["file_id"], row["status"])}
                 for row in self.store.source_files(source_id)
             ]
             if not rows:
                 self.catalog.delete_source(source_id)
+                self._profiles.pop(source_id, None)
             else:
                 entries = [file_entry(row) for row in rows]
                 manifest: dict[str, Any] = {
@@ -596,7 +672,8 @@ class Pipeline:
                     }
                 else:
                     owned = {name for row in ready for name in row["tables"]}
-                    if profile is None:
+                    profile = self._profiles.get(source_id)
+                    if profile is None:  # since a restart: the tables the manifest lists are all still there
                         previous = self.catalog.read_source(source_id) or {}
                         profile = (previous.get("database") or {}).get("tables", [])
                     manifest["database"] = {

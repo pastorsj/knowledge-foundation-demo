@@ -44,26 +44,32 @@ AI-Q's documents contract, so its upload UI works unchanged; responses add `kind
 | `GET /v1/collections/{name}/documents` | `{files: [FileInfo]}` |
 | `DELETE /v1/collections/{name}/documents` | body `{file_ids}`; removes chunks, tables and originals |
 | `GET /v1/documents/{job_id}/status` | `IngestionJobStatus` |
-| `POST /v1/packs/sync`, `GET /v1/packs/status` | start a pack sync (`202`), per-pack `{id, status, files_total, files_done, error}` |
+| `POST /v1/packs/sync[?force=true]`, `GET /v1/packs/status` | start a pack sync (`202`; `force` ignores digests), per-pack `{id, status, files_total, files_done, error}` |
 
 Uploads stream to disk; `file_id` is `f-` plus the first 16 hex digits of the file's sha256, so identical bytes are
 one file (a re-upload returns it, or ingests it again if it had failed). A file that cannot be ingested (unsupported,
 renamed, empty, too large) fails on its own with an error code and message; the rest of the batch continues.
 Uploaded documents become the source `workspace.documents`, tables `workspace.tables` (DuckDB alias
-`workspace_tables`), both in the pack `workspace` ("Your data").
+`workspace_tables`), both in the pack `workspace` ("Your data"). Table files load one at a time into a private copy of
+the DuckDB file that is swapped in whole; uploads and deletes never wait for a load (a deleted file's tables leave the
+manifest at once and the DuckDB file once the running load is done). Error messages carry no URLs or paths.
 
 **Nemotron Parse fallback.** When Parse is disabled, unreachable, failing, or slower than three quarters of the stage
 timeout, a PDF is read from its text layer instead (parser `pdf-text-layer`, with a warning); an image fails with
 `parser_unavailable`.
 
-## Industry packs (`demo-ingest sync-packs`)
+## Industry packs (`demo-ingest sync-packs [--force]`)
 
 Every `PACKS_DIR/<id>/pack.yaml` (validated with `data/schemas`) is ingested through the same pipeline into
 `<id>.<source>` sources, with the pack's declared keys, column descriptions and prediction templates. The server
 syncs in the background at startup; the command syncs and exits non-zero if any pack or file failed. A pack is skipped
 when its digest is unchanged: sha256 over `pack.yaml`, `questions.yaml` and `files/**`, plus the Parse model (or
-`pdf-text-layer` when Parse is disabled) and the embed model. A sync whose PDFs fell back to the text layer because
-Parse was unreachable records no digest, so the next sync tries Parse again.
+`pdf-text-layer` when Parse is disabled) and the embed model. The digest is recorded only when every file is ready
+or failed for a reason another sync would repeat (its content: `unsupported_type`, `type_mismatch`, `empty_file`,
+`too_large`, `load_failed`, `conversion_failed`, a Parse 4xx or empty output; or Parse turned off). After anything
+else (Parse unreachable, answering 5xx or slower than its budget, mid-file too, so a PDF fell back to its text layer
+or a scan was not read; an embedding, Milvus, internal or timeout error) it is left out and the next sync tries again.
+`force` (`POST /v1/packs/sync?force=true`, `demo-ingest sync-packs --force`) ingests every pack again.
 
 ## Configuration
 
