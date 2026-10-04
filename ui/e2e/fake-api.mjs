@@ -10,6 +10,7 @@
  */
 
 import { createServer } from 'node:http'
+import { createDocuments, readBody } from './fake-documents.mjs'
 
 const question = (id, label, text, sources, tools, featured = false) => ({
   id,
@@ -203,61 +204,7 @@ const SOURCES = {
 
 // ---------------------------------------------------------------- documents (Your data)
 
-const DOCUMENT_STAGES = ['received', 'parsing', 'chunking', 'embedding', 'indexing', 'ready']
-const TABLE_STAGES = ['received', 'loading', 'profiling', 'ready']
-const TABLE_EXTENSIONS = /\.(csv|tsv|xlsx|xls|parquet|json|jsonl)$/i
-
-/** Uploaded files by id, and jobs by id; a file moves one stage per poll of its job's status */
-const files = new Map()
-const jobs = new Map()
-let sequence = 0
-
-const fileInfo = (file) => {
-  const stages = file.kind === 'table' ? TABLE_STAGES : DOCUMENT_STAGES
-  const stage = stages[Math.min(file.step, stages.length - 1)]
-  const ready = stage === 'ready'
-  return {
-    file_id: file.id,
-    file_name: file.name,
-    collection_name: 'workspace',
-    status: ready ? 'success' : 'ingesting',
-    file_size: file.size,
-    chunk_count: ready && file.kind === 'document' ? 4 : 0,
-    uploaded_at: '2026-10-02T10:00:00Z',
-    metadata: {},
-    kind: file.kind,
-    stage,
-    stage_detail: stage === 'parsing' ? 'page 1 of 1' : null,
-    parser: file.kind === 'table' ? 'duckdb-csv' : 'nemotron-parse-2.0',
-    tables:
-      ready && file.kind === 'table' ? [file.name.replace(/\..*$/, '').replace(/\W+/g, '_')] : null,
-    warnings: [],
-    progress_percent: Math.round((100 * file.step) / (stages.length - 1)),
-    error_message: null,
-  }
-}
-
-const workspaceSources = () => {
-  const ready = [...files.values()].map(fileInfo).filter((file) => file.status === 'success')
-  return [
-    ...(ready.some((file) => file.kind === 'document')
-      ? [source('workspace.documents', 'Your documents', 'documents')]
-      : []),
-    // A structured source is offered once it has a table
-    ...(ready.some((file) => file.kind === 'table')
-      ? [source('workspace.tables', 'Your tables', 'structured')]
-      : []),
-  ]
-}
-
-const COLLECTION = () => ({
-  name: 'workspace',
-  description: 'Your uploaded documents and tables',
-  file_count: files.size,
-  chunk_count: 0,
-  backend: 'ingest',
-  metadata: {},
-})
+const documents = createDocuments()
 
 // ---------------------------------------------------------------- jobs
 
@@ -282,12 +229,6 @@ const json = (res, body, status = 200) => {
 
 /** What the fake transcribes every recording to. */
 const TRANSCRIPT = 'Which customers spent the most last quarter?'
-
-const readBody = async (req) => {
-  const chunks = []
-  for await (const chunk of req) chunks.push(chunk)
-  return Buffer.concat(chunks)
-}
 
 const submitted = new Map()
 
@@ -314,63 +255,11 @@ createServer(async (req, res) => {
   }
   if (route === 'GET /v1/data_sources') {
     const pack = url.searchParams.get('pack')
-    if (pack === 'workspace') return json(res, workspaceSources())
+    if (pack === 'workspace') return json(res, documents.sources())
     return json(res, pack ? (SOURCES[pack] ?? []) : Object.values(SOURCES).flat())
   }
 
-  if (route === 'GET /v1/collections/workspace') return json(res, COLLECTION())
-  if (route === 'POST /v1/collections') return json(res, COLLECTION())
-  if (route === 'GET /v1/collections/workspace/documents') {
-    return json(res, { files: [...files.values()].map(fileInfo) })
-  }
-  if (route === 'POST /v1/collections/workspace/documents') {
-    if (!req.headers['content-type']?.startsWith('multipart/form-data; boundary=')) {
-      return json(res, { detail: 'Expected a multipart upload' }, 415)
-    }
-    const body = (await readBody(req)).toString('latin1')
-    const names = [...body.matchAll(/filename="([^"]+)"/g)].map((match) => match[1])
-    const jobId = `job-upload-${++sequence}`
-    const ids = names.map((name, index) => {
-      const id = `file-${sequence}-${index}`
-      files.set(id, {
-        id,
-        name,
-        size: 1024,
-        kind: TABLE_EXTENSIONS.test(name) ? 'table' : 'document',
-        step: 0,
-      })
-      return id
-    })
-    jobs.set(jobId, ids)
-    return json(res, { job_id: jobId, file_ids: ids, message: `${ids.length} files accepted` })
-  }
-  if (route === 'DELETE /v1/collections/workspace/documents') {
-    const { file_ids: ids = [] } = JSON.parse((await readBody(req)).toString() || '{}')
-    for (const id of ids) files.delete(id)
-    return json(res, { deleted: ids })
-  }
-  const status = pathname.match(/^\/v1\/documents\/([^/]+)\/status$/)
-  if (req.method === 'GET' && status) {
-    const ids = jobs.get(status[1])
-    if (!ids) return json(res, { detail: 'Unknown job' }, 404)
-    for (const id of ids) {
-      const file = files.get(id)
-      if (file) file.step += 1
-    }
-    const details = ids.flatMap((id) => (files.has(id) ? [fileInfo(files.get(id))] : []))
-    const done = details.every((file) => file.status === 'success')
-    return json(res, {
-      job_id: status[1],
-      status: done ? 'completed' : 'processing',
-      submitted_at: '2026-10-02T10:00:00Z',
-      total_files: details.length,
-      processed_files: details.filter((file) => file.status === 'success').length,
-      file_details: details,
-      collection_name: 'workspace',
-      backend: 'ingest',
-      metadata: {},
-    })
-  }
+  if (await documents.handle(req, res, pathname)) return
 
   if (route === 'POST /v1/jobs/async/submit') {
     const request = JSON.parse((await readBody(req)).toString())

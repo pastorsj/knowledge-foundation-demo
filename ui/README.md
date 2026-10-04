@@ -36,10 +36,10 @@ The browser only talks to this origin. The server routes are:
 ## Modes
 
 `UI_MODE=live` (default) submits questions to the API. `UI_MODE=replay` shows
-only the recorded sessions of the data pack, under "Recorded" as the original
-demo UI did: the composer and the data source selection are read only, the data
-sources come from the bundle's `pack.json`, and the `/api/v1` proxy answers 404
-without calling the API.
+only the recorded sessions of the selected industry pack, under "Recorded" as the original
+demo UI did: the composer and the data source selection are read only, the pack and its
+data sources come from its replay bundle (`$PACKS_DIR/<pack>/recordings/pack.json` and
+`sources.json`), and the `/api/v1` proxy answers 404 without calling the API.
 
 ## The execution view
 
@@ -109,8 +109,8 @@ npm run e2e:visual            # visual baselines, in the Playwright Docker image
 ```
 
 The e2e tests start servers from the build: live mode against
-`e2e/fake-api.mjs` (packs retail, manufacturing and the workspace; a documents API whose files move
-one pipeline stage per status poll; jobs answering with cited reports), replay mode on the synthetic
+`e2e/fake-api.mjs` (packs retail, manufacturing and the workspace; a documents API,
+`e2e/fake-documents.mjs`, whose files move one pipeline stage per status poll; jobs answering with cited reports), replay mode on the synthetic
 fixture packs in `e2e/fixtures/packs` (retail and manufacturing), and replay mode on the industry
 packs' committed recordings in `../data/packs` (a pack without a recordings bundle is skipped).
 `e2e/smoke.spec.ts` switches industries (the picker's examples, the sources panel and `?pack=`
@@ -123,16 +123,27 @@ It needs `npx playwright install chromium` once; on Linux, `npx playwright insta
 which also installs Chromium's system libraries with apt (sudo), as CI and `demo.sh test e2e` do.
 
 `e2e-live/` is the live end-to-end test of a running deployment, `scripts/demo.sh test live --url URL`
-([operations](../docs/operations.md#on-demand-checks)), which CI never runs. `playwright.live.config.ts` runs it
-with no server of its own; its checks (`e2e-live/checks.ts`) are unit-tested with Vitest in
-`e2e-live/checks.test.ts`. To try the whole test without a deployment, point a live-mode UI at
-`e2e-live/fake-deployment.mjs`, a stand-in API that answers each question with its recorded session:
+([operations](../docs/operations.md#on-demand-checks)), which CI never runs. It asks every industry pack's
+featured questions (`--pack P`, or `LIVE_PACK`, tests one pack; `LIVE_QUESTIONS` takes `id` or `pack/id`), each
+on `/research?pack=P` in a fresh browser context, and checks each run through the UI and the API. Then, on
+Your data, it uploads `e2e/fixtures/files/{policy.pdf,orders.csv}` (renamed and changed by a per-run token, so
+they never match a file already there), waits up to 10 minutes for both to be Available while recording their
+stages, checks what read them (Nemotron Parse 2.0, or the PDF text layer with a warning; DuckDB CSV and its
+table), asks a question that needs both, checks that its report cites Your documents and Your tables, and
+deletes the two files. `LIVE_UPLOAD=0` skips the upload. A catalog that is not built yet (503) or a pack that is
+not `ready` fails the run. The results go to `test-results/live/**/live-results.json`.
+`playwright.live.config.ts` runs it with no server of its own; its checks (`e2e-live/checks.ts`) are
+unit-tested with Vitest in `e2e-live/checks.test.ts`. To try the whole test without a deployment, point a
+live-mode UI at `e2e-live/fake-deployment.mjs`, a stand-in API that serves the packs' replay bundles
+(`pack.json`, `sources.json`), answers each question with its recorded session, and emulates Your data's
+documents API as the smoke test's fake does (`e2e/fake-documents.mjs`):
 
 ```bash
 npm run build
-node e2e-live/fake-deployment.mjs &   # 127.0.0.1:3997; DATA_PACK picks the pack (default synthetic-market)
+# 127.0.0.1:3997; PACKS picks the packs (default: every pack with a replay bundle)
+PACKS=retail,manufacturing node e2e-live/fake-deployment.mjs &
 HOSTNAME=127.0.0.1 PORT=3998 UI_MODE=live API_URL=http://127.0.0.1:3997 node .next/standalone/server.js &
-../scripts/demo.sh test live --url http://127.0.0.1:3998
+../scripts/demo.sh test live --url http://127.0.0.1:3998 [--pack retail]
 ```
 
 The visual baselines (`e2e/visual`) are screenshots of the views that keep the original demo UI's

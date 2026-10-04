@@ -13,11 +13,16 @@
  *   and ends `success`, and the reopened session's execution view shows the run's closing events;
  * - closing: the run ends on run.completed, report.completed, report.reference_resolution and report.metrics;
  * - latency: the job finished within its budget.
+ *
+ * Your data's upload-then-ask run is checked by checkUploadCitations: its report cites a receipt of each
+ * workspace source.
  */
 
 import { pillLabel, sessionPills } from '@/shared/components/ToolPills/pills'
 
 export interface PackQuestion {
+  /** The pack it belongs to (the live test adds it to the API's questions) */
+  pack: string
   id: string
   label?: string
   question: string
@@ -39,7 +44,12 @@ export interface LiveTurn {
   status?: string
   report?: { markdown?: string; citations?: Array<{ evidenceId?: string }> } | null
   events?: LiveEvent[]
-  receipts?: Array<{ receiptId?: string; status?: string; content?: unknown }>
+  receipts?: Array<{
+    receiptId?: string
+    status?: string
+    artifactKind?: string
+    content?: unknown
+  }>
 }
 
 export interface Check {
@@ -51,6 +61,8 @@ export const CHECKS = ['success', 'citations', 'pills', 'replay', 'closing', 'la
 export type CheckId = (typeof CHECKS)[number]
 
 export interface QuestionResult {
+  pack: string
+  /** `pack/question` */
   id: string
   jobId: string | null
   seconds: number | null
@@ -74,27 +86,55 @@ export const MAX_BUDGET_SECONDS = 600
 const pass = (detail = ''): Check => ({ ok: true, detail })
 const fail = (detail: string): Check => ({ ok: false, detail })
 
-/** The featured questions, or the requested ones (comma-separated ids), in the order asked. */
-export const selectQuestions = (
-  questions: readonly PackQuestion[],
-  requested: string | undefined
-): PackQuestion[] => {
-  const ids = (requested ?? '')
+/** The requested questions: ids, comma- or space-separated, each `id` or `pack/id`. */
+export const parseQuestionFilter = (requested: string | undefined): string[] =>
+  (requested ?? '')
     .split(/[\s,]+/)
     .map((id) => id.trim())
     .filter(Boolean)
+
+/**
+ * One pack's questions to ask: its featured ones, or those requested (`id` or `pack/id`) in the order asked. A
+ * bare id another pack offers is not this pack's; `pack/id` naming a question this pack lacks is an error.
+ */
+export const selectQuestions = (
+  questions: readonly PackQuestion[],
+  requested: string | undefined,
+  pack: string
+): PackQuestion[] => {
+  const ids = parseQuestionFilter(requested)
   if (!ids.length) return questions.filter((question) => question.featured)
   const byId = new Map(questions.map((question) => [question.id, question]))
-  const unknown = ids.filter((id) => !byId.has(id))
+  const unknown = ids.filter(
+    (id) => id.startsWith(`${pack}/`) && !byId.has(id.slice(pack.length + 1))
+  )
   if (unknown.length) {
     throw new Error(
-      `the deployment's pack has no question ${unknown.join(', ')}; it offers ${[...byId.keys()].join(', ')}`
+      `the pack ${pack} has no question ${unknown.join(', ')}; it offers ${[...byId.keys()].join(', ')}`
     )
   }
-  return ids.map((id) => byId.get(id) as PackQuestion)
+  const selected = ids
+    .map((id) =>
+      id.startsWith(`${pack}/`) ? id.slice(pack.length + 1) : id.includes('/') ? '' : id
+    )
+    .flatMap((id) => (byId.has(id) ? [byId.get(id) as PackQuestion] : []))
+  return [...new Set(selected)]
 }
 
-/** `300`, `market-leaders=60` or both, comma-separated: one budget for all, and budgets by question. */
+/** The requested questions (`id` or `pack/id`) that no selected question answers to. */
+export const unmatchedQuestions = (
+  requested: string | undefined,
+  selected: readonly PackQuestion[]
+): string[] =>
+  parseQuestionFilter(requested).filter(
+    (id) =>
+      !selected.some((question) => id === question.id || id === `${question.pack}/${question.id}`)
+  )
+
+/**
+ * `300`, `return-window-fees=60`, `retail/return-window-fees=60` or any of them, comma-separated: one budget
+ * for all, and budgets by question (`id` or `pack/id`).
+ */
 export const parseBudgets = (
   spec: string | undefined
 ): { all: number | null; byQuestion: Record<string, number> } => {
@@ -121,11 +161,17 @@ export const defaultBudget = (recordedSeconds: number | null): number => {
   return Math.min(MAX_BUDGET_SECONDS, Math.max(MIN_BUDGET_SECONDS, budget))
 }
 
+/** The budget of `pack/id`, else of `id`, else for all, else three times the recorded run. */
 export const budgetFor = (
   id: string,
   budgets: ReturnType<typeof parseBudgets>,
-  recordedSeconds: number | null
-): number => budgets.byQuestion[id] ?? budgets.all ?? defaultBudget(recordedSeconds)
+  recordedSeconds: number | null,
+  pack?: string
+): number =>
+  (pack ? budgets.byQuestion[`${pack}/${id}`] : undefined) ??
+  budgets.byQuestion[id] ??
+  budgets.all ??
+  defaultBudget(recordedSeconds)
 
 /** How long the recorded session's last turn took (its report.metrics `wall_duration_ms`), in seconds. */
 export const recordedSeconds = (session: unknown): number | null => {
@@ -194,6 +240,55 @@ export const checkCitations = (turn: LiveTurn | null): Check => {
   if (resolved < citations.length)
     return fail(`${citations.length - resolved} citation(s) unresolved`)
   return pass(`${resolved} cited`)
+}
+
+/**
+ * The sources a receipt is evidence from: a retrieval's hits (else the sources it searched), and a structured
+ * query's database, by its alias (`aliases`, `database_name` to source id; `workspace_tables` is
+ * `workspace.tables` without one).
+ */
+export const receiptSources = (
+  content: unknown,
+  aliases: Readonly<Record<string, string>> = {}
+): string[] => {
+  const body = (content ?? {}) as {
+    sourceIds?: unknown
+    hits?: Array<{ sourceId?: unknown }>
+    databaseName?: unknown
+  }
+  const hits = (Array.isArray(body.hits) ? body.hits : [])
+    .map((hit) => hit?.sourceId)
+    .filter((id): id is string => typeof id === 'string')
+  const searched = Array.isArray(body.sourceIds)
+    ? body.sourceIds.filter((id): id is string => typeof id === 'string')
+    : []
+  const database =
+    typeof body.databaseName === 'string'
+      ? [aliases[body.databaseName] ?? body.databaseName.replace('_', '.')]
+      : []
+  return [...new Set([...(hits.length ? hits : searched), ...database])]
+}
+
+/** Every citation resolves, and the cited receipts include evidence from each of the `required` sources. */
+export const checkUploadCitations = (
+  turn: LiveTurn | null,
+  required: readonly string[],
+  aliases: Readonly<Record<string, string>> = {}
+): Check => {
+  const cited = checkCitations(turn)
+  if (!cited.ok) return cited
+  const evidence = new Set((turn?.report?.citations ?? []).map((citation) => citation.evidenceId))
+  const sources = new Set(
+    (turn?.receipts ?? [])
+      .filter((receipt) => evidence.has(receipt.receiptId))
+      .flatMap((receipt) => receiptSources(receipt.content, aliases))
+  )
+  const missing = required.filter((source) => !sources.has(source))
+  return missing.length
+    ? fail(
+        `no cited evidence from ${missing.join(', ')}; cited ${[...sources].join(', ') || 'none'}`
+      )
+    : pass(`${cited.detail} from ${required.join(', ')}`)
 }
 
 /** The picker's pills are the declared ones, and the run used every declared pill. */
@@ -280,14 +375,16 @@ export const parseStream = (text: string): { events: number; status: string | nu
 export const failed = (result: QuestionResult): CheckId[] =>
   CHECKS.filter((check) => !result.checks[check].ok)
 
-/** A compact pass/fail table: one row per question, then the deployment's own checks. */
+/** A compact pass/fail table: one row per question, then the deployment's own checks and the upload's. */
 export const formatTable = (
   results: readonly QuestionResult[],
-  deployment: ReadonlyArray<readonly [string, Check]>
+  deployment: ReadonlyArray<readonly [string, Check]>,
+  upload: ReadonlyArray<readonly [string, Check]> = []
 ): string => {
-  const header = ['Question', 'Result', ...CHECKS, 'Details']
+  const header = ['Pack', 'Question', 'Result', ...CHECKS, 'Details']
   const rows = results.map((result) => [
-    result.id,
+    result.pack,
+    result.id.startsWith(`${result.pack}/`) ? result.id.slice(result.pack.length + 1) : result.id,
     failed(result).length ? 'FAIL' : 'PASS',
     ...CHECKS.map((check) => (result.checks[check].ok ? 'ok' : 'FAIL')),
     CHECKS.filter((check) => result.checks[check].detail)
@@ -304,14 +401,19 @@ export const formatTable = (
     cells
       .map((cell, column) => (column === cells.length - 1 ? cell : cell.padEnd(widths[column])))
       .join('  ')
+  const named = (checks: ReadonlyArray<readonly [string, Check]>, prefix = '') =>
+    checks.map(([name, check]) => `${check.ok ? 'ok  ' : 'FAIL'} ${prefix}${name}: ${check.detail}`)
   const passed = results.filter((result) => !failed(result).length).length
   const checksOk = deployment.filter(([, check]) => check.ok).length
+  const uploadOk = upload.filter(([, check]) => check.ok).length
   return [
-    ...deployment.map(([name, check]) => `${check.ok ? 'ok  ' : 'FAIL'} ${name}: ${check.detail}`),
+    ...named(deployment),
     '',
     line(header),
     ...rows.map(line),
+    ...(upload.length ? ['', ...named(upload, 'upload ')] : []),
     '',
-    `${passed} of ${results.length} questions passed; deployment checks ${checksOk} of ${deployment.length}`,
+    `${passed} of ${results.length} questions passed; deployment checks ${checksOk} of ${deployment.length}` +
+      (upload.length ? `; upload checks ${uploadOk} of ${upload.length}` : ''),
   ].join('\n')
 }

@@ -12,6 +12,8 @@ import {
   checkPills,
   checkReplay,
   checkSuccess,
+  checkUploadCitations,
+  receiptSources,
   defaultBudget,
   failed,
   formatTable,
@@ -21,6 +23,7 @@ import {
   recordedSeconds,
   withRetries,
   selectQuestions,
+  unmatchedQuestions,
   type LiveEvent,
   type LiveTurn,
   type QuestionResult,
@@ -69,14 +72,22 @@ const turn = (overrides: Partial<LiveTurn> = {}): LiveTurn => ({
 
 const QUESTIONS = [
   {
+    pack: 'retail',
     id: 'top-customers',
     question: 'Who led?',
     sources: ['retail.sales'],
     tools: ['duckdb'],
     featured: true,
   },
-  { id: 'sector-sql', question: 'Sectors?', sources: ['retail.sales'], tools: ['ontology'] },
   {
+    pack: 'retail',
+    id: 'sector-sql',
+    question: 'Sectors?',
+    sources: ['retail.sales'],
+    tools: ['ontology'],
+  },
+  {
+    pack: 'retail',
     id: 'churn-risk',
     question: 'Peers?',
     sources: ['retail.sales'],
@@ -87,24 +98,39 @@ const QUESTIONS = [
 
 describe('questions and budgets', () => {
   it('runs the featured questions by default, or the requested ones in the order asked', () => {
-    expect(selectQuestions(QUESTIONS, undefined).map((q) => q.id)).toEqual([
+    expect(selectQuestions(QUESTIONS, undefined, 'retail').map((q) => q.id)).toEqual([
       'top-customers',
       'churn-risk',
     ])
-    expect(selectQuestions(QUESTIONS, 'sector-sql, top-customers').map((q) => q.id)).toEqual([
-      'sector-sql',
-      'top-customers',
-    ])
-    expect(() => selectQuestions(QUESTIONS, 'nope')).toThrow(
-      /no question nope; it offers top-customers/
+    expect(
+      selectQuestions(QUESTIONS, 'sector-sql, retail/top-customers', 'retail').map((q) => q.id)
+    ).toEqual(['sector-sql', 'top-customers'])
+    expect(() => selectQuestions(QUESTIONS, 'retail/nope', 'retail')).toThrow(
+      /the pack retail has no question retail\/nope; it offers top-customers/
     )
   })
 
+  it("leaves another pack's questions to it, and names the requested ones no pack offers", () => {
+    // A bare id this pack lacks, or another pack's `pack/id`, is not this pack's
+    expect(selectQuestions(QUESTIONS, 'nope, healthcare/sector-sql', 'retail')).toEqual([])
+    const selected = selectQuestions(QUESTIONS, 'churn-risk, nope, healthcare/x', 'retail')
+    expect(selected.map((q) => q.id)).toEqual(['churn-risk'])
+    expect(unmatchedQuestions('churn-risk, nope, healthcare/x', selected)).toEqual([
+      'nope',
+      'healthcare/x',
+    ])
+    expect(unmatchedQuestions('retail/churn-risk', selected)).toEqual([])
+  })
+
   it('takes one budget for all and budgets by question, and refuses anything else', () => {
-    const budgets = parseBudgets('300, top-customers=60')
-    expect(budgets).toEqual({ all: 300, byQuestion: { 'top-customers': 60 } })
-    expect(budgetFor('top-customers', budgets, 10)).toBe(60)
-    expect(budgetFor('churn-risk', budgets, 10)).toBe(300)
+    const budgets = parseBudgets('300, top-customers=60, retail/churn-risk=90')
+    expect(budgets).toEqual({
+      all: 300,
+      byQuestion: { 'top-customers': 60, 'retail/churn-risk': 90 },
+    })
+    expect(budgetFor('top-customers', budgets, 10, 'retail')).toBe(60)
+    expect(budgetFor('churn-risk', budgets, 10, 'retail')).toBe(90)
+    expect(budgetFor('churn-risk', budgets, 10, 'healthcare')).toBe(300)
     expect(() => parseBudgets('fast')).toThrow(/not a budget: fast/)
     expect(() => parseBudgets('=30')).toThrow(/not a budget/)
     expect(() => parseBudgets('a=-1')).toThrow(/not a budget/)
@@ -230,7 +256,8 @@ describe('the stream and the table', () => {
 
   it('prints one row per question and the deployment checks, and counts the failures', () => {
     const passing: QuestionResult = {
-      id: 'top-customers',
+      pack: 'retail',
+      id: 'retail/top-customers',
       jobId: 'job-1',
       seconds: 30,
       budget: 120,
@@ -245,7 +272,7 @@ describe('the stream and the table', () => {
     }
     const slow = {
       ...passing,
-      id: 'churn-risk',
+      id: 'retail/churn-risk',
       checks: { ...passing.checks, latency: { ok: false, detail: '200 s, over 120' } },
     }
     expect(failed(slow)).toEqual(['latency'])
@@ -254,15 +281,63 @@ describe('the stream and the table', () => {
       [
         ['health', { ok: true, detail: 'status ok, mode live' }],
         ['landing', { ok: false, detail: 'missing churn-risk' }],
-      ]
+      ],
+      [['citations', { ok: true, detail: '2 cited from workspace.documents' }]]
     )
     expect(table).toContain('ok   health: status ok, mode live')
     expect(table).toContain('FAIL landing: missing churn-risk')
-    expect(table).toMatch(/^top-customers\s+PASS(\s+ok){6}\s+citations: 1 cited/m)
+    expect(table).toMatch(/^retail\s+top-customers\s+PASS(\s+ok){6}\s+citations: 1 cited/m)
     expect(table).toMatch(
-      /^churn-risk\s+FAIL\s+ok\s+ok\s+ok\s+ok\s+ok\s+FAIL\s+.*latency: 200 s, over 120/m
+      /^retail\s+churn-risk\s+FAIL\s+ok\s+ok\s+ok\s+ok\s+ok\s+FAIL\s+.*latency: 200 s, over 120/m
     )
-    expect(table).toContain('1 of 2 questions passed; deployment checks 1 of 2')
+    expect(table).toContain('ok   upload citations: 2 cited from workspace.documents')
+    expect(table).toContain(
+      '1 of 2 questions passed; deployment checks 1 of 2; upload checks 1 of 1'
+    )
+  })
+})
+
+describe("Your data's upload", () => {
+  const cited = (receipts: Array<{ receiptId: string; content: unknown }>) =>
+    turn({
+      report: {
+        markdown: 'x [1] [2]',
+        citations: receipts.map((receipt) => ({ evidenceId: receipt.receiptId })),
+      },
+      receipts: receipts.map((receipt) => ({ ...receipt, status: 'completed' })),
+    })
+  const documents = {
+    receiptId: 'r1',
+    content: {
+      sourceIds: ['workspace.documents', 'workspace.tables'],
+      hits: [{ sourceId: 'workspace.documents' }],
+    },
+  }
+  const tables = { receiptId: 'r2', content: { databaseName: 'workspace_tables' } }
+
+  it('reads the sources of a retrieval and of a structured query', () => {
+    expect(receiptSources(documents.content)).toEqual(['workspace.documents'])
+    expect(receiptSources({ sourceIds: ['workspace.documents'], hits: [] })).toEqual([
+      'workspace.documents',
+    ])
+    expect(receiptSources(tables.content)).toEqual(['workspace.tables'])
+    expect(receiptSources({ databaseName: 'ws' }, { ws: 'workspace.tables' })).toEqual([
+      'workspace.tables',
+    ])
+    expect(receiptSources(null)).toEqual([])
+  })
+
+  it('passes a report citing both workspace sources, and names a missing one', () => {
+    const required = ['workspace.documents', 'workspace.tables']
+    expect(checkUploadCitations(cited([documents, tables]), required)).toEqual({
+      ok: true,
+      detail: '2 cited from workspace.documents, workspace.tables',
+    })
+    expect(checkUploadCitations(cited([documents]), required)).toEqual({
+      ok: false,
+      detail: 'no cited evidence from workspace.tables; cited workspace.documents',
+    })
+    expect(checkUploadCitations(null, required).ok).toBe(false)
   })
 })
 
