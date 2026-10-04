@@ -112,8 +112,9 @@ or with the UI alone shared through a Brev link.
    `ontology` profile, also bring the private submodule ([Auto Ontology](../tools/auto-ontology/README.md#run)).
 3. **Configure.** Run `./scripts/demo.sh init` on the VM, then edit `.env` there (it stays mode 600; keep keys off
    command lines). Set `INFERENCE_API_KEY` (your `nvapi-` key, which also serves the retriever) and
-   `COMPOSE_PROFILES=core,parse,kumo`. `KUMO_RELATIONAL_URL` and `KUMO_API_KEY` stay unused: the `kumo` profile
-   runs its own NIM.
+   `COMPOSE_PROFILES=core,parse,kumo`. `KUMO_RELATIONAL_URL` and `KUMO_API_KEY` are ignored: the `kumo` profile
+   runs its own NIM, and `demo.sh` passes the prediction server no key for it (the Kumo client refuses to send one
+   over plain `http://`), so a `.env` copied from the Spark works unchanged.
 4. **The Kumo NIM image.** `up` pulls `nvcr.io/nim/nvidia/kumo-relational:1.0.1` (about 14 GB to download, 44 GB
    unpacked); the pull has worked without a login. If it is denied, log in with an NGC API key, piped rather than
    typed on the command line:

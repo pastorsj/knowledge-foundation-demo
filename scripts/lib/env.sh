@@ -26,6 +26,8 @@ readonly ENV_KEYS="COMPOSE_PROFILES UI_PORT UI_BIND_HOST
 #   PARSE_BASE_URL      the local Nemotron Parse server under the parse profile
 #   PARSE_API_KEY       always exported (Compose needs every secret's variable set); empty for the local server
 #   KUMO_RELATIONAL_URL the local NIM under the kumo profile; else .env's remote NIM (prediction profile)
+#   KUMO_API_KEY        empty under the kumo profile: the local NIM takes no key, and the Kumo client refuses
+#                       to send one over plain http to a host other than localhost
 #   AUTO_ONTOLOGY_URL   the Auto Ontology web app under the ontology profile, for the API
 #   AGENT_FEATURES      the optional tools baked into the agent image
 #   RETRIEVER_API_KEY   INFERENCE_API_KEY when empty: one build.nvidia.com key serves both
@@ -51,6 +53,7 @@ load_env() {
   fi
   if has_profile kumo; then
     KUMO_RELATIONAL_URL=http://kumo-relational:8000
+    KUMO_API_KEY=
   fi
   AUTO_ONTOLOGY_URL=
   if has_profile ontology; then
@@ -65,7 +68,8 @@ load_env() {
   if [ "$CAPABLE_BASE_URL" = "$INFERENCE_BASE_URL" ]; then
     CAPABLE_API_KEY=${CAPABLE_API_KEY:-$INFERENCE_API_KEY}
   fi
-  export COMPOSE_PROFILES PARSE_BASE_URL PARSE_API_KEY KUMO_RELATIONAL_URL AUTO_ONTOLOGY_URL AGENT_FEATURES
+  export COMPOSE_PROFILES PARSE_BASE_URL PARSE_API_KEY KUMO_RELATIONAL_URL KUMO_API_KEY
+  export AUTO_ONTOLOGY_URL AGENT_FEATURES
   export RETRIEVER_API_KEY SPEECH_API_KEY CAPABLE_API_KEY
 }
 

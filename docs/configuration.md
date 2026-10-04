@@ -70,7 +70,7 @@ Document embedding (ingest and retrieval) and reranking (retrieval).
 |---|---|---|
 | `COMPOSE_PROFILES` | `core,parse,prediction` | The profiles ([below](#profiles)). DGX Spark: `core,parse,prediction`; Brev or x86_64 with a GPU: `core,parse,kumo` |
 | `KUMO_RELATIONAL_URL` | – (required with `prediction`) | The base URL of a remote Kumo Relational NIM, the one that serves `/v1/health/ready`. Use `https://`: the Kumo client sends the key over plain `http://` only to `localhost`, `127.0.0.1` or `::1`. Unused under `kumo`, which runs its own NIM |
-| `KUMO_API_KEY` | – (required with `prediction`) | The key of the authenticating gateway in front of that NIM, sent as the `X-API-Key` header |
+| `KUMO_API_KEY` | – (required with `prediction`) | The key of the authenticating gateway in front of that NIM, sent as the `X-API-Key` header. Ignored under `kumo`: `demo.sh` passes the local NIM no key |
 | `UI_PORT` | `3300` | The UI's host port |
 | `UI_BIND_HOST` | `127.0.0.1` | The UI's host address. `0.0.0.0` only behind a link that requires sign-in (a Brev link with sign-in set in the Brev console): the UI, its uploads and the agent have no sign-in of their own. Every other port stays on 127.0.0.1 |
 | `DEFAULT_PACK` | `retail` | The industry the UI opens on (a directory of `data/packs`) |
