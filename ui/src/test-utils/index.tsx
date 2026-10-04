@@ -25,7 +25,6 @@ const renderWithProviders = (ui: ReactElement, { config, feature }: ProviderOpti
     <AppConfigProvider
       config={{
         mode: 'live',
-        defaultPack: 'retail',
         phoenixUrl: null,
         speechInput: { enabled: false, maxSeconds: 60 },
         fileUpload: getFileUploadConfigFromEnv({} as NodeJS.ProcessEnv),

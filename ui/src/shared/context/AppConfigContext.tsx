@@ -51,8 +51,6 @@ export interface FileUploadConfig {
 export interface AppConfig {
   /** Whether the UI talks to the API or replays recordings (UI_MODE) */
   mode: UiMode
-  /** The pack shown until the user picks another (DEFAULT_PACK) */
-  defaultPack: string
   /** Browser-reachable Phoenix UI (PHOENIX_URL); null hides the Phoenix link */
   phoenixUrl: string | null
   speechInput: SpeechInputConfig

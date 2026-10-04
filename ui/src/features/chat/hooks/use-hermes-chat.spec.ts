@@ -41,11 +41,11 @@ describe('useHermesChat', () => {
       status: 'submitted',
     }))
 
-    send('  Which assets led?  ')
+    send('  Which stores led in Q3?  ')
 
     const request = vi.mocked(submitJob).mock.calls[0][0]
     expect(request).toMatchObject({
-      input: 'Which assets led?',
+      input: 'Which stores led in Q3?',
       conversationId: chat().currentConversation!.id,
       dataSources: ['retail.policies'],
     })
@@ -63,7 +63,7 @@ describe('useHermesChat', () => {
   test('reports a rejected submission', async () => {
     vi.mocked(submitJob).mockRejectedValue(new Error('Failed to start research: 422 - bad source'))
 
-    send('Which assets led?')
+    send('Which stores led in Q3?')
 
     await waitFor(() =>
       expect(chat().currentConversation?.messages.at(-1)?.errorData?.errorMessage).toBe(
@@ -83,7 +83,7 @@ describe('useHermesChat', () => {
     vi.mocked(submitJob).mockRejectedValue(new Error('Failed to start research: 502'))
     vi.mocked(getJobStatus).mockResolvedValue({ job_id: 'x', status: 'running', error: null })
 
-    send('Which assets led?')
+    send('Which stores led in Q3?')
 
     await waitFor(() => expect(chat().isDeepResearchStreaming).toBe(true))
     expect(chat().currentConversation?.messages.some((m) => m.messageType === 'error')).toBe(false)
@@ -94,7 +94,7 @@ describe('useHermesChat', () => {
       'Failed to start research: 503 - The API is starting or stopping. Try again shortly.'
     vi.mocked(submitJob).mockRejectedValue(new ApiRequestError(message, 503, true))
 
-    send('Which assets led?')
+    send('Which stores led in Q3?')
 
     await waitFor(() =>
       expect(chat().currentConversation?.messages.at(-1)?.errorData?.errorMessage).toBe(message)
@@ -109,7 +109,7 @@ describe('useHermesChat', () => {
     )
     vi.mocked(getJobStatus).mockResolvedValue({ job_id: 'x', status: 'running', error: null })
 
-    send('Which assets led?')
+    send('Which stores led in Q3?')
 
     await waitFor(() => expect(chat().isDeepResearchStreaming).toBe(true))
     expect(chat().currentConversation?.messages.some((m) => m.messageType === 'error')).toBe(false)

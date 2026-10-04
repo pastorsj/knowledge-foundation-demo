@@ -15,7 +15,7 @@ describe('splitReferences', () => {
   test('keeps the API evidence limitation, which precedes the Sources list, in the body', () => {
     const content =
       'A claim [1].\n\n## Evidence limitation\n\nOne or more citations did not match evidence recorded for this run.' +
-      '\n\n## Sources\n\n- [1] Market analytics result — market scan — evidence `hermes-receipt:abc`'
+      '\n\n## Sources\n\n- [1] Structured query result — top stores — evidence `hermes-receipt:abc`'
     const { body, sources } = splitReferences(content)
     expect(body).toBe(
       'A claim [1].\n\n## Evidence limitation\n\nOne or more citations did not match evidence recorded for this run.'
@@ -107,11 +107,11 @@ describe('splitReferences', () => {
   test('parses run evidence with its reference and invocation ids', () => {
     const content =
       'Leaders were stable [1] and filings agree [2].\n\n**References:**\n' +
-      '- [1] Market analytics result — market scan — evidence `ev-1` — invocation `call_7`\n' +
+      '- [1] Structured query result — top stores — evidence `ev-1` — invocation `call_7`\n' +
       '- [2] Unstructured Retrieval evidence — 3 documents — evidence `ev-2`'
     const { sources } = splitReferences(content)
     expect(sources[0]).toMatchObject({
-      label: 'Market analytics result — market scan',
+      label: 'Structured query result — top stores',
       kind: 'doc',
       evidence: { referenceId: 'ev-1', invocationId: 'call_7' },
     })

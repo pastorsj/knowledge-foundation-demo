@@ -15,7 +15,6 @@ describe('runtime configuration', () => {
   test('defaults to live mode without Phoenix and the compose API address', () => {
     expect(readAppConfig({})).toMatchObject({
       mode: 'live',
-      defaultPack: 'retail',
       phoenixUrl: null,
       speechInput: { enabled: false, maxSeconds: 60 },
     })

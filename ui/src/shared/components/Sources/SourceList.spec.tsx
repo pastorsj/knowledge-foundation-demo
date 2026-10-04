@@ -68,7 +68,7 @@ describe('SourceList', () => {
     const evidence = { referenceId: 'ev-1', invocationId: 'call_7' }
     render(
       <SourceList
-        sources={[{ ...docSource, label: 'Market analytics result', evidence }]}
+        sources={[{ ...docSource, label: 'Structured query result', evidence }]}
         onOpenEvidence={onOpenEvidence}
       />
     )

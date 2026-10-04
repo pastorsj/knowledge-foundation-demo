@@ -11,7 +11,7 @@
  */
 
 import { type ReactNode, Suspense } from 'react'
-import { fetchPack } from '@/adapters/api/pack-client'
+import { fetchPack, fetchPacks, readRecordedPacks } from '@/adapters/api/pack-client'
 import { MainLayout, toDemoScenarios, type InitialQuestion } from '@/features/layout'
 import { readUiMode } from '@/shared/config/env'
 import { selectedPack } from '../selected-pack'
@@ -23,7 +23,11 @@ interface ResearchPageProps {
 const ResearchPage = async ({ searchParams }: ResearchPageProps): Promise<ReactNode> => {
   const params = await searchParams
   const packId = await selectedPack(params.pack)
-  const pack = readUiMode() === 'live' ? await fetchPack(packId) : null
+  const live = readUiMode() === 'live'
+  // The selector's packs come with the page, so it never shows a pack by its bare id
+  const [pack, packs] = live
+    ? await Promise.all([fetchPack(packId), fetchPacks()])
+    : [null, await readRecordedPacks()]
   const questionId = params.question
   const question =
     typeof questionId === 'string' ? pack?.questions.find((q) => q.id === questionId) : undefined
@@ -36,6 +40,7 @@ const ResearchPage = async ({ searchParams }: ResearchPageProps): Promise<ReactN
     <Suspense fallback={null}>
       <MainLayout
         packId={packId}
+        packs={packs}
         initialQuestion={initialQuestion}
         demoScenarios={toDemoScenarios(pack?.questions ?? [], pack?.examples)}
       />

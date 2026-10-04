@@ -24,7 +24,7 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 /** Start following job-1 and return its stream once connected. */
 const followJob = (): FakeEventSource => {
   chat().ensureSession()
-  chat().addUserMessage('Which assets led?')
+  chat().addUserMessage('Which stores led in Q3?')
   const messageId = chat().addAgentResponseWithMeta('', {
     deepResearchJobId: 'job-1',
     deepResearchJobStatus: 'submitted',

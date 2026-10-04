@@ -17,7 +17,7 @@ const showMessages = (messages: ChatMessage[]): void => {
   const conversation = {
     id: 's_1',
     userId: 'local',
-    title: 'Market leaders',
+    title: 'Top stores',
     messages,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -29,7 +29,7 @@ const question: ChatMessage = {
   id: 'q1',
   role: 'user',
   messageType: 'user',
-  content: 'Which assets led?',
+  content: 'Which stores led in Q3?',
   timestamp: new Date(),
 }
 
@@ -37,7 +37,7 @@ const answer: ChatMessage = {
   id: 'a1',
   role: 'assistant',
   messageType: 'agent_response',
-  content: 'Asset A led [1].\n\n**References:**\n- [1] Market analytics result — evidence `ev-1`',
+  content: 'Store 12 led [1].\n\n**References:**\n- [1] Structured query result — evidence `ev-1`',
   timestamp: new Date(),
   deepResearchJobId: 'job-1',
   deepResearchJobStatus: 'success',
@@ -59,8 +59,8 @@ describe('ChatArea', () => {
     showMessages([question, answer])
     render(<ChatArea />)
 
-    expect(screen.getByText('Which assets led?')).toBeInTheDocument()
-    expect(screen.getByText(/Asset A led/)).toBeInTheDocument()
+    expect(screen.getByText('Which stores led in Q3?')).toBeInTheDocument()
+    expect(screen.getByText(/Store 12 led/)).toBeInTheDocument()
   })
 
   test('renders job banners and dismissible error cards', async () => {

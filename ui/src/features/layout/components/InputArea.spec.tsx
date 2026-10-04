@@ -57,8 +57,8 @@ describe('InputArea', () => {
       {
         ...initialLayout,
         availableDataSources: [
-          { id: 'retail.sales', name: 'Market data', kind: 'structured' },
-          { id: 'retail.policies', name: 'Market news', kind: 'documents' },
+          { id: 'retail.sales', name: 'Sales & Customers', kind: 'structured' },
+          { id: 'retail.policies', name: 'Policies & Procedures', kind: 'documents' },
         ],
         enabledDataSourceIds: ['retail.sales'],
       },
@@ -70,9 +70,9 @@ describe('InputArea', () => {
     render(<InputArea />)
     const input = screen.getByRole('textbox', { name: 'Chat message input' })
 
-    await userEvent.type(input, 'Which assets led?{Enter}')
+    await userEvent.type(input, 'Which stores led in Q3?{Enter}')
 
-    expect(hermes.sendMessage).toHaveBeenCalledWith('Which assets led?')
+    expect(hermes.sendMessage).toHaveBeenCalledWith('Which stores led in Q3?')
     expect(input).toHaveValue('')
     expect(useChatStore.getState().currentConversation).not.toBeNull()
   })

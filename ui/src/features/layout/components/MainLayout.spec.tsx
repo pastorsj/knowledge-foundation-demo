@@ -3,7 +3,7 @@
 
 import { render, screen, waitFor } from '@/test-utils'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import { useChatStore } from '@/features/chat'
 import type { ExecutionWorkspaceProps, RecordingsSource } from '@/shared/context'
 import { useLayoutStore } from '../store'
@@ -19,28 +19,46 @@ const initialChat = useChatStore.getState()
 const initialLayout = useLayoutStore.getState()
 
 const SOURCES = [
-  { id: 'retail.sales', name: 'Market data' },
-  { id: 'retail.policies', name: 'Market news' },
+  { id: 'retail.sales', name: 'Sales & Customers' },
+  { id: 'retail.policies', name: 'Policies & Procedures' },
 ]
+
+const PACKS = [
+  {
+    id: 'retail',
+    kind: 'industry' as const,
+    title: 'Retail',
+    description: null,
+    icon: 'Store',
+    status: 'ready' as const,
+  },
+]
+
+/** The API, as far as the layout asks it: no request leaves the test */
+const api = vi.fn(async (url: string) =>
+  String(url).startsWith('/api/v1/data_sources')
+    ? Response.json(SOURCES)
+    : new Response(null, { status: 404 })
+)
 
 const recordings: RecordingsSource = {
   list: async () => [
     {
       id: 'rec-1',
-      title: 'Market leaders',
+      title: 'Return windows',
       recordedAt: '2026-09-01T00:00:00Z',
-      questions: ['Which assets led?'],
+      questions: ['What is the return window?'],
       tools: [],
     },
   ],
   load: async () => ({
     id: 'rec-1',
-    title: 'Market leaders',
+    title: 'Return windows',
     recordedAt: '2026-09-01T00:00:00Z',
     turns: [
       {
-        question: 'Which assets led?',
-        answer: 'Asset A led.',
+        question: 'What is the return window?',
+        answer: 'Thirty days, with a receipt.',
         jobId: 'job-1',
         sourceIds: ['retail.sales'],
       },
@@ -53,10 +71,13 @@ describe('MainLayout', () => {
     useChatStore.setState(initialChat, true)
     useChatStore.getState().setCurrentUser('local')
     useLayoutStore.setState({ ...initialLayout, availableDataSources: SOURCES }, true)
+    vi.stubGlobal('fetch', api)
   })
 
+  afterEach(() => vi.unstubAllGlobals())
+
   test('live mode offers the composer and data sources', () => {
-    render(<MainLayout />)
+    render(<MainLayout packId="retail" packs={PACKS} />)
 
     expect(screen.getByRole('textbox', { name: 'Chat message input' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Add data sources' })).toBeInTheDocument()
@@ -64,7 +85,10 @@ describe('MainLayout', () => {
   })
 
   test('replay mode lists recordings and opens one read-only', async () => {
-    render(<MainLayout />, { config: { mode: 'replay' }, feature: { recordings } })
+    render(<MainLayout packId="retail" packs={PACKS} />, {
+      config: { mode: 'replay' },
+      feature: { recordings },
+    })
 
     // As the original demo UI shows a recorded session: read only, not hidden
     expect(screen.getByRole('textbox', { name: 'Chat message input' })).toBeDisabled()
@@ -77,10 +101,10 @@ describe('MainLayout', () => {
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Recorded session: Market leaders; Completed' })
+      screen.getByRole('button', { name: 'Recorded session: Return windows; Completed' })
     )
 
-    expect(await screen.findByText('Asset A led.')).toBeInTheDocument()
+    expect(await screen.findByText('Thirty days, with a receipt.')).toBeInTheDocument()
     expect(useChatStore.getState().currentConversation?.readOnly).toBe(true)
     // Its data sources show in the composer's counter
     expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.sales'])
@@ -89,7 +113,7 @@ describe('MainLayout', () => {
   })
 
   test('live mode lists the recordings beside My sessions, and opens one read-only', async () => {
-    render(<MainLayout />, { feature: { recordings } })
+    render(<MainLayout packId="retail" packs={PACKS} />, { feature: { recordings } })
 
     // As in the original demo UI: My sessions first, the recordings one tab away
     const recordedTab = await screen.findByRole('tab', { name: /Recorded \(1\)/ })
@@ -101,10 +125,10 @@ describe('MainLayout', () => {
 
     await userEvent.click(recordedTab)
     await userEvent.click(
-      screen.getByRole('button', { name: 'Recorded session: Market leaders; Completed' })
+      screen.getByRole('button', { name: 'Recorded session: Return windows; Completed' })
     )
 
-    expect(await screen.findByText('Asset A led.')).toBeInTheDocument()
+    expect(await screen.findByText('Thirty days, with a receipt.')).toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: 'Chat message input' })).toBeDisabled()
     expect(screen.getByText('Recorded test session · read only')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Add data sources' })).toBeDisabled()
@@ -118,7 +142,7 @@ describe('MainLayout', () => {
       },
       load: recordings.load,
     }
-    render(<MainLayout />, { feature: { recordings: missing } })
+    render(<MainLayout packId="retail" packs={PACKS} />, { feature: { recordings: missing } })
 
     await waitFor(() => expect(screen.getByText('No sessions yet')).toBeInTheDocument())
     expect(screen.queryByRole('tab', { name: /Recorded/ })).not.toBeInTheDocument()
@@ -127,13 +151,15 @@ describe('MainLayout', () => {
   test('the composer offers the pack questions as demo scenarios', async () => {
     render(
       <MainLayout
+        packId="retail"
+        packs={PACKS}
         demoScenarios={[
           {
             id: 'top-customers',
             label: 'Top Customers',
             tools: ['duckdb'],
             description: 'Scan the most liquid issuers.',
-            question: 'Which assets led?',
+            question: 'What is the return window?',
             sourceIds: ['retail.policies'],
           },
         ]}
@@ -148,7 +174,7 @@ describe('MainLayout', () => {
     await userEvent.click(option)
 
     expect(screen.getByRole('textbox', { name: 'Chat message input' })).toHaveValue(
-      'Which assets led?'
+      'What is the return window?'
     )
     expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.policies'])
   })
@@ -156,13 +182,15 @@ describe('MainLayout', () => {
   test('places a featured question and its data sources in a new session', async () => {
     render(
       <MainLayout
-        initialQuestion={{ question: 'Which assets led?', sourceIds: ['retail.policies'] }}
+        packId="retail"
+        packs={PACKS}
+        initialQuestion={{ question: 'What is the return window?', sourceIds: ['retail.policies'] }}
       />
     )
 
     await waitFor(() =>
       expect(screen.getByRole('textbox', { name: 'Chat message input' })).toHaveValue(
-        'Which assets led?'
+        'What is the return window?'
       )
     )
     expect(useLayoutStore.getState().enabledDataSourceIds).toEqual(['retail.policies'])
@@ -173,7 +201,7 @@ describe('MainLayout', () => {
       <button onClick={onClose}>Workspace for {jobId}</button>
     )
     useLayoutStore.getState().openExecution('job-1')
-    render(<MainLayout />, { feature: { Workspace } })
+    render(<MainLayout packId="retail" packs={PACKS} />, { feature: { Workspace } })
 
     await userEvent.click(screen.getByRole('button', { name: 'Workspace for job-1' }))
 
@@ -187,13 +215,18 @@ describe('MainLayout', () => {
         {question} from {sourceIds?.join(', ')}
       </p>
     )
-    render(<MainLayout />, { config: { mode: 'replay' }, feature: { recordings, Workspace } })
+    render(<MainLayout packId="retail" packs={PACKS} />, {
+      config: { mode: 'replay' },
+      feature: { recordings, Workspace },
+    })
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Recorded session: Market leaders; Completed' })
+      await screen.findByRole('button', { name: 'Recorded session: Return windows; Completed' })
     )
-    await screen.findByText('Asset A led.')
+    await screen.findByText('Thirty days, with a receipt.')
 
     useLayoutStore.getState().openExecution('job-1')
-    expect(await screen.findByText('Which assets led? from retail.sales')).toBeInTheDocument()
+    expect(
+      await screen.findByText('What is the return window? from retail.sales')
+    ).toBeInTheDocument()
   })
 })

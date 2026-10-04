@@ -24,7 +24,7 @@ const kinds = (): Array<string | undefined> =>
 /** A conversation whose question has a job-backed answer placeholder, as useHermesChat creates it. */
 const askQuestion = (jobId = 'job-1'): string => {
   chat().ensureSession()
-  chat().addUserMessage('Which assets led?')
+  chat().addUserMessage('Which stores led in Q3?')
   const messageId = chat().addAgentResponseWithMeta('', {
     deepResearchJobId: jobId,
     deepResearchJobStatus: 'submitted',
@@ -42,7 +42,7 @@ describe('useChatStore', () => {
       {
         ...initialLayout,
         availableDataSources: [
-          { id: 'retail.sales', name: 'Market data' },
+          { id: 'retail.sales', name: 'Sales & Customers' },
           { id: 'retail.policies', name: 'News', default_enabled: false },
         ],
       },
@@ -253,10 +253,15 @@ describe('useChatStore', () => {
     test('opens a recording as a read-only conversation that is never saved', () => {
       chat().openRecordedSession({
         id: 'rec-1',
-        title: 'Market leaders',
+        title: 'Top stores',
         recordedAt: '2026-09-01T00:00:00Z',
         turns: [
-          { question: 'Which assets led?', answer: 'Asset A.', jobId: 'job-1', sourceIds: [] },
+          {
+            question: 'Which stores led in Q3?',
+            answer: 'Store 12.',
+            jobId: 'job-1',
+            sourceIds: [],
+          },
           { question: 'Why?', answer: null, jobId: 'job-2', sourceIds: [] },
         ],
       })
@@ -264,7 +269,7 @@ describe('useChatStore', () => {
       const conversation = chat().currentConversation as Conversation
       expect(conversation.readOnly).toBe(true)
       expect(kinds()).toEqual(['user', 'agent_response', 'user', 'error'])
-      expect(messages()[1]).toMatchObject({ content: 'Asset A.', deepResearchJobId: 'job-1' })
+      expect(messages()[1]).toMatchObject({ content: 'Store 12.', deepResearchJobId: 'job-1' })
       expect(chat().conversations).toEqual([])
     })
   })

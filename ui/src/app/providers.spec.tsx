@@ -25,14 +25,14 @@ const loadSavedSessionWithRunningJob = async (): Promise<void> => {
   const saved: Conversation = {
     id: 's_saved',
     userId: 'local',
-    title: 'Which assets led?',
+    title: 'Which stores led in Q3?',
     createdAt: new Date(),
     updatedAt: new Date(),
     messages: [
       {
         id: 'question',
         role: 'user',
-        content: 'Which assets led?',
+        content: 'Which stores led in Q3?',
         timestamp: new Date(),
         messageType: 'user',
       },
@@ -70,7 +70,6 @@ describe('Providers', () => {
       <Providers
         config={{
           mode: 'live',
-          defaultPack: 'retail',
           phoenixUrl: null,
           speechInput: SPEECH_OFF,
           fileUpload: FILE_UPLOAD,
@@ -109,7 +108,6 @@ describe('Providers', () => {
       <Providers
         config={{
           mode: 'live',
-          defaultPack: 'retail',
           phoenixUrl: null,
           speechInput: SPEECH_OFF,
           fileUpload: FILE_UPLOAD,
@@ -135,7 +133,6 @@ describe('Providers', () => {
       <Providers
         config={{
           mode: 'live',
-          defaultPack: 'retail',
           phoenixUrl: null,
           speechInput: SPEECH_OFF,
           fileUpload: FILE_UPLOAD,
@@ -156,7 +153,6 @@ describe('Providers', () => {
       <Providers
         config={{
           mode: 'replay',
-          defaultPack: 'retail',
           phoenixUrl: null,
           speechInput: SPEECH_OFF,
           fileUpload: FILE_UPLOAD,

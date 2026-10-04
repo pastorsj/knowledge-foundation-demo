@@ -43,6 +43,7 @@ import { useLayoutStore } from '../store'
 import { useRecordedSessions } from '../use-recorded-sessions'
 import type { DemoScenario } from '../scenarios'
 import { useSessionUrl } from '@/hooks/use-session-url'
+import type { PackSummary } from '@/generated/packs'
 
 /** A question to place in the composer, e.g. a featured question from the landing page. */
 export interface InitialQuestion {
@@ -52,7 +53,9 @@ export interface InitialQuestion {
 
 interface MainLayoutProps {
   /** The pack the page shows (`?pack=`, the `kf-pack` cookie or DEFAULT_PACK) */
-  packId?: string
+  packId: string
+  /** The packs of the industry selector, when the server listed them */
+  packs?: PackSummary[]
   initialQuestion?: InitialQuestion | null
   /** The active data pack's questions, offered by the composer's demo scenario picker */
   demoScenarios?: DemoScenario[]
@@ -105,7 +108,8 @@ const turnOfJob = (
  * Chat state is managed via the useChatStore.
  */
 export const MainLayout: FC<MainLayoutProps> = ({
-  packId = 'retail',
+  packId,
+  packs,
   initialQuestion = null,
   demoScenarios,
 }) => {
@@ -297,7 +301,7 @@ export const MainLayout: FC<MainLayoutProps> = ({
         newSessionActionLabel={executionOpen ? 'Back to answer' : 'Create new session'}
         isNewSessionDisabled={executionOpen ? false : isReplay || isStreaming}
         isDataSourceSelectionDisabled={isRecordedSession}
-        industrySelect={<IndustrySelect packId={packId} />}
+        industrySelect={<IndustrySelect packId={packId} packs={packs} />}
       />
 
       {/* Main content area: in-flow panels reflow the center column (push, not overlay) */}

@@ -51,7 +51,7 @@ interface IndexSession {
   tools?: ToolPillUse[]
 }
 
-/** The UI's pill labels: a market tool's pill names its CPU library when its run reported the CPU. */
+/** The UI's pill labels and families: NVIDIA's tools, and partners' (DuckDB). */
 const PILLS: Record<string, { label: string; family: 'partner' | 'nvidia' }> = {
   retrieval: { label: 'Retrieval', family: 'nvidia' },
   duckdb: { label: 'DuckDB', family: 'partner' },

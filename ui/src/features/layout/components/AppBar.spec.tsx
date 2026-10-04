@@ -16,9 +16,9 @@ describe('AppBar', () => {
 
   test('shows the session title and starts a new session from the logo', async () => {
     const onNewSession = vi.fn()
-    render(<AppBar sessionTitle="Market leaders" onNewSession={onNewSession} />)
+    render(<AppBar sessionTitle="Top stores" onNewSession={onNewSession} />)
 
-    expect(screen.getByText('Market leaders')).toBeInTheDocument()
+    expect(screen.getByText('Top stores')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Create new session' }))
     expect(onNewSession).toHaveBeenCalledOnce()
   })

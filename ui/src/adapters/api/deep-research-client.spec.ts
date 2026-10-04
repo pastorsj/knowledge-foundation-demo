@@ -120,7 +120,7 @@ describe('REST functions', () => {
     vi.stubGlobal('fetch', fetchMock)
 
     await submitJob({
-      input: 'Which assets led?',
+      input: 'Which stores led in Q3?',
       conversationId: 's_1',
       dataSources: ['retail.policies'],
       jobId: 'job-1',
@@ -132,7 +132,7 @@ describe('REST functions', () => {
     expect(init.headers).toMatchObject({ 'conversation-id': 's_1' })
     expect(JSON.parse(init.body)).toEqual({
       agent_type: 'hermes',
-      input: 'Which assets led?',
+      input: 'Which stores led in Q3?',
       data_sources: ['retail.policies'],
       job_id: 'job-1',
     })
@@ -150,7 +150,7 @@ describe('REST functions', () => {
   test('tells an answer from the API apart from one by the UI proxy', async () => {
     const submit = () =>
       submitJob({
-        input: 'Which assets led?',
+        input: 'Which stores led in Q3?',
         conversationId: 's_1',
         dataSources: [],
         jobId: 'job-1',

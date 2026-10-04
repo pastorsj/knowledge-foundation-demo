@@ -90,6 +90,17 @@ describe('DataSourcesPanel', () => {
   })
 
   test('in Your data without files, points to the Files tab instead of "no data sources"', async () => {
+    // The Files tab asks the documents API for the workspace's files: none, and no real request
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) =>
+        Response.json(
+          String(url).endsWith('/documents')
+            ? { files: [] }
+            : { name: 'workspace', file_count: 0, chunk_count: 0, metadata: {} }
+        )
+      )
+    )
     useLayoutStore.setState({
       packId: 'workspace',
       availableDataSources: [],
@@ -104,6 +115,7 @@ describe('DataSourcesPanel', () => {
     expect(screen.getByText(/No files yet/)).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Open Files' }))
     expect(useLayoutStore.getState().dataSourcesPanelTab).toBe('files')
+    vi.unstubAllGlobals()
   })
 
   test('says the sources are not ready yet while the catalog is being built', () => {

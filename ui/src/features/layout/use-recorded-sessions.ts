@@ -44,7 +44,12 @@ export const useRecordedSessions = (): UseRecordedSessionsReturn => {
   const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
-    if (!recordings || !packId) return
+    // Your data (the workspace) has no recordings bundle: nothing to ask for
+    if (!recordings || !packId || packId === 'workspace') {
+      setSessions([])
+      setStatus('ready')
+      return
+    }
     let cancelled = false
     setStatus('loading')
     recordings

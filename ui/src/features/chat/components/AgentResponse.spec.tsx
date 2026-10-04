@@ -8,7 +8,7 @@ import { AgentResponse } from './AgentResponse'
 
 const ANSWER_WITH_EVIDENCE =
   'Leaders were stable [1].\n\n**References:**\n' +
-  '- [1] Market analytics result — market scan — evidence `ev-1` — invocation `call_7`'
+  '- [1] Structured query result — top stores — evidence `ev-1` — invocation `call_7`'
 
 describe('AgentResponse', () => {
   test('renders response content', () => {

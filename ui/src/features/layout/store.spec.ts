@@ -95,7 +95,7 @@ describe('useLayoutStore', () => {
   describe('fetchDataSources', () => {
     test('stores the sources and enables those enabled by default', async () => {
       vi.mocked(fetchDataSources).mockResolvedValue([
-        { id: 'retail.sales', name: 'Market data' },
+        { id: 'retail.sales', name: 'Sales & Customers' },
         { id: 'retail.policies', name: 'News', default_enabled: false },
       ])
 

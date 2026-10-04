@@ -10,7 +10,7 @@
 
 import type { TrackedFile } from './types'
 
-const STORAGE_KEY = 'documents_active_jobs'
+const STORAGE_KEY = 'kf-documents-active-jobs'
 
 /** Persisted job info for resuming polling after refresh */
 export interface PersistedJob {
@@ -151,7 +151,7 @@ export const clearAllPersistedJobs = (): void => {
 // Prevents unnecessary GET /collections/{sessionId} calls (and 404 errors)
 // for sessions that have never had files uploaded.
 
-const COLLECTIONS_STORAGE_KEY = 'documents_sessions_with_collections'
+const COLLECTIONS_STORAGE_KEY = 'kf-documents-collections'
 
 /** Max tracked sessions to prevent unbounded localStorage growth */
 const MAX_TRACKED_SESSIONS = 200

@@ -14,7 +14,6 @@ const wrapper = ({ children }: { children: ReactNode }) => (
   <AppConfigProvider
     config={{
       mode: 'live',
-      defaultPack: 'retail',
       phoenixUrl: null,
       speechInput: { enabled: false, maxSeconds: 60 },
       fileUpload: getFileUploadConfigFromEnv({} as NodeJS.ProcessEnv),

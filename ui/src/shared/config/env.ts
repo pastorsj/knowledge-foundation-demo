@@ -59,7 +59,6 @@ export const readAppConfig = (env: Env = process.env): AppConfig => {
   const mode = readMode(env)
   return {
     mode,
-    defaultPack: readDefaultPack(env),
     phoenixUrl: phoenixUrl ? readHttpUrl('PHOENIX_URL', phoenixUrl) : null,
     speechInput: {
       // Replay never calls the API, so it has no transcription

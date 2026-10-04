@@ -21,7 +21,7 @@ const PACK: PackView = {
     {
       id: 'top-customers',
       label: 'Top Customers',
-      tag: 'ANALYTICS',
+      tag: 'SQL',
       description: null,
       question: 'Which customers spent the most?',
       sources: ['retail.sales'],
