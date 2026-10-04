@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 # Switchyard model router
 
 Hermes runs inside the OpenShell sandbox and sends every model call to
-[Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) at `host.openshell.internal:4000`, which is
+[Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) at `host.openshell.internal:4300`, which is
 published on `127.0.0.1:4300`. Each call names a route, such as `knowledge`, and Switchyard
 maps it to real models on the inference endpoint (and, for the capable model, on an optional
 endpoint of its own).

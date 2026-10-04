@@ -19,7 +19,7 @@ works on the host, through an SSH tunnel, or through a link to the UI.
 
 ```bash
 ./scripts/demo.sh eval --pack retail                      # every question with answer checks, once
-./scripts/demo.sh eval --pack retail --runs 2 --questions return-window,churn-risk
+./scripts/demo.sh eval --pack retail --runs 2 --questions return-window-fees,gold-churn-risk
 ./scripts/demo.sh eval --pack retail --url http://spark:3300
 ```
 
@@ -64,7 +64,7 @@ Off by default. It turns on when the environment holds all three of:
 | `GRADER_MODEL` | its model id |
 | `GRADER_SAMPLES` | optional: samples per run, majority vote (default 3) |
 
-The grader must be a frontier model, such as GPT-6 Sol or Claude Opus 5.5, the two graders of the bake-off in
+The grader must be a frontier model, such as GPT-6.1 Sol or Claude Opus 5.5, the two graders of the bake-off in
 [models and routing](../docs/models-and-routing.md). It has to check every number, date and unit in a report
 against the receipts; smaller models miss unsupported claims and fractions shown as percentages, which is what it is
 there to catch. It grades blind, with the bake-off judge's prompt: it sees what the data is (the `answers.yaml`
