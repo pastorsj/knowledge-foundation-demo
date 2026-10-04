@@ -1,0 +1,696 @@
+{
+  "schemaVersion": 2,
+  "id": "hf-followup-schedule",
+  "title": "Heart failure follow-up schedule",
+  "turns": [
+    {
+      "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+      "question": "What follow-up steps does the heart failure discharge protocol require after a patient goes home, and by when?",
+      "submittedAt": "2026-10-04T05:32:47.306415Z",
+      "completedAt": "2026-10-04T05:32:52.929854Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the Riverside Health Network Heart Failure Discharge and Transitional Care Protocol (RHN-CLN-HF-014 v4.2), the protocol requires the following post-discharge follow-up steps for patients discharged to **home or home health** [1]:\n\n| Follow-up Step | Required Action | Timing | Owner |\n|---|---|---|---|\n| **48-hour nurse call** | Phone call covering symptoms, daily weight, medicines in hand, open checklist items | Within 48 hours of discharge (up to 3 attempts documented) | Care Transitions RN |\n| **7-day follow-up visit** | In-person or telehealth visit at an HF clinic (Pine Valley Heart Failure Clinic F10, Oakridge Cardiology Clinic F11), primary care clinic | Within 7 calendar days of discharge (visit must be kept; a phone call does not count) | Receiving clinic |\n| **14-day labs** | Basic metabolic panel (potassium, creatinine) after any change to diuretic, ARNI, ACE inhibitor, or MRA dose | Within 14 days of discharge; result reviewed within 2 business days | Ordering clinic |\n| **30-day clinic review** | Cardiology/HF clinic review of volume status and titration of guideline-directed therapy; repeat education items if readmitted | Within 30 days of discharge | Cardiology |\n| **90-day assessment** | Functional status, medication adherence, need for repeat echocardiogram | At 90 days (closes the transitional care episode) | Primary care or HF clinic |\n\n**If the 7-day visit is missed:** The Care Transitions nurse calls the patient the same day (end of day 7), reschedules within 2 business days, records the reason, escalates to the Care Transitions manager if still not completed by day 10, and includes the patient in the monthly missed follow-up report [1].\n\n**Note:** Patients discharged to a skilled nursing facility, inpatient rehabilitation, or against medical advice follow a different schedule (Section 6) and are not counted in the 7-day completion measure. Discharges to hospice are excluded from all measures.\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — hf_discharge_transitional_care_protocol.pdf — evidence `hermes-receipt:18bc144072ef3b08ebec59b32fe556763fc386d3a87f3eee504acad5d80d3fa3`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:18bc144072ef3b08ebec59b32fe556763fc386d3a87f3eee504acad5d80d3fa3",
+            "label": "Unstructured Retrieval evidence — hf_discharge_transitional_care_protocol.pdf",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-67b032cb592b487691a7e083988cd754"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "4ac992fb-6d90-5374-8896-08ca8f6cee04",
+          "cursor": 867,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:47.395815Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:5655f29e9942072156e26113e2d59207c7da799a54777af751683e41bf8e2353",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e9ae39af-c10a-536e-8faa-36e490fd53c6",
+          "cursor": 868,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df:api:1",
+          "parentInvocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:48.401113Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4788,
+              "output_tokens": 170
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0fd691db-d639-50a2-a7ed-259b086efb80",
+          "cursor": 869,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-67b032cb592b487691a7e083988cd754",
+          "parentInvocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:48.442157Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:987f80878765348024d3bf3006544a008bb213914af5512b15317ef9e851de44",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "cf3f95d7-d665-55ed-ac7b-913ccdc33d8d",
+          "cursor": 870,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-67b032cb592b487691a7e083988cd754",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:18bc144072ef3b08ebec59b32fe556763fc386d3a87f3eee504acad5d80d3fa3"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:49.122306Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 678,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:18bc144072ef3b08ebec59b32fe556763fc386d3a87f3eee504acad5d80d3fa3",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "88d0e38a-9a82-5eb0-a217-a1f66ddde012",
+          "cursor": 871,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-67b032cb592b487691a7e083988cd754",
+          "parentInvocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:49.162559Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.704
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:5b286193ee72e52ad98f9776e1f4727110c97ab10133e14bd0696279067c25c8",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3d8ea940-09eb-57eb-9d65-aafcaa59bb8f",
+          "cursor": 872,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df:api:2",
+          "parentInvocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:52.856225Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 10283,
+              "output_tokens": 1043
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8d8567eb-a258-510f-af10-8a2d5f792e29",
+          "cursor": 873,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:52.887025Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:3619ae4a23dda09524e5fe03e1c17c52e39537da0d6393aab5a1f57ca59a8d78",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "caef3f38-d0df-5466-862a-5fafacde8001",
+          "cursor": 874,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:52.908193Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 15071,
+              "output_tokens": 1213,
+              "total_tokens": 16284,
+              "output_characters": 2129
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:1490cfcd25f6bafa43f5035d819390ea8615004a270a05f4845de2e3592a5a07",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "43c69aa3-004f-560f-9297-8868e77151c2",
+          "cursor": 875,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:52.929430Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c0376314-9b90-5760-a703-ab6567a60916",
+          "cursor": 876,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:52.929512Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "41d3dfb2-d316-595b-b164-80801fa142ee",
+          "cursor": 877,
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "runId": "run_6be1ed3600364cfabe2a92805e3c9136",
+          "sessionId": "record-13a5b2fb-3022-493e-b548-054e2b25324f",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4babc7fc09725018fbffc61d:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:52.929571Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 5559,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 704,
+              "input_tokens": 15071,
+              "output_tokens": 1213,
+              "total_tokens": 16284
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:18bc144072ef3b08ebec59b32fe556763fc386d3a87f3eee504acad5d80d3fa3",
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "invocationId": "hermes-tool:chatcmpl-tool-67b032cb592b487691a7e083988cd754",
+          "turnId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:3c98ae2e-ddb6-4744-8c72-19529ac8d7a2:1a3e26df",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 678,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T05:32:49.122306Z",
+          "content": {
+            "query": "heart failure discharge protocol follow-up steps after discharge home timing",
+            "sourceIds": [
+              "healthcare.guidelines"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 2.8828125,
+                "vectorScore": 0.6517423987388611,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0009",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n5. Post-discharge follow-up schedule\n5.1 The 7-day visit\nThe visit must take place within 7 calendar days of the discharge date. The clinic confirms the appointment by phone 2 days before it. Transport is arranged by Care Transitions for any patient who has no ride. A visit on day 7 counts; a visit on day 8 or later is recorded as late and still prompts the 14-day actions.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 5. Post-discharge follow-up schedule › 5.1 The 7-day visit",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": 1.6875,
+                "vectorScore": 0.6581768989562988,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0008",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n5. Post-discharge follow-up schedule\nEvery eligible patient receives the schedule below. The unit books the 7-day visit and the 14-day laboratory order before discharge; Care Transitions owns the schedule from the day of discharge.\nWithin 48 hours of discharge, Required action = Nurse phone call: symptoms, daily weight, medicines in hand, open checklist items. Within 48 hours of discharge, Owner = Care Transitions RN. Within 48 hours of discharge, Notes = Up to 3 attempts in 48 hours; every attempt is documented. Within 7 calendar days, Required action = Follow-up visit at an HF clinic (Pine Valley Heart Failure Clinic, F10, or Oakridge Cardiology Clinic, F11), the patient's primary care clinic, or by telehealth. Within 7 calendar days, Owner = Receiving clinic. Within 7 calendar days, Notes = Booked before discharge; a kept visit is required, a call does not count. Within 14 days, Required action = Basic metabolic panel (potassium, creatinine) after any change to a diuretic, ARNI, ACE inhibitor or MRA dose. Within 14 days, Owner = Ordering clinic. Within 14 days, Notes = Result reviewed within 2 business days. Within 30 days, Required action = Cardiology or HF clinic review: volume status and titration of guideline-directed therapy. Within 30 days, Owner = Cardiology. Within 30 days, Notes = Repeat the checklist's education items if the patient has been readmitted. At 90 days, Required action = Functional status, medicat",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 5. Post-discharge follow-up schedule",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": 1.58984375,
+                "vectorScore": 0.5125745534896851,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0004",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\n2. Definitions\nIndex discharge. The discharge that ends an inpatient HF admission. Discharges that end in death or in transfer to hospice are not index discharges for quality reporting.\nEligible for the 7-day visit. An index discharge to home or to home health. Patients discharged to a skilled nursing facility, to inpatient rehabilitation or against medical advice follow section 6.\nCompleted follow-up visit. A kept outpatient encounter, in person or by telehealth, with a physician, nurse practitioner or physician assistant at a Riverside clinic or hospital outpatient department. A phone call from the Care Transitions nurse does not count as a visit.\n30-day readmission. Any later inpatient admission of the same patient that begins within 30 days of the index discharge, whatever its cause.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope › 2. Definitions",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": 1.10546875,
+                "vectorScore": 0.5662314295768738,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0010",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n5. Post-discharge follow-up schedule\n5.1 The 7-day visit\n5.2 Missed or unbooked visits\nIf the 7-day visit has not been completed by the end of day 7, the Care Transitions nurse:\n- calls the patient the same day and reschedules the visit within 2 business days;\n- records the reason (no transport, patient declined, clinic capacity, other);\n- escalates to the Care Transitions manager if the visit is still not completed by day 10; and\n- lists the patient in the monthly missed follow-up report that goes to the Clinical Quality Committee.\nHome or home health, What this protocol requires = Full schedule in section 5; counted in the 7-day completion measure. Skilled nursing facility or inpatient rehabilitation, What this protocol requires = Discharge summary and medication list to the facility within 24 hours; facility physician reviews within 72 hours of arrival; not counted in the 7-day measure. Against medical advice, What this protocol requires = Care Transitions calls within 24 hours and offers a visit within 7 days; not counted in the 7-day measure. Hospice, What this protocol requires = Palliative plan of care; excluded from every measure in section 8",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 5. Post-discharge follow-up schedule › 5.1 The 7-day visit › 5.2 Missed or unbooked visits",
+                  "labels": [
+                    "list_item",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": 0.413330078125,
+                "vectorScore": 0.5986635684967041,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0005",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\n3. Discharge readiness criteria\nThe discharging physician confirms and documents each criterion before the discharge order is signed. The Care Transitions nurse completes the discharge checklist (form RHN-F-0231) in parallel; a scanned copy is filed in the chart.\n- • Weight is at or within 3 lb of the documented dry weight, and the discharge weight is recorded on the checklist.\n- • Oral diuretic regimen has been stable for at least 24 hours with no intravenous diuretic in that period.\n- • Potassium and creatinine from the last 24 hours have been reviewed.\n- • Resting heart rate and blood pressure are within the targets the cardiology team has written in the plan of care.\nSynthetic document for demonstration only. Riverside Health Network is fictional. Page 1 of 4\nRIVERSIDE HEALTH NETWORK RHN-CLN-HF-014 | Version 4.2\n- (\\bullet) The patient or caregiver has a working home scale, or one has been supplied by the unit before the patient leaves.\n- (\\bullet) A follow-up visit within 7 days has been booked and the date is written on the checklist and the after-visit summary.\nNote: If any criterion cannot be met, the physician documents why and the Care Transitions manager is told the same day. A discharge is not delayed for a missing appointment alone: the nurse books the visit before the patient leaves the unit or, at the latest, within one business day of discharge.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope › 3. Discharge readiness criteria",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": 0.126953125,
+                "vectorScore": 0.5976613759994507,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0003",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n1. Purpose and scope\nThis protocol sets out how Riverside Health Network prepares adult patients with heart failure (HF) for discharge and how it supports them in the 90 days afterwards. Its goal is to cut avoidable 30-day readmissions by making the first week after discharge predictable: every eligible patient leaves with a scheduled follow-up visit, a working home scale, a reconciled medication list and a named nurse who will call within 48 hours.\nThe protocol applies to every inpatient admission whose primary diagnosis is heart failure (ICD-10 codes I50.x, for example I50.9 heart failure unspecified, I50.22 chronic systolic heart failure, I50.23 acute on chronic systolic heart failure and I50.32 chronic diastolic heart failure) at Riverside Memorial Hospital (F01), Lakeview Community Hospital (F02) and Eastgate Regional Hospital (F03). Patients with HF as a secondary diagnosis follow the unit’s general discharge process, with this protocol's education items as a recommended addition.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 1. Purpose and scope",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": 0.1243896484375,
+                "vectorScore": 0.5830814242362976,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0011",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n6. Other discharge destinations\nA patient readmitted within 30 days of an HF discharge is reviewed by the unit’s nurse manager and the Care Transitions manager within 5 business days. The review asks which schedule steps were missed and whether the patient could have been supported differently.\nDischarging physician, Responsibility = Confirms the readiness criteria in section 3 and writes the plan of care. Unit nurse, Responsibility = Completes the checklist, performs teach-back, confirms the home scale, books the 7-day visit. Pharmacist, Responsibility = Reconciles medicines and reviews the discharge list. Care Transitions RN, Responsibility = Makes the 48-hour call, owns the schedule, rescheduled missed visits, reports open items. Receiving clinic, Responsibility = Holds capacity for HF visits within 7 days and reports no-shows the same day. Care Transitions manager, Responsibility = Reviews escalations and readmissions; reports monthly to the Clinical Quality Committee",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 6. Other discharge destinations",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": -0.44384765625,
+                "vectorScore": 0.5291674733161926,
+                "sourceId": "healthcare.guidelines",
+                "documentId": "healthcare.guidelines:f-bf5ec0b84895b290",
+                "chunkId": "healthcare.guidelines:f-bf5ec0b84895b290:0012",
+                "title": "hf_discharge_transitional_care_protocol.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Heart Failure Discharge and Transitional Care\nProtocol\n7. Roles and responsibilities\nSynthetic document for demonstration only. Riverside Health Network is fictional. Page 3 of 4\nRIVERSIDE HEALTH NETWORK RHN-CLN-HF-014 | Version 4.2\n7-day follow-up completion, Definition = Eligible HF discharges with a completed outpatient visit within 7 calendar days, divided by eligible HF discharges. 7-day follow-up completion, Target = 85% or higher. 7-day follow-up completion, Reported = Monthly, by hospital. 30-day HF readmission rate, Definition = Index HF discharges followed by any inpatient admission within 30 days, divided by index HF discharges. 30-day HF readmission rate, Target = 20.0% or lower. 30-day HF readmission rate, Reported = Quarterly, by hospital. 48-hour call completion, Definition = Eligible discharges reached by phone within 48 hours. 48-hour call completion, Target = 90% or higher. 48-hour call completion, Reported = Monthly. Teach-back documented, Definition = Discharges with teach-back recorded for patient and, where applicable, caregiver. Teach-back documented, Target = 95% or higher. Teach-back documented, Reported = Monthly",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-bf5ec0b84895b290",
+                  "file_name": "hf_discharge_transitional_care_protocol.pdf",
+                  "citation": "hf_discharge_transitional_care_protocol.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 4,
+                  "headings": "Heart Failure Discharge and Transitional Care\nProtocol › 7. Roles and responsibilities",
+                  "labels": [
+                    "page_footer",
+                    "page_header",
+                    "table"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "healthcare.guidelines": 31
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 280.5,
+              "searchMs": 8.5,
+              "rerankMs": 378.1,
+              "totalMs": 667.1
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "healthcare.guidelines"
+      ]
+    }
+  ]
+}

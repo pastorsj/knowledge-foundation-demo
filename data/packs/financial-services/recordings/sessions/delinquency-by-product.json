@@ -1,0 +1,512 @@
+{
+  "schemaVersion": 2,
+  "id": "delinquency-by-product",
+  "title": "Delinquency by loan product",
+  "turns": [
+    {
+      "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+      "question": "Which loan product had the highest 30-day delinquency rate in September 2026, and how does each product compare with September 2025?",
+      "submittedAt": "2026-10-04T05:32:24.795371Z",
+      "completedAt": "2026-10-04T05:32:32.488309Z",
+      "status": "success",
+      "report": {
+        "markdown": "**September 2026: Auto loans had the highest 30-day delinquency rate at 4.78%.**\n\n| Product | Sep 2025 | Sep 2026 | Change (pp) |\n|---------|----------|----------|-------------|\n| Auto    | 1.37% (2/146) | 4.78% (12/251) | +3.41 |\n| Personal| 2.99% (4/134) | 3.35% (7/209)  | +0.36 |\n| Mortgage| 0.75% (1/133) | 3.01% (4/133)  | +2.26 |\n\nAll three products saw higher delinquency rates in September 2026 versus September 2025. Auto loans showed the largest increase (+3.41 pp) and overtook personal loans as the highest-risk product. Mortgage delinquency rose sharply despite a flat active-loan count, while personal loans grew in volume with only a modest rate increase. [1]\n\n## Sources\n\n- [1] Structured retrieval result — financial_services_banking — evidence `hermes-receipt:cb9f40d6ac3b948181c44ab425bde6d1f954d2de228d9bef948a3c5680dfd25d`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:cb9f40d6ac3b948181c44ab425bde6d1f954d2de228d9bef948a3c5680dfd25d",
+            "label": "Structured retrieval result — financial_services_banking",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-c45c6e6608724e17b647a8a59e063bbd"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "dbc29c0f-7b65-50af-a281-d6ad759189f4",
+          "cursor": 839,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:24.881537Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:13867c28441c3db1934f914203838fc49e1676a88d38477103af968acf8107ba",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a76f817f-3b5b-53ec-bf99-949f9aec73a9",
+          "cursor": 840,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": "78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764:api:1",
+          "parentInvocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:28.137803Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 9756,
+              "output_tokens": 254
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "1b533a72-3ef2-512d-bd3b-81cd0fa5b6e2",
+          "cursor": 841,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-c45c6e6608724e17b647a8a59e063bbd",
+          "parentInvocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:28.175822Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d57a795121c2b7b951096a7773076529d7278ec1b78c802c7e2ced2b0afb5508",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "60578f5c-b60f-532d-90a6-26606900528c",
+          "cursor": 842,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": "78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-c45c6e6608724e17b647a8a59e063bbd",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:cb9f40d6ac3b948181c44ab425bde6d1f954d2de228d9bef948a3c5680dfd25d"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:28.474661Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 298,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:cb9f40d6ac3b948181c44ab425bde6d1f954d2de228d9bef948a3c5680dfd25d",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "883c0a1d-65c4-56f6-9548-897f29511bbe",
+          "cursor": 843,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-c45c6e6608724e17b647a8a59e063bbd",
+          "parentInvocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:28.501408Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.317
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:81a8af3d23240041e8262753166d73e2bf7ed9f3ece9d0c8b089b07475ce0a5f",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "5c0a27aa-7b71-5542-b264-edee2a068731",
+          "cursor": 844,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": "78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764:api:2",
+          "parentInvocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:32.413008Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 10960,
+              "output_tokens": 552
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "3e6f9297-80e5-54f9-8ce3-e10d92e4d476",
+          "cursor": 845,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:32.447438Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4936613679c5f706ae5fc86771ce193d64f28e030f30d7d01219c5956090280f",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "fcab0557-3a3c-5a14-9698-ad1cf8fdfca2",
+          "cursor": 846,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:32.469822Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 20716,
+              "output_tokens": 806,
+              "total_tokens": 21522,
+              "output_characters": 762
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:2de4c8333c73f392e6d26a9469ae0dc9b5fd8d202221755d72be9055b942e20d",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "258f6818-d68b-5795-819a-c3a74498e23a",
+          "cursor": 847,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:32.487958Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:78c16471-f714-4e82-bbee-27f1afce54e7:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "545d3f8d-3f0c-5fa8-81cc-7674b906362e",
+          "cursor": 848,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:32.488013Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:78c16471-f714-4e82-bbee-27f1afce54e7:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "00ac56b0-1999-5ed0-8eee-378b7c774e2a",
+          "cursor": 849,
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "runId": "run_39e5d819b59f4af7921c172ae4fe528a",
+          "sessionId": "record-6b359ca0-fe1f-408d-882f-36e539a3fb6c",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:55a9935d12e2f6e62304f83f:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:32.488045Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 7632,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 317,
+              "input_tokens": 20716,
+              "output_tokens": 806,
+              "total_tokens": 21522
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:78c16471-f714-4e82-bbee-27f1afce54e7:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:cb9f40d6ac3b948181c44ab425bde6d1f954d2de228d9bef948a3c5680dfd25d",
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "invocationId": "hermes-tool:chatcmpl-tool-c45c6e6608724e17b647a8a59e063bbd",
+          "turnId": "78c16471-f714-4e82-bbee-27f1afce54e7:78c16471-f714-4e82-bbee-27f1afce54e7:91696764",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 298,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T05:32:28.474661Z",
+          "content": {
+            "query": "30-day delinquency rate by loan product for September 2026 and September 2025",
+            "databaseName": "financial_services_banking",
+            "answer": null,
+            "sql": "SELECT \n    product,\n    month_end,\n    active_loans,\n    loans_30plus,\n    delinquency_rate_30plus * 100 AS delinquency_rate_30plus_pct\nFROM financial_services_banking.credit_risk_report_delinquency\nWHERE month_end IN ('2025-09-30', '2026-09-30')\nORDER BY month_end, delinquency_rate_30plus DESC;",
+            "rows": [
+              {
+                "product": "personal",
+                "month_end": "2025-09-30",
+                "active_loans": 134.0,
+                "loans_30plus": 4.0,
+                "delinquency_rate_30plus_pct": 2.9899999999999998
+              },
+              {
+                "product": "auto",
+                "month_end": "2025-09-30",
+                "active_loans": 146.0,
+                "loans_30plus": 2.0,
+                "delinquency_rate_30plus_pct": 1.37
+              },
+              {
+                "product": "mortgage",
+                "month_end": "2025-09-30",
+                "active_loans": 133.0,
+                "loans_30plus": 1.0,
+                "delinquency_rate_30plus_pct": 0.75
+              },
+              {
+                "product": "auto",
+                "month_end": "2026-09-30",
+                "active_loans": 251.0,
+                "loans_30plus": 12.0,
+                "delinquency_rate_30plus_pct": 4.78
+              },
+              {
+                "product": "personal",
+                "month_end": "2026-09-30",
+                "active_loans": 209.0,
+                "loans_30plus": 7.0,
+                "delinquency_rate_30plus_pct": 3.35
+              },
+              {
+                "product": "mortgage",
+                "month_end": "2026-09-30",
+                "active_loans": 133.0,
+                "loans_30plus": 4.0,
+                "delinquency_rate_30plus_pct": 3.01
+              }
+            ],
+            "sourceRowCount": 6,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "financial-services.banking"
+      ]
+    }
+  ]
+}

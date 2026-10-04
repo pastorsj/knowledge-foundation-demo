@@ -653,7 +653,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 273
+          "duration_ms": 246
         },
         "merchandising_plan_category_targets": {
           "table": "merchandising_plan_category_targets",
@@ -760,7 +760,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 262
+          "duration_ms": 276
         },
         "merchandising_plan_promo_calendar": {
           "table": "merchandising_plan_promo_calendar",
@@ -877,7 +877,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 263
+          "duration_ms": 258
         },
         "order_items": {
           "table": "order_items",
@@ -974,7 +974,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 271
+          "duration_ms": 273
         },
         "orders": {
           "table": "orders",
@@ -1101,7 +1101,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 279
+          "duration_ms": 249
         },
         "products": {
           "table": "products",
@@ -1218,7 +1218,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 271
+          "duration_ms": 265
         },
         "returns": {
           "table": "returns",
@@ -1355,7 +1355,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 265
+          "duration_ms": 287
         },
         "stores": {
           "table": "stores",
@@ -1462,7 +1462,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 252
+          "duration_ms": 260
         }
       },
       "queries": [
@@ -1521,7 +1521,70 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 283
+            "duration_ms": 251
+          }
+        },
+        {
+          "sql": "WITH\n  -- Net sales per category in Q3 2026\n  sales_q3 AS (\n    SELECT\n      p.category,\n      SUM(oi.line_amount) AS net_sales\n    FROM retail_sales.orders AS o\n    JOIN retail_sales.order_items AS oi ON oi.order_id = o.order_id\n    JOIN retail_sales.products AS p ON p.product_id = oi.product_id\n    WHERE o.ordered_at >= TIMESTAMP '2026-07-01'\n      AND o.ordered_at < TIMESTAMP '2026-10-01'\n    GROUP BY p.category\n  ),\n  -- Return value per category in Q3 2026\n  returns_q3 AS (\n    SELECT\n      p.category,\n      SUM(r.returned_amount) AS returned_value\n    FROM retail_sales.returns AS r\n    JOIN retail_sales.order_items AS oi ON oi.order_item_id = r.order_item_id\n    JOIN retail_sales.products AS p ON p.product_id = oi.product_id\n    WHERE r.returned_at >= TIMESTAMP '2026-07-01'\n      AND r.returned_at < TIMESTAMP '2026-10-01'\n    GROUP BY p.category\n  )\nSELECT\n  s.category,\n  s.net_sales,\n  COALESCE(r.returned_value, 0) AS returned_value,\n  ROUND(COALESCE(r.returned_value, 0) / NULLIF(s.net_sales, 0), 4) AS return_rate\nFROM sales_q3 AS s\nLEFT JOIN returns_q3 AS r USING (category)\nORDER BY return_rate DESC",
+          "result": {
+            "columns": [
+              "category",
+              "net_sales",
+              "returned_value",
+              "return_rate"
+            ],
+            "types": [
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "Electronics",
+                47732.89999999998,
+                7981.059999999993,
+                0.1672
+              ],
+              [
+                "Apparel",
+                11362.969999999967,
+                1645.73,
+                0.1448
+              ],
+              [
+                "Bedding & Bath",
+                19844.17000000002,
+                1746.2400000000002,
+                0.088
+              ],
+              [
+                "Home Decor",
+                25226.680000000095,
+                1983.8700000000003,
+                0.0786
+              ],
+              [
+                "Outdoor & Garden",
+                27048.330000000067,
+                2007.8400000000001,
+                0.0742
+              ],
+              [
+                "Furniture",
+                42181.19,
+                2887.079999999999,
+                0.0684
+              ],
+              [
+                "Kitchen & Dining",
+                33670.35000000013,
+                1757.7700000000002,
+                0.0522
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 253
           }
         },
         {
@@ -1551,7 +1614,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 254
+            "duration_ms": 249
           }
         },
         {
@@ -1610,7 +1673,51 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 282
+            "duration_ms": 255
+          }
+        },
+        {
+          "sql": "WITH q3_2026_targets AS (\n  SELECT category, target_net_sales\n  FROM retail_sales.merchandising_plan_category_targets\n  WHERE quarter = '2026-Q3'\n),\nq3_2026_actuals AS (\n  SELECT p.category, SUM(oi.line_amount) AS actual_net_sales\n  FROM retail_sales.order_items oi\n  JOIN retail_sales.orders o ON oi.order_id = o.order_id\n  JOIN retail_sales.products p ON oi.product_id = p.product_id\n  WHERE o.ordered_at >= '2026-07-01' AND o.ordered_at < '2026-10-01'\n  GROUP BY p.category\n)\nSELECT \n  t.category,\n  t.target_net_sales,\n  COALESCE(a.actual_net_sales, 0) AS actual_net_sales,\n  t.target_net_sales - COALESCE(a.actual_net_sales, 0) AS shortfall_usd,\n  ROUND(100.0 * (t.target_net_sales - COALESCE(a.actual_net_sales, 0)) / t.target_net_sales, 2) AS pct_missed\nFROM q3_2026_targets t\nLEFT JOIN q3_2026_actuals a ON t.category = a.category\nWHERE COALESCE(a.actual_net_sales, 0) < t.target_net_sales\nORDER BY pct_missed DESC;",
+          "result": {
+            "columns": [
+              "category",
+              "target_net_sales",
+              "actual_net_sales",
+              "shortfall_usd",
+              "pct_missed"
+            ],
+            "types": [
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "Electronics",
+                52000.0,
+                47732.89999999998,
+                4267.10000000002,
+                8.21
+              ],
+              [
+                "Kitchen & Dining",
+                36000.0,
+                33670.35000000013,
+                2329.6499999998705,
+                6.47
+              ],
+              [
+                "Apparel",
+                11800.0,
+                11362.969999999967,
+                437.0300000000334,
+                3.7
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 275
           }
         },
         {
@@ -1835,7 +1942,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 285
+            "duration_ms": 249
           }
         },
         {
@@ -2114,7 +2221,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 251
+            "duration_ms": 258
           }
         },
         {
@@ -2409,7 +2516,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 260
+            "duration_ms": 250
           }
         },
         {
@@ -2661,7 +2768,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 263
+            "duration_ms": 245
           }
         },
         {
@@ -2994,7 +3101,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 266
+            "duration_ms": 273
           }
         },
         {
@@ -3300,7 +3407,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 245
+            "duration_ms": 249
           }
         },
         {
@@ -3660,7 +3767,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 265
+            "duration_ms": 247
           }
         },
         {
@@ -3939,7 +4046,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 251
+            "duration_ms": 244
           }
         }
       ]

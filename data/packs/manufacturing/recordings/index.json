@@ -4,7 +4,7 @@
     "id": "manufacturing",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-04T04:39:46.413744Z",
+  "recordedAt": "2026-10-04T05:33:46.657981Z",
   "sessions": [
     {
       "id": "pm2-interval-hydraulic-press",
@@ -45,6 +45,25 @@
       ]
     },
     {
+      "id": "lockout-lock-removal",
+      "title": "Removing someone else's lock",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "question": "Under the lockout/tagout procedure, who may remove a lock applied by an authorized employee who is not on site, and what must happen before they do?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
       "id": "unplanned-downtime-by-plant",
       "title": "Unplanned downtime by plant, Q3 2026",
       "featured": true,
@@ -52,6 +71,44 @@
         {
           "jobId": "7c8fb2a1-c4c3-4f1a-a5d5-ad2c25873c0b",
           "question": "Which plant had the most unplanned downtime hours in Q3 2026 (1 July to 30 September), and how many hours and unplanned events was that?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top-failure-codes",
+      "title": "Top failure codes by downtime",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "bb6383b0-7b6d-4f62-b2e0-d2a07b217e1d",
+          "question": "Which three failure codes caused the most unplanned downtime hours between 1 October 2025 and 30 September 2026, and how many hours did each cause?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plan-attainment-q3",
+      "title": "Production plan attainment, Q3 2026",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "5b85d703-2d4c-4959-a434-dae6cdf0f024",
+          "question": "Over the 12 weeks starting 6 July through 21 September 2026, which plant had the lowest production plan attainment (total actual units divided by total target units), and what was it?"
         }
       ],
       "tools": [

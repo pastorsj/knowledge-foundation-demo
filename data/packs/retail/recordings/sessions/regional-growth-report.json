@@ -1,0 +1,695 @@
+{
+  "schemaVersion": 2,
+  "id": "regional-growth-report",
+  "title": "Fastest-growing region in Q3",
+  "turns": [
+    {
+      "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+      "question": "According to the Q3 2026 regional performance report, which region grew net sales fastest year over year, and what were its Q3 2026 net sales?",
+      "submittedAt": "2026-10-04T05:33:47.909139Z",
+      "completedAt": "2026-10-04T05:33:53.571270Z",
+      "status": "success",
+      "report": {
+        "markdown": "According to the Q3 2026 regional performance report, the **Northeast** region grew net sales fastest year over year at **+14.4%**, reaching **$37,736** in Q3 2026 net sales [1]. The report's executive summary and net-sales-by-region table both identify Northeast as the growth leader, up from $32,988 in Q3 2025 [1].\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — 2 documents — evidence `hermes-receipt:e0bdf3dcb632a300b6d73a6b21587b4edd640700d90ca3b04d52cd5495d724ed`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:e0bdf3dcb632a300b6d73a6b21587b4edd640700d90ca3b04d52cd5495d724ed",
+            "label": "Unstructured Retrieval evidence — 2 documents",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-d0a6acbff55e4c3e88e8abf8c19abd51"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "4bef58b8-1446-5f4d-8360-3f9869323336",
+          "cursor": 948,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:48.022046Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8723d58c580a6cb26a9faa6014e129c6e5b7bb79af33dba22ed6346131f0fe09",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "833a7651-a1bb-5ccc-9349-3fc76b4f837e",
+          "cursor": 949,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": "b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752:api:1",
+          "parentInvocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:50.581064Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4768,
+              "output_tokens": 157
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f32c6e81-2a27-54a7-a066-629dae497a68",
+          "cursor": 950,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-d0a6acbff55e4c3e88e8abf8c19abd51",
+          "parentInvocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:50.619120Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:6012d13da044b69d8ead0037aad6c3dc6863fc402f330f14d272ebe370d2c04a",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "2ea58a20-51b4-58d5-98fc-e57d34f32b1c",
+          "cursor": 951,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": "b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-d0a6acbff55e4c3e88e8abf8c19abd51",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:e0bdf3dcb632a300b6d73a6b21587b4edd640700d90ca3b04d52cd5495d724ed"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:51.271826Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 651,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:e0bdf3dcb632a300b6d73a6b21587b4edd640700d90ca3b04d52cd5495d724ed",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "47fcae17-105a-58bc-bd10-29eac944aebf",
+          "cursor": 952,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-d0a6acbff55e4c3e88e8abf8c19abd51",
+          "parentInvocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:51.312264Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.68
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:341dc6a9763a66f4c8ef2e84ef9bd0f2ad12095467fc50e6398c44abfeeb7b2d",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e02b6504-f280-5bf0-95ea-2dffd9f5f508",
+          "cursor": 953,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": "b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752:api:2",
+          "parentInvocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:53.504189Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 10495,
+              "output_tokens": 445
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "6a4d1a2b-79fb-5847-9bbb-a70e5ffb3656",
+          "cursor": 954,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:53.535909Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:545f7e8d1ac5e9ab44ab903178ea0d48ad1e5d8d651e29e9702fd66b750a4ae9",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d972ee8c-3936-5b84-8c9b-f6e88a6c9af1",
+          "cursor": 955,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:53.553749Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 15263,
+              "output_tokens": 602,
+              "total_tokens": 15865,
+              "output_characters": 491
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:ae50a31ef61abed06f09264f8f1078ac7659103155e26dee3a2726c61fce6dc1",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f117ee8d-4771-5f1e-88e9-a2de663ec5ac",
+          "cursor": 956,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:53.570977Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:b5626878-9f81-4524-93e1-ed3c774d8b6e:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "18b58e56-8021-546c-a87b-08169f5aaa75",
+          "cursor": 957,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:53.571036Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:b5626878-9f81-4524-93e1-ed3c774d8b6e:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d7a7459d-4264-532f-a5a9-041aee531764",
+          "cursor": 958,
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "runId": "run_0bfff057dd874a708d6c1673f74c839c",
+          "sessionId": "record-3a94d2a6-e685-46ce-a18e-6225ec019213",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:48b7647b0bcaa18bde266cda:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:53.571070Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 5601,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 680,
+              "input_tokens": 15263,
+              "output_tokens": 602,
+              "total_tokens": 15865
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:b5626878-9f81-4524-93e1-ed3c774d8b6e:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:e0bdf3dcb632a300b6d73a6b21587b4edd640700d90ca3b04d52cd5495d724ed",
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "invocationId": "hermes-tool:chatcmpl-tool-d0a6acbff55e4c3e88e8abf8c19abd51",
+          "turnId": "b5626878-9f81-4524-93e1-ed3c774d8b6e:b5626878-9f81-4524-93e1-ed3c774d8b6e:66eb7752",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 651,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T05:33:51.271826Z",
+          "content": {
+            "query": "region grew net sales fastest year over year Q3 2026",
+            "sourceIds": [
+              "retail.reports"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 0.869140625,
+                "vectorScore": 0.5660310983657837,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-ec81cf489eedf143",
+                "chunkId": "retail.reports:f-ec81cf489eedf143:0003",
+                "title": "regional-performance-q3-2026.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Regional Performance Report, Q3 2026\n1. Executive summary\nLumen Retail Group’s loyalty members placed 1,079 orders in the third quarter of 2026, worth $207,067 in net sales, +1.2% against the third quarter of 2025. The average order value was $192.\n- • Growth. Northeast grew fastest, at +14.4% year over year, to $37,736. Southeast was the slowest region at -12.4%.\n- • Largest region. E-commerce had the highest net sales of any region at $57,370, which is 27.7% of the chain.\n- • Returns. Returned value was $20,010, a return rate of 9.7% of net sales. E-commerce had the highest regional return rate at 12.0%.\n- • Top physical store. San Francisco Union Square (S21) led all physical stores with $19,982 in net sales.\n- • Plan. 3 of 7 categories finished below their Q3 net sales plan; 4 finished above it.\nHow to read this report: figures come from Lumen’s loyalty-member order tables (stores, customers, orders, order_items, returns) as of September 30, 2026. Definitions are in section 7. Dollar amounts are US dollars.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ec81cf489eedf143",
+                  "file_name": "regional-performance-q3-2026.pdf",
+                  "citation": "regional-performance-q3-2026.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Regional Performance Report, Q3 2026 › 1. Executive summary",
+                  "labels": [
+                    "list_item",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": -1.0361328125,
+                "vectorScore": 0.6545408368110657,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-ec81cf489eedf143",
+                "chunkId": "retail.reports:f-ec81cf489eedf143:0006",
+                "title": "regional-performance-q3-2026.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Regional Performance Report, Q3 2026\nNet sales by region, $ thousands\nQ3 2025\nQ3 2026\n80\n60\n57.4\n40\n20\n0\nNortheast\nSoutheast\nMidwest\nWest\nE-commerce\nNortheast was the growth leader at +14.4%. West followed at +3.5%, and E-commerce at +3.4%. E-commerce, which is reported as its own region, accounted for 27.7% of net sales. Southeast fell short of the chain at -12.4%; regional operations will review its promotion calendar and Q4 labor plan before the holiday season.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ec81cf489eedf143",
+                  "file_name": "regional-performance-q3-2026.pdf",
+                  "citation": "regional-performance-q3-2026.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Regional Performance Report, Q3 2026 › Net sales by region, $ thousands",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": -1.869140625,
+                "vectorScore": 0.6197187304496765,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-ec81cf489eedf143",
+                "chunkId": "retail.reports:f-ec81cf489eedf143:0004",
+                "title": "regional-performance-q3-2026.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Regional Performance Report, Q3 2026\n2. Net sales by region\n\nNortheast, Store s = 6. Northeast, Q3 2026 net sales = $37,736. Northeast, Q3 2025 net sales = $32,988. Northeast, YoY = +14.4%. Northeast, Orders = 209. Northeast, Avg order value = $181. Northeast, Returned value = $1,969. Northeast, Return rate = 5.2%. Southeast, Store s = 6. Southeast, Q3 2026 net sales = $30,865. Southeast, Q3 2025 net sales = $35,215. Southeast, YoY = -12.4%. Southeast, Orders = 158. Southeast, Avg order value = $195. Southeast, Returned value = $3,682. Southeast, Return rate = 11.9%. Midwest, Store s = 6. Midwest, Q3 2026 net sales = $35,699. Midwest, Q3 2025 net sales = $37,082. Midwest, YoY = -3.7%. Midwest, Orders = 176. Midwest, Avg order value = $203. Midwest, Returned value = $3,445. Midwest, Return rate = 9.6%. West, Store s = 6. West, Q3 2026 net sales = $45,396. West, Q3 2025 net sales = $43,869. West, YoY = +3.5%. West, Orders = 245. West, Avg order value = $185. West, Returned value = $4,043. West, Return rate = 8.9%. E-commerce, Store s = Onlin e. E-commerce, Q3 2026 net sales = $57,370. E-commerce, Q3 2025 net sales = $55,491. E-commerce, YoY = +3.4%. E-commerce, Orders = 291. E-commerce, Avg order value = $197. E-commerce, Returned value = $6,871. E-commerce,",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ec81cf489eedf143",
+                  "file_name": "regional-performance-q3-2026.pdf",
+                  "citation": "regional-performance-q3-2026.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Regional Performance Report, Q3 2026 › 2. Net sales by region",
+                  "labels": [
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": -1.9873046875,
+                "vectorScore": 0.5460062623023987,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-7e2ab98a953f828d",
+                "chunkId": "retail.reports:f-7e2ab98a953f828d:0002",
+                "title": "q3-2026-merchandising-review.pptx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Q3 2026 at a glance\n$207,067\n1,079\n$192\n9.7%\nNet sales\nOrders\nAverage order value\nReturn rate\n+1.2% vs Q3 2025\n+5.5% vs Q3 2025\n-4.1% vs Q3 2025\nreturned value / net sales\n•  Northeast led regional growth at +14.4%; Southeast was the slowest at -12.4%.\n•  3 of 7 categories missed their Q3 net sales plan and 4 beat it.\n•  Returned value was 9.7% of net sales, with Electronics the highest-returning category (16.7%).\nLumen Retail Group  |  Merchandising and Planning  |  Internal\n2",
+                "metadata": {
+                  "parser": "docling-pptx",
+                  "file_id": "f-7e2ab98a953f828d",
+                  "file_name": "q3-2026-merchandising-review.pptx",
+                  "citation": "q3-2026-merchandising-review.pptx, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Q3 2026 at a glance",
+                  "labels": [
+                    "paragraph"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": -2.59765625,
+                "vectorScore": 0.6122567653656006,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-ec81cf489eedf143",
+                "chunkId": "retail.reports:f-ec81cf489eedf143:0005",
+                "title": "regional-performance-q3-2026.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Regional Performance Report, Q3 2026\n2. Net sales by region\n Return rate = 12.0%. Total, Store s = 24. Total, Q3 2026 net sales = $207,067. Total, Q3 2025 net sales = $204,645. Total, YoY = +1.2%. Total, Orders = 1,079. Total, Avg order value = $192. Total, Returned value = $20,010. Total, Return rate = 9.7%\nTable 1. Q3 2026 results by region\nNet sales are after discounts and before returns. Return rate is returned value divided by net sales.\nRPT-REG-2026Q3 | Version 1.0 Internal use only. Synthetic document for a software demonstration. Page 1 of 4\nLUMEN RETAIL GROUP Regional Performance Report, Q3 2026",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ec81cf489eedf143",
+                  "file_name": "regional-performance-q3-2026.pdf",
+                  "citation": "regional-performance-q3-2026.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Regional Performance Report, Q3 2026 › 2. Net sales by region",
+                  "labels": [
+                    "caption",
+                    "footnote",
+                    "page_footer",
+                    "page_header",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": -3.994140625,
+                "vectorScore": 0.5157051682472229,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-ec81cf489eedf143",
+                "chunkId": "retail.reports:f-ec81cf489eedf143:0002",
+                "title": "regional-performance-q3-2026.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Regional Performance Report, Q3 2026\nNet sales, orders, returns and store results for July 1 to September 30, 2026\nVersion, RPT-REG-2026Q3 = 1.0. Version, Owner = Audience. Version, Regional Operations and Finance = Regional Operations Directors, store managers, merchants, executive team. Effective, RPT-REG-2026Q3 = Issued October 1, 2026. Effective, Owner = . Effective, Regional Operations and Finance = ",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ec81cf489eedf143",
+                  "file_name": "regional-performance-q3-2026.pdf",
+                  "citation": "regional-performance-q3-2026.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Regional Performance Report, Q3 2026",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": -4.1640625,
+                "vectorScore": 0.48415589332580566,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-ec81cf489eedf143",
+                "chunkId": "retail.reports:f-ec81cf489eedf143:0007",
+                "title": "regional-performance-q3-2026.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Regional Performance Report, Q3 2026\nStore results\nThe five physical stores with the highest Q3 net sales are shown below. E-commerce is excluded from the ranking because it is not a store. The four flagship stores (S01, S07, S13 and S21) together produced 37.7% of physical store net sales.\nTable 2. Five physical stores with the highest Q3 2026 net sales\n1, Store ID = S21. 1, Store = San Francisco Union Square. 1, Region = West. 1, Net sales = $19,982. 1, Orders = 94. 1, Return rate = 6.8%. 2, Store ID = S13. 2, Store = Chicago Loop. 2, Region = Midwest. 2, Net sales = $15,651. 2, Orders = 74. 2, Return rate = 12.5%. 3, Store ID = S07. 3, Store = Atlanta Midtown. 3, Region = Southeast. 3, Net sales = $12,374. 3, Orders = 57. 3, Return rate = 6.1%. 4, Store ID = S06. 4, Store = Newark Gateway. 4, Region = Northeast. 4, Net sales = $10,911. 4, Orders = 49. 4, Return rate = 10.4%. 5, Store ID = S01. 5, Store = Boston Seaport. 5, Region = Northeast. 5, Net sales = $8,413. 5, Orders = 46. 5, Return rate = 2.7%\nThe newest store, Denver Cherry Creek (S24), opened on August 15, 2025. It delivered $2,160 in net sales in Q3 2026, against $840 in Q3 2025, when it traded for only six weeks.\nRPT-REG-2026Q3 | Version 1.0 Internal use only. Synthetic document for a software demonstration. Page 2 of 4",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ec81cf489eedf143",
+                  "file_name": "regional-performance-q3-2026.pdf",
+                  "citation": "regional-performance-q3-2026.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Regional Performance Report, Q3 2026 › Store results",
+                  "labels": [
+                    "caption",
+                    "page_footer",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": -4.30078125,
+                "vectorScore": 0.46307888627052307,
+                "sourceId": "retail.reports",
+                "documentId": "retail.reports:f-ec81cf489eedf143",
+                "chunkId": "retail.reports:f-ec81cf489eedf143:0014",
+                "title": "regional-performance-q3-2026.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Regional Performance Report, Q3 2026\nStore results\n7. Methodology and definitions\n- (\\bullet) Source and scope. The sales database’s loyalty-member order tables, as of September 30, 2026. Orders placed by customers who are not Lumen Rewards members are not in the extract, so absolute dollars understate chain totals.\n- (\\bullet) Quarters. Fiscal quarters follow the calendar year. Q3 2026 is July 1 to September 30, 2026; Q3 2025 is July 1 to September 30, 2025.\n- (\\bullet) Net sales. The sum of order net amounts (after discounts, before returns). Orders are assigned to the region of the store that took the order; orders placed on Lumen.com are assigned to E-commerce.\n- (\\bullet) Returned value. The value of returned items before any restocking fee, by return date, and assigned to the region of the store that processed the return. Online-order returns made in a store belong to that store.\n- (\\bullet) Return rate. Returned value divided by net sales for the same region and quarter. It is a flow ratio: returns in a quarter include items bought in the previous quarter.\n- (\\bullet) Average order value. Net sales divided by the number of orders.\nRPT-REG-2026Q3 | Version 1.0 Internal use only. Synthetic document for a software demonstration. Page 4 of 4",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-ec81cf489eedf143",
+                  "file_name": "regional-performance-q3-2026.pdf",
+                  "citation": "regional-performance-q3-2026.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Regional Performance Report, Q3 2026 › Store results › 7. Methodology and definitions",
+                  "labels": [
+                    "list_item",
+                    "page_footer"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "retail.reports": 24
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 259.3,
+              "searchMs": 7.4,
+              "rerankMs": 372.9,
+              "totalMs": 639.6
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "retail.reports"
+      ]
+    }
+  ]
+}

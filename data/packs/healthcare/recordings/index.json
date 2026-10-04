@@ -4,7 +4,7 @@
     "id": "healthcare",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-04T04:41:05.787228Z",
+  "recordedAt": "2026-10-04T05:33:18.187087Z",
   "sessions": [
     {
       "id": "scanned-checklist",
@@ -45,6 +45,25 @@
       ]
     },
     {
+      "id": "hf-followup-schedule",
+      "title": "Heart failure follow-up schedule",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "3c98ae2e-ddb6-4744-8c72-19529ac8d7a2",
+          "question": "What follow-up steps does the heart failure discharge protocol require after a patient goes home, and by when?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
       "id": "readmissions-by-hospital",
       "title": "Q2 readmission rate by hospital",
       "featured": true,
@@ -52,6 +71,44 @@
         {
           "jobId": "805c5f70-a0ef-4c00-98f0-b1b876585441",
           "question": "What was the 30-day readmission rate at each of our three hospitals for patients discharged in Q2 2026 (April to June)? Leave out discharges that ended in death or hospice."
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top-denial-reasons",
+      "title": "Costliest denial reasons",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "question": "Which three denial reasons account for the most billed dollars on claims whose denial notice is dated in 2026, and what share of all billed dollars on those denied claims do they make up?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "readmission-by-condition",
+      "title": "Readmissions by condition",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "3efc6a72-843f-442c-968f-576945fa747a",
+          "question": "Compare the 30-day readmission rate for inpatient discharges with heart failure as the primary diagnosis, discharges with COPD as the primary diagnosis and all other inpatient discharges from April 2025 through August 2026. Leave out deaths and hospice discharges."
         }
       ],
       "tools": [

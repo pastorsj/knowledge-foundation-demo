@@ -741,7 +741,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 259
+          "duration_ms": 251
         },
         "diagnoses": {
           "table": "diagnoses",
@@ -838,7 +838,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 251
+          "duration_ms": 252
         },
         "encounters": {
           "table": "encounters",
@@ -1062,7 +1062,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 261
+          "duration_ms": 246
         },
         "patients": {
           "table": "patients",
@@ -1189,7 +1189,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 277
+          "duration_ms": 273
         },
         "providers": {
           "table": "providers",
@@ -1266,7 +1266,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 267
+          "duration_ms": 245
         },
         "quality_scorecard_hcahps": {
           "table": "quality_scorecard_hcahps",
@@ -1373,7 +1373,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 268
+          "duration_ms": 272
         },
         "quality_scorecard_readmissions": {
           "table": "quality_scorecard_readmissions",
@@ -1500,7 +1500,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 266
+          "duration_ms": 246
         }
       },
       "queries": [
@@ -1545,7 +1545,41 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 253
+            "duration_ms": 289
+          }
+        },
+        {
+          "sql": "WITH denied_2026 AS (\n    SELECT\n        denial_reason,\n        SUM(billed_amount) AS total_billed\n    FROM healthcare_clinical.claims\n    WHERE denied = 1\n      AND adjudicated_date IS NOT NULL\n      AND YEAR(adjudicated_date) = 2026\n      AND denial_reason IS NOT NULL\n    GROUP BY denial_reason\n),\ntotal_denied AS (\n    SELECT SUM(total_billed) AS grand_total FROM denied_2026\n)\nSELECT\n    d.denial_reason,\n    ROUND(d.total_billed, 2) AS billed_dollars,\n    ROUND(100.0 * d.total_billed / t.grand_total, 2) AS share_pct\nFROM denied_2026 d\nCROSS JOIN total_denied t\nORDER BY d.total_billed DESC\nLIMIT 3",
+          "result": {
+            "columns": [
+              "denial_reason",
+              "billed_dollars",
+              "share_pct"
+            ],
+            "types": [
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "Medical necessity",
+                314335.13,
+                26.31
+              ],
+              [
+                "Coding error",
+                203786.44,
+                17.06
+              ],
+              [
+                "Prior authorization missing",
+                196581.28,
+                16.46
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 268
           }
         },
         {
@@ -1666,7 +1700,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 290
+            "duration_ms": 257
           }
         },
         {
@@ -1780,7 +1814,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 293
+            "duration_ms": 255
           }
         },
         {
@@ -1824,7 +1858,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 253
+            "duration_ms": 250
           }
         },
         {
@@ -1943,7 +1977,46 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 262
+            "duration_ms": 254
+          }
+        },
+        {
+          "sql": "WITH index_discharges AS (\n    SELECT\n        e.encounter_id,\n        e.patient_id,\n        e.facility_id,\n        e.admit_ts,\n        e.discharge_ts,\n        e.discharge_disposition,\n        d.icd10_code,\n        d.icd10_description,\n        d.is_primary,\n        CASE\n            WHEN d.icd10_code LIKE 'I50%' AND d.is_primary = 1 THEN 'Heart Failure'\n            WHEN d.icd10_code LIKE 'J44%' AND d.is_primary = 1 THEN 'COPD'\n            ELSE 'Other'\n        END AS cohort\n    FROM healthcare_clinical.encounters e\n    JOIN healthcare_clinical.diagnoses d ON e.encounter_id = d.encounter_id\n    WHERE e.encounter_type = 'inpatient'\n      AND e.discharge_ts >= '2025-04-01'\n      AND e.discharge_ts < '2026-09-01'\n      AND e.discharge_disposition NOT IN ('expired', 'hospice')\n      AND d.is_primary = 1\n),\nreadmissions AS (\n    SELECT\n        i.encounter_id AS index_encounter_id,\n        i.patient_id,\n        i.cohort,\n        i.discharge_ts AS index_discharge_ts,\n        MIN(e2.admit_ts) AS readmit_admit_ts\n    FROM index_discharges i\n    LEFT JOIN healthcare_clinical.encounters e2\n        ON i.patient_id = e2.patient_id\n        AND e2.encounter_type = 'inpatient'\n        AND e2.admit_ts > i.discharge_ts\n        AND e2.admit_ts <= i.discharge_ts + INTERVAL '30 days'\n    GROUP BY i.encounter_id, i.patient_id, i.cohort, i.discharge_ts\n)\nSELECT\n    cohort,\n    COUNT(*) AS index_discharges,\n    SUM(CASE WHEN readmit_admit_ts IS NOT NULL THEN 1 ELSE 0 END) AS readmissions_30d,\n    ROUND(100.0 * SUM(CASE WHEN readmit_admit_ts IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*), 2) AS readmission_rate_pct\nFROM readmissions\nGROUP BY cohort\nORDER BY\n    CASE cohort WHEN 'Heart Failure' THEN 1 WHEN 'COPD' THEN 2 ELSE 3 END;",
+          "result": {
+            "columns": [
+              "cohort",
+              "index_discharges",
+              "readmissions_30d",
+              "readmission_rate_pct"
+            ],
+            "types": [
+              "VARCHAR",
+              "BIGINT",
+              "HUGEINT",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "Heart Failure",
+                191,
+                40,
+                20.94
+              ],
+              [
+                "COPD",
+                71,
+                17,
+                23.94
+              ],
+              [
+                "Other",
+                462,
+                49,
+                10.61
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 264
           }
         },
         {
@@ -2357,7 +2430,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 246
+            "duration_ms": 265
           }
         },
         {
@@ -2609,7 +2682,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 247
+            "duration_ms": 246
           }
         },
         {
@@ -2942,7 +3015,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 242
+            "duration_ms": 256
           }
         },
         {
@@ -3104,7 +3177,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 287
+            "duration_ms": 250
           }
         },
         {
@@ -3437,7 +3510,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 245
+            "duration_ms": 247
           }
         },
         {
@@ -3635,7 +3708,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 248
+            "duration_ms": 260
           }
         },
         {
@@ -3914,7 +3987,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 290
+            "duration_ms": 291
           }
         },
         {
@@ -4247,7 +4320,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 249
+            "duration_ms": 267
           }
         }
       ]

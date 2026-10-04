@@ -1,0 +1,671 @@
+{
+  "schemaVersion": 2,
+  "id": "complaint-deadlines",
+  "title": "Complaint handling deadlines",
+  "turns": [
+    {
+      "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+      "question": "A customer complains that their loan modification request was denied. How soon must the bank acknowledge and resolve the complaint, and when does it escalate to the Complaint Resolution Team?",
+      "submittedAt": "2026-10-04T05:32:18.743631Z",
+      "completedAt": "2026-10-04T05:32:22.765568Z",
+      "status": "success",
+      "report": {
+        "markdown": "Based on the Harborview Community Bank's **Customer Complaint Handling Procedure (v4.0, effective 1 May 2026)**, a complaint about a denied loan modification falls under the **\"Lending and loan servicing\"** category (which explicitly includes \"modification denials\" as an example) [1].\n\n| Action | Timeline | Notes |\n|--------|----------|-------|\n| **Acknowledge** | Within **2 business days** of logging the complaint | Written acknowledgement with reference number, handler name, and expected response date |\n| **Resolve** | Within **15 business days** of logging the complaint | Owner: Loan Servicing |\n| **Escalation to Complaint Resolution Team** | **Automatically on the 10th business day** if not yet resolved | Team may extend resolution by up to 15 additional business days (with written notice to customer before the original deadline) |\n\nBusiness days exclude weekends and bank holidays, counted from the day after the complaint is logged. A complaint open more than 30 business days is reported to the Head of Customer Care weekly and to the Compliance Committee at its next meeting.\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — complaint_handling_procedure.docx — evidence `hermes-receipt:7b7bc1ed0fa3f25f15ac2a2e6e3091db176421fe2848983cbfccd4d5a0ff786c`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:7b7bc1ed0fa3f25f15ac2a2e6e3091db176421fe2848983cbfccd4d5a0ff786c",
+            "label": "Unstructured Retrieval evidence — complaint_handling_procedure.docx",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-0bc4cd26c9a94db18e28c41de66df821"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "4b81d354-cf67-53a9-bb7d-687977e3aa4f",
+          "cursor": 827,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:18.823561Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:04a756a35543e0e94b18f7b2a1101ae3b682248a19a0b1e362d6b364838236b7",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "a306f07d-4e2f-55c0-b997-a2b3f72fbaac",
+          "cursor": 828,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": "2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb:api:1",
+          "parentInvocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:19.998008Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4806,
+              "output_tokens": 142
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f7860faa-9b1f-5134-bc7e-8dd35b48caed",
+          "cursor": 829,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-0bc4cd26c9a94db18e28c41de66df821",
+          "parentInvocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:20.047681Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:4bd336b891d4063416612774af5da8be1b627e68a961bc04886c00ee94a8ed13",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "84d5e5b3-791c-5f9d-aeee-24e63608dfc7",
+          "cursor": 830,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": "2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-0bc4cd26c9a94db18e28c41de66df821",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:7b7bc1ed0fa3f25f15ac2a2e6e3091db176421fe2848983cbfccd4d5a0ff786c"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:20.706330Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 657,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:7b7bc1ed0fa3f25f15ac2a2e6e3091db176421fe2848983cbfccd4d5a0ff786c",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "e3a7efda-3a3c-56c9-aa47-2eb6017beb3f",
+          "cursor": 831,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-0bc4cd26c9a94db18e28c41de66df821",
+          "parentInvocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:20.752514Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.69
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:9f107ab6661224bede57b5c5f5e32d5ef0cdaa3c5316c4346963428db41eb31e",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b1135dcc-3e3d-5af2-b40d-8276028ed057",
+          "cursor": 832,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": "2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb:api:2",
+          "parentInvocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:22.693019Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 9107,
+              "output_tokens": 418
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "1edb49cd-423c-5814-b2e4-bcc99d6f50cd",
+          "cursor": 833,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:22.726330Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:fe456e24a7c2bcaaab2c541393c6e3af5ca683ec4e10fe06fabb29023fa41021",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0990bb94-904a-579f-94b7-ba815b7ef1a1",
+          "cursor": 834,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:22.749480Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 13913,
+              "output_tokens": 560,
+              "total_tokens": 14473,
+              "output_characters": 1182
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:1da09d78ae8f855465b66107ffe0be466163f94b10fe529ade06cf6389a516c2",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "d1386175-8e7a-5d00-93f4-84898719300e",
+          "cursor": 835,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:22.765261Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2c207b13-a0bc-48d5-8e1f-0901d1787788:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8bdb4c10-c0ef-52ab-a9ca-1ac415663561",
+          "cursor": 836,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:22.765311Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2c207b13-a0bc-48d5-8e1f-0901d1787788:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "6b50a481-9418-5e95-8670-d44c60d50038",
+          "cursor": 837,
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "runId": "run_64fe7656064a43ae8e37e48ba351ac94",
+          "sessionId": "record-544b7875-4dd2-4f2e-96c9-7ddeabd4037c",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:228ab4f304c243054af05f9e:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:22.765346Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 3973,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 690,
+              "input_tokens": 13913,
+              "output_tokens": 560,
+              "total_tokens": 14473
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:2c207b13-a0bc-48d5-8e1f-0901d1787788:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:7b7bc1ed0fa3f25f15ac2a2e6e3091db176421fe2848983cbfccd4d5a0ff786c",
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "invocationId": "hermes-tool:chatcmpl-tool-0bc4cd26c9a94db18e28c41de66df821",
+          "turnId": "2c207b13-a0bc-48d5-8e1f-0901d1787788:2c207b13-a0bc-48d5-8e1f-0901d1787788:08f0f6cb",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 657,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T05:32:20.706330Z",
+          "content": {
+            "query": "complaint handling procedure service levels acknowledgment resolution timeline denied loan modification escalation Complaint Resolution Team",
+            "sourceIds": [
+              "financial-services.policies"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": -2.373046875,
+                "vectorScore": 0.5051944851875305,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0005",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n4. Handling times\nTable 1 gives the handling times that apply to each category. Business days exclude weekends and Bank holidays and are counted from the day after the complaint is logged.\n**Table 1. Complaint categories and service levels**\nFees and charges, **Examples** = Overdraft fee, monthly service fee, wire fee. Fees and charges, **Acknowledge within** = 2 business days. Fees and charges, **Resolve within** = 10 business days. Fees and charges, **Owner** = Customer Care. Deposit accounts, **Examples** = Holds on deposits, account closure, statement errors. Deposit accounts, **Acknowledge within** = 2 business days. Deposit accounts, **Resolve within** = 15 business days. Deposit accounts, **Owner** = Customer Care. Card disputes and unauthorized transactions, **Examples** = Debit or credit card charges the customer did not make. Card disputes and unauthorized transactions, **Acknowledge within** = 2 business days. Card disputes and unauthorized transactions, **Resolve within** = 10 business days to investigate or provisionally credit, final decision within 45 days. Card disputes and unauthorized transactions, **Owner** = Card Services. Lending and loan servicing, **Examples** = Payment application, modification denials, collections conduct. Lending and loan servicing, **Acknowledge within** = 2 business days. Lending and loan servicing, **Resolve within** = 15 business days. Lending and loan servicing, **Owner** = Loan Servicing. F",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure › 4. Handling times",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": -4.13671875,
+                "vectorScore": 0.5107008218765259,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0007",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n6. Escalation\nIf a complaint has not been resolved by the 10th business day, it is escalated automatically to the Complaint Resolution Team, a group of senior specialists who are independent of the owner. The Team may extend the resolution time by up to 15 business days when the investigation needs information from a third party, such as a card network or merchant. The customer must be told in writing before the original deadline expires, with the reason and the new date. A complaint that is open more than 30 business days is reported to the Head of Customer Care weekly and to the Compliance Committee at its next meeting.\nA customer who is not satisfied with the final response may ask for a review by the Chief Compliance Officer, whose decision is final within the Bank. The response letter must tell customers that they may also contact the Bank's primary federal regulator or the Consumer Financial Protection Bureau at any time.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure › 6. Escalation",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": -4.98046875,
+                "vectorScore": 0.4194852113723755,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0006",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n5. Investigation steps\n1. **Acknowledge.** Send a written acknowledgement within the time in Table 1 that gives the reference number, the name of the person handling the complaint and the date by which the customer will receive an answer.\n2. **Investigate.** The owner reviews the account history, call recordings and relevant policies, and speaks with every employee involved. The investigator may not be the person who is the subject of the complaint.\n3. **Decide and respond.** The owner decides, in plain language, whether the complaint is upheld, partly upheld or not upheld, explains why, and states any remedy, such as a fee refund or a correction to credit reporting.\n4. **Close.** The owner records the outcome, the remedy and the root cause in the complaint system and closes the case only after the response has been sent.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure › 5. Investigation steps",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": -5.76171875,
+                "vectorScore": 0.3440386950969696,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0003",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n2. What counts as a complaint\nA complaint is any expression of dissatisfaction, written or spoken, about the Bank's products, services or employees, whether or not the customer uses the word \"complaint\". A simple question or a request for information is an inquiry and is answered on the spot. If an inquiry cannot be answered at once, or the customer is unhappy with the answer, it becomes a complaint.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure › 2. What counts as a complaint",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": -5.8203125,
+                "vectorScore": 0.4296989142894745,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0010",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n9. Reporting and records\nCustomer Care reports volume, categories, handling times and root causes monthly to the Compliance Committee. Every quarter the report goes to the Credit Risk Committee with the complaints that concern lending, collections and card disputes. A complaint record, including all letters and call notes, is kept for 5 years after the case closes.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure › 9. Reporting and records",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": -5.88671875,
+                "vectorScore": 0.388678640127182,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0004",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n3. How complaints arrive\nCustomers may complain at any branch, by telephone through Customer Care, through secure messaging in online banking, by letter or by email to the Customer Care mailbox. Whoever receives the complaint is responsible for logging it in the complaint system on the day it arrives, with the customer's identifier, the account or loan involved, the category in Table 1 and the date received. A complaint received by a branch is never forwarded without being logged first.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure › 3. How complaints arrive",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": -6.1328125,
+                "vectorScore": 0.3971409201622009,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0002",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n1. Purpose and scope\nThis procedure sets out how Harborview Community Bank receives, records, investigates and resolves complaints from retail customers about deposit accounts, credit cards, loans, fees, branch service, online banking and card disputes. It applies to every employee. Treating complaints promptly and fairly is a regulatory expectation and is also how the Bank finds and fixes problems before they affect other customers.",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure › 1. Purpose and scope",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": -6.65625,
+                "vectorScore": 0.35676100850105286,
+                "sourceId": "financial-services.policies",
+                "documentId": "financial-services.policies:f-cf35b7218f0c2c45",
+                "chunkId": "financial-services.policies:f-cf35b7218f0c2c45:0001",
+                "title": "complaint_handling_procedure.docx",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Customer Complaint Handling Procedure\n*Receiving, logging, resolving and reporting retail customer complaints*\nHCB-CMP-002, **Version** = 4.0. HCB-CMP-002, **Effective** = 1 May 2026. HCB-CMP-002, **Owner** = Head of Customer Care. HCB-CMP-002, **Approved** = Compliance Committee, 28 April 2026",
+                "metadata": {
+                  "parser": "docling-docx",
+                  "file_id": "f-cf35b7218f0c2c45",
+                  "file_name": "complaint_handling_procedure.docx",
+                  "citation": "complaint_handling_procedure.docx",
+                  "headings": "Customer Complaint Handling Procedure",
+                  "labels": [
+                    "table",
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "financial-services.policies": 32
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 190.2,
+              "searchMs": 14.0,
+              "rerankMs": 432.6,
+              "totalMs": 636.8
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "financial-services.policies"
+      ]
+    }
+  ]
+}

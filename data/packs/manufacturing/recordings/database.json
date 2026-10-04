@@ -655,7 +655,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 264
+          "duration_ms": 246
         },
         "maintenance_events": {
           "table": "maintenance_events",
@@ -772,7 +772,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 269
+          "duration_ms": 245
         },
         "plants": {
           "table": "plants",
@@ -834,7 +834,7 @@
             ]
           ],
           "truncated": false,
-          "duration_ms": 272
+          "duration_ms": 247
         },
         "production_plan_scrap_targets": {
           "table": "production_plan_scrap_targets",
@@ -911,7 +911,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 266
+          "duration_ms": 261
         },
         "production_plan_weekly_output": {
           "table": "production_plan_weekly_output",
@@ -1125,7 +1125,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 268
+          "duration_ms": 245
         },
         "sensor_readings": {
           "table": "sensor_readings",
@@ -1222,7 +1222,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 250
+          "duration_ms": 271
         },
         "work_orders": {
           "table": "work_orders",
@@ -1379,10 +1379,39 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 250
+          "duration_ms": 265
         }
       },
       "queries": [
+        {
+          "sql": "SELECT\n    failure_code,\n    ROUND(SUM(downtime_hours), 2) AS total_downtime_hours\nFROM manufacturing_operations.maintenance_events\nWHERE event_type = 'unplanned'\n  AND failure_code IS NOT NULL\n  AND failure_code != ''\n  AND started_at >= TIMESTAMP '2025-10-01'\n  AND started_at < TIMESTAMP '2026-10-01'\nGROUP BY failure_code\nORDER BY total_downtime_hours DESC\nLIMIT 3",
+          "result": {
+            "columns": [
+              "failure_code",
+              "total_downtime_hours"
+            ],
+            "types": [
+              "VARCHAR",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "SPN-BRG",
+                1088.7
+              ],
+              [
+                "PMP-WEAR",
+                232.6
+              ],
+              [
+                "SRV-DRV",
+                224.3
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 278
+          }
+        },
         {
           "sql": "SELECT \n    m.plant_id,\n    p.plant_name,\n    COUNT(*) AS unplanned_events,\n    ROUND(SUM(me.downtime_hours), 1) AS total_unplanned_downtime_hours\nFROM manufacturing_operations.maintenance_events AS me\nJOIN manufacturing_operations.machines AS m USING (machine_id)\nJOIN manufacturing_operations.plants AS p USING (plant_id)\nWHERE me.event_type = 'unplanned'\n  AND me.started_at >= TIMESTAMP '2026-07-01'\n  AND me.started_at < TIMESTAMP '2026-10-01'\nGROUP BY m.plant_id, p.plant_name\nORDER BY total_unplanned_downtime_hours DESC",
           "result": {
@@ -1419,7 +1448,46 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 253
+            "duration_ms": 250
+          }
+        },
+        {
+          "sql": "SELECT \n    plant_id,\n    SUM(target_units) AS total_target_units,\n    SUM(actual_units) AS total_actual_units,\n    ROUND(SUM(actual_units) / NULLIF(SUM(target_units), 0) * 100, 2) AS attainment_pct\nFROM manufacturing_operations.production_plan_weekly_output\nWHERE week_start >= DATE '2026-07-06' AND week_start <= DATE '2026-09-21'\nGROUP BY plant_id\nORDER BY attainment_pct ASC",
+          "result": {
+            "columns": [
+              "plant_id",
+              "total_target_units",
+              "total_actual_units",
+              "attainment_pct"
+            ],
+            "types": [
+              "VARCHAR",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "MTY",
+                143900.0,
+                137845.0,
+                95.79
+              ],
+              [
+                "DAY",
+                151100.0,
+                150838.0,
+                99.83
+              ],
+              [
+                "BRN",
+                109800.0,
+                110628.0,
+                100.75
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 260
           }
         },
         {
@@ -1463,7 +1531,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 272
+            "duration_ms": 257
           }
         },
         {
@@ -1910,7 +1978,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 278
+            "duration_ms": 277
           }
         },
         {
@@ -1937,7 +2005,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 279
+            "duration_ms": 274
           }
         },
         {
@@ -2216,7 +2284,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 275
+            "duration_ms": 245
           }
         },
         {
@@ -2522,7 +2590,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 247
+            "duration_ms": 262
           }
         },
         {
@@ -2714,7 +2782,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 249
+            "duration_ms": 245
           }
         },
         {
@@ -2939,7 +3007,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 247
+            "duration_ms": 245
           }
         },
         {
@@ -3272,7 +3340,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 246
+            "duration_ms": 274
           }
         },
         {
@@ -3524,7 +3592,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 250
+            "duration_ms": 289
           }
         },
         {

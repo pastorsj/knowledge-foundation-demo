@@ -4,7 +4,7 @@
     "id": "financial-services",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-04T04:42:21.284832Z",
+  "recordedAt": "2026-10-04T05:32:46.005489Z",
   "sessions": [
     {
       "id": "underwriting-limits",
@@ -45,6 +45,25 @@
       ]
     },
     {
+      "id": "complaint-deadlines",
+      "title": "Complaint handling deadlines",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "2c207b13-a0bc-48d5-8e1f-0901d1787788",
+          "question": "A customer complains that their loan modification request was denied. How soon must the bank acknowledge and resolve the complaint, and when does it escalate to the Complaint Resolution Team?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
       "id": "deposits-by-branch",
       "title": "Top branches by deposits",
       "featured": true,
@@ -52,6 +71,44 @@
         {
           "jobId": "decf35ba-279a-4524-a7aa-54ef7923b920",
           "question": "Which five branches held the most deposits (checking and savings balances) at the end of September 2026, and how much did each hold?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delinquency-by-product",
+      "title": "Delinquency by loan product",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "78c16471-f714-4e82-bbee-27f1afce54e7",
+          "question": "Which loan product had the highest 30-day delinquency rate in September 2026, and how does each product compare with September 2025?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "card-disputes-q3",
+      "title": "Card disputes in Q3 2026",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "b1b2ae41-0a83-4b9e-ae88-b6299fd85c1a",
+          "question": "How many card disputes were filed in the third quarter of 2026, how much money was disputed in total, and which reason was the most common?"
         }
       ],
       "tools": [

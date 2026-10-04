@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 2,
+  "id": "top-denial-reasons",
+  "title": "Costliest denial reasons",
+  "turns": [
+    {
+      "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+      "question": "Which three denial reasons account for the most billed dollars on claims whose denial notice is dated in 2026, and what share of all billed dollars on those denied claims do they make up?",
+      "submittedAt": "2026-10-04T05:32:53.366861Z",
+      "completedAt": "2026-10-04T05:33:00.502342Z",
+      "status": "success",
+      "report": {
+        "markdown": "The top three denial reasons by billed dollars on claims with denial notices dated in 2026 are:\n\n| Denial reason | Billed dollars | Share of total |\n| --- | --- | --- |\n| Medical necessity | $314,335.13 | 26.31% |\n| Coding error | $203,786.44 | 17.06% |\n| Prior authorization missing | $196,581.28 | 16.46% |\n\nTogether, these three reasons account for **59.83%** of all billed dollars on denied claims in 2026. [1]\n\n## Sources\n\n- [1] Structured retrieval result — healthcare_clinical — evidence `hermes-receipt:932e69e4c2b09ee96e78369de246552048c4614aec58e257ab5850e2e3794e65`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:932e69e4c2b09ee96e78369de246552048c4614aec58e257ab5850e2e3794e65",
+            "label": "Structured retrieval result — healthcare_clinical",
+            "capabilityId": "structured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-02c2ed023feb4b91b5e02dc3b6ebd107"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "fc52a83b-c513-5b3c-9d41-6ff2e442a90d",
+          "cursor": 879,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:53.483082Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:48b02a0251b1d294a030823e74937e1a2abc216112cf9758c0a74f4632f67ed0",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "17f69589-2b03-5d52-a1ee-45c96e230893",
+          "cursor": 880,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": "e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1:api:1",
+          "parentInvocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:55.260705Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 9076,
+              "output_tokens": 210
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "132c2ad2-3fff-57e0-bb0b-cab92ccd061b",
+          "cursor": 881,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:chatcmpl-tool-62abc9b7ddbd49ccaab46ca6db2aae6d",
+          "parentInvocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:55.297333Z",
+          "display": {
+            "label": "skill_view started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:09382f76883fc60b36987eb3f9312839661837871a93eacc97f21d511bdacc98",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "7460dbb6-bef6-5346-bffe-8af67d409fab",
+          "cursor": 882,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:chatcmpl-tool-62abc9b7ddbd49ccaab46ca6db2aae6d",
+          "parentInvocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:55.318095Z",
+          "display": {
+            "label": "skill_view completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.015
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:54d5366069ae18558480486ba883dc928298c3752957ff8803ae040165a19470",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0b9e7632-6368-5f56-9cd4-cbb248e50c2c",
+          "cursor": 883,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": "e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1:api:2",
+          "parentInvocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:58.108141Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 11870,
+              "output_tokens": 464
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4732a421-f470-5534-99f1-90340b3cad19",
+          "cursor": 884,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-02c2ed023feb4b91b5e02dc3b6ebd107",
+          "parentInvocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:58.132299Z",
+          "display": {
+            "label": "Table Query started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:9568fe4d08fce4ac4f1617182696eaae131fa11cb5675588eb9b31d11465134b",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "96d7e383-9641-529b-9666-9c2221225bf4",
+          "cursor": 885,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": "e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-02c2ed023feb4b91b5e02dc3b6ebd107",
+          "parentInvocationId": null,
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:932e69e4c2b09ee96e78369de246552048c4614aec58e257ab5850e2e3794e65"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:58.404884Z",
+          "display": {
+            "label": "Structured query result available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 271,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:932e69e4c2b09ee96e78369de246552048c4614aec58e257ab5850e2e3794e65",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9c032810-4b8c-581c-916d-0b1ab697afb8",
+          "cursor": 886,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "duckdb.tables",
+          "invocationId": "hermes-tool:chatcmpl-tool-02c2ed023feb4b91b5e02dc3b6ebd107",
+          "parentInvocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "toolServer": "tables",
+          "toolName": "query_tables",
+          "capabilityId": "structured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:32:58.435244Z",
+          "display": {
+            "label": "Table Query completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.299
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:9cd634be8fb04c6c20afd4c7db298f0980b4f59fe5fd258f3d5eb6b1b621ed1b",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4e0b3afc-8826-5083-a7ff-3b6cf08a2ee1",
+          "cursor": 887,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": "e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1:api:3",
+          "parentInvocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:00.436515Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 12887,
+              "output_tokens": 378
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "de976520-ea35-5960-a6a4-b09216327d5c",
+          "cursor": 888,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:00.467707Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:fd244f4a7673253a21de3553e11b029465129ba80b43cb9cfd11b74ac1ab8e20",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "978831e4-182d-5d9c-94c1-6198571f0550",
+          "cursor": 889,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:00.483794Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 33833,
+              "output_tokens": 1052,
+              "total_tokens": 34885,
+              "output_characters": 501
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:90f728082a4ef74497c82f8d779cab642332efc5070d6f0a5b0ca48546c72614",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "00aaa5b5-ec3c-52f5-9d16-3ce276bc5ace",
+          "cursor": 890,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:00.501829Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:e41177b2-31a0-4016-b721-a66efaea10cc:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "32e66d4b-a207-5fc2-a12f-0b297e59a540",
+          "cursor": 891,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:00.501909Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:e41177b2-31a0-4016-b721-a66efaea10cc:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "fc5d6c64-1d63-5c42-b90c-6f3debbd194d",
+          "cursor": 892,
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "runId": "run_37d699d86cf04560b85541a5cc5f11ce",
+          "sessionId": "record-843b7831-eac9-45c3-afa1-025636bf083f",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:c6b613fa45a80821dc5c756c:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:00.501973Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 7067,
+              "tool_call_count": 2,
+              "known_tool_duration_ms": 314,
+              "input_tokens": 33833,
+              "output_tokens": 1052,
+              "total_tokens": 34885
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:e41177b2-31a0-4016-b721-a66efaea10cc:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_query",
+          "receiptId": "hermes-receipt:932e69e4c2b09ee96e78369de246552048c4614aec58e257ab5850e2e3794e65",
+          "jobId": "e41177b2-31a0-4016-b721-a66efaea10cc",
+          "invocationId": "hermes-tool:chatcmpl-tool-02c2ed023feb4b91b5e02dc3b6ebd107",
+          "turnId": "e41177b2-31a0-4016-b721-a66efaea10cc:e41177b2-31a0-4016-b721-a66efaea10cc:23f0b0d1",
+          "toolName": "mcp__tables__query_tables",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 271,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T05:32:58.404884Z",
+          "content": {
+            "query": "Top three denial reasons by billed dollars for claims denied in 2026, with share of total",
+            "databaseName": "healthcare_clinical",
+            "answer": null,
+            "sql": "WITH denied_2026 AS (\n    SELECT\n        denial_reason,\n        SUM(billed_amount) AS total_billed\n    FROM healthcare_clinical.claims\n    WHERE denied = 1\n      AND adjudicated_date IS NOT NULL\n      AND YEAR(adjudicated_date) = 2026\n      AND denial_reason IS NOT NULL\n    GROUP BY denial_reason\n),\ntotal_denied AS (\n    SELECT SUM(total_billed) AS grand_total FROM denied_2026\n)\nSELECT\n    d.denial_reason,\n    ROUND(d.total_billed, 2) AS billed_dollars,\n    ROUND(100.0 * d.total_billed / t.grand_total, 2) AS share_pct\nFROM denied_2026 d\nCROSS JOIN total_denied t\nORDER BY d.total_billed DESC\nLIMIT 3",
+            "rows": [
+              {
+                "denial_reason": "Medical necessity",
+                "billed_dollars": 314335.13,
+                "share_pct": 26.31
+              },
+              {
+                "denial_reason": "Coding error",
+                "billed_dollars": 203786.44,
+                "share_pct": 17.06
+              },
+              {
+                "denial_reason": "Prior authorization missing",
+                "billed_dollars": 196581.28,
+                "share_pct": 16.46
+              }
+            ],
+            "sourceRowCount": 3,
+            "truncated": false,
+            "resolutionLineage": []
+          }
+        }
+      ],
+      "sourceIds": [
+        "healthcare.clinical"
+      ]
+    }
+  ]
+}

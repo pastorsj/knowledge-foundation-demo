@@ -4,7 +4,7 @@
     "id": "retail",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-04T04:38:50.996854Z",
+  "recordedAt": "2026-10-04T05:37:28.550159Z",
   "sessions": [
     {
       "id": "return-window-fees",
@@ -45,6 +45,25 @@
       ]
     },
     {
+      "id": "regional-growth-report",
+      "title": "Fastest-growing region in Q3",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "b5626878-9f81-4524-93e1-ed3c774d8b6e",
+          "question": "According to the Q3 2026 regional performance report, which region grew net sales fastest year over year, and what were its Q3 2026 net sales?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "retrieval",
+          "tools": [
+            "retrieve_evidence"
+          ]
+        }
+      ]
+    },
+    {
       "id": "top-stores-q3",
       "title": "Top stores by Q3 net sales",
       "featured": true,
@@ -52,6 +71,44 @@
         {
           "jobId": "3a570714-bb32-4263-baba-dad8ed56a6d5",
           "question": "Which five physical stores (excluding the online store) had the highest net sales in Q3 2026, July 1 to September 30?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "category-vs-plan",
+      "title": "Categories against plan",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "ac0afbbc-dcf3-4814-9f06-9a3c48f59abd",
+          "question": "Which product categories missed their Q3 2026 net sales target in the merchandising plan, and by what percentage?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "category-return-rate",
+      "title": "Highest return rate by category",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "c5962166-116f-42c7-b1fc-46f0a2497d84",
+          "question": "Which product category had the highest return rate in Q3 2026, measured as the value of items returned in the quarter divided by net sales in the quarter?"
         }
       ],
       "tools": [

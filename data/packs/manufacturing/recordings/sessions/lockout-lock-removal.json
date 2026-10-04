@@ -1,0 +1,695 @@
+{
+  "schemaVersion": 2,
+  "id": "lockout-lock-removal",
+  "title": "Removing someone else's lock",
+  "turns": [
+    {
+      "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+      "question": "Under the lockout/tagout procedure, who may remove a lock applied by an authorized employee who is not on site, and what must happen before they do?",
+      "submittedAt": "2026-10-04T05:33:19.426384Z",
+      "completedAt": "2026-10-04T05:33:23.869772Z",
+      "status": "success",
+      "report": {
+        "markdown": "**Who may remove the lock**\nOnly the **Plant EHS Manager** (or a **deputy named in writing**) may remove a lock applied by an authorized employee who is not on site. This is an exceptional case allowed only when the machine must be returned to service [1].\n\n**What must happen before removal**\nAll of the following steps must be completed:\n\n1. The **Maintenance Supervisor** has verified the employee is not on site and has made **at least two documented attempts to reach them by phone**.\n2. The **Plant EHS Manager** has confirmed the machine is **safe to re-energize** and that **no one is working on it**.\n3. The absent employee **is informed that the lock was removed** before they return to work on that machine.\n4. The removal is **recorded in the lockout log** with the names of everyone involved and the reason [1].\n\n*Note: This is a synthetic demonstration document (SAF-SOP-007, Rev C) — not for operational use.*\n\n## Sources\n\n- [1] Unstructured Retrieval evidence — lockout_tagout_sop.pdf — evidence `hermes-receipt:2f136520ff1a6e61ba6bbb498a50946b1ece47bd4216b9cce7813a3f0feb19c0`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:2f136520ff1a6e61ba6bbb498a50946b1ece47bd4216b9cce7813a3f0feb19c0",
+            "label": "Unstructured Retrieval evidence — lockout_tagout_sop.pdf",
+            "capabilityId": "unstructured_retrieval",
+            "invocationId": "hermes-tool:chatcmpl-tool-12c7b464a512499d8511b42d4183269b"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "367ceda0-02fe-5141-b41c-4af326c51892",
+          "cursor": 906,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:19.514775Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:d28a529ba9cbc25578868198042984a439f6596d1a4b73e8e88ed52af6f939c2",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b1677aa3-c75b-5c72-a2c4-f2909fb9f4e4",
+          "cursor": 907,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e:api:1",
+          "parentInvocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:20.417493Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 4810,
+              "output_tokens": 152
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c1e1721c-8a65-5358-9fb9-ba63d21f225c",
+          "cursor": 908,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-12c7b464a512499d8511b42d4183269b",
+          "parentInvocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:20.458944Z",
+          "display": {
+            "label": "Document Retrieval started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:05371e8090df24991696cc3af8ba7eeb78b1179671eb4c1c3018c0820a8dd16c",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "b8381a32-d8e6-5c50-9722-022d46e23ad0",
+          "cursor": 909,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-12c7b464a512499d8511b42d4183269b",
+          "parentInvocationId": null,
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [
+            "hermes-receipt:2f136520ff1a6e61ba6bbb498a50946b1ece47bd4216b9cce7813a3f0feb19c0"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:21.167536Z",
+          "display": {
+            "label": "Unstructured retrieval evidence available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 707,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:2f136520ff1a6e61ba6bbb498a50946b1ece47bd4216b9cce7813a3f0feb19c0",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "dcf08d9d-05da-526e-be38-d4b7c22a77f4",
+          "cursor": 910,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "milvus.retrieval",
+          "invocationId": "hermes-tool:chatcmpl-tool-12c7b464a512499d8511b42d4183269b",
+          "parentInvocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "toolServer": "retrieval",
+          "toolName": "retrieve_evidence",
+          "capabilityId": "unstructured_retrieval",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:21.215241Z",
+          "display": {
+            "label": "Document Retrieval completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.74
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:2bfc236f4568eb628c2d1807ca09adc2e42dcc358a782655317c841bd4cd56cf",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "aef5c7ee-04b0-5b98-805b-90fe28479d30",
+          "cursor": 911,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e:api:2",
+          "parentInvocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:23.794891Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 10024,
+              "output_tokens": 568
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9bd043ad-e058-5d88-b5ea-af3f7bf7092c",
+          "cursor": 912,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:23.826519Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:9259531819b6404ecc332f7302afa84e5681f71b25706f5a2274a3f5ce979886",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "19360046-25a6-5b70-9dcf-ed96c587f82c",
+          "cursor": 913,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:23.847689Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 14834,
+              "output_tokens": 720,
+              "total_tokens": 15554,
+              "output_characters": 1102
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:a21b76b121b1b5a101a12d7f7b5b65273f4ac6954edb98769db7df449d1acab4",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "594dad14-7664-52b6-815f-62abc6a2a9eb",
+          "cursor": 914,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:23.869331Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "f90ae2f7-dec3-5573-8b1c-1dc81bb36b36",
+          "cursor": 915,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:23.869392Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "9291f872-9c06-5feb-a395-e46b9de883cd",
+          "cursor": 916,
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "runId": "run_544487a1cfec4dac838a7d87e5cecce1",
+          "sessionId": "record-775699ea-6e6f-4b04-af71-98e4e88c3fb2",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:e10d0e1a7fe2a34f8f1b1314:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T05:33:23.869424Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 4378,
+              "tool_call_count": 1,
+              "known_tool_duration_ms": 740,
+              "input_tokens": 14834,
+              "output_tokens": 720,
+              "total_tokens": 15554
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "retrieval_evidence",
+          "receiptId": "hermes-receipt:2f136520ff1a6e61ba6bbb498a50946b1ece47bd4216b9cce7813a3f0feb19c0",
+          "jobId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea",
+          "invocationId": "hermes-tool:chatcmpl-tool-12c7b464a512499d8511b42d4183269b",
+          "turnId": "f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:f0723fa2-bc69-4a56-bc9f-702bcfbb2cea:3c31579e",
+          "toolName": "mcp__retrieval__retrieve_evidence",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 707,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T05:33:21.167536Z",
+          "content": {
+            "query": "who may remove a lock applied by an authorized employee who is not on site and what must happen before they do",
+            "sourceIds": [
+              "manufacturing.procedures"
+            ],
+            "collection": "knowledge",
+            "collectionVersion": "knowledge__v1",
+            "hits": [
+              {
+                "rank": 1,
+                "score": 3.80859375,
+                "vectorScore": 0.5370785593986511,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0009",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n7. Removal of a lock by someone else\nOnly the person who applied a lock may remove it. Supervisors, co-workers and contractors may not cut or remove another person’s lock.\nIn the exceptional case that the authorized employee is not on site and the machine must be returned to service, only the Plant EHS Manager (or a deputy named in writing) may remove the lock, and only after all of these steps:\n- The Maintenance Supervisor has verified that the employee is not on site and has made at least two documented attempts to reach them by phone.\n- The Plant EHS Manager has confirmed that the machine is safe to re-energize and that no one is working on it.\n- The employee is told that the lock was removed before they return to work on that machine.\n- The removal is entered in the lockout log, with the names of the people involved and the reason.\nCNC Mill, Energy sources = Electrical main supply; pneumatic air; coolant and lubrication pumps; stored energy in servo drives. CNC Mill, Isolating devices and checks = Main disconnect; air supply valve with dump; pump breakers; wait 5 minutes for drive discharge. CNC Lathe, Energy sources = Electrical main supply; hydraulic chuck and turret power pack; pneumatic air; coolant pump. CNC Lathe, Isolating devices and checks = Main disconnect; hydraulic power pack breaker and bleed; air supply valve with dump. Hydraulic Press, Energy sources = Elec",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 7. Removal of a lock by someone else",
+                  "labels": [
+                    "caption",
+                    "list_item",
+                    "table",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 2,
+                "score": -3.1953125,
+                "vectorScore": 0.4735761284828186,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0006",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n4. Roles\nAuthorized employee, Responsibility = Plans the lockout, applies and removes their own locks, verifies zero energy.. Production Supervisor, Responsibility = Releases the machine for service and tells the affected employees.. Maintenance Supervisor, Responsibility = Assigns authorized employees, keeps the lockout log and checks group lockouts.. Plant EHS Manager, Responsibility = Approves lock removal in the exceptional case in section 7, audits the procedure each year.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 2,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 4. Roles",
+                  "labels": [
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 3,
+                "score": -3.861328125,
+                "vectorScore": 0.369525671005249,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0011",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n9. Training, audits and records\n- (\\bullet) Authorized employees are trained and certified before their first lockout, and are retrained every 12 months and whenever the procedure or the machine changes.\n- (\\bullet) Affected employees are trained to recognize a lock and tag and never to start or operate a locked-out machine.\n- (\\bullet) The Plant EHS Manager audits this procedure for each machine type once a year. The audit is carried out by an authorized employee who is not using the procedure in the audit, and findings are closed within 30 days.\n- (\\bullet) The lockout log is kept for three years. Personal locks are red and identify their owner; no lock may be used for any other purpose.\nRev A, Date = 3 March 2021. Rev A, Change = First release.. Rev B, Date = 20 September 2023. Rev B, Change = Added group lockbox and shift change rules.. Rev C, Date = 15 January 2026. Rev C, Change = Added robot cells; clarified lock removal by the Plant EHS Manager (section 7); added annual audit independence.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 4",
+                  "page_start": 4,
+                  "page_end": 4,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 9. Training, audits and records",
+                  "labels": [
+                    "list_item",
+                    "table"
+                  ]
+                }
+              },
+              {
+                "rank": 4,
+                "score": -3.87109375,
+                "vectorScore": 0.43647828698158264,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0010",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n7. Removal of a lock by someone else\nSynthetic document for a software demonstration. Not for operational use. Page 3\nATLAS PRECISION COMPONENTS SAF-SOP-007 | Rev C",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 4,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 7. Removal of a lock by someone else",
+                  "labels": [
+                    "page_footer",
+                    "page_header"
+                  ]
+                }
+              },
+              {
+                "rank": 5,
+                "score": -3.99609375,
+                "vectorScore": 0.3928467631340027,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0008",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n6. Restoring the machine\n- Remove tools and materials; check that the machine and its guards are fully reassembled.\n- Make sure every person is clear of the machine and tell the affected employees that the machine is about to be re-energized.\n- Each authorized employee removes their own personal lock and tag. The last lock removed from the group lockbox releases the machine locks.\n- Re-energize the machine, run the test cycle listed in the maintenance task list and record the work in the CMMS.\n- Tell the Production Supervisor that the machine is released.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 3",
+                  "page_start": 3,
+                  "page_end": 3,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 6. Restoring the machine",
+                  "labels": [
+                    "list_item"
+                  ]
+                }
+              },
+              {
+                "rank": 6,
+                "score": -4.66796875,
+                "vectorScore": 0.431948721408844,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0005",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n3. Definitions\n- • Authorized employee: a person trained and certified under section 9 who applies locks and tags to service a machine.\n- • Affected employee: a person who operates or works near the machine being serviced.\n- • Energy source: electrical, hydraulic, pneumatic, mechanical, gravity, thermal or stored (springs, accumulators, capacitors, suspended loads).\n- • Personal lock: a red padlock issued to one authorized employee with a single key held only by that person.\n- • Group lockbox: a box that holds the keys of a locked-out machine so that a crew can work under one lockout; each member adds a personal lock to the box.\n- • Tag: a danger tag fixed to each lock giving the owner’s name, date and department.\nSynthetic document for a software demonstration. Not for operational use. Page 1\nATLAS PRECISION COMPONENTS SAF-SOP-007 | Rev C",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 2,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 3. Definitions",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header"
+                  ]
+                }
+              },
+              {
+                "rank": 7,
+                "score": -4.80078125,
+                "vectorScore": 0.3317304253578186,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0007",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n5. Lockout and tagout procedure\nFollow these steps in order. Do not skip a step, even for short jobs.\n- Prepare. Review the machine-specific energy sources in Table 1. Identify every energy source and every isolating device. Collect personal locks, tags and a group lockbox if more than one person will work on the machine.\n- Notify. Tell the Production Supervisor and every affected employee that the machine will be shut down and locked out, and why.\n- Shut down. Stop the machine with its normal stop control. Do not use the E-stop as the normal stop.\n- Isolate. Switch off or close every energy isolating device in Table 1: the main electrical disconnect, hydraulic and pneumatic supply valves and any other feed.\n- Apply locks and tags. Fit a personal lock and tag to each isolating device. Each authorized employee applies their own lock. For a crew, put the keys of the machine locks in a group lockbox and each member adds a personal lock to the box.\n- Release stored energy. Bleed hydraulic accumulators and pneumatic lines, discharge capacitors, lower or block any suspended load. On a hydraulic press, lower the ram to the bed or fit the rated ram safety props before anyone enters the die area.\n- Verify zero energy. Return the controls to OFF after each check. Confirm that the machine cannot start by trying to start it from its main control station (the try-out). Check that gauges r",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 2",
+                  "page_start": 2,
+                  "page_end": 3,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 5. Lockout and tagout procedure",
+                  "labels": [
+                    "list_item",
+                    "page_footer",
+                    "page_header",
+                    "text"
+                  ]
+                }
+              },
+              {
+                "rank": 8,
+                "score": -6.1875,
+                "vectorScore": 0.26909780502319336,
+                "sourceId": "manufacturing.procedures",
+                "documentId": "manufacturing.procedures:f-67a5daa3d77e97fb",
+                "chunkId": "manufacturing.procedures:f-67a5daa3d77e97fb:0003",
+                "title": "lockout_tagout_sop.pdf",
+                "url": null,
+                "publishedAt": null,
+                "snippet": "Lockout/Tagout of Machinery Energy Sources\nStandard operating procedure for servicing and maintenance\n1. Purpose\nThis procedure prevents the unexpected start-up of machinery, or the release of stored energy, while people service or maintain it. It describes how to isolate, lock, tag and verify every energy source before work begins, and how to restore the machine safely.",
+                "metadata": {
+                  "parser": "nemotron-parse-2.0",
+                  "file_id": "f-67a5daa3d77e97fb",
+                  "file_name": "lockout_tagout_sop.pdf",
+                  "citation": "lockout_tagout_sop.pdf, p. 1",
+                  "page_start": 1,
+                  "page_end": 1,
+                  "headings": "Lockout/Tagout of Machinery Energy Sources › Standard operating procedure for servicing and maintenance › 1. Purpose",
+                  "labels": [
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "candidateCounts": {
+              "manufacturing.procedures": 32
+            },
+            "models": {
+              "embed": "nvidia/nemotron-3-embed-1b",
+              "rerank": "nvidia/llama-nemotron-rerank-vl-1b-v2"
+            },
+            "index": {
+              "type": "HNSW",
+              "metric": "COSINE",
+              "params": {
+                "M": 16,
+                "efConstruction": 200
+              },
+              "searchParams": {
+                "ef": 128
+              }
+            },
+            "timings": {
+              "embedMs": 271.5,
+              "searchMs": 7.8,
+              "rerankMs": 416.0,
+              "totalMs": 695.3
+            }
+          }
+        }
+      ],
+      "sourceIds": [
+        "manufacturing.procedures"
+      ]
+    }
+  ]
+}

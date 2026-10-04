@@ -785,7 +785,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 269
+          "duration_ms": 265
         },
         "branches": {
           "table": "branches",
@@ -882,7 +882,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 262
+          "duration_ms": 259
         },
         "card_disputes": {
           "table": "card_disputes",
@@ -989,7 +989,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 267
+          "duration_ms": 249
         },
         "credit_risk_report_delinquency": {
           "table": "credit_risk_report_delinquency",
@@ -1086,7 +1086,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 259
+          "duration_ms": 260
         },
         "credit_risk_report_provisions": {
           "table": "credit_risk_report_provisions",
@@ -1213,7 +1213,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 270
+          "duration_ms": 279
         },
         "customers": {
           "table": "customers",
@@ -1340,7 +1340,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 261
+          "duration_ms": 263
         },
         "loan_payments": {
           "table": "loan_payments",
@@ -1457,7 +1457,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 249
+          "duration_ms": 275
         },
         "loans": {
           "table": "loans",
@@ -1644,7 +1644,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 266
+          "duration_ms": 247
         },
         "monthly_balances": {
           "table": "monthly_balances",
@@ -1771,7 +1771,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 264
+          "duration_ms": 268
         }
       },
       "queries": [
@@ -2573,7 +2573,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 262
+            "duration_ms": 270
           }
         },
         {
@@ -2622,7 +2622,96 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 251
+            "duration_ms": 254
+          }
+        },
+        {
+          "sql": "SELECT \n    product,\n    month_end,\n    active_loans,\n    loans_30plus,\n    delinquency_rate_30plus * 100 AS delinquency_rate_30plus_pct\nFROM financial_services_banking.credit_risk_report_delinquency\nWHERE month_end IN ('2025-09-30', '2026-09-30')\nORDER BY month_end, delinquency_rate_30plus DESC;",
+          "result": {
+            "columns": [
+              "product",
+              "month_end",
+              "active_loans",
+              "loans_30plus",
+              "delinquency_rate_30plus_pct"
+            ],
+            "types": [
+              "VARCHAR",
+              "DATE",
+              "DOUBLE",
+              "DOUBLE",
+              "DOUBLE"
+            ],
+            "rows": [
+              [
+                "personal",
+                "2025-09-30",
+                134.0,
+                4.0,
+                2.9899999999999998
+              ],
+              [
+                "auto",
+                "2025-09-30",
+                146.0,
+                2.0,
+                1.37
+              ],
+              [
+                "mortgage",
+                "2025-09-30",
+                133.0,
+                1.0,
+                0.75
+              ],
+              [
+                "auto",
+                "2026-09-30",
+                251.0,
+                12.0,
+                4.78
+              ],
+              [
+                "personal",
+                "2026-09-30",
+                209.0,
+                7.0,
+                3.35
+              ],
+              [
+                "mortgage",
+                "2026-09-30",
+                133.0,
+                4.0,
+                3.01
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 246
+          }
+        },
+        {
+          "sql": "WITH q3_disputes AS (\n  SELECT\n    dispute_id,\n    amount,\n    reason\n  FROM financial_services_banking.card_disputes\n  WHERE dispute_date >= '2026-07-01'\n    AND dispute_date <= '2026-09-30'\n)\nSELECT\n  COUNT(*) AS dispute_count,\n  SUM(amount) AS total_amount_disputed,\n  (SELECT reason FROM q3_disputes GROUP BY reason ORDER BY COUNT(*) DESC LIMIT 1) AS most_common_reason\nFROM q3_disputes",
+          "result": {
+            "columns": [
+              "dispute_count",
+              "total_amount_disputed",
+              "most_common_reason"
+            ],
+            "types": [
+              "BIGINT",
+              "DOUBLE",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                68,
+                8546.13,
+                "unauthorized_transaction"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 252
           }
         },
         {
@@ -2680,7 +2769,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 268
+            "duration_ms": 253
           }
         },
         {
@@ -2986,7 +3075,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 265
+            "duration_ms": 248
           }
         },
         {
@@ -3175,7 +3264,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 262
+            "duration_ms": 263
           }
         },
         {
@@ -3454,7 +3543,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 285
+            "duration_ms": 265
           }
         },
         {
@@ -3706,7 +3795,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 261
+            "duration_ms": 272
           }
         },
         {
@@ -4039,7 +4128,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 263
+            "duration_ms": 284
           }
         },
         {
@@ -4372,7 +4461,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 280
+            "duration_ms": 266
           }
         },
         {
@@ -4678,7 +4767,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 261
+            "duration_ms": 246
           }
         },
         {
@@ -5173,7 +5262,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 292
+            "duration_ms": 246
           }
         },
         {
@@ -5506,7 +5595,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 250
+            "duration_ms": 271
           }
         }
       ]
