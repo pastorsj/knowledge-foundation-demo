@@ -459,6 +459,8 @@ services:
     depends_on:
       auto-ontology-migrate: { condition: service_completed_successfully }
       ingest: { condition: service_healthy }
+      # It opens CONNECTION_STRINGS' file at startup: wait until ingest has written it.
+      auto-ontology-compile: { condition: service_completed_successfully }
 
   auto-ontology-ingestion:
     <<: *restart
@@ -489,7 +491,10 @@ services:
 
   # Upstream answers no question until its semantic layer (the ontology) is compiled, and compiles only
   # with Settings > Semantic Compilation on, which is off on a new database. This turns it on before the
-  # ingestion service starts; the service then ingests the catalog and compiles the ontology from it.
+  # backend and the ingestion service start; the service then ingests the catalog and compiles the ontology from it.
+  # First it waits for the source's DuckDB file: on a new knowledge volume ingest is still syncing the packs, and a
+  # backend or ingestion service that starts without the file compiles nothing until its next run, 24 hours later.
+  # Ingest swaps the file in complete. After 30 minutes it goes on without it (a source that is never written).
   auto-ontology-compile:
     profiles: [ontology]
     image: pgvector/pgvector:pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
@@ -498,13 +503,22 @@ services:
       PGUSER: auto_ontology
       PGPASSWORD: auto_ontology
       PGDATABASE: auto_ontology
+      SOURCE_DB: /knowledge/sources/${AUTO_ONTOLOGY_SOURCE:-retail.sales}/tables.duckdb
+    volumes: [knowledge:/knowledge:ro]
     command:
-      - psql
-      - --no-psqlrc
-      - --set=ON_ERROR_STOP=1
-      - --command=INSERT INTO frontend.configurations (key, value, updated_at)
-        VALUES ('semantic_compilation_enabled', 'true', now())
-        ON CONFLICT (key) DO UPDATE SET value = 'true', updated_at = now()
+      - sh
+      - -c
+      - |
+        waited=0
+        until [ -f "$$SOURCE_DB" ] || [ "$$waited" -ge 1800 ]; do sleep 5; waited=$$((waited + 5)); done
+        if [ -f "$$SOURCE_DB" ]; then
+          echo "$$SOURCE_DB is ready (waited $$waited s)"
+        else
+          echo "$$SOURCE_DB is still missing after $$waited s; starting Auto Ontology without it" >&2
+        fi
+        exec psql --no-psqlrc --set=ON_ERROR_STOP=1 --command="INSERT INTO frontend.configurations
+          (key, value, updated_at) VALUES ('semantic_compilation_enabled', 'true', now())
+          ON CONFLICT (key) DO UPDATE SET value = 'true', updated_at = now()"
     depends_on:
       auto-ontology-frontend-migrate: { condition: service_completed_successfully }
 

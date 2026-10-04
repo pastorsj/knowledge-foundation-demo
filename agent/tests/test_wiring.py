@@ -217,3 +217,39 @@ def test_the_tools_catalog_fixtures_are_copies_of_the_contracts():
             assert (copies / relative).read_bytes() == (contract / relative).read_bytes(), (
                 f"tools/{tool}/tests/fixtures/catalog/{relative} differs from contracts/fixtures/catalog/{relative}"
             )
+
+
+def test_auto_ontology_starts_once_its_source_database_exists(tmp_path):
+    """On a new knowledge volume ingest is still syncing the packs when Auto Ontology starts. Its backend and its
+    ingestion service open CONNECTION_STRINGS' file once, at startup, so the compile one-shot both start after waits
+    for that file."""
+    import subprocess
+    import threading
+    import time
+
+    services = load_yaml(COMPOSE)["services"]
+    compile_ = services["auto-ontology-compile"]
+    for name in ("auto-ontology", "auto-ontology-ingestion"):
+        assert services[name]["depends_on"]["auto-ontology-compile"] == {"condition": "service_completed_successfully"}
+    connection = services["auto-ontology"]["environment"]["CONNECTION_STRINGS"]
+    assert connection == "duckdb://" + compile_["environment"]["SOURCE_DB"]
+    assert "knowledge:/knowledge:ro" in compile_["volumes"]
+
+    # Run the one-shot's script (Compose turns $$ into $) with a psql that records that it ran.
+    shell, flag, script = compile_["command"]
+    assert (shell, flag) == ("sh", "-c")
+    (tmp_path / "psql").write_text('#!/bin/sh\necho "psql ran" > "$PSQL_RAN"\n')
+    (tmp_path / "psql").chmod(0o755)
+    source_db = tmp_path / "tables.duckdb"
+    ran = tmp_path / "ran"
+    env = {"PATH": f"{tmp_path}:/usr/bin:/bin", "SOURCE_DB": str(source_db), "PSQL_RAN": str(ran)}
+    threading.Timer(1.0, source_db.touch).start()
+    started = time.monotonic()
+
+    result = subprocess.run(
+        ["sh", "-c", script.replace("$$", "$")], env=env, capture_output=True, text=True, timeout=30, check=False
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert time.monotonic() - started >= 1.0 and ran.read_text() == "psql ran\n"
+    assert f"{source_db} is ready (waited 5 s)" in result.stdout

@@ -32,13 +32,17 @@ auto-ontology-db (pgvector) ──> auto-ontology-migrate ──> auto-ontology 
                                                             ├──> auto-ontology-ingestion (:3002)
                                                             └──> auto-ontology-mcp (127.0.0.1:3303 → :3003/mcp) <── Hermes
 auto-ontology-db ──> auto-ontology-frontend-migrate ──> auto-ontology-frontend (web UI; the API signs in here)
-                                                     └──> auto-ontology-compile (turns compilation on) ──> ingestion
+                                                     └──> auto-ontology-compile (waits for the source's DuckDB file,
+                                                          turns compilation on) ──> backend and ingestion
 ```
 
 - **One structured source.** `AUTO_ONTOLOGY_SOURCE` (default `retail.sales`) names a structured source of the
   knowledge catalog. Its DuckDB file, written by ingest, is the backend's and ingestion's only connection
   (`CONNECTION_STRINGS=duckdb:///knowledge/sources/<source>/tables.duckdb`, the `knowledge` volume mounted
-  read-only). The backend waits for ingest to be healthy.
+  read-only). The backend waits for ingest to be healthy and for `auto-ontology-compile`, which waits until ingest
+  has written that file (it swaps the file in complete), up to 30 minutes. On a new knowledge volume the packs are
+  still syncing when the stack starts, and a backend or ingestion service that started without the file compiled
+  nothing until its next run, 24 hours later.
 - **No seed.** The ontology is built by upstream's own ingestion from that database; nothing is imported from the
   packs ([how](#how-the-ontology-is-built)). The market demo's seed (`seed.py`, a hand-written `model.yaml` per
   pack) is gone.
@@ -68,9 +72,10 @@ each run when the service starts and then every 24 hours:
    about 10 minutes (579 s) and produced 8 terms, 62 attributes and 4 inferred relationships.
 
 Upstream runs the second pass only when Settings > Semantic Compilation is on, and it is off on a new database. The
-`auto-ontology-compile` one-shot in `compose.yaml` turns it on (`frontend.configurations`,
-`semantic_compilation_enabled = true`) after the web app's migration and before the ingestion service starts, so
-the first `up` compiles the ontology with no other step. Nothing else is triggered or imported.
+`auto-ontology-compile` one-shot in `compose.yaml` waits for the source's DuckDB file, then turns it on
+(`frontend.configurations`, `semantic_compilation_enabled = true`) after the web app's migration and before the
+backend and the ingestion service start, so the first `up`, even on a new knowledge volume, compiles the ontology
+with no other step. Nothing else is triggered or imported.
 
 - Allow about 10 minutes after the first `up` before asking. `./scripts/demo.sh logs auto-ontology-ingestion`
   shows `semantic: finished successfully` when it is ready.
