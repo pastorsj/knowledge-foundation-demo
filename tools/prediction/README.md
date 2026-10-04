@@ -63,7 +63,8 @@ Each call:
    entities." A failure is `available: false` with a written
    reason, and no URL or file path in it:
    - the endpoint could not be reached, or did not answer within 60 s;
-   - it refused the credentials;
+   - it refused the credentials (HTTP 401);
+   - it, or a proxy in front of it such as a Cloudflare challenge, blocked the request (HTTP 403): not a key problem;
    - it rejected the query (with its first line);
    - it answered with a server error;
    - the tables do not make a graph;

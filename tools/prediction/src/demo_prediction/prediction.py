@@ -77,6 +77,14 @@ NO_ENDPOINT = "No Kumo endpoint is configured (KUMO_RELATIONAL_URL)."
 UNREACHABLE = "The Kumo endpoint could not be reached (KUMO_RELATIONAL_URL); it may be down or still starting."
 TIMED_OUT = f"The Kumo endpoint did not answer within {TIMEOUT_SECONDS:g} seconds."
 REFUSED_KEY = "The Kumo endpoint refused the credentials (KUMO_API_KEY)."
+# A 403 is not a refused key: a proxy in front of the endpoint (a Cloudflare challenge, a firewall) answers it
+# before any key is checked.
+BLOCKED = (
+    "The Kumo endpoint, or a proxy in front of it, blocked the request (HTTP 403), for example with a bot "
+    "challenge; check that this host may reach KUMO_RELATIONAL_URL."
+)
+# The client reports a refusal while connecting as AUTHENTICATION_FAILED, with the status only in its message.
+_HTTP_403 = re.compile(r"\bHTTP 403\b")
 UNEXPECTED = "The prediction failed unexpectedly; the prediction service's log has the details."
 URL = re.compile(r"https?://\S+")
 PATH = re.compile(r"(?<![\w.])/(?:[\w.-]+/)+[\w.-]*")
@@ -335,7 +343,9 @@ def kumo_reason(error: Exception, plan: Plan | None = None, count: int | None = 
     if "Context size exceeds" in message:
         return too_large(plan, count)
     if isinstance(error, NimRequestError):
-        if error.status_code in (401, 403) or error.code == "AUTHENTICATION_FAILED":
+        if error.status_code == 403:
+            return BLOCKED
+        if error.status_code == 401 or error.code == "AUTHENTICATION_FAILED":
             return REFUSED_KEY
         if 400 <= error.status_code < 500 and error.status_code not in (408, 429):
             return f"Kumo rejected the query: {_redact(message)}"
@@ -346,7 +356,7 @@ def kumo_reason(error: Exception, plan: Plan | None = None, count: int | None = 
         if error.code == "TRANSPORT_ERROR":
             return TIMED_OUT if re.search(r"timed? ?out", message, re.IGNORECASE) else UNREACHABLE
         if error.code == "AUTHENTICATION_FAILED":
-            return REFUSED_KEY
+            return BLOCKED if _HTTP_403.search(message) else REFUSED_KEY
         if error.code == "INVALID_REQUEST":
             return f"Kumo rejected the query: {_redact(message)}"
         return f"Kumo could not make the prediction ({error.code or 'no code'})."

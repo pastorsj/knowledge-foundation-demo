@@ -456,13 +456,41 @@ async def test_a_filter_under_the_limit_scores_the_whole_population(knowledge_di
             "Kumo rejected the query: Unknown column 'foo' (see <url> <path>)",
         ),
         (NimRequestError(401, code=None, message="no key"), prediction.REFUSED_KEY),
+        (NimRequestError(403, code=None, message="<!DOCTYPE html> Just a moment..."), prediction.BLOCKED),
+        (
+            RelationalError(
+                "Client authentication failed for 'https://kumo.example'. If the NIM is behind an authenticating "
+                "gateway, pass a matching 'api_key'. HTTP 401: unauthorized",
+                code="AUTHENTICATION_FAILED",
+            ),
+            prediction.REFUSED_KEY,
+        ),
+        (
+            RelationalError(
+                "Client authentication failed for 'https://kumo.example'. If the NIM is behind an authenticating "
+                "gateway, pass a matching 'api_key'. HTTP 403: <!DOCTYPE html> Just a moment...",
+                code="AUTHENTICATION_FAILED",
+            ),
+            prediction.BLOCKED,
+        ),
         (NimRequestError(503, code=None, message="warming up at http://kumo:8000"), "HTTP 503"),
         (RelationalError("Read timed out at http://kumo:8000", code="TRANSPORT_ERROR"), prediction.TIMED_OUT),
         (RelationalError("refused", code="TRANSPORT_ERROR"), prediction.UNREACHABLE),
         (TimeoutError("slow"), prediction.TIMED_OUT),
         (RuntimeError("boom in /knowledge/sources/retail.sales/tables.duckdb"), prediction.UNEXPECTED),
     ],
-    ids=["invalid-query", "credentials", "server-error", "timeout", "unreachable", "builtin-timeout", "unexpected"],
+    ids=[
+        "invalid-query",
+        "credentials",
+        "blocked",
+        "credentials-at-connect",
+        "blocked-at-connect",
+        "server-error",
+        "timeout",
+        "unreachable",
+        "builtin-timeout",
+        "unexpected",
+    ],
 )
 async def test_kumo_failures_get_written_reasons(
     knowledge_dir: Path, stub: type[StubClient], error: Exception, reason: str
