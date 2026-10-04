@@ -140,3 +140,50 @@ export const normalizeFileName = (backendFileName: string): string => {
   }
   return backendFileName
 }
+
+/** What each extension is, for people, by group: documents (parsed), then tables (loaded into DuckDB) */
+const TYPE_LABELS: ReadonlyArray<{
+  group: 'documents' | 'tables'
+  label: string
+  extensions: string[]
+}> = [
+  { group: 'documents', label: 'PDF', extensions: ['.pdf'] },
+  {
+    group: 'documents',
+    label: 'images',
+    extensions: ['.png', '.jpg', '.jpeg', '.tif', '.tiff', '.webp'],
+  },
+  { group: 'documents', label: 'Word', extensions: ['.docx'] },
+  { group: 'documents', label: 'PowerPoint', extensions: ['.pptx'] },
+  { group: 'documents', label: 'HTML', extensions: ['.html', '.htm'] },
+  { group: 'documents', label: 'Markdown', extensions: ['.md'] },
+  { group: 'documents', label: 'text', extensions: ['.txt'] },
+  { group: 'tables', label: 'CSV', extensions: ['.csv'] },
+  { group: 'tables', label: 'TSV', extensions: ['.tsv'] },
+  { group: 'tables', label: 'Excel', extensions: ['.xlsx', '.xls'] },
+  { group: 'tables', label: 'Parquet', extensions: ['.parquet'] },
+  { group: 'tables', label: 'JSON', extensions: ['.json', '.jsonl'] },
+]
+
+/**
+ * The accepted types (`.pdf,.png,…`) as a short list people read, documents first, then tables:
+ * "PDF, images, Word · CSV, Excel". An extension without a label is listed as itself (`XML`).
+ */
+export const describeAcceptedTypes = (acceptedTypes: string): string => {
+  const extensions = acceptedTypes
+    .split(',')
+    .map((extension) => extension.trim().toLowerCase())
+    .filter(Boolean)
+  const labelled = (group: 'documents' | 'tables') =>
+    TYPE_LABELS.filter(
+      (type) => type.group === group && type.extensions.some((ext) => extensions.includes(ext))
+    ).map((type) => type.label)
+  const known = new Set(TYPE_LABELS.flatMap((type) => type.extensions))
+  const others = extensions
+    .filter((extension) => !known.has(extension))
+    .map((extension) => extension.replace(/^\./, '').toUpperCase())
+  return [labelled('documents'), [...labelled('tables'), ...others]]
+    .filter((labels) => labels.length)
+    .map((labels) => labels.join(', '))
+    .join(' · ')
+}

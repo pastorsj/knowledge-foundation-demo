@@ -29,11 +29,15 @@ describe('FileSourceCard', () => {
 
     expect(screen.getByRole('list', { name: 'Document pipeline' })).toBeVisible()
     expect(steps()).toEqual([
-      ['Parse', 'active'],
-      ['Chunk', 'pending'],
-      ['Embed', 'pending'],
-      ['Index', 'pending'],
+      ['Parse: in progress', 'active'],
+      ['Chunk: pending', 'pending'],
+      ['Embed: pending', 'pending'],
+      ['Index: pending', 'pending'],
     ])
+    // The state is said, not only colored, and the current step is marked and announced
+    expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('Parse')
+    expect(screen.getByTestId('file-stage-announcement')).toHaveTextContent('policy.pdf: Parse')
+    expect(screen.getByTestId('file-stage-announcement')).toHaveAttribute('aria-live', 'polite')
     expect(screen.getByText('page 2 of 4')).toBeVisible()
     expect(
       screen.getByRole('progressbar', { name: 'policy.pdf ingestion progress' })
@@ -77,9 +81,12 @@ describe('FileSourceCard', () => {
 
     expect(screen.getByRole('list', { name: 'Table pipeline' })).toBeVisible()
     expect(steps()).toEqual([
-      ['Load', 'done'],
-      ['Profile', 'done'],
+      ['Load: done', 'done'],
+      ['Profile: done', 'done'],
     ])
+    expect(screen.getByTestId('file-stage-announcement')).toHaveTextContent(
+      'orders.xlsx: Available'
+    )
     expect(screen.getByTestId('file-parser')).toHaveTextContent('DuckDB XLSX')
     await userEvent.click(screen.getByRole('button', { name: 'Open orders_q4 in the data viewer' }))
     expect(onOpenTable).toHaveBeenCalledWith('orders_q4')
@@ -97,8 +104,26 @@ describe('FileSourceCard', () => {
         onDelete={vi.fn()}
       />
     )
-    expect(steps()[0]).toEqual(['Parse', 'failed'])
+    expect(steps()[0]).toEqual(['Parse: failed', 'failed'])
+    expect(screen.getByTestId('file-stage-announcement')).toHaveTextContent(
+      'photo.png: failed at Parse'
+    )
     expect(screen.getByText(/an image has no text layer/)).toBeVisible()
     expect(screen.queryByRole('progressbar')).toBeNull()
+  })
+
+  test('shows its delete button to a keyboard user, not only on hover', () => {
+    render(
+      <FileSourceCard
+        id="f4"
+        title="notes.md"
+        status="available"
+        kind="document"
+        onDelete={vi.fn()}
+      />
+    )
+    const remove = screen.getByRole('button', { name: 'Delete notes.md' })
+    expect(remove.className).toMatch(/focus-visible:opacity-100/)
+    expect(remove.className).toMatch(/group-focus-within:opacity-100/)
   })
 })

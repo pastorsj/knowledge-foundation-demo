@@ -14,7 +14,7 @@
 
 'use client'
 
-import { type FC, useState, useEffect } from 'react'
+import { type FC } from 'react'
 import { Flex, Text, Button, Spinner } from '@/adapters/ui'
 import { Document, Trash } from '@/adapters/ui/icons'
 import { useIsCurrentSessionBusy } from '@/features/chat'
@@ -39,8 +39,6 @@ export interface FileSourceCardProps {
   status: FileSourceStatus
   /** Error message when status is 'error' */
   errorMessage?: string
-  /** Hours after upload before the file may expire (0 = no expiry shown) */
-  expirationIntervalHours?: number
   /** `document` or `table`, once the pipeline has detected it */
   kind?: 'document' | 'table' | null
   /** The pipeline stage it is at, and its detail (`page 3 of 12`) */
@@ -93,6 +91,14 @@ const STATUS_CONFIG: Record<
   },
 }
 
+/** What each step state is, for a screen reader (the chips say it by color only) */
+const STEP_STATE_TEXT: Record<StepState, string> = {
+  done: 'done',
+  active: 'in progress',
+  pending: 'pending',
+  failed: 'failed',
+}
+
 /** Pipeline step chip colors: done in brand green, the active step outlined, a failed one red */
 const STEP_CLASSES: Record<StepState, string> = {
   done: 'brand-chip',
@@ -125,65 +131,6 @@ const formatDateTime = (date: Date | string): string => {
   })
 }
 
-/**
- * Compute the milliseconds remaining until expiration.
- * Returns null if inputs are invalid or interval is 0.
- */
-const computeMsRemaining = (
-  uploadedAt: Date | string | null | undefined,
-  intervalHours: number
-): number | null => {
-  if (!uploadedAt || intervalHours <= 0) return null
-  const dateObj = typeof uploadedAt === 'string' ? new Date(uploadedAt) : uploadedAt
-  if (isNaN(dateObj.getTime())) return null
-  const expiresAtMs = dateObj.getTime() + intervalHours * 60 * 60 * 1000
-  return expiresAtMs - Date.now()
-}
-
-/**
- * Format milliseconds remaining into "Expires in H:MM" or the expired label.
- * Returns null when expiration doesn't apply.
- */
-const formatExpiryLabel = (
-  msRemaining: number | null
-): { text: string; expired: boolean } | null => {
-  if (msRemaining === null) return null
-  if (msRemaining <= 0) return { text: 'Deletion Pending - Reupload', expired: true }
-
-  const totalMinutes = Math.max(1, Math.ceil(msRemaining / 60_000))
-  return { text: `Expires in ${totalMinutes} min`, expired: false }
-}
-
-/**
- * Hook that returns a live expiry label, re-evaluated every minute.
- */
-const useExpiryLabel = (
-  uploadedAt: Date | string | null | undefined,
-  intervalHours: number,
-  active: boolean
-): { text: string; expired: boolean } | null => {
-  const [label, setLabel] = useState<{ text: string; expired: boolean } | null>(() =>
-    active ? formatExpiryLabel(computeMsRemaining(uploadedAt, intervalHours)) : null
-  )
-
-  useEffect(() => {
-    if (!active) {
-      setLabel(null)
-      return
-    }
-
-    setLabel(formatExpiryLabel(computeMsRemaining(uploadedAt, intervalHours)))
-
-    const id = setInterval(() => {
-      setLabel(formatExpiryLabel(computeMsRemaining(uploadedAt, intervalHours)))
-    }, 60_000)
-
-    return () => clearInterval(id)
-  }, [uploadedAt, intervalHours, active])
-
-  return label
-}
-
 /** The display status as the pipeline's file status, for its stepper */
 const PIPELINE_STATUS = {
   uploading: 'uploading',
@@ -204,7 +151,6 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
   description,
   status,
   errorMessage,
-  expirationIntervalHours = 0,
   kind = null,
   stage = null,
   lastStage = null,
@@ -218,7 +164,6 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
 }) => {
   const config = STATUS_CONFIG[status]
   const isBusy = useIsCurrentSessionBusy()
-  const expiryLabel = useExpiryLabel(uploadedAt, expirationIntervalHours, status === 'available')
 
   const handleDelete = () => {
     onDelete(id)
@@ -228,6 +173,15 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
   const isDeleting = status === 'deleting'
   const deleteDisabled = isBusy || isProcessing || isDeleting
   const steps = pipelineSteps(kind, stage, PIPELINE_STATUS[status], lastStage)
+  const current = steps.find((step) => step.state === 'active' || step.state === 'failed')
+  const announcement =
+    status === 'available'
+      ? `${title}: Available`
+      : status === 'error'
+        ? `${title}: failed${current ? ` at ${current.label}` : ''}`
+        : status === 'ingesting' && current
+          ? `${title}: ${current.label}`
+          : ''
   const reader = parserLabel(parser)
   const percent = Math.max(0, Math.min(100, Math.round(status === 'available' ? 100 : progress)))
 
@@ -247,7 +201,6 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
       `}
     >
       <Flex align="start" gap="3" className="min-w-0 flex-1">
-        {}
         {config.showSpinner ? (
           <Spinner size="small" aria-label={config.label} />
         ) : (
@@ -258,9 +211,7 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
           />
         )}
 
-        {}
         <Flex direction="col" gap="1" className="min-w-0 flex-1">
-          {}
           <Flex align="center" gap="2" className="min-w-0">
             <Text kind="label/semibold/sm" className="text-primary truncate">
               {title}
@@ -280,7 +231,6 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
             )}
           </Flex>
 
-          {}
           {description && (
             <Text kind="body/regular/xs" className="text-subtle line-clamp-2">
               {description}
@@ -296,15 +246,21 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
               <li
                 key={step.label}
                 data-state={step.state}
+                aria-current={step.state === 'active' ? 'step' : undefined}
                 className={cn(
-                  'rounded-full px-2 py-0.5 text-[10px] font-semibold leading-4',
+                  'rounded-full px-2 py-0.5 text-[11px] font-semibold leading-4',
                   STEP_CLASSES[step.state]
                 )}
               >
                 {step.label}
+                <span className="sr-only">: {STEP_STATE_TEXT[step.state]}</span>
               </li>
             ))}
           </ol>
+          {/* Announces each stage the file reaches, and how it ends */}
+          <span className="sr-only" aria-live="polite" data-testid="file-stage-announcement">
+            {announcement}
+          </span>
           {(isProcessing || status === 'available') && (
             <div
               role="progressbar"
@@ -321,9 +277,7 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
             </div>
           )}
 
-          {}
           <Flex align="center" gap="2" className="mt-1">
-            {}
             <Flex align="center" gap="1">
               {status === 'available' && <span className="text-success text-xs">✓</span>}
               {status === 'error' && <span className="text-error text-xs">✕</span>}
@@ -348,18 +302,6 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
               </>
             )}
 
-            {}
-            {expiryLabel && (
-              <>
-                <span className="text-subtle">•</span>
-                <Text
-                  kind="body/regular/xs"
-                  className={expiryLabel.expired ? 'text-warning' : 'text-orange-400'}
-                >
-                  {expiryLabel.text}
-                </Text>
-              </>
-            )}
           </Flex>
 
           {warnings?.map((warning, index) => (
@@ -398,7 +340,6 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
             </Flex>
           )}
 
-          {}
           {status === 'error' && errorMessage && (
             <Text kind="body/regular/xs" className="text-error mt-1">
               {errorMessage}
@@ -406,7 +347,6 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
           )}
         </Flex>
 
-        {}
         <Button
           kind="tertiary"
           size="small"
@@ -421,7 +361,7 @@ export const FileSourceCard: FC<FileSourceCardProps> = ({
                 ? 'Cannot delete files during active operations'
                 : 'Delete file'
           }
-          className="ml-2 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+          className="ml-2 flex-shrink-0 opacity-0 transition-opacity focus-visible:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100"
         >
           <Trash width={16} height={16} className="text-subtle hover:text-error" />
         </Button>

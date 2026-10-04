@@ -43,8 +43,6 @@ export interface FileUploadConfig {
   maxTotalSize: number
   /** Most files per upload (FILE_UPLOAD_MAX_FILE_COUNT) */
   maxFileCount: number
-  /** Hours before an uploaded file may expire; 0 shows no expiry */
-  fileExpirationCheckIntervalHours: number
 }
 
 /**

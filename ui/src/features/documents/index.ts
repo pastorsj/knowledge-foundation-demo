@@ -23,6 +23,7 @@ export { UploadOrchestrator, POLL_INTERVAL_MS } from './orchestrator'
 
 // Utils
 export {
+  describeAcceptedTypes,
   mapBackendStatus,
   mapToDisplayStatus,
   normalizeFileName,

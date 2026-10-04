@@ -132,14 +132,12 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
 
     return (
       <Flex direction="col" gap="4" className="flex-1">
-        {}
         {!knowledgeLayerAvailable && (
           <Banner kind="inline" status="info" className="mb-6 px-4 py-3">
             Setup backend to enable files.
           </Banner>
         )}
 
-        {}
         {knowledgeLayerAvailable && (
           <Flex direction="col" gap="1">
             <Text
@@ -155,19 +153,18 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
           </Flex>
         )}
 
-        {}
         {uploadError && (
           <Banner kind="inline" status="error" onClose={clearError}>
             {uploadError}
           </Banner>
         )}
 
-        {}
         {knowledgeLayerAvailable && (
           <FileUploadZone
             sessionId={sessionId}
             acceptedTypes={fileUploadConfig.acceptedTypes}
             maxFileSize={fileUploadConfig.maxFileSize}
+            maxFileCount={fileUploadConfig.maxFileCount}
             onUpload={handleUpload}
             isUploading={isUploading}
           />
@@ -178,7 +175,6 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
 
   return (
     <Flex direction="col" gap="2" className="flex-1 overflow-y-auto">
-      {}
       <input
         ref={fileInputRef}
         type="file"
@@ -188,14 +184,12 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
         onChange={handleFileChange}
       />
 
-      {}
       {uploadError && (
         <Banner kind="inline" status="error" onClose={clearError}>
           {uploadError}
         </Banner>
       )}
 
-      {}
       <Flex align="center" justify="between" className="mb-1">
         <Text kind="label/semibold/xs" className="text-subtle font-mono uppercase tracking-widest">
           Uploaded Files ({sessionFiles.length})
@@ -217,7 +211,6 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
         </Button>
       </Flex>
 
-      {}
       {sessionFiles.map((file) => (
         <FileSourceCard
           key={file.id}
@@ -227,7 +220,6 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
           uploadedAt={file.uploadedAt}
           status={mapToDisplayStatus(file.status)}
           errorMessage={file.errorMessage ?? undefined}
-          expirationIntervalHours={fileUploadConfig.fileExpirationCheckIntervalHours}
           kind={file.kind}
           stage={file.stage}
           lastStage={file.lastStage}
@@ -243,7 +235,6 @@ export const FileSourcesTab: FC<FileSourcesTabProps> = ({ onDeleteFile }) => {
 
       {DataViewer && viewingTables && <DataViewer onClose={() => setViewingTables(false)} />}
 
-      {}
       <DeleteFileConfirmationModal
         open={isDeleteModalOpen}
         onOpenChange={handleModalOpenChange}

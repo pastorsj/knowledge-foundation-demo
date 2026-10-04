@@ -8,7 +8,6 @@ const DEFAULT_ACCEPTED_TYPES =
   '.pdf,.png,.jpg,.jpeg,.tif,.tiff,.webp,.docx,.pptx,.html,.md,.txt,.csv,.tsv,.xlsx,.parquet,.json,.jsonl'
 const DEFAULT_MAX_SIZE_MB = 100
 const DEFAULT_MAX_FILE_COUNT = 20
-const DEFAULT_EXPIRATION_CHECK_INTERVAL_HOURS = 0
 
 const EXTENSION_TO_MIME: Record<string, string[]> = {
   '.pdf': ['application/pdf'],
@@ -63,9 +62,6 @@ export const getFileUploadConfigFromEnv = (
   const acceptedTypes = env.FILE_UPLOAD_ACCEPTED_TYPES || DEFAULT_ACCEPTED_TYPES
   const maxTotalSizeMB = parsePositiveNumber(env.FILE_UPLOAD_MAX_SIZE_MB) ?? DEFAULT_MAX_SIZE_MB
   const maxFileCount = parsePositiveNumber(env.FILE_UPLOAD_MAX_FILE_COUNT) ?? DEFAULT_MAX_FILE_COUNT
-  const fileExpirationCheckIntervalHours =
-    parsePositiveNumber(env.FILE_EXPIRATION_CHECK_INTERVAL_HOURS) ??
-    DEFAULT_EXPIRATION_CHECK_INTERVAL_HOURS
   const maxSizeBytes = maxTotalSizeMB * 1024 * 1024
 
   // Each file up to the size limit, each upload up to the count limit (the ingest service's
@@ -80,6 +76,5 @@ export const getFileUploadConfigFromEnv = (
       (parsePositiveNumber(env.FILE_UPLOAD_MAX_REQUEST_MB) ?? 512) * 1024 * 1024
     ),
     maxFileCount,
-    fileExpirationCheckIntervalHours,
   }
 }

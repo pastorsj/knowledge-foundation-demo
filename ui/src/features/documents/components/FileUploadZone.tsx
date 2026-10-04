@@ -14,7 +14,8 @@ import { type FC, useCallback, useState, useEffect, useMemo } from 'react'
 import { Upload, FormField } from '@/adapters/ui'
 import { useDocumentsStore } from '../store'
 import { useIsCurrentSessionBusy } from '@/features/chat'
-import { ACCEPTED_FILE_TYPES, MAX_FILE_SIZE } from '../'
+import { ACCEPTED_FILE_TYPES, MAX_FILE_COUNT, MAX_FILE_SIZE } from '../constants'
+import { describeAcceptedTypes } from '../utils'
 
 // ============================================================================
 // Types
@@ -33,6 +34,8 @@ interface FileUploadZoneProps {
   sessionId?: string
   /** Max file size in bytes (for display only) */
   maxFileSize?: number
+  /** Max files per upload (for display only) */
+  maxFileCount?: number
   /** Accepted file types (MIME types or extensions) */
   acceptedTypes?: string
   /** Handler for uploading files (parent handles validation via hook) */
@@ -50,6 +53,7 @@ interface FileUploadZoneProps {
 export const FileUploadZone: FC<FileUploadZoneProps> = ({
   sessionId,
   maxFileSize = MAX_FILE_SIZE,
+  maxFileCount = MAX_FILE_COUNT,
   acceptedTypes = ACCEPTED_FILE_TYPES,
   onUpload,
   isUploading = false,
@@ -113,11 +117,20 @@ export const FileUploadZone: FC<FileUploadZoneProps> = ({
       onValueChange={handleValueChange}
       disabled={uploadDisabled}
       listKind="card"
+      slotHeaderText=" or drag and drop them here."
       renderInput={(trigger) => <FormField slotLabel={label}>{trigger}</FormField>}
     >
-      <span>Up to {Math.round(maxFileSize / (1024 * 1024))} MB</span>
-      <span> · </span>
-      <span>Accepts: {acceptedTypes}</span>
+      <span className="block">
+        Up to {maxFileCount} files at a time, {Math.round(maxFileSize / (1024 * 1024))} MB each
+      </span>
+      {/* The raw extensions run past the card; their kinds fit, and the list is in the title */}
+      <span
+        className="block [overflow-wrap:anywhere]"
+        title={acceptedTypes.split(',').join(', ')}
+        data-testid="accepted-types"
+      >
+        {describeAcceptedTypes(acceptedTypes)}
+      </span>
     </Upload>
   )
 }

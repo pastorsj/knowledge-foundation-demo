@@ -34,6 +34,7 @@ import { Banner, Flex, Text, Button, Select, TextArea } from '@/adapters/ui'
 import { useHermesChat, useChatStore, useIsCurrentSessionBusy } from '@/features/chat'
 import { FileUploadBanner } from '@/features/chat/components/FileUploadBanner'
 import {
+  describeAcceptedTypes,
   useFileDragDrop,
   useFileUpload,
   useFileUploadBanners,
@@ -371,7 +372,7 @@ export const InputArea: FC<InputAreaProps> = memo(function InputArea({
               </Text>
               {isUnsupportedDrag && (
                 <Text kind="body/regular/xs" className="text-subtle">
-                  Accepts: {fileUploadConfig.acceptedTypes}
+                  Accepts: {describeAcceptedTypes(fileUploadConfig.acceptedTypes)}
                 </Text>
               )}
             </Flex>

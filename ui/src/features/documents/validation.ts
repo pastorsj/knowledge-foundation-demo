@@ -84,7 +84,6 @@ const DEFAULT_CONFIG: FileUploadConfig = {
   maxFileSize: DEFAULT_MAX_FILE_SIZE,
   maxTotalSize: DEFAULT_MAX_TOTAL_SIZE,
   maxFileCount: DEFAULT_MAX_FILE_COUNT,
-  fileExpirationCheckIntervalHours: 0,
 }
 
 // ============================================================================
