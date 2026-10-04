@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 import logging
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -161,7 +162,8 @@ class KnowledgeCatalog:
 
     A manifest is parsed and validated once per version of its file (inode, size, modification and change times;
     ingest replaces a manifest whole), so a request costs a ``stat`` per manifest and a bad one is logged once. Cached
-    manifests are shared between requests: read them, never change them.
+    manifests are shared between requests: read them, never change them. Requests read from threads, so the cache's
+    writes and its prune hold a lock.
     """
 
     def __init__(
@@ -175,6 +177,7 @@ class KnowledgeCatalog:
             for kind, name in (("packs", "pack-manifest"), ("sources", "source-manifest"))
         }
         self._parsed: dict[Path, tuple[tuple[int, ...], dict[str, Any] | None]] = {}
+        self._parsed_lock = threading.Lock()
 
     def read(self) -> CatalogSnapshot:
         """Every valid manifest, read now. Blocking: a route runs it in a thread, once per request."""
@@ -209,8 +212,9 @@ class KnowledgeCatalog:
             if manifest is not None and manifest["id"] == path.stem:
                 manifests.append(manifest)
         directory, present = catalog / kind, set(paths)
-        for gone in [path for path in self._parsed if path.parent == directory and path not in present]:
-            self._parsed.pop(gone, None)
+        with self._parsed_lock:  # another request may be adding an entry
+            for gone in [path for path in self._parsed if path.parent == directory and path not in present]:
+                self._parsed.pop(gone, None)
         return manifests
 
     def _manifest(self, path: Path, kind: str) -> dict[str, Any] | None:
@@ -232,7 +236,8 @@ class KnowledgeCatalog:
             where = "/".join(str(part) for part in error.absolute_path) or "the manifest"
             logger.warning("Skipping catalog manifest %s/%s: %s: %s", kind, path.name, where, error.message)
             manifest = None
-        self._parsed[path] = (version, manifest)
+        with self._parsed_lock:
+            self._parsed[path] = (version, manifest)
         return manifest
 
 

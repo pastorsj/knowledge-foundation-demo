@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import threading
 
 import pytest
 from support import DOCUMENTS
@@ -285,3 +286,31 @@ def test_a_manifest_is_validated_once_per_version_of_its_file(knowledge_dir, too
     update_manifest(knowledge_dir, "sources", DOCUMENTS, name="Policies, revised")
     assert knowledge.source(DOCUMENTS).name == "Policies, revised"  # a new version is read and validated
     assert validations[-1] == DOCUMENTS and len(validations) == 4
+
+
+def test_a_request_may_parse_a_manifest_while_another_prunes_the_cache(knowledge_dir, tool_registry):
+    """Requests read the catalog from threads and share its cache; a prune must not see another request's insert."""
+    knowledge = catalog(knowledge_dir, tool_registry)
+    knowledge.sources()
+    tables = manifest_path(knowledge_dir, "sources", TABLES)
+    knowledge._parsed.pop(tables)  # the other request parses it anew, adding a cache entry
+
+    class Racing:
+        """A cache entry whose ``parent`` lets the other request run in the middle of the prune."""
+
+        other: threading.Thread | None = None
+
+        @property
+        def parent(self) -> None:
+            if self.other is None:
+                self.other = threading.Thread(target=knowledge._manifest, args=(tables, "sources"))
+                self.other.start()
+                self.other.join(timeout=0.5)  # the insert lands now, or waits for the prune to finish
+
+    racing = Racing()
+    knowledge._parsed[racing] = ((), None)  # type: ignore[index]
+
+    assert knowledge.source(TABLES) is not None  # no "dictionary changed size during iteration"
+    assert racing.other is not None
+    racing.other.join()
+    assert tables in knowledge._parsed
