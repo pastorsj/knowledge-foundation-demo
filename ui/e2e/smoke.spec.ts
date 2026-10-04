@@ -3,7 +3,7 @@
 
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
-import { LIVE_URL, REPLAY_URL } from '../playwright.config'
+import { FAKE_API, LIVE_URL, REPLAY_URL } from '../playwright.config'
 
 /** The chat store's saved state: a live session whose job was running when the page closed. */
 const SAVED_LIVE_SESSION = JSON.stringify({
@@ -175,6 +175,78 @@ test.describe('live mode', () => {
     await page.getByRole('button', { name: 'Send message' }).click()
     await expect(page.getByText('Opened items may be returned within 30 days')).toBeVisible()
     await expect(page.getByRole('region', { name: 'Sources' }).locator('summary')).toHaveCount(2)
+  })
+
+  test('Your data: a file the pipeline cannot read fails at its step, with the reason', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/research?pack=workspace')
+    await expect(page.getByRole('radio', { name: 'Files' })).toBeChecked()
+    await page.getByTestId('composer-file-input').setInputFiles({
+      name: 'unreadable-scan.pdf',
+      mimeType: 'application/pdf',
+      buffer: Buffer.from('%PDF-1.4 not a PDF'),
+    })
+    const card = page.getByTestId('file-source-card').filter({ hasText: 'unreadable-scan.pdf' })
+    await expect(card).toHaveAttribute('data-status', 'error', { timeout: 30_000 })
+    // The step it failed in, said in words too, and why
+    await expect(card.locator('li[data-state="failed"]')).toHaveText('Parse: failed')
+    await expect(card).toContainText('Nemotron Parse could not read this file')
+    await expect(card.getByTestId('file-stage-announcement')).toHaveText(
+      'unreadable-scan.pdf: failed at Parse'
+    )
+
+    // Leave Your data as it was for the other tests
+    const listed = (await (
+      await request.get(`${FAKE_API}/v1/collections/workspace/documents`)
+    ).json()) as {
+      files: Array<{ file_id: string; file_name: string }>
+    }
+    const ids = listed.files
+      .filter((f) => f.file_name === 'unreadable-scan.pdf')
+      .map((f) => f.file_id)
+    await request.delete(`${FAKE_API}/v1/collections/workspace/documents`, {
+      data: { file_ids: ids },
+    })
+  })
+
+  test('Your data: with the ingest service down, the Files tab says so, keeps the upload zone, and retries', async ({
+    page,
+    request,
+  }) => {
+    await request.post(`${FAKE_API}/__fake/ingest-down?times=1`)
+    await page.goto('/research?pack=workspace')
+    const banner = page.getByTestId('files-error')
+    await expect(banner).toContainText('Couldn’t reach the ingestion service')
+    await expect(banner).toContainText('The ingest service is unavailable.')
+    await expect(page.getByText('Checking for files...')).toHaveCount(0)
+    await expect(page.getByTestId('accepted-types')).toBeVisible()
+    await banner.getByRole('button', { name: 'Retry' }).click()
+    await expect(banner).toHaveCount(0)
+  })
+
+  test('while the API has no knowledge catalog (a 503), the landing and the sources say so', async ({
+    page,
+  }) => {
+    await page.goto('/?pack=uncataloged')
+    await expect(page.getByTestId('catalog-notice')).toContainText(
+      'The knowledge catalog is not ready yet'
+    )
+    await expect(page.getByRole('region', { name: 'Featured questions' })).toHaveCount(0)
+
+    await page.goto('/research?pack=uncataloged')
+    await expect(page.getByText('Data sources not ready yet')).toBeVisible()
+    await expect(page.getByText(/The knowledge catalog is being built/)).toBeVisible()
+  })
+
+  test('a pack still syncing says so on the landing page and on its sources', async ({ page }) => {
+    await page.goto('/?pack=syncing')
+    await expect(page.getByTestId('catalog-notice')).toContainText('Syncing Retail')
+    await expect(page.getByRole('region', { name: 'Featured questions' })).toHaveCount(0)
+
+    await page.goto('/research?pack=syncing')
+    await expect(page.getByTestId('source-status').first()).toHaveText('Ingesting')
   })
 
   test('the example picker shows five rows and scrolls the others into view', async ({ page }) => {

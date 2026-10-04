@@ -178,6 +178,13 @@ const PACKS = {
   },
 }
 
+/**
+ * Packs the selector does not list, for the states a deployment passes through: `uncataloged` (the
+ * API has no catalog yet: a 503) and `syncing` (a pack ingest is still loading).
+ */
+const SYNCING = { ...PACKS.retail, id: 'syncing', status: 'ingesting' }
+const CATALOG_503 = { detail: 'The knowledge catalog is not built yet.' }
+
 const source = (id, name, kind, extra = {}) => ({
   id,
   pack_id: id.split('.')[0],
@@ -250,12 +257,22 @@ createServer(async (req, res) => {
     })
   }
   if (route === 'GET /v1/pack') {
-    const pack = PACKS[url.searchParams.get('id') ?? 'retail']
+    const id = url.searchParams.get('id')
+    if (id === 'uncataloged') return json(res, CATALOG_503, 503)
+    if (id === 'syncing') return json(res, SYNCING)
+    const pack = PACKS[id ?? 'retail']
     return pack ? json(res, pack) : json(res, { detail: 'Unknown pack' }, 404)
   }
   if (route === 'GET /v1/data_sources') {
     const pack = url.searchParams.get('pack')
     if (pack === 'workspace') return json(res, documents.sources())
+    if (pack === 'uncataloged') return json(res, CATALOG_503, 503)
+    if (pack === 'syncing') {
+      return json(
+        res,
+        SOURCES.retail.map((entry) => ({ ...entry, pack_id: 'syncing', status: 'ingesting' }))
+      )
+    }
     return json(res, pack ? (SOURCES[pack] ?? []) : Object.values(SOURCES).flat())
   }
 

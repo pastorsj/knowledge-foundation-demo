@@ -14,6 +14,7 @@
  * How to update the baselines: e2e/visual/README.md.
  */
 
+import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { expect, test, type Locator, type Page } from '@playwright/test'
 import { REPLAY_URL, VISUAL, VISUAL_LIVE_URL } from '../../playwright.config'
@@ -125,6 +126,26 @@ test.describe('live mode', () => {
       .poll(() => page.getByTestId('demo-scenario-list').evaluate((list) => list.style.maxHeight))
       .toMatch(/^min\(/)
     await matchesBaseline(page, 'question-picker')
+  })
+
+  test('Your data: Files tab with a file mid-pipeline, one ready and one failed', async ({
+    page,
+  }) => {
+    await page.goto(`${VISUAL_LIVE_URL}/research?pack=workspace`)
+    await expect(page.getByRole('radio', { name: 'Files' })).toBeChecked()
+    // The fake pipeline keeps a `stuck…` file at its first stage and fails an `unreadable…` one
+    const pdf = readFileSync(join(__dirname, '..', 'fixtures', 'files', 'policy.pdf'))
+    const file = (name: string) => ({ name, mimeType: 'application/pdf', buffer: pdf })
+    await page
+      .getByTestId('composer-file-input')
+      .setInputFiles([file('policy.pdf'), file('stuck-scan.pdf'), file('unreadable-memo.pdf')])
+    const card = (name: string) => page.getByTestId('file-source-card').filter({ hasText: name })
+    await expect(card('policy.pdf')).toHaveAttribute('data-status', 'available', {
+      timeout: 30_000,
+    })
+    await expect(card('unreadable-memo.pdf')).toHaveAttribute('data-status', 'error')
+    await expect(card('stuck-scan.pdf')).toHaveAttribute('data-stage', 'parsing')
+    await matchesBaseline(page, 'your-data-files')
   })
 })
 

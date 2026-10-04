@@ -7,6 +7,11 @@
  * deletes, and an upload job's status, on which each file moves one pipeline stage per poll. A
  * document is read by Nemotron Parse 2.0, a table by DuckDB; once ready, they are the sources
  * `workspace.documents` and `workspace.tables`.
+ *
+ * For the failure paths: a file named `unreadable…` fails after its first stage, with a message, one
+ * named `stuck…` stays at its first stage (so a screenshot can show a file mid-pipeline),
+ * and `POST /__fake/ingest-down` makes the next look at the workspace collection answer 503, as the
+ * API does while the ingest service is down.
  */
 
 export const DOCUMENT_STAGES = ['received', 'parsing', 'chunking', 'embedding', 'indexing', 'ready']
@@ -43,11 +48,26 @@ export const createDocuments = () => {
   const files = new Map()
   const jobs = new Map()
   let sequence = 0
+  /** How many looks at the collection still answer 503 (the ingest service down) */
+  let downFor = 0
 
   const fileInfo = (file) => {
     const stages = file.kind === 'table' ? TABLE_STAGES : DOCUMENT_STAGES
-    const stage = stages[Math.min(file.step, stages.length - 1)]
+    const failed = file.unreadable && file.step >= 2
+    const stage = failed ? 'failed' : stages[Math.min(file.step, stages.length - 1)]
     const ready = stage === 'ready'
+    if (failed) {
+      return {
+        ...fileInfo({ ...file, unreadable: false, step: 1 }),
+        status: 'failed',
+        stage,
+        stage_detail: null,
+        error_message:
+          file.kind === 'table'
+            ? 'DuckDB could not read this file as a table.'
+            : 'Nemotron Parse could not read this file: it is not a valid PDF.',
+      }
+    }
     return {
       file_id: file.id,
       file_name: file.name,
@@ -96,6 +116,14 @@ export const createDocuments = () => {
   /** Serves a documents route; false when the request is not one. */
   const handle = async (req, res, pathname) => {
     const route = `${req.method} ${pathname}`
+    if (route === 'POST /__fake/ingest-down') {
+      downFor = Number(new URL(req.url, 'http://fake').searchParams.get('times') ?? 1)
+      return (json(res, { downFor }), true)
+    }
+    if (route === 'GET /v1/collections/workspace' && downFor > 0) {
+      downFor -= 1
+      return (json(res, { detail: 'The ingest service is unavailable.' }, 503), true)
+    }
     if (route === 'GET /v1/collections/workspace') return (json(res, collection()), true)
     if (route === 'GET /v1/collections/workspace/documents') {
       return (json(res, { files: [...files.values()].map(fileInfo) }), true)
@@ -115,6 +143,8 @@ export const createDocuments = () => {
           size: 1024,
           kind: TABLE_EXTENSIONS.test(name) ? 'table' : 'document',
           step: 0,
+          unreadable: /^unreadable/i.test(name),
+          stuck: /^stuck/i.test(name),
         })
         return id
       })
@@ -133,16 +163,16 @@ export const createDocuments = () => {
       if (!ids) return (json(res, { detail: 'Unknown job' }, 404), true)
       for (const id of ids) {
         const file = files.get(id)
-        if (file) file.step += 1
+        if (file) file.step = file.stuck ? 1 : file.step + 1
       }
       const details = ids.flatMap((id) => (files.has(id) ? [fileInfo(files.get(id))] : []))
-      const done = details.every((file) => file.status === 'success')
+      const done = details.every((file) => file.status === 'success' || file.status === 'failed')
       json(res, {
         job_id: status[1],
         status: done ? 'completed' : 'processing',
         submitted_at: '2026-10-02T10:00:00Z',
         total_files: details.length,
-        processed_files: details.filter((file) => file.status === 'success').length,
+        processed_files: details.filter((file) => file.status !== 'ingesting').length,
         file_details: details,
         collection_name: 'workspace',
         backend: 'ingest',

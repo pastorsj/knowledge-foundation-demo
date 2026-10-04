@@ -18,7 +18,7 @@
 import { existsSync, readdirSync } from 'node:fs'
 import { defineConfig, devices } from '@playwright/test'
 
-const FAKE_API = 'http://127.0.0.1:3990'
+export const FAKE_API = 'http://127.0.0.1:3990'
 export const LIVE_URL = 'http://127.0.0.1:3991'
 export const REPLAY_URL = 'http://127.0.0.1:3992'
 /** Replay mode on the industry packs' committed recordings */
@@ -112,7 +112,11 @@ export default defineConfig({
       PACKS_DIR: FIXTURE_PACKS_DIR,
       DEFAULT_PACK: 'retail',
     }),
-    uiServer(REPLAY_URL, { UI_MODE: 'replay', PACKS_DIR: FIXTURE_PACKS_DIR, DEFAULT_PACK: 'retail' }),
+    uiServer(REPLAY_URL, {
+      UI_MODE: 'replay',
+      PACKS_DIR: FIXTURE_PACKS_DIR,
+      DEFAULT_PACK: 'retail',
+    }),
     ...(Object.keys(RECORDED_PACKS).length
       ? [
           uiServer(PACKS_REPLAY_URL, {
