@@ -9,7 +9,7 @@
  * and checked for citations of each. Every question runs live and costs model calls; the uploaded files are
  * deleted at the end. Manual only: CI never runs it, and the URL is never stored.
  *
- * LIVE_URL       the deployment's UI, e.g. http://127.0.0.1:3100 (required)
+ * LIVE_URL       the deployment's UI, e.g. http://127.0.0.1:3300 (required)
  * LIVE_PACK      one pack to test (default: every industry pack of `GET /v1/packs`)
  * LIVE_QUESTIONS question ids, `id` or `pack/id`, comma-separated (default: each pack's featured questions)
  * LIVE_BUDGETS   latency budgets: SECONDS for all, ID=SECONDS or PACK/ID=SECONDS for one (default: three times
