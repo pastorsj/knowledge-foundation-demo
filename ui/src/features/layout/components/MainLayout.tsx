@@ -21,13 +21,12 @@
 'use client'
 
 import { type FC, useCallback, useEffect, useMemo, useRef } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useShallow } from 'zustand/react/shallow'
 import { Flex } from '@/adapters/ui'
 import { useAppConfig, useExecutionFeature } from '@/shared/context'
 import { cn } from '@/shared/lib/cn'
 import { AppBar } from './AppBar'
-import { IndustrySelect, rememberPack } from './IndustrySelect'
+import { IndustrySelect } from './IndustrySelect'
 import { SessionsPanel, type RecordedCollection } from './SessionsPanel'
 import { ChatArea } from './ChatArea'
 import { InputArea } from './InputArea'
@@ -41,6 +40,7 @@ import {
 } from '@/features/chat/lib/session-activity'
 import { useLayoutStore } from '../store'
 import { useRecordedSessions } from '../use-recorded-sessions'
+import { usePackFollowing } from '../use-pack-following'
 import type { DemoScenario } from '../scenarios'
 import { useSessionUrl } from '@/hooks/use-session-url'
 import type { PackSummary } from '@/generated/packs'
@@ -59,37 +59,6 @@ interface MainLayoutProps {
   initialQuestion?: InitialQuestion | null
   /** The active data pack's questions, offered by the composer's demo scenario picker */
   demoScenarios?: DemoScenario[]
-}
-
-/**
- * Keeps the layout store's pack and the URL in step. A pack the page names (on load, or after a
- * navigation) becomes the store's; a pack the store switches to on its own (a restored session of
- * another industry) goes into the URL and the cookie, so the server renders that pack's examples.
- */
-const usePackFollowing = (packId: string): void => {
-  const storePack = useLayoutStore((state) => state.packId)
-  const named = useRef<string | null>(null)
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  useEffect(() => {
-    const store = useLayoutStore.getState()
-    if (named.current !== packId) {
-      named.current = packId
-      if (store.packId === null) store.setPackId(packId)
-      else if (store.packId !== packId) void store.switchPack(packId)
-      return
-    }
-    if (storePack && storePack !== packId) {
-      rememberPack(storePack)
-      // A question belongs to the pack it came from; so does a session, unless it is being restored
-      const params = new URLSearchParams(searchParams?.toString())
-      params.set('pack', storePack)
-      params.delete('question')
-      if (!useLayoutStore.getState().restoringPack) params.delete('session')
-      router.replace(`${pathname}?${params}`)
-    }
-  }, [packId, pathname, router, searchParams, storePack])
 }
 
 /** The question, and its data sources, that started a job in this conversation. */
