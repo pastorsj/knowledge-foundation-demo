@@ -653,7 +653,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 263
+          "duration_ms": 273
         },
         "merchandising_plan_category_targets": {
           "table": "merchandising_plan_category_targets",
@@ -760,7 +760,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 258
+          "duration_ms": 262
         },
         "merchandising_plan_promo_calendar": {
           "table": "merchandising_plan_promo_calendar",
@@ -877,7 +877,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 244
+          "duration_ms": 263
         },
         "order_items": {
           "table": "order_items",
@@ -974,7 +974,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 244
+          "duration_ms": 271
         },
         "orders": {
           "table": "orders",
@@ -1101,7 +1101,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 247
+          "duration_ms": 279
         },
         "products": {
           "table": "products",
@@ -1218,7 +1218,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 261
+          "duration_ms": 271
         },
         "returns": {
           "table": "returns",
@@ -1355,7 +1355,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 250
+          "duration_ms": 265
         },
         "stores": {
           "table": "stores",
@@ -1462,7 +1462,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 276
+          "duration_ms": 252
         }
       },
       "queries": [
@@ -1521,7 +1521,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 250
+            "duration_ms": 283
           }
         },
         {
@@ -1551,7 +1551,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 280
+            "duration_ms": 254
           }
         },
         {
@@ -1610,7 +1610,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 250
+            "duration_ms": 282
           }
         },
         {
@@ -1835,7 +1835,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 246
+            "duration_ms": 285
           }
         },
         {
@@ -2114,7 +2114,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 258
+            "duration_ms": 251
           }
         },
         {
@@ -2409,7 +2409,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 248
+            "duration_ms": 260
           }
         },
         {
@@ -2661,7 +2661,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 272
+            "duration_ms": 263
           }
         },
         {
@@ -2994,7 +2994,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 285
+            "duration_ms": 266
           }
         },
         {
@@ -3300,7 +3300,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 251
+            "duration_ms": 245
           }
         },
         {
@@ -3660,7 +3660,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 274
+            "duration_ms": 265
           }
         },
         {
@@ -3939,7 +3939,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 247
+            "duration_ms": 251
           }
         }
       ]

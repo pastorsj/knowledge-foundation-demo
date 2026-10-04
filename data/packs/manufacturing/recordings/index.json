@@ -4,7 +4,7 @@
     "id": "manufacturing",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-03T04:17:37.275957Z",
+  "recordedAt": "2026-10-04T04:39:46.413744Z",
   "sessions": [
     {
       "id": "pm2-interval-hydraulic-press",
@@ -109,6 +109,50 @@
           "pill": "duckdb",
           "tools": [
             "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "failure-risk-30d",
+      "title": "Machines most likely to fail next month",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "143a2ad3-30b7-4124-afc8-40180da5867e",
+          "question": "Which machines are most likely to have an unplanned failure in the next 30 days? Give the five with the highest probability."
+        }
+      ],
+      "tools": [
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "high-alarm-risk",
+      "title": "Machines likely to raise many alarms",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "50940df2-3432-4639-9f6f-a896820a97c1",
+          "question": "Which five machines are most likely to log more than 10 alarms over the next 30 days, and what plant and machine type is each?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "duckdb",
+          "tools": [
+            "query_tables"
+          ]
+        },
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
           ]
         }
       ]

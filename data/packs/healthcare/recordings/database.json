@@ -741,7 +741,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 264
+          "duration_ms": 259
         },
         "diagnoses": {
           "table": "diagnoses",
@@ -838,7 +838,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 261
+          "duration_ms": 251
         },
         "encounters": {
           "table": "encounters",
@@ -965,7 +965,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 282
+          "duration_ms": 249
         },
         "facilities": {
           "table": "facilities",
@@ -1062,7 +1062,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 244
+          "duration_ms": 261
         },
         "patients": {
           "table": "patients",
@@ -1189,7 +1189,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 271
+          "duration_ms": 277
         },
         "providers": {
           "table": "providers",
@@ -1266,7 +1266,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 242
+          "duration_ms": 267
         },
         "quality_scorecard_hcahps": {
           "table": "quality_scorecard_hcahps",
@@ -1373,7 +1373,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 266
+          "duration_ms": 268
         },
         "quality_scorecard_readmissions": {
           "table": "quality_scorecard_readmissions",
@@ -1500,7 +1500,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 280
+          "duration_ms": 266
         }
       },
       "queries": [
@@ -1666,7 +1666,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 255
+            "duration_ms": 290
           }
         },
         {
@@ -1780,7 +1780,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 250
+            "duration_ms": 293
           }
         },
         {
@@ -1824,7 +1824,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 263
+            "duration_ms": 253
           }
         },
         {
@@ -1943,7 +1943,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 248
+            "duration_ms": 262
           }
         },
         {
@@ -2357,7 +2357,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 260
+            "duration_ms": 246
           }
         },
         {
@@ -2609,7 +2609,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 275
+            "duration_ms": 247
           }
         },
         {
@@ -2942,7 +2942,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 248
+            "duration_ms": 242
           }
         },
         {
@@ -3104,7 +3104,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 265
+            "duration_ms": 287
           }
         },
         {
@@ -3437,7 +3437,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 246
+            "duration_ms": 245
           }
         },
         {
@@ -3635,7 +3635,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 247
+            "duration_ms": 248
           }
         },
         {
@@ -3914,7 +3914,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 247
+            "duration_ms": 290
           }
         },
         {
@@ -4247,7 +4247,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 251
+            "duration_ms": 249
           }
         }
       ]

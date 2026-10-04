@@ -1,0 +1,1020 @@
+{
+  "schemaVersion": 2,
+  "id": "return-risk-30d",
+  "title": "Silver customers likely to return an item",
+  "turns": [
+    {
+      "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+      "question": "Which silver-tier customers are most likely to return at least one item in the next 30 days?",
+      "submittedAt": "2026-10-04T04:37:51.330042Z",
+      "completedAt": "2026-10-04T04:38:43.958803Z",
+      "status": "success",
+      "report": {
+        "markdown": "The prediction ranks silver-tier loyalty members by their estimated likelihood of making at least one return in the 30 days after the data's latest date (2026-10-01). Kumo scored 415 silver customers and returned the top 25.\n\n| Customer | Likelihood of ≥1 return in next 30 days |\n| --- | --- |\n| C00802 | 37.4% |\n| C00610 | 29.1% |\n| C00975 | 23.2% |\n| C00030 | 23.1% |\n| C00963 | 22.7% |\n| C01008 | 22.5% |\n| C00527 | 22.0% |\n| C01365 | 21.2% |\n| C00798 | 20.1% |\n| C01162 | 19.9% |\n| C01289 | 19.7% |\n| C00871 | 19.2% |\n| C01198 | 18.6% |\n| C01255 | 17.6% |\n| C00615 | 15.6% |\n| C00027 | 15.4% |\n| C00033 | 15.3% |\n| C00464 | 13.8% |\n| C00842 | 13.4% |\n| C00008 | 13.3% |\n| C00987 | 13.2% |\n| C00959 | 13.1% |\n| C00467 | 12.6% |\n| C01070 | 12.4% |\n| C00342 | 12.2% |\n\n[1]\n\n**Limitations**: Probabilities are model estimates, not certainties. The ranking covers the 415 silver-tier customers in the data; 1,085 other customers (bronze, gold, or unscored) are not included. The 30-day horizon is calendar days from the anchor (2026-10-01).\n\n## Sources\n\n- [1] NVIDIA Kumo prediction result — retail.sales — evidence `hermes-receipt:9dee9614a5dea0acc2c9778505f45588edaddf98bbc9846baaef00d4a7ed764b`",
+        "citations": [
+          {
+            "number": 1,
+            "evidenceId": "hermes-receipt:9dee9614a5dea0acc2c9778505f45588edaddf98bbc9846baaef00d4a7ed764b",
+            "label": "NVIDIA Kumo prediction result — retail.sales",
+            "capabilityId": "structured_prediction",
+            "invocationId": "hermes-tool:chatcmpl-tool-5b35ddd4cc9f499fb3ead3afbe08860b"
+          }
+        ]
+      },
+      "events": [
+        {
+          "schemaVersion": "2",
+          "eventId": "9f19fd83-faff-5af8-82d0-4a310c835a1b",
+          "cursor": 619,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "run.created",
+          "state": "started",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:37:51.413503Z",
+          "display": {
+            "label": "Run accepted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:41fccc44574e47533a519970ece7ce2fc2965db4ddfee8099aa54d7d5616ff61",
+            "sourceEventKind": "run.created",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "536a1d63-2a32-54c1-bcd8-2ddb020407ca",
+          "cursor": 620,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:1",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:37:52.671286Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 8214,
+              "output_tokens": 198
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:1",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "2710fcd9-a3b9-589a-8451-7a0cbc6969b1",
+          "cursor": 621,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:chatcmpl-tool-09a28fa74c2b4a4fa0e3054016e02708",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:37:52.709913Z",
+          "display": {
+            "label": "skill_view started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:97f11e70eaec757955587ac5110d64eec9c5e184145e44e90d0ce3b0e10bc9b8",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "20bef973-5350-50ba-93db-893f18e086a1",
+          "cursor": 622,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "hermes.tool",
+          "invocationId": "hermes-tool:chatcmpl-tool-09a28fa74c2b4a4fa0e3054016e02708",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": null,
+          "toolName": "skill_view",
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:37:52.736369Z",
+          "display": {
+            "label": "skill_view completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 0.018
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:c61c1cd5a6d602bcbb68aed94a9974e5c3fcd8cd493d9425f6111f210bdb1be6",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "50964000-5254-504b-b601-d2b0e89e65f9",
+          "cursor": 623,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:2",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:37:54.102828Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 11144,
+              "output_tokens": 169
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:2",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "0c1411f2-72f8-5c37-8c2a-ec5afc7615d7",
+          "cursor": 624,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "nvidia.kumo",
+          "invocationId": "hermes-tool:chatcmpl-tool-fb740f141dc94055972c061d660ab242",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": "prediction",
+          "toolName": "predict",
+          "capabilityId": "structured_prediction",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:37:54.130066Z",
+          "display": {
+            "label": "Structured Prediction started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:46dfaa738e2db7f03e1fdfea5edcafee411536c14775da3e86619ffe37a2a0a1",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "06cfa2e9-ff65-53b6-94d7-0498ab8481fc",
+          "cursor": 625,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "eventKind": "tool.observed",
+          "state": "failed",
+          "componentId": "nvidia.kumo",
+          "invocationId": "hermes-tool:chatcmpl-tool-fb740f141dc94055972c061d660ab242",
+          "parentInvocationId": null,
+          "toolServer": "prediction",
+          "toolName": "predict",
+          "capabilityId": "structured_prediction",
+          "artifactRefs": [
+            "hermes-receipt:1975eb6ca0bfe9760b9827191282516a02b52efd463fafcc2a8276d27fb27d6f"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:00.337201Z",
+          "display": {
+            "label": "Structured Prediction failed",
+            "summary": "Kumo rejected the query: Context size exceeds the 30MB limit. Current context contains 482,994 nodes and 725,113 edges across 7 tables. Top-5 tables contributing most to the context size: orders: 0.29MB, order_items: 0.28MB, customers: 0.05MB, returns: 0.05MB, products: 0.05MB",
+            "attributes": {
+              "duration_ms": 6206,
+              "tool_status": "failed",
+              "error_type": "evidence_unavailable"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:1975eb6ca0bfe9760b9827191282516a02b52efd463fafcc2a8276d27fb27d6f",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c6f95682-f95d-5d25-80be-49ab92bc2385",
+          "cursor": 626,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "nvidia.kumo",
+          "invocationId": "hermes-tool:chatcmpl-tool-fb740f141dc94055972c061d660ab242",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": "prediction",
+          "toolName": "predict",
+          "capabilityId": "structured_prediction",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:00.358079Z",
+          "display": {
+            "label": "Structured Prediction completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 6.224
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:ef626be2200e8d796fd701861f2b3e5e0a877c76ba3ea5f7c73fc57a5ad12b5b",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "67591aa8-641f-5f9c-9640-568d3089549f",
+          "cursor": 627,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:3",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:05.190017Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 11693,
+              "output_tokens": 213
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:3",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "89e75660-a037-5574-8beb-754b17a92c9b",
+          "cursor": 628,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "tool.started",
+          "state": "started",
+          "componentId": "nvidia.kumo",
+          "invocationId": "hermes-tool:chatcmpl-tool-5b35ddd4cc9f499fb3ead3afbe08860b",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": "prediction",
+          "toolName": "predict",
+          "capabilityId": "structured_prediction",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:05.224472Z",
+          "display": {
+            "label": "Structured Prediction started",
+            "summary": null,
+            "attributes": {},
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:8e76141587d99692478a9325c5fcc1f91ca432ec6a152c1080c3c08efd6baff6",
+            "sourceEventKind": "tool.started",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "c6108691-eb86-5765-a8a2-d7d199453a25",
+          "cursor": 629,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:06.429013Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:98751afac6a4db7320333dcb120f4406d15f0fec95ff6cb3d1f8bef1647fd603",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "35237d74-c3d7-5857-8a78-edf780735cf3",
+          "cursor": 630,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:21.438361Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:cc3772d227cbe5efd69556a8e05ed63168d27440a1386ae8533a4e706755b869",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "316c6c36-0b98-5385-9857-5e4cf8e94b43",
+          "cursor": 631,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "run.heartbeat",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:36.459347Z",
+          "display": {
+            "label": "Working on the answer",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:082e6b0ba34737497642c94c699f698773319df1b16673d24b4924951c6c5ee5",
+            "sourceEventKind": "run.heartbeat",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "70ee5cb9-14e6-597b-b7df-27bddd34ca0c",
+          "cursor": 632,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "eventKind": "artifact.available",
+          "state": "completed",
+          "componentId": "nvidia.kumo",
+          "invocationId": "hermes-tool:chatcmpl-tool-5b35ddd4cc9f499fb3ead3afbe08860b",
+          "parentInvocationId": null,
+          "toolServer": "prediction",
+          "toolName": "predict",
+          "capabilityId": "structured_prediction",
+          "artifactRefs": [
+            "hermes-receipt:9dee9614a5dea0acc2c9778505f45588edaddf98bbc9846baaef00d4a7ed764b"
+          ],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:40.319200Z",
+          "display": {
+            "label": "NVIDIA Kumo prediction available",
+            "summary": null,
+            "attributes": {
+              "duration_ms": 35093,
+              "tool_status": "completed"
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-receipt:9dee9614a5dea0acc2c9778505f45588edaddf98bbc9846baaef00d4a7ed764b",
+            "sourceEventKind": "post_tool_call",
+            "normalizationVersion": "hermes-plugin-receipt.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "1ed13e76-9b8e-5d70-bfbd-825025f1df8d",
+          "cursor": 633,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "tool.completed",
+          "state": "completed",
+          "componentId": "nvidia.kumo",
+          "invocationId": "hermes-tool:chatcmpl-tool-5b35ddd4cc9f499fb3ead3afbe08860b",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": "prediction",
+          "toolName": "predict",
+          "capabilityId": "structured_prediction",
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:40.356280Z",
+          "display": {
+            "label": "Structured Prediction completed",
+            "summary": null,
+            "attributes": {
+              "reported_error": false,
+              "duration_seconds": 35.125
+            },
+            "inspectable": true
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:449037e831b8190581922d948ed76fd50ec00c22551381135dc3599d32fe1aea",
+            "sourceEventKind": "tool.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "4861427e-f8ad-5f83-a806-46df5808569a",
+          "cursor": 634,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "eventKind": "llm.call",
+          "state": "completed",
+          "componentId": "switchyard.router",
+          "invocationId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:4",
+          "parentInvocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:43.897463Z",
+          "display": {
+            "label": "Model call completed",
+            "summary": null,
+            "attributes": {
+              "served_model": "nemotron-3-ultra",
+              "tier": "efficient",
+              "input_tokens": 13705,
+              "output_tokens": 738
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.plugin",
+            "sourceEventId": "hermes-llm:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5:api:4",
+            "sourceEventKind": "post_api_request",
+            "normalizationVersion": "hermes-plugin.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "12e61325-7229-5023-8a7c-60f83286c69e",
+          "cursor": 635,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "reasoning.available",
+          "state": "progress",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:43.920852Z",
+          "display": {
+            "label": "Reasoning in progress",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:e16408aeef0c6c16892a680cf035884dc23249918d969c2beafe7391cdc26ef8",
+            "sourceEventKind": "reasoning.available",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "23817ddd-e105-5a2d-bfa8-0680914e36b5",
+          "cursor": 636,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "run.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:43.940379Z",
+          "display": {
+            "label": "Run completed",
+            "summary": null,
+            "attributes": {
+              "input_tokens": 44756,
+              "output_tokens": 1318,
+              "total_tokens": 46074,
+              "output_characters": 1127
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "hermes.runs",
+            "sourceEventId": "hermes-event:78edc6c4f16964acea618568fd38b55105127cc611ad3a5dcaaae5c0a42d0c29",
+            "sourceEventKind": "run.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "94669f62-da08-58ea-a81a-afa8166ff0f1",
+          "cursor": 637,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "report.completed",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:43.958514Z",
+          "display": {
+            "label": "Response formatted",
+            "summary": null,
+            "attributes": {},
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:report.completed",
+            "sourceEventKind": "report.completed",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "8523eafd-86bb-5e7c-8465-4e8ec0479dcc",
+          "cursor": 638,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "report.reference_resolution",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:43.958569Z",
+          "display": {
+            "label": "Citations resolved",
+            "summary": null,
+            "attributes": {
+              "status": "reference_ids_resolved",
+              "total_citations": 1,
+              "uncited_evidence_count": 0,
+              "invalid_evidence_count": 0
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:report.reference_resolution",
+            "sourceEventKind": "report.reference_resolution",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "eventId": "92ca7fe0-1bf6-565e-bfeb-bfa97ff2d3c3",
+          "cursor": 639,
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "runId": "run_7b8d4ab2e0b5438daaea45413a6b770b",
+          "sessionId": "record-e4a47492-ea3f-4570-91f9-23cefa60b67c",
+          "turnId": null,
+          "eventKind": "report.metrics",
+          "state": "completed",
+          "componentId": "hermes.agent",
+          "invocationId": "hermes-run:4a93ceeea865352a9a2b1ee8:0",
+          "parentInvocationId": null,
+          "toolServer": null,
+          "toolName": null,
+          "capabilityId": null,
+          "artifactRefs": [],
+          "metricsRef": null,
+          "occurredAt": "2026-10-04T04:38:43.958603Z",
+          "display": {
+            "label": "Run metrics available",
+            "summary": null,
+            "attributes": {
+              "runtime_profile": "enterprise-research",
+              "wall_duration_ms": 52569,
+              "tool_call_count": 3,
+              "known_tool_duration_ms": 41367,
+              "input_tokens": 44756,
+              "output_tokens": 1318,
+              "total_tokens": 46074
+            },
+            "inspectable": false
+          },
+          "provenance": {
+            "sourceSystem": "demo-api",
+            "sourceEventId": "publication:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:report.metrics",
+            "sourceEventKind": "report.metrics",
+            "normalizationVersion": "hermes-runs.v1",
+            "observation": "observed",
+            "configDigest": null
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_prediction",
+          "receiptId": "hermes-receipt:1975eb6ca0bfe9760b9827191282516a02b52efd463fafcc2a8276d27fb27d6f",
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "invocationId": "hermes-tool:chatcmpl-tool-fb740f141dc94055972c061d660ab242",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "toolName": "mcp__prediction__predict",
+          "status": "failed",
+          "errorType": "evidence_unavailable",
+          "errorSummary": "Kumo rejected the query: Context size exceeds the 30MB limit. Current context contains 482,994 nodes and 725,113 edges across 7 tables. Top-5 tables contributing most to the context size: orders: 0.29MB, order_items: 0.28MB, customers: 0.05MB, returns: 0.05MB, products: 0.05MB",
+          "durationMs": 6206,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T04:38:00.337201Z",
+          "content": {
+            "available": false,
+            "reason": "Kumo rejected the query: Context size exceeds the 30MB limit. Current context contains 482,994 nodes and 725,113 edges across 7 tables. Top-5 tables contributing most to the context size: orders: 0.29MB, order_items: 0.28MB, customers: 0.05MB, returns: 0.05MB, products: 0.05MB",
+            "sourceId": "retail.sales",
+            "templateId": "return_risk_30d",
+            "pql": "PREDICT COUNT(returns.*, 0, 30, days) > 0 FOR EACH customers.customer_id",
+            "taskType": "binary_classification",
+            "anchorTime": "2026-10-01T00:00:00Z",
+            "horizon": {
+              "value": 30,
+              "unit": "days"
+            },
+            "entityTable": "customers",
+            "rows": [],
+            "model": "kumo-relational"
+          }
+        },
+        {
+          "schemaVersion": "2",
+          "artifactKind": "structured_prediction",
+          "receiptId": "hermes-receipt:9dee9614a5dea0acc2c9778505f45588edaddf98bbc9846baaef00d4a7ed764b",
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "invocationId": "hermes-tool:chatcmpl-tool-5b35ddd4cc9f499fb3ead3afbe08860b",
+          "turnId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:c87ecffa-2fc0-45a5-ba5c-5cf143be2c44:fc3da7f5",
+          "toolName": "mcp__prediction__predict",
+          "status": "completed",
+          "errorType": null,
+          "errorSummary": null,
+          "durationMs": 35093,
+          "traceId": null,
+          "spanId": null,
+          "occurredAt": "2026-10-04T04:38:40.319200Z",
+          "content": {
+            "available": true,
+            "reason": null,
+            "sourceId": "retail.sales",
+            "templateId": null,
+            "pql": "PREDICT COUNT(returns.*, 0, 30, days) > 0 FOR EACH customers.customer_id WHERE customers.tier = 'silver'",
+            "taskType": "binary_classification",
+            "anchorTime": null,
+            "horizon": {
+              "value": 30,
+              "unit": "days"
+            },
+            "entityTable": "customers",
+            "rows": [
+              {
+                "entityId": "C00802",
+                "probability": 0.37387582659721375,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00610",
+                "probability": 0.29098084568977356,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00975",
+                "probability": 0.23231014609336853,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00030",
+                "probability": 0.230919748544693,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00963",
+                "probability": 0.2267836183309555,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C01008",
+                "probability": 0.2254166156053543,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00527",
+                "probability": 0.22000709176063538,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C01365",
+                "probability": 0.2120688110589981,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00798",
+                "probability": 0.200557678937912,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C01162",
+                "probability": 0.19930800795555115,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C01289",
+                "probability": 0.19682620465755463,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00871",
+                "probability": 0.1919327974319458,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C01198",
+                "probability": 0.1859472095966339,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C01255",
+                "probability": 0.1755380630493164,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00615",
+                "probability": 0.1561049073934555,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00027",
+                "probability": 0.1540575623512268,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00033",
+                "probability": 0.15304216742515564,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00464",
+                "probability": 0.13753247261047363,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00842",
+                "probability": 0.13386750221252441,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00008",
+                "probability": 0.13296423852443695,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00987",
+                "probability": 0.13206614553928375,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00959",
+                "probability": 0.13117322325706482,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00467",
+                "probability": 0.1259227693080902,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C01070",
+                "probability": 0.12421300262212753,
+                "value": null,
+                "label": null
+              },
+              {
+                "entityId": "C00342",
+                "probability": 0.12168575078248978,
+                "value": null,
+                "label": null
+              }
+            ],
+            "model": "kumo-relational"
+          }
+        }
+      ],
+      "sourceIds": [
+        "retail.sales"
+      ]
+    }
+  ]
+}

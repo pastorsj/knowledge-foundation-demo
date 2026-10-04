@@ -4,7 +4,7 @@
     "id": "retail",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-03T04:15:56.385769Z",
+  "recordedAt": "2026-10-04T04:38:50.996854Z",
   "sessions": [
     {
       "id": "return-window-fees",
@@ -109,6 +109,44 @@
           "pill": "duckdb",
           "tools": [
             "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gold-churn-risk",
+      "title": "Gold customers likely to churn",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "4047e8f1-1d67-48f1-ace2-c22c8d44bd67",
+          "question": "Which gold-tier customers are most likely to place no order in the next 90 days?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "return-risk-30d",
+      "title": "Silver customers likely to return an item",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "c87ecffa-2fc0-45a5-ba5c-5cf143be2c44",
+          "question": "Which silver-tier customers are most likely to return at least one item in the next 30 days?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
           ]
         }
       ]

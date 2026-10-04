@@ -124,6 +124,35 @@
         "duckdb"
       ],
       "featured": true
+    },
+    {
+      "id": "failure-risk-30d",
+      "label": "Machines most likely to fail next month",
+      "tag": "PREDICTION",
+      "description": "A Kumo prediction of unplanned failure per machine over the next 30 days.",
+      "question": "Which machines are most likely to have an unplanned failure in the next 30 days? Give the five with the highest probability.",
+      "sources": [
+        "manufacturing.operations"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "high-alarm-risk",
+      "label": "Machines likely to raise many alarms",
+      "tag": "PREDICTION",
+      "description": "A Kumo prediction of a high alarm count, joined to the machine details.",
+      "question": "Which five machines are most likely to log more than 10 alarms over the next 30 days, and what plant and machine type is each?",
+      "sources": [
+        "manufacturing.operations"
+      ],
+      "tools": [
+        "kumo",
+        "duckdb"
+      ],
+      "featured": false
     }
   ],
   "examples": [
@@ -132,9 +161,11 @@
     "unplanned-downtime-by-plant",
     "overdue-pm2",
     "eight-d-machine-history",
+    "failure-risk-30d",
     "lockout-lock-removal",
     "top-failure-codes",
-    "plan-attainment-q3"
+    "plan-attainment-q3",
+    "high-alarm-risk"
   ],
   "conversations": []
 }

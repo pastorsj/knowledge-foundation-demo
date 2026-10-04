@@ -4,7 +4,7 @@
     "id": "healthcare",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-03T04:19:13.433223Z",
+  "recordedAt": "2026-10-04T04:41:05.787228Z",
   "sessions": [
     {
       "id": "scanned-checklist",
@@ -109,6 +109,44 @@
           "pill": "duckdb",
           "tools": [
             "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hf-readmission-risk",
+      "title": "Heart failure readmission risk",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "4faadb19-bbed-485b-bfab-35ed7a3c867a",
+          "question": "Among our heart failure patients, which are most likely to be admitted to the hospital again in the next 30 days?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-denial-risk",
+      "title": "Claim denial risk",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "12da3157-d920-46ad-9797-6871dc67d992",
+          "question": "Which Northstar Advantage patients are most likely to have a claim denied in the next 60 days?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
           ]
         }
       ]

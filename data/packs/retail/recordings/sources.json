@@ -35,7 +35,8 @@
     "default_enabled": true,
     "kind": "structured",
     "capabilities": [
-      "structured_retrieval"
+      "structured_retrieval",
+      "structured_prediction"
     ],
     "synthetic": true,
     "status": "ready",

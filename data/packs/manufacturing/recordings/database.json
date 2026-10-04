@@ -655,7 +655,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 258
+          "duration_ms": 264
         },
         "maintenance_events": {
           "table": "maintenance_events",
@@ -772,7 +772,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 260
+          "duration_ms": 269
         },
         "plants": {
           "table": "plants",
@@ -834,7 +834,7 @@
             ]
           ],
           "truncated": false,
-          "duration_ms": 255
+          "duration_ms": 272
         },
         "production_plan_scrap_targets": {
           "table": "production_plan_scrap_targets",
@@ -911,7 +911,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 254
+          "duration_ms": 266
         },
         "production_plan_weekly_output": {
           "table": "production_plan_weekly_output",
@@ -998,7 +998,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 283
+          "duration_ms": 270
         },
         "quality_defects": {
           "table": "quality_defects",
@@ -1125,7 +1125,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 266
+          "duration_ms": 268
         },
         "sensor_readings": {
           "table": "sensor_readings",
@@ -1222,7 +1222,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 279
+          "duration_ms": 250
         },
         "work_orders": {
           "table": "work_orders",
@@ -1379,7 +1379,7 @@
             ]
           ],
           "truncated": true,
-          "duration_ms": 288
+          "duration_ms": 250
         }
       },
       "queries": [
@@ -1419,7 +1419,51 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 263
+            "duration_ms": 253
+          }
+        },
+        {
+          "sql": "SELECT machine_id, plant_id, machine_type\nFROM manufacturing_operations.machines\nWHERE machine_id IN ('DAY-LTH-05', 'DAY-PRS-04', 'BRN-LTH-04', 'BRN-LTH-03', 'DAY-MIL-02')\nORDER BY \n  CASE machine_id \n    WHEN 'DAY-LTH-05' THEN 1\n    WHEN 'DAY-PRS-04' THEN 2\n    WHEN 'BRN-LTH-04' THEN 3\n    WHEN 'BRN-LTH-03' THEN 4\n    WHEN 'DAY-MIL-02' THEN 5\n  END",
+          "result": {
+            "columns": [
+              "machine_id",
+              "plant_id",
+              "machine_type"
+            ],
+            "types": [
+              "VARCHAR",
+              "VARCHAR",
+              "VARCHAR"
+            ],
+            "rows": [
+              [
+                "DAY-LTH-05",
+                "DAY",
+                "CNC Lathe"
+              ],
+              [
+                "DAY-PRS-04",
+                "DAY",
+                "Hydraulic Press"
+              ],
+              [
+                "BRN-LTH-04",
+                "BRN",
+                "CNC Lathe"
+              ],
+              [
+                "BRN-LTH-03",
+                "BRN",
+                "CNC Lathe"
+              ],
+              [
+                "DAY-MIL-02",
+                "DAY",
+                "CNC Mill"
+              ]
+            ],
+            "truncated": false,
+            "duration_ms": 272
           }
         },
         {
@@ -1509,7 +1553,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 268
+            "duration_ms": 267
           }
         },
         {
@@ -1866,7 +1910,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 261
+            "duration_ms": 278
           }
         },
         {
@@ -1893,7 +1937,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 280
+            "duration_ms": 279
           }
         },
         {
@@ -2172,7 +2216,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 260
+            "duration_ms": 275
           }
         },
         {
@@ -2478,7 +2522,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 271
+            "duration_ms": 247
           }
         },
         {
@@ -2542,7 +2586,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 279
+            "duration_ms": 246
           }
         },
         {
@@ -2670,7 +2714,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 271
+            "duration_ms": 249
           }
         },
         {
@@ -2895,7 +2939,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 271
+            "duration_ms": 247
           }
         },
         {
@@ -3228,7 +3272,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 262
+            "duration_ms": 246
           }
         },
         {
@@ -3480,7 +3524,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 262
+            "duration_ms": 250
           }
         },
         {
@@ -3894,7 +3938,7 @@
               ]
             ],
             "truncated": false,
-            "duration_ms": 272
+            "duration_ms": 261
           }
         }
       ]

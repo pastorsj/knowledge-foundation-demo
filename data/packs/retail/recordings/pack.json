@@ -124,6 +124,34 @@
         "duckdb"
       ],
       "featured": true
+    },
+    {
+      "id": "gold-churn-risk",
+      "label": "Gold customers likely to churn",
+      "tag": "PREDICTION",
+      "description": "Predict which gold-tier customers (154, under Kumo's 1,000-entity limit) place no order in the next 90 days.",
+      "question": "Which gold-tier customers are most likely to place no order in the next 90 days?",
+      "sources": [
+        "retail.sales"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "return-risk-30d",
+      "label": "Silver customers likely to return an item",
+      "tag": "PREDICTION",
+      "description": "Predict which silver-tier customers (415, under Kumo's 1,000-entity limit) return at least one item in the next 30 days.",
+      "question": "Which silver-tier customers are most likely to return at least one item in the next 30 days?",
+      "sources": [
+        "retail.sales"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": false
     }
   ],
   "examples": [
@@ -132,9 +160,11 @@
     "top-stores-q3",
     "electronics-returns-fee",
     "monitored-store-returns",
+    "gold-churn-risk",
     "regional-growth-report",
     "category-vs-plan",
-    "category-return-rate"
+    "category-return-rate",
+    "return-risk-30d"
   ],
   "conversations": []
 }

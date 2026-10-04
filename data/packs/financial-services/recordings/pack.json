@@ -124,6 +124,34 @@
         "duckdb"
       ],
       "featured": true
+    },
+    {
+      "id": "loan-default-risk",
+      "label": "Loans likely to go delinquent",
+      "tag": "PREDICTION",
+      "description": "Kumo scores the 593 active loans for an installment 30 or more days past due in the next 90 days.",
+      "question": "Which active loans are most likely to be 30 or more days past due within the next 90 days?",
+      "sources": [
+        "financial-services.banking"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "account-closure-risk",
+      "label": "Checking accounts likely to close",
+      "tag": "PREDICTION",
+      "description": "Kumo scores the 887 open checking accounts for closure (attrition) in the next 90 days.",
+      "question": "Which of our open checking accounts are most likely to be closed in the next 90 days?",
+      "sources": [
+        "financial-services.banking"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": false
     }
   ],
   "examples": [
@@ -132,9 +160,11 @@
     "deposits-by-branch",
     "dti-over-policy",
     "deck-vs-loan-data",
+    "loan-default-risk",
     "complaint-deadlines",
     "delinquency-by-product",
-    "card-disputes-q3"
+    "card-disputes-q3",
+    "account-closure-risk"
   ],
   "conversations": []
 }

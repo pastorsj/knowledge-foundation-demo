@@ -4,7 +4,7 @@
     "id": "financial-services",
     "version": "1.0.0"
   },
-  "recordedAt": "2026-10-03T04:21:35.498595Z",
+  "recordedAt": "2026-10-04T04:42:21.284832Z",
   "sessions": [
     {
       "id": "underwriting-limits",
@@ -109,6 +109,44 @@
           "pill": "duckdb",
           "tools": [
             "query_tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "loan-default-risk",
+      "title": "Loans likely to go delinquent",
+      "featured": true,
+      "turns": [
+        {
+          "jobId": "435df12e-f356-422a-89d6-bfa5346b4a24",
+          "question": "Which active loans are most likely to be 30 or more days past due within the next 90 days?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "account-closure-risk",
+      "title": "Checking accounts likely to close",
+      "featured": false,
+      "turns": [
+        {
+          "jobId": "cf1459a0-0ace-4c3c-b5c3-4ccfd325c6ff",
+          "question": "Which of our open checking accounts are most likely to be closed in the next 90 days?"
+        }
+      ],
+      "tools": [
+        {
+          "pill": "kumo",
+          "tools": [
+            "predict"
           ]
         }
       ]

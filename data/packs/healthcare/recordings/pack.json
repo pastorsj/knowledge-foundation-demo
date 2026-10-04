@@ -124,6 +124,34 @@
         "duckdb"
       ],
       "featured": true
+    },
+    {
+      "id": "hf-readmission-risk",
+      "label": "Heart failure readmission risk",
+      "tag": "PREDICTION",
+      "description": "Kumo scores the heart failure patients (238, under its 1,000-entity limit) for an inpatient admission in the next 30 days.",
+      "question": "Among our heart failure patients, which are most likely to be admitted to the hospital again in the next 30 days?",
+      "sources": [
+        "healthcare.clinical"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "claim-denial-risk",
+      "label": "Claim denial risk",
+      "tag": "PREDICTION",
+      "description": "Kumo scores the Northstar Advantage patients (226, under its 1,000-entity limit) for a denied claim in the next 60 days.",
+      "question": "Which Northstar Advantage patients are most likely to have a claim denied in the next 60 days?",
+      "sources": [
+        "healthcare.clinical"
+      ],
+      "tools": [
+        "kumo"
+      ],
+      "featured": false
     }
   ],
   "examples": [
@@ -132,9 +160,11 @@
     "readmissions-by-hospital",
     "missed-hf-followup",
     "appealable-denials",
+    "hf-readmission-risk",
     "hf-followup-schedule",
     "top-denial-reasons",
-    "readmission-by-condition"
+    "readmission-by-condition",
+    "claim-denial-risk"
   ],
   "conversations": []
 }
