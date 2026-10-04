@@ -55,11 +55,11 @@ def test_parse_converts_a_pdf_into_pages_and_a_table(
 def test_the_output_cap_follows_the_setting(parse_settings: Settings, fake_parse: FakeParse, policy_pdf: Path):
     fake_parse.label = "policy-pdf"
 
-    # build.nvidia.com serves Parse with a 4096-token context and refuses max_tokens=8192 with HTTP 400
-    converted = documents.convert(policy_pdf, "pdf", replace(parse_settings, parse_max_tokens=4096), None)
+    # build.nvidia.com serves Parse with a 4096-token context, prompt included, and refuses max_tokens=8192 (or 4096)
+    converted = documents.convert(policy_pdf, "pdf", replace(parse_settings, parse_max_tokens=4000), None)
 
     assert converted.parser == "nemotron-parse-2.0"
-    assert {request["max_tokens"] for request in fake_parse.requests} == {4096}
+    assert {request["max_tokens"] for request in fake_parse.requests} == {4000}
 
 
 def _sent_image_sizes(fake_parse: FakeParse) -> list[tuple[int, int]]:

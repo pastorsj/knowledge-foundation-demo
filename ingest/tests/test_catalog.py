@@ -98,12 +98,12 @@ def test_settings_read_secret_files_and_an_empty_parse_url_disables_parse(tmp_pa
     (tmp_path / "retriever_api_key").write_text("nvapi-secret\n")
 
     settings = Settings.from_env(
-        {"PARSE_BASE_URL": "", "INGEST_WORKERS": "3", "PARSE_MAX_TOKENS": "4096"}, secrets_dir=tmp_path
+        {"PARSE_BASE_URL": "", "INGEST_WORKERS": "3", "PARSE_MAX_TOKENS": "4000"}, secrets_dir=tmp_path
     )
 
     assert settings.parse_base_url == ""
     assert settings.parse_api_key == "parse-key"
     assert settings.retriever_api_key == "nvapi-secret"
     assert settings.workers == 3
-    assert settings.parse_max_tokens == 4096
+    assert settings.parse_max_tokens == 4000
     assert "nvapi-secret" not in repr(settings)

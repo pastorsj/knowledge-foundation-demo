@@ -52,7 +52,7 @@ One docling `DocumentConverter` reads every document kind:
   `PyPdfiumDocumentBackend`, one request per page, `PARSE_CONCURRENCY` (4) pages in flight per document. The
   request parameters are the model card's: `skip_special_tokens: false`, `top_k: 1`, `repetition_penalty: 1.1`,
   `temperature: 0`, and `max_tokens` from `PARSE_MAX_TOKENS`: 8192 by default (the card says 9,000, but the local
-  vLLM's context is 9,000 tokens including the prompt and the image), 4096 for build.nvidia.com.
+  vLLM's context is 9,000 tokens including the prompt and the image), 4000 for build.nvidia.com.
 - **Page images** are rendered at the preset's `scale` (2.0: 144 dpi for a PDF page; an image without DPI metadata
   counts as 72 dpi, so it would be doubled) with the preset's `max_size` set to 1,664: docling scales a page down,
   keeping its aspect ratio, until its longer side is at most 1,664 px, so every page fits the model card's maximum
@@ -90,9 +90,10 @@ A spike on a DGX Spark (GB10, 2026-10-02) parsed a two-page PDF with a table in 
 this way, tables included. The Nemotron Parse NIM has no GB10 profile, which is why vLLM is used.
 
 **Without a GPU**, set `PARSE_BASE_URL=https://integrate.api.nvidia.com/v1`, `PARSE_MODEL=nvidia/nemotron-parse-2.0`,
-`PARSE_MAX_TOKENS=4096` and an `nvapi-` `PARSE_API_KEY`: the hosted model takes the same chat contract, but serves
-a 4,096-token context, so it refuses the default cap of 8,192 with HTTP 400 (every PDF would then fall back to its
-text layer and every image would fail).
+`PARSE_MAX_TOKENS=4000` and an `nvapi-` `PARSE_API_KEY`: the hosted model takes the same chat contract, but serves
+a 4,096-token context that also holds the prompt (6 tokens; the page image does not count), so it refuses a cap of
+4,091 or more with HTTP 400, the default 8,192 included (every PDF would then fall back to its text layer and every
+image would fail). A scanned memo needed 763 output tokens.
 
 ### Fallbacks
 
@@ -223,7 +224,7 @@ Uploaded documents become the source `workspace.documents` and tables `workspace
 | Files ingested at once | 2 | `INGEST_WORKERS` |
 | Pages in flight to Parse per document | 4 | `PARSE_CONCURRENCY` |
 | Stage timeout | 1,800 s | `INGEST_STAGE_TIMEOUT_SECONDS` |
-| Parse output per page | 8,192 tokens (4,096 for build.nvidia.com) | `PARSE_MAX_TOKENS` |
+| Parse output per page | 8,192 tokens (4,000 for build.nvidia.com) | `PARSE_MAX_TOKENS` |
 | Page image sent to Parse | longer side 1,664 px | fixed: inside the model card's 1,664 x 2,048 |
 | Chunk size | 512 tokens | fixed |
 
