@@ -26,7 +26,14 @@ export function renderHbar({ spec, box, min, max, colors, fmt }: RenderInput): M
 
   cats.forEach((cat, i) => {
     const centerY = box.y1 + band * i + band / 2
-    marks.push({ kind: 'text', x: box.x0 - 8, y: centerY + 3.5, text: truncate(cat, 22), anchor: 'end', variant: 'cat' })
+    marks.push({
+      kind: 'text',
+      x: box.x0 - 8,
+      y: centerY + 3.5,
+      text: truncate(cat, 22),
+      anchor: 'end',
+      variant: 'cat',
+    })
 
     spec.series.forEach((series, si) => {
       const value = toNumber(spec.data[i][series.key])

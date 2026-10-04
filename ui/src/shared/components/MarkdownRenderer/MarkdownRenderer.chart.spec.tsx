@@ -26,7 +26,11 @@ describe('MarkdownRenderer chart integration', () => {
 
   test('renders a ```chart-carousel fence as a carousel', () => {
     const line = { ...chart, type: 'line' }
-    render(<MarkdownRenderer content={fence('chart-carousel', { title: 'Trends', charts: [line, line] })} />)
+    render(
+      <MarkdownRenderer
+        content={fence('chart-carousel', { title: 'Trends', charts: [line, line] })}
+      />
+    )
     expect(screen.getByLabelText('Trends')).toBeInTheDocument()
   })
 

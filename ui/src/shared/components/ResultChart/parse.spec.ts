@@ -114,7 +114,9 @@ describe('parseCarouselSpec', () => {
 
 describe('parseKpiSpec', () => {
   test('valid and invalid', () => {
-    expect(parseKpiSpec(JSON.stringify({ kpis: [{ label: 'A', value: '1' }] }))?.kpis).toHaveLength(1)
+    expect(parseKpiSpec(JSON.stringify({ kpis: [{ label: 'A', value: '1' }] }))?.kpis).toHaveLength(
+      1
+    )
     expect(parseKpiSpec(JSON.stringify({ kpis: [] }))).toBeNull()
   })
 })

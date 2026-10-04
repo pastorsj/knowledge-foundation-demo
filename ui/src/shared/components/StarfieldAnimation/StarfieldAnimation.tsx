@@ -59,15 +59,10 @@ export const StarfieldAnimation: FC<StarfieldAnimationProps> = ({
       // Size variation - most particles small, few larger accent particles
       // Multiply by particleSize prop for user control
       const size =
-        (distribution < 0.95
-          ? rng.next() * 0.7 + 0.3
-          : rng.next() * 1.2 + 0.7) * particleSize
+        (distribution < 0.95 ? rng.next() * 0.7 + 0.3 : rng.next() * 1.2 + 0.7) * particleSize
 
       // Opacity variation - most bright, some slightly dimmer
-      const opacity =
-        distribution < 0.6
-          ? 0.95 + rng.next() * 0.05
-          : 0.6 + rng.next() * 0.35
+      const opacity = distribution < 0.6 ? 0.95 + rng.next() * 0.05 : 0.6 + rng.next() * 0.35
 
       particles.push({ angle, radius, size, opacity })
     }

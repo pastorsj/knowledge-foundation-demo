@@ -18,7 +18,14 @@ function spec(type: ChartSpec['type'], rows: number): ChartSpec {
 describe('plotBox', () => {
   test('uses default padding', () => {
     const box = plotBox(290)
-    expect(box).toEqual({ x0: 54, x1: CHART_WIDTH - 18, y0: 256, y1: 18, w: CHART_WIDTH - 72, h: 238 })
+    expect(box).toEqual({
+      x0: 54,
+      x1: CHART_WIDTH - 18,
+      y0: 256,
+      y1: 18,
+      w: CHART_WIDTH - 72,
+      h: 238,
+    })
   })
 
   test('honors custom gutters', () => {

@@ -62,8 +62,7 @@ export const getFileUploadConfigFromEnv = (
 ): FileUploadConfig => {
   const acceptedTypes = env.FILE_UPLOAD_ACCEPTED_TYPES || DEFAULT_ACCEPTED_TYPES
   const maxTotalSizeMB = parsePositiveNumber(env.FILE_UPLOAD_MAX_SIZE_MB) ?? DEFAULT_MAX_SIZE_MB
-  const maxFileCount =
-    parsePositiveNumber(env.FILE_UPLOAD_MAX_FILE_COUNT) ?? DEFAULT_MAX_FILE_COUNT
+  const maxFileCount = parsePositiveNumber(env.FILE_UPLOAD_MAX_FILE_COUNT) ?? DEFAULT_MAX_FILE_COUNT
   const fileExpirationCheckIntervalHours =
     parsePositiveNumber(env.FILE_EXPIRATION_CHECK_INTERVAL_HOURS) ??
     DEFAULT_EXPIRATION_CHECK_INTERVAL_HOURS
@@ -76,7 +75,10 @@ export const getFileUploadConfigFromEnv = (
     acceptedMimeTypes: buildAcceptedMimeTypes(acceptedTypes),
     maxTotalSizeMB,
     maxFileSize: maxSizeBytes,
-    maxTotalSize: maxSizeBytes * maxFileCount,
+    maxTotalSize: Math.min(
+      maxSizeBytes * maxFileCount,
+      (parsePositiveNumber(env.FILE_UPLOAD_MAX_REQUEST_MB) ?? 512) * 1024 * 1024
+    ),
     maxFileCount,
     fileExpirationCheckIntervalHours,
   }

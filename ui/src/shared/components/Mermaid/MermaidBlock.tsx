@@ -50,7 +50,13 @@ export const MermaidBlock: FC<MermaidBlockProps> = ({ code, fallback }) => {
   const triggerRef = useRef<HTMLElement | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ x: number; y: number; left: number; top: number } | null>(null)
-  const anchorRef = useRef<{ ratio: number; contentX: number; contentY: number; cx: number; cy: number } | null>(null)
+  const anchorRef = useRef<{
+    ratio: number
+    contentX: number
+    contentY: number
+    cx: number
+    cy: number
+  } | null>(null)
   const scaleRef = useRef(scale)
   scaleRef.current = scale
 
@@ -155,7 +161,13 @@ export const MermaidBlock: FC<MermaidBlockProps> = ({ code, fallback }) => {
       const prev = scaleRef.current
       const next = clamp(prev * Math.exp(-e.deltaY * 0.0015))
       if (next === prev) return
-      anchorRef.current = { ratio: next / prev, contentX: el.scrollLeft + cx, contentY: el.scrollTop + cy, cx, cy }
+      anchorRef.current = {
+        ratio: next / prev,
+        contentX: el.scrollLeft + cx,
+        contentY: el.scrollTop + cy,
+        cx,
+        cy,
+      }
       setScale(next)
     }
     el.addEventListener('wheel', onWheel, { passive: false })
@@ -209,7 +221,7 @@ export const MermaidBlock: FC<MermaidBlockProps> = ({ code, fallback }) => {
       }
     >
       {zoomable && (
-        <div className="absolute right-2 top-2 z-10 flex items-center gap-0.5 rounded-full border border-[color:var(--border-color-base)] bg-[color:var(--background-color-surface-raised)]/90 px-1 py-0.5 backdrop-blur">
+        <div className="bg-[color:var(--background-color-surface-raised)]/90 absolute right-2 top-2 z-10 flex items-center gap-0.5 rounded-full border border-[color:var(--border-color-base)] px-1 py-0.5 backdrop-blur">
           <button
             type="button"
             aria-label="Zoom out"
@@ -251,14 +263,12 @@ export const MermaidBlock: FC<MermaidBlockProps> = ({ code, fallback }) => {
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className={
-          [
-            fullscreen ? 'h-screen max-h-screen' : 'max-h-[70vh]',
-            zoomable
-              ? 'cursor-grab touch-none select-none overflow-auto p-4 active:cursor-grabbing'
-              : 'overflow-auto p-4',
-          ].join(' ')
-        }
+        className={[
+          fullscreen ? 'h-screen max-h-screen' : 'max-h-[70vh]',
+          zoomable
+            ? 'cursor-grab touch-none select-none overflow-auto p-4 active:cursor-grabbing'
+            : 'overflow-auto p-4',
+        ].join(' ')}
       >
         <div
           role="img"

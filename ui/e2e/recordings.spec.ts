@@ -3,8 +3,8 @@
 
 /**
  * Every recorded session of every pack whose recordings bundle is in the checkout, as
- * `scripts/demo.sh replay` serves it (a pack without one, such as us-equities in the public
- * repository, is skipped). Per session: its Recorded list entry with the tool pills its runs used;
+ * `scripts/demo.sh replay` serves it (a pack without one, until `scripts/demo.sh record` writes it,
+ * is skipped). Per session: its Recorded list entry with the tool pills its runs used;
  * then per turn the question, the answer, its cited sources, and its run in the execution view down
  * to the closing events (the answer, the citation resolution and the run metrics). Nothing calls
  * the API.

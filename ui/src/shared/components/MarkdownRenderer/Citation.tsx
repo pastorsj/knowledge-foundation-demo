@@ -67,8 +67,12 @@ export function Citation({ n, sources }: CitationProps): ReactNode {
             <span className="text-secondary flex items-center gap-1.5 text-xs">
               <SourceKindIcon kind={src.kind} /> {src.label}
             </span>
-            <span className="text-primary mt-1 line-clamp-2 block text-sm font-medium">{src.title}</span>
-            {src.snippet && <span className="text-subtle mt-1 line-clamp-4 block text-xs">{src.snippet}</span>}
+            <span className="text-primary mt-1 line-clamp-2 block text-sm font-medium">
+              {src.title}
+            </span>
+            {src.snippet && (
+              <span className="text-subtle mt-1 line-clamp-4 block text-xs">{src.snippet}</span>
+            )}
           </motion.span>
         )}
       </AnimatePresence>

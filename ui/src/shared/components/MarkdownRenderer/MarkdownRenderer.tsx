@@ -59,7 +59,10 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = memo(
     const components: Components = useMemo(
       () => ({
         cite: ({ children }) => (
-          <Citation n={parseInt(getTextFromChildren(children) || '0', 10)} sources={sources ?? []} />
+          <Citation
+            n={parseInt(getTextFromChildren(children) || '0', 10)}
+            sources={sources ?? []}
+          />
         ),
         code: ({
           children,
@@ -267,9 +270,9 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = memo(
     return (
       <div
         className={cn(
-          'markdown-content [overflow-wrap:anywhere] break-words [&>*:last-child]:mb-0',
+          'markdown-content break-words [overflow-wrap:anywhere] [&>*:last-child]:mb-0',
           isAnswer && 'answer-prose',
-          className,
+          className
         )}
       >
         <ReactMarkdown

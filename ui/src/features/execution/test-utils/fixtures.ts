@@ -34,7 +34,10 @@ export const receiptOf = <K extends ArtifactKind>(
   ) as Extract<ReceiptV2, { artifactKind: K }>
 
 /** The first receipt of a registered tool, by its MCP name (`ask_question`, `query_tables`, …). */
-export const receiptOfTool = (toolId: string, status: ReceiptV2['status'] = 'completed'): ReceiptV2 =>
+export const receiptOfTool = (
+  toolId: string,
+  status: ReceiptV2['status'] = 'completed'
+): ReceiptV2 =>
   fixtureReceipts.find(
     (receipt) => receipt.toolName.endsWith(`__${toolId}`) && receipt.status === status
   )!

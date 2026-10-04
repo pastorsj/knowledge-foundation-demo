@@ -51,7 +51,9 @@ export function parseChartSpec(raw: string): ChartSpec | null {
   // least one numeric value, otherwise there is nothing meaningful to draw.
   const hasX = spec.data.some((row) => row[spec.x.key] != null && row[spec.x.key] !== '')
   if (!hasX) return null
-  const everySeriesNumeric = spec.series.every((s) => spec.data.some((row) => toNumber(row[s.key]) != null))
+  const everySeriesNumeric = spec.series.every((s) =>
+    spec.data.some((row) => toNumber(row[s.key]) != null)
+  )
   if (!everySeriesNumeric) return null
 
   return spec
@@ -97,7 +99,8 @@ export function fenceBareSpecs(markdown: string): string {
       const trimmed = line.trim()
       if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
         if (parseCarouselSpec(trimmed)) return '```chart-carousel\n' + trimmed + '\n```'
-        if (parseChartSpec(trimmed) || parseKpiSpec(trimmed)) return '```chart\n' + trimmed + '\n```'
+        if (parseChartSpec(trimmed) || parseKpiSpec(trimmed))
+          return '```chart\n' + trimmed + '\n```'
       }
       return line
     })

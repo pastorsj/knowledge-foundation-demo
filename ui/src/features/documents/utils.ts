@@ -46,9 +46,15 @@ export const mapToDisplayStatus = (status: string): FileSourceStatus => {
 /** The ingest pipeline's fields of a file, as a tracked file keeps them. */
 export const pipelineOf = (
   file: FileInfo | FileProgress
-): Pick<TrackedFile, 'kind' | 'stage' | 'stageDetail' | 'parser' | 'tables' | 'warnings'> => ({
+): Pick<
+  TrackedFile,
+  'kind' | 'stage' | 'lastStage' | 'stageDetail' | 'parser' | 'tables' | 'warnings'
+> => ({
   kind: file.kind ?? null,
   stage: file.stage ?? null,
+  ...(file.stage && file.stage !== 'failed' && file.stage !== 'ready'
+    ? { lastStage: file.stage }
+    : {}),
   stageDetail: file.stage_detail ?? null,
   parser: file.parser ?? null,
   tables: file.tables ?? null,
@@ -77,8 +83,11 @@ export type StepState = 'done' | 'active' | 'pending' | 'failed'
 export const pipelineSteps = (
   kind: TrackedFile['kind'],
   stage: string | null | undefined,
-  status: TrackedFile['status']
+  status: TrackedFile['status'],
+  /** The last stage before a failure, which the failed step is */
+  lastStage?: string | null
 ): Array<{ label: string; state: StepState }> => {
+  if (stage === 'failed') stage = lastStage ?? null
   const steps = kind === 'table' ? TABLE_STEPS : DOCUMENT_STEPS
   if (status === 'success' || stage === 'ready') {
     return steps.map(({ label }) => ({ label, state: 'done' }))

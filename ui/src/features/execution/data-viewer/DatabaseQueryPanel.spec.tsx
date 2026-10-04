@@ -50,7 +50,11 @@ describe('DatabaseQueryPanel', () => {
 
     fireEvent.keyDown(editor, { key: 'Enter', ctrlKey: true })
     const results = await waitFor(() => screen.getByRole('region', { name: 'SQL results' }))
-    expect(queryRunner).toHaveBeenCalledWith('retail.sales', receipt.content!.sql, expect.anything())
+    expect(queryRunner).toHaveBeenCalledWith(
+      'retail.sales',
+      receipt.content!.sql,
+      expect.anything()
+    )
     expect(within(results).getByText('NULL')).toBeVisible()
     expect(within(results).getByText('BIGINT')).toBeVisible()
   })

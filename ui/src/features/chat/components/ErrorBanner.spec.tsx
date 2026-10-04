@@ -9,7 +9,10 @@ import { ErrorBanner } from './ErrorBanner'
 // Mock the error registry
 vi.mock('../lib/error-registry', () => ({
   getErrorMeta: (code: string) => {
-    const registry: Record<string, { title: string; defaultMessage: string; status: 'error' | 'warning' | 'info' }> = {
+    const registry: Record<
+      string,
+      { title: string; defaultMessage: string; status: 'error' | 'warning' | 'info' }
+    > = {
       'agent.response_failed': {
         title: 'Connection Failed',
         defaultMessage: 'Unable to connect to the server. Please check your network connection.',
@@ -21,11 +24,13 @@ vi.mock('../lib/error-registry', () => ({
         status: 'warning',
       },
     }
-    return registry[code] || {
-      title: 'Error',
-      defaultMessage: 'An error occurred',
-      status: 'error',
-    }
+    return (
+      registry[code] || {
+        title: 'Error',
+        defaultMessage: 'An error occurred',
+        status: 'error',
+      }
+    )
   },
 }))
 
@@ -48,12 +53,7 @@ describe('ErrorBanner', () => {
     })
 
     test('renders custom message when provided', () => {
-      render(
-        <ErrorBanner
-          code="agent.response_failed"
-          message="Custom error message"
-        />
-      )
+      render(<ErrorBanner code="agent.response_failed" message="Custom error message" />)
 
       expect(screen.getByText('Custom error message')).toBeInTheDocument()
       expect(screen.queryByText(/unable to connect to the server/i)).not.toBeInTheDocument()
@@ -86,22 +86,14 @@ describe('ErrorBanner', () => {
   describe('timestamp', () => {
     test('displays timestamp when provided', () => {
       render(
-        <ErrorBanner
-          code="agent.response_failed"
-          timestamp={new Date('2024-01-15T14:30:00')}
-        />
+        <ErrorBanner code="agent.response_failed" timestamp={new Date('2024-01-15T14:30:00')} />
       )
 
       expect(screen.getByText(/\d{1,2}:\d{2}/)).toBeInTheDocument()
     })
 
     test('handles ISO string timestamp', () => {
-      render(
-        <ErrorBanner
-          code="agent.response_failed"
-          timestamp="2024-01-15T14:30:00Z"
-        />
-      )
+      render(<ErrorBanner code="agent.response_failed" timestamp="2024-01-15T14:30:00Z" />)
 
       expect(screen.getByText(/\d{1,2}:\d{2}/)).toBeInTheDocument()
     })
@@ -130,12 +122,7 @@ describe('ErrorBanner', () => {
 
   describe('expandable details', () => {
     test('shows "Show details" button when details provided', () => {
-      render(
-        <ErrorBanner
-          code="agent.response_failed"
-          details="Stack trace here..."
-        />
-      )
+      render(<ErrorBanner code="agent.response_failed" details="Stack trace here..." />)
 
       expect(screen.getByText('Show details')).toBeInTheDocument()
     })
@@ -143,12 +130,7 @@ describe('ErrorBanner', () => {
     test('expands to show details when clicked', async () => {
       const user = userEvent.setup()
 
-      render(
-        <ErrorBanner
-          code="agent.response_failed"
-          details="Error stack trace goes here"
-        />
-      )
+      render(<ErrorBanner code="agent.response_failed" details="Error stack trace goes here" />)
 
       await user.click(screen.getByText('Show details'))
 
@@ -159,12 +141,7 @@ describe('ErrorBanner', () => {
     test('collapses details when clicked again', async () => {
       const user = userEvent.setup()
 
-      render(
-        <ErrorBanner
-          code="agent.response_failed"
-          details="Error details"
-        />
-      )
+      render(<ErrorBanner code="agent.response_failed" details="Error details" />)
 
       // Expand
       await user.click(screen.getByText('Show details'))
@@ -186,12 +163,7 @@ describe('ErrorBanner', () => {
     test('details button has aria-expanded attribute', async () => {
       const user = userEvent.setup()
 
-      render(
-        <ErrorBanner
-          code="agent.response_failed"
-          details="Details here"
-        />
-      )
+      render(<ErrorBanner code="agent.response_failed" details="Details here" />)
 
       const button = screen.getByText('Show details').closest('button')!
       expect(button).toHaveAttribute('aria-expanded', 'false')
@@ -201,12 +173,7 @@ describe('ErrorBanner', () => {
     })
 
     test('details button has aria-controls', () => {
-      render(
-        <ErrorBanner
-          code="agent.response_failed"
-          details="Details here"
-        />
-      )
+      render(<ErrorBanner code="agent.response_failed" details="Details here" />)
 
       const button = screen.getByText('Show details').closest('button')
       expect(button).toHaveAttribute('aria-controls', 'error-details')

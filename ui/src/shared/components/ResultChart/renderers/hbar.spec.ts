@@ -51,7 +51,10 @@ describe('renderHbar', () => {
       title: 'T',
       x: { key: 'c' },
       series: [{ key: 'v' }],
-      data: [{ c: 'gain', v: 30 }, { c: 'loss', v: -20 }],
+      data: [
+        { c: 'gain', v: 30 },
+        { c: 'loss', v: -20 },
+      ],
     } as unknown as ChartSpec
 
     const marks = renderHbar(input(spec, -50, 50))

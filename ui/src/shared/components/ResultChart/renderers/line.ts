@@ -37,7 +37,9 @@ export function renderLine({ spec, box, min, max, colors, fmt }: RenderInput): M
 
     for (const segment of segments) {
       if (segment.length < 2) continue
-      const line = segment.map((p, k) => `${k === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
+      const line = segment
+        .map((p, k) => `${k === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
+        .join(' ')
       if (spec.type === 'area' && si === 0) {
         const last = segment[segment.length - 1]
         const area = `${line} L ${last.x.toFixed(1)} ${baselineY.toFixed(1)} L ${segment[0].x.toFixed(1)} ${baselineY.toFixed(1)} Z`
@@ -62,7 +64,14 @@ export function renderLine({ spec, box, min, max, colors, fmt }: RenderInput): M
   const labelLimit = cats.length <= 6 ? 16 : 10
   cats.forEach((cat, i) => {
     if (i % step !== 0) return
-    marks.push({ kind: 'text', x: columnX(i), y: box.y0 + 16, text: truncate(cat, labelLimit), anchor: 'middle', variant: 'cat' })
+    marks.push({
+      kind: 'text',
+      x: columnX(i),
+      y: box.y0 + 16,
+      text: truncate(cat, labelLimit),
+      anchor: 'middle',
+      variant: 'cat',
+    })
   })
 
   return marks

@@ -12,7 +12,8 @@ function input(spec: ChartSpec, colors = ['#0a0', '#00a']): RenderInput {
 }
 
 const kinds = (marks: Mark[], kind: Mark['kind']) => marks.filter((m) => m.kind === kind)
-const paths = (marks: Mark[]) => marks.filter((m): m is Extract<Mark, { kind: 'path' }> => m.kind === 'path')
+const paths = (marks: Mark[]) =>
+  marks.filter((m): m is Extract<Mark, { kind: 'path' }> => m.kind === 'path')
 
 describe('renderLine', () => {
   test('breaks the line into separate segments at a null, not one bridging line', () => {
@@ -21,12 +22,7 @@ describe('renderLine', () => {
       title: 'T',
       x: { key: 'c' },
       series: [{ key: 'v' }],
-      data: [
-        { c: 'jan', v: 10 },
-        { v: null },
-        { c: 'mar', v: 30 },
-        { c: 'apr', v: 35 },
-      ],
+      data: [{ c: 'jan', v: 10 }, { v: null }, { c: 'mar', v: 30 }, { c: 'apr', v: 35 }],
     } as unknown as ChartSpec
 
     const marks = renderLine(input(spec))
@@ -64,10 +60,15 @@ describe('renderLine', () => {
       title: 'T',
       x: { key: 'c' },
       series: [{ key: 'v' }],
-      data: [{ c: 'a', v: 10 }, { c: 'b', v: 40 }],
+      data: [
+        { c: 'a', v: 10 },
+        { c: 'b', v: 40 },
+      ],
     } as unknown as ChartSpec
 
-    expect(paths(renderLine(input(spec))).some((p) => p.variant === 'area' && p.d.endsWith('Z'))).toBe(true)
+    expect(
+      paths(renderLine(input(spec))).some((p) => p.variant === 'area' && p.d.endsWith('Z'))
+    ).toBe(true)
   })
 
   test('centers a single-point series', () => {
@@ -89,7 +90,10 @@ describe('renderLine', () => {
       title: 'T',
       x: { key: 'c' },
       series: [{ key: 'a' }, { key: 'b' }],
-      data: [{ c: 'x', a: 10, b: null }, { c: 'y', a: 20, b: null }],
+      data: [
+        { c: 'x', a: 10, b: null },
+        { c: 'y', a: 20, b: null },
+      ],
     } as unknown as ChartSpec
 
     expect(paths(renderLine(input(spec)).filter((m) => m.kind === 'path'))).toHaveLength(1)
@@ -97,7 +101,16 @@ describe('renderLine', () => {
 
   test('thins x labels when crowded', () => {
     const data = Array.from({ length: 16 }, (_, i) => ({ c: `m${i}`, v: i }))
-    const spec = { type: 'line', title: 'T', x: { key: 'c' }, series: [{ key: 'v' }], data } as unknown as ChartSpec
-    expect(kinds(renderLine(input(spec)), 'text').filter((m) => m.kind === 'text' && m.variant === 'cat').length).toBeLessThan(16)
+    const spec = {
+      type: 'line',
+      title: 'T',
+      x: { key: 'c' },
+      series: [{ key: 'v' }],
+      data,
+    } as unknown as ChartSpec
+    expect(
+      kinds(renderLine(input(spec)), 'text').filter((m) => m.kind === 'text' && m.variant === 'cat')
+        .length
+    ).toBeLessThan(16)
   })
 })

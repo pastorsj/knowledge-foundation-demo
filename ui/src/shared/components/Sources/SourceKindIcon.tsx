@@ -15,7 +15,13 @@ interface Props {
  * icon dependencies.
  */
 export function SourceKindIcon({ kind, className = 'h-3.5 w-3.5' }: Props): ReactNode {
-  const common = { className, viewBox: '0 0 16 16', fill: 'none', stroke: 'currentColor', strokeWidth: 1.4 }
+  const common = {
+    className,
+    viewBox: '0 0 16 16',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.4,
+  }
   if (kind === 'web') {
     return (
       <svg {...common} aria-hidden="true">

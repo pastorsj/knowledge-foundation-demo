@@ -54,7 +54,14 @@ export function degenerateKpis(spec: ChartSpec): ChartKpi[] | null {
     const row = spec.data.find((r) => toNumber(r[key]) != null)
     if (!row) return [{ label: spec.title, value: '–' }]
     const cat = String(row[spec.x.key] ?? '')
-    return [{ label: spec.title, value: formatValue(values[0], fmt), sub: cat || undefined, tone: 'accent' }]
+    return [
+      {
+        label: spec.title,
+        value: formatValue(values[0], fmt),
+        sub: cat || undefined,
+        tone: 'accent',
+      },
+    ]
   }
 
   if (values.length >= 3 && values.every((v) => v >= 0)) {
@@ -90,5 +97,8 @@ export function normalizeChart(spec: ChartSpec): NormalizedChart {
   const ranked = [...spec.data]
     .sort((a, b) => rowMagnitude(spec, b) - rowMagnitude(spec, a))
     .slice(0, MAX_CATEGORY_BARS)
-  return { spec: { ...spec, data: ranked }, truncation: { shown: ranked.length, total: spec.data.length } }
+  return {
+    spec: { ...spec, data: ranked },
+    truncation: { shown: ranked.length, total: spec.data.length },
+  }
 }

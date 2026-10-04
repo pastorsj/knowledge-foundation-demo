@@ -18,7 +18,7 @@ describe('splitReferences', () => {
       '\n\n## Sources\n\n- [1] Market analytics result — market scan — evidence `hermes-receipt:abc`'
     const { body, sources } = splitReferences(content)
     expect(body).toBe(
-      'A claim [1].\n\n## Evidence limitation\n\nOne or more citations did not match evidence recorded for this run.',
+      'A claim [1].\n\n## Evidence limitation\n\nOne or more citations did not match evidence recorded for this run.'
     )
     expect(sources).toHaveLength(1)
     expect(sources[0].evidence).toEqual({ referenceId: 'hermes-receipt:abc' })
@@ -36,7 +36,11 @@ describe('splitReferences', () => {
       kind: 'web',
       label: 'nvidia.com',
     })
-    expect(sources[1]).toMatchObject({ url: 'https://docs.example.ai/report', kind: 'web', label: 'docs.example.ai' })
+    expect(sources[1]).toMatchObject({
+      url: 'https://docs.example.ai/report',
+      kind: 'web',
+      label: 'docs.example.ai',
+    })
   })
 
   test('parses the canonical `[N] Title: URL` colon form as a linked web source', () => {
@@ -64,7 +68,11 @@ describe('splitReferences', () => {
     const { body, sources } = splitReferences(content)
     expect(body).toBe('See attached docs [1] and the search [2].')
     expect(sources[0]).toMatchObject({ kind: 'doc', title: 'fleet_overview.pdf, p.4' })
-    expect(sources[1]).toMatchObject({ kind: 'doc', title: 'knowledge_search', label: 'knowledge_search' })
+    expect(sources[1]).toMatchObject({
+      kind: 'doc',
+      title: 'knowledge_search',
+      label: 'knowledge_search',
+    })
   })
 
   test('orders sources by their [N] index regardless of line order', () => {
@@ -120,7 +128,8 @@ describe('splitReferences', () => {
 
 describe('tabularizeEntityLines', () => {
   test('reflows 2+ consecutive label: value lines into a GFM table', () => {
-    const body = 'Top teams by job count:\n\nteam_051: ~11,285 jobs\nteam_009: ~8,210 jobs\nteam_044: ~6,140 jobs'
+    const body =
+      'Top teams by job count:\n\nteam_051: ~11,285 jobs\nteam_009: ~8,210 jobs\nteam_044: ~6,140 jobs'
     const out = tabularizeEntityLines(body)
     expect(out).toContain('| Item | Value |')
     expect(out).toContain('| --- | --- |')

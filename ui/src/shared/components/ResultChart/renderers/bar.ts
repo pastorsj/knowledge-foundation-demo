@@ -40,7 +40,14 @@ export function renderBar({ spec, box, min, max, colors, fmt }: RenderInput): Ma
       })
       if (seriesCount === 1) {
         const labelY = value >= 0 ? Math.min(y, baselineY) - 5 : Math.max(y, baselineY) + 12
-        marks.push({ kind: 'text', x: center, y: labelY, text: formatValue(value, fmt), anchor: 'middle', variant: 'value' })
+        marks.push({
+          kind: 'text',
+          x: center,
+          y: labelY,
+          text: formatValue(value, fmt),
+          anchor: 'middle',
+          variant: 'value',
+        })
       }
     })
   })
@@ -49,7 +56,14 @@ export function renderBar({ spec, box, min, max, colors, fmt }: RenderInput): Ma
   const labelLimit = cats.length <= 6 ? 16 : 10
   cats.forEach((cat, i) => {
     if (i % step !== 0) return
-    marks.push({ kind: 'text', x: box.x0 + band * i + band / 2, y: box.y0 + 16, text: truncate(cat, labelLimit), anchor: 'middle', variant: 'cat' })
+    marks.push({
+      kind: 'text',
+      x: box.x0 + band * i + band / 2,
+      y: box.y0 + 16,
+      text: truncate(cat, labelLimit),
+      anchor: 'middle',
+      variant: 'cat',
+    })
   })
 
   return marks

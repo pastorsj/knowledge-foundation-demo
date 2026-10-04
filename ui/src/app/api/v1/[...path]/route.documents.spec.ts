@@ -4,8 +4,21 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import { DELETE, GET, POST } from './route'
 
+/**
+ * A request as the server sees it: fetch's Request drops the forbidden headers a browser sets itself
+ * (Origin, Sec-Fetch-*), so the test puts them back the way Node's incoming request carries them.
+ */
+const withHeaders = (request: Request, headers?: HeadersInit): Request => {
+  if (headers) {
+    const all = new Headers(request.headers)
+    for (const [name, value] of new Headers(headers)) all.set(name, value)
+    Object.defineProperty(request, 'headers', { value: all })
+  }
+  return request
+}
+
 const call = (handler: typeof GET, path: string, init?: RequestInit) =>
-  handler(new Request(`http://ui.test/api/v1/${path}`, init), {
+  handler(withHeaders(new Request(`http://ui.test/api/v1/${path}`, init), init?.headers), {
     params: Promise.resolve({ path: path.split('/') }),
   })
 
@@ -33,12 +46,10 @@ describe('/api/v1 proxy: Your data', () => {
 
   test.each([
     ['GET', 'packs'],
-    ['GET', 'collections'],
     ['GET', 'collections/workspace'],
     ['GET', 'collections/workspace/documents'],
     ['GET', 'documents/job-1/status'],
     ['POST', 'collections'],
-    ['DELETE', 'collections/workspace'],
   ])('forwards %s /v1/%s', async (method, path) => {
     const handler = method === 'GET' ? GET : method === 'POST' ? POST : DELETE
     const response = await call(handler, path, {
@@ -104,5 +115,51 @@ describe('/api/v1 proxy: Your data', () => {
     form.append('files', new File(['x'.repeat(4096)], 'big.txt'))
 
     expect((await upload(form)).status).toBe(413)
+  })
+  test.each([
+    ['GET', 'collections'],
+    ['DELETE', 'collections/workspace'],
+    ['GET', 'collections/other/documents'],
+    ['POST', 'collections/other/documents'],
+  ])('refuses %s /v1/%s', async (method, path) => {
+    const handler = method === 'GET' ? GET : method === 'POST' ? POST : DELETE
+    expect((await call(handler, path, { method })).status).toBe(404)
+  })
+
+  test.each([
+    [{ 'sec-fetch-site': 'cross-site' }],
+    [{ 'sec-fetch-site': 'same-site' }],
+    [{ origin: 'https://evil.example', host: 'ui.test' }],
+  ])('refuses a write another site sends (%j)', async (headers) => {
+    for (const [handler, method, path] of [
+      [POST, 'POST', 'collections/workspace/documents'],
+      [DELETE, 'DELETE', 'collections/workspace/documents'],
+      [POST, 'POST', 'jobs/async/submit'],
+    ] as const) {
+      const response = await call(handler, path, { method, headers, body: '{}' })
+      expect(response.status).toBe(403)
+    }
+    expect(upstream).not.toHaveBeenCalled()
+  })
+
+  test('allows a same-origin write, and reads from anywhere', async () => {
+    const same = { 'sec-fetch-site': 'same-origin', origin: 'http://ui.test', host: 'ui.test' }
+    const form = new FormData()
+    form.append('files', new File(['a'], 'a.txt'))
+    const response = await POST(
+      withHeaders(
+        new Request('http://ui.test/api/v1/collections/workspace/documents', {
+          method: 'POST',
+          body: form,
+        }),
+        same
+      ),
+      { params: Promise.resolve({ path: UPLOAD_PATH }) }
+    )
+    expect(response.status).toBe(200)
+    const read = await call(GET, 'collections/workspace/documents', {
+      headers: { 'sec-fetch-site': 'cross-site' },
+    })
+    expect(read.status).toBe(200)
   })
 })

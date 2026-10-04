@@ -37,7 +37,7 @@ export const ResultChart: FC<{ spec: ChartSpec; truncation?: Truncation | null }
     const fmt = spec.y?.format ?? 'number'
     const colors = spec.series.map((s, i) => seriesColor(s.color, i))
     const values = spec.series.flatMap((s) =>
-      spec.data.map((row) => toNumber(row[s.key])).filter((v): v is number => v != null),
+      spec.data.map((row) => toNumber(row[s.key])).filter((v): v is number => v != null)
     )
     const { min, max } = computeDomain(values, fmt === 'percent')
     const height = chartHeight(spec)
@@ -74,7 +74,12 @@ export const ResultChart: FC<{ spec: ChartSpec; truncation?: Truncation | null }
 
   return (
     <figure ref={wrapRef} className="result-chart" aria-label={`${spec.type} chart: ${spec.title}`}>
-      <ChartToolbar spec={spec} dataOpen={dataOpen} dataId={dataId} onToggleData={() => setDataOpen((open) => !open)} />
+      <ChartToolbar
+        spec={spec}
+        dataOpen={dataOpen}
+        dataId={dataId}
+        onToggleData={() => setDataOpen((open) => !open)}
+      />
       {spec.kpis && <KpiTiles kpis={spec.kpis} />}
       <figcaption className="result-chart-head">
         <span className="result-chart-title">{spec.title}</span>
@@ -104,7 +109,7 @@ export const ResultChart: FC<{ spec: ChartSpec; truncation?: Truncation | null }
                 <stop offset="0%" stopColor={mark.color} stopOpacity={0.28} />
                 <stop offset="100%" stopColor={mark.color} stopOpacity={0} />
               </linearGradient>
-            ) : null,
+            ) : null
           )}
         </defs>
         {layout.marks.map((mark, i) => renderMark(mark, i, tipHandlers, gradPrefix))}
@@ -119,7 +124,11 @@ export const ResultChart: FC<{ spec: ChartSpec; truncation?: Truncation | null }
         <div
           role="tooltip"
           className="result-chart-tooltip pointer-events-none absolute z-10"
-          style={{ left: tooltip.x, top: tooltip.y, transform: 'translate(-50%, calc(-100% - 12px))' }}
+          style={{
+            left: tooltip.x,
+            top: tooltip.y,
+            transform: 'translate(-50%, calc(-100% - 12px))',
+          }}
         >
           {tooltip.text}
         </div>
@@ -132,7 +141,7 @@ function renderMark(
   mark: Mark,
   key: number,
   tipHandlers: (text: string) => { onMouseMove: (e: MouseEvent) => void; onMouseLeave: () => void },
-  gradPrefix: string,
+  gradPrefix: string
 ): ReactNode {
   switch (mark.kind) {
     case 'gridline':
@@ -164,7 +173,12 @@ function renderMark(
       )
     case 'path':
       return mark.variant === 'area' ? (
-        <path key={key} d={mark.d} fill={`url(#${gradPrefix}-area-${key})`} className="result-chart-area" />
+        <path
+          key={key}
+          d={mark.d}
+          fill={`url(#${gradPrefix}-area-${key})`}
+          className="result-chart-area"
+        />
       ) : (
         <path
           key={key}

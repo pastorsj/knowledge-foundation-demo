@@ -38,17 +38,17 @@ the Agent Activity panel from `activity/execution-timeline.module.css`.
 
 ## Files
 
-| Path | Role |
-| --- | --- |
-| `contract.ts` | Shape guard for events and receipts; anything else is dropped and counted |
-| `registry.ts` | Tool lookup by MCP or Hermes name; the logos on tool and resource nodes |
-| `store.ts`, `projection.ts` | Run state, and its reduction to what the views show |
-| `graph/` | The execution graph: events as graph facts (a component per tool server), the fixed topology and its states, the renderer |
-| `explorers/` | Per node: Auto Ontology (`OntologyLineageInspector`), the rest (`EvidenceInspector`, from `receipt-summary.ts`: retrieval passages, DuckDB SQL and rows, Kumo predictions) |
-| `activity/` | The Agent Activity panel's tabs: Thinking (display-safe milestones) and Timeline (the finished run's spans, with each action's recorded result) |
-| `replay/` | Recordings bundle and job export (`sources.ts`), the replay cursor and its controls |
-| `data-viewer/` | The Structured Database browser: tables, previews and read-only SQL; in replay, the bundle's copy (`database.json`) |
-| `trace-link.ts` | Phoenix trace and span links (shown when `PHOENIX_URL` is set) |
+| Path                        | Role                                                                                                                                                                       |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `contract.ts`               | Shape guard for events and receipts; anything else is dropped and counted                                                                                                  |
+| `registry.ts`               | Tool lookup by MCP or Hermes name; the logos on tool and resource nodes                                                                                                    |
+| `store.ts`, `projection.ts` | Run state, and its reduction to what the views show                                                                                                                        |
+| `graph/`                    | The execution graph: events as graph facts (a component per tool server), the fixed topology and its states, the renderer                                                  |
+| `explorers/`                | Per node: Auto Ontology (`OntologyLineageInspector`), the rest (`EvidenceInspector`, from `receipt-summary.ts`: retrieval passages, DuckDB SQL and rows, Kumo predictions) |
+| `activity/`                 | The Agent Activity panel's tabs: Thinking (display-safe milestones) and Timeline (the finished run's spans, with each action's recorded result)                            |
+| `replay/`                   | Recordings bundle and job export (`sources.ts`), the replay cursor and its controls                                                                                        |
+| `data-viewer/`              | The Structured Database browser: tables, previews and read-only SQL; in replay, the bundle's copy (`database.json`)                                                        |
+| `trace-link.ts`             | Phoenix trace and span links (shown when `PHOENIX_URL` is set)                                                                                                             |
 
 The graph has one node per technology a run can use: Documents (Retrieve Evidence, then Nemotron
 Parse, Nemotron Embed, Milvus and, when the receipt names a rerank model, Nemotron Rerank; without

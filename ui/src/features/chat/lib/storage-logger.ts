@@ -61,14 +61,11 @@ export const logQuotaExceededPruning = (
 ): void => {
   if (process.env.NODE_ENV !== 'development') return
 
-  console.warn(
-    `${LOG_PREFIX} ⚠️ QUOTA EXCEEDED - Pruning sessions`,
-    {
-      before: { sessions: beforeCount, sizeKB: beforeSizeKB },
-      after: { sessions: afterCount, sizeKB: afterSizeKB },
-      timestamp: getTimestamp(),
-    }
-  )
+  console.warn(`${LOG_PREFIX} ⚠️ QUOTA EXCEEDED - Pruning sessions`, {
+    before: { sessions: beforeCount, sizeKB: beforeSizeKB },
+    after: { sessions: afterCount, sizeKB: afterSizeKB },
+    timestamp: getTimestamp(),
+  })
 }
 
 /**

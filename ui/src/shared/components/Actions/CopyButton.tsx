@@ -27,7 +27,7 @@ export function CopyButton({ text, label = 'Copy' }: CopyButtonProps): ReactNode
     () => () => {
       if (resetTimer.current != null) clearTimeout(resetTimer.current)
     },
-    [],
+    []
   )
 
   const handleCopy = useCallback(async () => {

@@ -8,11 +8,7 @@ import { transcribeSpeech, type SpeechTranscriptionError } from '@/adapters/api/
 import { createBrowserSpeechRecorder, type SpeechRecorder } from './browser-recorder'
 
 export type SpeechInputState =
-  | 'idle'
-  | 'requesting-permission'
-  | 'recording'
-  | 'transcribing'
-  | 'error'
+  'idle' | 'requesting-permission' | 'recording' | 'transcribing' | 'error'
 
 interface UseSpeechInputOptions {
   enabled: boolean

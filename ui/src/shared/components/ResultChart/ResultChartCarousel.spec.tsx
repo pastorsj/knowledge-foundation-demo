@@ -17,7 +17,10 @@ const line = (title: string): ChartSpec => ({
   ],
 })
 
-const spec = { title: 'Peer trends', charts: [line('One'), line('Two'), line('Three')] } as ChartCarouselSpec
+const spec = {
+  title: 'Peer trends',
+  charts: [line('One'), line('Two'), line('Three')],
+} as ChartCarouselSpec
 
 describe('ResultChartCarousel', () => {
   test('renders the first chart and a position counter', () => {
@@ -45,7 +48,7 @@ describe('ResultChartCarousel', () => {
     rerender(
       <ResultChartCarousel
         spec={{ title: 'Peer trends', charts: [line('One'), line('Two')] } as ChartCarouselSpec}
-      />,
+      />
     )
     expect(screen.getByText('2 / 2')).toBeInTheDocument()
   })

@@ -18,7 +18,7 @@ describe('KpiTiles', () => {
           { label: 'Churn', value: '12%', sub: 'next quarter', tone: 'alarm' },
           { label: 'Count', value: '5' },
         ]}
-      />,
+      />
     )
     expect(container.querySelectorAll('.result-chart-kpi')).toHaveLength(2)
     expect(container.querySelector('.tone-alarm')).not.toBeNull()

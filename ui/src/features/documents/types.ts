@@ -69,6 +69,8 @@ export interface TrackedFile {
   /** The ingest pipeline's view of it (FileProgress and FileInfo extras) */
   kind?: 'document' | 'table' | null
   stage?: string | null
+  /** The last stage it reached before `failed` */
+  lastStage?: string | null
   stageDetail?: string | null
   parser?: string | null
   tables?: string[] | null

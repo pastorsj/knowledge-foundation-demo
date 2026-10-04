@@ -6,7 +6,7 @@
  *
  * The right-side "Agent Activity" panel: its rail, a resizable width, the
  * header with Stop and Close, and the execution feature's tabs (Thinking,
- * Timeline, Benchmark). Without an execution feature the panel is not rendered.
+ * Timeline). Without an execution feature the panel is not rendered.
  *
  * This panel PUSHES the chat area (60% of the width by default) rather than overlaying it.
  */

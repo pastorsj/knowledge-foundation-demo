@@ -9,10 +9,7 @@ const spec: ChartSpec = {
   type: 'bar',
   title: 'Top GPU Models!',
   x: { key: 'model', label: 'Model' },
-  series: [
-    { key: 'count', label: 'Count' },
-    { key: 'note' },
-  ],
+  series: [{ key: 'count', label: 'Count' }, { key: 'note' }],
   data: [
     { model: 'H100', count: 5120, note: 'fast, hot' },
     { model: 'A "special" 100', count: null, note: 'line\nbreak' },

@@ -77,9 +77,7 @@ describe('EvidenceInspector', () => {
     // The question's structured source by name, which the prediction read too
     const sources = screen.getByLabelText('Sources used')
     expect(within(sources).getByText('Source used')).toBeVisible()
-    expect([...sources.querySelectorAll('span')].map((chip) => chip.textContent)).toEqual([
-      'Sales',
-    ])
+    expect([...sources.querySelectorAll('span')].map((chip) => chip.textContent)).toEqual(['Sales'])
     const calls = screen.getAllByTestId('execution-evidence-call')
     expect(within(calls[0]).getByText('Recorded call 1 of 2')).toBeVisible()
     expect(within(calls[0]).getByRole('heading', { name: 'NVIDIA Kumo Prediction' })).toBeVisible()

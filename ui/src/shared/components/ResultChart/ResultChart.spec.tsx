@@ -41,7 +41,7 @@ describe('ResultChart', () => {
           series: [{ key: 'count' }, { key: 'other', label: 'Other' }],
           data: [{ model: 'H100', count: 10, other: 5 }],
         })}
-      />,
+      />
     )
     expect(container.querySelector('.result-chart-legend')).not.toBeNull()
     expect(screen.getByText('Other')).toBeInTheDocument()
@@ -50,7 +50,15 @@ describe('ResultChart', () => {
   test('renders horizontal, delta, line and area variants', () => {
     for (const type of ['hbar', 'delta', 'line', 'area'] as const) {
       const { container } = render(
-        <ResultChart spec={spec({ type, data: [{ model: 'a', count: 5 }, { model: 'b', count: -3 }] })} />,
+        <ResultChart
+          spec={spec({
+            type,
+            data: [
+              { model: 'a', count: 5 },
+              { model: 'b', count: -3 },
+            ],
+          })}
+        />
       )
       expect(container.querySelector('svg')).not.toBeNull()
     }
@@ -67,7 +75,7 @@ describe('ResultChart', () => {
 
   test('positions the tooltip safely when no bounding rect is available', () => {
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(
-      undefined as unknown as DOMRect,
+      undefined as unknown as DOMRect
     )
     const { container } = render(<ResultChart spec={spec()} />)
     const bar = container.querySelector('.result-chart-bar') as SVGElement
@@ -80,7 +88,7 @@ describe('ResultChart', () => {
       <ResultChart
         spec={spec({ kpis: [{ label: 'Total', value: '30' }] })}
         truncation={{ shown: 15, total: 40 }}
-      />,
+      />
     )
     expect(screen.getByText('Total')).toBeInTheDocument()
     expect(screen.getByText('Showing top 15 of 40')).toBeInTheDocument()

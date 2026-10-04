@@ -17,17 +17,31 @@ export function verticalAxis(
   min: number,
   max: number,
   fmt: ValueFormat,
-  unit?: string,
+  unit?: string
 ): Mark[] {
   const marks: Mark[] = []
   const span = max - min || 1
   for (const value of ticks(min, max, 4)) {
     const y = box.y0 - ((value - min) / span) * box.h
     marks.push({ kind: 'gridline', x1: box.x0, y1: y, x2: box.x1, y2: y })
-    marks.push({ kind: 'text', x: box.x0 - 8, y: y + 3.5, text: formatTick(value, fmt), anchor: 'end', variant: 'tick' })
+    marks.push({
+      kind: 'text',
+      x: box.x0 - 8,
+      y: y + 3.5,
+      text: formatTick(value, fmt),
+      anchor: 'end',
+      variant: 'tick',
+    })
   }
   if (unit) {
-    marks.push({ kind: 'text', x: box.x0, y: box.y1 - 6, text: truncate(unit, 22), anchor: 'start', variant: 'unit' })
+    marks.push({
+      kind: 'text',
+      x: box.x0,
+      y: box.y1 - 6,
+      text: truncate(unit, 22),
+      anchor: 'start',
+      variant: 'unit',
+    })
   }
   return marks
 }
@@ -39,7 +53,14 @@ export function horizontalAxis(box: PlotBox, min: number, max: number, fmt: Valu
   for (const value of ticks(min, max, 4)) {
     const x = box.x0 + ((value - min) / span) * box.w
     marks.push({ kind: 'gridline', x1: x, y1: box.y1, x2: x, y2: box.y0 })
-    marks.push({ kind: 'text', x, y: box.y0 + 16, text: formatTick(value, fmt), anchor: 'middle', variant: 'tick' })
+    marks.push({
+      kind: 'text',
+      x,
+      y: box.y0 + 16,
+      text: formatTick(value, fmt),
+      anchor: 'middle',
+      variant: 'tick',
+    })
   }
   return marks
 }

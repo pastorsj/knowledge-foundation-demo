@@ -45,7 +45,13 @@ describe('degenerateKpis', () => {
   })
 
   test('a multi-row sparse chart with one numeric point stays a chart', () => {
-    const sparse = spec({ data: [{ cat: 'a', v: 10 }, { cat: 'b', v: null }, { cat: 'c', v: null }] })
+    const sparse = spec({
+      data: [
+        { cat: 'a', v: 10 },
+        { cat: 'b', v: null },
+        { cat: 'c', v: null },
+      ],
+    })
     expect(degenerateKpis(sparse)).toBeNull()
   })
 
@@ -56,7 +62,13 @@ describe('degenerateKpis', () => {
 
   test('near-flat data downgrades to an approximate KPI', () => {
     const kpis = degenerateKpis(
-      spec({ data: [{ cat: 'a', v: 100 }, { cat: 'b', v: 100 }, { cat: 'c', v: 100.1 }] }),
+      spec({
+        data: [
+          { cat: 'a', v: 100 },
+          { cat: 'b', v: 100 },
+          { cat: 'c', v: 100.1 },
+        ],
+      })
     )
     expect(kpis?.[0]).toMatchObject({ value: '≈ 100.1', sub: 'across all 3', tone: 'accent' })
   })
@@ -64,17 +76,44 @@ describe('degenerateKpis', () => {
   test('near-flat data prefers the spec kpis when present', () => {
     const own = [{ label: 'X', value: '1' }]
     const kpis = degenerateKpis(
-      spec({ data: [{ cat: 'a', v: 100 }, { cat: 'b', v: 100 }, { cat: 'c', v: 100 }], kpis: own }),
+      spec({
+        data: [
+          { cat: 'a', v: 100 },
+          { cat: 'b', v: 100 },
+          { cat: 'c', v: 100 },
+        ],
+        kpis: own,
+      })
     )
     expect(kpis).toBe(own)
   })
 
   test('genuinely varying data is not degenerate', () => {
-    expect(degenerateKpis(spec({ data: [{ cat: 'a', v: 1 }, { cat: 'b', v: 50 }, { cat: 'c', v: 99 }] }))).toBeNull()
+    expect(
+      degenerateKpis(
+        spec({
+          data: [
+            { cat: 'a', v: 1 },
+            { cat: 'b', v: 50 },
+            { cat: 'c', v: 99 },
+          ],
+        })
+      )
+    ).toBeNull()
   })
 
   test('data with a negative value skips the flat check', () => {
-    expect(degenerateKpis(spec({ data: [{ cat: 'a', v: -1 }, { cat: 'b', v: 2 }, { cat: 'c', v: 3 }] }))).toBeNull()
+    expect(
+      degenerateKpis(
+        spec({
+          data: [
+            { cat: 'a', v: -1 },
+            { cat: 'b', v: 2 },
+            { cat: 'c', v: 3 },
+          ],
+        })
+      )
+    ).toBeNull()
   })
 })
 
@@ -91,7 +130,7 @@ describe('normalizeChart', () => {
       const result = normalizeChart(spec({ type, data }))
       expect(result.truncation).toBeNull()
       expect(result.spec.data).toHaveLength(40)
-    },
+    }
   )
 
   test('caps a large ranking to the largest N and reports it', () => {
