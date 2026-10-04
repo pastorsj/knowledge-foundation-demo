@@ -69,7 +69,12 @@ or `evidence`.
   value" can mean per order or per customer; say which.
 - Keep measures at their natural grain. Ask for totals before a one-to-many join
   can multiply them.
-- State date windows as explicit dates, with whether the end date is included.
+- State date windows as explicit dates, and give the end as the first day
+  after the window: "on or after 2026-07-01 and before 2026-10-01". Timestamp
+  columns hold times of day, so an inclusive end date ("to 2026-09-30") can
+  drop the last day.
+- Say whether returns, refunds or cancellations reduce a sales measure. Auto
+  Ontology may subtract them from "net sales" unless told not to.
 - Ask separate questions for different time grains, such as daily and monthly.
 - A correlation in the rows is not a cause.
 
