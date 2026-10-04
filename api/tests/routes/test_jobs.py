@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import shutil
 from typing import Any
 
 import httpx
@@ -427,3 +428,26 @@ async def test_a_follow_up_carries_the_earlier_answers_of_its_conversation(api, 
 
 async def test_health_reports_the_store_and_the_runner(api):
     assert (await api.get("/health")).json() == {"status": "ok"}
+
+
+@pytest.mark.parametrize("features", ["retrieval,tables,ontology"])
+async def test_auto_ontology_is_offered_only_with_the_source_it_answers_from(app, api, knowledge_dir, fake_hermes):
+    uploads = read_manifest(knowledge_dir, "sources", "retail.sales")
+    uploads |= {"id": "workspace.tables", "pack_id": "workspace"}
+    uploads["database"] |= {"alias": "workspace_tables", "path": "sources/workspace.tables/tables.duckdb"}
+    write_manifest(knowledge_dir, "sources", uploads)
+    tables = knowledge_dir / "sources" / "workspace.tables"
+    tables.mkdir(parents=True)
+    shutil.copyfile(knowledge_dir / "sources" / "retail.sales" / "tables.duckdb", tables / "tables.duckdb")
+
+    response = await submit(api, "job-1", data_sources=["workspace.tables"])  # AUTO_ONTOLOGY_SOURCE is retail.sales
+    assert response.status_code == 200, response.text
+    request = await stored_request(app, "job-1")
+    assert request["toolsets"] == ["skills", "tables"]
+    assert (request["ontology_source_id"], request["ontology_database_name"]) == (None, None)
+
+    await submit(api, "job-2", data_sources=["workspace.tables", "retail.sales"])
+    request = await stored_request(app, "job-2")
+    assert request["toolsets"] == ["skills", "auto_ontology", "tables"]
+    assert (request["ontology_source_id"], request["ontology_database_name"]) == ("retail.sales", "retail_sales")
+    assert request["database_name"] == "workspace_tables"  # query_tables' receipts: the first structured source

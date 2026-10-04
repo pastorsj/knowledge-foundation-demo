@@ -39,8 +39,18 @@ async def test_execution_scope_names_the_jobs_sources_database_and_collection(se
         ],
         "database_name": "retail_sales",
         "collection": "knowledge",
+        "ontology_source_id": None,  # no ontology feature
+        "ontology_database_name": None,
         "models": {"efficient": "nvidia/efficient", "capable": "openai/capable"},
     }
+
+
+@pytest.mark.parametrize("features", ["retrieval,tables,ontology"])
+async def test_execution_scope_names_the_source_auto_ontology_answers_from(api, app, fake_hermes):
+    await start_job(api, app, sources=["retail.policies", "retail.sales"])  # retail.sales: AUTO_ONTOLOGY_SOURCE
+
+    body = (await scope(api)).json()
+    assert (body["ontology_source_id"], body["ontology_database_name"]) == ("retail.sales", "retail_sales")
 
 
 async def test_execution_scope_omits_what_the_job_did_not_select(api, app, fake_hermes):
@@ -155,3 +165,12 @@ async def test_a_model_call_becomes_an_llm_call_event_with_its_tier(api, app, fa
     bad = call | {"tier": "premium"}
     headers = {"X-Receipt-Key": RECEIPT_KEY}
     assert (await api.post("/internal/hermes/jobs/job-1/llm-calls", json=bad, headers=headers)).status_code == 422
+
+
+def test_jobs_run_one_at_a_time_as_the_plugin_keeps_one_scope():
+    from pydantic import ValidationError
+
+    from demo_api.settings import Settings
+
+    with pytest.raises(ValidationError, match="job_max_active"):
+        Settings(job_max_active=2)

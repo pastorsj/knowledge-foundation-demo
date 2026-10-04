@@ -41,6 +41,7 @@ router = APIRouter(prefix="/v1/jobs/async", tags=["jobs"])
 
 MAX_INPUT_CHARS = 32_768
 RETRY_AFTER_SECONDS = 30
+AUTO_ONTOLOGY_SERVER = "auto_ontology"  # the Hermes MCP server (toolset) of ask_question
 _CONVERSATION_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 _SSE_HEADERS = {"Cache-Control": "no-cache", "X-Accel-Buffering": "no"}
 
@@ -90,16 +91,26 @@ async def submit(
     selected = [available[source_id] for source_id in source_ids]
     families = {family for source in selected for family in source.capabilities}
     packs = {source.pack_id for source in selected}
+    toolsets = services.registry.toolsets(families, services.settings.features)
+    # Auto Ontology answers from AUTO_ONTOLOGY_SOURCE alone: offered for any other structured source, it would answer
+    # from a database the user did not select.
+    ontology = available.get(services.settings.auto_ontology_source)
+    if AUTO_ONTOLOGY_SERVER not in toolsets or ontology is None or ontology.id not in source_ids:
+        ontology = None
+        toolsets = [name for name in toolsets if name != AUTO_ONTOLOGY_SERVER]
     request: dict[str, Any] = {
         "question": question,
         "pack_id": body.pack_id or (packs.pop() if len(packs) == 1 else None),
         "source_ids": source_ids,
         "conversation_id": conversation_id,
         "catalog": [source.catalog_entry() for source in selected],
-        "toolsets": services.registry.toolsets(families, services.settings.features),
-        # The agent plugin's execution scope: the first structured source's DuckDB alias, the documents' collection
+        "toolsets": toolsets,
+        # The agent plugin's execution scope: the first structured source's DuckDB alias, the documents' collection,
+        # and the source Auto Ontology answers from with its alias (when the job selected it)
         "database_name": next((source.database_name for source in selected if source.database_name), None),
         "collection": next((source.collection for source in selected if source.collection), None),
+        "ontology_source_id": ontology and ontology.id,
+        "ontology_database_name": ontology and ontology.database_name,
     }
     job_id = body.job_id or str(uuid.uuid4())
     try:

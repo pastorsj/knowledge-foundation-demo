@@ -72,7 +72,8 @@ router = APIRouter(prefix="/internal/hermes", include_in_schema=False, dependenc
 
 @router.get("/jobs/{job_id}/execution-scope")
 async def execution_scope(job_id: str, services: ServicesDep) -> dict[str, Any]:
-    """The job's source ids, its database and its documents' collection, all fixed at submit."""
+    """The job's source ids, its database and its documents' collection, all fixed at submit; and the source Auto
+    Ontology answers from with its database alias, when the job selected it (else null)."""
     job = await _live_job(services, job_id)
     settings = services.settings
     models = {"efficient": settings.agent_efficient_model, "capable": settings.agent_capable_model}
@@ -82,6 +83,8 @@ async def execution_scope(job_id: str, services: ServicesDep) -> dict[str, Any]:
         "sources": [{"id": entry["id"], "capabilities": entry["capabilities"]} for entry in job.request["catalog"]],
         "database_name": job.request.get("database_name"),
         "collection": job.request.get("collection"),
+        "ontology_source_id": job.request.get("ontology_source_id"),
+        "ontology_database_name": job.request.get("ontology_database_name"),
         "models": {tier: model for tier, model in models.items() if model},
     }
 

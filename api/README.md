@@ -175,7 +175,7 @@ Secrets can also be files in `/run/secrets` named after the setting (Compose sec
 | `INGEST_URL` | `http://ingest:8330` | The ingest service the documents routes forward to |
 | `INGEST_MAX_REQUEST_MB` | `512` | The largest upload request forwarded (413 beyond) |
 | `API_DB_PATH` | `/var/lib/demo-api/jobs.db` | SQLite job store |
-| `JOB_MAX_ACTIVE`, `JOB_MAX_QUEUED` | `1`, `4` | Queue size |
+| `JOB_MAX_ACTIVE`, `JOB_MAX_QUEUED` | `1`, `4` | Queue size (`JOB_MAX_ACTIVE` must be 1: the receipts plugin keeps one job's scope) |
 | `JOB_DEADLINE_SECONDS` | `1200` | Per-job backstop deadline |
 | `JOB_RETENTION_SECONDS` | `86400` | How long finished jobs are kept |
 | `HERMES_RUN_WALL_TIMEOUT_SECONDS` | `900` | Hermes run deadline |

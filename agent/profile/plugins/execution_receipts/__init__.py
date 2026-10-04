@@ -174,9 +174,13 @@ class ExecutionReceipts:
         if not source_ids:
             return _block(f"None of the job's selected sources allows {tool['label']}.")
         if tool["server"] == "auto_ontology":
+            # Auto Ontology answers from the one source it was set up for (AUTO_ONTOLOGY_SOURCE) and takes no scope
+            # argument: it runs only when the job selected that source.
+            if scope.get("ontology_source_id") not in source_ids:
+                return _block(f"{tool['label']} answers only from a source this job did not select.")
             if tool["id"] == "ask_question":
                 _drop_arguments(args, ASK_QUESTION_DROPPED, tool_name)
-            return None  # Auto Ontology serves only the database it was set up for: it takes no scope argument.
+            return None
         return {"action": "modify", "args": {"source_ids": source_ids}}
 
     def post_tool_call(self, **call: Any) -> None:
@@ -225,10 +229,13 @@ class ExecutionReceipts:
         evidence_id = None
         # Receipts are best effort: a failure here must never fail the tool call.
         try:
+            scope = self.scope(session_id)
+            # Auto Ontology's answers come from its own source's database, whichever structured source is first.
+            database = "ontology_database_name" if tool["server"] == "auto_ontology" else "database_name"
             receipt = build_receipt(
                 tool,
                 job_id=session_id,
-                database_name=self.scope(session_id).get("database_name"),
+                database_name=scope.get(database),
                 tool_call_id=tool_call_id,
                 turn_id=turn_id,
                 args=args or {},

@@ -53,6 +53,8 @@ SCOPE = {
     ],
     "database_name": "retail_sales",
     "collection": "knowledge",
+    "ontology_source_id": STRUCTURED,  # AUTO_ONTOLOGY_SOURCE, selected
+    "ontology_database_name": "retail_sales",
     "models": {"efficient": EFFICIENT, "capable": CAPABLE},
 }
 
@@ -563,6 +565,8 @@ def test_other_tools_keep_their_arguments(hooks):
             {**SCOPE, "sources": [{"id": STRUCTURED, "capabilities": ["structured_prediction"]}]},
             False,
         ),
+        ("mcp__auto_ontology__ask_question", {**SCOPE, "ontology_source_id": None}, False),
+        ("mcp__auto_ontology__ask_question", {**SCOPE, "ontology_source_id": "healthcare.clinical"}, False),
         ("mcp__retrieval__retrieve_evidence", SCOPE, True),
         ("mcp__retrieval__retrieve_evidence", {"unexpected": "shape"}, False),
     ],
@@ -573,6 +577,8 @@ def test_other_tools_keep_their_arguments(hooks):
         "no-table-source",
         "no-prediction-source",
         "no-structured-retrieval",
+        "ontology-source-not-selected",
+        "ontology-source-outside-the-scope",
         "api-down",
         "bad-scope",
     ],
@@ -704,3 +710,13 @@ def test_hermes_enables_the_plugin_and_gets_its_four_hooks(monkeypatch, config):
     plugin.register(Context())
     assert sorted(registered) == sorted(manifest["provides_hooks"])
     assert set(plugin.CONTENT) == {tool["receipt_kind"] for tool in REGISTRY["tools"]}
+
+
+def test_auto_ontology_receipts_name_its_own_database_not_the_first_structured_one():
+    api = FakeApi({**SCOPE, "database_name": "workspace_tables"})  # the first structured source is the uploads
+    hooks = plugin.ExecutionReceipts(REGISTRY, api)
+    result = {"answer": "S-12", "sql": "SELECT 1", "rows": [], "row_count": 0, "resolution_lineage": []}
+
+    run_tool(hooks, "ask_question", {"question": "Which store sold the most?"}, result)
+
+    assert posted_receipt(api)["content"]["databaseName"] == "retail_sales"

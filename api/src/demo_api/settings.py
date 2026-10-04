@@ -45,7 +45,9 @@ class Settings(BaseSettings):
 
     # Job store and runner
     api_db_path: Path = Path("/var/lib/demo-api/jobs.db")
-    job_max_active: int = Field(default=1, ge=1)
+    # One job at a time: the agent's receipts plugin keeps one job's execution scope and recorded calls
+    # (agent/profile/plugins/execution_receipts/__init__.py, ExecutionReceipts.scope).
+    job_max_active: int = Field(default=1, ge=1, le=1)
     job_max_queued: int = Field(default=4, ge=0)
     job_deadline_seconds: float = Field(default=1_200, gt=0)
     job_retention_seconds: float = Field(default=86_400, gt=0)
