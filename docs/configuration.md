@@ -7,8 +7,8 @@ SPDX-License-Identifier: Apache-2.0
 
 All configuration lives in `.env` at the repository root. `./scripts/demo.sh init` creates it from
 [`.env.example`](../.env.example) with mode 600 and fills in the internal secrets; you add one build.nvidia.com
-(`nvapi-`) key, the remote Kumo Relational NIM's URL and key for predictions, and pick the profiles. `.env` is gitignored and must never be committed. `./scripts/demo.sh replay`
-needs no `.env` at all.
+(`nvapi-`) key, the remote Kumo Relational NIM's URL and key for predictions, and pick the profiles. `.env` is
+gitignored and must never be committed. `./scripts/demo.sh replay` needs no `.env` at all.
 
 ## How `.env` is read
 

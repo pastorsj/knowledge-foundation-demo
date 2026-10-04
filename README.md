@@ -74,9 +74,9 @@ on 127.0.0.1. [Architecture](docs/architecture.md) has the components, the reque
 ## Run it
 
 You need Docker Engine 28+ with Compose 2.30+ on Linux with kernel 6.2+, bash, curl and an `nvapi-` key from
-[build.nvidia.com](https://build.nvidia.com). The `parse` profile needs an NVIDIA GPU with the NVIDIA Container
-Toolkit; the `kumo` profile also needs an x86_64 host. OpenShell 0.1.2 runs in containers that `demo.sh` pins
-and builds, so there is no CLI to install.
+[build.nvidia.com](https://build.nvidia.com), plus uv and Node.js 22 for the tests and data commands. The `parse`
+profile needs an NVIDIA GPU with the NVIDIA Container Toolkit; the `kumo` profile also needs an x86_64 host.
+OpenShell 0.1.2 runs in containers that `demo.sh` pins and builds, so there is no CLI to install.
 
 ```bash
 git clone https://github.com/pastorsj/knowledge-foundation-demo.git && cd knowledge-foundation-demo

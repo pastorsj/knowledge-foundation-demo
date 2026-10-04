@@ -28,8 +28,8 @@ an hour). A repeat `up` with nothing changed recreates nothing and keeps the san
 
 ```text
 industry packs:
-  financial-services   ready      22/22 files
-  healthcare           ingesting  9/20 files
+  financial-services   ready      14/14 files
+  healthcare           ingesting  6/13 files
 ```
 
 A pack's questions are offered once its sources are `ready` or `ingesting`. `down --volumes` empties the catalog;

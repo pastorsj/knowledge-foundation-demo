@@ -12,16 +12,10 @@
 # demo.sh eval run directories: a deployment's answers and evidence
 /eval/runs/
 
-# Data pack build outputs
-/data/builds/
-/data/active
-*.duckdb
-*.duckdb.wal
-
 # Packs commit their tables as CSV and XLSX; database and columnar files are built by ingest.
 # Parquet is allowed only in test fixtures; the pre-commit hook enforces the same rule.
-/data/external/
-.verified.json
+*.duckdb
+*.duckdb.wal
 *.parquet
 *.arrow
 *.feather
