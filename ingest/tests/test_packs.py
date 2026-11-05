@@ -154,6 +154,10 @@ def test_the_digest_covers_the_parser_and_embed_configuration(pack_settings: Set
     assert len({disabled, enabled, other_model}) == 3
     # The URL alone does not change what Parse produces.
     assert enabled == packs.pack_digest(pack_dir, replace(pack_settings, parse_base_url="http://elsewhere:8000/v1"))
+    # The output cap does: a page cut at the old cap is read again.
+    capped = replace(pack_settings, parse_base_url="http://parse:8000/v1", parse_max_tokens=4000)
+    assert enabled != packs.pack_digest(pack_dir, capped)
+    assert disabled == packs.pack_digest(pack_dir, replace(pack_settings, parse_base_url="", parse_max_tokens=4000))
 
 
 def test_turning_parse_on_ingests_the_pack_again(
@@ -276,7 +280,10 @@ def test_a_failed_re_ingest_keeps_the_previous_chunks(
     assert "digest" not in catalog.read_pack("mini")  # transient: the next sync tries again
 
 
-@pytest.mark.parametrize(("file", "failure"), [("pdf", "http-503"), ("pdf", "slow"), ("png", "http-503")])
+@pytest.mark.parametrize(
+    ("file", "failure"),
+    [("pdf", "http-503"), ("pdf", "slow"), ("png", "http-503"), ("pdf", "degraded"), ("png", "special-tokens")],
+)
 def test_a_parse_that_stops_answering_mid_file_withholds_the_digest(
     *,
     pack_settings: Settings,
@@ -296,6 +303,10 @@ def test_a_parse_that_stops_answering_mid_file_withholds_the_digest(
     if failure == "slow":
         fake_parse.delay = 5
         settings = replace(settings, stage_timeout_s=2)
+    elif failure == "degraded":
+        fake_parse.fail_status, fake_parse.fail_message = 400, "DEGRADED function cannot be invoked"
+    elif failure == "special-tokens":
+        fake_parse.degenerate = True
     else:
         fake_parse.fail_status = 503
 

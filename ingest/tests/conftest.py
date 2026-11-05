@@ -44,6 +44,13 @@ RECORD_FROM = os.environ.get("INGEST_RECORD_PARSE_URL", "").rstrip("/")
 DIMENSION = 2048  # nvidia/nemotron-3-embed-1b
 
 
+@pytest.fixture(autouse=True)
+def _no_parse_retry_pause(monkeypatch: pytest.MonkeyPatch) -> None:
+    from demo_ingest import documents
+
+    monkeypatch.setattr(documents, "PARSE_RETRY_DELAYS", (0.0, 0.0))
+
+
 @pytest.fixture
 def knowledge_dir(tmp_path: Path) -> Path:
     path = tmp_path / "knowledge"
@@ -257,6 +264,9 @@ class FakeParse:
     label: str = "unlabelled"
     delay: float = 0.0
     fail_status: int | None = None
+    fail_message: str = "injected failure"
+    fail_count: int | None = None  # fail only this many requests, then answer (None: every request)
+    degenerate: bool = False  # answer "<s><s>..." until max_tokens, as an unhealthy hosted function did
     requests: list[dict[str, Any]] = field(default_factory=list)
     server: ThreadingHTTPServer | None = None
     _served: dict[str, int] = field(default_factory=dict)
@@ -276,8 +286,21 @@ class FakeParse:
         digest = hashlib.sha256(base64.b64decode(image.split(",", 1)[1])).hexdigest()
         with self._lock:
             self.requests.append({**body, "image_sha256": digest})
-            if self.fail_status is not None:
-                return self.fail_status, {"error": {"message": "injected failure"}}
+            if self.fail_status is not None and self.fail_count != 0:
+                if self.fail_count is not None:
+                    self.fail_count -= 1
+                return self.fail_status, {"error": {"message": self.fail_message}}
+            if self.degenerate:
+                return 200, {
+                    "id": "degenerate",
+                    "created": 0,
+                    "object": "chat.completion",
+                    "model": PARSE_MODEL,
+                    "choices": [
+                        {"index": 0, "message": {"role": "assistant", "content": "<s>" * 64}, "finish_reason": "length"}
+                    ],
+                    "usage": {"prompt_tokens": 6, "completion_tokens": 64, "total_tokens": 70},
+                }
             if RECORD_FROM:
                 return 200, self._record(body, digest)
             index = self.index()

@@ -11,8 +11,11 @@ When Parse is disabled, unreachable, failing, or slower than the parse budget (m
 falls back to its text layer: pypdfium2's text of each page becomes one Markdown section (``## Page N``) that
 docling's Markdown backend converts; the file records parser ``pdf-text-layer`` and a warning. An image has no text
 layer, so it fails with ``parser_unavailable``. A fallback is ``transient`` when another try may read the file with
-Parse: Parse did not answer (connection error, HTTP 5xx, 408 or 429, or slower than the budget). A 4xx or empty
-output would end the same way again.
+Parse: Parse did not answer (connection error, HTTP 5xx, 408 or 429, or slower than the budget), NVCF refused a
+``DEGRADED function``, or a page came back as nothing but special tokens until ``max_tokens`` (``<s><s>...``, seen
+from build.nvidia.com while its function was unhealthy). A transient result is tried again inside the budget after a
+pause (``PARSE_RETRY_DELAYS``), keeping the attempt with the fewest unread pages; if it stays transient, the pack's
+digest is withheld so the next ``data sync`` tries again. Any other 4xx, or an empty answer, would end the same way.
 
 Chunks come from docling's HybridChunker, sized with the embed model's own tokenizer; each is embedded as its
 contextualized text (heading path + text).
@@ -92,7 +95,15 @@ BORN_DIGITAL = {
 }
 _PAGE_HEADING = re.compile(r"^Page (\d+)$")
 # How docling reports a Parse that did not answer: requests' connection errors and timeouts, or the HTTP status.
-_TRANSIENT = re.compile(r"HTTP (?:5\d\d|408|429)\b|connection|timeout|timed out|max retries", re.IGNORECASE)
+# NVCF answers 400 "DEGRADED function cannot be invoked" while a hosted function is unhealthy; DEGENERATE_OUTPUT is
+# how this module reports a page whose answer was only special tokens.
+DEGENERATE_OUTPUT = "Nemotron Parse returned only special tokens"
+_TRANSIENT = re.compile(
+    rf"HTTP (?:5\d\d|408|429)\b|connection|timeout|timed out|max retries|DEGRADED|{DEGENERATE_OUTPUT}", re.IGNORECASE
+)
+_SPECIAL_TOKENS = re.compile(r"</?s>|<pad>|<unk>|\s")
+# Pauses before the second and third Parse attempts at a file whose result was transient (within the parse budget).
+PARSE_RETRY_DELAYS: tuple[float, ...] = (15.0, 45.0)
 
 Progress = Callable[[int, int], None]
 StageCallback = Callable[[str, str | None, float], None]
@@ -159,6 +170,23 @@ class ProgressVlmPipeline(VlmPipeline):
         )
         if (report := _page_progress.get()) is not None:
             report(len(processed_page_nos), conv_res.input.page_count)
+
+    def _determine_status(self, conv_res):
+        """docling's status, with a page that hit ``max_tokens`` on special tokens alone reported as such: that is
+        the endpoint misbehaving (transient), not a page too long for the cap."""
+        status = super()._determine_status(conv_res)
+        degenerate = {
+            page.page_no
+            for page in conv_res.pages
+            if (response := page.predictions.vlm_response) is not None
+            and getattr(response.stop_reason, "value", response.stop_reason) == "length"
+            and not _SPECIAL_TOKENS.sub("", response.text or "")
+        }
+        for position, error in enumerate(conv_res.errors):
+            if getattr(error, "page_no", None) in degenerate:
+                message = f"{DEGENERATE_OUTPUT} until max_tokens."
+                conv_res.errors[position] = error.model_copy(update={"error_message": message})
+        return status
 
 
 def probe_parse(settings: Settings) -> str | None:
@@ -266,6 +294,39 @@ def convert(
 
 
 def _parse(path: Path, fmt: str, settings: Settings, report: Progress, *, budget: float, remaining: float) -> Converted:
+    """Convert through Parse, trying again after a pause while the result is transient and the budget allows; the
+    attempt with the fewest unread pages wins."""
+    deadline = time.monotonic() + remaining
+    best: Converted | None = None
+    failure: _ParseUnavailable | None = None
+    for attempt, delay in enumerate((0.0, *PARSE_RETRY_DELAYS), start=1):
+        if attempt > 1:
+            if time.monotonic() + delay >= deadline:
+                break
+            logger.warning(
+                "%s: Nemotron Parse attempt %d of %d in %.0f s", path.name, attempt, 1 + len(PARSE_RETRY_DELAYS), delay
+            )
+            time.sleep(delay)
+        try:
+            converted = _parse_once(path, fmt, settings, report, budget=budget, remaining=deadline - time.monotonic())
+        except _ParseUnavailable as unavailable:
+            if not unavailable.transient:
+                raise
+            failure = unavailable
+            continue
+        if not converted.transient:
+            return converted
+        if best is None or len(converted.warnings) < len(best.warnings):
+            best = converted
+    if best is not None:
+        return best
+    assert failure is not None
+    raise failure
+
+
+def _parse_once(
+    path: Path, fmt: str, settings: Settings, report: Progress, *, budget: float, remaining: float
+) -> Converted:
     """Convert through Parse in a thread of its own, so a Parse that stops answering costs at most ``budget``."""
     converter = _parse_converter(settings, budget)
     outcome: dict[str, Any] = {}
@@ -291,9 +352,10 @@ def _parse(path: Path, fmt: str, settings: Settings, report: Progress, *, budget
         reason = errors or f"the conversion ended {result.status.value}"
         raise _ParseUnavailable(reason, transient=is_transient(errors))
     document = result.document
-    if not document.texts and not document.tables:
-        raise _ParseUnavailable("it returned no content", transient=False)
     page_errors = [error for error in result.errors if getattr(error, "page_no", None) is not None]
+    if not document.texts and not document.tables:
+        transient = any(is_transient(error.error_message) for error in page_errors)
+        raise _ParseUnavailable("it returned no content", transient=transient)
     warnings = [
         f"Nemotron Parse could not read page {error.page_no}: {redact(error.error_message)}"[:500]
         for error in page_errors

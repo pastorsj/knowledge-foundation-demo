@@ -63,11 +63,12 @@ timeout, a PDF is read from its text layer instead (parser `pdf-text-layer`, wit
 Every `PACKS_DIR/<id>/pack.yaml` (validated with `data/schemas`) is ingested through the same pipeline into
 `<id>.<source>` sources, with the pack's declared keys, column descriptions and prediction templates. The server
 syncs in the background at startup; the command syncs and exits non-zero if any pack or file failed. A pack is skipped
-when its digest is unchanged: sha256 over `pack.yaml`, `questions.yaml` and `files/**`, plus the Parse model (or
-`pdf-text-layer` when Parse is disabled) and the embed model. The digest is recorded only when every file is ready
+when its digest is unchanged: sha256 over `pack.yaml`, `questions.yaml` and `files/**`, plus the Parse model and
+`PARSE_MAX_TOKENS` (or `pdf-text-layer` when Parse is disabled) and the embed model. The digest is recorded only when every file is ready
 or failed for a reason another sync would repeat (its content: `unsupported_type`, `type_mismatch`, `empty_file`,
 `too_large`, `load_failed`, `conversion_failed`, a Parse 4xx or empty output; or Parse turned off). After anything
-else (Parse unreachable, answering 5xx or slower than its budget, mid-file too, so a PDF fell back to its text layer
+else (Parse unreachable, answering 5xx, NVCF's `DEGRADED function` 400 or only `<s>` tokens, or slower than its
+budget, mid-file too, after three attempts per file, so a PDF fell back to its text layer
 or a scan was not read; an embedding, Milvus, internal or timeout error) it is left out and the next sync tries again.
 `force` (`POST /v1/packs/sync?force=true`, `demo-ingest sync-packs --force`) ingests every pack again.
 

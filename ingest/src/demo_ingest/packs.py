@@ -3,11 +3,12 @@
 """Industry packs: every ``<PACKS_DIR>/<id>/pack.yaml`` into the catalog, through the same pipeline as an upload.
 
 A pack is synced when its digest changed: sha256 over the sorted relative paths and bytes of ``pack.yaml``,
-``questions.yaml`` and ``files/**``, plus what turns those bytes into the catalog (the Parse model, or
-``pdf-text-layer`` when Parse is disabled, and the embed model). The digest is recorded only when every file is
-ready or failed for a reason another sync would repeat (the file's content, or Parse turned off); after anything
-else (Parse not answering, so a PDF fell back to its text layer or a scan was not read; an embedding, Milvus or
-internal error; a timeout) it is left out, so the next sync tries again. ``force`` ingests every pack again.
+``questions.yaml`` and ``files/**``, plus what turns those bytes into the catalog (the Parse model and its output
+cap ``PARSE_MAX_TOKENS``, or ``pdf-text-layer`` when Parse is disabled, and the embed model). The digest is recorded
+only when every file is ready or failed for a reason another sync would repeat (the file's content, or Parse turned
+off); after anything else (Parse not answering or flapping, so a PDF fell back to its text layer, lost a page or a
+scan was not read; an embedding, Milvus or internal error; a timeout) it is left out, so the next sync tries again.
+``force`` ingests every pack again.
 
 Each structured source is rebuilt into a new DuckDB file that replaces the old one in one step, so readers see the
 old tables or the new ones. Each documents source is re-indexed file by file; documents that left the pack are
@@ -134,10 +135,12 @@ def pack_digest(pack_dir: Path, settings: Settings) -> str:
         digest.update(f"{relative}\0".encode())
         with path.open("rb") as f:
             digest.update(hashlib.file_digest(f, "sha256").digest())
-    configuration = {
+    configuration: dict[str, Any] = {
         "parser": settings.parse_model if settings.parse_enabled else "pdf-text-layer",
         "embed_model": settings.embed_model,
     }
+    if settings.parse_enabled:
+        configuration["parse_max_tokens"] = settings.parse_max_tokens
     digest.update(json.dumps(configuration, sort_keys=True).encode())
     return digest.hexdigest()
 

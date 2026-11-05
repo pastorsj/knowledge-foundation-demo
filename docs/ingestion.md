@@ -101,7 +101,8 @@ image would fail). A scanned memo needed 763 output tokens.
 |---|---|
 | No Parse endpoint configured (no `parse` profile, empty `PARSE_BASE_URL`) | A PDF is read from its text layer with `pypdfium2`: each page becomes a `## Page N` Markdown section that docling's Markdown backend converts. The file records `parser: pdf-text-layer` and a warning, which the UI shows. An image fails with `parser_unavailable` |
 | Parse unreachable, failing, or slower than three quarters of the stage timeout | The same text-layer fallback for a PDF, with the reason in the warning; an image fails with `parser_unavailable` |
-| A pack synced while Parse was unreachable | The pack's digest is not recorded, so the next sync tries Parse again |
+| A hosted Parse that flaps: HTTP 5xx, NVCF's 400 `DEGRADED function cannot be invoked`, or a page answered with nothing but `<s>` tokens until `max_tokens` | Transient. docling retries a 5xx itself; then the file is tried again after 15 s and 45 s (within the parse budget), keeping the attempt with the fewest unread pages. A page still unread stays a warning (`Nemotron Parse could not read page N`) |
+| A pack synced while Parse was unreachable or flapping | The pack's digest is not recorded, so the next plain `data sync` tries Parse again |
 
 `doctor` warns when neither the `parse` profile nor `PARSE_BASE_URL` is set.
 
@@ -169,11 +170,12 @@ digest, and `./scripts/demo.sh data status` (`GET /v1/packs/status`) shows each 
   its sources becomes the catalog source `<pack>.<source>`, with the pack's declared keys, column descriptions and
   prediction templates. The pack's files are copied into the source, then ingested like uploads.
 - A pack is skipped when its digest is unchanged and it is `ready`: sha256 over `pack.yaml`, `questions.yaml` and
-  `files/**`, plus the Parse model (or `pdf-text-layer`) and the embed model. Enabling Parse therefore re-ingests
-  every pack on the next sync.
+  `files/**`, plus the Parse model and `PARSE_MAX_TOKENS` (or `pdf-text-layer`) and the embed model. Enabling
+  Parse, or changing its output cap, therefore re-ingests every pack on the next sync.
 - The digest is recorded only when the sync is complete: every file ready, or failed for a reason another sync would
   repeat (the file itself: an unsupported, mismatched, empty, oversized or unreadable file; or Parse turned off).
-  After anything else (Parse not answering, so a PDF fell back to its text layer or a scan went unread; an
+  After anything else (Parse not answering or flapping, so a PDF fell back to its text layer, lost a page, or a
+  scan went unread; an
   embedding, Milvus or internal error; a timeout) the pack keeps no new digest, so the next `data sync` retries it.
   `--force` (`demo-ingest sync-packs --force`) ingests every pack again regardless, for instance after a fix outside
   the digest's inputs. Changing the embed model needs a rebuild of the index instead (`./scripts/demo.sh down --volumes`, then

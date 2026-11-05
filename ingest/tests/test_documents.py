@@ -135,6 +135,66 @@ def test_parse_errors_fall_back_to_the_text_layer(parse_settings: Settings, fake
     assert converted.warnings[0].startswith(TEXT_LAYER_WARNING)
 
 
+@pytest.mark.parametrize(
+    ("status", "message"),
+    [(400, "Function id '7a0655e9': DEGRADED function cannot be invoked"), (502, "Bad Gateway")],
+    ids=["nvcf-degraded", "http-502"],
+)
+def test_a_flapping_parse_is_tried_again(
+    parse_settings: Settings, fake_parse: FakeParse, policy_pdf: Path, status: int, message: str
+):
+    # A hosted function that refuses the first requests, then recovers: the file is read by Parse, every page.
+    fake_parse.fail_status, fake_parse.fail_message = status, message
+    fake_parse.fail_count = 2 if status == 400 else 12  # docling itself retries a 5xx five times per page
+
+    converted = documents.convert(policy_pdf, "pdf", parse_settings, None)
+
+    assert converted.parser == "nemotron-parse-2.0"
+    assert converted.warnings == [] and not converted.transient
+
+
+def test_a_degraded_parse_is_transient(parse_settings: Settings, fake_parse: FakeParse, policy_pdf: Path):
+    fake_parse.fail_status, fake_parse.fail_message = 400, "DEGRADED function cannot be invoked"
+
+    converted = documents.convert(policy_pdf, "pdf", parse_settings, None)
+
+    assert converted.parser == "pdf-text-layer" and converted.transient
+    assert len(fake_parse.requests) == 3 * 2  # three attempts at both pages
+
+
+def test_special_tokens_until_the_cap_are_transient(parse_settings: Settings, fake_parse: FakeParse, scan_png: Path):
+    fake_parse.degenerate = True
+
+    with pytest.raises(IngestError) as caught:
+        documents.convert(scan_png, "png", parse_settings, None)
+
+    assert caught.value.code == "parser_unavailable" and caught.value.transient
+    assert len(fake_parse.requests) == 3
+
+
+def test_a_page_of_special_tokens_is_a_transient_page_warning(
+    parse_settings: Settings, fake_parse: FakeParse, policy_pdf: Path, monkeypatch: pytest.MonkeyPatch
+):
+    answer = fake_parse.answer
+    calls = {"n": 0}
+
+    def second_page_degenerate(body):
+        calls["n"] += 1
+        fake_parse.degenerate = calls["n"] % 2 == 0
+        try:
+            return answer(body)
+        finally:
+            fake_parse.degenerate = False
+
+    monkeypatch.setattr(fake_parse, "answer", second_page_degenerate)
+    monkeypatch.setattr(documents, "PARSE_RETRY_DELAYS", ())
+
+    converted = documents.convert(policy_pdf, "pdf", replace(parse_settings, parse_concurrency=1), None)
+
+    assert converted.parser == "nemotron-parse-2.0" and converted.transient
+    assert len(converted.warnings) == 1 and documents.DEGENERATE_OUTPUT in converted.warnings[0]
+
+
 def test_a_slow_parse_falls_back_within_the_stage_timeout(
     parse_settings: Settings, fake_parse: FakeParse, policy_pdf: Path
 ):
