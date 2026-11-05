@@ -67,7 +67,7 @@ Development
                           default: unit ui contracts compose
 
 On demand (run by hand)
-  test live --url URL [--pack P] [--questions ID,...] [--budget SECONDS|ID=SECONDS]...
+  test live --url URL [--pack P] [--questions ID,...] [--budget SECONDS|ID=SECONDS]... [--no-upload]
                           ask a pack's featured questions, and the upload flow, on a running
                           deployment through its UI and API, and check each answer and replay
   eval [--pack P] [--runs N] [--questions ID,...] [--url URL] [--out DIR] [--max-wait SECONDS]
@@ -351,7 +351,7 @@ cmd_test() {
   for suite in $suites; do
     case $suite in
       unit | ui | e2e | contracts | compose | switchyard) log "test $suite" && "test_$suite" ;;
-      *) die "$EXIT_USAGE" "usage: demo.sh test [unit|ui|e2e|contracts|compose|switchyard|all], or test live --url URL" ;;
+      *) die "$EXIT_USAGE" "usage: demo.sh test [unit|ui|e2e|contracts|compose|switchyard|all], or test live --url URL [--no-upload]" ;;
     esac
   done
 }
@@ -380,14 +380,20 @@ test_e2e() {
   (cd "$ROOT/ui" && { [ -d node_modules ] || npm ci; } && npm run build && "${install[@]}" && npm run e2e)
 }
 
-# test live --url URL [--pack P] [--questions ID,...] [--budget SECONDS|ID=SECONDS]...: a pack's featured questions
-# (every industry pack by default), asked one at a time through a running deployment's UI (ui/e2e-live), and the
-# upload flow on "Your data". The URL is the UI's, passed here and never stored: http://127.0.0.1:3300 on the host,
+# test live --url URL [--pack P] [--questions ID,...] [--budget SECONDS|ID=SECONDS]... [--no-upload]: a pack's
+# featured questions (every industry pack by default), asked one at a time through a running deployment's UI
+# (ui/e2e-live), and the upload flow on "Your data" (--no-upload skips it). The URL is the UI's, passed here and never stored: http://127.0.0.1:3300 on the host,
 # an SSH tunnel to it, or a link to it. Each question runs live and costs model calls. Manual only.
 test_live() {
-  local url="" pack="" questions="" budgets="" install=(npx playwright install chromium)
+  local url="" pack="" questions="" budgets="" upload=1 install=(npx playwright install chromium)
   local usage="usage: demo.sh test live --url URL [--pack P] [--questions ID,...] [--budget SECONDS|ID=SECONDS]..."
+  usage+=" [--no-upload]"
   while [ $# -gt 0 ]; do
+    if [ "$1" = --no-upload ]; then
+      upload=0
+      shift
+      continue
+    fi
     case $1 in
       --url | --pack | --questions | --budget) [ $# -ge 2 ] || die "$EXIT_USAGE" "$usage" ;;
       *) die "$EXIT_USAGE" "$usage" ;;
@@ -409,7 +415,7 @@ test_live() {
     install=(npx playwright install --with-deps chromium)
   fi
   (cd "$ROOT/ui" && { [ -d node_modules ] || npm ci; } && "${install[@]}" &&
-    LIVE_URL=$url LIVE_PACK=$pack LIVE_QUESTIONS=$questions LIVE_BUDGETS=$budgets \
+    LIVE_URL=$url LIVE_PACK=$pack LIVE_QUESTIONS=$questions LIVE_BUDGETS=$budgets LIVE_UPLOAD=$upload \
       npx playwright test --config playwright.live.config.ts)
 }
 
