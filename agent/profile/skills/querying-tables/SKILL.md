@@ -113,6 +113,13 @@ Result fields:
 - Dates: `DATE '2026-07-01'`, `TIMESTAMP '2026-07-01 00:00:00'`,
   `date_trunc('month', ordered_at)`, `strftime(ordered_at, '%Y-%m')`,
   `ordered_at - INTERVAL 90 DAY`, `date_diff('day', start_at, end_at)`.
+- Date arithmetic: `DATE - DATE` is a number of days (BIGINT), but as soon
+  as one side is a `TIMESTAMP` (a timestamp column, or a date plus an
+  `INTERVAL`) the difference is an `INTERVAL`, which cannot be compared with
+  a number (`Cannot compare values of type INTERVAL and type INTEGER`). For
+  "days since" or "overdue by", use `date_diff('day', last_done_at, as_of)`,
+  which gives a number for any mix of dates and timestamps. Add days with
+  `d + INTERVAL 30 DAY`, or with a column as `d + to_days(interval_days)`.
 - Case-insensitive matching: `tier ILIKE 'gold'`, `name ILIKE '%valve%'`. Check
   a category's spelling with a small `SELECT DISTINCT` when a filter returns
   nothing.
